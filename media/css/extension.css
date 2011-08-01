@@ -1,0 +1,50 @@
+/**
+ * @version	   $Id:  $
+ * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
+ * @license	   GNU General Public License version 2 or later; see LICENSE.txt
+ */
+body {
+     overflow: auto
+}
+
+body * {
+     overflow: hidden;
+}
+
+form {
+    width: 100%;
+}
+
+form .submit {
+    float:right;
+}
+
+#ext-info div {
+    width: 100%;
+}
+
+body,
+html {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+div#module-sliders {
+    margin: 0px;
+    overflow: auto;
+}
+
+.mceEditor {
+    clear:both;
+    display: block;
+}
+
+.extension-save {
+    float: right !important;
+}
+
+.current {
+    height: auto;
+}

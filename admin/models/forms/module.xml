@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+            <field name="title" type="text"
+                description="COM_MODULES_FIELD_TITLE_DESC"
+                label="JGLOBAL_TITLE"
+                maxlength="100"
+                required="true"
+                size="35"
+            />
+
+            <field name="showtitle" type="radio"
+                default="1"
+                description="COM_MODULES_FIELD_SHOWTITLE_DESC"
+                label="COM_MODULES_FIELD_SHOWTITLE_LABEL"
+                size="1"
+            >
+                <option value="1">JSHOW</option>
+                <option value="0">JHIDE</option>
+            </field>
+
+            <field name="module" type="hidden"
+                description="COM_MODULES_FIELD_MODULE_DESC"
+                label="COM_MODULES_FIELD_MODULE_LABEL"
+                readonly="readonly"
+                size="20"
+            />
+
+            <field name="extension_id" type="hidden" required="true"/>
+	</fieldset>
+</form>

@@ -1,0 +1,13 @@
+form.mod-newsletter div {
+    margin: 10px;
+    text-align: center;
+}
+form.mod-newsletter fieldset {
+    margin: 10px;
+    text-align: center;
+    padding: 0;
+}
+
+#mod-subscriber-termslink {
+    font-weight: bold;
+}

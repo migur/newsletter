@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+	type="module"
+	version="1.6.0"
+	client="administrator">
+	<name>RSS module</name>
+	<author>Migur</author>
+	<creationDate>April 2011</creationDate>
+	<copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>info@migur.com</authorEmail>
+	<authorUrl>http://migur.com/</authorUrl>
+	<version>1.6.0</version>
+	<description>The simplest rss module</description>
+	<files>
+		<filename
+			module="mod_rss">mod_rss.php</filename>
+		<filename>index.html</filename>
+		<folder>tmpl</folder>
+	</files>
+	<help key="JHELP_EXTENSIONS_MODULE_MANAGER_ADMIN_RSS" />
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+					name="feed_url"
+					type="input"
+					label="Feed URL"
+					description=""
+					default="http://">
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

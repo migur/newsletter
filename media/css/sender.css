@@ -1,0 +1,23 @@
+/**
+ * @version	   $Id:  $
+ * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
+ * @license	   GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+#sender-container {
+    overflow: auto;
+    max-height: 360px;
+}
+
+#button_send {
+    float: right;
+}
+
+#newsletter-select {
+    width: 100%;
+
+}
+
+#sender {
+    margin: 4px;
+}

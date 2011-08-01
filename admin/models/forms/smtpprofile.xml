@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field name="smtp_profile_name"
+			type="text"
+			label="COM_NEWSLETTER_NAME"
+			description="COM_NEWSLETTER_NAME"
+			class="inputbox validate-name"
+			size="100"
+			default=""
+			required="true"
+                        validate=""
+		 />
+
+                <field name="from_name"
+                        type="text"
+                        label="COM_NEWSLETTER_FROM_NAME"
+                        description="COM_NEWSLETTER_FROM_NAME"
+                        class="inputbox validate-from_name"
+                        size="70"
+                        default=""
+                        required="true"
+                        validate=""
+                 />
+
+                <field name="from_email"
+                        type="text"
+                        label="COM_NEWSLETTER_FROM_EMAIL"
+                        description="COM_NEWSLETTER_FROM_EMAIL"
+                        class="inputbox validate-from_email"
+                        size="70"
+                        default=""
+                        required="true"
+                        validate=""
+                 />
+                 
+                <field name="reply_to_name"
+                        type="text"
+                        label="COM_NEWSLETTER_TO_NAME"
+                        description="COM_NEWSLETTER_TO_NAME"
+                        class="inputbox validate-reply_to_name"
+                        size="70"
+                        default=""
+                        required="true"
+                        validate=""
+                 />
+
+                <field name="reply_to_email"
+                        type="text"
+                        label="COM_NEWSLETTER_TO_EMAIL"
+                        description="COM_NEWSLETTER_TO_EMAIL"
+                        class="inputbox validate-reply_to_email"
+                        size="70"
+                        default=""
+                        required="true"
+                        validate=""
+                 />
+
+		<field name="smtp_server"
+			type="text"
+			label="COM_NEWSLETTER_SMTP_SERVER"
+			description="COM_NEWSLETTER_SMTP_SERVER"
+			class="inputbox validate-smtp_server"
+                        size="70"
+                        default=""
+                        required="true"
+                        validate=""
+		 />
+
+		<field name="smtp_port"
+			type="text"
+			label="COM_NEWSLETTER_SMTP_PORT"
+			description="COM_NEWSLETTER_SMTP_PORT"
+			class="inputbox validate-smtp_port"
+                        size="70"
+                        default=""
+                        required="true"
+                        validate=""
+		 />
+
+                 <field name="username"
+                        type="text"
+                        label="COM_NEWSLETTER_USERNAME"
+                        description="COM_NEWSLETTER_USERNAME"
+                        class="inputbox validate-username"
+                        size="70"
+                        default=""
+                        required="true"
+                        validate=""
+                 />
+
+                 <field name="password"
+                        type="text"
+                        label="COM_NEWSLETTER_PASSWORD"
+                        description="COM_NEWSLETTER_PASSWORD"
+                        class="inputbox validate-password"
+                        size="70"
+                        default=""
+                        required="true"
+                        validate=""
+                 />
+
+                 <field name="is_ssl"
+                        type="list"
+                        label="COM_NEWSLETTER_SSL"
+                        description="COM_NEWSLETTER_SSL"
+                        class="inputbox validate-is_ssl"
+                        default=""
+                        required="true"
+                        validate=""
+                >
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+
+
+                <field name="smtp_profile_id" type="hidden"></field>
+	</fieldset>
+</form>

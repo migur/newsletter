@@ -1,0 +1,23 @@
+.subscriber-info {
+    margin:10px 20px 20px;
+    padding: 10px;
+    border: 1px solid #888;
+    background-color: #ccc;
+}
+
+.lists-list {
+    margin:10px 20px 20px;
+}
+
+table, table tr, table th, table td {
+    border: 0;
+    padding: 5px;
+    margin: 5px;
+}
+
+table th {
+    border-bottom: 1px solid #888;
+    color: #0B55C4;
+}
+
+

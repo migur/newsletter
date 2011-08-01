@@ -1,0 +1,30 @@
+.guide-tip {
+    border: 1px solid #CBD9D4;
+    background-color: #DBE9E4;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+}
+
+.guide-content {
+    margin: 10px;
+}
+
+.guide-pointer {
+    background: url('../images/arrow.png');
+    width:  20px;
+    height: 26px;
+    position: relative;
+    bottom: 0px;
+    margin: 5px;
+}
+
+.guide-stop {
+    background: url('../images/close-orange.png');
+    width:  10px;
+    height: 10px;
+    position: absolute;
+    right: 0px;
+    top:0px;
+    cursor: pointer;
+}

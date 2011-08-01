@@ -1,0 +1,27 @@
+/**
+ * @version	   $Id:  $
+ * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
+ * @license	   GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+#config-extensions,
+#config-config {
+    float: left;
+    width: 48%;
+    margin: 0 0 0 5px;
+}
+
+#config-config {
+    float: right;
+    width: 48%;
+    margin: 0 5px 0 0;
+}
+
+#config-extensions .current,
+#config-config  .current {
+    height: 400px;
+}
+
+td fieldset {
+    background-color: transparent;
+}

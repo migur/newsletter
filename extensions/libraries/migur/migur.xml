@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="library" version="1.6.0" method="upgrade">
+
+        <!-- The name to display in the admin panel -->
+        <name>Migur</name>
+        <!-- The name of folder -->
+        <libraryname>migur</libraryname>
+        <!-- The following elements are optional and free of formatting conttraints -->
+        <creationDate>June 2011</creationDate>
+        <author>Migur</author>
+        <authorEmail>info@migur.com</authorEmail>
+        <authorUrl>http://www.migur.com/</authorUrl>
+        <copyright>Migur Ltd</copyright>
+        <license>GPL</license>
+        <!--  The version string is recorded in the components table -->
+        <version>0.5</version>
+        <!-- The description is optional and defaults to the name -->
+        <description>MIGUR_DESCRIPTION</description>
+
+        <files>
+            <folder>library</folder>
+            <filename>migur.php</filename>
+            <filename>migur.xml</filename>
+            <filename>migur.html</filename>
+            <filename>index.html</filename>
+        </files>
+ 
+</extension>

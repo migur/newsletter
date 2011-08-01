@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="1.6.0" client="site" method="upgrade">
+	<name>mod_newsletter_subscribe</name>
+	<author>Migur Newsletter Project</author>
+	<creationDate>May 2011</creationDate>
+	<copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>info@migur.com</authorEmail>
+	<authorUrl>www.migur.com</authorUrl>
+	<version>1.0.0</version>
+	<description>MOD_NEWSLETTER_SUBSCRIBE_DESCRIPTION</description>
+	<files>
+		<filename
+			module="mod_newsletter_subscribe">mod_newsletter_subscribe.php</filename>
+		<folder>tmpl</folder>
+		<folder>fields</folder>
+		<folder>css</folder>
+		<folder>scripts</folder>
+		<filename>helper.php</filename>
+		<filename>index.html</filename>
+		<filename>mod_newsletter_subscribe.xml</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.mod_newsletter_subscribe.ini</language>
+	</languages>
+    
+	<help key="JHELP_EXTENSIONS_MODULE_MANAGER_NEWSLETTER" />
+	
+	<config>
+		<fields name="params">
+			<fieldset 
+                name="basic"
+                addfieldpath="/modules/mod_newsletter_subscribe/fields">
+				<field
+					name="termslink"
+					type="text"
+					default=""
+					size="50"
+					label="MOD_NEWSLETTER_TERMSLINK"
+					description="MOD_NEWSLETTER_TERMSLINK_DESC" >
+				</field>
+
+				<field
+					name="listselector"
+					type="radio"
+					default="1"
+					label="MOD_NEWSLETTER_SELECT_LIST_RANGE"
+					description="MOD_NEWSLETTER_MULTILIST_DESC">
+					<option
+						value="0">MOD_NEWSLETTER_LISTS_ALL</option>
+<!--
+                    <option
+						value="1">MOD_NEWSLETTER_LISTS_EXTERNAL</option>
+					<option
+						value="2">MOD_NEWSLETTER_LISTS_INTERNAL</option>-->
+					<option
+						value="3">MOD_NEWSLETTER_LISTS_CUSTOM</option>
+				</field>
+
+
+				<field
+					name="multilist"
+					type="listslist"
+					default="0"
+                    multiple="true"
+					label="MOD_NEWSLETTER_MULTILIST"
+					description="MOD_NEWSLETTER_MULTILIST_DESC">
+				</field>
+
+                <field
+                    name="fbenabled"
+                    type="radio"
+                    default="0"
+                    label="MOD_NEWSLETTER_FACEBOOK_ENABLED"
+                    description="MOD_NEWSLETTER_FACEBOOK_ENABLED">
+                    <option
+                        value="1">JYES</option>
+                    <option
+                        value="0">JNO</option>
+                </field>
+                <field
+                    name="fbappid"
+                    type="text"
+                    default=""
+                    size="50"
+                    label="MOD_NEWSLETTER_FACEBOOK_APID">
+                </field>
+                <field
+                    name="fbsecret"
+                    type="text"
+                    default=""
+                    size="50"
+                    label="MOD_NEWSLETTER_FACEBOOK_SECRET">
+                </field>
+			</fieldset>
+
+			<fieldset name="advanced">
+
+				<field
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+
+				<field
+					name="moduleclass_sfx"
+					type="text"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+				<field
+					name="cache"
+					type="list"
+					default="1"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option
+						value="1">JGLOBAL_USE_GLOBAL</option>
+					<option
+						value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+
+				<field
+					name="cache_time"
+					type="text"
+					default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+
+				<field
+					name="cachemode"
+					type="hidden"
+					default="itemid">
+					<option
+						value="itemid"></option>
+				</field>
+
+			</fieldset>
+		</fields>
+	</config>
+</extension>

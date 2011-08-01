@@ -1,0 +1,310 @@
+/**
+ * @version	   $Id:  $
+ * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
+ * @license	   GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+.current {
+    height: 450px;
+}
+
+/* comomn for overview */
+#tab-container-ovirview {
+    width: 900px;
+}
+
+/* overview1 */
+#overview1 {
+    width: 400px;
+    height: 400px;
+    float: left;
+}
+
+#overview1 dl {
+    margin-right: 50px;
+}
+
+#overview1 dd {
+    float: right;
+    width: 200px;
+    padding:0px;
+    margin: 5px;
+}
+
+#overview1 input,
+#overview1 textarea,
+#overview1 select {
+    width:200px;
+}
+
+#overview1 label {
+    width:140px;
+}
+
+#overview1 #jform_description-lbl {
+    margin:4px 0;
+}
+
+#overview1 #jform_list_profile {
+    margin: 18px 2px 2px 2px;
+}
+
+#overview1 #label-chart-new-subs {
+    width: 300px;
+    float: none;
+    clear: both;
+}
+
+#overview1 #chart-new-subs {
+    width: 300px;
+    height: 200px;
+    float: none;
+    clear: both;
+    padding: 5px;
+}
+
+/* overview2 */
+
+#overview2 {
+    width: 450px;
+    float: left;
+    height: 450px;
+    overflow: auto;
+}
+
+#overview2 dl dt {
+    white-space: nowrap;
+/*  text-align: center;*/
+    float: left;
+    clear: both;
+    margin: 2px;
+    padding: 2px;
+    font-weight: bold;
+}
+
+#overview2 dl dd {
+    text-align: center;
+    float: left;
+    clear: both;
+    margin: 2px;
+    padding: 2px;
+}
+
+#tab-container-unsubscribed {
+    height: 450px;
+    overflow: auto;
+}
+
+/* comomn for unsubscribed */
+#tab-container-unsubscribed img {
+    float: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+#tab-container-advanced {
+    width: 500px;
+}
+
+#tab-container-advanced select {
+    width: 200px;
+}
+
+#tab-container-advanced input {
+    width: auto;
+}
+
+#tab-container-advanced dt {
+    width: 220px;
+}
+
+#tab-container-advanced dd {
+    padding-left: 225px;
+}
+
+
+/* Import tab */
+#import-toolbar {
+    margin: 10px;
+    float: left;
+    width: 700px;
+}
+
+#import-toolbar li {
+    margin: 10px;
+}
+
+#import-toolbar li a {
+    width: 130px;
+}
+
+/* Exclude tab */
+#exclude-toolbar {
+    margin: 10px;
+    float: left;
+    width: 360px;
+}
+
+#exclude-toolbar li {
+    margin: 10px;
+}
+
+#exclude-toolbar li a {
+    width: 130px;
+}
+
+#exclude-tab-container {
+    height: 360px;
+    clear: both;
+}
+
+#exclude-tab-scroller {
+    height: 320px;
+    overflow: auto;
+}
+
+#exclude-tab-button {
+    float: right;
+    margin: 15px 5px;
+    width: 100px;
+}
+
+#tab-container-advanced input {
+    width: 200px;
+    float: left;
+}
+
+.invisible {
+    display: none;
+}
+
+#tab-container-unsubscribed label,
+#tab-container-unsubscribed input {
+    min-width: 0px;
+    margin: 10px;
+}
+
+#import-fields div,
+#exclude-fields div {
+    margin: 5px;
+}
+
+
+#import-file,
+#exclude-file {
+    border: 1px solid #cccccc;
+    width:100%;
+    height: 355px;
+}
+
+#import-founded-fields,
+#exclude-founded-fields
+{
+    margin: 5px 5px 10px 10px;
+    padding: 0px;
+    border: 1px solid #cccccc;
+    width: 26%;
+    height: 150px;
+    float: left;
+    position: relative;
+}
+
+
+#import-fields,
+#exclude-fields {
+    margin: 5px 0px 10px 5px;
+    padding: 0px;
+    border: 1px solid #cccccc;
+    width: 43%;
+    height: 150px;
+    float: left;
+}
+
+#import-settings,
+#exclude-settings {
+    margin: 5px 10px 10px 0px;
+    padding: 0px;
+    border: 1px solid #cccccc;
+    width: 26%;
+    height: 150px;
+    float: right;
+    position: relative;
+}
+
+.drag {
+    top: 0px;
+    left: 0px;
+    width: 150px;
+    height: 15px;
+    cursor: move;
+    margin: 5px;
+    text-align: center;
+    vertical-align: middle;
+    background: #fafafa;
+    position: relative;
+    border: 1px solid #cccccc;
+}
+
+
+#import-fields .drop,
+#exclude-fields .drop {
+    border: 1px solid #cccccc;
+    height: 25px;
+    width: 165px;
+}
+
+#import-file-apply,
+#exclude-file-apply {
+    width: 100px;
+    margin-right: 10px;
+    float: right;
+}
+
+#import-delimiter,
+#import-delimiter-custom,
+#import-enclosure,
+#import-enclosure-custom,
+#import-escape,
+#import-escape-custom {
+    width : 60px;
+    margin: 5px 20px;
+    float : left;
+}
+
+#import-del-toggle-button,
+#import-enc-toggle-button,
+#import-esc-toggle-button {
+    width : 80px;
+    margin: 5px 10px;
+    float : left;
+}
+
+#import-upload-file {
+    float: left;
+}
+
+#import-upload-submit,
+#exclude-upload-submit {
+    width: 100px;
+    float: left;
+    margin-left: 20px;
+}
+
+#import-file-refresh,
+#exclude-file-refresh {
+    margin-left: 10px;
+}
+
+
+#newsletters_total_sent,
+#newsletters_opened,
+#newsletters_active_subscribers {
+
+    height: 170px;
+    width: 200px;
+}
+
+#subscribers-list {
+    overflow: auto;
+    height: 450px;
+}

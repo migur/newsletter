@@ -1,0 +1,57 @@
+/**
+ * @version	   $Id:  $
+ * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
+ * @license	   GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+#main-container {
+    max-height: 565px;
+    overflow: auto;
+}
+
+#stat-letters {
+    width: 23%;
+    float: left;
+}
+
+#stat-clicks {
+    width: 76%;
+    float: right;
+}
+
+#stat_total_sent,
+#stat_opened,
+#stat_active_subscribers {
+    height: 250px;
+}
+
+#stat-total-clicks,
+#stat-opened,
+#stat-active-subscribers {
+    height: 250px;
+}
+
+#stat-total-clicks {
+    margin : 0 auto 30px;
+    width: 150px;
+}
+
+#stat-clicks-per-day,
+#stat-clicks-per-hour {
+    margin:0 0 30px;
+}
+
+
+#days-selector {
+    float: right;
+}
+
+#days-label {
+    float: left;
+    margin: 5px;
+}
+
+
+dd {
+    margin: 0 !important;
+}

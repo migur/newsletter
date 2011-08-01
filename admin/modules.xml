@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: config.xml 19439 2010-11-10 15:42:23Z chdemko $ -->
+<extensions>
+    <module name="mod_articles_archive" />   <!-- Archived Articles,   works (beta) -->
+    <module name="mod_articles_category" />  <!-- Articles category,   works (beta) -->
+    <module name="mod_feed" />               <!-- Feed display,        works (beta) -->
+    <module name="mod_users_latest" />       <!-- Latest users,        works (beta) -->
+    <module name="mod_articles_popular" />   <!-- Most read content, -->
+    <module name="mod_articles_categories" /><!-- Articles Categories, works (beta) -->
+    <module name="mod_articles_news" />      <!-- Articles Newsflash,  works (beta) -->
+    <module name="mod_banners" />            <!-- Banners,             works (beta) -->
+    <module name="mod_articles_latest" />    <!-- Latest news,        -->
+    <module name="mod_whosonline" />         <!-- Whos online,         works (beta) -->
+</extensions>

@@ -1,0 +1,20 @@
+label {
+    min-width: 130px;
+    margin: 5px !important;
+}
+
+select {
+    min-width: 100px;
+}
+
+#jform-comps {
+    padding:10px;
+}
+
+.not-available {
+    color: #ccc;
+}
+
+.components-list {
+    margin-left: 50px;
+}

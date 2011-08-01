@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+	type="module"
+	version="1.6.0"
+	client="administrator">
+	<name>Article module</name>
+	<author>Migur</author>
+	<creationDate>June 2011</creationDate>
+    <copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>info@migur.com</authorEmail>
+	<authorUrl>http://migur.com/</authorUrl>
+	<version>1.6.0</version>
+	<description>The simplest way to add the link to the article into newsletter</description>
+	<files>
+		<filename
+			module="mod_article">mod_article.php</filename>
+		<filename>index.html</filename>
+	</files>
+	<help key="JHELP_EXTENSIONS_MODULE_MANAGER_ADMIN_ARTICLE" />
+	<config>
+		<fields name="params">
+			<fieldset
+                name="basic"
+                addfieldpath="/administrator/components/com_content/models/fields"
+            >
+
+                <field 
+                    name="id"
+                    type="modal_article"
+                    label="COM_CONTENT_FIELD_SELECT_ARTICLE_LABEL"
+                    required="true"
+                    description="COM_CONTENT_FIELD_SELECT_ARTICLE_DESC"
+                />
+                
+			</fieldset>
+		</fields>
+	</config>
+</extension>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+	type="module"
+	version="1.6.0"
+	client="administrator">
+	<name>Image module</name>
+	<author>Migur</author>
+	<creationDate>April 2011</creationDate>
+	<copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>info@migur.com</authorEmail>
+	<authorUrl>http://migur.com/</authorUrl>
+	<version>1.6.0</version>
+	<description>The simplest image module for testing (copied from J! native mod_custom )</description>
+	<files>
+		<filename
+			module="mod_img">mod_img.php</filename>
+		<filename>index.html</filename>
+		<folder>tmpl</folder>
+	</files>
+	<help key="JHELP_EXTENSIONS_MODULE_MANAGER_ADMIN_IMG" />
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+					name="img"
+					type="media"
+					label=""
+					description="" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>

@@ -1,0 +1,136 @@
+/**
+ * @version	   $Id:  $
+ * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
+ * @license	   GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+#dashboard-newsletters,
+#dashboard-subscribers,
+#dashboard-config,
+#dashboard-help {
+    width: 260px;
+    height: 110px;
+    float: left;
+    margin-left: 15px;
+}
+
+#news ul {
+    padding: 0 0 0 20px;
+}
+
+#news ul li {
+    text-align: left;
+    list-style-type: none;
+}
+
+#dashboard-handlers fieldset div.toolbar-list {
+    margin: auto;
+    float: none;
+    width: 280px;
+}
+
+
+fieldset .toolbar-list li {
+    width: 100px;
+    margin: 15px 10px;
+    padding: 0;
+}
+
+fieldset .toolbar-list a {
+    margin: 0;
+    width: 100px;
+    padding: 0;
+}
+
+#dashboard-handlers {
+    width: 69%;
+    float: left;
+}
+
+#dashboard-static {
+    width: 30%;
+    float: right;
+    clear: none;
+}
+
+#dashboard-info {
+    margin: 0px 5px 5px 5px;
+}
+
+#dashboard-info div {
+    margin: 5px;
+}
+
+#container-left-left,
+#container-left-right {
+    width: 50%;
+    float: left;
+    clear: none;
+}
+#container-left-left fieldset {
+    margin: 0px 5px 15px 5px;
+    width: 96%;
+    padding: 0;
+}
+
+#container-left-right fieldset {
+    margin: 0px 5px 15px 5px;
+    width: 96%;
+    float: right;
+    padding: 0;
+}
+
+/*#dashboard-handlers .toolbar-list li {
+    margin-left: 15%;
+}*/
+
+#links {
+    text-align: center;
+    margin-top: 15px;
+}
+
+#dashboard-statistic-chart {
+    height: 200px;
+    margin: 20px 0 0;
+}
+
+#statistic {
+    margin: 5px;
+}
+
+#toolbar-progress {
+    position: relative;
+}
+
+.progress-info {
+    float: left;
+    margin: 2px;
+}
+
+.queue-list {
+    float: right;
+}
+
+.progress-line {
+    position: absolute;
+    overflow: hidden;
+    top: 28px;
+    left: 0px;
+    margin: 0px;
+    width: 250px;
+    height: 12px;
+    z-index:100;
+    background: url('../images/progress.gif') no-repeat top left scroll;
+}
+
+.progress-bar {
+    position: absolute;
+    overflow: hidden;
+    top: 28px;
+    left: 0px;
+    margin: 0px;
+    width: 250px;
+    height: 12px;
+    z-index:101;
+    background: url('../images/bar.gif') no-repeat top left scroll;
+}

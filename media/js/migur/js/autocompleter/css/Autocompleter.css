@@ -1,0 +1,88 @@
+body
+{
+	font:					11px/1.7 "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+	text-align:				center;
+}
+div.autocompleter-loading
+{
+	float:					left;
+	clear:					right;
+	background:				#fff url(images/spinner.gif) no-repeat center;
+	width:					20px;
+	height:					16px;
+}
+
+ul.autocompleter-choices
+{
+	position:				absolute;
+	margin:					0;
+	padding:				0;
+	list-style:				none;
+	border:					1px solid #eee;
+	background-color:		#52616F;
+	border-right-color:		#ddd;
+	border-bottom-color:	#ddd;
+	text-align:				left;
+	font-family:			Verdana, Geneva, Arial, Helvetica, sans-serif;
+	z-index:				50;
+}
+
+ul.autocompleter-choices li
+{
+	position:				relative;
+	padding:				0.1em 1.5em 0.1em 1em;
+	cursor:					pointer;
+	font-weight:			normal;
+	font-size:				1em;
+}
+
+ul.autocompleter-choices li.autocompleter-selected
+{
+	background-color:		#444;
+	color:					#fff;
+}
+
+ul.autocompleter-choices span.autocompleter-queried
+{
+	font-weight:			bold;
+}
+
+ul.autocompleter-choices li.autocompleter-selected span.autocompleter-queried
+{
+	color:					#9FCFFF;
+}
+legend {
+  
+  color: grey;
+}
+
+
+.autocompleter-item {
+    border: 1px solid #C8D8F8;
+    background-color:  #D9EAF9;
+    overflow: hidden;
+    float: left;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    padding: 0 0 0 5px;
+    margin: 3px;
+    cursor: pointer;
+}
+
+.autocompleter-close {
+    background: url('../images/close.gif') no-repeat top right;
+    height: 7px;
+    width: 7px;
+    display: block;
+    float: right;
+    margin: 6px;
+}
+
+.autocompleter-item-selected {
+    background-color: #598BEC;
+}
+
+.newsletter_preview_email {
+    width: 400px;
+}
+

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+        <field
+            type="text"
+            name="name"
+            default=""
+            label="COM_NEWSLETTER_NAME"
+            description="COM_NEWSLETTER_NAME"
+            class="inputbox validate-name"
+            size="10"
+            required="true"
+/>
+        <field
+            type="textarea"
+            name="description"
+            default=""
+            label="COM_NEWSLETTER_DESCRIPTION"
+            description="COM_NEWSLETTER_DESCRIPTION"
+            class="inputbox validate-description"
+            rows="7"
+            cols="30"
+            max="255"
+            required="false"
+ />
+
+        <field
+            type="smtpprofiles"
+            name="smtp_profile"
+            default=""
+            label="COM_NEWSLETTER_PROFILE"
+            description="COM_NEWSLETTER_PROFILE"
+            class="selectbox validate-smtp_profile"
+            required="true"
+        >
+        </field>
+
+
+        <field
+            type="text"
+            name="list_encoding"
+            default="iso-8859-1"
+            label="COM_NEWSLETTER_ENCODING"
+            description="COM_NEWSLETTER_ENCODING"
+            class="inputbox validate-list_encoding"
+            size="40"
+            maxlength="40"
+            required="true"
+        />
+        <field 
+            type="newsletters"
+            scope="static"
+            name="send_at_reg"
+            default=""
+            label="COM_NEWSLETTER_SEND_AT_REG"
+            class="inputbox validate-send_at_reg"
+            required="false"
+        />
+        <field 
+            type="newsletters"
+            name="send_at_unsubscribe"
+            scope="static"
+            default=""
+            label="COM_NEWSLETTER_SEND_AT_UNSUBSCRIBE"
+            class="inputbox validate-send_at_unsubscribe"
+            required="false"
+        />
+        <field name="import_excluded"
+                type="file"
+                label="COM_NEWSLETTER_ATTACHMENT"
+                description="COM_NEWSLETTER_ATTACHMENT"
+                class="inputbox validate-import_excluded"
+                size="80"
+                default=""
+         />
+         <field name="list_id" type="hidden" />
+</form>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field name="name"
+			type="text"
+			label="COM_NEWSLETTER_NAME"
+			description="COM_NEWSLETTER_NAME"
+			class="inputbox validate-name autosaverable"
+			size="100"
+			default=""
+			required="true"
+                        validate=""
+		 />
+		<field name="subject"
+			type="text"
+			label="COM_NEWSLETTER_SUBJECT"
+			description="COM_NEWSLETTER_SUBJECT"
+			class="inputbox validate-subject autosaverable"
+			size="100"
+			default=""
+			required="true"
+            validate=""
+		 />
+		<field name="type"
+			type="radio"
+			label="COM_NEWSLETTER_TYPE"
+			description="COM_NEWSLETTER_TYPE"
+			class="inputbox validate-type autosaverable"
+			default="1"
+			required="true"
+		 >
+            <option value="0">COM_NEWSLETTER_ORDINARY</option>
+            <option value="1">COM_NEWSLETTER_STATIC</option>
+        </field>
+
+        <field
+            name="smtp_profile_id"
+            type="smtpprofiles"
+            default=""
+            label="COM_NEWSLETTER_SMTP_PROFILE"
+            description="COM_NEWSLETTER_SMTP_PROFILE"
+            class="selectbox validate-smtp_profile_id autosaverable"
+            required="false"
+        >
+        </field>
+
+        <fields name="params">
+
+            <field name="newsletter_from_name"
+                    type="text"
+                    label="COM_NEWSLETTER_FROM_NAME"
+                    description="COM_NEWSLETTER_FROM_NAME"
+                    class="inputbox smtp-dependency validate-newsletter_from_name autosaverable"
+                    size="30"
+                    default=""
+                    required="true"
+                    validate=""
+             />
+            <field name="newsletter_from_email"
+                    type="text"
+                    label="COM_NEWSLETTER_FROM_EMAIL"
+                    description="COM_NEWSLETTER_FROM_EMAIL"
+                    class="inputbox smtp-dependency validate-newsletter_from_email autosaverable"
+                    size="30"
+                    default=""
+                    required="true"
+                    validate=""
+             />
+            <field name="newsletter_to_name"
+                    type="text"
+                    label="COM_NEWSLETTER_TO_NAME"
+                    description="COM_NEWSLETTER_TO_NAME"
+                    class="inputbox smtp-dependency validate-newsletter_to_name autosaverable"
+                    size="30"
+                    default=""
+                    required="true"
+                    validate=""
+             />
+            <field name="newsletter_to_email"
+                    type="text"
+                    label="COM_NEWSLETTER_TO_EMAIL"
+                    description="COM_NEWSLETTER_TO_EMAIL"
+                    class="inputbox smtp-dependency validate-newsletter_to_email autosaverable"
+                    size="30"
+                    default=""
+                    required="true"
+                    validate=""
+             />
+             <field name="attachments" type="hidden" />
+
+        </fields>
+
+		<field name="plain"
+			type="textarea"
+			label="COM_NEWSLETTER_PLAIN"
+			description="COM_NEWSLETTER_PLAIN"
+			class="inputbox validate-newsletter_plain autosaverable"
+			cols="50"
+			rows="100"
+			id="plain-area"
+			default=""
+			required="true"
+			validate=""
+            filter="raw"
+		 />
+		<field name="newsletter_attachment"
+			type="file"
+			label="COM_NEWSLETTER_ATTACHMENT"
+			description="COM_NEWSLETTER_ATTACHMENT"
+			class="inputbox validate-newsletter_attachment autosaverable"
+			size="60"
+			default=""
+		 />
+
+                 <field name="newsletter_preview_email"
+                        type="text"
+                        label="COM_NEWSLETTER_PREVIEW_EMAIL"
+                        description="COM_NEWSLETTER_PREVIEW_EMAIL"
+                        class="inputbox validate-newsletter_preview_email"
+                        size="70"
+                        default=""
+                        required="false"
+                        validate=""
+                 />
+
+                 <field name="t_style_id" type="hidden" required="true"/>
+                 <field name="newsletter_id" type="hidden" />
+	</fieldset>
+</form>

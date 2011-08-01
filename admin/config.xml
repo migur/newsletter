@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: config.xml 19439 2010-11-10 15:42:23Z chdemko $ -->
+<config>
+	<fieldset name="general"
+		label="COM_NEWSLETTER_CONFIG_GENERAL"
+		description="COM_NEWSLETTER_CONFIG_GENERAL">
+
+        <field
+            name="general_send_disable"
+            type="radio"
+            default="0"
+            label="COM_NEWSLETTER_SEND_DISABLE"
+            description="COM_NEWSLETTER_SEND_DISABLE">
+            <option
+                value="1">JYES</option>
+            <option
+                value="0">JNO</option>
+        </field>
+
+        <field
+            name="general_reg_disable"
+            type="radio"
+            default="0"
+            label="COM_NEWSLETTER_REG_DISABLE"
+            description="COM_NEWSLETTER_REG_DISABLE">
+            <option
+                value="1">JYES</option>
+            <option
+                value="0">JNO</option>
+        </field>
+
+        <field
+            name="general_smtp_default"
+            type="smtpprofiles"
+            default=""
+            label="COM_NEWSLETTER_SMTP_DEFAULT"
+            description="COM_NEWSLETTER_SMTP_DEFAULT">
+        </field>
+
+        <field
+            name="newsletter_smtp_create"
+            type="button"
+                        class="button"
+            label=" "
+            description="COM_NEWSLETTER_CREATE_SMTP_PROFILE"
+                        required="false"
+                        value="COM_NEWSLETTER_CREATE_SMTP_PROFILE">
+        </field>
+
+        <field
+            name="autosaver_enabled"
+            type="radio"
+            default="0"
+            label="COM_NEWSLETTER_AUTOSAVER_IS_ON"
+            description="COM_NEWSLETTER_AUTOSAVER_IS_ON">
+            <option
+                value="1">JYES</option>
+            <option
+                value="0">JNO</option>
+        </field>
+
+    </fieldset>
+
+    <fieldset name="newsletters"
+    label="COM_NEWSLETTER_CONFIG"
+    description="COM_NEWSLETTER_CONFIG">
+
+        <field
+            name="newsletter_save_to_db"
+            type="radio"
+            default="1"
+            label="COM_NEWSLETTER_SAVE_NEWSLETTERS"
+            description="COM_NEWSLETTER_SAVE_NEWSLETTERS">
+            <option
+                value="1">JYES</option>
+            <option
+                value="0">JNO</option>
+        </field>
+
+        <field
+            name="newsletter_clear_db"
+            type="button"
+                        class="button"
+            label="COM_NEWSLETTER_CLEAR_DB"
+            description="COM_NEWSLETTER_CLEAR_DB"
+                        required="false"
+                        value="COM_NEWSLETTER_CLEAR">
+        </field>
+
+        <field
+            name="mailer_cron_interval"
+            type="text"
+            default="10"
+                        size="10"
+            label="COM_NEWSLETTER_CONFIG_CRON_INTERVAL"
+            description="COM_NEWSLETTER_CONFIG_CRON_INTERVAL">
+        </field>
+
+        <field
+            name="mailer_cron_count"
+            type="text"
+            default="10"
+                        size="10"
+            label="COM_NEWSLETTER_CONFIG_CRON_COUNT"
+            description="COM_NEWSLETTER_CONFIG_CRON_COUNT">
+        </field>
+
+        <field
+            name="mailer_cron_last_execution_time"
+            type="text"
+            readonly="true"
+            default="0"
+            size="30"
+            label="COM_NEWSLETTER_CONFIG_CRON_LAST"
+            description="COM_NEWSLETTER_CONFIG_CRON_LAST">
+        </field>
+
+        <field
+            name="mailer_cron_is_executed"
+            type="mapper"
+                        readonly="true"
+            default="0"
+            label="COM_NEWSLETTER_CONFIG_CRON_EXECUTED"
+            description="COM_NEWSLETTER_CONFIG_CRON_EXECUTED">
+            <option
+                value="1">JYES</option>
+            <option
+                value="0">JNO</option>
+        </field>
+
+        <field
+            name="subscription_newsletter_id"
+            type="newsletters"
+            scope="static"
+            default="0"
+            label="COM_NEWSLETTER_CONFIG_SUBSCRIPTION_NEWSLETTER"
+            description="COM_NEWSLETTER_CONFIG_SUBSCRIPTION_NEWSLETTER">
+        </field>
+    </fieldset>
+
+
+    <fieldset name="advanced"
+        label="COM_NEWSLETTER_CONFIG_ADVANCED"
+        description="COM_NEWSLETTER_CONFIG_ADVANCED">
+
+        <field
+            name="license_key"
+            type="text"
+            default="0"
+            size="50"
+            label="COM_NEWSLETTER_LICENSE_KEY">
+        </field>
+
+        <field
+            name="domain"
+            type="hidden"
+            default=""
+            size="50"
+            label="COM_NEWSLETTER_CONFIG_DOMAIN">
+        </field>
+
+        <field
+            name="product"
+            type="hidden"
+            default="com_newsletter"
+            size="50"
+            label="COM_NEWSLETTER_CONFIG_PRODUCT">
+        </field>
+
+        <field
+            name="monster_url"
+            type="hidden"
+            default="monster.migur.com"
+            size="50"
+            label="COM_NEWSLETTER_MONSTER_URL">
+        </field>
+        <field
+            name="fbappid"
+            type="text"
+            default=""
+            size="50"
+            label="COM_NEWSLETTER_FACEBOOK_APID">
+        </field>
+        <field
+            name="fbsecret"
+            type="text"
+            default=""
+            size="50"
+            label="COM_NEWSLETTER_FACEBOOK_SECRET">
+        </field>
+    </fieldset>
+</config>
