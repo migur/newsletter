@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ An ant build file for joomla install packages
+
+ @author   SmellsLikeApps
+ @link     http://www.smellslikeapps.com
+ @copyright Copyright (C) 2010 SmellsLikeApps. All rights reserved.
+ @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
+-->
+<project name="sla-newsletter" default="build" basedir=".">
+    <description>Ant Build File for Joomla</description>
+
+    <!-- load variables from config file -->
+    <property name="cfg.configFile" location="build.properties" />
+    <loadproperties srcfile="${cfg.configFile}" />
+
+    <!--config file values
+    cfg.name=paket
+    cfg.versionDir=v1_50
+    cfg.buildDir=packages
+    cfg.localhostRoot=../../www
+    cfg.xmlfile=files.txt
+
+    ftp.server=
+    ftp.user=
+    ftp.password=
+    ftp.dir=
+
+    rsync.server=
+    rsync.user=
+    rsync.dir=
+    -->
+
+    <!-- auto values but should be checked -->
+    <property name="cfg.comName" value="${cfg.name}" />
+    <property name="cfg.comDir" value="${basedir}" />
+    <property name="cfg.buildVersionDir" value="${cfg.buildDir}" />
+    <property name="cfg.adminFilesDir" location="${cfg.comDir}/admin" />
+    <property name="cfg.libFilesDir" location="${basedir}/extensions/libraries" />
+    <property name="cfg.siteFilesDir" location="${cfg.comDir}/site" />
+    <property name="cfg.extensionsDir" location="${basedir}/extensions" />
+    <property name="cfg.libDir" location="${cfg.comDir}/libraries" />
+    <property name="cfg.mediaFilesDir" location="${cfg.comDir}/media" />
+    <property name="cfg.adminLangDir" location="${cfg.comDir}/admin/language" />
+    <property name="cfg.siteLangDir" location="${cfg.comDir}/site/language" />
+
+
+    <target name="build" depends="up" />
+
+    <target name="up" description="attemps to update files on localhost server with files from working directory">
+        <condition property="destdir" value="${tmpdir}" else="${cfg.localhostRoot}" >
+            <available file="${tmpdir}" type="dir" />
+        </condition>
+    	<!-- MAIN COMPONENT -->	
+        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
+            <fileset dir="${cfg.adminFilesDir}" />
+        </copy>
+        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
+            <fileset file="${cfg.comDir}/${cfg.comName}.xml" />
+        </copy>
+        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
+            <fileset file="${cfg.comDir}/manifest.xml" />
+        </copy>
+
+        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>
+
+        <copy todir="${destdir}/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
+            <fileset dir="${cfg.siteFilesDir}" />
+        </copy>
+    	<!-- MEDIA FILES -->
+        <copy todir="${destdir}/media/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
+            <fileset dir="${cfg.mediaFilesDir}" />
+        </copy>
+
+    	<!-- LANGUAGE FILES -->
+        <copy todir="${destdir}/administrator/language" preservelastmodified="true" overwrite="true">
+            <fileset dir="${cfg.adminLangDir}" />
+        </copy>
+        <copy todir="${destdir}/language" preservelastmodified="true" overwrite="true">
+            <fileset dir="${cfg.siteLangDir}" />
+        </copy>
+
+        <!-- Copy library MIGUR -->
+        <copy todir="${destdir}/libraries/migur" preservelastmodified="true" overwrite="true">
+            <fileset dir="${cfg.libFilesDir}/migur" />
+        </copy>
+
+        <copy todir="${destdir}/modules" preservelastmodified="true" overwrite="true">
+            <fileset dir="${basedir}/extensions/modules" />
+        </copy>
+
+<!-- Copy plugins -->
+<!--        <copy todir="${destdir}/plugins" preservelastmodified="true" overwrite="true">
+            <fileset dir="${cfg.buildDir}/plugins" />
+        </copy>-->
+
+<!-- Copy plugin lang file -->
+<!--        <copy todir="${destdir}/administrator/language/en-GB" preservelastmodified="true" overwrite="true">
+            <fileset file="${cfg.buildDir}/plugins/system/newsletterga/en-GB.plg_system_newsletterga.ini" />
+        </copy>
+        <copy todir="${destdir}/administrator/language/en-GB" preservelastmodified="true" overwrite="true">
+            <fileset file="${cfg.buildDir}/plugins/system/newsletterga/en-GB.plg_system_newsletterga.sys.ini" />
+        </copy>-->
+        <copy todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/modules/mod_newsletter_subscribe/en-GB.mod_newsletter_subscribe.ini" />
+        </copy>
+
+<!--        <delete dir="${destdir}/administrator/components/com_${cfg.comName}/migur" />-->
+    <!-- MODULES -->
+        <!-- CART -->
+        <!-- copy todir="${destdir}/modules/mod_${cfg.comName}_cart" preservelastmodified="true" overwrite="true">
+            <fileset dir="${cfg.comDir}/mod_${cfg.comName}_cart" />
+        </copy -->
+    <!-- PLUGINS -->
+        <!-- BUG REPORT -->
+        <!-- copy todir="${destdir}/plugins/newsletter" preservelastmodified="true" overwrite="true">
+            <fileset dir="${cfg.comDir}/newsletter_plugin_bug_report" />
+        </copy>
+    -->
+    </target>
+
+    <target name="init" description="creates nessecary directory to build with">
+        <mkdir dir="${cfg.buildVersionDir}" />
+        <mkdir dir="${cfg.buildVersionDir}/plugins" />
+        <mkdir dir="${cfg.buildVersionDir}/modules" />
+        <mkdir dir="${cfg.buildVersionDir}/components" />
+        <mkdir dir="${cfg.extensionsDir}" />
+    </target>
+
+    <target name="build_package" description="build the package">
+        <condition property="destdir" value="${tmpdir}" else="${cfg.localhostRoot}" >
+            <available file="${tmpdir}" type="dir" />
+        </condition>
+
+        <delete  dir="${cfg.buildVersionDir}" />
+
+    	<!-- MAIN COMPONENT -->
+        <copy todir="${cfg.buildVersionDir}/packages/com_${cfg.comName}/admin" preservelastmodified="true" overwrite="true">
+            <fileset dir="${basedir}/admin" />
+        </copy>
+        <copy todir="${cfg.buildVersionDir}/packages/com_${cfg.comName}/site" preservelastmodified="true" overwrite="true">
+            <fileset dir="${basedir}/site" />
+        </copy>
+        <copy todir="${cfg.buildVersionDir}/packages/com_${cfg.comName}/media" preservelastmodified="true" overwrite="true">
+            <fileset dir="${basedir}/media" />
+        </copy>
+        <copy todir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/newsletter.xml" />
+        </copy>
+        <zip destfile="${cfg.buildVersionDir}/packages/com_${cfg.comName}.zip" basedir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" />
+        <delete dir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" />
+
+        <copy todir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" preservelastmodified="true" overwrite="true">
+            <fileset dir="${basedir}/extensions/modules/mod_newsletter_subscribe" />
+        </copy>
+        <zip destfile="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe.zip" basedir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" />
+        <delete dir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" />
+
+        <copy todir="${cfg.buildVersionDir}/packages/migur" preservelastmodified="true" overwrite="true">
+            <fileset dir="${basedir}/extensions/libraries/migur" />
+        </copy>
+        <zip destfile="${cfg.buildVersionDir}/packages/migur.zip" basedir="${cfg.buildVersionDir}/packages/migur" />
+        <delete dir="${cfg.buildVersionDir}/packages/migur" />
+
+        <copy todir="${cfg.buildVersionDir}" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/pkg_newsletter.xml" />
+        </copy>
+        <delete  file="${cfg.buildVersionDir}/pkg_newsletter.zip" />
+        <zip destfile="${cfg.buildVersionDir}/pkg_newsletter.zip" basedir="${cfg.buildVersionDir}" />
+
+    </target>
+
+    <target name="build_component" depends="update_extensions" description="packages the final component file">
+        <zip destfile="${cfg.buildVersionDir}/components/${cfg.comName}.zip" basedir="${cfg.comDir}" />
+    </target>
+
+    <target name="build_plugins" description="packages any plugins">
+        <!-- add all plugin directories here -->
+        <!-- EX: <zip destfile="${cfg.buildVersionDir}/plugins/aplugin.zip" basedir="${cfg.versionDir}/aplugin" /> -->
+        <!--         <zip destfile="${cfg.buildVersionDir}/plugins/billets_plugin_ambrasubs.zip" basedir="${cfg.versionDir}/billets_plugin_ambrasubs" /> -->
+    </target>
+
+    <target name="build_modules" description="packages any modules">
+        <!-- add all module directories here -->
+        <!-- EX: <zip destfile="${cfg.buildVersionDir}/modules/amodule.zip" basedir="${cfg.versionDir}/amodule" /> -->
+    </target>
+
+    <target name="update_extensions" depends="build_plugins, build_modules" description="copies fresh builds of plugins and extensions to the admin/extensions folder">
+        <copy todir="${cfg.extensionsDir}" overwrite="true">
+            <fileset dir="${cfg.buildVersionDir}/plugins" />
+        </copy>
+        <copy todir="${cfg.extensionsDir}" overwrite="true">
+            <fileset dir="${cfg.buildVersionDir}/modules" />
+        </copy>
+    </target>
+
+    <target name="info" description="prints information">
+        <echo message="Project:            ${cfg.name}" />
+        <tstamp>
+            <format property="buildtime" pattern="yyyy-MM-dd'T'HH:mm:ss" />
+        </tstamp>
+        <echo message="Buildtime:    ${buildtime}" />
+    </target>
+
+    <target name="clean" description="Destroys all generated files and dirs.">
+        <delete dir="${cfg.buildVersionDir}" />
+        <delete dir="packages" />
+        <delete dir="${cfg.extensionsDir}" />
+        <delete file="${cfg.xmlfile}" />
+    </target>
+
+
+    <target name="build_xml" description="builds an xml listing of all the files in the working copy">
+        <fileset id="site" dir="${cfg.siteFilesDir}" />
+        <echo message="${line.separator}&lt;files folder=&quot;site&quot;&gt;${line.separator}&lt;filename&gt;" file="${cfg.xmlfile}" append="false" />
+        <echo-fileset filesetref="site" />
+        <echo message="&lt;/filename&gt;${line.separator}&lt;/files&gt;${line.separator}" file="${cfg.xmlfile}" append="true" />
+
+        <fileset id="admin" dir="${cfg.adminFilesDir}" />
+        <echo message="${line.separator}&lt;files folder=&quot;admin&quot;&gt;${line.separator}&lt;filename&gt;" file="${cfg.xmlfile}" append="true" />
+        <echo-fileset filesetref="admin" />
+        <echo message="&lt;/filename&gt;${line.separator}&lt;/files&gt;${line.separator}" file="${cfg.xmlfile}" append="true" />
+
+        <replace file="${cfg.xmlfile}" token="${cfg.siteFilesDir}/" value="" />
+        <replace file="${cfg.xmlfile}" token="${cfg.adminFilesDir}/" value="" />
+    </target>
+
+    <macrodef name="echo-fileset" description="creates a printable directory listing">
+        <attribute name="filesetref" />
+        <sequential>
+            <pathconvert pathsep="&lt;/filename&gt;${line.separator}&lt;filename&gt;" property="@{filesetref}.echopath">
+                <path>
+                    <fileset refid="@{filesetref}" />
+                </path>
+            </pathconvert>
+            <echo message="${@{filesetref}.echopath}" file="${cfg.xmlfile}" append="true" />
+        </sequential>
+    </macrodef>
+</project>

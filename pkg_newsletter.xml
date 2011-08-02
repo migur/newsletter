@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extension type="package" version="1.6.0">
+<name>Migur Newsletter</name>
+<packagename>newsletter</packagename>
+<version>0.5a</version>
+<url>http://migur.com</url>
+<packager>Migur</packager>
+<packagerurl>http://migur.com</packagerurl>
+<description>Migur newsletter full package of a component.</description>
+<update>http://monster.migur.com</update>
+<copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
+<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+<files folder="packages">
+<file type="library" id="migur">migur.zip</file>
+<file type="component" id="com_newsletter">com_newsletter.zip</file>
+<file type="module" id="mod_newsletter_subscribe" client="site">mod_newsletter_subscribe.zip</file>
+</files>
+</extension>
