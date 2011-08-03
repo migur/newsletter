@@ -8,8 +8,11 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-error_reporting(E_ERROR | E_WARNING | ~E_DEPRECATED);
-ini_set('display_errors', '1');
+//  Uncoment this rows for debug
+//  ini_set('error_reporting', E_ALL | E_STRICT | E_NOTICE | E_DEPRECATED);
+//  ini_set('display_errors', '1');
+//  ini_set("log_errors" , "0");
+//  ini_set("error_log" , "/var/log/php-error.log");
 
 // import joomla controller library
 jimport('joomla.application.component.controller');
