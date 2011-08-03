@@ -105,4 +105,17 @@
         <updateservers>
             <server type="package" priority="1" name="Migur">http://update.migur.com/newsletter.xml</server>
         </updateservers>
+
+        <restorepoint>
+
+            <extraprefixes>
+                <prefix></prefix>
+            </extraprefixes>
+
+            <extratables>
+                <table>newsletters</table>
+            </extratables>
+
+        </restorepoint>
+
 </extension>
