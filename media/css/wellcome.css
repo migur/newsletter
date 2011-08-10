@@ -1,0 +1,31 @@
+#backup-panel {
+    padding: 10px
+}
+
+#table-backup-desc {
+    margin-bottom: 10px;
+    color: green;
+    font-weight: bold;
+}
+
+fieldset ul {
+    padding: auto !important;
+}
+
+fieldset li {
+    padding: 0px !important;
+    list-style: circle outside none !important;
+    margin: 5px 20px !important;
+}
+
+.table-backup {
+    color: #888;
+}
+
+#backup-question {
+    margin-top: 15px;
+}
+
+#delete-backups-label {
+    line-height: 20px;
+}
