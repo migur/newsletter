@@ -71,7 +71,7 @@ class NewsletterModelNewsletters extends JModelList
 				'n.language, n.sent_started, 123 AS sent_to'
 			)
 		);
-		$query->from('`#__newsletters` AS n');
+		$query->from('`#__newsletter_newsletters` AS n');
 
 		// Filtering the data
 		if (!empty($this->filtering)) {
@@ -184,7 +184,7 @@ class NewsletterModelNewsletters extends JModelList
 
 		// Select the required fields from the table.
 		$query->select('DISTINCT n.*');
-		$query->from('#__newsletters AS n');
+		$query->from('#__newsletter_newsletters AS n');
 		$query->where('UNIX_TIMESTAMP(n.sent_started) = 0 OR n.sent_started IS NULL');
 		$query->order('name');
 		$db->setQuery($query);

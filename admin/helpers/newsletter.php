@@ -134,7 +134,7 @@ class NewsletterHelper
 		$dbo = JFactory::getDbo();
 		$query = $dbo->getQuery(true);
 		$query->select('DISTINCT ns.*, (CASE WHEN l.list_id IS NULL THEN 0 ELSE 1 END) AS used_as_static')
-			->from('#__newsletters AS ns')
+			->from('#__newsletter_newsletters AS ns')
 			->join('LEFT', '#__newsletter_lists AS l ON (ns.newsletter_id = l.send_at_reg OR ns.newsletter_id = l.send_at_unsubscribe)')
 			->where('newsletter_id=' . (int)$id );
 

@@ -145,7 +145,7 @@ class StatisticsHelper
 
 		$query = $dbo->getQuery(true);
 		$query->select('distinct n.newsletter_id')
-			->from('#__newsletters AS n')
+			->from('#__newsletter_newsletters AS n')
 			->join('', '#__newsletter_sub_history AS h')
 			->where('h.newsletter_id=n.newsletter_id');
 
@@ -369,7 +369,7 @@ class StatisticsHelper
 		$query = $dbo->getQuery(true);
 		$query->select('DATE(date) AS day, count(*) as count')
 			->from('#__newsletter_sub_history as h')
-			->join('', '#__newsletters as n ON n.newsletter_id=h.newsletter_id')
+			->join('', '#__newsletter_newsletters as n ON n.newsletter_id=h.newsletter_id')
 			->where('h.action=' . $dbo->quote($activity))
 			->group('day');
 
@@ -440,7 +440,7 @@ class StatisticsHelper
 		$query = $dbo->getQuery(true);
 		$query->select('DATE(date) AS day, count(*) as count')
 			->from('#__newsletter_sub_history as h')
-			->join('', '#__newsletters as n ON n.newsletter_id=h.newsletter_id')
+			->join('', '#__newsletter_newsletters as n ON n.newsletter_id=h.newsletter_id')
 			->where('h.action="' . NewsletterTableHistory::ACTION_OPENED . '"')
 			->group('day, h.subscriber_id');
 
@@ -542,7 +542,7 @@ class StatisticsHelper
 		$query = $dbo->getQuery(true);
 		$query->select('DATE_FORMAT(h.date, "%Y-%m-%d %H") AS day, count(*) as count')
 			->from('#__newsletter_sub_history as h')
-			->join('', '#__newsletters as n ON n.newsletter_id=h.newsletter_id')
+			->join('', '#__newsletter_newsletters as n ON n.newsletter_id=h.newsletter_id')
 			->where('h.action=' . $dbo->quote($activity))
 			->group('day');
 

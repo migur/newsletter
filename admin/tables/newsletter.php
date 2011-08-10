@@ -30,7 +30,7 @@ class NewsletterTableNewsletter extends MigurJTable
 	function __construct(&$_db)
 	{
 		parent::__construct(
-				'#__newsletters',
+				'#__newsletter_newsletters',
 				'newsletter_id',
 				$_db
 		);

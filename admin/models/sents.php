@@ -72,7 +72,7 @@ class NewsletterModelSents extends JModelList
 			)
 		);
 		$query->from('`#__newsletter_sent` AS s');
-		$query->join('', '`#__newsletters` AS n ON s.newsletter_id=n.newsletter_id');
+		$query->join('', '`#__newsletter_newsletters` AS n ON s.newsletter_id=n.newsletter_id');
 
 		// Filtering the data
 		if (!empty($this->filtering)) {

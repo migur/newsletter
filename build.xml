@@ -147,6 +147,9 @@
         <copy todir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/newsletter.xml" />
         </copy>
+        <copy todir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/script.php" />
+        </copy>
         <zip destfile="${cfg.buildVersionDir}/packages/com_${cfg.comName}.zip" basedir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" />
         <delete dir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" />
 

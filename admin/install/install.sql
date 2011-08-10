@@ -1,3 +1,5 @@
+# Ver 0.5.1a;
+
 SET foreign_key_checks = 0;
 
 DROP TABLE IF EXISTS `#__newsletter_extensions`;
@@ -7,7 +9,7 @@ DROP TABLE IF EXISTS `#__newsletter_sent`;
 DROP TABLE IF EXISTS `#__newsletter_template_styles`;
 DROP TABLE IF EXISTS `#__newsletter_subscribers`;
 DROP TABLE IF EXISTS `#__newsletter_smtp_profiles`;
-DROP TABLE IF EXISTS `#__newsletters`;
+DROP TABLE IF EXISTS `#__newsletter_newsletters`;
 DROP TABLE IF EXISTS `#__newsletter_lists`;
 DROP TABLE IF EXISTS `#__newsletter_sub_history`;
 DROP TABLE IF EXISTS `#__newsletter_sub_list`;
@@ -66,7 +68,7 @@ PRIMARY KEY (`smtp_profile_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `#__newsletters`
+CREATE TABLE `#__newsletter_newsletters`
 (
 `newsletter_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
 `name` VARCHAR(255) NOT NULL,
@@ -202,11 +204,11 @@ PRIMARY KEY (`downloads_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
-CREATE INDEX `smtp_profile_id_idxfk` ON `#__newsletters`(`smtp_profile_id`);
-# ALTER TABLE `#__newsletters` ADD CONSTRAINT `newsletters_smtp_profile_idfk` FOREIGN KEY `smtp_profile_id_idxfk` (`smtp_profile_id`) REFERENCES `#__newsletter_smtp_profiles` (`smtp_profile_id`);
+CREATE INDEX `smtp_profile_id_idxfk` ON `#__newsletter_newsletters`(`smtp_profile_id`);
+# ALTER TABLE `#__newsletter_newsletters` ADD CONSTRAINT `newsletters_smtp_profile_idfk` FOREIGN KEY `smtp_profile_id_idxfk` (`smtp_profile_id`) REFERENCES `#__newsletter_smtp_profiles` (`smtp_profile_id`);
 
-CREATE INDEX t_style_id_idxfk ON #__newsletters(t_style_id);
-ALTER TABLE #__newsletters ADD CONSTRAINT `newsletters_t_style_idfk` FOREIGN KEY t_style_id_idxfk (t_style_id) REFERENCES #__newsletter_template_styles (t_style_id)
+CREATE INDEX t_style_id_idxfk ON #__newsletter_newsletters(t_style_id);
+ALTER TABLE #__newsletter_newsletters ADD CONSTRAINT `newsletters_t_style_idfk` FOREIGN KEY t_style_id_idxfk (t_style_id) REFERENCES #__newsletter_template_styles (t_style_id)
 	ON DELETE SET NULL ON UPDATE CASCADE;
 
 CREATE INDEX smtp_profile_id_idxfk ON #__newsletter_lists(smtp_profile_id);
@@ -221,13 +223,13 @@ CREATE INDEX list_id_idxfk ON #__newsletter_sub_history(list_id);
 # ALTER TABLE #__newsletter_sub_history ADD CONSTRAINT `sub_history_list_idfk` FOREIGN KEY list_id_idxfk_1 (list_id) REFERENCES #__newsletter_lists (list_id);
 
 CREATE INDEX newsletter_id_idxfk ON #__newsletter_sub_history(newsletter_id);
-ALTER TABLE #__newsletter_sub_history ADD CONSTRAINT `sub_history_newsletter_idfk` FOREIGN KEY newsletter_id_idxfk (newsletter_id) REFERENCES #__newsletters (newsletter_id);
+ALTER TABLE #__newsletter_sub_history ADD CONSTRAINT `sub_history_newsletter_idfk` FOREIGN KEY newsletter_id_idxfk (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id);
 
 CREATE INDEX list_id_idxfk ON #__newsletter_sub_list(list_id);
 ALTER TABLE #__newsletter_sub_list ADD CONSTRAINT `sub_list_list_idfk` FOREIGN KEY list_id_idxfk (list_id) REFERENCES #__newsletter_lists (list_id);
 
 CREATE INDEX newsletter_idxfk ON #__newsletter_newsletters_ext(newsletter_id);
-ALTER TABLE #__newsletter_newsletters_ext ADD CONSTRAINT `newsletters_ext_newsletter_idfk` FOREIGN KEY newsletter_idxfk (newsletter_id) REFERENCES #__newsletters (newsletter_id) ON DELETE CASCADE;
+ALTER TABLE #__newsletter_newsletters_ext ADD CONSTRAINT `newsletters_ext_newsletter_idfk` FOREIGN KEY newsletter_idxfk (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE;
 
 CREATE INDEX extension_id_idxfk ON #__newsletter_newsletters_ext(extension_id);
 # Do not use this index because it prevent to bind the Joomla native modules to newsletter;
@@ -262,8 +264,8 @@ insert  into `#__newsletter_lists`(`list_id`,`name`,`state`,`description`,`smtp_
 insert  into `#__newsletter_sub_list`(`sublist_id`,`subscriber_id`,`list_id`,`confirmed`) values (1,2,2,'');
 insert  into `#__newsletter_sub_list`(`sublist_id`,`subscriber_id`,`list_id`,`confirmed`) values (2,1,2,'');
 
-# Data for the table `#__newsletters`;
-insert  into `#__newsletters`(`newsletter_id`,`name`,`subject`,`alias`,`smtp_profile_id`,`t_style_id`,`plain`,`params`,`ordering`,`language`,`checked_out`,`checked_out_time`,`created`,`sent_started`,`type`) VALUES (96,'Birthday of Baby Doe!','Baby Doe','',0,5,'Meet the Baby Doe!\nCongratulations for [username]! \n\nTo unsubscribe: [unsubscription link]','{\"newsletter_from_name\":\"John Doe\",\"newsletter_from_email\":\"johndoe@example.com\",\"newsletter_to_name\":\"John Doe\",\"newsletter_to_email\":\"johndoe@example.com\"}',0,'',0,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0);
+# Data for the table `#__newsletter_newsletters`;
+insert  into `#__newsletter_newsletters`(`newsletter_id`,`name`,`subject`,`alias`,`smtp_profile_id`,`t_style_id`,`plain`,`params`,`ordering`,`language`,`checked_out`,`checked_out_time`,`created`,`sent_started`,`type`) VALUES (96,'Birthday of Baby Doe!','Baby Doe','',0,5,'Meet the Baby Doe!\nCongratulations for [username]! \n\nTo unsubscribe: [unsubscription link]','{\"newsletter_from_name\":\"John Doe\",\"newsletter_from_email\":\"johndoe@example.com\",\"newsletter_to_name\":\"John Doe\",\"newsletter_to_email\":\"johndoe@example.com\"}',0,'',0,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0);
 
 # Data for the table `#__newsletter_newsletters_ext`;
 insert  into `#__newsletter_newsletters_ext`(`newsletters_ext_id`,`newsletter_id`,`extension_id`,`position`,`params`,`ordering`,`native`,`title`,`showtitle`) values (6,96,4,'header_module_position','{\"text\":\"<p>Meet the Baby Doe!<\\/p>\\n<p>Congratulations for [username]!<\\/p>\"}',1,0,'Text Module',1);

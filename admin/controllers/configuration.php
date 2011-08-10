@@ -189,4 +189,33 @@ class NewsletterControllerConfiguration extends JController
 		$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=close');
 	}
 
+
+	function init() {
+
+		if (JRequest::getInt('delete_backups') == 1) {
+			
+			$sess = JFactory::getSession();
+			$backups = $sess->get('com-newsletter-backup');
+
+			if (!empty($backups)) {
+				$dbo = JFactory::getDbo();
+				$dbo->setQuery('SET foreign_key_checks = 0;');
+				$dbo->query();
+
+				foreach($backups as $table) {
+					$dbo->setQuery('DROP TABLE IF EXISTS `'.$table['backup'].'`');
+					$dbo->query();
+				}
+
+				$dbo->setQuery('SET foreign_key_checks = 1;');
+				$dbo->query();
+			}
+
+			$sess->set('com-newsletter-backup', null);
+		}
+
+
+		$this->setRedirect('index.php?option=com_newsletter');
+	}
+
 }
