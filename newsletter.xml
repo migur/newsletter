@@ -10,12 +10,12 @@
         <copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
         <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
         <!--  The version string is recorded in the components table -->
-        <version>0.5a</version>
+        <version>0.5.1a</version>
         <!-- The description is optional and defaults to the name -->
         <description>COM_NEWSLETTER_DESCRIPTION</description>
  
         <!-- Runs on install/uninstall/update; New in 1.6 -->
-<!--        <scriptfile>script.php</scriptfile>-->
+        <scriptfile>script.php</scriptfile>
  
         <install>
             <sql>
@@ -105,17 +105,4 @@
         <updateservers>
             <server type="package" priority="1" name="Migur">http://update.migur.com/newsletter.xml</server>
         </updateservers>
-
-        <restorepoint>
-
-            <extraprefixes>
-                <prefix></prefix>
-            </extraprefixes>
-
-            <extratables>
-                <table>newsletters</table>
-            </extratables>
-
-        </restorepoint>
-
 </extension>

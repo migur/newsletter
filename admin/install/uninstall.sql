@@ -1,3 +1,5 @@
+# Ver 0.5.1a;
+
 SET foreign_key_checks = 0;
 
 DROP TABLE IF EXISTS `#__newsletter_extensions`;
@@ -7,7 +9,7 @@ DROP TABLE IF EXISTS `#__newsletter_sent`;
 DROP TABLE IF EXISTS `#__newsletter_template_styles`;
 DROP TABLE IF EXISTS `#__newsletter_subscribers`;
 DROP TABLE IF EXISTS `#__newsletter_smtp_profiles`;
-DROP TABLE IF EXISTS `#__newsletters`;
+DROP TABLE IF EXISTS `#__newsletter_newsletters`;
 DROP TABLE IF EXISTS `#__newsletter_lists`;
 DROP TABLE IF EXISTS `#__newsletter_sub_history`;
 DROP TABLE IF EXISTS `#__newsletter_sub_list`;

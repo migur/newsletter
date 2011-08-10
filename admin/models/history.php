@@ -113,7 +113,7 @@ class NewsletterModelHistory extends MigurModelList
 		$action = $this->getTable('history', 'newsletterTable')->getMappingFor('action');
 		$query->select("a.history_id, a.subscriber_id, a.list_id, a.newsletter_id, a.date, {$action}, a.text, n.name");
 		$query->from('#__newsletter_sub_history AS a');
-		$query->join('', '#__newsletters AS n ON a.newsletter_id = n.newsletter_id');
+		$query->join('', '#__newsletter_newsletters AS n ON a.newsletter_id = n.newsletter_id');
 		//$query->join('LEFT', '#__newsletter_lists AS l ON a.list_id = l.list_id');
 
 
