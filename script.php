@@ -158,10 +158,29 @@ class com_newsletterInstallerScript
 
 		$dbo = JFactory::getDbo();
 		$tableNew = $table . self::$backSuffix . $cnt;
+		
+		//Delete all foreign keys
+		$sql = 'SHOW CREATE TABLE ' . $table . ';';
+		$dbo->setQuery($sql);
+		$res = $dbo->query();
+		$res = mysql_fetch_array($res);
+		$text = $res['Create Table'];
+		
+		$matches = array();
+		preg_match_all('/CONSTRAINT[\s]+\`([^\`]+)\`[\s]+FOREIGN\sKEY/', $text, $matches);
+		//var_dump($text, $matches);
+		if (!empty($matches[1])) {
+			foreach($matches[1] as $fkey) {
+				$sql = 'ALTER TABLE ' . $table . ' DROP FOREIGN KEY ' . $fkey . ';';
+				$dbo->setQuery($sql);
+				$dbo->query();
+			}
+		}		
+		
+		// Rename the table
 		$sql = 'RENAME TABLE ' . $table . ' TO ' . $tableNew . ';';
 		$dbo->setQuery($sql);
 		$res = $dbo->query();
-		
 		return $tableNew;
 	}
 
