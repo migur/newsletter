@@ -203,8 +203,8 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 	 */
 	function track(&$content, $uid, $newsletterId)
 	{
-		$this->_trackLinks(&$content, $uid, $newsletterId);
-		$this->_addTrackingImg(&$content, $uid, $newsletterId);
+		$this->_trackLinks($content, $uid, $newsletterId);
+		$this->_addTrackingImg($content, $uid, $newsletterId);
 		return true;
 	}
 
