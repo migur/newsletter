@@ -6,6 +6,9 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+// Hack. Set the first tab active
+Cookie.write('jpanetabs_tabs-newsletter', 0);
+
 //TODO: Tottaly refacktoring. Create and use widgets!
 
 //TODO: Create the setup method that doing the page setup emmidiately after loading (not events)!
@@ -31,12 +34,11 @@ function jInsertFieldValue(value, id) {
 
 
 //TODO: BAAAD!!! Ned to insert into module widget
-Migur.dnd.makeAvatar = function(el, droppables, callbacks){
+Migur.dnd.makeAvatar = function(el, droppables){
 
     var avatar = el.clone();
     avatar.cloneEvents(el);
         
-    avatar.store('dndCallbacks', callbacks);
     /* Set draggable behaviour to avatar */
     avatar.makeDraggable({
 
@@ -72,7 +74,8 @@ Migur.dnd.makeAvatar = function(el, droppables, callbacks){
             if (!draggable) return false;
             var source = $(draggable).retrieve('source');
             if (!droppable) {
-                    
+                // no droopable area
+
                 if (!source) {
                     return draggable.destroy();
                 }
@@ -100,17 +103,18 @@ Migur.dnd.makeAvatar = function(el, droppables, callbacks){
                         zIndex: 'auto'
                     });
 
-                    var callbacks = $(draggable).retrieve('dndCallbacks');
-                    if (callbacks && typeof callbacks.onDropComplete == 'function') {
-                        callbacks.onDropComplete(draggable, droppable);
-                    }
-
                     var widget = Migur.getWidget(draggable);
                     widget.load(
                         siteRoot + 'index.php?option=com_newsletter&task=newsletter.rendermodule',
                         widget.get(),
                         '.widget-content'
                         );
+
+                    if (widget.get().notConfigured) {
+                        setTimeout(function(){
+                            avatar.getElements('a.settings')[0].fireEvent('click');
+                        }, 500);
+                    }
                 }
 
                 droppable.removeClass('overdropp');
@@ -127,13 +131,19 @@ Migur.dnd.makeAvatar = function(el, droppables, callbacks){
 
 // BAAAD!!! Ned to insert into module widget
 avatarSetSettings = function(avatar) {
+    
     avatar.getElements('a.settings')[0]
     .addEvent('mousedown', function(event){
         event.stop();
     })
     .addEvent('click', function(event){
+            
+        var widgetEl = $(this).getParent('.widget');
+        widget = Migur.getWidget(widgetEl);
+        var conf = widget.get().notConfigured;
+        widget.set({'notConfigured': false});
 
-        event.stop();
+        if (event) event.stop();
         var href = 0;//$(this).getProperty('href');
         if ( Migur.moodialogs[href] ) {
             Migur.moodialogs[href].destroy();
@@ -145,11 +155,11 @@ avatarSetSettings = function(avatar) {
                 'title': 'Module / Plugin',
                 'class': 'MooDialog myDialog',
                 autoOpen: false,
+                closeButton: !conf,
                 onClose: function() {
                     if ( this.task == 'apply' ) {
                         var widget = Migur.getWidget(this.targetObj);
 
-                        //console.log(this.data.params);
                         widget.set( {
                             'params'    : this.data.params,
                             'title'     : this.data.title,
@@ -346,7 +356,7 @@ window.addEvent('domready', function() {
 
                             var avatar = Migur.dnd.makeAvatar(this, $$('#html-area .modules, #trashcan-container'));
 
-                            Migur.createWidget(
+                            var w = Migur.createWidget(
                                 avatar,
                                 {
                                     data: [widget.get()].clone()[0],
@@ -355,6 +365,8 @@ window.addEvent('domready', function() {
                                 }
                                 );
 
+                            w.set({'notConfigured': true});
+                            
                             avatarSetSettings(avatar);
                             avatar.inject($$('body')[0]);
 
@@ -417,8 +429,6 @@ window.addEvent('domready', function() {
                     }
                     
                     this.set(data);
-
-                    //console.log(data);
                     // Update the turn on/off switcher
                     $(this.domEl).getElements('input')[0].setProperty(
                         'checked',
@@ -1034,7 +1044,8 @@ window.addEvent('domready', function() {
     $('templates-container').set( 'value', $$('[name=jform[t_style_id]]')[0].get('value') );
     $('templates-container').fireEvent('change');
 
-    // You want the request dialog instance to set the onRequest message, so you have to do it in two steps.
+    // You want the request dialog instance to set the onRequest message,
+    // so you have to do it in two steps.
 
     if (isNew == 1) {
     

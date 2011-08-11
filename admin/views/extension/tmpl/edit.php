@@ -3,9 +3,8 @@
 defined('_JEXEC') or die;
 ?>
 
-
 <?php
-echo JHtml::_('tabs.start', 'tabs-newsletter');
+echo JHtml::_('tabs.start', 'tabs-extension', array('startOffset' => 0, 'useCookie' => false));
 echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_EXTENSION_SETTINGS'), 'tab-ext-settings'); ?>
 
 <form name="extensionForm" method="POST" id="extension-container" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
