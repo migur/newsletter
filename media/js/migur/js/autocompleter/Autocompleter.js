@@ -98,8 +98,6 @@ var Autocompleter = new Class({
 			this.fix = new OverlayFix(this.choices);
 		}
 		
-		//console.log(this.choices);//return;
-		
 		if (!this.options.separator.test(this.options.separatorSplit)) {
 			this.options.separatorSplit = this.options.separator;
 		}
@@ -163,7 +161,6 @@ var Autocompleter = new Class({
 		
 		//HOTFIX: Use only first element
 		var input = this.selected.inputValue[0], value = input;
-		//console.log(input);//return;
 		var start = this.queryValue.length, end = input.length;
 		if (input.substr(0, start).toLowerCase() != this.queryValue.toLowerCase()) start = 0;
 		if (this.options.multiple) {
@@ -192,11 +189,7 @@ var Autocompleter = new Class({
 
 	showChoices: function() {
 
-        //console.log('showChoices');//return;
-
 		var match = this.options.choicesMatch, first = this.choices.getFirst(match);
-        //
-        //console.log(this.options.choicesMatch);//return;
 		this.selected = this.selectedValue = null;
 		if (this.fix) {
 			var pos = this.element.getCoordinates(this.relative), width = this.options.width || 'auto';
@@ -215,7 +208,6 @@ var Autocompleter = new Class({
 		}
 		if (this.options.selectFirst || this.typeAhead || first.inputValue == this.queryValue) this.choiceOver(first, this.typeAhead);
 		var items = this.choices.getChildren(match), max = this.options.maxChoices;
-        //console.log(items);//return;
 		var styles = {'overflowY': 'hidden', 'height': ''};
 		this.overflown = false;
 		if (items.length > max) {
@@ -414,7 +406,6 @@ var Autocompleter = new Class({
 			//HOTFIX: Add the testing on two walues in array. It was "return this.test(token);"
 			return this.test(token[0]) || this.test(token[1]);
 		}, new RegExp(((this.options.filterSubset) ? '' : '^') + this.queryValue.escapeRegExp(), (this.options.filterCase) ? '' : 'i'));
-        //console.log(res);
         return res;
 
 	},
@@ -430,7 +421,6 @@ var Autocompleter = new Class({
 	 */
 	markQueryValue: function(arr) {
 		
-		//console.log('markQueryValue:' + str);
 		var str = arr[0];
 		var res1 = (!this.options.markQuery || !this.queryValue) ? str
 			: str.replace(new RegExp('(' + ((this.options.filterSubset) ? '' : '^') + this.queryValue.escapeRegExp() + ')', (this.options.filterCase) ? '' : 'i'), '<span class="autocompleter-queried">$1</span>');		

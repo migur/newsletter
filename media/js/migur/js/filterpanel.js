@@ -38,7 +38,6 @@ window.addEvent('domready', function() {
             $(id + '-control').grab(control);
 
             var arrow;
-            //console.log(el, slide);//return;
             if(Cookie.read(id) == '1' || el.hasClass('opened')) {
                 slide.show();
                 arrow = 'icon-16-slide-up';

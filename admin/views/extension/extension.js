@@ -6,6 +6,9 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+// Hack. Set the first tab active
+Cookie.write('jpanetabs_tabs-extension', 0);
+
 window.addEvent('domready', function() {
 try {
 
@@ -44,6 +47,8 @@ try {
             }
         });
     }
+
+
 } catch(e){
     if (console && console.log) console.log(e);
 }

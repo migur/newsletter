@@ -133,7 +133,6 @@ Migur.lists.sortable = {
     //TODO: Move to widgets.
 
     setup: function(table) {
-        //console.log('sortable.setup', table);
         // parseHead
         obj = this;
         $(table).getChildren('thead a').each(function(el){
@@ -150,7 +149,6 @@ Migur.lists.sortable = {
             }
         });
 
-        //console.log($(table).getElements('thead a'));//return;
         $(table).getElements('thead a').each( function(el) {
             el.removeEvents('click')
             .setProperty('onclick', false)
@@ -183,8 +181,6 @@ Migur.lists.sortable = {
 
     sort: function(domContainer, clicked, colNum, dir){
 
-        //console.log('sortable.sort', domContainer, clicked, colNum, dir);
-
         var rows = domContainer.getElements('tr');
         var items = [];
         rows.each(function(el){
@@ -195,7 +191,6 @@ Migur.lists.sortable = {
             })
         });
 
-        //console.log(items);
         for(var i=0; i < items.length; i++) {
             for(var j=i; j < items.length; j++) {
 
@@ -266,7 +261,6 @@ Migur.lists.sortable = {
         var pagination = domContainer.getParent().getElements('.pagination')[0];
         if (pagination) {
             var paginator = pagination.retrieve('paginator');
-            //console.log(pagination, paginator);//return;
             if ( paginator ) {
                 paginator.refresh();
             }
@@ -474,7 +468,6 @@ Migur.lists.paginator = new Class({
         }));
 
         var self = this;
-        //console.log(this.container);
         this.container.store('paginator', self);
         $(this.container).getElements('a, select').each(function(el){
             el.store('paginator', self);
@@ -570,7 +563,6 @@ Migur.iterator.getItem = function(dataset, keyField, value, link) {
 }
 
 Migur.setRadio = function(dom, value) {
-    //console.log(dom);
     var radios = $(dom).getElements('input');
 
     // get all radios
