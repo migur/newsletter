@@ -129,8 +129,6 @@ Migur.widgets.guide = new Class({
 			var xCor = step.needle.xCorrection? step.needle.xCorrection : 0;
 			var yCor = step.needle.yCorrection? step.needle.yCorrection : 0;
 
-			//console.log(xCor, yCor);
-
 			coords.top  = coords.top  - coords.h + yCor;
 			coords.left = coords.left + xCor;
 

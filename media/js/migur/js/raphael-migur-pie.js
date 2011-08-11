@@ -1,6 +1,5 @@
 Migur.chart.pie = function(containerId, legend, data, x, y, r) {
 
-        //console.log(containerId, legend, data, x, y, r);//return;
         var colorsList = [
 			'#1751a7',
 			'#8aa717',
@@ -59,7 +58,6 @@ Migur.chart.pie = function(containerId, legend, data, x, y, r) {
 			legend.data = [legend.data];
 		}
 		var pdLabels = legend.data[0];
-        //console.log(pdLabels);//return;
 		var x = 15;var h = 18;
 
 		pie.labels = raphael.set();
@@ -69,7 +67,6 @@ Migur.chart.pie = function(containerId, legend, data, x, y, r) {
 
 			var mark = raphael.g["disc"](x + 5, h * i + offset, 5)
 			.attr({fill: clr, stroke: "none"});
-            //console.log(pdLabels[i], data[i]);//return;
 			var txt = raphael.text(x + 20, h * i + offset, pdLabels[i].replace('##', data[i]))
 			.attr(raphael.g.txtattr)
 			.attr({fill: "#000", "text-anchor": "start"});

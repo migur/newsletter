@@ -42,9 +42,6 @@ Raphael.fn.g.piechart = function (cx, cy, r, values, opts) {
                 endAngle +=2;
             }
 	
-			
-			//console.log(startAngle, endAngle, corEndAngle, corStartAngle);//return;
-			
             var rad = Math.PI / 180,
                 x1 = cx + r * Math.cos(-startAngle * rad),
                 x2 = cx + r * Math.cos(-endAngle * rad),
