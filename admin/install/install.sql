@@ -208,11 +208,10 @@ CREATE INDEX `smtp_profile_id_idxfk` ON `#__newsletter_newsletters`(`smtp_profil
 # ALTER TABLE `#__newsletter_newsletters` ADD CONSTRAINT `newsletters_smtp_profile_idfk` FOREIGN KEY `smtp_profile_id_idxfk` (`smtp_profile_id`) REFERENCES `#__newsletter_smtp_profiles` (`smtp_profile_id`);
 
 CREATE INDEX t_style_id_idxfk ON #__newsletter_newsletters(t_style_id);
-ALTER TABLE #__newsletter_newsletters ADD CONSTRAINT `newsletters_t_style_idfk` FOREIGN KEY t_style_id_idxfk (t_style_id) REFERENCES #__newsletter_template_styles (t_style_id)
-	ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE #__newsletter_newsletters ADD FOREIGN KEY (t_style_id) REFERENCES #__newsletter_template_styles (t_style_id) ON DELETE SET NULL ON UPDATE CASCADE;
 
 CREATE INDEX smtp_profile_id_idxfk ON #__newsletter_lists(smtp_profile_id);
-# ALTER TABLE #__newsletter_lists ADD CONSTRAINT `newsletter_lists_smtp_profile_idfk` FOREIGN KEY smtp_profile_id_idxfk_1 (smtp_profile_id) REFERENCES #__newsletter_smtp_profiles (smtp_profile_id);
+# ALTER TABLE #__newsletter_lists ADD FOREIGN KEY (smtp_profile_id) REFERENCES #__newsletter_smtp_profiles (smtp_profile_id);
 
 CREATE INDEX list_id_idxfk ON #__newsletter_sent(list_id);
 # We can not use this key because the list_id is not ALWAYS present in sent newsletter;
@@ -223,13 +222,13 @@ CREATE INDEX list_id_idxfk ON #__newsletter_sub_history(list_id);
 # ALTER TABLE #__newsletter_sub_history ADD CONSTRAINT `sub_history_list_idfk` FOREIGN KEY list_id_idxfk_1 (list_id) REFERENCES #__newsletter_lists (list_id);
 
 CREATE INDEX newsletter_id_idxfk ON #__newsletter_sub_history(newsletter_id);
-ALTER TABLE #__newsletter_sub_history ADD CONSTRAINT `sub_history_newsletter_idfk` FOREIGN KEY newsletter_id_idxfk (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id);
+ALTER TABLE #__newsletter_sub_history ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id);
 
 CREATE INDEX list_id_idxfk ON #__newsletter_sub_list(list_id);
-ALTER TABLE #__newsletter_sub_list ADD CONSTRAINT `sub_list_list_idfk` FOREIGN KEY list_id_idxfk (list_id) REFERENCES #__newsletter_lists (list_id);
+ALTER TABLE #__newsletter_sub_list ADD FOREIGN KEY (list_id) REFERENCES #__newsletter_lists (list_id);
 
 CREATE INDEX newsletter_idxfk ON #__newsletter_newsletters_ext(newsletter_id);
-ALTER TABLE #__newsletter_newsletters_ext ADD CONSTRAINT `newsletters_ext_newsletter_idfk` FOREIGN KEY newsletter_idxfk (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE;
+ALTER TABLE #__newsletter_newsletters_ext ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE;
 
 CREATE INDEX extension_id_idxfk ON #__newsletter_newsletters_ext(extension_id);
 # Do not use this index because it prevent to bind the Joomla native modules to newsletter;
