@@ -36,22 +36,16 @@ defined('_JEXEC') or die;
 		//  get RSS parsed object
 		$options = array();
 		$options['rssUrl'] = $params->rssurl;
-		
-//		if (!empty($params->rssurl)) {
-			if ($params->get('cache')) {
-				$options['cache_time'] = $params->get('cache_time', 15);
-				$options['cache_time'] *= 60;
-			} else {
-				$options['cache_time'] = null;
-			}
+		$options['cache_time'] = 0;
 
-			$parser = @JFactory::getXMLparser('RSS', $options);
-			if ($parser) {
-				return self::_parse($parser, $params);
-			} else {
-				return false;
-			}
-//		}
+		$parser = @JFactory::getXMLparser('RSS', $options);
+		if ($parser) {
+
+			return RssfeedHelper::_parse($parser, $params);
+
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -63,7 +57,7 @@ defined('_JEXEC') or die;
 	 * @return array - the array of RSS items
 	 * @since  1.0
 	 */
-	protected static function _parse($rssDoc, $params)
+	public static function _parse($rssDoc, $params)
 	{
 		// module params
 		$rssurl = $params->get('rssurl', '');

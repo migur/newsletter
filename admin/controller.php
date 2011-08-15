@@ -11,7 +11,6 @@ defined('_JEXEC') or die('Restricted access');
 
 // import Joomla controller library
 jimport('joomla.application.component.controller');
-JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 class NewsletterController extends JController
 {

@@ -110,10 +110,14 @@ class NewsletterViewDashboard extends MigurView
 		JavascriptHelper::addStringVar('emailsTotal', $total);
 		JavascriptHelper::addStringVar('newslettersSent', count($stat));
 
-		$this->news = RssfeedHelper::loadFeed(new JObject(
+		$cache = JFactory::getCache('com_newsletter');
+		$this->news = $cache->call(
+			array('RssfeedHelper', 'loadFeed'),
+			new JObject(
 					array('rssurl' => JRoute::_('http://migur.com/blog?format=feed&type=rss'))
-		));
-
+			)
+		);
+		
 		$this->info = NewsletterHelper::getCommonInfo();
 
 		JavascriptHelper::addStringVar('siteRoot', JUri::root());
