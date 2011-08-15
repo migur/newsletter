@@ -20,6 +20,7 @@ class NewsletterHelper
 
 	public static $extension = 'com_newsletter';
 
+	public static $_manifest = null;
 	/**
 	 * Configure the Linkbar.
 	 *
@@ -70,8 +71,12 @@ class NewsletterHelper
 		// TODO: Move it to the ComponentHelper
 		$params = JComponentHelper::getParams('com_newsletter');
 		$lkey = $params->get('license_key');
-		$product = $params->get('product');
+
+		$obj = self::getManifest();
+		$product = $obj->monsterName;
+
 		$domain = $_SERVER['HTTP_HOST'];
+		
 		$monster_url = $params->get('monster_url');
 
 		//$monster_url = 'monster.woody.php.nixsolutions.com';
@@ -107,17 +112,8 @@ class NewsletterHelper
 			$monster->latest_version = null;
 		}
 
-		$file = JPATH_COMPONENT_ADMINISTRATOR . DS . 'newsletter.xml';
-		$path = JPath::clean($file);
-		if (file_exists($path)) {
-			$info = simplexml_load_file($path);
-		} else {
-			$info = new JObject();
-		}
-
-		$infos = $info->attributes();
 		$res = new stdClass();
-
+		
 		$res->is_valid = null;
 		if ((string) $monster->is_valid == '1') {
 			$res->is_valid = "JYES";
@@ -138,6 +134,22 @@ class NewsletterHelper
 		}
 
 		return $res;
+	}
+
+	static public function getManifest()
+	{
+		if (!self::$_manifest) {
+
+			$file = JPATH_COMPONENT_ADMINISTRATOR . DS . 'newsletter.xml';
+			$path = JPath::clean($file);
+			if (file_exists($path)) {
+				self::$_manifest = simplexml_load_file($path);
+			} else {
+				self::$_manifest = new JObject();
+			}
+		}
+
+		return self::$_manifest;
 	}
 
 	/**

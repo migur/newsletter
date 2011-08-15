@@ -2,6 +2,7 @@
 <extension type="component" version="1.6.0" method="upgrade">
  
         <name>COM_NEWSLETTER</name>
+        <monsterName>Migur Newsletter</monsterName>
         <!-- The following elements are optional and free of formatting conttraints -->
         <creationDate>June 2011</creationDate>
         <author>Migur</author>
