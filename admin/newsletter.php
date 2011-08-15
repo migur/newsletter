@@ -23,6 +23,7 @@ jimport('migur.migur');
 // Add the helper
 JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 // Handle the messages from previous requests
 $sess = JFactory::getSession();
@@ -35,11 +36,35 @@ if ($msg) {
 JFormHelper::addRulePath(JPATH_COMPONENT . DS . 'models' . DS . 'rules');
 JTable::addIncludePath(JPATH_COMPONENT . DS . 'tables');
 
+// Setup the cache
+$cache = JFactory::getCache('com_newsletter');
+$cache->setCaching(true);
+$cache->setLifeTime(900); // cache to 5 min
+
+
 // Get an instance of the controller
 $controller = JController::getInstance('Newsletter');
 
 // Perform the Request task
 $controller->execute(JRequest::getCmd('task'));
 
+
+
 // Redirect if set by the controller
 $controller->redirect();
+
+// if there is no redirection then let's check the license and notify the admin
+// No need to check if this is a redirection
+if ( JRequest::getString('tmpl') != 'component') {
+
+	// Get license data (may be cached data)
+	$info = NewsletterHelper::getCommonInfo();
+
+	// If it has no valid license then show the RED message
+	if ($info->is_valid == "JNO") {
+
+		$app = JFactory::getApplication();
+		$app->enqueueMessage(JText::_('COM_NEWSLETTER_LICENSE_INVALID'), 'error');
+	}
+}
+

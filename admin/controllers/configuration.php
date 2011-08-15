@@ -119,6 +119,8 @@ class NewsletterControllerConfiguration extends JController
 				break;
 		}
 
+		JFactory::getCache('com_newsletter')->clean();
+		$this->licDontCheck = true;
 		return true;
 	}
 

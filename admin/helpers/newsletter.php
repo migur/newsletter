@@ -71,11 +71,35 @@ class NewsletterHelper
 		$params = JComponentHelper::getParams('com_newsletter');
 		$lkey = $params->get('license_key');
 		$product = $params->get('product');
-		$domain = $params->get('domain');
+		$domain = $_SERVER['HTTP_HOST'];
 		$monster_url = $params->get('monster_url');
 
-		$url = $monster_url . '/license_key/' . $lkey . '/product/' . $product . '/domain/' . $domain;
-		$monster = @simplexml_load_file(urlencode($url));
+		//$monster_url = 'monster.woody.php.nixsolutions.com';
+		$url = $monster_url . '/service/check/license/license_key/' . urlencode($lkey) . '/product/' . urlencode($product) . '/domain/' . urlencode($domain);
+		if (strpos($url, 'http://') === false) {
+			$url = 'http://' . $url;
+		}
+
+		$cache = JFactory::getCache('com_newsletter');
+		$res = $cache->call(array('NewsletterHelper', '_getCommonInfo'), $url, $domain, $lkey);
+
+		return $res;
+	}
+
+	/**
+ 	 * Gets latest info about component from server.
+	 * Used in cjaching
+	 * 
+	 * @param string $url
+	 * @param string $domain
+	 * @param string $lkey
+	 * 
+	 * @return stdClass
+	 * @since	1.0
+	 */
+	public static function _getCommonInfo($url, $domain, $lkey)
+	{
+		$monster = @simplexml_load_file($url);
 
 		if (!$monster) {
 			$monster = new stdClass();
@@ -95,26 +119,23 @@ class NewsletterHelper
 		$res = new stdClass();
 
 		$res->is_valid = null;
-		if ((string)$monster->is_valid == '1') {
+		if ((string) $monster->is_valid == '1') {
 			$res->is_valid = "JYES";
-		}
-		if ((string)$monster->is_valid == '0') {
+		} else {
 			$res->is_valid = "JNO";
 		}
 
-		$res->latest_version  = (string)$monster->latest_version;
-		$res->current_version = (string)$info->version;
-		$res->copyright       = (string)$info->copyright;
-		$res->license_key     = (string)$lkey;
-		$res->domain          = (string)$domain;
+		$res->latest_version = (string) $monster->latest_version;
+		$res->current_version = (string) $info->version;
+		$res->copyright = (string) $info->copyright;
+		$res->license_key = (string) $lkey;
+		$res->domain = (string) $domain;
 
-		foreach($res as &$item) {
+		foreach ($res as &$item) {
 			if (empty($item)) {
 				$item = JText::_('COM_NEWSLETTER_UNKNOWN');
 			}
 		}
-
-		//var_dump($res, $monster, $info); die();
 
 		return $res;
 	}
@@ -136,11 +157,11 @@ class NewsletterHelper
 		$query->select('DISTINCT ns.*, (CASE WHEN l.list_id IS NULL THEN 0 ELSE 1 END) AS used_as_static')
 			->from('#__newsletter_newsletters AS ns')
 			->join('LEFT', '#__newsletter_lists AS l ON (ns.newsletter_id = l.send_at_reg OR ns.newsletter_id = l.send_at_unsubscribe)')
-			->where('newsletter_id=' . (int)$id );
+			->where('newsletter_id=' . (int) $id);
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die();
 		$data = $dbo->setQuery($query)->loadAssoc();
-		
+
 		if (!empty($data)) {
 			// Check if we can change the type of newsletter
 			$data['type_changeable'] = (!$data['used_as_static'] && $data['sent_started'] == '0000-00-00 00:00:00');
@@ -148,4 +169,5 @@ class NewsletterHelper
 		}
 		return array();
 	}
+
 }
