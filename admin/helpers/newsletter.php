@@ -85,9 +85,11 @@ class NewsletterHelper
 			$url = 'http://' . $url;
 		}
 
+                //$res = self::_getCommonInfo($url, $domain, $lkey);
 		$cache = JFactory::getCache('com_newsletter');
 		$res = $cache->call(array('NewsletterHelper', '_getCommonInfo'), $url, $domain, $lkey);
-
+		$res->current_version = (string) $obj->version;
+		$res->copyright = (string) $obj->copyright;
 		return $res;
 	}
 
@@ -122,8 +124,6 @@ class NewsletterHelper
 		}
 
 		$res->latest_version = (string) $monster->latest_version;
-		$res->current_version = (string) $info->version;
-		$res->copyright = (string) $info->copyright;
 		$res->license_key = (string) $lkey;
 		$res->domain = (string) $domain;
 
@@ -139,7 +139,6 @@ class NewsletterHelper
 	static public function getManifest()
 	{
 		if (!self::$_manifest) {
-
 			$file = JPATH_COMPONENT_ADMINISTRATOR . DS . 'newsletter.xml';
 			$path = JPath::clean($file);
 			if (file_exists($path)) {

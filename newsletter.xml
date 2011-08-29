@@ -11,7 +11,7 @@
         <copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
         <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
         <!--  The version string is recorded in the components table -->
-        <version>0.5.1a</version>
+        <version>1.0.0b1</version>
         <!-- The description is optional and defaults to the name -->
         <description>COM_NEWSLETTER_DESCRIPTION</description>
  
@@ -104,6 +104,6 @@
 
         <!-- Note: No spaces or linebreaks allowed between the server tags -->
         <updateservers>
-            <server type="package" priority="1" name="Migur">http://update.migur.com/newsletter.xml</server>
+            <server type="extension" priority="1" name="Migur">http://update.migur.com/newsletter.xml</server>
         </updateservers>
 </extension>
