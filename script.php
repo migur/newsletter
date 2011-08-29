@@ -97,16 +97,43 @@ class com_newsletterInstallerScript
 	 */
 	function postflight($type, $parent)
 	{
-		// Let's store the info about backed up tables
-		if (!empty($this->tables)) {
-			$sess = JFactory::getSession();
-			$sess->set('com-newsletter-backup', $this->backedup);
-		}
+            //error_reporting(E_ALL);
+            //ini_set('display_errors', 1);
+            /* Dirty hack. Changes the type of the update adapter for sites of com_newsletter 
+               to able to update this component via J! Updater */
+            if ($type == 'update') {
 
-		/* Redirect after installation. Make sure the component was installed the last if
-		   there is package */
-		JInstaller::getInstance()->setRedirectURL('index.php?option=com_newsletter&view=wellcome');
-		return true;
+                $dbo = JFactory::getDbo();
+                
+                $dbo->setQuery(
+                    'SELECT juse.update_site_id as id '.
+                    'FROM #__extensions AS e '.
+                    'JOIN #__update_sites_extensions AS juse ON juse.extension_id = e.extension_id '.
+                    'JOIN #__update_sites AS us ON juse.update_site_id = us.update_site_id '.
+                    'WHERE e.element = "com_newsletter"'
+                );
+                $res = $dbo->loadAssocList();
+                
+                if (!empty($res)) {
+                    $arr = array();
+                    foreach($res as $item) {
+                        $arr[] = $item['id'];
+                    }
+                    $dbo->setQuery('UPDATE #__update_sites SET type="extension" WHERE update_site_id in ('.implode(',', $arr).')');
+                    $dbo->query();
+                }    
+            }
+
+            // Let's store the info about backed up tables
+            if (!empty($this->tables)) {
+                    $sess = JFactory::getSession();
+                    $sess->set('com-newsletter-backup', $this->backedup);
+            }
+
+            /* Redirect after installation. Make sure the component was installed the last if
+               there is package */
+            JInstaller::getInstance()->setRedirectURL('index.php?option=com_newsletter&view=wellcome');
+            return true;
 	}
 
 	/**
