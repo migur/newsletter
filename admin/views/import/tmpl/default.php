@@ -6,7 +6,7 @@
 
 		<label><?php echo JText::_('COM_NEWSLETTER_SELECT_IMPORT_TYPE'); ?></label>
 		<select name="jform-import-type">
-			<option value="lists"><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></option>
+			<option value="lists"><?php echo JText::_('COM_NEWSLETTER_LISTS_AND_SUBSCRIBERS'); ?></option>
 		</select>
 
 		<label><?php echo JText::_('COM_NEWSLETTER_SELECT_COMPONENT') . ':'; ?></label>
