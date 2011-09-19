@@ -101,7 +101,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 
 		//var_dump('MigurModuleHelper->renderModule():' . $path);
 		// Load the module
-		if (!$module->user && file_exists($path)) {
+		if (empty($module->user) && file_exists($path)) {
 			$lang = JFactory::getLanguage();
 			// 1.5 or Core then
 			// 1.6 3PD
