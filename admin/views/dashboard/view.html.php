@@ -171,7 +171,7 @@ class NewsletterViewDashboard extends MigurView
 	protected function setDocument()
 	{
 		$document = JFactory::getDocument();
-		$document->setTitle('COM_NEWSLETTER_DASHBOARD_TITLE');
+		//$document->setTitle('COM_NEWSLETTER_DASHBOARD_TITLE');
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/subscriber/submitbutton.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/dashboard/dashboard.js");
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
