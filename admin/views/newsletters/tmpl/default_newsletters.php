@@ -24,10 +24,10 @@
 					<?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_NEWSLETTER_NAME', 'n.name', $this->listDirn, $this->listOrder); ?>
 				</th>
 				<th width="20%" class="left">
-					<?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_SENT_TO', 'n.sent_to', $this->listDirn, $this->listOrder, NULL, 'desc'); ?>
+					<?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_SENT_TO', 'sent_to', $this->listDirn, $this->listOrder, NULL, 'desc'); ?>
 				</th>
 				<th width="20%" class="left">
-					<?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_START_DATE', 'n.start_date', $this->listDirn, $this->listOrder, NULL, 'desc'); ?>
+					<?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_START_DATE', 'n.sent_started', $this->listDirn, $this->listOrder, NULL, 'desc'); ?>
 				</th>
 			</tr>
 		</thead>
@@ -69,8 +69,8 @@
 	<div>
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="boxchecked" value="0" />
-		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
+		<input type="hidden" name="filter_order" value="<?php echo $this->listOrder; ?>" />
+		<input type="hidden" name="filter_order_Dir" value="<?php echo $this->listDirn; ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>
