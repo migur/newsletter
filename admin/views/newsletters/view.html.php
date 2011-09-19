@@ -76,8 +76,9 @@ class NewsletterViewNewsletters extends MigurView
 		$items = $model->getItems();
 		$pagination = $model->getPagination();
 		$state = $model->getState();
-		$listOrder = $model->get('list.ordering');
-		$listDirn = $model->get('list.direction');
+		$listOrder = $model->getState('list.ordering');
+		$listDirn = $model->getState('list.direction');
+                
 		$saveOrder = $listOrder == 'a.ordering';
 
 		$this->assignRef('items', $items);

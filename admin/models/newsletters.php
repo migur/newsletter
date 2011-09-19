@@ -36,6 +36,7 @@ class NewsletterModelNewsletters extends JModelList
 				'name', 'n.name',
 				'se', 'n.name',
 				'alias', 'n.alias',
+                                'sent_to',
 				'ordering', 'n.ordering',
 				'language', 'n.language',
 				'checked_out', 'n.checked_out',
@@ -68,7 +69,7 @@ class NewsletterModelNewsletters extends JModelList
 				'n.checked_out AS checked_out,' .
 				'n.checked_out_time AS checked_out_time,' .
 				'n.ordering AS ordering,' .
-				'n.language, n.sent_started, 123 AS sent_to'
+				'n.language, n.sent_started, "---" AS sent_to'
 			)
 		);
 		$query->from('`#__newsletter_newsletters` AS n');
