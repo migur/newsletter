@@ -155,8 +155,10 @@ class NewsletterViewDashboard extends MigurView
 		$bar->appendButton('Link', 'options', 'COM_NEWSLETTER_CONFIGURATION', 'index.php?option=com_newsletter&amp;view=configuration');
 
 		$bar = MigurToolBar::getInstance('help-toolbar');
-		$bar->appendButton('Popup', 'publish', 'COM_NEWSLETTER_ABOUT', 'http://migur.com/products/newsletter', 800, 600, 0, 0);
-		$bar->appendButton('Popup', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter', 800, 600, 0, 0);
+		$bar->appendButton('Popup', 'publish', 'COM_NEWSLETTER_ABOUT', 'http://migur.com/products/newsletter', 1000, 600, 0, 0);
+                
+                $helpLink = 'http://migur.com/support/documentation/newsletter/' . NewsletterHelper::getManifest()->version;
+		$bar->appendButton('Popup', 'help', 'COM_NEWSLETTER_HELP', $helpLink, 1000, 600, 0, 0);
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));

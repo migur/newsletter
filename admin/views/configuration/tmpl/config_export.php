@@ -22,7 +22,7 @@
 			</td>
 			<td>
 				<a href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import'); ?>"
-				   rel="{handler: 'iframe', size: {x: 500, y: 290}}"
+				   rel="{handler: 'iframe', size: {x: 500, y: 300}}"
 				   class="modal" >
 					<?php echo JText::_('COM_NEWSLETTER_IMPORT_DATA'); ?>
 				</a>

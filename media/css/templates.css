@@ -244,5 +244,5 @@ div.info-title label {
 }
 
 .current {
-    overflow: auto;
+    overflow: hidden;
 }

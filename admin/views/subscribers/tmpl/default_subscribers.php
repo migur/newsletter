@@ -65,7 +65,7 @@
 				</td>
 				<td>
                                     <a href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&subscriber_id='.(int) $item->id); ?>"
-                                       rel="{handler: 'iframe', size: {x: 965, y: 540}}"
+                                       rel="{handler: 'iframe', size: {x: 980, y: 540}}"
                                        class="modal" >
                                         <?php echo $this->escape($item->name); ?>
                                     </a>

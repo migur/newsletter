@@ -15,6 +15,9 @@ iframe {
     width: 100%;
 }
 
+.MooDialog iframe {
+    overflow: hidden !important;
+}
 
 #tabs-sub-container > .current {
 /*    width: 600px;*/
