@@ -17,7 +17,6 @@ defined('_JEXEC') or die;
  */
 class NewsletterControllerConfiguration extends JController
 {
-
 	/**
 	 * Class Constructor
 	 *
@@ -156,8 +155,7 @@ class NewsletterControllerConfiguration extends JController
 		//var_dump($com, $type);	die();
 		if (empty($com) || empty($type)) {
 			$app = JFactory::getApplication()->enqueueMessage(
-					JText::_('COM_NEWSLETTER_RUQUIRED_MISSING',
-						'error'
+				JText::_('COM_NEWSLETTER_RUQUIRED_MISSING', 'error'
 				));
 			$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=import');
 			return;
@@ -167,8 +165,7 @@ class NewsletterControllerConfiguration extends JController
 
 		if ($arr === false) {
 			$app = JFactory::getApplication()->enqueueMessage(
-					JText::_('COM_NEWSLETTER_IMPORT_ERROR',
-						'error'
+				JText::_('COM_NEWSLETTER_IMPORT_ERROR', 'error'
 				));
 			$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=import');
 			return;
@@ -178,24 +175,28 @@ class NewsletterControllerConfiguration extends JController
 
 		if (!$res) {
 			$app = JFactory::getApplication()->enqueueMessage(
-					JText::_('COM_NEWSLETTER_IMPORT_ERROR',
-						'error'
+				JText::_('COM_NEWSLETTER_IMPORT_ERROR', 'error'
 				));
 			$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=import');
 			return;
 		}
 		$app = JFactory::getApplication()->enqueueMessage(
-				JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL',
-					'message'
+			JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL', 'message'
 			));
 		$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=close');
 	}
 
-
-	function init() {
+	/**
+	 * 	Init the component. First action after installing the component
+	 *
+	 *  @return void
+	 *  @since  1.0
+	 */
+	public function init()
+	{
 
 		if (JRequest::getInt('delete_backups') == 1) {
-			
+
 			$sess = JFactory::getSession();
 			$backups = $sess->get('com-newsletter-backup');
 
@@ -204,8 +205,8 @@ class NewsletterControllerConfiguration extends JController
 				$dbo->setQuery('SET foreign_key_checks = 0;');
 				$dbo->query();
 
-				foreach($backups as $table) {
-					$dbo->setQuery('DROP TABLE IF EXISTS `'.$table['backup'].'`');
+				foreach ($backups as $table) {
+					$dbo->setQuery('DROP TABLE IF EXISTS `' . $table['backup'] . '`');
 					$dbo->query();
 				}
 
@@ -219,5 +220,4 @@ class NewsletterControllerConfiguration extends JController
 
 		$this->setRedirect('index.php?option=com_newsletter');
 	}
-
 }

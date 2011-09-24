@@ -75,6 +75,20 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 
 		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
 	}
+	
+	/**
+	 * Redirection after standard saving
+	 *
+	 * @return void
+	 * @since 1.0
+	 */
+	public function delete()
+	{
+
+		parent::delete();
+
+		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
+	}
 
 	/**
 	 * Gets the URL arguments to append to an item redirect.

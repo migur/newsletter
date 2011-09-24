@@ -43,10 +43,16 @@ window.addEvent('domready', function() {
             });
         });
 
+
+        $$('[name=newsletter_smtp_delete]')[0].addEvent('click', function(ev){
+            $$('[name=task]')[0].setProperty('value', 'smtpprofiles.delete');
+            $$('[name=adminForm]')[0].submit();
+        });
+
+
         $('export-button').addEvent('click', function(){
             $$('[name=task]')[0].setProperty('value', 'configuration.export');
             $$('[name=adminForm]')[0].submit();
-
         });
 
     } catch(e){
