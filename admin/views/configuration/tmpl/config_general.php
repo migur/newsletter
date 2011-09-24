@@ -12,15 +12,28 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($items as $i => $item) : ?>
                 <tr class="row<?php echo $i % 2; ?>">
-                    <td>
-                        <?php echo $item->label; ?>
-                    </td>
-                    <td>
-                        <?php echo $item->input; ?>
-                    </td>
+                    <td><?php echo current($items)->label; ?></td>
+                    <td><?php echo current($items)->input; ?></td>
                 </tr>
-            <?php endforeach; ?>
+                <tr class="row<?php echo $i % 2; ?>">
+                    <td><?php next($items); echo current($items)->label; ?></td>
+                    <td><?php echo current($items)->input; ?></td>
+                </tr>
+                <tr class="row<?php echo $i % 2; ?>">
+                    <td><?php next($items); echo current($items)->label; ?></td>
+                    <td><?php 
+						echo current($items)->input; ?>
+						<div class="clr"></div>
+						<?php next($items); echo current($items)->input; 
+						next($items);
+						echo current($items)->input; 
+					?></td>
+					
+                </tr>
+                <tr class="row<?php echo $i % 2; ?>">
+                    <td><?php next($items); echo current($items)->label; ?></td>
+                    <td><?php echo current($items)->input; ?></td>
+                </tr>
         </tbody>
     </table>

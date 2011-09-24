@@ -51,7 +51,7 @@ PRIMARY KEY (`subscriber_id`,`user_id`)
 
 CREATE TABLE `#__newsletter_smtp_profiles`
 (
-`smtp_profile_id` INT(11) NOT NULL,
+`smtp_profile_id` INT(11) NOT NULL AUTO_INCREMENT,
 `smtp_profile_name` VARCHAR(255),
 `from_name` VARCHAR(255),
 `from_email` VARCHAR(255),

@@ -37,6 +37,7 @@ defined('_JEXEC') or die;
 		?>
 		<div>
 			<input type="hidden" name="task" value="" />
+			<input type="hidden" name="returnurl" value="<?php echo base64_encode(JRoute::_('index.php?option=com_newsletter&view=configuration', false)); ?>" />
 			<?php echo JHtml::_('form.token'); ?>
 		</div>
 	</form>

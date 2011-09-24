@@ -40,11 +40,20 @@
         <field
             name="newsletter_smtp_create"
             type="button"
-                        class="button"
+			class="button"
             label=" "
             description="COM_NEWSLETTER_CREATE_SMTP_PROFILE"
-                        required="false"
-                        value="COM_NEWSLETTER_CREATE_SMTP_PROFILE">
+			required="false"
+			value="COM_NEWSLETTER_CREATE_SMTP_PROFILE">
+        </field>
+        <field
+            name="newsletter_smtp_delete"
+            type="button"
+			class="button"
+            label=" "
+            description="COM_NEWSLETTER_DELETE_SMTP_PROFILE"
+			required="false"
+			value="COM_NEWSLETTER_DELETE_SMTP_PROFILE">
         </field>
 
         <field
