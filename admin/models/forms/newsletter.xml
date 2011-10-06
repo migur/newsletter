@@ -26,7 +26,7 @@
 			label="COM_NEWSLETTER_TYPE"
 			description="COM_NEWSLETTER_TYPE"
 			class="inputbox validate-type autosaverable"
-			default="1"
+			default="0"
 			required="true"
 		 >
             <option value="0">COM_NEWSLETTER_ORDINARY</option>

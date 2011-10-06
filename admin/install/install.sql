@@ -44,6 +44,7 @@ CREATE TABLE `#__newsletter_subscribers`
 `locked_by` INT(11) DEFAULT '0' NOT NULL,
 `confirmed` VARCHAR(255) NOT NULL,
 `subscription_key` VARCHAR(40) NOT NULL,
+`extra` text
 
 PRIMARY KEY (`subscriber_id`,`user_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
@@ -107,6 +108,7 @@ CREATE TABLE `#__newsletter_lists`
 `internal` TINYINT(3) DEFAULT '0' NOT NULL,
 send_at_reg INT(11) DEFAULT '0' NOT NULL,
 send_at_unsubscribe INT(11) DEFAULT '0' NOT NULL,
+`extra` text
 
 PRIMARY KEY (`list_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
@@ -148,6 +150,7 @@ CREATE TABLE `#__newsletter_sub_list`
 `subscriber_id` BIGINT(20) NOT NULL,
 `list_id` BIGINT(20) NOT NULL,
 `confirmed` VARCHAR(255) NOT NULL,
+`extra` text
 
 PRIMARY KEY (`sublist_id`),
 UNIQUE KEY `unique-subscriber` (`subscriber_id`,`list_id`)
@@ -208,7 +211,7 @@ CREATE INDEX `smtp_profile_id_idxfk` ON `#__newsletter_newsletters`(`smtp_profil
 # ALTER TABLE `#__newsletter_newsletters` ADD CONSTRAINT `newsletters_smtp_profile_idfk` FOREIGN KEY `smtp_profile_id_idxfk` (`smtp_profile_id`) REFERENCES `#__newsletter_smtp_profiles` (`smtp_profile_id`);
 
 CREATE INDEX t_style_id_idxfk ON #__newsletter_newsletters(t_style_id);
-ALTER TABLE #__newsletter_newsletters ADD FOREIGN KEY (t_style_id) REFERENCES #__newsletter_template_styles (t_style_id) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE #__newsletter_newsletters ADD FOREIGN KEY (t_style_id) REFERENCES #__newsletter_template_styles (t_style_id) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 CREATE INDEX smtp_profile_id_idxfk ON #__newsletter_lists(smtp_profile_id);
 # ALTER TABLE #__newsletter_lists ADD FOREIGN KEY (smtp_profile_id) REFERENCES #__newsletter_smtp_profiles (smtp_profile_id);
@@ -222,13 +225,13 @@ CREATE INDEX list_id_idxfk ON #__newsletter_sub_history(list_id);
 # ALTER TABLE #__newsletter_sub_history ADD CONSTRAINT `sub_history_list_idfk` FOREIGN KEY list_id_idxfk_1 (list_id) REFERENCES #__newsletter_lists (list_id);
 
 CREATE INDEX newsletter_id_idxfk ON #__newsletter_sub_history(newsletter_id);
-ALTER TABLE #__newsletter_sub_history ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id);
+ALTER TABLE #__newsletter_sub_history ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 CREATE INDEX list_id_idxfk ON #__newsletter_sub_list(list_id);
-ALTER TABLE #__newsletter_sub_list ADD FOREIGN KEY (list_id) REFERENCES #__newsletter_lists (list_id);
+ALTER TABLE #__newsletter_sub_list ADD FOREIGN KEY (list_id) REFERENCES #__newsletter_lists (list_id) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 CREATE INDEX newsletter_idxfk ON #__newsletter_newsletters_ext(newsletter_id);
-ALTER TABLE #__newsletter_newsletters_ext ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE;
+ALTER TABLE #__newsletter_newsletters_ext ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 CREATE INDEX extension_id_idxfk ON #__newsletter_newsletters_ext(extension_id);
 # Do not use this index because it prevent to bind the Joomla native modules to newsletter;
@@ -241,9 +244,6 @@ insert  into `#__newsletter_extensions`(`extension_id`,`title`,`extension`,`para
 insert  into `#__newsletter_extensions`(`extension_id`,`title`,`extension`,`params`,`type`) values (4,'Text Module','mod_text','{}',1);
 insert  into `#__newsletter_extensions`(`extension_id`,`title`,`extension`,`params`,`type`) values (5,'WYSIWYG Module','mod_wysiwyg','{}',1);
 insert  into `#__newsletter_extensions`(`extension_id`,`title`,`extension`,`params`,`type`) values (6,'Google Analytics','ganalytics','{}',2);
-
-
-
 
 # Example data for tables -----------------------------------------------------;
 

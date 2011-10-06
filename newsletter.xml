@@ -55,8 +55,9 @@
                 <folder>js</folder>
         </media>
 
-<!--        <languages folder="site">
-        </languages>-->
+		<languages folder="site">
+				<language tag="en-GB">language/en-GB/en-GB.com_newsletter.ini</language>
+		</languages>
 
         <administration>
                 <!-- Administration Menu Section -->

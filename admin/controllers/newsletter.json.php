@@ -190,28 +190,28 @@ class NewsletterControllerNewsletter extends JControllerForm
 	}
 
 	// TODO: Check and remove this method. Mailing is with queue now.
-	public function sendToList()
-	{
-
-		$listId = JRequest::getInt('list_id');
-
-		$subscribers = JModel::getInstance('list', 'NewsletterModel')->getSubscribers(JRequest::get('list_id'));
-		if (!$subscribers) {
-			echo json_encode(array(
-				'state' => '0',
-				'error' => 'Unable to load list',
-				'list_id' => $listId
-			));
-			return;
-		}
-
-		$mailer = new MigurMailer();
-		$mailer->sendToList(array(
-			'subscribers' => $subscribers,
-			'newsletter_id' => JRequest::getInt('newsletter_id'),
-			'list_id' => $listId
-		));
-	}
+//	public function sendToList()
+//	{
+//
+//		$listId = JRequest::getInt('list_id');
+//
+//		$subscribers = JModel::getInstance('list', 'NewsletterModel')->getSubscribers(JRequest::get('list_id'));
+//		if (!$subscribers) {
+//			echo json_encode(array(
+//				'state' => '0',
+//				'error' => 'Unable to load list',
+//				'list_id' => $listId
+//			));
+//			return;
+//		}
+//
+//		$mailer = new MigurMailer();
+//		$mailer->sendToList(array(
+//			'subscribers' => $subscribers,
+//			'newsletter_id' => JRequest::getInt('newsletter_id'),
+//			'list_id' => $listId
+//		));
+//	}
 
 	/**
 	 * Handles the configuration "Clear sent" button
