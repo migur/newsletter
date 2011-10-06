@@ -62,6 +62,7 @@ defined('_JEXEC') or die; ?>
 		</div>
 		<?php echo JHtml::_('form.token'); ?>
 		<input name="newsletter-uid" type="hidden" value="<?php echo $this->uid; ?>" />
+		<input name="newsletter-nid" type="hidden" value="<?php echo $this->nid; ?>" />
 	</form>
 </div>
 

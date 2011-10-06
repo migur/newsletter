@@ -30,30 +30,31 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 * @return void
 	 * @since  1.0
 	 */
-	public function sendPreview()
-	{
-		$emails = JRequest::getVar('emails');
-		$newsletterId = JRequest::getVar('newsletter_id');
-		$type = JRequest::getVar('type');
-
-		$data = array(
-			'newsletter_id' => $newsletterId,
-			'type' => $type,
-			'tracking' => true
-		);
-		
-		foreach ($emails as $email) {
-			$data['subscribers'][] = SubscriberHelper::getByEmail($email[1]);
-		}
-
-		$mailer = new MigurMailer();
-		$mailer->sendToList($data);
-	}
+//	public function sendPreview()//deprecated
+//	{
+//		$emails = JRequest::getVar('emails');
+//		$newsletterId = JRequest::getVar('newsletter_id');
+//		$type = JRequest::getVar('type');
+//
+//		$data = array(
+//			'newsletter_id' => $newsletterId,
+//			'type' => $type,
+//			'tracking' => true
+//		);
+//		
+//		foreach ($emails as $email) {
+//			$data['subscribers'][] = SubscriberHelper::getByEmail($email[1]);
+//		}
+//
+//		$mailer = new MigurMailer();
+//		$mailer->sendToList($data);
+//	}
 
 	public function track() {
 
 		$subkey       = JRequest::getString('uid', '');
 		$newsletterId = JRequest::getInt('nid', 0);
+		$listId       = JRequest::getInt('lid', 0);
 		$action       = JRequest::getString('action', '');
 		$link         = base64_decode(urldecode(JRequest::getVar('link')));
 

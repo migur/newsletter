@@ -249,11 +249,12 @@ class NewsletterControllerSubscribe extends JController
 	{
 		// Get variables from request
 		$uid = JRequest::getString('uid', '');
+		$nid = JRequest::getString('nid', '');
 
 		// Check token, die on error.
 		//JRequest::checkToken() or jexit('Invalid Token');
 
-		if (empty($uid)) {
+		if (empty($uid) || empty($nid)) {
 			jexit('One or more parameters is missing');
 		}
 
@@ -281,12 +282,13 @@ class NewsletterControllerSubscribe extends JController
 
 		// Get variables from request
 		$uid   = JRequest::getString('newsletter-uid', '');
+		$nid   = JRequest::getString('newsletter-nid', '');
 		$lists = JRequest::getVar('newsletter-lists', array());
 
 		// Check token, die on error.
 		//JRequest::checkToken() or jexit('Invalid Token');
 
-		if (empty($uid) || empty($lists)) {
+		if (empty($uid) || empty($lists) || empty($nid)) {
 			jexit('One or more parameters is missing');
 		}
 
@@ -295,17 +297,54 @@ class NewsletterControllerSubscribe extends JController
 		$db->setQuery( "SELECT subscriber_id FROM #__newsletter_subscribers WHERE subscription_key = " . $db->quote(addslashes($uid)) );
 		$subscriber = $db->loadObject();
 		if (empty($subscriber->subscriber_id)) {
-			jexit('The user is not found');
+			jexit('The user not found');
 		}
-		// Add subscriptions to lists, ignore if already in db
+
+		$db->setQuery( "SELECT newsletter_id FROM #__newsletter_newsletters WHERE newsletter_id = " . $db->quote(addslashes($nid)));
+		$newsletter = $db->loadObject();
+		if (empty($newsletter->newsletter_id)) {
+			jexit('The newsletter not found');
+		}
+		
+		$app->triggerEvent(
+			'onMigurNewsletterBeforeUnsubscribe', 
+			array(
+				'subscriber' => $subscriber,
+				'lists' => $lists
+		));
+		
 		foreach ($lists as $list) {
+
+			// Delete subscriptions from list
 			$db->setQuery(
 				"DELETE FROM #__newsletter_sub_list ".
 				"WHERE subscriber_id = " . $db->quote((int)$subscriber->subscriber_id) . " AND list_id = " . $db->quote((int)$list)
 			);
 			$db->query();
+			
+			// Add to history
+			$db->setQuery(
+				"INSERT IGNORE INTO #__newsletter_sub_history SET ".
+				" newsletter_id=" . $db->quote((int)$nid) . ", ".
+				" subscriber_id=" . $db->quote((int)$subscriber->subscriber_id) . ", ".
+				" list_id=" . $db->quote((int)$list) . ", ".
+				" date=" . $db->quote(date('Y-m-d H:i:s')) . ", ".
+				" action=" . $db->quote(NewsletterTableHistory::ACTION_UNSUBSCRIBED) . ", ".
+				" text=''"
+			);
+			$res = $db->query();
 		}
 
+		
+		
+		$app->triggerEvent(
+			'onMigurNewsletterAfterUnsubscribe', 
+			array(
+				'subscriber' => $subscriber,
+				'lists' => $lists,
+				'result' => $res
+		));
+		
 		// Redirect to page
 		$message = JText::sprintf('Thank you %s for using our service!', $subscriber->name);
 		jexit($message);

@@ -172,7 +172,9 @@ class MigurMailer extends JObject
 				$res = false;
 				break;
 			}
-
+			
+			PlaceholderHelper::setPlaceholder('newsletter id', $letter->newsletter_id);
+			
 			// render the content of letter for each user
 			$letter->content = $this->render(array(
 					'type' => $type,
@@ -250,6 +252,8 @@ class MigurMailer extends JObject
 			return $res;
 		}
 
+		PlaceholderHelper::setPlaceholder('newsletter id', $letter->newsletter_id);
+		
 		// render the content of letter for each user
 		$letter->content = $this->render(array(
 				'type' => $type,

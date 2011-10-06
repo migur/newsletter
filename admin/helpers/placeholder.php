@@ -121,7 +121,7 @@ class PlaceholderHelper
 
 			self::$placeholders['unsubscription link'] = array(
 				'data' => null,
-				'default' => JUri::getInstance()->toString(array('host', 'scheme')) . JRoute::_('index.php?option=com_newsletter&task=subscribe.showunsubscribe', false) . '&uid=[subscription key]',
+				'default' => JUri::getInstance()->toString(array('host', 'scheme')) . JRoute::_('index.php?option=com_newsletter&task=subscribe.showunsubscribe', false) . '&uid=[subscription key]&nid=[newsletter id]',
 				'class' => 'link'
 			);
 

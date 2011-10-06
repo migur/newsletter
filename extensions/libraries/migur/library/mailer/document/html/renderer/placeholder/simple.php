@@ -12,7 +12,7 @@
  */
 class HtmlPlaceholderSimple
 {
-
+	
 	public function render($data, $params = null)
 	{
 		if ($data === null) {
