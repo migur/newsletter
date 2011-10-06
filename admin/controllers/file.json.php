@@ -139,7 +139,13 @@ class NewsletterControllerFile extends JController {
 	public function fileinfo() {
 
 		$filename = JRequest::getString('filename');
-		$size = getimagesize($filename);
+		$size = @getimagesize($filename);
+		if (empty($size)) {
+			$size = array(
+				'3' => 'width="auto" height="auto"',
+				"mime" => "image"
+			);
+		}
 		jexit(json_encode($size));
 	}
 

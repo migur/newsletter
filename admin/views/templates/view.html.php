@@ -64,6 +64,9 @@ class NewsletterViewTemplates extends MigurView
 
 		$modelTemps = $this->getModel('templates');
 
+		$pagination = $modelTemps->getPagination();
+
+		
 		$temps = (object) array(
 				'items' => $modelTemps->getItems(),
 				'state' => $modelTemps->getState(),
@@ -71,7 +74,7 @@ class NewsletterViewTemplates extends MigurView
 				'listDirn' => $modelTemps->getState('list.direction')
 		);
 		$this->assignRef('templates', $temps);
-
+		$this->assignRef('pagination', $pagination);
 
 		parent::display($tpl);
 	}

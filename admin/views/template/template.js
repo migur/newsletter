@@ -19,8 +19,21 @@ function jInsertFieldValue(value, id) {
             $(id).setProperty('value', siteRoot + value);
 
             if (res.mime.substr(0,5) == 'image') {
-                $(id+'_width').setProperty('value', res['0'] + 'px');
-                $(id+'_height').setProperty('value', res['1'] + 'px');
+				
+				if (typeof res['0'] != 'undefined') {
+					res['0'] += 'px';
+				} else {
+					res['0'] = 'auto';
+				}
+
+				if (typeof res['1'] != 'undefined') {
+					res['1'] += 'px';
+				} else {
+					res['1'] = 'auto';
+				}
+
+                $(id+'_width').setProperty('value', res['0']);
+                $(id+'_height').setProperty('value', res['1']);
             }
         }
     }).send();
@@ -39,6 +52,37 @@ try {
             }
             return false;
         });
+		
+		
+	if(typeof $$('.templateslist .search')[0] != 'undefined') {	
+		
+		tplTransport = null;
+		$$('.templateslist .search').addEvent('click', function(){
+
+			var id = $(this).getParent('tr').getElements('[name=cid[]]')[0].get('value');
+
+			delete tplTransport;
+			tplTransport = new Request.JSON({
+				url: '?option=com_newsletter&task=template.getparsed&format=json&shownames=1',
+				data: {
+					t_style_id: id,
+					tagsRenderMode: 'raw',
+					type: 'html' },
+
+				onComplete: function(res){
+
+					$('preview-container').set('html', res.data.content);
+					$('tpl-title').set('text', res.data.information.name);
+					$('tpl-name').set('text', res.data.information.author);
+					$('tpl-email').set('text', res.data.information.authorEmail);
+				}
+			}).send();
+
+			return false;
+		});
+
+		$$('.templateslist .search')[0].fireEvent('click');
+	}	
 
 } catch(e){
     if (console && console.log) console.log(e);
