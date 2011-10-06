@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla controllerform library
 jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer');
+jimport('joomla.session.session');
 
 JLoader::import('helpers.autocompleter', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.sent',           JPATH_COMPONENT_ADMINISTRATOR, '');
@@ -48,18 +49,44 @@ class NewsletterControllerCron extends JControllerForm
 	 */
 	public function send()
 	{
+		ob_start();
+            
 		$config   = JComponentHelper::getParams('com_newsletter');
 		$lastExec =        $config->get('mailer_cron_last_execution_time');
 		$isExec   = (bool) $config->get('mailer_cron_is_executed');
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
 		$interval = (int)  $config->get('mailer_cron_interval');
 		$count    = (int)  $config->get('mailer_cron_count');
+                
+		$forced = JRequest::getBool('forced', false);
+		if($forced) {
+                    
+				$conf = JFactory::getConfig();
+				$handler = $conf->get('session_handler', 'none');
+				$sessId = JRequest::getVar(JRequest::getString('sessname', ''), false, 'COOKIE');
+				if(empty($sessId)){
+					ob_end_clean();
+				echo 'Unknown session';
+					jexit();
+				}    
+				$data = JSessionStorage::getInstance($handler, array())->read($sessId);
+				session_decode($data);
+        	    $user = $_SESSION['__default']['user'];
+            	    $levels = $user->getAuthorisedGroups();
+	            if ( max($levels) < 7 ) {
+                        ob_end_clean();
+	                echo 'Unknown session';
+                        jexit();
+                    }    
+                }
+                
+                
 
 		$table = JTable::getInstance('jextension', 'NewsletterTable');
 		$lastExec = !empty($lastExec) ? strtotime($lastExec) : 0;
 		$interval = $interval * 60;
 
-		if ($lastExec + $interval < time() && !$isExec) {
+		if ( ($lastExec + $interval < time() && !$isExec) || $forced) {
 
 			// set the isExecuted flag
 			if ($table->load(array('name' => 'com_newsletter'))) {
@@ -88,6 +115,7 @@ class NewsletterControllerCron extends JControllerForm
 				foreach ($list as $item) {
 
 					$subscriber->load($item['subscriber_id']);
+                                        
 					$type  = ($subscriber->html == 1) ? 'html' : 'plain';
 					
 					$letter = $mailer->send(array(
@@ -96,11 +124,10 @@ class NewsletterControllerCron extends JControllerForm
 						'type'          => $type
 					));
 
-					$res[] = $item['newsletter_id'];
-					$res['state'] = ($letter->state) ? 'success' : $mailer->getErrors();
 					$ret[] = array(
 						'newsletter_id' => $item['newsletter_id'],
 						'email' => $subscriber->email,
+						'subscriber_id' => $subscriber->subscriber_id,
 						'state' => (int)$letter->state,
 						'error' => $letter->error
 					);
@@ -119,14 +146,13 @@ class NewsletterControllerCron extends JControllerForm
 					unset($nl);
 
 					// Update the queue item after success mailing
-					if ($letter->state) {
-
-						$db->setQuery(
-							'UPDATE #__newsletter_queue SET state=0 '
-							.' WHERE newsletter_id=' . $item['newsletter_id']
-							.' AND subscriber_id=' . $item['subscriber_id']);
-						$db->query();
-					}
+					$st = $letter->state? 0 : 2;
+                                        
+                                        $db->setQuery(
+                                                'UPDATE #__newsletter_queue SET state='.$st
+                                                .' WHERE newsletter_id=' . $item['newsletter_id']
+                                                .' AND subscriber_id=' . $item['subscriber_id']);
+                                        $db->query();
 
 					// Get all records which refers to the current user and the current newsletter
 					$query = $db->getQuery(true);
@@ -178,21 +204,27 @@ class NewsletterControllerCron extends JControllerForm
 			if ($table) {
 				$table->addToParams(array(
 					'mailer_cron_is_executed' => 0,
-					'mailer_cron_last_execution_time' => date('Y-m-d H:i:s')
+					'mailer_cron_last_execution_time' => date('Y-m-d H:i:s'),
+                                        'mailer_force' => false
 				));
 				$table->store();
 			}
 
-			echo json_encode(array(
+			$response = json_encode(array(
 				'data' => $ret,
 				'count' => count($list),
 				'error' => ''
 			));
 		} else {
-			echo json_encode(array(
+                    
+			$response = json_encode(array(
 				'error' => 'The interval is not exedeed'
 			));
 		}
+                
+                ob_end_clean();
+                echo $response;
+                jexit();
 	}
 
 }

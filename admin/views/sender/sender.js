@@ -47,8 +47,8 @@ try {
                 onComplete: function(res){
                     if (res && res.state) {
                         alert('The newsletter has been queued succesfully');
-                        window.parent.SqueezeBox.close();
                         window.parent.location.reload();
+                        window.parent.SqueezeBox.close();
                     } else {
                         alert('An error has occured during the request');
                     }
