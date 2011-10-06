@@ -25,6 +25,8 @@ class NewsletterViewSubscribe extends JView
 	function display($tpl = null)
 	{
 		$uid = JRequest::getString('uid', '');
+		$nid = JRequest::getString('nid', '');
+		
 		$subscriber = SubscriberHelper::getBySubkey($uid);
 
 		if (empty($subscriber->subscriber_id)) {
@@ -36,6 +38,7 @@ class NewsletterViewSubscribe extends JView
 		$this->assignRef('subscriber', $subscriber);
 		$this->assignRef('lists', $lists);
 		$this->assignRef('uid',   $uid);
+		$this->assignRef('nid',   $nid);
 
 		$this->setDocument();
 

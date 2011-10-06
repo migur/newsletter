@@ -183,7 +183,7 @@ class NewsletterModelSubscribers extends MigurModelList
 		}
 		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
 
-		// echo nl2br(str_replace('#__','jos_',$query));
+		// echo nl2br(str_replace('#__','jos_',$query)); die;
 		$this->query = $query;
 	}
 
@@ -193,7 +193,50 @@ class NewsletterModelSubscribers extends MigurModelList
 	 * @return	JDatabaseQuery
 	 * @since	1.0
 	 */
-	public function setUnsubscribedQuery($params)
+	public function getSubscribersByList($params)
+	{
+		// Create a new query object.
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select(
+			'DISTINCT a.subscriber_id AS id, a.name, a.email, a.state, a.created_on' .
+			', a.created_by, a.modified_on, a.modified_by' .
+			', a.locked_on, a.locked_by'
+		);
+
+		$query->from('#__newsletter_subscribers AS a');
+		$query->join('', "#__newsletter_sub_list AS sl ON a.subscriber_id=sl.subscriber_id");
+
+		if (!empty($params['list_id'])) {
+			
+			$query->where('sl.list_id=' . intval($params['list_id']));
+		}
+		
+		// Add the list ordering clause.
+		$orderCol = $this->state->get('list.ordering', 'a.name');
+		$orderDirn = $this->state->get('list.direction', 'asc');
+
+		if ($orderCol == 'a.ordering' || $orderCol == 'a.name') {
+			$orderCol = 'name ' . $orderDirn . ', a.subscriber_id';
+		}
+		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
+
+		//echo nl2br(str_replace('#__','jos_',$query)); //die;
+		$db->setQuery($query);
+		return $db->loadObjectList();
+	}
+	
+	
+	
+	/**
+	 * Build an SQL query to load the list data.
+	 *
+	 * @return	JDatabaseQuery
+	 * @since	1.0
+	 */
+	public function getUnsubscribedList($params)
 	{
 		if (!$this->state->get('list.unsubscribed.ordering')) {
 			$orderCol = $this->state->set('list.unsubscribed.ordering', 'date');
@@ -207,12 +250,7 @@ class NewsletterModelSubscribers extends MigurModelList
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 		// Select the required fields from the table.
-		$query->select(
-			$this->getState(
-				'list.select',
-				'a.*, h.date, h.text'
-			)
-		);
+		$query->select('a.*, h.date, h.text');
 
 		$query->from('#__newsletter_subscribers AS a');
 		$query->join('', "#__newsletter_sub_history AS h ON a.subscriber_id=h.subscriber_id AND h.list_id='" . intval($params['list_id']) . "'");
@@ -224,7 +262,9 @@ class NewsletterModelSubscribers extends MigurModelList
 		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
 
 		//echo nl2br(str_replace('#__','jos_',$query)); //die();
-		$this->query = $query;
+		$db->setQuery($query);
+		
+		return $db->loadObjectList();
 	}
 
 }
