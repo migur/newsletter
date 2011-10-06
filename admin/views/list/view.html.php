@@ -74,22 +74,23 @@ class NewsletterViewList extends MigurView
 			JavaScriptHelper::addObject('uploadData', $data);
 		}
 
-		$modelSubs = $this->getModel('subscribers');
-		$modelSubs->setUnsubscribedQuery(array(
+		$modelSubs = new NewsletterModelSubscribers();
+		$modelSubs->setState('list.limit', 10);
+		$this->subs = $modelSubs->getSubscribersByList(array(
+			'list_id' => JRequest::getInt('list_id')
+		));
+		
+		$items = $modelSubs->getUnsubscribedList(array(
 			'list_id' => JRequest::getInt('list_id')
 		));
 
 		$ss = (object) array(
-				'items' => $modelSubs->getItems(),
+				'items' => $items,
 				'state' => $modelSubs->getState(),
 				'listOrder' => $modelSubs->getState('list.unsubscribed.ordering'),
 				'listDirn' => $modelSubs->getState('list.unsubscribed.direction')
 		);
 		$this->assignRef('subscribers', $ss);
-
-		$modelSubs->setState('filter.list', JRequest::getInt('list_id'));
-		$modelSubs->setDefaultQuery();
-		$this->subs = $modelSubs->getItems();
 
 
 		// get data for "excluded"

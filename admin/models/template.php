@@ -73,6 +73,7 @@ class NewsletterModelTemplate extends JModelAdmin
 		if (empty($data)) {
 			$data = $this->getItem();
 			$arr = $data->getProperties();
+			unset($arr['params']['t_style_id']);
 			$arr = array_merge($arr, $arr['params']);
 			$data->setProperties($arr);
 			unset($data->params);

@@ -255,3 +255,13 @@ textarea.invalid {
     color: red !important;
     font-weight: bold;
 }
+
+.preloader {
+	background: url('../../system/images/mootree_loader.gif') left top no-repeat;
+	padding-left: 22px;
+	line-height: 18px;
+	color: #888;
+	min-height: 18px;
+	min-width: 18px;
+	display: block;
+}

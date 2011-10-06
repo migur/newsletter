@@ -22,7 +22,7 @@ try {
     $$('#toolbar-progress .queue-list')[0].addEvent('click', function(ev){
 
         new Request.JSON({
-			url: siteRoot + 'index.php?option=com_newsletter&task=cron.send&format=json',
+            url: siteRoot + 'index.php?option=com_newsletter&task=cron.send&forced=true&sessname=' + sessname,
             onComplete: function(res){
                 if (res.error == '' && res.count == 0) {
                     text = "There are no emails to send";
@@ -34,7 +34,7 @@ try {
                     text = "An error occured: \n"+res.error;
                 }
                 alert(text);
-                window.parent.location.reload();
+                window.location.reload();
             }
         }).send();
 
