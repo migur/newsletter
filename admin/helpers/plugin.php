@@ -136,7 +136,24 @@ abstract class MigurPluginHelper
 	 */
 	public function getNativeSupported()
 	{
-		return array();
+		// Fetch it
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select(
+			"extension_id, `name` as title, element as extension, params, type, ".
+			"'1' AS native"
+		);
+		$query->from('`#__extensions` AS a');
+
+		// Filter by module
+		$query->where("a.type = 'plugin'");
+		$query->where("a.folder = 'migur'");
+		$query->order('a.name ASC');
+
+		//echo nl2br(str_replace('#__','jos_',$query));
+		return $db->setQuery($query)->loadObjectList();
 	}
 
 	/**
@@ -212,4 +229,32 @@ abstract class MigurPluginHelper
 		return null;
 	}
 
+/* Unused
+        public static function triggerBefore() {
+            
+            list($controller, $action) = explode(JRequest('task', ''));
+            
+            if (empty($controller)){
+                $controller = 'default';
+            }
+            
+            if (empty($action)){
+                $action = 'default';
+            }
+            
+            self::$controller = strtolower($controller);
+            self::$action = strtolower($action);
+
+            $app = JFactory::getApplication();
+            $app->triggerEvent('onMigurNewsletterBefore'.ucwords(self::$controller).ucwords(self::$action), array());
+            
+        }
+        
+        
+        public static function triggerAfter() {
+            
+            $app = JFactory::getApplication();
+            $app->triggerEvent('onMigurNewsletterAfter'.ucwords(self::$controller).ucwords(self::$action), array());
+        }
+ */
 }

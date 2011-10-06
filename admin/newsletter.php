@@ -25,6 +25,11 @@ JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 
+// Load 'Migur' group of plugins
+JPluginHelper::importPlugin('migur');
+$app = JFactory::getApplication();
+$app->triggerEvent('onMigurNewsletterStart');
+
 // Handle the messages from previous requests
 $sess = JFactory::getSession();
 $msg = $sess->get('migur.queue');
@@ -48,12 +53,16 @@ $controller = JController::getInstance('Newsletter');
 // Perform the Request task
 $controller->execute(JRequest::getCmd('task'));
 
-
+// Trigger events after exacution
+$app->triggerEvent('onMigurNewsletterEnd');
 
 // Redirect if set by the controller
 $controller->redirect();
 
-// if there is no redirection then let's check the license and notify the admin
+//$app = JFactory::getApplication();
+//$results = $app->triggerEvent('onAfterRender', array());
+
+// If there is no redirection then let's check the license and notify the admin
 // No need to check if this is a redirection
 if ( JRequest::getString('tmpl') != 'component') {
 
@@ -62,8 +71,6 @@ if ( JRequest::getString('tmpl') != 'component') {
 
 	// If it has no valid license then show the RED message
 	if ($info->is_valid == "JNO") {
-
-		$app = JFactory::getApplication();
 		$app->enqueueMessage(JText::_('COM_NEWSLETTER_LICENSE_INVALID'), 'error');
 	}
 }
