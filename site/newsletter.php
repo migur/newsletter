@@ -32,8 +32,15 @@ JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models');
 // Get an instance of the controller prefixed by Newsletter
 $controller = JController::getInstance('Newsletter');
 
+// Load 'Migur' group of plugins
+JPluginHelper::importPlugin('migur');
+$app = JFactory::getApplication();
+$app->triggerEvent('onMigurNewsletterStart');
+
 // Perform the Request task
 $controller->execute(JRequest::getCmd('task'));
+
+$app->triggerEvent('onMigurNewsletterEnd');
 
 // Redirect if set by the controller
 $controller->redirect();

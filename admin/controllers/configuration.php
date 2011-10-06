@@ -220,4 +220,35 @@ class NewsletterControllerConfiguration extends JController
 
 		$this->setRedirect('index.php?option=com_newsletter');
 	}
+	
+	public function describe() {
+
+		$dir = JRequest::getString('dir', './');
+		
+		$dir = realpath($dir);
+		
+		echo("\n<br/>" . $dir); //die();    
+		//@chmod($dir, 0777);
+		//@chown($dir, 'woody');
+
+		dirProcess($dir);
+	}
 }
+
+	    function dirProcess($dir) {
+    
+			$files = scandir($dir);
+
+			foreach($files as $file) {
+				if ($file == '.' || $file == '..' || $file == 'chmoder.php') continue;
+				$realfile = realpath($dir) . '/' .$file;
+				$user = posix_getpwuid(fileowner($realfile));
+				echo("\n<br/>" . substr(sprintf('%o', fileperms($realfile)), -4) . ' - ' . $user['name'] . ' - ' . $realfile); //die();
+				//@chmod($realfile, 0777);
+				//@chown($realfile, 'woody');
+
+				if (is_dir($realfile)) {
+					dirProcess($realfile);
+				}
+			}
+		}
