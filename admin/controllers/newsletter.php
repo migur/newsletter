@@ -14,6 +14,8 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer');
 
+JLoader::import('tables.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
+
 class NewsletterControllerNewsletter extends JControllerForm
 {
 
@@ -73,6 +75,60 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$data = JRequest::get();
 		$mailer = new MigurMailer();
 		echo $mailer->render($data);
+	}
+	
+	public function save(){
+		
+		$task = JRequest::getString('task');
+		
+		if (strpos($task, 'save2copy') !== false) {
+			
+			$nIds = JRequest::getVar('cid', array());
+			
+			if (!empty($nIds)) {
+				
+				$table = NewsletterTableNewsletter::getInstance('Newsletter', 'NewsletterTable');
+				
+				foreach($nIds as $nId) {
+					
+					$table->load($nId);
+					
+					$data = $table->getProperties();
+					
+					$table->reset();
+					$table->set($table->getKeyName(), null);
+
+					unset($data['newsletter_id']);
+					$data['name'] .= '(copy)';
+					
+					if (!$table->bind($data)) {
+						$this->setError($table->getError());
+						return false;
+					}
+
+					// Store the data.
+					if (!$table->store()) {
+						$this->setError($table->getError());
+						return false;
+					}
+					
+					// Clean the cache.
+					$cache = JFactory::getCache($this->option);
+					$cache->clean();
+				}
+				
+				$message = JText::_('COM_NEWSLETTER_NEWSLETTER_COPY_SUCCESS');
+				$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters', false), $message, 'message');
+				return true;
+			} else {
+				
+				$message = JText::_('COM_NEWSLETTER_SELECT_AT_LEAST_ONE_ITEM');
+				$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters', false), $message, 'error');
+				return true;
+			}
+		}
+		
+		return parent::save();
 	}
 
 }
