@@ -40,7 +40,7 @@ class NewsletterControllerLists extends JControllerAdmin
 	public function publish()
 	{
             parent::publish();
-            $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=subscribers', true));
+            $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=subscribers', false));
         }
 
 	/**
@@ -58,6 +58,6 @@ class NewsletterControllerLists extends JControllerAdmin
                 $dbo->query();
             }
             parent::delete();
-            $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=subscribers', true));
+            $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=subscribers', false));
         }
 }
