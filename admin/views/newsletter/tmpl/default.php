@@ -24,6 +24,7 @@ defined('_JEXEC') or die;
                 ?>
                     <input type="hidden" name="newsletter_id" value="<?php echo $this->form->getValue('newsletter_id'); ?>" />
                     <?php echo $this->form->getInput('t_style_id'); ?>
+                    <?php echo $this->form->getInput('alias'); ?>
                     <input type="hidden" name="task" value="" />
                     <?php echo JHtml::_('form.token'); ?>
                 </form>

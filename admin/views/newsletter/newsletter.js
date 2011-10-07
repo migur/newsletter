@@ -155,7 +155,7 @@ avatarSetSettings = function(avatar) {
                 'title': 'Module / Plugin',
                 'class': 'MooDialog myDialog',
                 autoOpen: false,
-                closeButton: !conf,
+                closeButton: true, //!conf,
                 onClose: function() {
                     if ( this.task == 'apply' ) {
                         var widget = Migur.getWidget(this.targetObj);
