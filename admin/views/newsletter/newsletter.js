@@ -786,13 +786,23 @@ window.addEvent('domready', function() {
         /* Save handlers */
         $$('#toolbar-save a')[0].addEvent('click', function(ev){
 
-            if (autosaver.send(false, 'use controller')) {
-                return true; //$$('#toolbar-cancel a')[0].onclick();
-            } else {
-                alert('An error occured during save, please try turning on autosave instead.');
+			var form = $$('form.form-validate')[0];
+			var res = document.formvalidator.isValid(form);
+
+			Migur.validator.tabIndicator(
+				'#tabs-sub-container',
+				'span h3 a',
+				'tab-invalid',
+				'.invalid'
+				);
+
+			if (!res) {
+                alert('There are some errors on the page.');
                 ev.stop();
                 return false;
             }
+			
+			return true;
         });
 
         $$('#toolbar-apply a')[0].addEvent('click', function(ev){
