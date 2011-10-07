@@ -83,5 +83,4 @@ class NewsletterModelNewsletter extends JModelAdmin
 	{
 		return 'administrator/components/com_newsletter/models/forms/newsletter.js';
 	}
-
 }

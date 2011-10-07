@@ -56,4 +56,9 @@ window.addEvent('domready', function() {
             regex=/^[.]{1,5000}$/;
             return regex.test(value);
         });
+
+    document.formvalidator.setHandler('alias',
+        function (value) {
+            return true;
+        });
 });

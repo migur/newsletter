@@ -112,18 +112,19 @@
 			default=""
 		 />
 
-                 <field name="newsletter_preview_email"
-                        type="text"
-                        label="COM_NEWSLETTER_PREVIEW_EMAIL"
-                        description="COM_NEWSLETTER_PREVIEW_EMAIL"
-                        class="inputbox validate-newsletter_preview_email"
-                        size="70"
-                        default=""
-                        required="false"
-                        validate=""
-                 />
+		 <field name="newsletter_preview_email"
+				type="text"
+				label="COM_NEWSLETTER_PREVIEW_EMAIL"
+				description="COM_NEWSLETTER_PREVIEW_EMAIL"
+				class="inputbox validate-newsletter_preview_email"
+				size="70"
+				default=""
+				required="false"
+				validate=""
+		 />
 
-                 <field name="t_style_id" type="hidden" required="true"/>
-                 <field name="newsletter_id" type="hidden" />
+		 <field name="t_style_id" type="hidden" required="true"/>
+		 <field name="alias" type="hidden" />
+		 <field name="newsletter_id" type="hidden" />
 	</fieldset>
 </form>
