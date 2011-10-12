@@ -67,7 +67,6 @@ class NewsletterControllerSender extends JControllerForm
 			//echo nl2br(str_replace('#__','jos_',$query));
 			$subs = $dbo->setQuery($query)->loadAssocList();
 
-			//var_dump($subs); die();
 			if (!empty($subs)) {
 				foreach ($subs as $item) {
 

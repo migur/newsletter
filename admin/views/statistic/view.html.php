@@ -84,8 +84,6 @@ class NewsletterViewStatistic extends MigurView
 
 		$ids = (!empty($ids)) ? explode(',', $ids) : null;
 
-		//var_dump($ids); die();
-
 		$data = StatisticsHelper::totalSent($ids);
 		JavascriptHelper::addObject('statTotalSent', $data);
 

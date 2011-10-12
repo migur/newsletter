@@ -53,7 +53,6 @@ abstract class MediaHelper
 	public static function canUpload($file, &$err)
 	{
 		$params = JComponentHelper::getParams('com_media');
-		//var_dump($params); die();
 
 		$params->set('upload_extensions', 'rtf,csv,txt,RTF,CSV,TXT');
 		$params->set('upload_maxsize', '10');

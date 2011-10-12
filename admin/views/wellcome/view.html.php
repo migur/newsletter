@@ -47,7 +47,6 @@ class NewsletterViewWellcome extends MigurView
 			$this->addToolbar();
 		}
 
-		//var_dump($xml); die();
 		parent::display($tpl);
 
 		// Set the document

@@ -127,8 +127,6 @@ class NewsletterViewDashboard extends MigurView
                 $sess = JFactory::getSession();
        		JavascriptHelper::addStringVar('sessname', $sess->getName());
 
-                
-		//var_dump($xml); die();
 		parent::display($tpl);
 
 		// Set the document

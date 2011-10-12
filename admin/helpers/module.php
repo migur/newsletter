@@ -56,7 +56,6 @@ abstract class MigurModuleHelper extends JModuleHelper
 			}
 		}
 
-		//var_dump($path, $xml); die();
 		return $xml;
 	}
 
@@ -99,7 +98,6 @@ abstract class MigurModuleHelper extends JModuleHelper
 			$path = JPATH_SITE . '/modules/' . $module->module . '/' . $module->module . '.php';
 		}
 
-		//var_dump('MigurModuleHelper->renderModule():' . $path);
 		// Load the module
 		if (empty($module->user) && file_exists($path)) {
 			$lang = JFactory::getLanguage();
@@ -126,8 +124,6 @@ abstract class MigurModuleHelper extends JModuleHelper
 			} catch (Exception $e) {
 
 			}
-
-			//var_dump($module->content); die();
 
 			JFactory::$application = $app;
 		}
@@ -162,16 +158,13 @@ abstract class MigurModuleHelper extends JModuleHelper
 		foreach (explode(' ', $attribs['style']) as $style) {
 			$chromeMethod = 'modChrome_' . $style;
 
-			//var_dump($chromeMethod);// die();
 			// Apply chrome and render module
 			if (function_exists($chromeMethod)) {
 				$module->style = $attribs['style'];
 
 				ob_start();
 				$chromeMethod($module, $params, $attribs);
-				//var_dump($module->content);// die();
 				$module->content = ob_get_contents();
-				//var_dump($module->content);// die();
 				ob_end_clean();
 			}
 		}
@@ -267,7 +260,6 @@ abstract class MigurModuleHelper extends JModuleHelper
 		}
 		// Return to simple indexing that matches the query order.
 		$clean = array_values($clean);
-		//var_dump($clean); die();
 		return $clean;
 	}
 
@@ -281,11 +273,10 @@ abstract class MigurModuleHelper extends JModuleHelper
 	 */
 	public static function getModule($name, $title = null)
 	{
-		//var_dump($name); die();
 		$result = null;
 		$modules = self::_load();
 		$total = count($modules);
-		//var_dump($name, $modules); die();
+		
 		for ($i = 0; $i < $total; $i++) {
 			// Match the name of the module
 			if ($modules[$i]->name == $name) {
@@ -348,7 +339,6 @@ abstract class MigurModuleHelper extends JModuleHelper
 	 */
 	public static function getSupported($params = array())
 	{
-		//var_dump($params); die();
 		$extensions = array_merge(
 				self::getNativeSupported(),
 				self::getLocallySupported()
@@ -433,7 +423,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 		$array = self::getNativeSupportedNames();
 
 		$sqlIn = "'" . implode('\',\'', $array) . "'";
-		//var_dump($sqlIn); die();
+		
 		// Fetch it
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -476,7 +466,6 @@ abstract class MigurModuleHelper extends JModuleHelper
 			} else {
 				$item->desc = JText::_('COM_MODULES_NODESCRIPTION');
 			}
-			//var_dump($item); die();
 		}
 
 		return JArrayHelper::sortObjects($modules, 'title', 1, false);

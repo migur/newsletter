@@ -153,7 +153,6 @@ class NewsletterControllerList extends JControllerForm
 			$subscribers = JRequest::getVar('cid', null, 'post');
 			$lists = json_decode(JRequest::getVar('list_id', null, 'post'));
 
-			//var_dump($subscribers, $listId); die();
 			if (!empty($lists) && !empty($subscribers)) {
 				foreach($lists as $listId) {
 					foreach ($subscribers as $subscriberId) {
@@ -191,7 +190,6 @@ class NewsletterControllerList extends JControllerForm
 			$subscribers = JRequest::getVar('cid', null, 'post');
 			$lists = json_decode(JRequest::getVar('list_id', null, 'post'));
 
-			//var_dump($subscribers, $listId); die();
 			if (!empty($lists) && !empty($subscribers)) {
 				foreach($lists as $listId) {
 					foreach ($subscribers as $subscriberId) {

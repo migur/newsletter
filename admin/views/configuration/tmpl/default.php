@@ -42,4 +42,3 @@ defined('_JEXEC') or die;
 		</div>
 	</form>
 </fieldset>
-<?php //var_dump($_SESSION); ?>

@@ -81,7 +81,6 @@ class NewsletterControllerTemplate extends JControllerForm
 		$tpl = JRequest::getString('template');
 		$standard = $model->getTemplateBy($tpl);
 
-		//var_dump($tpl); die();
 		$table = JTable::getInstance('Template', 'NewsletterTable');
 		$table->save(array(
 			'template' => $tpl,

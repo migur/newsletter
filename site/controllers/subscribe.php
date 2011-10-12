@@ -149,7 +149,6 @@ class NewsletterControllerSubscribe extends JController
 		$titles = array();
 		foreach ($mysqlObj as $item) {
 			$titles[] = $item->name;
-			//var_dump($titles); die();
 		}
 		PlaceholderHelper::setPlaceholder('list', $titles);
 

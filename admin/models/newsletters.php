@@ -190,7 +190,6 @@ class NewsletterModelNewsletters extends JModelList
 		$query->order('name');
 		$db->setQuery($query);
 		$res = $db->loadObjectList();
-//		var_dump($query->__toString(), $res); die();
 		return $res;
 	}
 

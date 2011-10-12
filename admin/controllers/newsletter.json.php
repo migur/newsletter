@@ -98,13 +98,10 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 				$context = "$this->option.edit.$this->context";
 
-				//var_dump($data); die();
 				$htmlTpl = (object) json_decode($data['htmlTpl']);
 				$plugins = (array) json_decode($data['plugins']);
 				$htmlTpl->extensions = array_merge($htmlTpl->extensions, $plugins);
-				//var_dump($htmlTpl->extensions); //die();
 				$newExtsModel = $this->getModel('newsletterext');
-				//print_r($htmlTpl->extensions); die();
 				if ($newExtsModel->rebindExtensions(
 						$htmlTpl->extensions,
 						$nsid

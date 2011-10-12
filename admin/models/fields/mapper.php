@@ -47,13 +47,10 @@ class JFormFieldMapper extends JFormField
 			}
 		}
 
-		//var_dump($this->value, $opts);
-
 		$data = "";
 		if ($this->value !== null && isset($opts[$this->value])) {
 			$data = JText::_($opts[$this->value]);
 		}
-		//var_dump($data);
 		// Initialize some field attributes.
 		$attr = $this->element['class'] ? ' class="' . (string) $this->element['class'] . '"' : '';
 		$attr .= $this->element['value'] ? ' value="' . JText::_($this->element['value']) . '"' : '';

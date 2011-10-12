@@ -81,7 +81,7 @@ class NewsletterHelper
 
 		//$monster_url = 'monster.woody.php.nixsolutions.com';
 		$url = $monster_url . '/service/check/license/license_key/' . urlencode($lkey) . '/product/' . urlencode($product) . '/domain/' . urlencode($domain);
-		if (strpos($url, 'http://') === false) {
+		if (empty($url) || strpos($url, 'http://') === false) {
 			$url = 'http://' . $url;
 		}
 

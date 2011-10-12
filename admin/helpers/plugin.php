@@ -45,7 +45,6 @@ abstract class MigurPluginHelper
 //				$xml->{$name} = JText::_($item);
 //			}
 //		}
-		//var_dump($path, $xml); die();
 		return $xml;
 	}
 

@@ -40,9 +40,8 @@ class NewsletterViewSmtpprofile extends MigurView
 		//$script = $this->get('Script');
 		//$this->script = $script;
 
-
 		$this->ssForm = $this->get('Form', 'smtpprofile');
-		//var_dump($this->ssForm); die();
+		
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
 			JError::raiseError(500, implode("\n", $errors));

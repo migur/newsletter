@@ -28,7 +28,6 @@ class rsMailManager extends commonManager
 		$query->from('#__rsmail_subscribers AS s');
 		$query->join('left', '#__rsmail_subscriber_details AS sd ON sd.IdSubscriber=s.IdSubscriber AND sd.FieldName = "name"');
 		$query->order('s.SubscriberEmail, list_name');
-		//var_dump($query->__toString()); die();
 		// Set the query
 		$db->setQuery($query);
 		$objs = $db->loadObjectList();

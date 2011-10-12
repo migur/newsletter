@@ -139,7 +139,6 @@ class NewsletterControllerList extends JControllerForm
 
 		$sess = JFactory::getSession();
 		$data = $sess->get('list.' . $listId . '.file.uploaded', array());
-		//var_dump($data);
 		if (!empty($data)) {
 			if (($handle = fopen($data['file']['filepath'], "r")) !== FALSE) {
 				$data['fields'] = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);

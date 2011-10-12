@@ -63,7 +63,6 @@ class MigurMailerDocumentPlain extends MigurMailerDocument
 	 */
 	protected function _loadTemplate($params)
 	{
-		//die(var_dump(debug_backtrace()));
 		$template = new stdClass();
 		$template->content = $this->_letter->plain;
 		return $template;

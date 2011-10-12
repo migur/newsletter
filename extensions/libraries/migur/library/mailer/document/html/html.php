@@ -158,7 +158,6 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 		$template->params = $this->_mapParams($template->params);
 		PlaceholderHelper::setPlaceholders($template->params);
 
-		//var_dump($template); die();
 		return $template;
 	}
 

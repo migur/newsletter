@@ -410,8 +410,7 @@ class StatisticsHelper
 		}
 
 		ksort($assoc);
-		//var_dump($assoc);
-		//die();
+		
 		return $assoc;
 	}
 
@@ -481,8 +480,7 @@ class StatisticsHelper
 		}
 
 		ksort($assoc);
-		//var_dump($assoc);
-		//die();
+		
 		return $assoc;
 	}
 
@@ -584,7 +582,7 @@ class StatisticsHelper
 		}
 
 		ksort($assoc);
-//		var_dump($res);die();
+		
 		return $assoc;
 	}
 

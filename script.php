@@ -158,7 +158,7 @@ class com_newsletterInstallerScript
 
 		while ($row = mysql_fetch_row($res)) {
 
-			if (strpos($row[0], self::$comNamespace) !== false) {
+			if (!empty($row[0]) && !empty(self::$comNamespace) && strpos($row[0], self::$comNamespace) !== false) {
 
 				$this->tables[] = $row[0];
 
@@ -195,7 +195,7 @@ class com_newsletterInstallerScript
 		
 		$matches = array();
 		preg_match_all('/CONSTRAINT[\s]+\`([^\`]+)\`[\s]+FOREIGN\sKEY/', $text, $matches);
-		//var_dump($text, $matches);
+		
 		if (!empty($matches[1])) {
 			foreach($matches[1] as $fkey) {
 				$sql = 'ALTER TABLE ' . $table . ' DROP FOREIGN KEY ' . $fkey . ';';

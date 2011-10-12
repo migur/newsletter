@@ -74,7 +74,6 @@ class NewsletterTableNewsletterext extends MigurJTable
 		$query->where('ne.native = 1');
 
 		// Set the query
-		//var_dump($query->__toString()); die();
 		$db->setQuery($query);
 		$modulesNat = $db->loadAssocList();
 

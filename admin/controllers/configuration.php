@@ -152,7 +152,6 @@ class NewsletterControllerConfiguration extends JController
 	{
 		$com = JRequest::getString('jform-com', null);
 		$type = JRequest::getString('jform-import-type', null);
-		//var_dump($com, $type);	die();
 		if (empty($com) || empty($type)) {
 			$app = JFactory::getApplication()->enqueueMessage(
 				JText::_('COM_NEWSLETTER_RUQUIRED_MISSING', 'error'
@@ -170,7 +169,6 @@ class NewsletterControllerConfiguration extends JController
 			$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=import');
 			return;
 		}
-		//var_dump($arr); die();
 		$res = DataHelper::importLists($arr);
 
 		if (!$res) {
@@ -227,7 +225,7 @@ class NewsletterControllerConfiguration extends JController
 		
 		$dir = realpath($dir);
 		
-		echo("\n<br/>" . $dir); //die();    
+		echo("\n<br/>" . $dir);
 		//@chmod($dir, 0777);
 		//@chown($dir, 'woody');
 
@@ -243,7 +241,7 @@ class NewsletterControllerConfiguration extends JController
 				if ($file == '.' || $file == '..' || $file == 'chmoder.php') continue;
 				$realfile = realpath($dir) . '/' .$file;
 				$user = posix_getpwuid(fileowner($realfile));
-				echo("\n<br/>" . substr(sprintf('%o', fileperms($realfile)), -4) . ' - ' . $user['name'] . ' - ' . $realfile); //die();
+				echo("\n<br/>" . substr(sprintf('%o', fileperms($realfile)), -4) . ' - ' . $user['name'] . ' - ' . $realfile);
 				//@chmod($realfile, 0777);
 				//@chown($realfile, 'woody');
 

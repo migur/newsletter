@@ -100,7 +100,6 @@ class JFormFieldListslist extends JFormField
 		if ($db->getErrorNum()) {
 			JError::raiseWarning(500, $db->getErrorMsg());
 		}
-		//var_dump($options); die();
 		return $options;
 	}
 

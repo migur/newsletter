@@ -29,7 +29,6 @@ class jNewsManager extends commonManager
 		$query->join('left', '#__jnews_listssubscribers AS sl ON sl.subscriber_id=s.id');
 		$query->join('left', '#__jnews_lists AS l ON sl.list_id=l.id');
 		$query->order('s.email, l.list_name');
-		//var_dump($query->__toString()); die();
 		// Set the query
 		$db->setQuery($query);
 		$objs = $db->loadObjectList();

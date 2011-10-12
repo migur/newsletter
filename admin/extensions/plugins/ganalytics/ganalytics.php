@@ -35,7 +35,7 @@ class ganalytics
 		$withs = array();
 
 		foreach ($search as $item) {
-			$sep = (strpos('?', $item) === false)? '?' : '&';
+			$sep = (strpos($item, '?') === false)? '?' : '&';
 			$withs[] = $item.$sep.$params->goal;
 		}
 

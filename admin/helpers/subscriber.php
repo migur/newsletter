@@ -38,7 +38,6 @@ class SubscriberHelper
 	public static function emulateUser($params)
 	{
 
-		//var_dump($params); die();
 		if (empty($params['email']) && empty($params['subscriber_id'])) {
 			return false;
 		}
@@ -58,14 +57,12 @@ class SubscriberHelper
 
 		$db->setQuery($query);
 		$subscriber = $db->loadObject();
-		//var_dump($subscriber); die();
 		$user = JUser::getInstance();
 		if (!empty($subscriber->user_id)) {
 			// Get a database object
 			$user->load($subscriber->user_id);
 		}
 
-		//var_dump($user); die();
 		// bind data
 		if (!empty($subscriber->subscriber_id)) {
 			$user->set('subscriber_id', $subscriber->subscriber_id);
@@ -85,7 +82,6 @@ class SubscriberHelper
 
 
 		// fetch the dynamic data for placeholders
-		//var_dump($user);die();
 		PlaceholderHelper::setPlaceholders(array(
 				'username' => $user->name,
 				'useremail' => $user->email,

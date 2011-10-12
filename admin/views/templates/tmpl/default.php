@@ -96,5 +96,3 @@ defined('_JEXEC') or die;
         </td>
     </tr>
 </table>
-
-<?php //var_dump($_SESSION); ?>

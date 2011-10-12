@@ -110,12 +110,15 @@ class MigurMailerSender extends JMail
 			$full  = JPATH_ROOT.DS.$item->filename;
 			if(function_exists('mime_content_type')) {
 				$mime = mime_content_type($full);
-			} else {
+			} elseif (function_exists('finfo_open')) {
 				$finfo = finfo_open(FILEINFO_MIME);
 				$mime = finfo_file($finfo, $full);
 				finfo_close($finfo);
 				list($mime) = explode(';', $mime);
-			}
+			} else {
+				$mime = 'application/octet-stream';
+			}	
+			
 			parent::AddAttachment($full, '', 'base64', $mime);
 		}	
 		parent::IsHTML($params['type'] == 'html');

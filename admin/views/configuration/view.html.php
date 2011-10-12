@@ -63,9 +63,6 @@ class NewsletterViewConfiguration extends MigurView
 		$this->modules = MigurModuleHelper::getSupported();
 		$this->plugins = MigurPluginHelper::getSupported();
 
-		//var_dump($this->modules);
-		//var_dump($this->plugins); die();
-
 		$this->form = $this->get('Form');
 		$this->addToolbar();
 		parent::display($tpl);

@@ -56,7 +56,6 @@ class MigurMailer extends JObject
 		//$this->triggerEvent('onMailerBeforeRender');
 		$data = $document->render(false, $params);
 		//$this->triggerEvent('onMailerAfterRender');
-		//var_dump($data);// die();
 		unset($document);
 
 		return $data;
@@ -84,7 +83,6 @@ class MigurMailer extends JObject
 		//$this->triggerEvent('onMailerBeforeRender');
 		$data = $document->render(false, $params);
 		//$this->triggerEvent('onMailerAfterRender');
-		//var_dump($data);// die();
 		unset($document);
 
 		return $data;
@@ -111,7 +109,6 @@ class MigurMailer extends JObject
 		 * otherwise set raw mode
 		 */
 		$params['renderMode'] = ($params['t_style_id'] == strval(intval($params['t_style_id']))) ? 'schematic' : 'raw';
-		//var_dump($params, intval($params['t_style_id'])); die();
 		$document = MigurMailerDocument::getInstance($params['type'], $params);
 		//$this->triggerEvent('onMailerBeforeRender');
 		$document->render(false, $params);

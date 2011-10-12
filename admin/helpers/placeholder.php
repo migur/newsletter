@@ -95,7 +95,6 @@ class PlaceholderHelper
 			$data = self::getPlaceholder($name, $default);
 		}
 
-		//var_dump($data);// die();
 		return $pholder->render($data, array('name'=>$name));
 	}
 

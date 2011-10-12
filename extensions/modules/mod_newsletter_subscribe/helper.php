@@ -65,7 +65,6 @@ abstract class modNewsletterSubscribeHelper
 		if ($user->id > 0) {
 			$db = JFactory::getDbo();
 			$sql = 'SELECT * FROM #__newsletter_subscribers WHERE user_id=' . $db->quote($user->id);
-			//var_dump($sql); die();
 			$subscriber = $db->setQuery($sql)->loadObject();
 			return $subscriber->name;
 		}

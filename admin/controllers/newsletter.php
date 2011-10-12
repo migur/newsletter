@@ -81,7 +81,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		
 		$task = JRequest::getString('task');
 		
-		if (strpos($task, 'save2copy') !== false) {
+		if (!empty($task) && strpos($task, 'save2copy') !== false) {
 			
 			$nIds = JRequest::getVar('cid', array());
 			
@@ -100,6 +100,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 					unset($data['newsletter_id']);
 					$data['name'] .= '(copy)';
+					$data['sent_started'] = '';
 					
 					if (!$table->bind($data)) {
 						$this->setError($table->getError());

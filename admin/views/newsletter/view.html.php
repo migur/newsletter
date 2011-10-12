@@ -102,17 +102,14 @@ class NewsletterViewNewsletter extends MigurView
 		);
 		$this->smtpprofiles = $this->get('Items', 'smtpprofiles');
 
-
 		// get all the Extensions
 		$this->modules = MigurModuleHelper::getSupported(array('withoutInfo'=>true));
-		//var_dump($this->modules); die();
 		$this->plugins = MigurPluginHelper::getSupported(array('withoutInfo'=>true));
-
 
 		// get the Extensions used in this newsletter
 		$model = JModel::getInstance('newsletterext', 'NewsletterModel');
 		$this->usedExts = $model->getExtensionsBy($nId);
-		//var_dump($this->usedExts); die();
+		
 		// Get a list of all templates
 		$this->setModel(
 			JModel::getInstance('templates', 'NewsletterModel')
@@ -173,7 +170,6 @@ class NewsletterViewNewsletter extends MigurView
 		$this->attItemslistOrder = "asc";
 
 		// getting of an xml from
-		//var_dump($this->templates->items); die();
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
 			JError::raiseError(500, implode("\n", $errors));
