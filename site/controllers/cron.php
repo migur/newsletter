@@ -138,7 +138,7 @@ class NewsletterControllerCron extends JControllerForm
 					$nl = JTable::getInstance('newsletter', 'NewsletterTable');
 					$nl->load(array('newsletter_id' => $item['newsletter_id']));
 
-					if (strtotime($nl->sent_started) < 0) {
+					if ( $nl->sent_started == '0000-00-00 00:00:00' || strtotime($nl->sent_started) <= 0 ) {
 						$nl->save(array(
 							'sent_started' => date('Y-m-d H:i:s')
 						));
@@ -148,11 +148,11 @@ class NewsletterControllerCron extends JControllerForm
 					// Update the queue item after success mailing
 					$st = $letter->state? 0 : 2;
                                         
-                                        $db->setQuery(
-                                                'UPDATE #__newsletter_queue SET state='.$st
-                                                .' WHERE newsletter_id=' . $item['newsletter_id']
-                                                .' AND subscriber_id=' . $item['subscriber_id']);
-                                        $db->query();
+					$db->setQuery(
+							'UPDATE #__newsletter_queue SET state='.$st
+							.' WHERE newsletter_id=' . $item['newsletter_id']
+							.' AND subscriber_id=' . $item['subscriber_id']);
+					$db->query();
 
 					// Get all records which refers to the current user and the current newsletter
 					$query = $db->getQuery(true);
@@ -226,6 +226,5 @@ class NewsletterControllerCron extends JControllerForm
                 echo $response;
                 jexit();
 	}
-
 }
 

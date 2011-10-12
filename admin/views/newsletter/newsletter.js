@@ -150,7 +150,7 @@ avatarSetSettings = function(avatar) {
         }
         Migur.moodialogs[href] = {};
         Migur.moodialogs[href] = new MooDialog.Iframe(
-            $(this).getProperty('href'),
+           '', //$(this).getProperty('href'),
             {
                 'title': 'Module / Plugin',
                 'class': 'MooDialog myDialog',
@@ -223,6 +223,51 @@ avatarSetSettings = function(avatar) {
         $$('div.title').addEvent('mouseup', function(){
             Migur.moodialogs[href].mover.detach();
         });
+		
+
+        var ifr = $(Migur.moodialogs[0].content).getElements('iframe')[0];
+        var target='moodialogiframe';
+        ifr.contentWindow.window.name = target;
+        $(ifr).setProperty('name', target);
+        $(ifr).setProperty('id', target);
+
+		if ($('moodialog_form_helper')) {
+			$('moodialog_form_helper').destroy();
+		}
+		
+        var phonyForm = new Element('form', {
+			'id': 'moodialog_form_helper',
+			'method': 'post',
+			'action': $(this).getProperty('href'),
+			'target': target,
+			'styles': {
+				'display': 'none'
+			}
+		});
+		
+        phonyForm.enctype = "application/x-www-form-urlencoded"
+        $(document.body).grab(phonyForm, 'bottom');
+		
+		Object.each(Migur.moodialogs[href].data, function(val, name){
+			
+			if (typeof val == 'object') {
+				Object.each(val, function(subval, subname){
+					phonyForm.appendChild(new Element('input', {
+						'type':"hidden",
+						'name': 'jform['+name+']['+subname+']',
+						'value': subval
+					}));
+				});
+			} else {
+				phonyForm.appendChild(new Element('input', {
+					'type':"hidden",
+					'name': 'jform['+name+']',
+					'value': val
+				}));
+			}	
+		});
+		
+        phonyForm.submit();
     })
     .removeClass('icon-16-gear-disabled')
     .addClass('icon-16-gear');

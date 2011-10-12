@@ -224,7 +224,6 @@ class MigurMailerDocument extends JDocument
 		$this->parse();
 		$this->_template->content = $this->_renderTemplate();
 
-		//var_dump($this->_template->content);die();
 		// The second pass. Some dynamic data can contain placeholders.
 		// In other words - placeholders in placeholders...
 		$this->_parseTemplate();
@@ -248,7 +247,6 @@ class MigurMailerDocument extends JDocument
 			);
 		}
 
-		//var_dump($this->_template->content); die();
 		return $this->_template->content;
 	}
 
@@ -270,7 +268,6 @@ class MigurMailerDocument extends JDocument
 		foreach ($this->_parsed as $parsedTag) {
 			foreach ($parsedTag AS $jdoc => $args) {
 				$replace[] = $jdoc;
-				//var_dump($args);
 				$with[] = $this->getBuffer($args['type'], $args['name'], $args['attribs']);
 			}
 		}
@@ -358,14 +355,12 @@ class MigurMailerDocument extends JDocument
 	 */
 	public function getBuffer($type = null, $name = null, $attribs = array())
 	{
-		//var_dump(func_get_args());//die();
 		// If no type is specified, return the whole buffer
 		if ($type === null) {
 			return parent::$_buffer;
 		}
 
 		$result = null;
-		//var_dump(parent::$_buffer[$type][$name]);// die();
 		if (isset(parent::$_buffer[$type][$name])) {
 			return parent::$_buffer[$type][$name];
 		}
@@ -437,18 +432,21 @@ class MigurMailerDocument extends JDocument
 		foreach ($search as $item) {
 
 			// if this link is relative then repair it!
-			if (substr($item, 0, 4) != 'http') {
+			if (!empty($item) && substr($item, 0, 4) != 'http') {
+				
 				$pathprefix = JUri::base(true);
 
 				// remove the path prefix from the begin of item
-				if (strpos($item, $pathprefix) === 0) {
+				if (!empty($pathprefix) && strpos($item, $pathprefix) === 0) {
 					$item = substr($item, strlen($pathprefix));
 				}
 
 				// remove the '/' from the begin of item
-				if ($item[0] == '/') {
+				if ($item[0] == '/' && sizeof($item) > 1) {
 					$item = substr($item, 1);
-				}
+				} else {
+					$item = '';
+				}	
 
 				// Compile link
 				$item = JUri::root() . $item;

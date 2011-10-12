@@ -86,20 +86,29 @@ class NewsletterModelExtension extends JModelAdmin
 		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.extension.data', array());
 		if (empty($data)) {
 
-			$id     = $this->getState($this->getName().'.id');
-			$native = $this->getState('item.module.native');
+			$form = JRequest::getVar('jform');
+			
+			if (!empty($form)) {
+				$data = $form;
+			} else {	
+			
+				$id     = $this->getState($this->getName().'.id');
+				$native = $this->getState('item.module.native');
 
-			$modules = MigurModuleHelper::getSupported(array(
-				'extension_id' => $id,
-				'native'       => $native
-			));
+				$modules = MigurModuleHelper::getSupported(array(
+					'extension_id' => $id,
+					'native'       => $native
+				));
 
-			$data = new JObject($modules[0]);
-			if (!empty($data->params)) {
-				$data->setProperties($data->params);
+				$data = new JObject($modules[0]);
+				if (!empty($data->params)) {
+					$data->setProperties($data->params);
+				}
+				unset($data->params);
+
 			}
-			unset($data->params);
 		}
+		
 		return $data;
 	}
 
@@ -126,7 +135,6 @@ class NewsletterModelExtension extends JModelAdmin
 		$client		= JApplicationHelper::getClientInfo($clientId);
 
 		// Load the core and/or local language file(s).
-		//var_dump($client->path); die();
 			$lang->load($module, $client->path, null, false, false)
 		||	$lang->load($module, $client->path.DS.$type.DS.$module, null, false, false)
 		||	$lang->load($module, $client->path, $lang->getDefault(), false, false)
@@ -138,7 +146,6 @@ class NewsletterModelExtension extends JModelAdmin
 			JPath::clean(JPATH_COMPONENT_ADMINISTRATOR.DS.'extensions'.DS.$type.DS.$module.DS.$module.'.xml') :
 			JPath::clean(JPATH_SITE.DS.$type.DS.$module.DS.$module.'.xml');
 
-		//var_dump($formFile); die();
 		if (file_exists($formFile)) {
 			// Get the module form.
 			if (!$form->loadFile($formFile, false, '//config')) {
