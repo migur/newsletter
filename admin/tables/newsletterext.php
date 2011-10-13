@@ -93,5 +93,25 @@ class NewsletterTableNewsletterext extends MigurJTable
 		return $res;
 	}
 
+	/**
+	 * Get all the extensions for newsletter.
+	 *
+	 * @param  int   $id id of a newsletter
+	 * @return array list of extensions
+	 */
+	public function getRowsBy($id)
+	{
+		$db = $this->_db;
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('a.*');
+		$query->from('#__newsletter_newsletters_ext AS a');
+		$query->where('newsletter_id=' . intval($id));
+
+		$db->setQuery($query);
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
+ 		return $db->loadAssocList();
+	}
 }
 

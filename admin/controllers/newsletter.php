@@ -87,31 +87,86 @@ class NewsletterControllerNewsletter extends JControllerForm
 			
 			if (!empty($nIds)) {
 				
-				$table = NewsletterTableNewsletter::getInstance('Newsletter', 'NewsletterTable');
+				$table = JTable::getInstance('Newsletter', 'NewsletterTable');
+				$relTable = JTable::getInstance('Newsletterext', 'NewsletterTable');
+				$downTable = JTable::getInstance('Downloads', 'NewsletterTable');
 				
 				foreach($nIds as $nId) {
 					
+					// Copying the newsletter...
 					$table->load($nId);
-					
 					$data = $table->getProperties();
 					
+					// reset
 					$table->reset();
 					$table->set($table->getKeyName(), null);
-
 					unset($data['newsletter_id']);
 					$data['name'] .= '(copy)';
 					$data['sent_started'] = '';
 					
+					// bind
 					if (!$table->bind($data)) {
 						$this->setError($table->getError());
 						return false;
 					}
-
-					// Store the data.
+					
+					// Store data.
 					if (!$table->store()) {
 						$this->setError($table->getError());
 						return false;
 					}
+					
+					$newNid = $table->get($table->getKeyName());
+
+					// Copy extensions...
+					$exts = $relTable->getRowsBy($nId);
+					if (!empty($exts)) {
+						foreach($exts as $ext) {
+
+							// reset
+							$relTable->reset();
+							$relTable->set($relTable->getKeyName(), null);
+							unset($ext[$relTable->getKeyName()]);
+							$ext['newsletter_id'] = $newNid;
+							
+							// bind
+							if (!$relTable->bind($ext)) {
+								$this->setError($relTable->getError());
+								return false;
+							}
+							
+							// Store data.
+							if (!$relTable->store()) {
+								$this->setError($relTable->getError());
+								return false;
+							}
+						}
+					}	
+
+					// Copy downloads...
+					$exts = $downTable->getRowsBy($nId);
+					if (!empty($exts)) {
+						foreach($exts as $ext) {
+
+							// reset
+							$downTable->reset();
+							$downTable->set($downTable->getKeyName(), null);
+							unset($ext[$downTable->getKeyName()]);
+							$ext['newsletter_id'] = $newNid;
+							
+							// bind
+							if (!$downTable->bind($ext)) {
+								$this->setError($downTable->getError());
+								return false;
+							}
+							
+							// Store data.
+							if (!$downTable->store()) {
+								$this->setError($downTable->getError());
+								return false;
+							}
+						}
+					}	
 					
 					// Clean the cache.
 					$cache = JFactory::getCache($this->option);
