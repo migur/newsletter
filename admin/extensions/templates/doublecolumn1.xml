@@ -49,7 +49,8 @@ table td { border-collapse:collapse; }
                 src="[image_top.src]"
                 width="[image_top.width]"
                 height="[image_top.height]"
-                alt="[image_top.alt]" />
+                alt="[image_top.alt]" 
+				style="width:[image_bottom.width]; height:[image_bottom.height];" />
         </td>
     </tr>
     <tr>
@@ -76,7 +77,8 @@ table td { border-collapse:collapse; }
                 src="[image_bottom.src]"
                 width="[image_bottom.width]"
                 height="[image_bottom.height]"
-                alt="[image_bottom.alt]" />
+                alt="[image_bottom.alt]" 
+				style="width:[image_bottom.width]; height:[image_bottom.height];"/>
         </td>
     </tr>
     <tr><td colspan="2" align="center">To unsubscribe or change subscriber options visit [unsubscription link]<tr>
