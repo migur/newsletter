@@ -180,8 +180,9 @@ class NewsletterViewList extends MigurView
 	protected function addToolbar()
 	{
 		$bar = JToolBar::getInstance('multitab-toolbar');
+		$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'list.apply', false);
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'list.save', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CLOSE', false, false);
+		$bar->appendButton('Link', 'cancel', 'JTOOLBAR_CLOSE', 'index.php?option=com_newsletter&view=close&tmpl=component', false);
 
 		$bar = MigurToolBar::getInstance('import-toolbar');
 		$bar->appendButton('Link', 'export', 'COM_NEWSLETTER_IMPORT_FROM_FILE', '#');
@@ -228,6 +229,7 @@ class NewsletterViewList extends MigurView
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.bar.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-line.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-pie.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/message.js');
 
 		$document->addScriptDeclaration('var urlRoot = "' . JURI::root(true) . '";');
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');

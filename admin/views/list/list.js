@@ -518,16 +518,6 @@ try {
         }
     }
 
-    $$('#multitab-toolbar-cancel a')
-        .removeProperty('onclick')
-        .addEvent('click', function(){
-            if (window && window.parent && window.parent.SqueezeBox) {
-                window.parent.SqueezeBox.close();
-            }
-            return false;
-        });
-		
-		
     $$('input, select, textarea').addEvent('blur', function(){
 		Migur.validator.tabIndicator(
 			'#listForm',
