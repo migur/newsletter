@@ -220,17 +220,25 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 	function _trackLinks(&$content, $uid, $newsletterId)
 	{
 		// Find all hrefs
-		preg_match_all("/(?:href[\s\=\"\']+)([^\"\']+)/", $content, $matches);
-		$search = array_unique($matches[1]);
+		preg_match_all('/href[\s\=\"\']+([^\"\']+)[\"\']/', $content, $matches);
+		$fullhrefs = array_unique($matches[0]);
+		$urls = array_unique($matches[1]);
+		
 		$withs = array();
-		foreach ($search as $item) {
+		for($i=0; $i < count($urls); $i++) {
 
-			$withs[] = JRoute::_(
+			$withs[] = str_replace(
+				$urls[$i],
+				JRoute::_(
 					'index.php?option=com_newsletter&task=newsletter.track&format=json&action=clicked&uid=' . $uid . '&nid=' . $newsletterId .
-					'&link=' . urlencode(base64_encode($item)), FALSE, 2
-			);
+					'&link=' . urlencode(base64_encode($urls[$i])), FALSE, 2
+				),
+				$fullhrefs[$i]
+			);	
 		}
-		$content = str_replace($search, $withs, $content);
+		
+		$content = str_replace($fullhrefs, $withs, $content);
+		
 		return true;
 	}
 
