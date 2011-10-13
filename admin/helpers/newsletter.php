@@ -181,4 +181,61 @@ class NewsletterHelper
 		return array();
 	}
 
+	/**
+	 * Get first unused alias.
+	 *
+	 * @param  string $alias assumed alias
+	 * @return string alias should been used
+	 */
+	public function getFreeAlias($alias)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('*');
+		$query->from('#__newsletter_newsletters AS a');
+		$query->where("alias LIKE '" . $db->quote($alias) . "%'");
+
+		$db->setQuery($query);
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
+ 		$res = $db->loadAssocList();
+
+		if (empty($res)) {
+			return $alias;
+		}
+		
+		// Get array with similar aliases
+		$aliases = array();
+		foreach($res as $item) {
+			$aliases[] = $item['alias'];
+		}
+
+		// Find unused alias...
+		for ($i = 1; $i < 100000; $i++) {
+			if(!in_array($data['alias'].$i, $aliases)) {
+				return $data['alias'].$i;
+			}
+		}
+	}
+	
+	/**
+	 * Get first unused alias.
+	 *
+	 * @param  string $alias assumed alias
+	 * @return string alias should been used
+	 */
+	public function getByAlias($alias)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('*');
+		$query->from('#__newsletter_newsletters AS a');
+		$query->where("alias='" . addslashes($alias) . "'");
+		$db->setQuery($query);
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
+ 		return $db->loadAssoc();
+	}
 }

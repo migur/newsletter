@@ -723,9 +723,20 @@ window.addEvent('domready', function() {
 
         /* "Subject" input -> keyup-handler */
         $('jform_subject').addEvent('keyup', function (event) {
-            var link = $('link-website')
-            var value = $(this).get('value');
-            var val = siteRoot + link.getProperty('rel').replace('%s', value.replace(/[^a-zA-Z-0-9_-]+/g, '').toLowerCase());
+			
+			// Set the alias only if the newsletter is not saved yet
+			
+			var nid = $$('[name=newsletter_id]')[0].getProperty('value');
+			var alias = $('jform_alias').getProperty('value');
+            var link = $('link-website');
+			
+			if (nid == '') {
+				var value = $(this).get('value');
+				alias = value.replace(/[^a-zA-Z-0-9_-]+/g, '').toLowerCase();
+				$('jform_alias').setProperty('value', alias);
+			}
+			
+            var val = siteRoot + link.getProperty('rel').replace('%s', alias);
             if (val == '') {
                 link.addClass('hide');
                 $('link-website-prompt').removeClass('hide');

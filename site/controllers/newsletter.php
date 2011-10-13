@@ -15,6 +15,7 @@ jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer');
 JLoader::import('helpers.module', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
  * Class of the cron controller. Handles the  request of a "trigger" from remote server.
@@ -63,8 +64,13 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$newsletterId = JRequest::getVar('newsletter_id');
 		$type         = JRequest::getVar('type');
 		$email        = urldecode(JRequest::getVar('email'));
-		
+		$alias        = JRequest::getString('alias', null);
 
+		if (!empty($alias)) {
+			$newslettter = NewsletterHelper::getByAlias($alias);
+			$newsletterId = $newslettter['newsletter_id'];
+		}	
+		
 		if (empty($newsletterId)) {
 			echo json_encode(array(
 				'state' => '0',

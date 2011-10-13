@@ -90,6 +90,15 @@ class NewsletterControllerNewsletter extends JControllerForm
 					$data['type'] = $nl['type'];
 					JRequest::setVar('jform', $data, 'post');
 				}
+				
+			} else {
+				
+				if (empty($data['alias'])) {
+					$data['alias'] = 'newsletter';
+				}
+				
+				// Get newsletters with similar aliases
+				$data['alias'] = NewsletterHelper::getFreeAlias($data['alias']);
 			}
 
 			if (parent::save()) {
