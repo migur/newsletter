@@ -51,7 +51,7 @@ table td { border-collapse:collapse; }
                 width="[image_top.width]"
                 height="[image_top.height]"
                 alt="[image_top.alt]" 
-				style="width:[image_bottom.width]; height:[image_bottom.height];" />
+				style="width:[image_top.width]; height:[image_top.height];" />
         </td>
     </tr>
     <tr>
