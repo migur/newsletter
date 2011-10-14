@@ -12,6 +12,7 @@
 	<authorUrl>http://migur.com/</authorUrl>
 	<version>1.6.0</version>
 	<description></description>
+	<namespace>com_newsletter.newsletter</namespace>
 	<files>
 		<filename
 			module="ganalytics">ganalytics.php</filename>

@@ -104,7 +104,7 @@ class NewsletterViewNewsletter extends MigurView
 
 		// get all the Extensions
 		$this->modules = MigurModuleHelper::getSupported(array('withoutInfo'=>true));
-		$this->plugins = MigurPluginHelper::getSupported(array('withoutInfo'=>true));
+		$this->plugins = MigurPluginHelper::getSupported(array('withoutInfo'=>true), 'com_newsletter.newsletter');
 
 		// get the Extensions used in this newsletter
 		$model = JModel::getInstance('newsletterext', 'NewsletterModel');
