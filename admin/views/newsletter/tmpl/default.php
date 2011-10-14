@@ -26,6 +26,8 @@ defined('_JEXEC') or die;
                     <?php echo $this->form->getInput('t_style_id'); ?>
                     <?php echo $this->form->getInput('alias'); ?>
                     <input type="hidden" name="task" value="" />
+                    <input type="hidden" name="jform[htmlTpl]" value="" />
+                    <input type="hidden" name="jform[plugins]" value="" />
                     <?php echo JHtml::_('form.token'); ?>
                 </form>
 

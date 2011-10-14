@@ -103,6 +103,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 					unset($data['newsletter_id']);
 					$data['name'] .= '(copy)';
 					$data['sent_started'] = '';
+					$data['alias'] = NewsletterHelper::getFreeAlias($data['alias']);
 					
 					// bind
 					if (!$table->bind($data)) {
@@ -182,9 +183,91 @@ class NewsletterControllerNewsletter extends JControllerForm
 				$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters', false), $message, 'error');
 				return true;
 			}
+			
+			return parent::save();
+			
+		} else {
+			
+			$nsid = JRequest::getVar('newsletter_id', '0');
+			$type = JRequest::getVar('task');
+			$context = JRequest::getString('context', 'html');
+
+			// We can save NEW newsletter (create it) or autosave an existing letter
+			if (!empty($nsid) || $type == 'save') {
+
+				$data = JRequest::getVar('jform', array(), 'post', 'array');
+
+				// If the type is not changeable then replace type as now (for success validation).
+				if (!empty($nsid)) {
+					$nl = NewsletterHelper::get($nsid);
+					if (!$nl['type_changeable']) {
+						$data['type'] = $nl['type'];
+						JRequest::setVar('jform', $data, 'post');
+					}
+
+				} else {
+
+					if (empty($data['alias'])) {
+						$data['alias'] = 'newsletter';
+					}
+
+					// Get newsletters with similar aliases
+					$data['alias'] = NewsletterHelper::getFreeAlias($data['alias']);
+				}
+
+				if (parent::save()) {
+
+					$nsid = $this->newsletterId;
+
+					$htmlTpl = (object) json_decode($data['htmlTpl']);
+					$plugins = (array) json_decode($data['plugins']);
+					$htmlTpl->extensions = array_merge($htmlTpl->extensions, $plugins);
+					$newExtsModel = $this->getModel('newsletterext');
+					if ($newExtsModel->rebindExtensions(
+							$htmlTpl->extensions,
+							$nsid
+					)) {
+
+					} else {
+						$error = $newExtsModel->getError();
+					}
+				} else {
+					$error = $this->getError();
+				}
+			} else {
+				$error = JText::_('JLIB_DATABASE_ERROR_NULL_PRIMARY_KEY');
+			}
+
+			if ($context == 'json') {
+				
+				$this->setRedirect(null);
+				if (empty($error)) {
+					$error = JFactory::getApplication()->getMessageQueue();
+				}
+
+				echo json_encode(array(
+					'state' => (!empty($error)) ? $error : 'ok',
+					'newsletter_id' => $nsid
+					)
+				);
+
+				die;
+			}	
 		}
-		
-		return parent::save();
 	}
 
+	/**
+	 * Saves the Id of current record to give
+	 * access for other methods of controller to it
+	 *
+	 * @param <type> $model - the model object
+	 * @param <type> $data  - saved data.
+	 * 
+	 * @return void
+	 * @since 1.0
+	 */
+	protected function postSaveHook($model, $data)
+	{
+		$this->newsletterId = $model->getState($model->getName() . '.id');
+	}
 }

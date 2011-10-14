@@ -195,7 +195,7 @@ class NewsletterHelper
 		// Select the required fields from the table.
 		$query->select('*');
 		$query->from('#__newsletter_newsletters AS a');
-		$query->where("alias LIKE '" . $db->quote($alias) . "%'");
+		$query->where("alias LIKE '" . addslashes($alias) . "%'");
 
 		$db->setQuery($query);
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
@@ -213,8 +213,8 @@ class NewsletterHelper
 
 		// Find unused alias...
 		for ($i = 1; $i < 100000; $i++) {
-			if(!in_array($data['alias'].$i, $aliases)) {
-				return $data['alias'].$i;
+			if(!in_array($alias.$i, $aliases)) {
+				return $alias.$i;
 			}
 		}
 	}

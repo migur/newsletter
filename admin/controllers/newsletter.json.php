@@ -68,78 +68,6 @@ class NewsletterControllerNewsletter extends JControllerForm
 	}
 
 	/**
-	 * Save the configuration
-	 * @return	void
-	 * @since	1.0
-	 */
-	function save()
-	{
-		$nsid = JRequest::getVar('newsletter_id', '0');
-
-		$type = JRequest::getVar('task');
-
-		// We can save NEW newsletter (create it) or autosave an existing letter
-		if (!empty($nsid) || $type == 'save') {
-
-			$data = JRequest::getVar('jform', array(), 'post', 'array');
-
-			// If the type is not changeable then replace type as now (for success validation).
-			if (!empty($nsid)) {
-				$nl = NewsletterHelper::get($nsid);
-				if (!$nl['type_changeable']) {
-					$data['type'] = $nl['type'];
-					JRequest::setVar('jform', $data, 'post');
-				}
-				
-			} else {
-				
-				if (empty($data['alias'])) {
-					$data['alias'] = 'newsletter';
-				}
-				
-				// Get newsletters with similar aliases
-				$data['alias'] = NewsletterHelper::getFreeAlias($data['alias']);
-			}
-
-			if (parent::save()) {
-
-				$nsid = $this->newsletterId;
-
-				$context = "$this->option.edit.$this->context";
-
-				$htmlTpl = (object) json_decode($data['htmlTpl']);
-				$plugins = (array) json_decode($data['plugins']);
-				$htmlTpl->extensions = array_merge($htmlTpl->extensions, $plugins);
-				$newExtsModel = $this->getModel('newsletterext');
-				if ($newExtsModel->rebindExtensions(
-						$htmlTpl->extensions,
-						$nsid
-				)) {
-					
-				} else {
-					$error = $newExtsModel->getError();
-				}
-			} else {
-				$error = $this->getError();
-			}
-		} else {
-			$error = JText::_('JLIB_DATABASE_ERROR_NULL_PRIMARY_KEY');
-		}
-
-		$this->setRedirect(null);
-		if (empty($error)) {
-			$error = JFactory::getApplication()->getMessageQueue();
-		}
-
-		echo json_encode(array(
-			'state' => (!empty($error)) ? $error : 'ok',
-			'newsletter_id' => $nsid
-			)
-		);
-		return;
-	}
-
-	/**
 	 * Saves the Id of current record to give
 	 * access for other methods of controller to it
 	 *
@@ -195,29 +123,6 @@ class NewsletterControllerNewsletter extends JControllerForm
 		echo json_encode(AutocompleterHelper::getSubscribers());
 	}
 
-	// TODO: Check and remove this method. Mailing is with queue now.
-//	public function sendToList()
-//	{
-//
-//		$listId = JRequest::getInt('list_id');
-//
-//		$subscribers = JModel::getInstance('list', 'NewsletterModel')->getSubscribers(JRequest::get('list_id'));
-//		if (!$subscribers) {
-//			echo json_encode(array(
-//				'state' => '0',
-//				'error' => 'Unable to load list',
-//				'list_id' => $listId
-//			));
-//			return;
-//		}
-//
-//		$mailer = new MigurMailer();
-//		$mailer->sendToList(array(
-//			'subscribers' => $subscribers,
-//			'newsletter_id' => JRequest::getInt('newsletter_id'),
-//			'list_id' => $listId
-//		));
-//	}
 
 	/**
 	 * Handles the configuration "Clear sent" button
