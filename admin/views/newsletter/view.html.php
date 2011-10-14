@@ -81,12 +81,6 @@ class NewsletterViewNewsletter extends MigurView
 
 		$nId = JRequest::getInt('newsletter_id');
 
-		JavascriptHelper::addObject(
-				'Migur.storage.newsletter',
-				NewsletterHelper::get($nId),
-				'global'
-		);
-
 		$script = $this->get('Script');
 		$this->script = $script;
 
@@ -194,7 +188,8 @@ class NewsletterViewNewsletter extends MigurView
                 ),
                 'templates' => (array)$this->templates->items,
                 'modules' => (array)$this->modules,
-                'plugins' => (array)$this->plugins
+                'plugins' => (array)$this->plugins,
+				'newsletter' => NewsletterHelper::get($nId)
             )
 			
         );

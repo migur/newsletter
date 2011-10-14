@@ -477,7 +477,7 @@ window.addEvent('domready', function() {
                     // Update the turn on/off switcher
                     $(this.domEl).getElements('input')[0].setProperty(
                         'checked',
-                        (data.params.active)? true : false
+                        (data.params !== undefined && data.params.active)? true : false
                     );
                 },
 
@@ -668,9 +668,9 @@ window.addEvent('domready', function() {
         $$('#tabs-newsletter > dt')[0].fireEvent('click');
 
         /* Type of letter */
-        if (!Migur.storage.newsletter.type_changeable && isNew != 1) {
+        if (dataStorage.newsletter.type_changeable !== undefined && !dataStorage.newsletter.type_changeable) {
             $$('[name=jform[type]]').each(function(el){
-                el.setProperty('disabled', 'disabled');
+                el.onclick = function(){ return false; }
             });
         }
 
@@ -806,7 +806,13 @@ window.addEvent('domready', function() {
                         Migur.getWidget('autosaver-switch').render();
                         autosaver.options.observState = autosaver.getter();
                     }
-                }
+                } else {
+					
+					if (autosaver.messageCannotsave === undefined) {
+						alert(res.state);
+						autosaver.messageCannotsave = true;
+					}	
+				}
             },
 
             controller: function(data) {
