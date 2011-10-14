@@ -729,8 +729,15 @@ window.addEvent('domready', function() {
 			var nid = $$('[name=newsletter_id]')[0].getProperty('value');
 			var alias = $('jform_alias').getProperty('value');
             var link = $('link-website');
-			
+
 			if (nid == '') {
+				$('link-website-msg').setStyles({'display': 'block'});
+			} else {
+				$('link-website-msg').setStyles({'display': 'none'});
+			}
+
+
+			if (dataStorage.newsletter.alias == '') {
 				var value = $(this).get('value');
 				alias = value.replace(/[^a-zA-Z-0-9_-]+/g, '').toLowerCase();
 				$('jform_alias').setProperty('value', alias);
