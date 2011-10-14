@@ -58,6 +58,9 @@
                 <a id="link-website-prompt" href="#">
                     <?php echo JText::_('COM_NEWSLETTER_START_TO_INPUT'); ?>
                 </a>
+                <div id="link-website-msg" style="color:gray">
+                   ( <?php echo JText::_('COM_NEWSLETTER_LINK_AVAILABLE_AFTER_SAVING'); ?> )
+                </div>
             </div>
         </li>
     </ul>
