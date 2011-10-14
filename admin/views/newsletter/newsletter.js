@@ -767,7 +767,7 @@ window.addEvent('domready', function() {
                 repeat: true,
                 timeout: 3000,
                 observable: $('tabs-sub-container'),
-                url: '?option=com_newsletter&format=json'
+                url: '?option=com_newsletter&context=json'
             },
 
             beforeSend: function(){
@@ -791,6 +791,10 @@ window.addEvent('domready', function() {
                 obj["jform[newsletter_preview_email]"] = "";
                 obj["jform[htmlTpl]"] = JSON.encode(htmlTpl);
                 obj["jform[plugins]"] = JSON.encode(plugins);
+				
+				$$("[name=jform[htmlTpl]]")[0].setProperty('value', obj["jform[htmlTpl]"]);
+				$$("[name=jform[plugins]]")[0].setProperty('value', obj["jform[plugins]"]);
+				
                 return obj.toQueryString();
             },
         
@@ -858,6 +862,8 @@ window.addEvent('domready', function() {
                 return false;
             }
 			
+			// To set jform[htmlTpl] and jform[plugins] fields
+			autosaver.getter();
 			return true;
         });
 
