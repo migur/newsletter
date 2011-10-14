@@ -176,6 +176,7 @@ class NewsletterHelper
 		if (!empty($data)) {
 			// Check if we can change the type of newsletter
 			$data['type_changeable'] = (!$data['used_as_static'] && $data['sent_started'] == '0000-00-00 00:00:00');
+			$data['saveable'] = ($data['type'] == 1 || $data['sent_started'] == '0000-00-00 00:00:00');
 			return $data;
 		}
 		return array();

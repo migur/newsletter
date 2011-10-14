@@ -199,10 +199,32 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 				// If the type is not changeable then replace type as now (for success validation).
 				if (!empty($nsid)) {
+					
+					// Get newsletter's extended info 
 					$nl = NewsletterHelper::get($nsid);
+					
 					if (!$nl['type_changeable']) {
 						$data['type'] = $nl['type'];
 						JRequest::setVar('jform', $data, 'post');
+					}
+					
+					// Check if we can change the newsletter
+					if (!$nl['saveable']) {
+
+						$error = JText::_('COM_NEWSLETTER_CANNOT_SAVE_NEWSLETTER');	
+						
+						if ($context == 'json') {
+
+							echo json_encode(array(
+								'state' => $error,
+								'newsletter_id' => $nsid
+								));
+							jexit();
+						} else {
+							JFactory::getApplication()->enqueueMessage($error, 'error');
+							$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletter&layout=edit&newsletter_id='.$nsid, false));
+							return;
+						}	
 					}
 
 				} else {
@@ -214,7 +236,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 					// Get newsletters with similar aliases
 					$data['alias'] = NewsletterHelper::getFreeAlias($data['alias']);
 				}
-
+				
 				if (parent::save()) {
 
 					$nsid = $this->newsletterId;
@@ -251,7 +273,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 					)
 				);
 
-				die;
+				jexit();
 			}	
 		}
 	}
