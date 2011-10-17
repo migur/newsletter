@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterTableExtension extends MigurJTable
+class NewsletterTableNExtension extends MigurJTable
 {
 	const TYPE_MODULE = '1';
 	const TYPE_PLUGIN = '2';

@@ -212,7 +212,7 @@ class DataHelper
 	 */
 	public function getComponentInstance($com)
 	{
-		if (is_object(self::$managers[$com])) {
+		if (!empty(self::$managers[$com]) && is_object(self::$managers[$com])) {
 			return self::$managers[$com];
 		}
 		if (!@include_once JPATH_LIBRARIES . DS . 'migur' . DS . 'library' . DS . 'managers' . DS . strtolower($com) . '.php') {

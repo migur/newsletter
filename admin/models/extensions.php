@@ -10,7 +10,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-JLoader::import('tables.extension', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('tables.nextension', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.module', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
@@ -174,7 +174,7 @@ class NewsletterModelExtensions extends MigurModelList
 		$res = array();
 		$extensions = $this->getItems();
 		foreach ($extensions as $item) {
-			if ($item->type == NewsletterTableExtension::TYPE_MODULE) {
+			if ($item->type == NewsletterTableNextension::TYPE_MODULE) {
 				$item->xml = MigurModuleHelper::getInfo($item->extension);
 				$res[] = $item;
 			}
@@ -194,7 +194,7 @@ class NewsletterModelExtensions extends MigurModelList
 		$res = array();
 		$extensions = $this->getItems();
 		foreach ($extensions as $item) {
-			if ($item->type == NewsletterTableExtension::TYPE_PLUGIN) {
+			if ($item->type == NewsletterTableNextension::TYPE_PLUGIN) {
 				$res[] = $item;
 			}
 		}

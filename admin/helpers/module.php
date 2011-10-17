@@ -12,7 +12,7 @@ defined('JPATH_BASE') or die;
 
 // Import library dependencies
 jimport('joomla.application.module.helper');
-JLoader::import('tables.extension', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('tables.nextension', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
  * Module helper class
@@ -401,7 +401,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 		$query->from('`#__newsletter_extensions` AS a');
 
 		// Filter by module
-		$query->where('a.type = ' . $db->Quote(NewsletterTableExtension::TYPE_MODULE));
+		$query->where('a.type = ' . $db->Quote(NewsletterTableNExtension::TYPE_MODULE));
 		$query->order('a.title ASC');
 
 		//echo nl2br(str_replace('#__','jos_',$query));
@@ -431,7 +431,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 		// Select the required fields from the table.
 		$query->select(
 			'extension_id, name as title, element as extension, params, '
-			. $db->Quote(NewsletterTableExtension::TYPE_MODULE) . ' AS type, '
+			. $db->Quote(NewsletterTableNExtension::TYPE_MODULE) . ' AS type, '
 			. '\'1\' AS native'
 		);
 		$query->from('`#__extensions` AS a');
