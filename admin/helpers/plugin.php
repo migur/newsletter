@@ -122,13 +122,13 @@ abstract class MigurPluginHelper
 		// Select the required fields from the table.
 		$query->select(
 			'extension_id, title, extension, params, '
-			. $db->Quote(NewsletterTableExtension::TYPE_PLUGIN) . ' AS type, '
+			. $db->Quote(NewsletterTableNExtension::TYPE_PLUGIN) . ' AS type, '
 			. '\'0\' AS native'
 		);
 		$query->from('`#__newsletter_extensions` AS a');
 
 		// Filter by module
-		$query->where('a.type = ' . $db->Quote(NewsletterTableExtension::TYPE_PLUGIN));
+		$query->where('a.type = ' . $db->Quote(NewsletterTableNExtension::TYPE_PLUGIN));
 		$query->order('a.title ASC');
 
 		//echo nl2br(str_replace('#__','jos_',$query));
