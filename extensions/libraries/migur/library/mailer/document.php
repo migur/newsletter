@@ -426,11 +426,10 @@ class MigurMailerDocument extends JDocument
 	{
 		// Gets all links (href and src attributes has been parsed)
 		preg_match_all("/(?:href[\s\=\"\']+|src[\s\=\"\']+)([^\"\']+)/", $content, $matches);
-		$search = array_unique($matches[1]);
 
 		$withs = array();
-		foreach ($search as $item) {
-
+		for($i=0; $i < count($matches[0]); $i++) {
+                        $item = $matches[1][$i];
 			// if this link is relative then repair it!
 			if (!empty($item) && substr($item, 0, 4) != 'http') {
 				
@@ -444,8 +443,6 @@ class MigurMailerDocument extends JDocument
 				// remove the '/' from the begin of item
 				if ($item[0] == '/' && sizeof($item) > 1) {
 					$item = substr($item, 1);
-				} else {
-					$item = '';
 				}	
 
 				// Compile link
@@ -453,10 +450,12 @@ class MigurMailerDocument extends JDocument
 				$item = str_replace('&amp;', '&', $item);
 
 			}
-			$withs[] = $item;
+
+			$withs[] = str_replace($matches[1][$i], $item, $matches[0][$i]);
 		}
 
-		$content = str_replace($search, $withs, $content);
+		$content = str_replace($matches[0], $withs, $content);
+//                var_dump($content); die;
 		return true;
 	}
 	

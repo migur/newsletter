@@ -98,9 +98,8 @@ class com_newsletterInstallerScript
 	 */
 	function postflight($type, $parent)
 	{
-			// In both cases check if the tables/extension.php is not exists!
-			JFile::delete(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'tables'.DS.'extension.php');
-			
+            // In both cases check if the tables/extension.php is not exists!
+            @unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'tables'.DS.'extension.php');
 			
             //error_reporting(E_ALL);
             //ini_set('display_errors', 1);
