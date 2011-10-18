@@ -345,7 +345,10 @@ window.addEvent('domready', function() {
                         }
 
                         htmlWidget.render(tpl);
-                        Migur.getWidget('autosaver-switch').update('unsaved');
+						
+						if (htmlWidget.initialised) {
+							Migur.getWidget('autosaver-switch').update('unsaved');
+						}
 
                         // change template
                         // set new droppables for drags
@@ -510,13 +513,13 @@ window.addEvent('domready', function() {
         /**
      * Create widget for HTMLarea contol
      **/
-        Migur.createWidget($('html-area'), {
+        widgetHtmlArea = Migur.createWidget($('html-area'), {
 
-            /*
+        /*
          * Parses input data from data storage and get
          * the structure of template style and add all the extensions
          * used in the newsleter html templte
-         *    */
+         */
             setup: function(){
                 var htmlTemplate = dataStorage.htmlTemplate;
                 if ($(htmlTemplate.template.id)) {
@@ -537,6 +540,8 @@ window.addEvent('domready', function() {
 
                 this.data = data;
 
+				this.domEl.set('html', '');
+
                 var $this = this;
                 new Request.JSON({
                     url: '?option=com_newsletter&task=template.getparsed&format=json',
@@ -546,6 +551,7 @@ window.addEvent('domready', function() {
                     },
                     onSuccess: function(res){
                         $this.data.template = res.data.content;
+						this.initialised = false;
                         $this._render();
                     }
                 }).send();
@@ -565,47 +571,80 @@ window.addEvent('domready', function() {
                         html: this.data.template
                         });
                     $$('form [name=jform[t_style_id]]').set('value', this.data.t_style_id);
+						
+					var locThis = this;
 
+					// If nothing to render
+                    if (!this.data.extensions) {
+						locThis.initialised = true;
+						return;
+					}
+						
+                    // Render the modules HTML
 
-                    /* Render the modules HTML */
-                    if (this.data.extensions) {
-                        Array.each(this.data.extensions, function(el) {
-                            var position = $$(
-                                '#' + domEl.getProperty('id') +
-                                ' [name=' + el.position + ']'
-                                )[0];
+					// Count how many modules should be rendered
+					var modules = [];
+					Array.each(widgetHtmlArea.data.extensions, function(el) {
 
-                            if (position) {
-                                // Create the new Element
-                                module = $$('#' + el.extension)[0];
-                                if (module) {
+						// Check if there is a position for module
+						var position = $$(
+							'#' + domEl.getProperty('id') +
+							' [name=' + el.position + ']'
+							)[0];
+						if (position) { 
+							modules.push(el); 
+						}
+					});
 
-                                    var avatar = Migur.dnd.makeAvatar(module, $$('#html-area .modules, #trashcan-container'));
-                                    // Create the new Widget from element
-                                    var widget = Migur.getWidget(module);
-                                    var newW = Migur.createWidget(
-                                        avatar,
-                                        {
-                                            data: el,
-                                            type: widget.type
-                                        }
-                                        );
+					// Finish it if there is no modules to render
+					if (modules.length == 0) {
+						locThis.initialised = true;
+						return;
+					}
 
-                                    newW.load(
-                                        siteRoot + 'index.php?option=com_newsletter&task=newsletter.rendermodule',
-                                        newW.get(),
-                                        '.widget-content'
-                                        );
+					// Process each module
+					Array.each(modules, function(el, idx) {
 
-                                    avatarSetSettings(avatar);
-                                    avatar.inject(position);
-                                }
-                            }
-                        });
-                    }
-                }
+						// Create the new Element
+						var module = $$('#' + el.extension)[0];
+						if (module) {
+
+							var avatar = Migur.dnd.makeAvatar(module, $$('#html-area .modules, #trashcan-container'));
+							// Create the new Widget from element
+							var widget = Migur.getWidget(module);
+							var newW = Migur.createWidget(
+								avatar,
+								{
+									data: el,
+									type: widget.type
+								}
+								);
+
+							newW.load(
+								siteRoot + 'index.php?option=com_newsletter&task=newsletter.rendermodule',
+								newW.get(),
+								'.widget-content',
+								// Callback that checks if this module is the last module in list
+								function(){
+									if(modules.length == idx + 1){
+										widgetHtmlArea.initialised = true;
+									}
+								}
+							);
+
+							avatarSetSettings(avatar);
+
+							var position = $$(
+								'#' + domEl.getProperty('id') +
+								' [name=' + el.position + ']'
+							)[0];
+
+							avatar.inject(position);
+						}
+					});
+				}
             },
-
+			
             /**
          * Specific behavior. Parses dom of htmlTpl element, get all the extensions
          * its positions and id of used template style and
@@ -634,7 +673,8 @@ window.addEvent('domready', function() {
                             idx++;
                         });
                     }
-                    );
+				);
+					
                 return res;
             }
         });
@@ -786,7 +826,10 @@ window.addEvent('domready', function() {
             },
 
             getter: function(){
-                var htmlTpl = Migur.getWidget('html-area').parse();
+				
+				
+				var htmlConstructor = Migur.getWidget('html-area');
+                var htmlTpl = htmlConstructor.parse();
                 var inputs  = $('tabs-sub-container').toQueryString();
                 
                 // Get the all data from all plugins!
@@ -823,11 +866,7 @@ window.addEvent('domready', function() {
             },
 
             controller: function(data) {
-                /*
-            if (parseInt($$('[name=newsletter_id]').get('value')) < 1) {
-                return false;
-            }
-*/
+				
                 var form = $$('form.form-validate')[0];
                 var res = document.formvalidator.isValid(form);
 
@@ -841,6 +880,12 @@ window.addEvent('domready', function() {
                 if (!res) {
                     return false;
                 }
+
+				// If the HTML constructor is not ready yet the we cant get data from it...
+				var htmlConstructor = Migur.getWidget('html-area');
+				if (!htmlConstructor.initialised) {
+					return false;
+				}
 
                 return this.isChanged(data);
             }
@@ -925,7 +970,6 @@ window.addEvent('domready', function() {
                 '<span id="content-state"></span>'
                 });
                 this.update('saved');
-
                 (this.data == 'on')? this.turnOn() : this.turnOff();
             },
 
@@ -1029,46 +1073,11 @@ window.addEvent('domready', function() {
         }
 
         var email = bit? bit[1] : null;
-        /*
-        var email = null;
-        if (bit) {
-            email = (bit.value[0])? bit.value[0] : bit.value[1];
-        }
-*/
-//        new Request({
-//            url: siteRoot + 'index.php?option=com_newsletter&task=newsletter.render',
-//            data: {
-//                newsletter_id: $$('[name=newsletter_id]')[0].get('value'),
-//                email: email,
-//                type: 'html'
-//            },
-//            onComplete: function(res){
-//                if (res) {
-//                    $$('#tab-preview-html-container body').set('html', res);
-//                } else {
-//                    alert("An unknown error occured");
-//                }
-//            }
-//        }).send();
 
         var nsId = $$('[name=newsletter_id]')[0].get('value');
         $('tab-preview-html-container').setProperty(
             'src', 
             siteRoot + 'index.php?option=com_newsletter&task=newsletter.render&type=html&email='+escape(email)+'&newsletter_id='+nsId);
-//            url:
-//            data: {
-//                newsletter_id: $$('[name=newsletter_id]')[0].get('value'),
-//                email: email,
-//                type: 'html'
-//            },
-//            onComplete: function(res){
-//                if (res) {
-//
-//                } else {
-//                    alert("An unknown error occured");
-//                }
-//            }
-//        }).send();
 
         new Request({
             url: siteRoot + 'index.php?option=com_newsletter&task=newsletter.render',
@@ -1088,8 +1097,6 @@ window.addEvent('domready', function() {
         }).send();
     });
 
-    //    previewTextBox.fireEvent('blur');
-    //
     $$('.tab-preview').addEvent('click', function(){
         autocomp.fireEvent('boxSelect');
     });

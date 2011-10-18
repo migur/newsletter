@@ -86,7 +86,7 @@ Migur.widget = new Class({
         return this.domEl.get('html');
     },
 
-    load: function(url, data, subpath){
+    load: function(url, data, subpath, completeCallback){
 
         var widget = this;
 
@@ -97,6 +97,9 @@ Migur.widget = new Class({
             onComplete: function(res){
                 widget.setBody(res, subpath);
                 delete transport;
+				if (typeof completeCallback == 'function') {
+					completeCallback();
+				}
             }
         }).send();
     },
