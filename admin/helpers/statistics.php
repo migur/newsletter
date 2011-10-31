@@ -400,17 +400,17 @@ class StatisticsHelper
 		$date = date('Y-m-d', strtotime($startDate));
 		$end = date('Y-m-d', strtotime($endDate));
 		$theDay = 3600 * 24;
+		
 		while ($date <= $endDate) {
 
 			if (!isset($assoc[$date])) {
 				$assoc[$date] = 0;
 			}
 
-			$date = date('Y-m-d', strtotime($date) + $theDay);
+			$date = date('Y-m-d', strtotime("+1 day", strtotime($date)));
 		}
 
 		ksort($assoc);
-		
 		return $assoc;
 	}
 
@@ -476,7 +476,7 @@ class StatisticsHelper
 				$assoc[$date] = 0;
 			}
 
-			$date = date('Y-m-d', strtotime($date) + $theDay);
+			$date = date('Y-m-d', strtotime("+1 day", strtotime($date)));
 		}
 
 		ksort($assoc);
@@ -596,14 +596,14 @@ class StatisticsHelper
 
 		$date = date('Y-m-d', strtotime($startDate));
 		$end = date('Y-m-d', strtotime($endDate));
-		$theDay = 3600 * 24;
+		
 		while ($date <= $endDate) {
 
 			if (!isset($assoc[$date])) {
 				$assoc[$date] = 0;
 			}
 
-			$date = date('Y-m-d', strtotime($date) + $theDay);
+			$date = date('Y-m-d', strtotime("+1 day", strtotime($date)));
 		}
 		$res = $assoc;
 	}

@@ -102,15 +102,14 @@ class NewsletterViewStatistic extends MigurView
 		$data = StatisticsHelper::totalClicks($ids);
 		JavascriptHelper::addObject('statTotalClicks', $data);
 
-		$theHour = 3600;
-		$theDay = $theHour * 24;
+		$previousDay = date('Y-m-d 00:00:00', strtotime("-1 day", time()));
 		
-		$previousDay = date('Y-m-d 00:00:00', time() - $theDay);
-		$fiewDaysBefore = date('Y-m-d 00:00:00', time() - $theDay * $days);
+		$daysIdentifier = ($days == 1)? "-1 day" : "-" . $days . " Days";
+		$fiewDaysBefore = date('Y-m-d 00:00:00', strtotime($daysIdentifier, time()));
 
-		$previousHour =  date('Y-m-d H:00:00', time() - $theHour);
-		$oneDayBefore = date('Y-m-d H:00:00', time() - $theDay);
-
+		$previousHour =  date('Y-m-d H:00:00', strtotime("-1 hour", time()));
+		$oneDayBefore = date('Y-m-d H:00:00', strtotime("-1 day", time()));
+		
 		JavascriptHelper::addObject('clicksPerDay',
 			StatisticsHelper::activityPerDay(
 				$fiewDaysBefore,

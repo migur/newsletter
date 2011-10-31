@@ -52,7 +52,7 @@
 		data.labels.push(key);
 		data.views.push(viewsPerDay[key]);
 	});
-	var pdRaph = Migur.chart.line("stat-clicks-per-day", data.labels, [ data.views, data.clicks ], 578, 150);
+	var pdRaph = Migur.chart.line("stat-clicks-per-day", data.labels, [ data.views, data.clicks ], 578, 150, []);
 
 
 
@@ -62,6 +62,6 @@
 		dataHour.labels.push(key.substr(11,2));
 		dataHour.views.push(viewsPerHour[key]);
 	});
-	var phRaph = Migur.chart.line("stat-clicks-per-hour", dataHour.labels, [ dataHour.views, dataHour.clicks ], 578, 150);
+	var phRaph = Migur.chart.line("stat-clicks-per-hour", dataHour.labels, [ dataHour.views, dataHour.clicks ], 578, 150, []);
 
 </script>
