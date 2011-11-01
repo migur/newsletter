@@ -72,5 +72,11 @@ class NewsletterModelSent extends JModelAdmin
 		}
 		return $data;
 	}
+	
+	
+	public function setBounced($sid, $nid, $bounceType)
+	{
+		return $this->getTable()->setBounced($sid, $nid, $bounceType);
+	}	
 
 }

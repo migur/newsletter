@@ -41,7 +41,7 @@ class MigurMailerSender extends PHPMailer
 			$this->_setData($params);
 		}
 
-		parent::__construct();
+		parent::__construct(!empty($params['exceptions']));
 	}
 
 	/**
@@ -179,6 +179,7 @@ class MigurMailerSender extends PHPMailer
 			}	
 			return false;
 		}
+		
 		return true;
 	}
 	
