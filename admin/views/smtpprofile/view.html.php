@@ -64,6 +64,7 @@ class NewsletterViewSmtpprofile extends MigurView
 	protected function addToolbar()
 	{
 		$bar = JToolBar::getInstance('smtp-toolbar', 'smtpprofileForm');
+		$bar->appendButton('Standard', 'publish', 'COM_NEWSLETTER_CHECK', 'smtpprofile.checkconnection', false);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'smtpprofile.save', false);
 	}
@@ -80,7 +81,7 @@ class NewsletterViewSmtpprofile extends MigurView
 		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_SMTP_CREATING') : JText::_('COM_NEWSLETTER_SMTP_EDITING'));
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/smtpprofile/submitbutton.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/smtpprofile/smtpprofile.js");
-		JText::script('COM_NEWSLETTER_SMTP_ERROR_UNACCEPTABLE');
+		JText::script('COM_NEWSLETTER_MAILBOX_ERROR_UNACCEPTABLE');
 	}
 
 }

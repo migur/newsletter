@@ -41,6 +41,24 @@ class NewsletterTableSent extends JTable
 		);
 	}
 
+	/**
+	 * Get all allowed action names (used via JText).
+	 *
+	 * @return array of action names
+	 */
+	public function getBounces()
+	{
+		$oClass = new ReflectionClass(get_class($this));
+		$consts = $oClass->getConstants();
+		$this->actions = array();
+		foreach ($consts as $name => $item) {
+			if (substr($name, 0, 7) == 'BOUNCED') {
+				$this->actions[$name] = $item;
+			}
+		}
+		return $this->actions;
+	}
+	
 	public function deleteAll()
 	{
 
@@ -58,5 +76,27 @@ class NewsletterTableSent extends JTable
 		return true;
 	}
 
+	
+	public function setBounced($sid, $nid, $bounceType)
+	{
+		$bounceType = 'BOUNCED_'. strtoupper($bounceType);
+		$bounces = $this->getBounces();
+		
+		if (!in_array($bounceType, array_keys($bounces))) {
+			return false;
+		}
+
+		$this->load(array(
+			'subscriber_id' => $sid,
+			'newsletter_id' => $nid
+		));
+		
+		return $this->save(array(
+			'subscriber_id' => $sid,
+			'newsletter_id' => $nid,
+			'bounced' => $bounces[$bounceType],
+			'recieved_date' => date('Y-m-d H:i:s')
+		));
+	}	
 }
 
