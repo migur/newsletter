@@ -41,6 +41,11 @@ Migur.chart = {};
 Migur.storage = {};
 
 /**
+ * Translations.
+ */
+Migur.translations = {};
+
+/**
  * Need for Table Column ordering in multiple-forms page.
  * Expand the functionality to handle multiform pages
  *
