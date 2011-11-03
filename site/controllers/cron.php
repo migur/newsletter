@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla controllerform library
 jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer');
+jimport('migur.library.mailer.mailbox');
 jimport('joomla.session.session');
 
 JLoader::import('helpers.autocompleter', JPATH_COMPONENT_ADMINISTRATOR, '');
@@ -255,57 +256,56 @@ class NewsletterControllerCron extends JControllerForm
 	{
 		$bounceds = JModel::getInstance('Bounceds', 'NewsletterModel');
 		
-		$mailboxes = $bounceds->getMailboxesForBounsecheck();
+		$mbprofiles = $bounceds->getMailboxesForBounsecheck();
 		
 		$processed = 0;
 		$errors = array();
 		// Trying to check all bounces
-		foreach($mailboxes as $mailbox) {
-		
-			if (!MailHelper::connect($mailbox)) {
-				$errors[] = $mailbox['username'] . ':' . MailHelper::getMailboxError();
-				continue;
-			}
+		foreach($mbprofiles as $mbprofile) {
 			
-			$mails = MailHelper::getBouncedList();
+			$mailbox = new MigurMailerMailbox($mbprofile);
+			
+			$mails = $mailbox->getBouncedList();
 
-			if (empty($mails)) 
-			{
-				echo json_encode(array(
-					'error' => '', 
-					'count' => 0,
-					'message' => 'No mails to process'
-				));
-				jexit();
-			}
+			if ($mails === false) {
 
-			foreach($mails as &$mail) 
-			{
-				if (!empty($mail->subscriber_id) && !empty($mail->newsletter_id) && !empty($mail->bounce_type)) 
-				{
-					$sent = JModel::getInstance('Sent', 'NewsletterModel');
-					$sent->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
+				$errors[] = $mbprofile['username'] . ':' . $mailbox->getLastError();
 
-					$history = JModel::getInstance('History', 'NewsletterModel');
-					$history->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
+			} else {
 
-					$queue = JTable::getInstance('Queue', 'NewsletterTable');
-					$queue->setBounced($mail->subscriber_id, $mail->newsletter_id, NewsletterTableQueue::STATE_BOUNCED);
+				if (!empty($mails)) {
 
-					if ($mail->msgnum > 0) {
-						MailHelper::deleteMail($mail->msgnum);
-						$processed++;
-					}	
+					foreach($mails as &$mail) {
+
+						if (!empty($mail->subscriber_id) && !empty($mail->newsletter_id) && !empty($mail->bounce_type)) 
+						{
+							$sent = JModel::getInstance('Sent', 'NewsletterModel');
+							$sent->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
+
+							$history = JModel::getInstance('History', 'NewsletterModel');
+							$history->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
+
+							$queue = JTable::getInstance('Queue', 'NewsletterTable');
+							$queue->setBounced($mail->subscriber_id, $mail->newsletter_id, NewsletterTableQueue::STATE_BOUNCED);
+
+							if ($mail->msgnum > 0) {
+								$mailbox->deleteMail($mail->msgnum);
+								$processed++;
+							}	
+						}
+					}
 				}
+				
+				$mailbox->close();
 			}
 			
-			MailHelper::closeMailbox();
+			unset($mailbox);
 		}
 		
 		echo json_encode(array(
 			'error' => $errors,
 			'count'  => $processed,
-			'mailboxes' => count($mailboxes)
+			'mailboxes' => count($mbprofiles)
 		));
 		
 		jexit();
