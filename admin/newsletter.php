@@ -38,8 +38,13 @@ if ($msg) {
 	$sess->set('migur.queue', null);
 }
 
+
+
 JFormHelper::addRulePath(JPATH_COMPONENT . DS . 'models' . DS . 'rules');
 JTable::addIncludePath(JPATH_COMPONENT . DS . 'tables');
+
+// Add the site root to JS
+JavascriptHelper::addStringVar('migurSiteRoot', JUri::root());
 
 // Setup the cache
 $cache = JFactory::getCache('com_newsletter');

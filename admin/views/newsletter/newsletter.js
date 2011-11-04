@@ -17,7 +17,7 @@ Migur.moodialogs = [];
 function jInsertFieldValue(value, id) {
 
     if (typeof Migur.moodialogs[0] != 'undefined') {
-        Migur.moodialogs[0].data.params.img = siteRoot + '/' + value;
+        Migur.moodialogs[0].data.params.img = migurSiteRoot + '/' + value;
         Migur.moodialogs[0].task = 'apply';
         Migur.moodialogs[0].close();
     }
@@ -105,7 +105,7 @@ Migur.dnd.makeAvatar = function(el, droppables){
 
                     var widget = Migur.getWidget(draggable);
                     widget.load(
-                        siteRoot + 'index.php?option=com_newsletter&task=newsletter.rendermodule',
+                        migurSiteRoot + 'index.php?option=com_newsletter&task=newsletter.rendermodule',
                         widget.get(),
                         '.widget-content'
                         );
@@ -169,7 +169,7 @@ avatarSetSettings = function(avatar) {
                         // TODO: The widget should decide it (update or not its content) itself
                         if (this.data.type == 1) {
                             widget.load(
-                                siteRoot + 'index.php?option=com_newsletter&task=newsletter.rendermodule',
+                                migurSiteRoot + 'index.php?option=com_newsletter&task=newsletter.rendermodule',
                                 widget.get(),
                                 '.widget-content'
                             );
@@ -621,7 +621,7 @@ window.addEvent('domready', function() {
 								);
 
 							newW.load(
-								siteRoot + 'index.php?option=com_newsletter&task=newsletter.rendermodule',
+								migurSiteRoot + 'index.php?option=com_newsletter&task=newsletter.rendermodule',
 								newW.get(),
 								'.widget-content',
 								// Callback that checks if this module is the last module in list
@@ -783,7 +783,7 @@ window.addEvent('domready', function() {
 				$('jform_alias').setProperty('value', alias);
 			}
 			
-            var val = siteRoot + link.getProperty('rel').replace('%s', alias);
+            var val = migurSiteRoot + link.getProperty('rel').replace('%s', alias);
             if (val == '') {
                 link.addClass('hide');
                 $('link-website-prompt').removeClass('hide');
@@ -1077,10 +1077,10 @@ window.addEvent('domready', function() {
         var nsId = $$('[name=newsletter_id]')[0].get('value');
         $('tab-preview-html-container').setProperty(
             'src', 
-            siteRoot + 'index.php?option=com_newsletter&task=newsletter.render&type=html&email='+escape(email)+'&newsletter_id='+nsId);
+            migurSiteRoot + 'index.php?option=com_newsletter&task=newsletter.render&type=html&email='+escape(email)+'&newsletter_id='+nsId);
 
         new Request({
-            url: siteRoot + 'index.php?option=com_newsletter&task=newsletter.render',
+            url: migurSiteRoot + 'index.php?option=com_newsletter&task=newsletter.render',
             data: {
                 newsletter_id: $$('[name=newsletter_id]')[0].get('value'),
                 email: escape(email),
@@ -1113,7 +1113,7 @@ window.addEvent('domready', function() {
 
         var type = ($$('.tab-preview-html')[0].hasClass('open') == true)? 'html' : 'plain';
         new Request({
-            url: siteRoot + 'index.php?option=com_newsletter&task=newsletter.sendpreview&tmpl=component',
+            url: migurSiteRoot + 'index.php?option=com_newsletter&task=newsletter.sendpreview&tmpl=component',
             data: {
                 newsletter_id: $$('[name=newsletter_id]')[0].get('value'),
                 emails: autocomp.getBoxes(),

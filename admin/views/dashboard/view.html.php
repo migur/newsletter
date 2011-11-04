@@ -119,8 +119,6 @@ class NewsletterViewDashboard extends MigurView
 		
 		$this->info = NewsletterHelper::getCommonInfo();
 
-		JavascriptHelper::addStringVar('siteRoot', JUri::root());
-
 		$this->setStatisticsData();
 
 		$sess = JFactory::getSession();

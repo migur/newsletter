@@ -11,15 +11,21 @@ try {
 
     $('toolbar-progress').set({
         html:
-            '<div class="progress-info">' +
-                emailsSent + ' of ' + emailsTotal + ' emails sent in ' + newslettersSent + ' newsletters' +
-            '</div>' +
-            '<a href="#" class="queue-list">Process queue</a>' +
-            '<a href="#" class="bounces-list">Process bounces</a>' +
-			'<div class="clr"></div>' +
-            '<div class="progress-line"></div>' +
-            '<div class="progress-bar"></div>' +
-			'<div style="float:right; min-width:0; margin:6px 4px;" id="process-preloader"></div>'
+			'<div style="float:left">' +
+				'<div class="progress-info">' +
+	                emailsSent + ' of ' + emailsTotal + ' emails sent in ' + newslettersSent + ' newsletters' +
+		        '</div>' +
+				'<div style="float:right; min-width:0;" id="process-preloader"></div>' +
+			'</div>' +	
+			'<div style="float:right">' +
+				'<a href="#" class="queue-list">Process queue</a><br/>' +
+				'<a href="index.php?option=com_newsletter&view=queues" class="viewqueue-list">View queue</a><br/>' +
+				'<a href="#" class="bounces-list">Process bounces</a>' +
+			'</div>' +
+			'<div style="width: 360px">' +
+				'<div class="progress-line"></div>' +
+				'<div class="progress-bar"></div>' +
+			'</div>'	
     })
 
     $$('#toolbar-progress .queue-list')[0].addEvent('click', function(ev){
@@ -27,7 +33,7 @@ try {
 		$('process-preloader').addClass('preloader');
 		
         new Request({
-            url: siteRoot + 'index.php?option=com_newsletter&task=cron.send&forced=true&sessname=' + sessname,
+            url: migurSiteRoot + 'index.php?option=com_newsletter&task=cron.send&forced=true&sessname=' + sessname,
             onComplete: function(result){
 				
 				$('process-preloader').removeClass('preloader');
@@ -65,7 +71,7 @@ try {
 		$('process-preloader').addClass('preloader');
 		
         new Request({
-            url: siteRoot + 'index.php?option=com_newsletter&task=cron.processbounced&forced=true&sessname=' + sessname,
+            url: migurSiteRoot + 'index.php?option=com_newsletter&task=cron.processbounced&forced=true&sessname=' + sessname,
             onComplete: function(result){
 
 				$('process-preloader').removeClass('preloader');
@@ -98,6 +104,22 @@ try {
         }).send();
 
     });
+
+
+	// Add events to controls
+//	$$('.viewqueue-list')[0].addEvent('click', function(ev)
+//	{
+//		ev.stop();
+//		var href = "";
+//
+//		SqueezeBox.open(href, {
+//			handler: 'iframe',
+//			size: {
+//				x: 800,
+//				y: 600
+//			}
+//		});
+//	});
 
     var width = (emailsSent / emailsTotal) * $$('.progress-bar')[0].getWidth();
 
