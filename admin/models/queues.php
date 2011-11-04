@@ -20,6 +20,29 @@ JLoader::import('tables.queue', JPATH_COMPONENT_ADMINISTRATOR, '');
  */
 class NewsletterModelQueues extends JModelList
 {
+	
+	/**
+	 * The constructor of a class
+	 *
+	 * @param	array	$config		An optional associative array of configuration settings.
+	 *
+	 * @return	void
+	 * @since	1.0
+	 */
+	public function __construct($config = array())
+	{
+		$config['filter_fields'] = array(
+			'queue_id',
+			'n.name',
+			's.name',
+			's.email',
+			'q.create',
+			'q.state',
+		);
+
+		parent::__construct($config);
+	}
+	
 	/**
 	 * Build an SQL query to load the list data.
 	 *
@@ -50,16 +73,15 @@ class NewsletterModelQueues extends JModelList
 		$search = $this->getState('filter.search');
 		if (!empty($search)) {
 			if (stripos($search, 'id:') === 0) {
-				$query->where('n.queue_id = ' . (int) substr($search, 3));
+				$query->where('q.queue_id = ' . (int) substr($search, 3));
 			} else {
 				$search = $db->Quote('%' . $db->getEscaped($search, true) . '%');
-				$query->where('(n. LIKE ' . $search . ' OR n.alias LIKE ' . $search . ')');
+				$query->where(
+					'(n.name LIKE ' . $search . 
+					' OR s.name LIKE ' . $search . 
+					' OR s.email LIKE ' . $search . ')'
+				);
 			}
-		}
-
-		// Filter on the language.
-		if ($language = $this->getState('filter.language')) {
-			$query->where('n.language = ' . $db->quote($language));
 		}
 
 		// Add the list ordering clause.
@@ -117,14 +139,9 @@ class NewsletterModelQueues extends JModelList
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		// Initialise variables.
-		$app = JFactory::getApplication('administrator');
-
 		// Load the filter state.
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-		if ($search == "Search...") {
-			$search = "";
-		}
+		
 		$this->setState('filter.search', $search);
 
 		// Load the parameters.
