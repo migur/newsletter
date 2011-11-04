@@ -67,7 +67,6 @@ defined('_JEXEC') or die; ?>
 </div>
 
 <script text="javascript">
-    migurSiteRoot = "<?php echo JUri::root(); ?>";
     migurName = "<?php echo $userName; ?>";
     migurEmail = "<?php echo $userEmail; ?>";
 </script>

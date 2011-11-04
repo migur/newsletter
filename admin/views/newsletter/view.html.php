@@ -72,7 +72,6 @@ class NewsletterViewNewsletter extends MigurView
 
 
 		//TODO: Bulk-code. Need to refactor.
-		JavascriptHelper::addStringVar('siteRoot', JUri::root());
 
 		JavascriptHelper::addObject(
 				'comParams',

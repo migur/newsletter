@@ -77,8 +77,6 @@ class NewsletterViewExtension extends MigurView
 		}
 
 		parent::display($tpl);
-
-		JavascriptHelper::addStringVar('siteRoot', JUri::root());
 	}
 
 }

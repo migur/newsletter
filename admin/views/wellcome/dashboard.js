@@ -22,7 +22,7 @@ try {
     $$('#toolbar-progress .queue-list')[0].addEvent('click', function(ev){
 
         new Request.JSON({
-			url: siteRoot + 'index.php?option=com_newsletter&task=cron.send&format=json',
+			url: migurSiteRoot + 'index.php?option=com_newsletter&task=cron.send&format=json',
             onComplete: function(res){
                 if (res.error == '' && res.count == 0) {
                     text = "There are no emails to send";

@@ -85,9 +85,6 @@ class NewsletterViewTemplate extends MigurView
 			$this->addToolbar();
 		}
 
-		JavascriptHelper::addStringVar('siteRoot', JUri::root());
-
-
 		parent::display($tpl);
 
 		// Set the document
