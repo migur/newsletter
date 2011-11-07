@@ -12,15 +12,15 @@ window.addEvent('domready', function() {
         // Add events to controls
         $$('[name=newsletter_clear_db]')[0].addEvent('click', function(){
 
-            if ( confirm("Do you realy want to delete all sent letters?") ) {
+            if ( confirm(Joomla.JText._('DO_YOU_REALY_WANT_TO_DELETE_ALL_SENT_LETTERS_QM', 'Do you realy want to delete all sent letters?')) ) {
                 new Request.JSON({
                     url: '?option=com_newsletter&task=newsletter.clearsent&format=json',
                     data: {},
                     onComplete: function(res){
                         if (res && res.state) {
-                            alert('The data deleted successfully');
+                            alert(Joomla.JText._('THE_DATA_DELETED_SUCCESSFULLY','The data deleted successfully'));
                         } else {
-                            alert('An error has occured during the request');
+                            alert(Joomla.JText._('AN_ERROR_HAS_OCCURED_DURING_THE_REQUEST','An error has occured during the request'));
                         }
                     }
                 }).send();
@@ -87,7 +87,7 @@ window.addEvent('domready', function() {
 			var id = $('jform_general_mailbox_default').getProperty('value');
 			
 			if (id < 1) {
-				alert('Please selet profile');
+				alert(Joomla.JText._('PLEASE_SELET_PROFILE','Please selet profile'));
 				return;
 			}
 			
@@ -115,7 +115,7 @@ window.addEvent('domready', function() {
 
         $$('[name=newsletter_mailbox_delete]')[0].addEvent('click', function(ev){
 			
-			if (!confirm('Are you sure?')) { 
+			if (!confirm(Joomla.JText._('ARE_YOU_SURE_QM', 'Are you sure?'))) { 
 				return false;
 			}
 			

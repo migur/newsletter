@@ -18,9 +18,9 @@ try {
 				'<div style="float:right; min-width:0;" id="process-preloader"></div>' +
 			'</div>' +	
 			'<div style="float:right">' +
-				'<a href="#" class="queue-list">Process queue</a><br/>' +
-				'<a href="index.php?option=com_newsletter&view=queues" class="viewqueue-list">View queue</a><br/>' +
-				'<a href="#" class="bounces-list">Process bounces</a>' +
+				'<a href="#" class="queue-list">'+Joomla.JText._('PROCESS_QUEUE','Process queue')+'</a><br/>' +
+				'<a href="index.php?option=com_newsletter&view=queues" class="viewqueue-list">'+Joomla.JText._('VIEW_QUEUE', 'View queue')+'</a><br/>' +
+				'<a href="#" class="bounces-list">'+Joomla.JText._('PROCESS_BOUNCES','Process bounces')+'</a>' +
 			'</div>' +
 			'<div style="width: 360px">' +
 				'<div class="progress-line"></div>' +
@@ -46,18 +46,18 @@ try {
                 if (typeof res == 'undefined' || typeof res.error == 'undefined' || res.error != '') {
 					
 					var error = (typeof res == 'undefined' || typeof res.error == 'undefined')? 'unknown' : res.error;
-                    text = "An error occured: \n" + error;
+                    text = Joomla.JText._('AN_ERROR_OCCURED', 'An error occured')+': \n' + error;
 	                alert(text); 
 					return;
                 }
 				
                 if (res.error == '' && res.count == 0) {
-                    text = "There are no emails to send";
+                    text = Joomla.JText._('THERE_ARE_NO_EMAILS_TO_SEND','There are no emails to send');
 	                alert(text); 
 					return;
                 }
                 if (res.error == '' && res.count > 0) {
-                    text = ""+res.count+" newsletters has been sent sucessfully";
+                    text = ""+res.count+" "+Joomla.JText._('NEWSLETTERS_HAS_BEEN_SENT_SUCESSFULLY', 'newsletters has been sent sucessfully');
 					alert(text);
 					window.location.reload();
 				}	
@@ -84,19 +84,19 @@ try {
                 if (typeof res == 'undefined' || typeof res.error == 'undefined' || res.error != '') {
 					
 					var error = (typeof res == 'undefined' || typeof res.error == 'undefined')? 'unknown' : res.error;
-                    text = "An error occured: \n" + error;
+                    text = Joomla.JText._('AN_ERROR_OCCURED', 'An error occured') + ': \n' + error;
 	                alert(text); 
 					return;
                 }
 				
                 if (res.error == '' && res.count == 0) {
-                    text = "There are no bounced emails";
+                    text = Joomla.JText._('THERE_ARE_NO_BOUNCED_EMAILS', 'There are no bounced emails');
 	                alert(text); 
 					return;
                 }
 				
                 if (res.error == '' && res.count > 0) {
-                    text = ""+res.count+" bounced emails has been processed sucessfully";
+                    text = ""+res.count+' '+Joomla.JText._('BOUNCED_EMAILS_HAS_BEEN_PROCESSED_SUCESSFULLY', 'bounced emails has been processed sucessfully');
 					alert(text);
 					return;
 				}	

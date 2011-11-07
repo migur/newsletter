@@ -19,7 +19,7 @@ try {
         var newsletterId = $$('select')[0].get('value');
 
         if ( !newsletterId ) {
-            alert('Please selct newsletter first');
+            alert(Joomla.JText._('PLEASE_SELECT_NEWSLETTER_FIRST','Please select newsletter first'));
             return;
         }
 
@@ -31,12 +31,12 @@ try {
         });
 
         if ( lists.length == 0 ) {
-            alert('Please selct at least one list');
+            alert(Joomla.JText._('PLEASE_SELECT_AT_LEAST_ONE_LIST','Please selct at least one list'));
             return;
         }
 
 
-        if ( confirm("Do you realy want to send this newsletter?") ) {
+        if ( confirm(Joomla.JText._('DO_YOU_REALY_WANT_TO_SEND_THIS_NEWSLETTER_QM', 'Do you realy want to send this newsletter?'))) {
 
             new Request.JSON({
             url: '?option=com_newsletter&task=sender.addtoqueue&format=json',
@@ -46,11 +46,11 @@ try {
             },
                 onComplete: function(res){
                     if (res && res.state) {
-                        alert('The newsletter has been queued succesfully');
+                        alert(Joomla.JText._('THE_NEWSLETTER_HAS_BEEN_QUEUED_SUCCESFULLY', 'The newsletter has been queued succesfully'));
                         window.parent.SqueezeBox.close();
                         window.parent.location.reload();
                     } else {
-                        alert('An error has occured during the request');
+                        alert(Joomla.JText._('AN_ERROR_HAS_OCCURED_DURING_THE_REQUEST','An error has occured during the request'));
                     }
                 }
             }).send();
