@@ -15,7 +15,7 @@ Migur.chart.line = function(containerId, xLabels, data, width, height, pdLabels)
                 var yData = [];
 
                 if (data.length < 1) {
-                    var text = "Wrong chart data.";
+                    var text = Joomla.JText._('WRONG_CHART_DATA',"Wrong chart data.");
 
                     console.error(text);
                     return false;
@@ -150,7 +150,7 @@ Migur.chart.line = function(containerId, xLabels, data, width, height, pdLabels)
 
                 // Print legend
                 if (pdLabels.length < 1) {
-                    pdLabels = [ "Number of clicks", "Number of views" ];
+                    pdLabels = [ Joomla.JText._('NUMBER_OF_CLICKS',"Number of clicks"), Joomla.JText._('NUMBER_OF_VIEWS',"Number of views") ];
                 }
                 var x = 15;
                 var h = 20;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The dashboard view file.
+ * The wellcome view file.
  *
  * @version	   $Id:  $
  * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 JHtml::_('behavior.framework');
 
 /**
- * Class of the dashboard view. Displays the model data.
+ * Class of the wellcome view. Displays the model data.
  *
  * @since   1.0
  * @package Migur.Newsletter

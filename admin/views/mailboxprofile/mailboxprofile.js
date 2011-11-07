@@ -47,11 +47,11 @@ window.addEvent('domready', function() { try {
 					res = JSON.decode(res);
 					
 					if (res && res.status == 'ok') {
-						alert('Connection ok!');
+						alert(Joomla.JText._('CONNECTION_OK', 'Connection ok!'));
 						return;
 					}
 					
-					alert('Connection failed!');
+					alert(Joomla.JText._('CONNECTION_FAILED','Connection failed!'));
 					return;
 					
 				}

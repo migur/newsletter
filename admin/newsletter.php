@@ -25,6 +25,9 @@ JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 
+// Add translations used in JavaScript
+JavascriptHelper::requireTranslations();
+
 // Load 'Migur' group of plugins
 JPluginHelper::importPlugin('migur');
 $app = JFactory::getApplication();
@@ -37,8 +40,6 @@ if ($msg) {
 	$sess->set('application.queue', $msg);
 	$sess->set('migur.queue', null);
 }
-
-
 
 JFormHelper::addRulePath(JPATH_COMPONENT . DS . 'models' . DS . 'rules');
 JTable::addIncludePath(JPATH_COMPONENT . DS . 'tables');
