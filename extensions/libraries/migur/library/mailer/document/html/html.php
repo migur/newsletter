@@ -225,20 +225,22 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 		$urls = array_unique($matches[1]);
 		
 		$withs = array();
-		for($i=0; $i < count($urls); $i++) {
+		if (!empty($urls)) {
+			foreach($urls as $i => $val) {
 
-			$withs[] = str_replace(
-				$urls[$i],
-				JRoute::_(
-					'index.php?option=com_newsletter&task=newsletter.track&format=json&action=clicked&uid=' . $uid . '&nid=' . $newsletterId .
-					'&link=' . urlencode(base64_encode($urls[$i])), FALSE, 2
-				),
-				$fullhrefs[$i]
-			);	
+				$withs[] = str_replace(
+					$val,
+					JRoute::_(
+						'index.php?option=com_newsletter&task=newsletter.track&format=json&action=clicked&uid=' . $uid . '&nid=' . $newsletterId .
+						'&link=' . urlencode(base64_encode($val)), FALSE, 2
+					),
+					$fullhrefs[$i]
+				);	
+			}
+
+			$content = str_replace($fullhrefs, $withs, $content);
 		}
-		
-		$content = str_replace($fullhrefs, $withs, $content);
-		
+			
 		return true;
 	}
 
