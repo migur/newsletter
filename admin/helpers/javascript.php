@@ -100,8 +100,10 @@ class JavascriptHelper
 		
 		JFactory::getLanguage()->load('com_newsletter_js');
 
-		foreach($data as $key => $item) {
-			JText::script($key);
+		if(!empty($data)) {
+			foreach($data as $key => $item) {
+				JText::script($key);
+			}	
 		}	
 	}
 }
