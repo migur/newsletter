@@ -194,8 +194,14 @@ class MigurMailer extends JObject
 
 			//Add custom headers
 			$sender->AddCustomHeader('Return-Path: woody@nixsolutions.com');
-			$sender->AddCustomHeader('Email-Name:' . $letter->name);
-			$sender->AddCustomHeader('Subscriber-ID:' . $item->subscriber_id);
+			
+			if (!empty($letter->name)) {
+				$sender->AddCustomHeader('Email-Name:' . $letter->name);
+			}	
+			
+			if (!empty($item->subscriber_id)) {
+				$sender->AddCustomHeader('Subscriber-ID:' . $item->subscriber_id);
+			}	
 
 			// send the unique letter to each recipient
 			$bounced = $sender->send(array(

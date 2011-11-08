@@ -72,6 +72,7 @@ Migur.dnd.makeAvatar = function(el, droppables){
         onDrop: function(draggable, droppable){
                 
             if (!draggable) return false;
+			
             var source = $(draggable).retrieve('source');
             if (!droppable) {
                 // no droopable area
@@ -1051,20 +1052,21 @@ window.addEvent('domready', function() {
 
 
         // Test source, list of tags from http://del.icio.us/tag/
-        var tokens = [['.net', 'net2', 0], ['2008', '20082', 1], ['3d', 'advertising', 2]];
+        //var tokens = [['.net', 'net2', 0], ['2008', '20082', 1], ['3d', 'advertising', 2]];
 
         // Our instance for the element with id "demo-local"
-        autocomp = new Autocompleter.Local('jform_newsletter_preview_email', tokens, {
+        autocomp = new Autocompleter.Local('jform_newsletter_preview_email', [], {
             'minLength': 1, // We need at least 1 character
-            'selectMode': 'type-ahead', // Instant completion
+            'selectMode': false, // Instant completion
             'multiple': true // Tag support, by default comma separated
         });
 
         //previewTextBox.container.addClass('textboxlist-loading');
-        new Request.JSON({
+        new Request({
             url: '?option=com_newsletter&task=newsletter.autocomplete&format=json',
-            onSuccess: function(r){
-                autocomp.tokens = r;
+            onSuccess: function(res){
+				
+                autocomp.tokens = JSON.decode(res);
             }
         }).send();
 
@@ -1115,18 +1117,32 @@ window.addEvent('domready', function() {
 
     $('button-newsletter-send-preview').addEvent('click', function(){
 
+		var emails = autocomp.getBoxes();
+		
+		if (emails.length < 1) {
+			var val = $('jform_newsletter_preview_email').getProperty('value');
+			if (document.formvalidator.handlers.email.exec(val) == false) {
+				alert(Joomla.JText._('PLEASE_INPUT_A_VALID_EMAIL', 'Please input a valid email'));
+				return;
+			}
+			emails.push([null, val, -1]);
+		}
+
         var type = ($$('.tab-preview-html')[0].hasClass('open') == true)? 'html' : 'plain';
         new Request({
             url: migurSiteRoot + 'index.php?option=com_newsletter&task=newsletter.sendpreview&tmpl=component',
             data: {
                 newsletter_id: $$('[name=newsletter_id]')[0].get('value'),
-                emails: autocomp.getBoxes(),
+                emails: emails,
                 type: type
             },
             onComplete: function(res){
                 
+				try{ res = JSON.decode(res); }
+				catch (e) { res = null; }
+				
                 var text;
-                if (res == '') {
+                if (res && res.state == true) {
                     text = Joomla.JText._('THE_PREVIEWS_WERE_SUCCESFULLY_MAILED',"The previews were succesfully mailed");
                 } else {
                     text = Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', "An unknown error occured!");

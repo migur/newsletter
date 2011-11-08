@@ -338,5 +338,42 @@ class NewsletterHelper
 			array('comment' => $msg)
 		);
 	}
+
+	/**
+	 * Assumes that this is complete server response.
+	 * 
+	 * @param boolean $status The status of a responce
+	 * @param string $message Text of returned messages
+	 * @param type $data
+	 * @param type $exit 
+	 */
+	static public function jsonResponse($status, $messages = array(), $data = null, $exit = true) {
+		
+		$serverResponse = ob_get_contents();
+		ob_end_clean();
+		
+		if (!is_array($messages) && !is_object($messages)) {
+			$messages = array($messages);
+		}
+		
+		@header('Content-Type:application/json; charset=utf-8');
+		
+		echo json_encode(array(
+			'state' => (bool)$status,
+			'messages' => (array)$messages,
+			'data' => $data,
+			'serverResponse' => htmlentities($serverResponse)
+		));
+		
+		ob_start();
+		jexit();
+	}
+
+	static public function jsonError($messages = array(), $data = array(), $exit = true) {
+		self::jsonResponse(false, $messages, $data, $exit);
+	}	
 	
+	static public function jsonMessage($messages = array(), $data = array(), $exit = true) {
+		self::jsonResponse(true, $messages, $data, $exit);
+	}	
 }
