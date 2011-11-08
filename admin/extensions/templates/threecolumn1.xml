@@ -38,14 +38,17 @@ h1 a:active, h2 a:active,  h3 a:active, h4 a:active, h5 a:active, h6 a:active {
 h1 a:visited, h2 a:visited,  h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
     color: purple !important; }
 
-table td { border-collapse:collapse; }
+table td { 
+	border-collapse:collapse; 
+	vertical-align: top;
+}
 
 .yshortcuts, .yshortcuts a, .yshortcuts a:link,.yshortcuts a:visited, .yshortcuts a:hover, .yshortcuts a span { color: black; text-decoration: none !important; border-bottom: none !important; background: none !important;}
 </style>
 
 <table bgcolor="[table_background]" width="600px" style="color:[text_color]">
     <tr>
-        <td colspan="3">
+        <td valign="top" colspan="3">
             <img
                 src="[image_top.src]"
                 width="[image_top.width]"
@@ -55,28 +58,28 @@ table td { border-collapse:collapse; }
         </td>
     </tr>
     <tr>
-        <td colspan="3">
+        <td valign="top" colspan="3">
             <position type="modules" name="header_module_position" alt="Header module position" />
         </td>
     </tr>
     <tr>
-        <td width="[width_column1]" height="[height_column1]">
+        <td valign="top" width="[width_column1]" height="[height_column1]">
             <position type="modules" name="col1_module_position" alt="Column 1 module position" />
         </td>
-        <td width="[width_column2]" height="[height_column2]">
+        <td valign="top" width="[width_column2]" height="[height_column2]">
             <position type="modules" name="col2_module_position" alt="Column 2 module position" />
         </td>
-        <td>
+        <td valign="top">
             <position type="modules" name="col3_module_position" alt="Column 3 module position" />
         </td>
     </tr>
     <tr>
-        <td colspan="3">
+        <td valign="top" colspan="3">
             <position type="modules" name="footer_module_position" alt="Footer module position" />
         </td>
     </tr>
     <tr>
-        <td colspan="3">
+        <td valign="top" colspan="3">
             <img
                 src="[image_bottom.src]"
                 width="[image_bottom.width]"
@@ -85,7 +88,7 @@ table td { border-collapse:collapse; }
 				style="width:[image_bottom.width]; height:[image_bottom.height];" />
         </td>
     </tr>
-    <tr><td colspan="3" align="center">To unsubscribe or change subscriber options visit [unsubscription link]<tr>
+    <tr><td valign="top" colspan="3" align="center">To unsubscribe or change subscriber options visit [unsubscription link]<tr>
 </table>
 ]]>
     </template>
