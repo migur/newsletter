@@ -66,7 +66,7 @@ try {
 				url: '?option=com_newsletter&task=template.getparsed&format=json&shownames=1',
 				data: {
 					t_style_id: id,
-					tagsRenderMode: 'raw',
+					tagsRenderMode: 'schematic',
 					type: 'html' },
 
 				onComplete: function(res){

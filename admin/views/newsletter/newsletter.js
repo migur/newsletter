@@ -547,7 +547,8 @@ window.addEvent('domready', function() {
                     url: '?option=com_newsletter&task=template.getparsed&format=json',
                     data: {
                         t_style_id: data.t_style_id,
-                        type: 'html'
+                        type: 'html',
+						tagsRenderMode: 'htmlconstructor'
                     },
                     onSuccess: function(res){
                         $this.data.template = res.data.content;
