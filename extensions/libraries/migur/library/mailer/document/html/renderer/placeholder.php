@@ -15,7 +15,7 @@ JLoader::import('helpers.placeholder', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurDocumentRendererPlaceholder extends JDocumentRenderer
+class MigurDocumentHtmlRendererPlaceholder extends JDocumentRenderer
 {
 
 	/**

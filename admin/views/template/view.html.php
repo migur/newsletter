@@ -120,6 +120,7 @@ class NewsletterViewTemplate extends MigurView
 		$document->addStylesheet(JURI::root() . '/media/com_newsletter/css/templates.css');
 
 		$document->addScript(JURI::root() . '/media/com_newsletter/js/migur/js/core.js');
+		$document->addScript(JURI::root() . '/media/com_newsletter/js/migur/js/message.js');
 		$document->addScript(JURI::root() . '/administrator/components/com_newsletter/views/template/template.js');
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/template/submitbutton.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/models/forms/template.js");

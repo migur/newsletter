@@ -118,7 +118,7 @@ class NewsletterControllerCron extends JControllerForm
 
 					$subscriber->load($item['subscriber_id']);
                                         
-					$type  = ($subscriber->html == 1) ? 'html' : 'plain';
+					$type = ($subscriber->html == 1) ? 'html' : 'plain';
 					
 					$letter = $mailer->send(array(
 						'subscriber' => $subscriber,
@@ -231,26 +231,25 @@ class NewsletterControllerCron extends JControllerForm
 	}
 	
 	/**
-	 * 
+	 * Method for testing bounced emails
 	 */
-	public function bounced(){
-		
-		$mailer = new MigurMailer();
-		$subscriber = JTable::getInstance('subscriber', 'NewsletterTable');
-		$subscriber->load('8316');
-
-		//var_dump($subscriber); die;
-		$subscriber->email = 'andreyalek2@gmail.com';
-		var_dump(
-			$mailer->send(array(
-				'subscriber' => $subscriber,
-				'newsletter_id' => 130,
-				'type' => 'html'
-			))
-		);
-		
-		die;
-	}
+//	public function bounced(){
+//		
+//		$mailer = new MigurMailer();
+//		$subscriber = JTable::getInstance('subscriber', 'NewsletterTable');
+//		$subscriber->load('8316');
+//
+//		$subscriber->email = 'andreyalek2@gmail.com';
+//		var_dump(
+//			$mailer->send(array(
+//				'subscriber' => $subscriber,
+//				'newsletter_id' => 130,
+//				'type' => 'html'
+//			))
+//		);
+//		
+//		die;
+//	}
 	
 	public function processbounced()
 	{

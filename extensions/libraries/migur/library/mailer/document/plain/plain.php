@@ -78,7 +78,7 @@ class MigurMailerDocumentPlain extends MigurMailerDocument
 	 */
 	public function loadRenderer($type)
 	{
-		$class = 'MigurDocumentRenderer' . $type;
+		$class = 'MigurDocumentPlainRenderer' . $type;
 
 		if (!class_exists($class)) {
 			$path = dirname(__FILE__) . DS . 'renderer' . DS . $type . '.php';

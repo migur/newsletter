@@ -16,7 +16,8 @@ class HtmlPlaceholderSimple
 	public function render($data, $params = null)
 	{
 		if ($data === null) {
-			$data = '{' . (!empty($params['name'])? $params['name'] : 'data') . '}';
+			$data = '';
+			//$data = '{' . (!empty($params['name'])? $params['name'] : 'data') . '}';
 		}
 		return $data;
 	}

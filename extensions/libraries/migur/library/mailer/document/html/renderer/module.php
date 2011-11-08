@@ -15,7 +15,7 @@ JLoader::import('helpers.module', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurDocumentRendererModule extends JDocumentRenderer
+class MigurDocumentHtmlRendererModule extends JDocumentRenderer
 {
 
 	/**

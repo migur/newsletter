@@ -117,6 +117,8 @@ class PlaceholderHelper
 			self::$placeholders['image_top.alt'] = array('data' => null, 'default' => 'The top image');
 			self::$placeholders['image_bottom.alt'] = array('data' => null, 'default' => 'The bottom image');
 			self::$placeholders['sitename'] = array('data' => null, 'default' => JFactory::getConfig()->get('sitename'));
+			self::$placeholders['table_background'] = array('data' => null, 'default' => '#FFFFFF');
+			self::$placeholders['text_color'] = array('data' => null, 'default' => '#000000');
 
 			self::$placeholders['unsubscription link'] = array(
 				'data' => null,
@@ -126,7 +128,7 @@ class PlaceholderHelper
 
 			self::$placeholders['confirmation link'] = array(
 				'data' => null,
-				'default' => JRoute::_('index.php?option=com_newsletter&task=subscribe.confirm', false) . '&id=[subscription key]',
+				'default' => JUri::getInstance()->toString(array('host', 'scheme')) . JRoute::_('index.php?option=com_newsletter&task=subscribe.confirm', false) . '&id=[subscription key]',
 				'class' => 'link'
 			);
 

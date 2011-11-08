@@ -109,7 +109,11 @@ class MigurMailer extends JObject
 		/* if we get int then this is the custom template (schematic mode),
 		 * otherwise set raw mode
 		 */
-		$params['renderMode'] = ($params['t_style_id'] == strval(intval($params['t_style_id']))) ? 'schematic' : 'raw';
+		//$params['renderMode'] = ($params['t_style_id'] == strval(intval($params['t_style_id']))) ? 'schematic' : 'raw';
+		// No more RAW mode. It displayed not correct
+		if (empty($params['renderMode'])) {
+			$params['renderMode'] = 'schematic';
+		}	
 		$document = MigurMailerDocument::getInstance($params['type'], $params);
 		//$this->triggerEvent('onMailerBeforeRender');
 		$document->render(false, $params);
