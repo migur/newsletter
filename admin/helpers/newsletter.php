@@ -25,6 +25,8 @@ class NewsletterHelper
 	public static $extension = 'com_newsletter';
 
 	public static $_manifest = null;
+	
+	public static $logging = false;
 	/**
 	 * Configure the Linkbar.
 	 *
@@ -325,4 +327,16 @@ class NewsletterHelper
 		
 		return $res;
 	}
+	
+	static public function logMessage($msg, $prefix = '') {
+		
+		if (!self::$logging) {
+			return;
+		}
+		
+		JLog::getInstance(date('Y-m-d') . '.txt')->addEntry(
+			array('comment' => $msg)
+		);
+	}
+	
 }

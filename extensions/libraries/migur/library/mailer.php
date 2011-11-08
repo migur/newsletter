@@ -53,10 +53,13 @@ class MigurMailer extends JObject
 			return false;
 		}
 
-		$document = MigurMailerDocument::getInstance($params['type'], $params);
+		// Create ALWAYS NEW instance
+		$document = MigurMailerDocument::factory($params['type'], $params);
 		//$this->triggerEvent('onMailerBeforeRender');
 		$data = $document->render(false, $params);
 		//$this->triggerEvent('onMailerAfterRender');
+		
+		// Finish with it. Destroy.
 		unset($document);
 
 		return $data;
@@ -80,7 +83,7 @@ class MigurMailer extends JObject
 			return false;
 		}
 
-		$document = MigurMailerDocument::getInstance($params['type'], $params);
+		$document = MigurMailerDocument::factory($params['type'], $params);
 		//$this->triggerEvent('onMailerBeforeRender');
 		$data = $document->render(false, $params);
 		//$this->triggerEvent('onMailerAfterRender');
@@ -114,7 +117,7 @@ class MigurMailer extends JObject
 		if (empty($params['renderMode'])) {
 			$params['renderMode'] = 'schematic';
 		}	
-		$document = MigurMailerDocument::getInstance($params['type'], $params);
+		$document = MigurMailerDocument::factory($params['type'], $params);
 		//$this->triggerEvent('onMailerBeforeRender');
 		$document->render(false, $params);
 		$tpl = $document->getTemplate();

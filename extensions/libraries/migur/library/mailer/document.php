@@ -85,6 +85,7 @@ class MigurMailerDocument extends JDocument
 			return;
 		}
 
+		
 		// And finaly try to find the template.
 		if (!empty($params['t_style_id'])) {
 			$this->_template = $this->_loadTemplate($params['t_style_id']);
@@ -149,6 +150,33 @@ class MigurMailerDocument extends JDocument
 	}
 
 	/**
+	 * Returns the global JDocument object, only creating it
+	 * if it doesn't already exist.
+	 *
+	 * @param  type $type The document type to instantiate
+	 *
+	 * @return object  The document object.
+	 * @since  1.0
+	 */
+	public static function factory($type = 'html', $attributes = array())
+	{
+		$signature = serialize(array($type, $attributes));
+		
+		// Determine the path and class
+		$class = 'MigurMailerDocument' . $type;
+		if (!class_exists($class)) {
+			$path = dirname(__FILE__) . DS . 'document' . DS . $type . DS . $type . '.php';
+			if (file_exists($path)) {
+				require_once $path;
+			} else {
+				JError::raiseError(500, JText::_('JLIB_DOCUMENT_ERROR_UNABLE_LOAD_DOC_CLASS'));
+			}
+		}
+
+		return  new $class($attributes);
+	}
+	
+	/**
 	 * Get the template
 	 *
 	 * @return	string	The template name
@@ -160,6 +188,7 @@ class MigurMailerDocument extends JDocument
 
 		// set the letter id for the Helper
 		MigurModuleHelper::$itemId = $letter->newsletter_id;
+		MigurModuleHelper::$clean = null;
 
 		return $letter;
 	}
@@ -218,12 +247,10 @@ class MigurMailerDocument extends JDocument
 	 */
 	public function render($caching = false, $params = array())
 	{
-		$this->init($params);
-
 		// first pass of rendering.
 		$this->parse();
 		$this->_template->content = $this->_renderTemplate();
-
+		
 		// The second pass. Some dynamic data can contain placeholders.
 		// In other words - placeholders in placeholders...
 		$this->_parseTemplate();

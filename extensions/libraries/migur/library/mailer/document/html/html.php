@@ -174,8 +174,6 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 	 */
 	protected function _loadTemplate($id)
 	{
-		static $template;
-
 		// Try to find the newsletter by id.
 		// Supported both standard and custom
 
