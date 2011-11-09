@@ -18,13 +18,19 @@ class PlaceholderHelper
 
 	public static $_instances = array(array());
 
-
 	/*
 	 * The container for placeholders
 	 */
 	public static $placeholders = array();
-	protected static $_initialized = false;
+	
+	/*
+	 * Tags to enclose placeholders
+	 */
+	public static $openedTag = '[';
+	public static $closedTag = ']';
 
+	protected static $_initialized = false;
+	
 	/**
 	 * Get the instance of a placeholder
 	 * If the class for placeholder is not founded
@@ -203,7 +209,6 @@ class PlaceholderHelper
 	 */
 	public static function setPlaceholders($array, $reset = false)
 	{
-
 		self::_init($reset);
 
 		foreach ($array as $name => $data) {
@@ -212,5 +217,17 @@ class PlaceholderHelper
 			}
 		}
 	}
+	
+	public static function fetchFromString($string)
+	{
+		$preg = "/\\".self::$openedTag."([^\\".self::$closedTag."]+)\\".self::$closedTag."/";
+		
+		preg_match_all($preg, $string, $matches);
+		
+		if (empty($matches[1])) {
+			return array();
+		}	
 
+		return array_values(array_unique($matches[1]));
+	}
 }

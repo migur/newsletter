@@ -24,6 +24,6 @@ class JFormRuleCssdimension extends JFormRule
 	 * @var		string
 	 * @since	1.0
 	 */
-	protected $regex = '^([0-9]+\s*(\%|px|em))|auto$';
+	protected $regex = '^([0-9]+\s*(\%|px|em))|(auto)|$';
 
 }
