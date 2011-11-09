@@ -762,43 +762,6 @@ window.addEvent('domready', function() {
             $('jform_smtp_profile_id').set('value', '0').fireEvent('change');
         });
 
-
-        /* "Subject" input -> keyup-handler */
-        $('jform_subject').addEvent('keyup', function (event) {
-			
-			// Set the alias only if the newsletter is not saved yet
-			
-			var nid = $$('[name=newsletter_id]')[0].getProperty('value');
-			var alias = $('jform_alias').getProperty('value');
-            var link = $('link-website');
-
-			if (nid == '') {
-				$('link-website-msg').setStyles({'display': 'block'});
-			} else {
-				$('link-website-msg').setStyles({'display': 'none'});
-			}
-
-
-			if (dataStorage.newsletter.alias == '') {
-				var value = $(this).get('value');
-				alias = value.replace(/[^a-zA-Z-0-9_-]+/g, '').toLowerCase();
-				$('jform_alias').setProperty('value', alias);
-			}
-			
-            var val = migurSiteRoot + link.getProperty('rel').replace('%s', alias);
-            if (val == '') {
-                link.addClass('hide');
-                $('link-website-prompt').removeClass('hide');
-            } else {
-                link.removeClass('hide');
-                $('link-website-prompt').addClass('hide');
-            }
-            link.set('text', val);
-            link.setProperty('href', val);
-        });
-
-        $('jform_subject').fireEvent('keyup');
-
         /* "Plain text" tab -> "Dynamic data" -> click-handlers */
         // add dynamic data
         $$('#dynamic-data-container a').each(function(el){
@@ -820,15 +783,10 @@ window.addEvent('domready', function() {
             },
 
             beforeSend: function(){
-                if ( $$('[name=newsletter_id]').get('value') > 0) {
                     $$('form [name=task]').set('value','newsletter.apply');
-                } else {
-                    $$('form [name=task]').set('value','newsletter.save');
-                }
             },
 
             getter: function(){
-				
 				
 				var htmlConstructor = Migur.getWidget('html-area');
                 var htmlTpl = htmlConstructor.parse();
@@ -840,6 +798,7 @@ window.addEvent('domready', function() {
                     plugins.push( Migur.getWidget(el).get() );
                 });
                 var obj = new Hash(inputs.parseQueryString());
+				
                 obj["jform[newsletter_preview_email]"] = "";
                 obj["jform[htmlTpl]"] = JSON.encode(htmlTpl);
                 obj["jform[plugins]"] = JSON.encode(plugins);
@@ -854,7 +813,12 @@ window.addEvent('domready', function() {
             onSuccess: function(res){
                 if (res.state == 'ok') {
                     if (res.newsletter_id > 0) {
+						
                         $$('[name=newsletter_id]').set('value', res.newsletter_id);
+						$('jform_alias').set('value', res.alias);
+						delete(dataStorage.aliasIsEmpty);
+						$('jform_subject').fireEvent('keyup');
+						
                         Migur.getWidget('autosaver-switch').render();
                         autosaver.options.observState = autosaver.getter();
                     }
@@ -892,6 +856,7 @@ window.addEvent('domready', function() {
                 return this.isChanged(data);
             }
         });
+
 
         $$('input, select, textarea').addEvent('blur', function(){
             Migur.validator.tabIndicator(
@@ -1024,6 +989,45 @@ window.addEvent('domready', function() {
                 }
             }
         });
+
+        /* "Subject" input -> keyup-handler */
+        $('jform_subject').addEvent('keyup', function (event) {
+			
+			// Set the alias only if the newsletter is not saved yet
+			var nid = parseInt($$('[name=newsletter_id]')[0].getProperty('value'));
+			var alias = $('jform_alias').getProperty('value');
+            var link = $('link-website');
+
+			if (dataStorage.aliasIsEmpty === undefined) {
+				dataStorage.aliasIsEmpty = (alias == '');
+			}
+
+			if (nid < 1 || dataStorage.aliasIsEmpty === true) {
+				$('link-website-msg').setStyles({'display': 'block'});
+				var value = $(this).get('value');
+				alias = value.replace(/[^a-zA-Z-0-9_-]+/g, '').toLowerCase();
+				Migur.getWidget('autosaver-switch').update('unsaved');
+				autosaver.forceIsChanged = true;
+				
+			} else {	
+				$('link-website-msg').setStyles({'display': 'none'});
+			}	
+			
+			$('jform_alias').setProperty('value', alias);
+			
+            var val = migurSiteRoot + link.getProperty('rel').replace('%s', alias);
+            if (val == '') {
+                link.addClass('hide');
+                $('link-website-prompt').removeClass('hide');
+            } else {
+                link.removeClass('hide');
+                $('link-website-prompt').addClass('hide');
+            }
+            link.set('text', val);
+            link.setProperty('href', val);
+        });
+
+        $('jform_subject').fireEvent('keyup');
 
 
         /* Unsaved data warning handler */
