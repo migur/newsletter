@@ -320,6 +320,8 @@ class MigurMailerDocument extends JDocument
 			'height_column1' => 'height_column1',
 			'width_column2' => 'width_column2',
 			'height_column2' => 'height_column2',
+			'width_column3' => 'width_column3',
+			'height_column3' => 'height_column3',
 			'image_top' => 'image_top.src',
 			'image_top_alt' => 'image_top.alt',
 			'image_top_width' => 'image_top.width',

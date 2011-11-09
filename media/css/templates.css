@@ -24,7 +24,8 @@ background-color: #ffffff;
 }
 
 #dimensions1,
-#dimensions2 {
+#dimensions2,
+#dimensions3 {
     float: left;
     width: 150px;
     margin-left: 50px;
@@ -39,7 +40,7 @@ background-color: #ffffff;
 }
 
 #tab-container-dimensions {
-    width: 400px;
+    width: 700px;
     margin-left: 20px;
 }
 
@@ -182,7 +183,6 @@ dl#prewiew {
 #preview-container .drop,
 #preview-container .modules {
     width: 100%;
-    min-width: 200px;
     height: 100%;
     min-height: 80px;
     border: 1px dashed #CCCCCC;
@@ -200,9 +200,9 @@ dl#prewiew {
 
 #preview-container tr,
 #preview-container td {
-    height: auto;
+/*    height: auto;
     position: relative;
-	width:550px;
+	width:550px;*/
 }
 
 .template-new {
@@ -245,4 +245,8 @@ div.info-title label {
 
 .current {
     overflow: auto;
+}
+
+table.nl-templates .current {
+    overflow: hidden;
 }

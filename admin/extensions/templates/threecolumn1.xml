@@ -69,7 +69,7 @@ table td {
         <td valign="top" width="[width_column2]" height="[height_column2]">
             <position type="modules" name="col2_module_position" alt="Column 2 module position" />
         </td>
-        <td valign="top">
+        <td valign="top" width="[width_column3]" height="[height_column3]">
             <position type="modules" name="col3_module_position" alt="Column 3 module position" />
         </td>
     </tr>
