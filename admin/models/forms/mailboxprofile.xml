@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field name="mailbox_profile_name"
+			type="text"
+			label="COM_NEWSLETTER_NAME"
+			description="COM_NEWSLETTER_NAME"
+			class="inputbox validate-name"
+			size="100"
+			default=""
+			required="true"
+                        validate=""
+		 />
+
+		<field name="mailbox_server"
+			type="text"
+			label="COM_NEWSLETTER_MAILBOX_SERVER"
+			description="COM_NEWSLETTER_MAILBOX_SERVER"
+			class="inputbox validate-mailbox_server"
+			size="70"
+			default=""
+			required="true"
+			validate=""
+		 />
+
+		<field name="mailbox_port"
+			type="text"
+			label="COM_NEWSLETTER_MAILBOX_PORT"
+			description="COM_NEWSLETTER_MAILBOX_PORT"
+			class="inputbox validate-mailbox_port"
+			size="70"
+			default=""
+			required="true"
+			validate=""
+		 />
+		 
+		<field name="mailbox_server_type"
+			type="list"
+			label="COM_NEWSLETTER_MAILBOX_TYPE"
+			description="COM_NEWSLETTER_MAILBOX_TYPE"
+			class="inputbox validate-mailbox_port"
+			default=""
+			required="true"
+			validate=""
+		 >
+			<option value="0">COM_NEWSLETTER_MAILBOX_POP3</option>
+			<option value="1">COM_NEWSLETTER_MAILBOX_IMAP</option>
+		 </field>	
+			
+		 <field name="username"
+			type="text"
+			label="COM_NEWSLETTER_USERNAME"
+			description="COM_NEWSLETTER_USERNAME"
+			class="inputbox validate-username"
+			size="70"
+			default=""
+			required="true"
+			validate=""
+		 />
+
+		 <field name="password"
+			type="password"
+			label="COM_NEWSLETTER_PASSWORD"
+			description="COM_NEWSLETTER_PASSWORD"
+			class="inputbox validate-password"
+			size="70"
+			default=""
+			required="true"
+			validate=""
+		 />
+
+		 <field name="is_ssl"
+				type="list"
+				label="COM_NEWSLETTER_SSL"
+				description="COM_NEWSLETTER_SSL"
+				class="inputbox validate-is_ssl"
+				default=""
+				required="true"
+				validate=""
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field name="mailbox_profile_id" type="hidden"></field>
+	</fieldset>
+</form>

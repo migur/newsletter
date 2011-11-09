@@ -15,6 +15,7 @@ jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer');
 JLoader::import('helpers.module', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
  * Class of the cron controller. Handles the  request of a "trigger" from remote server.
@@ -63,8 +64,13 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$newsletterId = JRequest::getVar('newsletter_id');
 		$type         = JRequest::getVar('type');
 		$email        = urldecode(JRequest::getVar('email'));
-		
+		$alias        = JRequest::getString('alias', null);
 
+		if (!empty($alias)) {
+			$newslettter = NewsletterHelper::getByAlias($alias);
+			$newsletterId = $newslettter['newsletter_id'];
+		}	
+		
 		if (empty($newsletterId)) {
 			echo json_encode(array(
 				'state' => '0',
@@ -149,10 +155,18 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 */
 	public function sendPreview()
 	{
-		$emails = JRequest::getVar('emails');
+		$emails = JRequest::getVar('emails', array());
 		$newsletterId = JRequest::getVar('newsletter_id');
 		$type = JRequest::getVar('type');
 
+		if (empty($type) || empty($newsletterId)) {
+			NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_RUQUIRED_MISSING'));
+		}
+
+		if (empty($emails)) {
+			NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_ADD_EMAILS'));
+		}
+		
 		$data = array(
 			'newsletter_id' => $newsletterId,
 			'type' => $type,
@@ -165,7 +179,8 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		$mailer = new MigurMailer();
 		$res = $mailer->sendToList($data);
-		jexit(($res)? '' : 'error');
+
+		NewsletterHelper::jsonMessage('ok', $emails);
 	}
 }
 

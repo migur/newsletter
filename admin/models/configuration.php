@@ -108,7 +108,6 @@ class NewsletterModelConfiguration extends JModelForm
 	 */
 	public function save($data)
 	{
-		JTable::addIncludePath(JPATH_LIBRARIES . DS . 'joomla' . DS . 'database' . DS . 'table');
 		$table = JTable::getInstance('extension');
 		// Save the rules.
 		if (isset($data['params']) && isset($data['params']['rules'])) {

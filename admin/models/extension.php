@@ -36,7 +36,7 @@ class NewsletterModelExtension extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.0
 	 */
-	public function getTable($type = 'Extension', $prefix = 'NewsletterTable', $config = array())
+	public function getTable($type = 'NExtension', $prefix = 'NewsletterTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -64,7 +64,7 @@ class NewsletterModelExtension extends JModelAdmin
 		$this->setState('item.client_id', $clientId);
 		$this->setState('item.module', $module);
 		$this->setState('item.module.native', $native);
-		$this->setState('item.extension.type', $type);
+		$this->setState('item.nextension.type', $type);
 
 		// Get the form.
 		$form = $this->loadForm('com_newsletter.'.$type, $type, array('control' => 'jform', 'load_data' => $loadData));
@@ -83,7 +83,7 @@ class NewsletterModelExtension extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.extension.data', array());
+		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.nextension.data', array());
 		if (empty($data)) {
 
 			$form = JRequest::getVar('jform');
@@ -130,7 +130,7 @@ class NewsletterModelExtension extends JModelAdmin
 
 		$clientId = $this->getState('item.client_id', 0);
 		$native   = $this->getState('item.module.native', 0);
-		$type     = $this->getState('item.extension.type', 0).'s';
+		$type     = $this->getState('item.nextension.type', 0).'s';
 		$lang		= JFactory::getLanguage();
 		$client		= JApplicationHelper::getClientInfo($clientId);
 

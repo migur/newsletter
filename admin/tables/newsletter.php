@@ -94,6 +94,5 @@ class NewsletterTableNewsletter extends MigurJTable
 		}
 		return count($this->getErrors()) == 0;
 	}
-
 }
 

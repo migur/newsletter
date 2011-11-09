@@ -137,4 +137,8 @@ class NewsletterModelHistory extends MigurModelList
 		return $query;
 	}
 
+	public function setBounced($sid, $nid, $bounceType)
+	{
+		return JTable::getInstance('History', 'NewsletterTable')->setBounced($sid, $nid, $bounceType);
+	}	
 }

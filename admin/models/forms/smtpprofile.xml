@@ -78,42 +78,49 @@
                         validate=""
 		 />
 
-                 <field name="username"
-                        type="text"
-                        label="COM_NEWSLETTER_USERNAME"
-                        description="COM_NEWSLETTER_USERNAME"
-                        class="inputbox validate-username"
-                        size="70"
-                        default=""
-                        required="true"
-                        validate=""
-                 />
+		 <field name="username"
+				type="text"
+				label="COM_NEWSLETTER_USERNAME"
+				description="COM_NEWSLETTER_USERNAME"
+				class="inputbox validate-username"
+				size="70"
+				default=""
+				required="true"
+				validate=""
+		 />
 
-                 <field name="password"
-                        type="text"
-                        label="COM_NEWSLETTER_PASSWORD"
-                        description="COM_NEWSLETTER_PASSWORD"
-                        class="inputbox validate-password"
-                        size="70"
-                        default=""
-                        required="true"
-                        validate=""
-                 />
+		 <field name="password"
+				type="password"
+				label="COM_NEWSLETTER_PASSWORD"
+				description="COM_NEWSLETTER_PASSWORD"
+				class="inputbox validate-password"
+				size="70"
+				default=""
+				required="true"
+				validate=""
+		 />
 
-                 <field name="is_ssl"
-                        type="list"
-                        label="COM_NEWSLETTER_SSL"
-                        description="COM_NEWSLETTER_SSL"
-                        class="inputbox validate-is_ssl"
-                        default=""
-                        required="true"
-                        validate=""
-                >
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
+		 <field name="is_ssl"
+				type="list"
+				label="COM_NEWSLETTER_ENCRYPT"
+				description="COM_NEWSLETTER_ENCRYPT"
+				class="inputbox validate-is_ssl"
+				default=""
+				required="true"
+				validate=""
+		>
+			<option value="0">JNO</option>
+			<option value="1">COM_NEWSLETTER_SSL</option>
+			<option value="2">COM_NEWSLETTER_TLS</option>
+		</field>
 
+		 <field name="mailbox_profile_id"
+				type="mailboxprofiles"
+				default=""
+				label="COM_NEWSLETTER_MAILBOX_PROFILE"
+				description="COM_NEWSLETTER_MAILBOX_PROFILE">
+			</field>
 
-                <field name="smtp_profile_id" type="hidden"></field>
+		<field name="smtp_profile_id" type="hidden"></field>
 	</fieldset>
 </form>

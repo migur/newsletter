@@ -57,7 +57,6 @@ class NewsletterViewDashboard extends MigurView
 		JHTML::script('media/com_newsletter/js/migur/js/g.bar.js');
 		JHTML::script('media/com_newsletter/js/migur/js/raphael-migur-line.js');
 
-
 		$script = $this->get('Script');
 		$this->script = $script;
 
@@ -120,12 +119,10 @@ class NewsletterViewDashboard extends MigurView
 		
 		$this->info = NewsletterHelper::getCommonInfo();
 
-		JavascriptHelper::addStringVar('siteRoot', JUri::root());
-
 		$this->setStatisticsData();
 
-                $sess = JFactory::getSession();
-       		JavascriptHelper::addStringVar('sessname', $sess->getName());
+		$sess = JFactory::getSession();
+		JavascriptHelper::addStringVar('sessname', $sess->getName());
 
 		parent::display($tpl);
 
@@ -158,7 +155,7 @@ class NewsletterViewDashboard extends MigurView
 
 		$bar = MigurToolBar::getInstance('help-toolbar');
 		$bar->appendButton('Popup', 'publish', 'COM_NEWSLETTER_ABOUT', 'http://migur.com/products/newsletter', 800, 600, 0, 0);
-		$bar->appendButton('Popup', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter', 800, 600, 0, 0);
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter');
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
@@ -184,8 +181,8 @@ class NewsletterViewDashboard extends MigurView
 		$theHour = 3600;
 		$theDay = $theHour * 24;
 		$days = 30;
-		$previousDay = date('Y-m-d 00:00:00', time() - $theDay);
-		$fiewDaysBefore = date('Y-m-d 00:00:00', time() - $theDay * $days);
+		$previousDay = date('Y-m-d 00:00:00', strtotime("-1 day", time()));
+		$fiewDaysBefore = date('Y-m-d 00:00:00', strtotime("-30 Days", time()));
 
 		JavascriptHelper::addObject('opensPerDay',
 				StatisticsHelper::activityPerDay(
@@ -195,7 +192,6 @@ class NewsletterViewDashboard extends MigurView
 					NewsletterTableHistory::ACTION_OPENED
 				)
 		);
-
 		JavascriptHelper::addObject('subsPerDay',
 				StatisticsHelper::activeSubscribersPerDay(
 					$fiewDaysBefore,

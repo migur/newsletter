@@ -7,13 +7,13 @@
 #config-extensions,
 #config-config {
     float: left;
-    width: 48%;
+    width: 45%;
     margin: 0 0 0 5px;
 }
 
 #config-config {
     float: right;
-    width: 48%;
+    width: 50%;
     margin: 0 5px 0 0;
 }
 

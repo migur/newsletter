@@ -32,6 +32,9 @@ JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models');
 // Get an instance of the controller prefixed by Newsletter
 $controller = JController::getInstance('Newsletter');
 
+// Add translations used in JavaScript
+JavascriptHelper::requireTranslations();
+
 // Load 'Migur' group of plugins
 JPluginHelper::importPlugin('migur');
 $app = JFactory::getApplication();

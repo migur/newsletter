@@ -19,6 +19,11 @@ defined('_JEXEC') or die;
 class NewsletterTableQueue extends JTable
 {
 
+	const STATE_SENT = 0;
+	const STATE_INQUEUE = 1;
+	const STATE_BOUNCED = 2;
+	
+	
 	/**
 	 * The constructor of a class.
 	 *
@@ -92,5 +97,24 @@ class NewsletterTableQueue extends JTable
 		return count($this->getErrors()) == 0;
 	}
 
+	
+	public function setBounced($sid, $nid)
+	{
+		if (empty($sid)) {
+			return false;
+		}
+
+		$this->load(array(
+			'subscriber_id' => $sid,
+			'newsletter_id' => $nid
+		));
+		
+		return $this->save(array(
+			'subscriber_id' => $sid,
+			'newsletter_id' => $nid,
+			'state' => NewsletterTableQueue::STATE_BOUNCED,
+			'date' => date('Y-m-d H:i:s')
+		));
+	}	
 }
 

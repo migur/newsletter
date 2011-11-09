@@ -36,7 +36,15 @@
             label="COM_NEWSLETTER_SMTP_DEFAULT"
             description="COM_NEWSLETTER_SMTP_DEFAULT">
         </field>
-
+        <field
+            name="newsletter_smtp_edit"
+            type="button"
+			class="button"
+            label=" "
+            description="COM_NEWSLETTER_EDIT"
+			required="false"
+			value="COM_NEWSLETTER_EDIT">
+        </field>
         <field
             name="newsletter_smtp_create"
             type="button"
@@ -57,6 +65,41 @@
         </field>
 
         <field
+            name="general_mailbox_default"
+            type="mailboxprofiles"
+            default=""
+            label="COM_NEWSLETTER_MAILBOX_DEFAULT"
+            description="COM_NEWSLETTER_MAILBOX_DEFAULT">
+        </field>
+        <field
+            name="newsletter_mailbox_edit"
+            type="button"
+			class="button"
+            label=" "
+            description="COM_NEWSLETTER_EDIT"
+			required="false"
+			value="COM_NEWSLETTER_EDIT">
+        </field>
+        <field
+            name="newsletter_mailbox_create"
+            type="button"
+			class="button"
+            label=" "
+            description="COM_NEWSLETTER_CREATE_MAILBOX_PROFILE"
+			required="false"
+			value="COM_NEWSLETTER_CREATE_MAILBOX_PROFILE">
+        </field>
+        <field
+            name="newsletter_mailbox_delete"
+            type="button"
+			class="button"
+            label=" "
+            description="COM_NEWSLETTER_DELETE_MAILBOX_PROFILE"
+			required="false"
+			value="COM_NEWSLETTER_DELETE_MAILBOX_PROFILE">
+        </field>
+		
+		<field
             name="autosaver_enabled"
             type="radio"
             default="0"

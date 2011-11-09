@@ -10,6 +10,10 @@
 // No direct access
 defined('_JEXEC') or die;
 
+JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
+
+
 /**
  * Content component helper.
  *
@@ -21,6 +25,8 @@ class NewsletterHelper
 	public static $extension = 'com_newsletter';
 
 	public static $_manifest = null;
+	
+	public static $logging = false;
 	/**
 	 * Configure the Linkbar.
 	 *
@@ -165,7 +171,7 @@ class NewsletterHelper
 		// Get info about newsletter plus info about using it in lists.
 		$dbo = JFactory::getDbo();
 		$query = $dbo->getQuery(true);
-		$query->select('DISTINCT ns.*, (CASE WHEN l.list_id IS NULL THEN 0 ELSE 1 END) AS used_as_static')
+		$query->select("DISTINCT ns.*, (CASE WHEN l.list_id IS NULL THEN '0' ELSE '1' END) AS used_as_static")
 			->from('#__newsletter_newsletters AS ns')
 			->join('LEFT', '#__newsletter_lists AS l ON (ns.newsletter_id = l.send_at_reg OR ns.newsletter_id = l.send_at_unsubscribe)')
 			->where('newsletter_id=' . (int) $id);
@@ -175,10 +181,199 @@ class NewsletterHelper
 
 		if (!empty($data)) {
 			// Check if we can change the type of newsletter
-			$data['type_changeable'] = (!$data['used_as_static'] && $data['sent_started'] == '0000-00-00 00:00:00');
+			$data['type_changeable'] = ($data['used_as_static'] == 0 && $data['sent_started'] == '0000-00-00 00:00:00');
+			$data['saveable'] = ($data['type'] == 1 || $data['sent_started'] == '0000-00-00 00:00:00');
 			return $data;
 		}
 		return array();
 	}
 
+	/**
+	 * Get first unused alias.
+	 *
+	 * @param  string $alias assumed alias
+	 * @return string alias should been used
+	 */
+	public function getFreeAlias($alias)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('*');
+		$query->from('#__newsletter_newsletters AS a');
+		$query->where("alias LIKE '" . addslashes($alias) . "%'");
+
+		$db->setQuery($query);
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
+ 		$res = $db->loadAssocList();
+
+		if (empty($res)) {
+			return $alias;
+		}
+		
+		// Get array with similar aliases
+		$aliases = array();
+		foreach($res as $item) {
+			$aliases[] = $item['alias'];
+		}
+
+		// Find unused alias...
+		for ($i = 1; $i < 100000; $i++) {
+			if(!in_array($alias.$i, $aliases)) {
+				return $alias.$i;
+			}
+		}
+	}
+	
+	/**
+	 * Get first unused alias.
+	 *
+	 * @param  string $alias assumed alias
+	 * @return string alias should been used
+	 */
+	public function getByAlias($alias)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('*');
+		$query->from('#__newsletter_newsletters AS a');
+		$query->where("alias='" . addslashes($alias) . "'");
+		$db->setQuery($query);
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
+ 		return $db->loadAssoc();
+	}
+	
+	public function getMailProfiles($nid)
+	{
+		$db = JFactory::getDbo();
+		
+		// Get default SMTP and Mailbox profile ids
+		$smtpId = MailHelper::getDefaultSmtp('idOnly');
+		$mailboxId = MailHelper::getDefaultMailbox('idOnly');
+		
+		$db->setQuery(
+			'SELECT DISTINCT '.
+				'mp.mailbox_profile_id AS mp_mailbox_profile_id, '.
+				'mp.mailbox_profile_name AS mp_mailbox_profile_name, '.
+				'mp.mailbox_server AS mp_mailbox_server, '.
+				'mp.mailbox_server_type AS mp_mailbox_server_type, '.
+				'mp.mailbox_port AS mp_mailbox_port, '.
+				'mp.is_ssl AS mp_is_ssl, '.
+				'mp.username AS mp_username, '.
+				'mp.password AS mp_password, '.
+			
+				'sp.smtp_profile_id AS sp_smtp_profile_id, '.
+				'sp.smtp_profile_name AS sp_smtp_profile_name, '.
+				'sp.from_name AS sp_from_name, '.
+				'sp.from_email AS sp_from_email, '.
+				'sp.reply_to_name AS sp_reply_to_name, '.
+				'sp.reply_to_email AS sp_reply_to_email, '.
+				'sp.smtp_server AS sp_smtp_server, '.
+				'sp.smtp_port AS sp_smtp_port, '.
+				'sp.is_ssl AS sp_is_ssl, '.
+				'sp.pop_before_smtp AS sp_pop_before_smtp, '.
+				'sp.username AS sp_username, '.
+				'sp.password AS sp_password, '.
+				'sp.mailbox_profile_id AS sp_mailbox_profile_id '.
+			
+			'FROM #__newsletter_mailbox_profiles AS mp '.
+			
+			'JOIN #__newsletter_smtp_profiles AS sp '.
+				'ON (sp.mailbox_profile_id = mp.mailbox_profile_id) '.
+				'OR (sp.mailbox_profile_id = '.NewsletterTableMailboxprofile::MAILBOX_DEFAULT.' AND mp.mailbox_profile_id='.$mailboxId.') '.
+			
+			'JOIN #__newsletter_newsletters AS n  '.
+				'ON (n.smtp_profile_id = sp.smtp_profile_id) '.
+				'OR (n.smtp_profile_id = '.NewsletterTableSmtpprofile::SMTP_DEFAULT.' AND sp.smtp_profile_id='.$smtpId.') '.
+			
+			// get mailboxes for sent newsletters without errors
+			'WHERE n.newsletter_id = ' . (int)$nid
+		);
+		
+		//echo (string)$db->getQuery();
+		$result = $db->loadAssoc();
+		
+		$res = array(
+			'mailbox' => array(
+				'mailbox_profile_id' => $result['mp_mailbox_profile_id'],
+				'mailbox_profile_name' => $result['mp_mailbox_profile_name'],
+				'mailbox_server' => $result['mp_mailbox_server'],
+				'mailbox_server_type' => $result['mp_mailbox_server_type'],
+				'mailbox_port' => $result['mp_mailbox_port'],
+				'is_ssl' => $result['mp_is_ssl'],
+				'username' => $result['mp_username'],
+				'password' => $result['mp_password']
+			),
+			
+			'smtp' => array(
+				'smtp_profile_id' => $result['sp_smtp_profile_id'],
+				'smtp_profile_name' => $result['sp_smtp_profile_name'],
+				'from_name' => $result['sp_from_name'],
+				'from_email' => $result['sp_from_email'],
+				'reply_to_name' => $result['sp_reply_to_name'],
+				'reply_to_email' => $result['sp_reply_to_email'],
+				'smtp_server' => $result['sp_smtp_server'],
+				'smtp_port' => $result['sp_smtp_port'],
+				'is_ssl' => $result['sp_is_ssl'],
+				'pop_before_smtp' => $result['sp_pop_before_smtp'],
+				'username' => $result['sp_username'],
+				'password' => $result['sp_password'],
+				'mailbox_profile_id' => $result['sp_mailbox_profile_id'],
+			),
+		);
+		
+		return $res;
+	}
+	
+	static public function logMessage($msg, $prefix = '') {
+		
+		if (!self::$logging) {
+			return;
+		}
+		
+		JLog::getInstance(date('Y-m-d') . '.txt')->addEntry(
+			array('comment' => $msg)
+		);
+	}
+
+	/**
+	 * Assumes that this is complete server response.
+	 * 
+	 * @param boolean $status The status of a responce
+	 * @param string $message Text of returned messages
+	 * @param type $data
+	 * @param type $exit 
+	 */
+	static public function jsonResponse($status, $messages = array(), $data = null, $exit = true) {
+		
+		$serverResponse = ob_get_contents();
+		ob_end_clean();
+		
+		if (!is_array($messages) && !is_object($messages)) {
+			$messages = array($messages);
+		}
+		
+		@header('Content-Type:application/json; charset=utf-8');
+		
+		echo json_encode(array(
+			'state' => (bool)$status,
+			'messages' => (array)$messages,
+			'data' => $data,
+			'serverResponse' => htmlentities($serverResponse)
+		));
+		
+		ob_start();
+		jexit();
+	}
+
+	static public function jsonError($messages = array(), $data = array(), $exit = true) {
+		self::jsonResponse(false, $messages, $data, $exit);
+	}	
+	
+	static public function jsonMessage($messages = array(), $data = array(), $exit = true) {
+		self::jsonResponse(true, $messages, $data, $exit);
+	}	
 }

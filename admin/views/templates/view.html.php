@@ -91,8 +91,7 @@ class NewsletterViewTemplates extends MigurView
 
 		$bar = JToolBar::getInstance('templates');
 		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=template&tmpl=component', 880, 680, 0, 0);
-		$bar->appendButton('Standard', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
-		//$bar->appendButton('Standard', 'copy', 'COM_NEWSLETTER_COPY', 'templates.copy', false);
+		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
 
 		// Load the submenu.
