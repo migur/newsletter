@@ -20,7 +20,7 @@ body{width:100% !important;} .ReadMsgBody{width:100%;} .ExternalClass{width:100%
 body{-webkit-text-size-adjust:none; -ms-text-size-adjust:none;}
 body{margin:0; padding:0;}
 
-table.img{height:auto; line-height:100%; outline:none; text-decoration:none;}
+img{line-height:100%; outline:none; text-decoration:none;}
 
 #backgroundTable{height:100% !important; margin:0; padding:0; width:100% !important;}
 
@@ -52,8 +52,7 @@ table td {
                 src="[image_top.src]"
                 width="[image_top.width]"
                 height="[image_top.height]"
-                alt="[image_top.alt]" 
-				style="width:[image_top.width]; height:[image_top.height];" />
+                alt="[image_top.alt]" />
         </td>
     </tr>
     <tr>
@@ -80,8 +79,7 @@ table td {
                 src="[image_bottom.src]"
                 width="[image_bottom.width]"
                 height="[image_bottom.height]"
-                alt="[image_bottom.alt]" 
-				style="width:[image_bottom.width]; height:[image_bottom.height];"/>
+                alt="[image_bottom.alt]" />
         </td>
     </tr>
     <tr><td valign="top" colspan="2" align="center">To unsubscribe or change subscriber options visit [unsubscription link]<tr>
