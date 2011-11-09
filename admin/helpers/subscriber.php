@@ -58,6 +58,7 @@ class SubscriberHelper
 		$db->setQuery($query);
 		$subscriber = $db->loadObject();
 		$user = JUser::getInstance();
+
 		if (!empty($subscriber->user_id)) {
 			// Get a database object
 			$user->load($subscriber->user_id);
@@ -86,7 +87,7 @@ class SubscriberHelper
 				'username' => $user->name,
 				'useremail' => $user->email,
 				'userid' => !empty($subscriber->subscriber_id) ? $user->subscriber_id : null,
-				'subscription key' => $user->subscription_key
+				'subscription key' => !empty($user->subscription_key) ? $user->subscription_key : null
 			));
 
 		return $user;

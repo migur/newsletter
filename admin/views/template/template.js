@@ -11,12 +11,12 @@ function jInsertFieldValue(value, id) {
     new Request.JSON({
         url: '?option=com_newsletter&task=file.fileinfo&format=json',
         data: {
-            filename: siteRoot + value
+            filename: migurSiteRoot + value
         },
 
         onComplete: function(res){
             
-            $(id).setProperty('value', siteRoot + value);
+            $(id).setProperty('value', migurSiteRoot + value);
 
             if (res.mime.substr(0,5) == 'image') {
 				
@@ -66,7 +66,7 @@ try {
 				url: '?option=com_newsletter&task=template.getparsed&format=json&shownames=1',
 				data: {
 					t_style_id: id,
-					tagsRenderMode: 'raw',
+					tagsRenderMode: 'schematic',
 					type: 'html' },
 
 				onComplete: function(res){

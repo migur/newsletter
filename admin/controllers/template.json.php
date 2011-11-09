@@ -79,7 +79,8 @@ class NewsletterControllerTemplate extends JControllerForm
 			't_style_id' => JRequest::getString('t_style_id'),
 			'showNames'  => (bool)JRequest::getString('shownames'),
 			'tracking'   => false,
-			'trackingGa' => false
+			'trackingGa' => false,
+			'renderMode' => JRequest::getString('tagsRenderMode')
 		));
 
 		//TODO: Need to remove this

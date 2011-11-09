@@ -8,10 +8,9 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 // No direct access to this file
-defined('_MIGUR') or die('Restricted access');
+defined('_JEXEC') or die;
 
-// import Joomla controllerform library
-jimport('joomla.application.component.controllerform');
+jimport('joomla.application.component.controlleradmin');
 
 class NewsletterControllerNewsletters extends JControllerAdmin
 {
@@ -34,4 +33,31 @@ class NewsletterControllerNewsletters extends JControllerAdmin
 		return $model;
 	}
 
+	
+	public function delete() {
+		
+		$cids = JRequest::getVar('cid', array());
+		
+		$unset = 0;
+		
+		if (!empty($cids)) {
+			
+			
+			foreach($cids as $idx => $cid) {
+				$newsletter = NewsletterHelper::get($cid);
+				if ($newsletter['used_as_static'] == 1 || !$newsletter['saveable']) {
+					unset($cids[$idx]);
+					$unset++;
+					
+				}
+			}
+			JRequest::setVar('cid', $cids);
+		}
+		
+		if ($unset > 0) {
+			JFactory::getApplication()->enqueueMessage(sprintf(JText::_('COM_NEWSLETTER_SOME_COULDNOT_DELETE'), $unset), 'message');
+		}
+		
+		parent::delete();
+	}
 }

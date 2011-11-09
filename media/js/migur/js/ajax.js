@@ -39,14 +39,14 @@ Migur.ajax.autosaver = new Class({
         timeout: 30000,
 
         /**
-         * The form (or a DOM element) who's state will be tracked.
+         * The form (or a DOM element) who's state will be checked.
          **/
         observable: null,
 
         /**
          * The state of the observable DOM element
          **/
-        observState: ''
+        observState: null
     },
 
     initialize: function(config) {
@@ -55,10 +55,6 @@ Migur.ajax.autosaver = new Class({
         config.options = Object.merge(this.options, config.options);
         Object.append(this, config);
         this._setupAjax();
-        // set the initial state of observable form
-        if (this.options.observable) {
-            this.options.observState = this.getter();
-        }
     },
 
     start: function(options) {
@@ -115,9 +111,11 @@ Migur.ajax.autosaver = new Class({
         this.beforeSend();
         
         if (!options) options = {};
-        if (!options.data) {
-            options.data = this.getter();
-        }
+		
+		if (!options.data) {
+			options.data = this.getter();
+		}
+		
         if ( !useController || this.controller(options.data) ) {
 
             if (typeof options.data == 'string' &&
@@ -154,6 +152,17 @@ Migur.ajax.autosaver = new Class({
     },
 
     isChanged: function(data) {
+		
+		// First access
+		if (this.options.observState === null) {
+			this.options.observState = data;
+			return false;
+		}
+		
+//		if (this.options.observState != data) {
+//			console.log(data);
+//		}
+		
         return ( this.options.observState != data );
     },
 

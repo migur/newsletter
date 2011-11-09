@@ -54,16 +54,19 @@ class NewsletterModelNewsletterext extends JModel
 
 			if (!empty($data) ) {
 				foreach ($data as $item) {
-
-					// Skip the empty plugins (not configured)
-					if ($item->type == 2 && empty($item->params)) continue;
 					
-					$table->reset();
-					$table->set($table->getKeyName(), null);
+					if (isset($item->type)) {
 
-					$item->newsletter_id = $id;
-					$table->bind($item);
-					$table->store();
+						// Skip the empty plugins (not configured)
+						if ($item->type == 2 && empty($item->params)) continue;
+
+						$table->reset();
+						$table->set($table->getKeyName(), null);
+
+						$item->newsletter_id = $id;
+						$table->bind($item);
+						$table->store();
+					}	
 				}
 			}
 			return true;

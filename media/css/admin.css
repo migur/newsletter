@@ -257,11 +257,20 @@ textarea.invalid {
 }
 
 .preloader {
-	background: url('../../system/images/mootree_loader.gif') left top no-repeat;
+/*	background: url('../../system/images/mootree_loader.gif') left top no-repeat;*/
+	background: url('../images/preloader.gif') left top no-repeat;
 	padding-left: 22px;
 	line-height: 18px;
 	color: #888;
 	min-height: 18px;
 	min-width: 18px;
 	display: block;
+}
+
+.icon-32-messaging {
+    background-image: url("../images/icon-32-messaging.png");
+}
+
+.icon-32-alert {
+    background-image: url("../images/icon-32-alert.png");
 }

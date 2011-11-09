@@ -85,6 +85,7 @@ class MigurMailerDocument extends JDocument
 			return;
 		}
 
+		
 		// And finaly try to find the template.
 		if (!empty($params['t_style_id'])) {
 			$this->_template = $this->_loadTemplate($params['t_style_id']);
@@ -149,6 +150,33 @@ class MigurMailerDocument extends JDocument
 	}
 
 	/**
+	 * Returns the global JDocument object, only creating it
+	 * if it doesn't already exist.
+	 *
+	 * @param  type $type The document type to instantiate
+	 *
+	 * @return object  The document object.
+	 * @since  1.0
+	 */
+	public static function factory($type = 'html', $attributes = array())
+	{
+		$signature = serialize(array($type, $attributes));
+		
+		// Determine the path and class
+		$class = 'MigurMailerDocument' . $type;
+		if (!class_exists($class)) {
+			$path = dirname(__FILE__) . DS . 'document' . DS . $type . DS . $type . '.php';
+			if (file_exists($path)) {
+				require_once $path;
+			} else {
+				JError::raiseError(500, JText::_('JLIB_DOCUMENT_ERROR_UNABLE_LOAD_DOC_CLASS'));
+			}
+		}
+
+		return  new $class($attributes);
+	}
+	
+	/**
 	 * Get the template
 	 *
 	 * @return	string	The template name
@@ -160,6 +188,7 @@ class MigurMailerDocument extends JDocument
 
 		// set the letter id for the Helper
 		MigurModuleHelper::$itemId = $letter->newsletter_id;
+		MigurModuleHelper::$clean = null;
 
 		return $letter;
 	}
@@ -218,12 +247,10 @@ class MigurMailerDocument extends JDocument
 	 */
 	public function render($caching = false, $params = array())
 	{
-		$this->init($params);
-
 		// first pass of rendering.
 		$this->parse();
 		$this->_template->content = $this->_renderTemplate();
-
+		
 		// The second pass. Some dynamic data can contain placeholders.
 		// In other words - placeholders in placeholders...
 		$this->_parseTemplate();
@@ -426,11 +453,10 @@ class MigurMailerDocument extends JDocument
 	{
 		// Gets all links (href and src attributes has been parsed)
 		preg_match_all("/(?:href[\s\=\"\']+|src[\s\=\"\']+)([^\"\']+)/", $content, $matches);
-		$search = array_unique($matches[1]);
 
 		$withs = array();
-		foreach ($search as $item) {
-
+		for($i=0; $i < count($matches[0]); $i++) {
+                        $item = $matches[1][$i];
 			// if this link is relative then repair it!
 			if (!empty($item) && substr($item, 0, 4) != 'http') {
 				
@@ -444,8 +470,6 @@ class MigurMailerDocument extends JDocument
 				// remove the '/' from the begin of item
 				if ($item[0] == '/' && sizeof($item) > 1) {
 					$item = substr($item, 1);
-				} else {
-					$item = '';
 				}	
 
 				// Compile link
@@ -453,10 +477,12 @@ class MigurMailerDocument extends JDocument
 				$item = str_replace('&amp;', '&', $item);
 
 			}
-			$withs[] = $item;
+
+			$withs[] = str_replace($matches[1][$i], $item, $matches[0][$i]);
 		}
 
-		$content = str_replace($search, $withs, $content);
+		$content = str_replace($matches[0], $withs, $content);
+//                var_dump($content); die;
 		return true;
 	}
 	

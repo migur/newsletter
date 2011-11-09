@@ -13,11 +13,13 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla controllerform library
 jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer');
+jimport('migur.library.mailer.mailbox');
 jimport('joomla.session.session');
 
 JLoader::import('helpers.autocompleter', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.sent',           JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.subscriber',     JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('tables.queue',          JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
  * Class of the cron controller. Handles the  request of a "trigger" from remote server.
@@ -116,7 +118,7 @@ class NewsletterControllerCron extends JControllerForm
 
 					$subscriber->load($item['subscriber_id']);
                                         
-					$type  = ($subscriber->html == 1) ? 'html' : 'plain';
+					$type = ($subscriber->html == 1) ? 'html' : 'plain';
 					
 					$letter = $mailer->send(array(
 						'subscriber' => $subscriber,
@@ -215,6 +217,7 @@ class NewsletterControllerCron extends JControllerForm
 				'count' => count($list),
 				'error' => ''
 			));
+			
 		} else {
                     
 			$response = json_encode(array(
@@ -222,9 +225,138 @@ class NewsletterControllerCron extends JControllerForm
 			));
 		}
                 
-                ob_end_clean();
-                echo $response;
-                jexit();
+		ob_end_clean();
+		echo $response;
+		jexit();
+	}
+	
+	/**
+	 * Method for testing bounced emails
+	 */
+//	public function bounced(){
+//		
+//		$mailer = new MigurMailer();
+//		$subscriber = JTable::getInstance('subscriber', 'NewsletterTable');
+//		$subscriber->load('8316');
+//
+//		$subscriber->email = 'andreyalek2@gmail.com';
+//		var_dump(
+//			$mailer->send(array(
+//				'subscriber' => $subscriber,
+//				'newsletter_id' => 130,
+//				'type' => 'html'
+//			))
+//		);
+//		
+//		die;
+//	}
+	
+	public function processbounced()
+	{
+		$bounceds = JModel::getInstance('Bounceds', 'NewsletterModel');
+		
+		$mbprofiles = $bounceds->getMailboxesForBounsecheck();
+		
+		$processed = 0;
+		$errors = array();
+		// Trying to check all bounces
+		foreach($mbprofiles as $mbprofile) {
+			
+			$mailbox = new MigurMailerMailbox($mbprofile);
+			
+			$mails = $mailbox->getBouncedList();
+
+			if ($mails === false) {
+
+				$errors[] = $mbprofile['username'] . ':' . $mailbox->getLastError();
+
+			} else {
+
+				if (!empty($mails)) {
+
+					foreach($mails as &$mail) {
+
+						if (!empty($mail->subscriber_id) && !empty($mail->newsletter_id) && !empty($mail->bounce_type)) 
+						{
+							$sent = JModel::getInstance('Sent', 'NewsletterModel');
+							$sent->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
+
+							$history = JModel::getInstance('History', 'NewsletterModel');
+							$history->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
+
+							$queue = JTable::getInstance('Queue', 'NewsletterTable');
+							$queue->setBounced($mail->subscriber_id, $mail->newsletter_id, NewsletterTableQueue::STATE_BOUNCED);
+
+							if ($mail->msgnum > 0) {
+								$mailbox->deleteMail($mail->msgnum);
+								$processed++;
+							}	
+						}
+					}
+				}
+				
+				$mailbox->close();
+			}
+			
+			unset($mailbox);
+		}
+		
+		echo json_encode(array(
+			'error' => $errors,
+			'count'  => $processed,
+			'mailboxes' => count($mbprofiles)
+		));
+		
+		jexit();
+	}
+	
+	public function processbouncedtest(){
+	
+		define('_PATH_BMH', JPATH_LIBRARIES.DS.'migur'.DS.'library'.DS.'mailer'.DS.'phpmailer'.DS);
+
+		include(_PATH_BMH . 'class.phpmailer-bmh.php');
+		//include(_PATH_BMH . 'callback_echo.php');
+
+		// testing examples
+		$bmh = new BounceMailHandler();
+		//$bmh->action_function    = 'callbackAction'; // default is 'callbackAction'
+		$bmh->verbose            = VERBOSE_SIMPLE; //VERBOSE_REPORT; //VERBOSE_DEBUG; //VERBOSE_QUIET; // default is VERBOSE_SIMPLE
+		//$bmh->use_fetchstructure = true; // true is default, no need to speficy
+		$bmh->testmode           = true; // false is default, no need to specify
+		//$bmh->debug_body_rule    = true; // false is default, no need to specify
+		//$bmh->debug_dsn_rule     = true; // false is default, no need to specify
+		//$bmh->purge_unprocessed  = false; // false is default, no need to specify
+		$bmh->disable_delete     = true; // false is default, no need to specify
+
+		/*
+		 * for local mailbox (to process .EML files)
+		 */
+		//$bmh->openLocalDirectory('/home/email/temp/mailbox');
+		//$bmh->processMailbox();
+
+		/*
+		 * for remote mailbox
+		 */
+		$bmh->mailhost           = 'imap.gmail.com'; // your mail server
+		$bmh->mailbox_username   = 'andreyalek2@gmail.com'; // your mailbox username
+		$bmh->mailbox_password   = 'gmail83twenty'; // your mailbox password
+		$bmh->port               = 993; // the port to access your mailbox, default is 143
+		$bmh->service            = 'imap'; // the service to use (imap or pop3), default is 'imap'
+		$bmh->service_option     = 'ssl'; // the service options (none, tls, notls, ssl, etc.), default is 'notls'
+		$bmh->boxname            = 'INBOX'; // the mailbox to access, default is 'INBOX'
+		//$bmh->moveHard           = true; // default is false
+		//$bmh->hardMailbox        = 'INBOX.hardtest'; // default is 'INBOX.hard' - NOTE: must start with 'INBOX.'
+		//$bmh->moveSoft           = true; // default is false
+		//$bmh->softMailbox        = 'INBOX.softtest'; // default is 'INBOX.soft' - NOTE: must start with 'INBOX.'
+		//$bmh->deleteMsgDate      = '2009-01-05'; // format must be as 'yyyy-mm-dd'
+
+		/*
+		 * rest used regardless what type of connection it is
+		 */
+		$bmh->openMailbox();
+		$bmh->processMailbox();
+		
+		die;
 	}
 }
 

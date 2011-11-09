@@ -12,7 +12,7 @@ defined('JPATH_BASE') or die;
 
 // Import library dependencies
 jimport('joomla.application.module.helper');
-JLoader::import('tables.extension', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('tables.nextension', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
  * Module helper class
@@ -182,14 +182,13 @@ abstract class MigurModuleHelper extends JModuleHelper
 	 */
 	protected static function &_load()
 	{
-		static $clean;
-		if (!empty($clean)) {
-			return $clean;
+		if (!empty(self::$clean)) {
+			return self::$clean;
 		}
 
 		if (self::$itemId < 1) {
-			$clean = array();
-			return $clean;
+			self::$clean = array();
+			return self::$clean;
 		}
 
 		$app = JFactory::getApplication();
@@ -231,11 +230,11 @@ abstract class MigurModuleHelper extends JModuleHelper
 
 		$modules = array_merge($modulesCom, $modulesNat);
 
-		$clean = array();
+		self::$clean = array();
 
 		if ($db->getErrorNum()) {
 			JError::raiseWarning(500, JText::sprintf('JLIB_APPLICATION_ERROR_MODULE_LOAD', $db->getErrorMsg()));
-			return $clean;
+			return self::$clean;
 		}
 
 		// Apply negative selections and eliminate duplicates
@@ -256,11 +255,11 @@ abstract class MigurModuleHelper extends JModuleHelper
 				$module->params = $module->params_default;
 			}
 
-			$clean[$module->id] = $module;
+			self::$clean[$module->id] = $module;
 		}
 		// Return to simple indexing that matches the query order.
-		$clean = array_values($clean);
-		return $clean;
+		self::$clean = array_values(self::$clean);
+		return self::$clean;
 	}
 
 	/**
@@ -401,7 +400,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 		$query->from('`#__newsletter_extensions` AS a');
 
 		// Filter by module
-		$query->where('a.type = ' . $db->Quote(NewsletterTableExtension::TYPE_MODULE));
+		$query->where('a.type = ' . $db->Quote(NewsletterTableNExtension::TYPE_MODULE));
 		$query->order('a.title ASC');
 
 		//echo nl2br(str_replace('#__','jos_',$query));
@@ -431,7 +430,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 		// Select the required fields from the table.
 		$query->select(
 			'extension_id, name as title, element as extension, params, '
-			. $db->Quote(NewsletterTableExtension::TYPE_MODULE) . ' AS type, '
+			. $db->Quote(NewsletterTableNExtension::TYPE_MODULE) . ' AS type, '
 			. '\'1\' AS native'
 		);
 		$query->from('`#__extensions` AS a');

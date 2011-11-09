@@ -51,8 +51,8 @@
             label="COM_NEWSLETTER_IMAGE_TOP"
             class="inputbox validate-image_top"
             size="10"
-            required="true"
-            validate="text"
+            required="false"
+			validate="text"
         />
         <field
             type="text"
@@ -61,7 +61,7 @@
             label="COM_NEWSLETTER_IMAGE_ALT"
             class="inputbox validate-image_top_alt"
             size="10"
-            required="true"
+            required="false"
             validate="text"
         />
         <field
@@ -91,8 +91,8 @@
             label="COM_NEWSLETTER_IMAGE_BOTTOM"
             class="inputbox validate-image_bottom"
             size="10"
-            required="true"
-            validate="text"
+            required="false"
+			validate="text"
         />
         <field
             type="text"
@@ -101,7 +101,7 @@
             label="COM_NEWSLETTER_IMAGE_ALT"
             class="inputbox validate-image_bottom_alt"
             size="10"
-            required="true"
+            required="false"
             validate="text"
         />
         <field
@@ -127,7 +127,7 @@
         <field 
             type="text"
             name="table_background"
-            default="#000000"
+            default="#FFFFFF"
             label="COM_NEWSLETTER_TABLE_BACKGROUND_COLOR"
             class="inputbox validate-table_background"
             size="7"

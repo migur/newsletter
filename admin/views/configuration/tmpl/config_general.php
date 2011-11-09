@@ -22,9 +22,28 @@
                 </tr>
                 <tr class="row<?php echo $i % 2; ?>">
                     <td><?php next($items); echo current($items)->label; ?></td>
-                    <td><?php 
+                    <td>
+					<?php 
+						echo current($items)->input;
+						next($items); ?>
+					<div class="clr"></div>						
+					<?php	
 						echo current($items)->input; ?>
-						<div class="clr"></div>
+						<?php next($items); echo current($items)->input; 
+						next($items);
+						echo current($items)->input; 
+					?></td>
+					
+                </tr>
+                <tr class="row<?php echo $i % 2; ?>">
+                    <td><?php next($items); echo current($items)->label; ?></td>
+                    <td>
+					<?php 
+						echo current($items)->input;
+						next($items); ?>
+					<div class="clr"></div>						
+					<?php	
+						echo current($items)->input; ?>
 						<?php next($items); echo current($items)->input; 
 						next($items);
 						echo current($items)->input; 

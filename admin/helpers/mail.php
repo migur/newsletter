@@ -20,6 +20,7 @@ class MailHelper
 	 */
 	public static $types = array('plain', 'html');
 
+	public static $bounceds = array();
 
 	/**
 	 * Load letter from DB, load SMTP settings
@@ -141,4 +142,78 @@ class MailHelper
 		return $res;
 	}
 
+	
+	/**
+	 *
+	 * Get SMTP default profile or J! profile if the default is not configured.
+	 *
+	 * @param string $name - id of a letter
+	 *
+	 * @return object - list of subscribers
+	 * @since 1.0
+	 */
+	public function getDefaultSMtp($onlyId = false)
+	{
+		
+		$options = JComponentHelper::getComponent('com_newsletter');
+		$options = $options->params->toArray();
+		
+		$id = empty($options['general_smtp_default'])? 0 : (int)$options['general_smtp_default'];
+
+		// If we need only smtpID
+		if (!empty($onlyId)) {
+			return $id;
+		}
+
+		// If we need full profile and it is not configured
+		// or J! profile selected as the default profile
+		if (empty($id)) {
+			return self::getJoomlaProfile();
+		}
+		
+		// Get profile. Create a new query object.
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('*');
+		$query->from('#__newsletter_smtp_profiles AS sp');
+		$query->where('where smtp_profile_id = '.(int) $id);
+		$db->setQuery($query);
+		return $this->db->loadObject();
+	}
+	
+	/**
+	 *
+	 * Get default Mailbox profile or empty if the default is not configured.
+	 *
+	 * @param string $name - id of a letter
+	 *
+	 * @return object - list of subscribers
+	 * @since 1.0
+	 */
+	public function getDefaultMailbox($onlyId = false)
+	{
+		
+		$options = JComponentHelper::getComponent('com_newsletter');
+		$options = $options->params->toArray();
+		
+		$id = empty($options['general_mailbox_default'])? 0 : (int)$options['general_mailbox_default'];
+
+		// If we need only smtpID
+		if (!empty($onlyId)) {
+			return $id;
+		}
+
+		// Get profile. Create a new query object.
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('*');
+		$query->from('#__newsletter_mailbox_profiles AS sp');
+		$query->where('where mailbox_profile_id = '.(int) $id);
+		$db->setQuery($query);
+		return $this->db->loadObject();
+	}
 }

@@ -121,6 +121,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	public function autocomplete()
 	{
 		echo json_encode(AutocompleterHelper::getSubscribers());
+		jexit();
 	}
 
 
