@@ -198,7 +198,6 @@ class MigurMailerSender extends PHPMailer
 			$result = substr_replace($result, '', $start, $length);
 		}
 		
-		//var_dump($result); die;
 // mail.ru testing headers
 //		$result = "Date: Thu, 20 Oct 2011 18:52:09 +0300\r\nReturn-Path:andreyalek-ru@mail.ru\r\nReturn-Receipt-To:andreyalek-ru@mail.ru\r\n".
 //					"To:andreyalek-ru@mail.ru\r\nFrom: Andrey <august-ru@mail.ru>\r\n".

@@ -484,7 +484,6 @@ class MigurMailerDocument extends JDocument
 		}
 
 		$content = str_replace($matches[0], $withs, $content);
-//                var_dump($content); die;
 		return true;
 	}
 	

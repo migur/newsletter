@@ -192,9 +192,6 @@ class MigurMailer extends JObject
 				break;
 			}
 
-			//Add custom headers
-			$sender->AddCustomHeader('Return-Path: woody@nixsolutions.com');
-			
 			if (!empty($letter->name)) {
 				$sender->AddCustomHeader('Email-Name:' . $letter->name);
 			}	
@@ -216,7 +213,9 @@ class MigurMailer extends JObject
 			// If sending failed
 			if (!$bounced) {
 
-				$this->setError(JError::getError('unset')->get('message'));
+				if (JError::getError('unset')) {
+					$this->setError(JError::getError('unset')->get('message'));
+				}	
 				$res = false;
 			}
 		}
@@ -249,7 +248,6 @@ class MigurMailer extends JObject
 
 		// Retrieve the email for bounced letters
 		$profiles = NewsletterHelper::getMailProfiles($params['newsletter_id']);
-		//var_dump($profiles); die;
 		
 		// Use the phpMailer exceptions
 		$sender = new MigurMailerSender(array('exceptions'=>true));
@@ -307,8 +305,6 @@ class MigurMailer extends JObject
 		$atts = DownloadHelper::getByNewsletterId($params['newsletter_id']);
 		
 		// send the unique letter to each recipient
-		
-		//var_dump($letter->smtp_profile); die;
 		$sendRes = $sender->send(array(
 				'letter' => $letter,
 				'attach' => $atts,

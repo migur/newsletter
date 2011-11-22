@@ -488,8 +488,6 @@ class BounceMailHandler {
 	imap_timeout(IMAP_READTIMEOUT, 6000); 
 	imap_timeout(IMAP_WRITETIMEOUT,6000);
 	
-    //var_dump($header, $subject);
-
     if ($type == 'DSN') {
       // first part of DSN (Delivery Status Notification), human-readable explanation
       $dsn_msg = imap_fetchbody($this->_mailbox_link,$pos,"1");

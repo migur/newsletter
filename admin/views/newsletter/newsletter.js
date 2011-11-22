@@ -726,7 +726,12 @@ window.addEvent('domready', function() {
             if( $(this).get('value') != '0' ) {
                 var id = $(this).get('value');
                 var sets = this.retrieve('optionsData');
-                var vals;
+                var vals = {
+					from_name: '',
+					from_email: '',
+					reply_to_name:'',
+					reply_to_email:''
+				};
                 for (var i=0; i < sets.length; i++) {
                     if (sets[i].smtp_profile_id == id) {
                         vals = sets[i];

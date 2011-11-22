@@ -451,7 +451,8 @@ function bmhBodyRules($body,$structure,$debug_mode=false) {
  */
 function bmhDSNRules($dsn_msg,$dsn_report,$debug_mode=false) {
 	
-  var_dump($dsn_msg,$dsn_report,$debug_mode);	
+  //var_dump($dsn_msg,$dsn_report,$debug_mode);	
+
   // initialize the result array
   $result = array(
     'email'        => ''
