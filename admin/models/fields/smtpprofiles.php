@@ -64,9 +64,15 @@ class JFormFieldSmtpprofiles extends JFormFieldList
 		// Merge any additional options in the XML definition.
 		//$options = array_merge(parent::getOptions(), $options);
 
-		if (empty($options))
+		if (empty($options)) {
 			$options = array();
+		}	
+		
 		array_unshift($options, JHtml::_('select.option', '0', JText::_('COM_NEWSLETTER_JOOMLA_MAIL_SETTINGS')));
+		
+		if (empty($this->element['scope']) || $this->element['scope'] != 'withoutDef') {
+			array_unshift($options, JHtml::_('select.option', '-1', JText::_('COM_NEWSLETTER_PROFILE')));
+		}
 
 		return $options;
 	}

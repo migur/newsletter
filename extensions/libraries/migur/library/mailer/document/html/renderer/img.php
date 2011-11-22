@@ -29,7 +29,6 @@ class MigurDocumentHtmlRendererImg extends JDocumentRenderer
 	 */
 	public function render($name, $attribs = array(), $content = null)
 	{
-		var_dump($name);
 		// The schematic view of IMG
 		return htmlspecialchars("<img$name/>");
 	}

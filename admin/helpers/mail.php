@@ -152,9 +152,8 @@ class MailHelper
 	 * @return object - list of subscribers
 	 * @since 1.0
 	 */
-	public function getDefaultSMtp($onlyId = false)
+	public function getDefaultSmtp($onlyId = false)
 	{
-		
 		$options = JComponentHelper::getComponent('com_newsletter');
 		$options = $options->params->toArray();
 		
@@ -178,9 +177,9 @@ class MailHelper
 		// Select the required fields from the table.
 		$query->select('*');
 		$query->from('#__newsletter_smtp_profiles AS sp');
-		$query->where('where smtp_profile_id = '.(int) $id);
+		$query->where('smtp_profile_id = '.(int) $id);
 		$db->setQuery($query);
-		return $this->db->loadObject();
+		return $db->loadObject();
 	}
 	
 	/**
@@ -212,8 +211,8 @@ class MailHelper
 		// Select the required fields from the table.
 		$query->select('*');
 		$query->from('#__newsletter_mailbox_profiles AS sp');
-		$query->where('where mailbox_profile_id = '.(int) $id);
+		$query->where('mailbox_profile_id = '.(int) $id);
 		$db->setQuery($query);
-		return $this->db->loadObject();
+		return $db->loadObject();
 	}
 }

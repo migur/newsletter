@@ -52,12 +52,32 @@ class NewsletterControllerCron extends JControllerForm
 	public function send()
 	{
 		ob_start();
-            
+
 		$config   = JComponentHelper::getParams('com_newsletter');
-		$lastExec =        $config->get('mailer_cron_last_execution_time');
 		$isExec   = (bool) $config->get('mailer_cron_is_executed');
-		$doSave   = (bool) $config->get('newsletter_save_to_db');
+
+		$lastExec = $config->get('mailer_cron_last_execution_time');
+		$lastExec = !empty($lastExec) ? strtotime($lastExec) : 0;
+
 		$interval = (int)  $config->get('mailer_cron_interval');
+		$interval = $interval * 60;
+		
+		// Pre check if the isExec is too long
+		$table = JTable::getInstance('jextension', 'NewsletterTable');
+		
+		if ($isExec && $table->load(array('name' => 'com_newsletter'))) {
+			
+			// If execution does about 10 times of interval then forse to set $isExec = 0
+			if ($lastExec == 0 || ((time() - $lastExec) > $interval*10)) {
+			
+				$table->addToParams(array('mailer_cron_is_executed' => 0));
+				$table->store();
+				$isExec = false;
+			}	
+		}
+
+		
+		$doSave   = (bool) $config->get('newsletter_save_to_db');
 		$count    = (int)  $config->get('mailer_cron_count');
                 
 		$forced = JRequest::getBool('forced', false);
@@ -84,9 +104,6 @@ class NewsletterControllerCron extends JControllerForm
                 
                 
 
-		$table = JTable::getInstance('jextension', 'NewsletterTable');
-		$lastExec = !empty($lastExec) ? strtotime($lastExec) : 0;
-		$interval = $interval * 60;
 
 		if ( ($lastExec + $interval < time() && !$isExec) || $forced) {
 
