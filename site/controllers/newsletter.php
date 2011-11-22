@@ -155,10 +155,18 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 */
 	public function sendPreview()
 	{
-		$emails = JRequest::getVar('emails');
+		$emails = JRequest::getVar('emails', array());
 		$newsletterId = JRequest::getVar('newsletter_id');
 		$type = JRequest::getVar('type');
 
+		if (empty($type) || empty($newsletterId)) {
+			NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_RUQUIRED_MISSING'));
+		}
+
+		if (empty($emails)) {
+			NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_ADD_EMAILS'));
+		}
+		
 		$data = array(
 			'newsletter_id' => $newsletterId,
 			'type' => $type,
@@ -171,7 +179,8 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		$mailer = new MigurMailer();
 		$res = $mailer->sendToList($data);
-		jexit(($res)? '' : 'error');
+
+		NewsletterHelper::jsonMessage('ok', $emails);
 	}
 }
 

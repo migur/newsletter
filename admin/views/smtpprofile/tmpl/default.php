@@ -4,6 +4,7 @@ defined('_JEXEC') or die;
 ?>
 
 <fieldset>
+<legend><?php echo JText::_('COM_NEWSLETTER_SMTP_PROFILE'); ?></legend>	
     <form id="smtpprofile-form" class="form-validate" name="smtpprofileForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
         <dl>
         <?php foreach($this->ssForm->getFieldset() as $field) { ?>

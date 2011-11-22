@@ -12,6 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // import Joomla controllerform library
 jimport('joomla.application.component.controllerform');
+jimport('migur.library.mailer.sender');
 
 class NewsletterControllerSmtpprofile extends JControllerForm
 {
@@ -121,5 +122,18 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 		return $append;
 	}
 
+	public function checkConnection()
+	{
+		$mailbox = JRequest::getVar('jform');
+	
+		$sender = new MigurMailerSender();
+		$res = $sender->checkConnection((object)$mailbox);
+		
+		echo json_encode(array(
+			'status' => $res? 'ok' : 'Unable to connect'
+		));
+		jexit();
+	}
+	
 }
 

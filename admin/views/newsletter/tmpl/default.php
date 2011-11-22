@@ -2,8 +2,8 @@
 // no direct access
 defined('_JEXEC') or die;
 ?>
-<fieldset id="tabs">
-    <legend><?php echo JFactory::getDocument()->getTitle(); ?></legend>
+<div id="tabs">
+    <legend id="tabs-legend"><?php echo JFactory::getDocument()->getTitle(); ?></legend>
     <table width="100%">
         <tr>
             <td>
@@ -45,4 +45,4 @@ defined('_JEXEC') or die;
             </td>
         </tr>
     </table>
-</fieldset>
+</div>

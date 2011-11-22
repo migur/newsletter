@@ -119,8 +119,6 @@ class NewsletterViewDashboard extends MigurView
 		
 		$this->info = NewsletterHelper::getCommonInfo();
 
-		JavascriptHelper::addStringVar('siteRoot', JUri::root());
-
 		$this->setStatisticsData();
 
 		$sess = JFactory::getSession();
@@ -157,7 +155,7 @@ class NewsletterViewDashboard extends MigurView
 
 		$bar = MigurToolBar::getInstance('help-toolbar');
 		$bar->appendButton('Popup', 'publish', 'COM_NEWSLETTER_ABOUT', 'http://migur.com/products/newsletter', 800, 600, 0, 0);
-		$bar->appendButton('Popup', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter', 800, 600, 0, 0);
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter');
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));

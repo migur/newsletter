@@ -20,7 +20,7 @@ window.addEvent('domready', function() {
             var control = new Element('a', {
                 href: '#',
                 //TODO: It must be a multilingual
-                html: 'Search & Filters<span></span>',
+                html: Joomla.JText._('SEARCH_AND_FILTERS', 'Search & Filters') + '<span></span>',
                 events: {
                     click: function(){
                         var controlId = $(this).getParent().getProperty('id');

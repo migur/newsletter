@@ -27,18 +27,30 @@ window.addEvent('domready', function() { try {
 
         if ( $$('#form-subscribers [name=boxchecked]')[0].get('value') < 1 ) {
             if (type == 'assign') {
-                alert("Please select the subscribers to assign to list");
+                alert(Joomla.JText._(
+					'PLEASE_SELECT_THE_SUBSCRIBERS_TO_ASSIGN_TO_LIS',
+					"Please select the subscribers to assign to list"
+				));
             } else {
-                alert("Please select the subscribers to remove from lists");
+                alert(Joomla.JText._(
+					'PLEASE_SELECT_THE_SUBSCRIBERS_TO_REMOVE_FROM_LISTS',
+					"Please select the subscribers to remove from lists"
+				));
             }
             return;
         }
 
         if (listIds.length == 0) {
             if (type == 'assign') {
-                alert('In the table with "Lists" on the right, select at least one list to assign the selected subscriber(s) to.');
+                alert(Joomla.JText._(
+					'IN_THE_TABLE_WITH_LISTS_ON_THE_RIGHT_SELECT',
+					'In the table with "Lists" on the right, select at least one list to assign the selected subscriber(s) to.'
+				));
             } else {
-                alert('In the table with "Lists" on the right, select at least one list to remove the selected subscriber(s) from.');
+                alert(Joomla.JText._(
+					'IN_THE_TABLE_WITH_LISTS_ON_THE_RIGHT_SELECT_FROM',
+					'In the table with "Lists" on the right, select at least one list to remove the selected subscriber(s) from.'
+				));
             }
             return;
         }

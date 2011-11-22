@@ -99,7 +99,7 @@ class NewsletterModelTemplate extends JModelAdmin
 	}
 
 	/**
-	 * Method to get the template y it's id.
+	 * Method to get the template by it's id.
 	 * Can fetch both types standard and custom.
 	 * For standard type use the filename of template
 	 *
@@ -186,4 +186,26 @@ class NewsletterModelTemplate extends JModelAdmin
 		return $template;
 	}
 
+	/**
+	 * Get all column placeholders from templice.
+	 * Something like table_width1 or table_height2.
+	 * 
+	 * @param string $tid Filename of template
+	 * 
+	 * @return array Array of names of placeholdedrs
+	 */
+	public function getColumnPlaceholders($content) 
+	{
+		$placeholders = PlaceholderHelper::fetchFromString($content);
+
+		$res = array();
+		// Let's find column placeholders
+		foreach($placeholders as $ph) {
+			if(preg_match('/^(width_column.*)|(height_column.*)$/', $ph)) {
+				$res[] = $ph;
+			}
+		}
+		
+		return $res;
+	}
 }

@@ -41,7 +41,8 @@ class NewsletterViewTemplate extends MigurView
 	{
 		JHTML::_('behavior.modal');
 
-
+		$tStyleId = JRequest::getInt('t_style_id');
+		
 		$modelTemps = JModel::getInstance('Templates', 'NewsletterModel');
 		$temps = (object) array(
 				'items' => $modelTemps->getStandardTemplates(),
@@ -56,24 +57,6 @@ class NewsletterViewTemplate extends MigurView
 
 		$this->tplForm = $this->get('Form', 'template');
 
-		//TODO: Get real data. Not example.
-		$this->tplInfo = (object) array(
-				"name" => "Standard template",
-				"author" => "Migur",
-				"creationDate" => "December 2010",
-				"copyright" => "Copyright (C) 2010 - Migur Ltd.",
-				"license" => "http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL",
-				"authorEmail" => "info@migur.com",
-				"version" => "1.5.0",
-				"description" => "This is the standard newsletter template. And it's a very very very very very very very very very very very very long"
-		);
-
-		$name = $this->tplForm->getValue('template_name');
-		if (empty($name)) {
-			$this->tplForm->setValue('template_name', null, $this->escape($this->tplInfo->name));
-		}
-
-
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
 			JError::raiseError(500, implode("\n", $errors));
@@ -85,9 +68,20 @@ class NewsletterViewTemplate extends MigurView
 			$this->addToolbar();
 		}
 
-		JavascriptHelper::addStringVar('siteRoot', JUri::root());
+		if ($tStyleId > 0) {
+			
+			$model = $this->getModel();
+			$template = $model->getTemplateBy($tStyleId);
+			
+			$this->assign('columns', $model->getColumnPlaceholders($template->content));
+			$this->assign('tplInfo', (object)$template->information);
 
-
+			$name = $this->tplForm->getValue('template_name');
+			if (empty($name)) {
+				$this->tplForm->setValue('template_name', null, $this->escape($this->tplInfo->name));
+			}
+		}
+		
 		parent::display($tpl);
 
 		// Set the document
@@ -123,6 +117,7 @@ class NewsletterViewTemplate extends MigurView
 		$document->addStylesheet(JURI::root() . '/media/com_newsletter/css/templates.css');
 
 		$document->addScript(JURI::root() . '/media/com_newsletter/js/migur/js/core.js');
+		$document->addScript(JURI::root() . '/media/com_newsletter/js/migur/js/message.js');
 		$document->addScript(JURI::root() . '/administrator/components/com_newsletter/views/template/template.js');
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/template/submitbutton.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/models/forms/template.js");

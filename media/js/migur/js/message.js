@@ -37,8 +37,8 @@ window.addEvent('domready', function() {
             setTimeout(function(){
                 var el = $('system-message');
                 el.retrieve('slide')
-                    .start( 0, (-1) * parseInt(el.getStyle('height')) - 10 );
-            }, 3000);
+                    .start( 0, (-1) * parseInt(el.getStyle('height'))-20);
+            }, 4000);
         });
 
         smDom.fireEvent('click');
