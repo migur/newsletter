@@ -2,9 +2,8 @@
         <dl id="att-controls">
             <div class="fltrt">
 				<a
-					rel="{handler: 'iframe', size: {x: 700, y: 445}}"
-					href="index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=&amp;author=&amp;fieldid=fileattach&amp;folder="
-					class="modal button"
+					href="#"
+					class="button"
 					id="newsletter_upload"
 					name="newsletter_upload">
 					

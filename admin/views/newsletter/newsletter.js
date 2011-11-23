@@ -279,7 +279,6 @@ avatarSetSettings = function(avatar) {
 window.addEvent('domready', function() {
     try {
 
-
         $('tabs-sub-container').getElements('input, textarea')
         .addEvent('focus', function(ev){
             this.addClass('focused');
@@ -1083,7 +1082,7 @@ window.addEvent('domready', function() {
     autocomp.addEvent('boxSelect', function(bit){
 
         if ( !$$('[name=newsletter_id]')[0].get('value') ) {
-            alert("Please save the newsletter first!");
+            alert(Joomla.JText._('PLEASE_SAVE_THE_NEWSLETTER_FIRST', "Please save the newsletter first!"));
             return;
         }
 
