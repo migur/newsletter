@@ -9,6 +9,16 @@
 window.addEvent('domready', function() {
 try {
 
+	if (defaultMailbox < 1){
+		
+		alert(Joomla.JText._(
+			'DEFAULT_MAILBOX_PROFILE_UNDEFINED', 
+			'Default mailbox profile is undefined. \n'+
+			'If you are going to mail newsletters that uses Joomla! standard SMTP profile \n'+
+			'then you probably cant use the "Process bounces" feature'
+		));
+	}
+
     historyPaginator = new Migur.lists.paginator($$('.sslist')[0]);
     Migur.lists.sortable.setup($$('.sslist')[0]);
 

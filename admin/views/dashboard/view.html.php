@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla view library
 jimport('joomla.application.component.view');
 jimport('migur.library.toolbar');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JLoader::import('helpers.queue', JPATH_COMPONENT_ADMINISTRATOR, '');

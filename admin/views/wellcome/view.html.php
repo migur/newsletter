@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // import Joomla view library
 jimport('joomla.application.component.view');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 
 /**
  * Class of the wellcome view. Displays the model data.
