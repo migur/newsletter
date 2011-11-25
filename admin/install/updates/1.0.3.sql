@@ -1,3 +1,7 @@
+# Version 1.0.3b;
+# Migration(upgrade).Uses only if UPDATE proccess executes!;
+# Prev version 1.0.2a;
+
 SET foreign_key_checks = 0;
 
 CREATE INDEX `newsletter_queue_state` ON #__newsletter_queue(`state`);
@@ -12,7 +16,7 @@ CREATE TABLE `#__newsletter_mailbox_profiles` (
   `username` VARCHAR(255) DEFAULT NULL,
   `password` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`mailbox_profile_id`)
-) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 ALTER TABLE `#__newsletter_smtp_profiles` ADD COLUMN `mailbox_profile_id` INT(11);
 
