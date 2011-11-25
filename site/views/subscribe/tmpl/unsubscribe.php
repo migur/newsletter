@@ -8,20 +8,41 @@
 // no direct access
 defined('_JEXEC') or die; ?>
 
-<span><?php echo JText::_('COM_NEWSLETTER_SUBSCRIBER_INFORMATION'). ":"; ?></span>
-<div class="subscriber-info">
-	<div>
-		<span><b><?php echo JText::_('COM_NEWSLETTER_EMAIL'); ?></b></span>
-		<span><?php echo $this->escape($this->subscriber->email); ?></span>
-	</div>
-	<div>
-		<span><b><?php echo JText::_('COM_NEWSLETTER_NAME'); ?></b></span>
-		<span><?php echo $this->escape($this->subscriber->name); ?></span>
-	</div>
-</div>
+<?php 
+if (empty($this->subscriber->subscriber_id)) {
+	echo JText::_('COM_NEWSLETTER_YOU_ARE_NOT_SUBSCRIBER');
 
-<?php if (count($this->lists) > 0) { ?>
+//	<fieldset style="width:300px; margin: auto">
+//		<legend><?php echo JText::_('COM_NEWSLETTER_YOU_CAN_SUBSCRIBE'); </legend>
+	
+		
+//		$module = JModuleHelper::getModule('mod_newsletter_subscribe');
+//		echo JModuleHelper::renderModule($module); 
+	
+//	</fieldset>	
 
+
+} else { 
+?>	
+
+	<span><?php echo JText::_('COM_NEWSLETTER_SUBSCRIBER_INFORMATION'). ":"; ?></span>
+	<div class="subscriber-info">
+		<div>
+			<span><b><?php echo JText::_('COM_NEWSLETTER_EMAIL'); ?></b></span>
+			<span><?php echo $this->escape($this->subscriber->email); ?></span>
+		</div>
+		<div>
+			<span><b><?php echo JText::_('COM_NEWSLETTER_NAME'); ?></b></span>
+			<span><?php echo $this->escape($this->subscriber->name); ?></span>
+		</div>
+	</div>
+
+<?php 
+	if (count($this->lists) < 1) { 
+		echo JText::_('COM_NEWSLETTER_NOTHING_TO_UNSUBSCRIBE');
+	} else { 
+?>
+	
 <div class="newsletter<?php echo $moduleclass_sfx; ?>">
 	<form class="mod-newsletter" action="<?php echo JRoute::_('index.php?option=com_newsletter&task=subscribe.unsubscribe'); ?>" method="POST" name="unsubscribe-form">
 		<?php if (count($this->lists) > 1) { ?>
@@ -71,7 +92,5 @@ defined('_JEXEC') or die; ?>
     migurEmail = "<?php echo $userEmail; ?>";
 </script>
 <?php
-} else {
-	echo JText::_('COM_NEWSLETTER_NOTHING_TO_UNSUBSCRIBE');
-}
+} }
 ?>

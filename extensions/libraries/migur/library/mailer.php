@@ -263,9 +263,10 @@ class MigurMailer extends JObject
 			return $res;
 		}
 
+
 		// emulate user environment
 		SubscriberHelper::saveRealUser();
-
+		
 		if (!SubscriberHelper::emulateUser(array('email' => $subscriber->email))) {
 			$res->error = 'The user ' . $subscriber->email . ' is absent';
 			return $res;
@@ -280,12 +281,13 @@ class MigurMailer extends JObject
 				'tracking' => true
 			));
 
+		SubscriberHelper::restoreRealUser();
+
 		$res->content = $letter->content;
 
 		if ($letter->content === false) {
 			return $res;
 		}
-
 		
 		// Add custom headers
 
@@ -320,8 +322,6 @@ class MigurMailer extends JObject
 			$res->error = $error;
 			return $res;
 		}
-
-		SubscriberHelper::restoreRealUser();
 
 		$res->state = true;
 		return $res;

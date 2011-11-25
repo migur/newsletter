@@ -53,6 +53,8 @@ class NewsletterControllerCron extends JControllerForm
 	{
 		ob_start();
 
+		$debug = true;
+		
 		$config   = JComponentHelper::getParams('com_newsletter');
 		$isExec   = (bool) $config->get('mailer_cron_is_executed');
 
@@ -151,9 +153,7 @@ class NewsletterControllerCron extends JControllerForm
 						'error' => $letter->error
 					);
 
-
 					// Set up the sending start time
-
 					$nl = JTable::getInstance('newsletter', 'NewsletterTable');
 					$nl->load(array('newsletter_id' => $item['newsletter_id']));
 
@@ -229,6 +229,8 @@ class NewsletterControllerCron extends JControllerForm
 				$table->store();
 			}
 
+			NewsletterHelper::logMessage(json_encode($ret), '', $debug);
+			
 			$response = json_encode(array(
 				'data' => $ret,
 				'count' => count($list),

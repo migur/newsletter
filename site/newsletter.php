@@ -32,6 +32,22 @@ JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models');
 // Get an instance of the controller prefixed by Newsletter
 $controller = JController::getInstance('Newsletter');
 
+// ACL
+	$resource = JRequest::getString('view','') .'.'. JRequest::getString('layout','default');
+	
+	switch($resource){
+		
+		case 'subscribe.unsubscribe':
+			
+			if(!JFactory::getUser()->id && !JRequest::getString('uid', NULL)) {
+				
+				JFactory::getApplication()->redirect(
+					JRoute::_('index.php?option=com_users&view=login'), 
+					JText::_('COM_NEWSLETTER_LOGIN_FIRST'), 
+					'message');
+			}	
+	}
+
 // Add translations used in JavaScript
 JavascriptHelper::requireTranslations();
 

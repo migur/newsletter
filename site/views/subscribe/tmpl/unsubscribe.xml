@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="com_newsletter_subscriber_unsubscribe" option="com_newsletter_subscriber_unsubscribe">
+		<help
+			key = "JHELP_MENUS_MENU_ITEM_NEWSLETTER_UNSUBSCRIBE"
+		/>
+		<message>
+			<![CDATA[com_newsletter_subscriber_view_unsubscribe_desc]]>
+		</message>
+	</layout>
+</metadata>
