@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.form.helper');
 jimport('migur.library.toolbar');
 jimport('joomla.html.pagination');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 
 // import Joomla view library
 

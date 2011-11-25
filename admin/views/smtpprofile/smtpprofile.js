@@ -17,6 +17,8 @@ window.addEvent('domready', function() { try {
             return false;
     });
 
+
+	// Check button. Do a check.
     $$('#smtp-toolbar-publish a')[0]
         .removeProperty('onclick')
         .addEvent('click', function(){
