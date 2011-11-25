@@ -104,6 +104,9 @@
         <copy todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/extensions/modules/mod_newsletter_subscribe/en-GB.mod_newsletter_subscribe.ini" />
         </copy>
+        <copy todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/modules/mod_newsletter_subscribe/en-GB.mod_newsletter_subscribe.sys.ini" />
+        </copy>
 
 <!--        <delete dir="${destdir}/administrator/components/com_${cfg.comName}/migur" />-->
     <!-- MODULES -->

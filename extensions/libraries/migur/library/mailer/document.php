@@ -201,6 +201,10 @@ class MigurMailerDocument extends JDocument
 	 */
 	protected function _parseTemplate()
 	{
+		if (empty($this->_template)) {
+			throw new Exception('ParseTemplate: template entity is empty');
+		}	
+		
 		$replaces = array();
 		foreach ($this->parsedTags as $name => $val) {
 			$matches = array();
@@ -234,6 +238,8 @@ class MigurMailerDocument extends JDocument
 		}
 
 		$this->_parsed = $replaces;
+		
+		return true;
 	}
 
 	/**
@@ -247,34 +253,40 @@ class MigurMailerDocument extends JDocument
 	 */
 	public function render($caching = false, $params = array())
 	{
-		// first pass of rendering.
-		$this->parse();
-		$this->_template->content = $this->_renderTemplate();
-		
-		// The second pass. Some dynamic data can contain placeholders.
-		// In other words - placeholders in placeholders...
-		$this->_parseTemplate();
-		$this->_template->content = $this->_renderTemplate();
+		try {
+			// first pass of rendering.
+			$this->parse();
+			$this->_template->content = $this->_renderTemplate();
 
-		$this->_parseTemplate();
-		$this->_template->content = $this->_renderTemplate();
+			// The second pass. Some dynamic data can contain placeholders.
+			// In other words - placeholders in placeholders...
+			$this->_parseTemplate();
+			$this->_template->content = $this->_renderTemplate();
 
-		// Set absolute links
-		$this->repairLinks($this->_template->content);
+			$this->_parseTemplate();
+			$this->_template->content = $this->_renderTemplate();
 
-		// Trigger plugins (GA and so on)
-		$this->triggerEvent('onafterrender');
-		
-		// Add tracking by com_newsletter
-		if (!empty($this->tracking)) {
-			$this->track(
-				$this->_template->content,
-				PlaceholderHelper::getPlaceholder('subscription key'),
-				$params['newsletter_id']
-			);
-		}
+			// Set absolute links
+			$this->repairLinks($this->_template->content);
 
-		return $this->_template->content;
+			// Trigger plugins (GA and so on)
+			$this->triggerEvent('onafterrender');
+
+			// Add tracking by com_newsletter
+			if (!empty($this->tracking)) {
+				$this->track(
+					$this->_template->content,
+					PlaceholderHelper::getPlaceholder('subscription key'),
+					$params['newsletter_id']
+				);
+			}
+			
+			return $this->_template->content;
+			
+		} catch(Exception $e) {
+			
+			return false;
+		}	
 	}
 
 	/**

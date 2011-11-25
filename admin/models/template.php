@@ -122,9 +122,20 @@ class NewsletterModelTemplate extends JModelAdmin
 		if (strval(intval($id)) == strval($id)) {
 			$isCustom = true;
 			$item = $this->getItem($id);
+			
+			if (empty($item)) {
+				return false;
+			}
+			
 			$filename = $item->template;
+			
 		} else {
 			$item = new JObject($this->getTable()->getProperties(1));
+			
+			if (empty($item)) {
+				return false;
+			}
+			
 			$filename = $id;
 		}
 

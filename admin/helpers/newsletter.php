@@ -347,9 +347,9 @@ class NewsletterHelper
 		return $res;
 	}
 	
-	static public function logMessage($msg, $prefix = '') {
+	static public function logMessage($msg, $prefix = '', $force = false) {
 		
-		if (!self::$logging) {
+		if (!self::$logging && !$force) {
 			return;
 		}
 		
@@ -358,6 +358,48 @@ class NewsletterHelper
 		);
 	}
 
+	static public function debugBacktrace($html = true, $compact = true) {
+		
+		$backtracel = '';
+		$del = $html? '<br /><br />':"\n\n";
+		
+		if (!$compact) {
+			
+			foreach(debug_backtrace() as $k=>$v){
+				if($v['function'] == "include" || $v['function'] == "include_once" || $v['function'] == "require_once" || $v['function'] == "require"){
+					$backtracel .= "#".$k." ".$v['function']."(".$v['args'][0].") called at [".$v['file'].":".$v['line']."]".$del;
+				}else{
+					$backtracel .= "#".$k." ".$v['function']."() called at [".$v['file'].":".$v['line']."]".$del;
+				}
+			}
+			
+		} else {
+			
+			ob_end_flush();
+			ob_start();
+			debug_print_backtrace();
+			$raw = ob_get_clean();
+			
+			preg_match_all('/#[^#]*/', $raw, $matches);
+			
+			$backtracel = ''; 
+			$tagOpen = ''; 
+			$tagClosed = '';
+			
+			foreach($matches[0] as $row){
+				$backtracel .= $tagOpen.$row.$tagClosed.$del;
+				
+				if ($html) {
+					$tagOpen = ($tagOpen == '')? '<b>':'';
+					$tagClosed = ($tagClosed == '')? '</b>':'';
+				}
+			}
+		}
+		
+		return $backtracel;
+	}
+	
+	
 	/**
 	 * Assumes that this is complete server response.
 	 * 
