@@ -90,7 +90,11 @@ class NewsletterTableSent extends JTable
 			'subscriber_id' => $sid,
 			'newsletter_id' => $nid
 		));
-		
+
+		if (empty($this->sent_id)){
+			return false;
+		}
+
 		return $this->save(array(
 			'subscriber_id' => $sid,
 			'newsletter_id' => $nid,

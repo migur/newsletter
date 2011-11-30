@@ -29,7 +29,7 @@ class MigurMailerMailbox
 
 	public $messages = array();
 
-	public $state = 'not initialized';
+	public $state = 'notInitialized';
 
 	public $moveHard = false;
 	
@@ -43,11 +43,10 @@ class MigurMailerMailbox
 
 	public function __construct($options)
 	{
-
 		if (empty($this->protocol)) {
 			$this->setProtocol($options);
 		}
-
+		
 		$this->state = 'disconnected';
 	}
 
@@ -60,6 +59,15 @@ class MigurMailerMailbox
 		return ($this->state == 'connected');
 	}
 
+	/**
+	 * Is disconnected?
+	 * @return boolean
+	 */
+	public function isDisconnected()
+	{
+		return ($this->state == 'disconnected');
+	}
+	
 	/**
 	 * 
 	 */
@@ -95,7 +103,7 @@ class MigurMailerMailbox
 	 */
 	public function connect()
 	{
-		if ($this->isConnected()) {
+		if (!$this->isDisconnected()) {
 			return true;
 		}
 
@@ -146,6 +154,10 @@ class MigurMailerMailbox
 	 */
 	public function getLastError()
 	{
+		if (empty($this->protocol)) {
+			return null;
+		}	
+		
 		return $this->protocol->getLastError();
 	}
 
@@ -176,6 +188,10 @@ class MigurMailerMailbox
 	 */
 	function processMailbox($max=false)
 	{
+		if (!$this->isConnected()) {
+			return false;
+		}
+		
 		$met = ini_get('max_execution_time');
 		if ($met < 6000 && $met != 0) {
 			set_time_limit(6000);
@@ -437,23 +453,33 @@ class MigurMailerMailbox
 		$sid = null;
 		$lid = null;
 
+
+		// Lets get the Application header to ensure that this is the body of sent newsletter
+		if (!preg_match_all('/X-Application:\s*Migur\s*Newsletter/is', $body, $matches)) {
+			return false;
+		}
+		
 		// Lets get the IDs from headers placed in body of bounced letter
-		if (preg_match_all('/subscriber-id:\s*([0-9]+)/is', $body, $matches)) {
+		if (preg_match_all('/X-Subscriber-Id:\s*([0-9]+)/is', $body, $matches)) {
 			if (!empty($matches[1][0])) {
 				$sid = $matches[1][0];
 			}
 		}
 
-		if (preg_match_all('/newsletter-id:\s*([0-9]+)/is', $body, $matches)) {
+		if (preg_match_all('/X-Newsletter-Id:\s*([0-9]+)/is', $body, $matches)) {
 			if (!empty($matches[1][0])) {
 				$nid = $matches[1][0];
 			}
 		}
 
-		if (preg_match_all('/list-id:\s*([0-9]+)/is', $body, $matches)) {
+		if (preg_match_all('/X-List-Id:\s*([0-9]+)/is', $body, $matches)) {
 			if (!empty($matches[1][0])) {
 				$lid = $matches[1][0];
 			}
+		}
+
+		if (empty($nid) && empty($sid)) {
+			return false;
 		}
 
 		$this->bounceds[] = (object) array(

@@ -45,6 +45,10 @@ class NewsletterControllerCron extends JControllerForm
 
 	/**
 	 * Sends the bulk of letters to queued subscribers.
+	 * 
+	 * Cron usage: 
+	 *  curl [BASE_URL]/index.php\?option=com_newsletter\&task=cron.send
+	 *  wget --delete-after [BASE_URL]/index.php\?option=com_newsletter\&task=cron.send
 	 *
 	 * @return void
 	 * @since  1.0
@@ -54,61 +58,16 @@ class NewsletterControllerCron extends JControllerForm
 		ob_start();
 
 		$debug = true;
-		
+
 		$config   = JComponentHelper::getParams('com_newsletter');
-		$isExec   = (bool) $config->get('mailer_cron_is_executed');
-
-		$lastExec = $config->get('mailer_cron_last_execution_time');
-		$lastExec = !empty($lastExec) ? strtotime($lastExec) : 0;
-
-		$interval = (int)  $config->get('mailer_cron_interval');
-		$interval = $interval * 60;
-		
-		// Pre check if the isExec is too long
-		$table = JTable::getInstance('jextension', 'NewsletterTable');
-		
-		if ($isExec && $table->load(array('name' => 'com_newsletter'))) {
-			
-			// If execution does about 10 times of interval then forse to set $isExec = 0
-			if ($lastExec == 0 || ((time() - $lastExec) > $interval*10)) {
-			
-				$table->addToParams(array('mailer_cron_is_executed' => 0));
-				$table->store();
-				$isExec = false;
-			}	
-		}
-
 		
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
 		$count    = (int)  $config->get('mailer_cron_count');
-                
-		$forced = JRequest::getBool('forced', false);
-		if($forced) {
-                    
-				$conf = JFactory::getConfig();
-				$handler = $conf->get('session_handler', 'none');
-				$sessId = JRequest::getVar(JRequest::getString('sessname', ''), false, 'COOKIE');
-				if(empty($sessId)){
-					ob_end_clean();
-				echo 'Unknown session';
-					jexit();
-				}    
-				$data = JSessionStorage::getInstance($handler, array())->read($sessId);
-				session_decode($data);
-        	    $user = $_SESSION['__default']['user'];
-            	    $levels = $user->getAuthorisedGroups();
-	            if ( max($levels) < 7 ) {
-                        ob_end_clean();
-	                echo 'Unknown session';
-                        jexit();
-                    }    
-                }
-                
-                
 
+		if ($this->_checkAccess('mailer_cron')) {
 
-		if ( ($lastExec + $interval < time() && !$isExec) || $forced) {
-
+			$table = JTable::getInstance('jextension', 'NewsletterTable');
+			
 			// set the isExecuted flag
 			if ($table->load(array('name' => 'com_newsletter'))) {
 				$table->addToParams(array('mailer_cron_is_executed' => 1));
@@ -223,29 +182,31 @@ class NewsletterControllerCron extends JControllerForm
 			if ($table) {
 				$table->addToParams(array(
 					'mailer_cron_is_executed' => 0,
-					'mailer_cron_last_execution_time' => date('Y-m-d H:i:s'),
-                                        'mailer_force' => false
+					'mailer_cron_last_execution_time' => date('Y-m-d H:i:s')
 				));
 				$table->store();
 			}
 
 			NewsletterHelper::logMessage(json_encode($ret), '', $debug);
 			
-			$response = json_encode(array(
+			$response = array(
 				'data' => $ret,
 				'count' => count($list),
 				'error' => ''
-			));
+			);
 			
 		} else {
                     
-			$response = json_encode(array(
-				'error' => 'The interval is not exedeed'
-			));
+			$isExec = (bool) $config->get('mailer_cron_is_executed');
+			if (!$isExec) {
+				$response = array('error' => JText::_('COM_NEWSLETTER_MAILING_INTERVAL_IS_NOT_EXEEDED'));
+			} else {
+				$response = array('error' => JText::_('COM_NEWSLETTER_MAILING_IS_IN_PROCESS_NOW'));
+			}	
 		}
                 
 		ob_end_clean();
-		echo $response;
+		echo json_encode($response);
 		jexit();
 	}
 	
@@ -269,63 +230,133 @@ class NewsletterControllerCron extends JControllerForm
 //		
 //		die;
 //	}
+
+	/**
+	 * Process mailboxes for presence of bounced mails.
+	 * 
+	 * curl [BASE_URL]/index.php\?option=com_newsletter\&task=cron.processbounced
+	 * wget --delete-after [BASE_URL]/index.php\?option=com_newsletter\&task=cron.processbounced
+	 */
 	
 	public function processbounced()
 	{
-		$bounceds = JModel::getInstance('Bounceds', 'NewsletterModel');
+		ob_start();
+
+		$debug = true;
+
+		$config   = JComponentHelper::getParams('com_newsletter');
 		
-		$mbprofiles = $bounceds->getMailboxesForBounsecheck();
-		
-		$processed = 0;
-		$errors = array();
-		// Trying to check all bounces
-		foreach($mbprofiles as $mbprofile) {
-			
-			$mailbox = new MigurMailerMailbox($mbprofile);
-			
-			$mails = $mailbox->getBouncedList();
+		$doSave   = (bool) $config->get('newsletter_save_to_db');
+		$count    = (int)  $config->get('mailer_cron_count');
 
-			if ($mails === false) {
+		if ($this->_checkAccess('mailer_cron_bounced')) {
 
-				$errors[] = $mbprofile['username'] . ':' . $mailbox->getLastError();
+			$table = JTable::getInstance('jextension', 'NewsletterTable');
 
-			} else {
-
-				if (!empty($mails)) {
-
-					foreach($mails as &$mail) {
-
-						if (!empty($mail->subscriber_id) && !empty($mail->newsletter_id) && !empty($mail->bounce_type)) 
-						{
-							$sent = JModel::getInstance('Sent', 'NewsletterModel');
-							$sent->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
-
-							$history = JModel::getInstance('History', 'NewsletterModel');
-							$history->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
-
-							$queue = JTable::getInstance('Queue', 'NewsletterTable');
-							$queue->setBounced($mail->subscriber_id, $mail->newsletter_id, NewsletterTableQueue::STATE_BOUNCED);
-
-							if ($mail->msgnum > 0) {
-								$mailbox->deleteMail($mail->msgnum);
-								$processed++;
-							}	
-						}
-					}
-				}
-				
-				$mailbox->close();
+			// set the isExecuted flag
+			if ($table->load(array('name' => 'com_newsletter'))) {
+				$table->addToParams(array('mailer_cron_bounced_is_executed' => 1));
+				$table->store();
 			}
 			
-			unset($mailbox);
+			$bounceds = JModel::getInstance('Bounceds', 'NewsletterModel');
+
+			$mbprofiles = $bounceds->getMailboxesForBounsecheck();
+
+			$processedAll = 0;
+			$response = array();
+			// Trying to check all bounces
+			foreach($mbprofiles as $mbprofile) {
+
+				$processed = 0;
+				$response[$mbprofile['username']] = array(
+					'errors' => array(),
+					'processed' => 0
+				);
+
+				try {
+
+					$mailbox = new MigurMailerMailbox($mbprofile);
+
+					$mails = $mailbox->getBouncedList();
+
+					if ($mails === false) {
+
+						$response[$mbprofile['username']]['errors'][] = $mailbox->getLastError();
+
+					} else {
+
+						if (!empty($mails)) {
+
+							foreach($mails as &$mail) {
+
+								if (!empty($mail->subscriber_id) && !empty($mail->newsletter_id) && !empty($mail->bounce_type)) 
+								{
+									$queue = JTable::getInstance('Queue', 'NewsletterTable');
+									if ($queue->setBounced($mail->subscriber_id, $mail->newsletter_id, NewsletterTableQueue::STATE_BOUNCED))
+									{
+										$sent = JModel::getInstance('Sent', 'NewsletterModel');
+										$sent->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
+
+										$history = JModel::getInstance('History', 'NewsletterModel');
+										$history->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
+
+										if ($mail->msgnum > 0) {
+											$mailbox->deleteMail($mail->msgnum);
+											$processed++;
+											$processedAll++;
+										}
+
+										unset($history);
+										unset($sent);
+									}
+									unset($queue);
+								}
+							}
+						}
+
+						$mailbox->close();
+
+						//Set summary information
+						$response[$mbprofile['username']]['processed'] = $processed;
+					}
+
+				} catch(Exception $e) {
+
+						if (!empty($mailbox)) {
+							$mailbox->close();
+						}	
+
+						$response[$mbprofile['username']]['errors'][] = $e->getMessage();
+						$response[$mbprofile['username']]['errors'][] = JText::_('COM_NEWSLETTER_CHECK_YOUR_MAILBOX_SETTINGS');
+				}	
+
+				unset($mailbox);
+			}
+
+			if ($table) {
+				$table->addToParams(array(
+					'mailer_cron_bounced_is_executed' => 0,
+					'mailer_cron_bounced_last_execution_time' => date('Y-m-d H:i:s')
+				));
+				$table->store();
+			}
+
+			NewsletterHelper::logMessage(json_encode($ret), '', $debug);
+
+			
+		} else {
+
+			$isExec = (bool) $config->get('mailer_cron_bounced_is_executed');
+			if (!$isExec) {
+				$response = array('error' => JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_INTERVAL_IS_NOT_EXEEDED'));
+			} else {
+				$response = array('error' => JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_IS_IN_PROCESS_NOW'));
+			}	
 		}
-		
-		echo json_encode(array(
-			'error' => $errors,
-			'count'  => $processed,
-			'mailboxes' => count($mbprofiles)
-		));
-		
+                
+		ob_end_clean();
+		echo json_encode($response);
 		jexit();
 	}
 	
@@ -376,6 +407,57 @@ class NewsletterControllerCron extends JControllerForm
 		$bmh->processMailbox();
 		
 		die;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param type $type "mailer_cron", "mailer_cron_bounced"
+	 */
+	
+	protected function _checkAccess($type)
+	{
+		$config   = JComponentHelper::getParams('com_newsletter');
+		$isExec   = (bool) $config->get($type.'_is_executed');
+
+		$lastExec = $config->get($type.'_last_execution_time');
+		$lastExec = !empty($lastExec) ? strtotime($lastExec) : 0;
+
+		$interval = (int)  $config->get('mailer_cron_interval');
+		$interval = $interval * 60;
+		
+		// Pre check if the isExec is too long
+		$table = JTable::getInstance('jextension', 'NewsletterTable');
+		
+		if ($isExec && $table->load(array('name' => 'com_newsletter'))) {
+			
+			// If execution does about 10 times of interval then forse to set $isExec = 0
+			if ($lastExec == 0 || ((time() - $lastExec) > $interval*10)) {
+			
+				$table->addToParams(array($type.'_is_executed' => 0));
+				$table->store();
+				$isExec = false;
+			}
+		}
+
+		$forced = JRequest::getBool('forced', false);
+		if($forced) {
+                    
+			$conf = JFactory::getConfig();
+			$handler = $conf->get('session_handler', 'none');
+			$sessId = JRequest::getVar(JRequest::getString('sessname', ''), false, 'COOKIE');
+			if(empty($sessId)){
+				return false; //'Unknown session';
+			}    
+			$data = JSessionStorage::getInstance($handler, array())->read($sessId);
+			session_decode($data);
+			$user = $_SESSION['__default']['user'];
+				$levels = $user->getAuthorisedGroups();
+			if ( max($levels) < 7 ) {
+				return false; //'Unauthorized user';
+			}    
+		}
+		return (($lastExec + $interval < time()) || $forced) && !$isExec;
 	}
 }
 
