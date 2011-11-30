@@ -16,6 +16,7 @@ class DataHelper
 {
 
 	static $importables = array(
+		//'jusers', // Available since 1.0.4
 		'acymailing',
 		'ccnewsletter',
 		'rsmail',

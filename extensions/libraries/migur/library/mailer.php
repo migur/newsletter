@@ -299,9 +299,10 @@ class MigurMailer extends JObject
 		}	
 		
 		// Add info about newsleerter and subscriber
-		$sender->AddCustomHeader('Email-Name:' . $letter->name);
-		$sender->AddCustomHeader('Newsletter-ID:' . $params['newsletter_id']);
-		$sender->AddCustomHeader('Subscriber-ID:' . $subscriber->subscriber_id);
+		$sender->AddCustomHeader('X-Email-Name:' . $letter->name);
+		$sender->AddCustomHeader('X-Application: Migur Newsletter');
+		$sender->AddCustomHeader('X-Newsletter-Id:' . $params['newsletter_id']);
+		$sender->AddCustomHeader('X-Subscriber-Id:' . $subscriber->subscriber_id);
 		
 		// Get attachments
 		$atts = DownloadHelper::getByNewsletterId($params['newsletter_id']);

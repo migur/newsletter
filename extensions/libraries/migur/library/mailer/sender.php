@@ -25,7 +25,6 @@ jimport('joomla.error.log');
  */
 class MigurMailerSender extends PHPMailer
 {
-
 	/**
 	 * The constructor of a class
 	 *

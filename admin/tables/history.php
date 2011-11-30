@@ -113,7 +113,7 @@ class NewsletterTableHistory extends JTable
 			'newsletter_id' => $nid,
 			'action' => NewsletterTableHistory::ACTION_BOUNCED
 		));
-		
+
 		return $this->save(array(
 			'subscriber_id' => $sid,
 			'newsletter_id' => $nid,
