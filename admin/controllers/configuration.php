@@ -156,32 +156,40 @@ class NewsletterControllerConfiguration extends JController
 			$app = JFactory::getApplication()->enqueueMessage(
 				JText::_('COM_NEWSLETTER_RUQUIRED_MISSING', 'error'
 				));
-			$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=import');
+			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import', false));
 			return;
 		}
 
-		$arr = DataHelper::exportFromComponent($com, $type);
-
+		$component = DataHelper::getComponentInstance($com);
+		
+		if ($type == 'lists') {
+			$arr = $component->exportLists();
+		}
+		
+		
 		if ($arr === false) {
 			$app = JFactory::getApplication()->enqueueMessage(
 				JText::_('COM_NEWSLETTER_IMPORT_ERROR', 'error'
 				));
-			$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=import');
+			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import', false));
 			return;
 		}
-		$res = DataHelper::importLists($arr);
+		
+		$res = $component->importLists($arr);
 
-		if (!$res) {
+		if ($res === false) {
 			$app = JFactory::getApplication()->enqueueMessage(
 				JText::_('COM_NEWSLETTER_IMPORT_ERROR', 'error'
 				));
-			$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=import');
+			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import', false));
 			return;
 		}
+		
 		$app = JFactory::getApplication()->enqueueMessage(
-			JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL', 'message'
-			));
-		$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=close');
+			JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL') . '. ' . 
+			JText::sprintf('COM_NEWSLETTER_N_SUBSCRIBERS_IMPORTED', $res), 'message');
+		
+		$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=close', false));
 	}
 
 	/**
@@ -216,7 +224,7 @@ class NewsletterControllerConfiguration extends JController
 		}
 
 
-		$this->setRedirect('index.php?option=com_newsletter');
+		$this->setRedirect(JRoute::_('index.php?option=com_newsletter', false));
 	}
 	
 	public function describe() {
