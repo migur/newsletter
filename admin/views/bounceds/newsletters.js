@@ -23,7 +23,7 @@ window.addEvent('domready', function() {
             });
 
             if (listIds.length < 1) {
-                alert("Please select the newsletters");
+                alert(Joomla.JText._('PLEASE_SELECT_THE_NEWSLETTERS',"Please select the newsletters"));
                 return;
             }
 

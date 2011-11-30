@@ -26,18 +26,24 @@ class NewsletterViewSubscribe extends JView
 	{
 		$uid = JRequest::getString('uid', '');
 		$nid = JRequest::getString('nid', '');
-		
-		$subscriber = SubscriberHelper::getBySubkey($uid);
 
-		if (empty($subscriber->subscriber_id)) {
-			jexit('Subscriber not found');
+		$user = JFactory::getUser();
+		
+		$subscriber = JTable::getInstance('Subscriber', 'NewsletterTable');
+
+		if (!empty($uid)) {
+			$subscriber->load(array('subscription_key' => $uid));
+			
+		} elseif(!empty($user->id)) {	
+			$subscriber->load(array('user_id' => $user->id));
 		}
 		
-		$lists = SubscriberHelper::getLists($uid);
+		$lists = SubscriberHelper::getLists($subscriber->subscription_key);
 
+		$this->assignRef('user', $user);
 		$this->assignRef('subscriber', $subscriber);
 		$this->assignRef('lists', $lists);
-		$this->assignRef('uid',   $uid);
+		$this->assignRef('uid',   $subscriber->subscription_key);
 		$this->assignRef('nid',   $nid);
 
 		$this->setDocument();

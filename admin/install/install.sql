@@ -1,4 +1,6 @@
-# Ver 0.5.1a;
+# Version 1.0.3b;
+# Non-migration behavior if INSTALL proccess executes!;
+# Prev version 1.0.2b1;
 
 SET foreign_key_checks = 0;
 
@@ -59,10 +61,11 @@ CREATE TABLE `#__newsletter_smtp_profiles`
 `reply_to_name` VARCHAR(255),
 `smtp_server` VARCHAR(255),
 `smtp_port` INTEGER(2),
-`is_ssl` ENUM("1","0") DEFAULT '0',
+`is_ssl` INTEGER(11),
 `pop_before_smtp` ENUM("1","0") DEFAULT '0',
 `username` VARCHAR(255),
 `password` VARCHAR(255),
+`mailbox_profile_id` INT(11),
 
 PRIMARY KEY (`smtp_profile_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
@@ -205,6 +208,19 @@ CREATE TABLE `#__newsletter_downloads`
 PRIMARY KEY (`downloads_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+CREATE TABLE `#__newsletter_mailbox_profiles` 
+(
+`mailbox_profile_id` INT(11) NOT NULL AUTO_INCREMENT,
+`mailbox_profile_name` VARCHAR(255) DEFAULT NULL,
+`mailbox_server` VARCHAR(255) DEFAULT NULL,
+`mailbox_server_type` VARCHAR(255) DEFAULT NULL,
+`mailbox_port` INT(11) DEFAULT NULL,
+`is_ssl` ENUM('1','0') DEFAULT '0',
+`username` VARCHAR(255) DEFAULT NULL,
+`password` VARCHAR(255) DEFAULT NULL,
+
+PRIMARY KEY (`mailbox_profile_id`)
+) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 CREATE INDEX `smtp_profile_id_idxfk` ON `#__newsletter_newsletters`(`smtp_profile_id`);
 # ALTER TABLE `#__newsletter_newsletters` ADD CONSTRAINT `newsletters_smtp_profile_idfk` FOREIGN KEY `smtp_profile_id_idxfk` (`smtp_profile_id`) REFERENCES `#__newsletter_smtp_profiles` (`smtp_profile_id`);
@@ -238,6 +254,9 @@ ALTER TABLE #__newsletter_newsletters_ext ADD FOREIGN KEY (newsletter_id) REFERE
 CREATE INDEX extension_id_idxfk ON #__newsletter_newsletters_ext(extension_id);
 # Do not use this index because it prevent to bind the Joomla native modules to newsletter;
 # ALTER TABLE #__newsletter_newsletters_ext ADD CONSTRAINT `newsletters_ext_extension_idfk` FOREIGN KEY extension_idxfk (extension_id) REFERENCES #__newsletter_extensions (extension_id) ON DELETE CASCADE;
+
+CREATE INDEX newsletter_queue_state ON #__newsletter_queue(state);
+
 
 # Data for the table `#__newsletter_extensions`;
 insert  into `#__newsletter_extensions`(`extension_id`,`title`,`extension`,`params`,`type`) values (1,'Article Module','mod_article','{}',1);

@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 // import view library
 JLoader::import('helpers.statistics', JPATH_COMPONENT_ADMINISTRATOR, '');
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 jimport('migur.library.toolbar');

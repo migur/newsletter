@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // import Joomla view library
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 jimport('joomla.application.component.view');
 jimport('migur.library.toolbar');
@@ -105,14 +105,14 @@ class NewsletterViewSubscribers extends MigurView
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'subscribers.delete', false);
 		$bar->appendButton('Standard', 'unpublish', 'JTOOLBAR_DISABLE', 'subscribers.unpublish', false);
 		$bar->appendButton('Standard', 'publish', 'JTOOLBAR_ENABLE', 'subscribers.publish', false);
-		$bar->appendButton('Help', 'JHELP_CONTENT_ARTICLE_MANAGER', false, null, null);
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter');
 
 		$bar = MigurToolBar::getInstance('lists');
 		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&amp;view=list&amp;tmpl=component', 1000, 600, 0, 0);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'lists.delete', false);
 		$bar->appendButton('Standard', 'unpublish', 'JTOOLBAR_DISABLE', 'lists.unpublish', false);
 		$bar->appendButton('Standard', 'publish', 'JTOOLBAR_ENABLE', 'lists.publish', false);
-		$bar->appendButton('Help', 'JHELP_CONTENT_ARTICLE_MANAGER', false, null, null);
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter');
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));

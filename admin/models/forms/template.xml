@@ -3,45 +3,67 @@
         <field
             type="text"
             name="width_column1"
-            default="50%"
+            default="auto"
             label="COM_NEWSLETTER_WIDTH"
             description="COM_NEWSLETTER_WIDTH_COLUMN1"
             class="inputbox validate-width_column1"
             size="10"
-            required="true"
+            required="false"
             validate="cssdimension"
 />
         <field
             type="text"
             name="height_column1"
-            default="50%"
+            default="auto"
             label="COM_NEWSLETTER_HEIGHT"
             description="COM_NEWSLETTER_HEIGHT_COLUMN1"
             class="inputbox validate-height_column1"
             size="10"
-            required="true"
+            required="false"
             validate="cssdimension"
  />
         <field
             type="text"
             name="width_column2"
-            default="50%"
+            default="auto"
             label="COM_NEWSLETTER_WIDTH"
             description="COM_NEWSLETTER_WIDTH_COLUMN2"
             class="inputbox validate-width_column2"
             size="10"
-            required="true"
+            required="false"
             validate="cssdimension"
 />
         <field
             type="text"
             name="height_column2"
-            default="50%"
+            default="auto"
             label="COM_NEWSLETTER_HEIGHT"
             description="COM_NEWSLETTER_HEIGHT_COLUMN2"
             class="inputbox validate-height_column2"
             size="10"
-            required="true"
+            required="false"
+            validate="cssdimension"
+ />
+        <field
+            type="text"
+            name="width_column3"
+            default="auto"
+            label="COM_NEWSLETTER_WIDTH"
+            description="COM_NEWSLETTER_WIDTH_COLUMN3"
+            class="inputbox validate-width_column3"
+            size="10"
+            required="false"
+            validate="cssdimension"
+/>
+        <field
+            type="text"
+            name="height_column3"
+            default="auto"
+            label="COM_NEWSLETTER_HEIGHT"
+            description="COM_NEWSLETTER_HEIGHT_COLUMN3"
+            class="inputbox validate-height_column3"
+            size="10"
+            required="false"
             validate="cssdimension"
  />
         <field 
@@ -51,8 +73,8 @@
             label="COM_NEWSLETTER_IMAGE_TOP"
             class="inputbox validate-image_top"
             size="10"
-            required="true"
-            validate="text"
+            required="false"
+			validate="text"
         />
         <field
             type="text"
@@ -61,7 +83,7 @@
             label="COM_NEWSLETTER_IMAGE_ALT"
             class="inputbox validate-image_top_alt"
             size="10"
-            required="true"
+            required="false"
             validate="text"
         />
         <field
@@ -91,8 +113,8 @@
             label="COM_NEWSLETTER_IMAGE_BOTTOM"
             class="inputbox validate-image_bottom"
             size="10"
-            required="true"
-            validate="text"
+            required="false"
+			validate="text"
         />
         <field
             type="text"
@@ -101,7 +123,7 @@
             label="COM_NEWSLETTER_IMAGE_ALT"
             class="inputbox validate-image_bottom_alt"
             size="10"
-            required="true"
+            required="false"
             validate="text"
         />
         <field
@@ -127,7 +149,7 @@
         <field 
             type="text"
             name="table_background"
-            default="#000000"
+            default="#FFFFFF"
             label="COM_NEWSLETTER_TABLE_BACKGROUND_COLOR"
             class="inputbox validate-table_background"
             size="7"

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The dashboard view file.
+ * The wellcome view file.
  *
  * @version	   $Id:  $
  * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
@@ -12,10 +12,10 @@ defined('_JEXEC') or die('Restricted access');
 
 // import Joomla view library
 jimport('joomla.application.component.view');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 
 /**
- * Class of the dashboard view. Displays the model data.
+ * Class of the wellcome view. Displays the model data.
  *
  * @since   1.0
  * @package Migur.Newsletter
@@ -73,7 +73,7 @@ class NewsletterViewWellcome extends MigurView
 	protected function setDocument()
 	{
 		$document = JFactory::getDocument();
-		$document->setTitle('COM_NEWSLETTER_WELLCOME_TITLE');
+		$document->setTitle(JText::_('COM_NEWSLETTER_WELLCOME_TITLE'));
 		$document->addStylesheet(JURI::root() . '/media/com_newsletter/css/wellcome.css');
 	}
 }

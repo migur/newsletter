@@ -24,6 +24,6 @@ class JFormRuleText extends JFormRule
 	 * @var		string
 	 * @since	1.0
 	 */
-	protected $regex = '^.{1,255}$';
+	protected $regex = '^.{0,255}$';
 
 }

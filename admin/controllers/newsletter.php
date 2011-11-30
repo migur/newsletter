@@ -34,35 +34,6 @@ class NewsletterControllerNewsletter extends JControllerForm
 		// Apply, Save & New, and Save As copy should be standard on forms.
 	}
 
-	/**
-	 * Method override to check if you can edit an existing record.
-	 *
-	 * @param	array	$data	An array of input data.
-	 * @param	string	$key	The name of the key for the primary key.
-	 *
-	 * @return	boolean
-	 * @since	1.0
-	 */
-	protected function allowEdit($data = array(), $key = 'id')
-	{
-		//TODO: Remove and check
-		return true;
-	}
-
-	/**
-	 * Method override to check if you can add an existing record.
-	 *
-	 * @param	array	$data	An array of input data.
-	 * @param	string	$key	The name of the key for the primary key.
-	 *
-	 * @return	boolean
-	 * @since	1.0
-	 */
-	protected function allowAdd($data = array(), $key = 'id')
-	{
-		//TODO: Remove and check
-		return true;
-	}
 
 	/**
 	 * Creates the letter for a preview
@@ -192,72 +163,69 @@ class NewsletterControllerNewsletter extends JControllerForm
 			$type = JRequest::getVar('task');
 			$context = JRequest::getString('context', 'html');
 
-			// We can save NEW newsletter (create it) or autosave an existing letter
-			if (!empty($nsid) || $type == 'save') {
+			// save new newsletter (create it) or autosave an existing letter
 
-				$data = JRequest::getVar('jform', array(), 'post', 'array');
+			$data = JRequest::getVar('jform', array(), 'post', 'array');
 
-				// If the type is not changeable then replace type as now (for success validation).
-				if (!empty($nsid)) {
-					
-					// Get newsletter's extended info 
-					$nl = NewsletterHelper::get($nsid);
-					
-					if (!$nl['type_changeable']) {
-						$data['type'] = $nl['type'];
-						JRequest::setVar('jform', $data, 'post');
-					}
-					
-					// Check if we can change the newsletter
-					if (!$nl['saveable']) {
+			// If the type is not changeable then replace type as now (for success validation).
+			if (!empty($nsid)) {
 
-						$error = JText::_('COM_NEWSLETTER_CANNOT_SAVE_NEWSLETTER');	
-						
-						if ($context == 'json') {
+				// Get newsletter's extended info 
+				$nl = NewsletterHelper::get($nsid);
 
-							echo json_encode(array(
-								'state' => $error,
-								'newsletter_id' => $nsid
-								));
-							jexit();
-						} else {
-							JFactory::getApplication()->enqueueMessage($error, 'error');
-							$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletter&layout=edit&newsletter_id='.$nsid, false));
-							return;
-						}	
-					}
-
-				} else {
-
-					if (empty($data['alias'])) {
-						$data['alias'] = 'newsletter';
-					}
-
-					// Get newsletters with similar aliases
-					$data['alias'] = NewsletterHelper::getFreeAlias($data['alias']);
+				if (!$nl['type_changeable']) {
+					$data['type'] = $nl['type'];
+					JRequest::setVar('jform', $data, 'post');
 				}
-				
-				if (parent::save()) {
 
-					$nsid = $this->newsletterId;
+				// Check if we can change the newsletter
+				if (!$nl['saveable']) {
 
-					$htmlTpl = (object) json_decode($data['htmlTpl']);
-					$plugins = (array) json_decode($data['plugins']);
-					$htmlTpl->extensions = array_merge($htmlTpl->extensions, $plugins);
-					$newExtsModel = $this->getModel('newsletterext');
-					if ($newExtsModel->rebindExtensions(
-							$htmlTpl->extensions,
-							$nsid
-					)) {
+					$error = JText::_('COM_NEWSLETTER_CANNOT_SAVE_NEWSLETTER');	
 
+					if ($context == 'json') {
+
+						echo json_encode(array(
+							'state' => $error,
+							'newsletter_id' => $nsid
+							));
+						jexit();
 					} else {
-						$error = $newExtsModel->getError();
-					}
+						JFactory::getApplication()->enqueueMessage($error, 'error');
+						$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletter&layout=edit&newsletter_id='.$nsid, false));
+						return;
+					}	
+				}
+
+			} else {
+
+				if (empty($data['alias'])) {
+					$data['alias'] = 'newsletter';
+				}
+
+				// Get newsletters with similar aliases
+				$data['alias'] = NewsletterHelper::getFreeAlias($data['alias']);
+			}
+
+
+			if (parent::save()) {
+
+				$nsid = $this->newsletterId;
+
+				$htmlTpl = (object) json_decode($data['htmlTpl']);
+				$plugins = (array) json_decode($data['plugins']);
+				$htmlTpl->extensions = array_merge($htmlTpl->extensions, $plugins);
+				$newExtsModel = $this->getModel('newsletterext');
+				if ($newExtsModel->rebindExtensions(
+						$htmlTpl->extensions,
+						$nsid
+				)) {
+
 				} else {
-					$error = $this->getError();
+					$error = $newExtsModel->getError();
 				}
 			} else {
-				$error = JText::_('JLIB_DATABASE_ERROR_NULL_PRIMARY_KEY');
+				$error = $this->getError();
 			}
 
 			if ($context == 'json') {
@@ -269,9 +237,9 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 				echo json_encode(array(
 					'state' => (!empty($error)) ? $error : 'ok',
-					'newsletter_id' => $nsid
-					)
-				);
+					'newsletter_id' => $nsid, 
+					'alias' => $data['alias']
+				));
 
 				jexit();
 			}	

@@ -17,6 +17,8 @@ window.addEvent('domready', function() { try {
             return false;
     });
 
+
+	// Check button. Do a check.
     $$('#smtp-toolbar-publish a')[0]
         .removeProperty('onclick')
         .addEvent('click', function(){
@@ -48,11 +50,11 @@ window.addEvent('domready', function() { try {
 					catch(e) { res = undefined; }
 					
 					if (res && res.status == 'ok') {
-						alert('Connection ok!');
+						alert(Joomla.JText._('CONNECTION_OK','Connection ok!'));
 						return;
 					}
 					
-					alert('Connection failed!');
+					alert(Joomla.JText._('CONNECTION_FAILED','Connection failed!'));
 					return;
 					
 				}

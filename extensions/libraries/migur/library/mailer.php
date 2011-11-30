@@ -53,10 +53,13 @@ class MigurMailer extends JObject
 			return false;
 		}
 
-		$document = MigurMailerDocument::getInstance($params['type'], $params);
+		// Create ALWAYS NEW instance
+		$document = MigurMailerDocument::factory($params['type'], $params);
 		//$this->triggerEvent('onMailerBeforeRender');
 		$data = $document->render(false, $params);
 		//$this->triggerEvent('onMailerAfterRender');
+		
+		// Finish with it. Destroy.
 		unset($document);
 
 		return $data;
@@ -80,7 +83,7 @@ class MigurMailer extends JObject
 			return false;
 		}
 
-		$document = MigurMailerDocument::getInstance($params['type'], $params);
+		$document = MigurMailerDocument::factory($params['type'], $params);
 		//$this->triggerEvent('onMailerBeforeRender');
 		$data = $document->render(false, $params);
 		//$this->triggerEvent('onMailerAfterRender');
@@ -109,8 +112,12 @@ class MigurMailer extends JObject
 		/* if we get int then this is the custom template (schematic mode),
 		 * otherwise set raw mode
 		 */
-		$params['renderMode'] = ($params['t_style_id'] == strval(intval($params['t_style_id']))) ? 'schematic' : 'raw';
-		$document = MigurMailerDocument::getInstance($params['type'], $params);
+		//$params['renderMode'] = ($params['t_style_id'] == strval(intval($params['t_style_id']))) ? 'schematic' : 'raw';
+		// No more RAW mode. It displayed not correct
+		if (empty($params['renderMode'])) {
+			$params['renderMode'] = 'schematic';
+		}	
+		$document = MigurMailerDocument::factory($params['type'], $params);
 		//$this->triggerEvent('onMailerBeforeRender');
 		$document->render(false, $params);
 		$tpl = $document->getTemplate();
@@ -185,10 +192,13 @@ class MigurMailer extends JObject
 				break;
 			}
 
-			//Add custom headers
-			$sender->AddCustomHeader('Return-Path: woody@nixsolutions.com');
-			$sender->AddCustomHeader('Email-Name:' . $letter->name);
-			$sender->AddCustomHeader('Subscriber-ID:' . $item->subscriber_id);
+			if (!empty($letter->name)) {
+				$sender->AddCustomHeader('Email-Name:' . $letter->name);
+			}	
+			
+			if (!empty($item->subscriber_id)) {
+				$sender->AddCustomHeader('Subscriber-ID:' . $item->subscriber_id);
+			}	
 
 			// send the unique letter to each recipient
 			$bounced = $sender->send(array(
@@ -203,7 +213,9 @@ class MigurMailer extends JObject
 			// If sending failed
 			if (!$bounced) {
 
-				$this->setError(JError::getError('unset')->get('message'));
+				if (JError::getError('unset')) {
+					$this->setError(JError::getError('unset')->get('message'));
+				}	
 				$res = false;
 			}
 		}
@@ -236,7 +248,6 @@ class MigurMailer extends JObject
 
 		// Retrieve the email for bounced letters
 		$profiles = NewsletterHelper::getMailProfiles($params['newsletter_id']);
-		//var_dump($profiles); die;
 		
 		// Use the phpMailer exceptions
 		$sender = new MigurMailerSender(array('exceptions'=>true));
@@ -252,9 +263,10 @@ class MigurMailer extends JObject
 			return $res;
 		}
 
+
 		// emulate user environment
 		SubscriberHelper::saveRealUser();
-
+		
 		if (!SubscriberHelper::emulateUser(array('email' => $subscriber->email))) {
 			$res->error = 'The user ' . $subscriber->email . ' is absent';
 			return $res;
@@ -269,12 +281,13 @@ class MigurMailer extends JObject
 				'tracking' => true
 			));
 
+		SubscriberHelper::restoreRealUser();
+
 		$res->content = $letter->content;
 
 		if ($letter->content === false) {
 			return $res;
 		}
-
 		
 		// Add custom headers
 
@@ -294,8 +307,6 @@ class MigurMailer extends JObject
 		$atts = DownloadHelper::getByNewsletterId($params['newsletter_id']);
 		
 		// send the unique letter to each recipient
-		
-		//var_dump($letter->smtp_profile); die;
 		$sendRes = $sender->send(array(
 				'letter' => $letter,
 				'attach' => $atts,
@@ -311,8 +322,6 @@ class MigurMailer extends JObject
 			$res->error = $error;
 			return $res;
 		}
-
-		SubscriberHelper::restoreRealUser();
 
 		$res->state = true;
 		return $res;

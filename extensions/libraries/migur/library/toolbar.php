@@ -46,6 +46,8 @@ class MigurToolBar extends JToolBar
 		parent::__construct($name);
 
 		$this->_formName = ($form) ? $form : $name . 'Form';
+		
+		$this->addButtonPath(JPATH_LIBRARIES.DS.'migur'.DS.'library'.DS.'button');
 	}
 
 	/**

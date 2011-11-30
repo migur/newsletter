@@ -32,6 +32,7 @@
         <field
             name="general_smtp_default"
             type="smtpprofiles"
+			scope="withoutDef"
             default=""
             label="COM_NEWSLETTER_SMTP_DEFAULT"
             description="COM_NEWSLETTER_SMTP_DEFAULT">
@@ -68,6 +69,7 @@
             name="general_mailbox_default"
             type="mailboxprofiles"
             default=""
+			scope="withoutDef"
             label="COM_NEWSLETTER_MAILBOX_DEFAULT"
             description="COM_NEWSLETTER_MAILBOX_DEFAULT">
         </field>

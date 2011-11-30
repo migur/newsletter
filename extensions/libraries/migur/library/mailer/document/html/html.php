@@ -72,7 +72,38 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 			// Do not parse any placeholder...
 		}
 
+		if ($this->renderMode == 'htmlconstructor') {
 
+			// replace all POSITIONs to DIVs with schematic mode
+			$this->parsedTags["templateTags"] = array(
+				'regexp' => '#<position type="([^"]+)" name="([^"]+)" .* \/>#iU',
+				'matches' => array(
+					'type' => '',
+					'name' => '',
+					'attribs' => array(
+						'renderMode' => 'schematic',
+						'showNames' => !empty($this->showNames)
+				))
+			);
+
+			// Parse the placeholders...
+			$this->parsedTags["placeholders"] = array(
+				'regexp' => '#\[([\w\s\.]+)\]#iU',
+				'matches' => array(
+					'name' => '',
+					'type' => 'placeholder',
+					'attribs' => array()
+				)
+			);
+
+			// Override some placeholders
+			PlaceholderHelper::setPlaceholder('table_background', null, '#FFFFFF');
+			PlaceholderHelper::setPlaceholder('text_color', null, '#000000');
+			
+			// Don't parse any IMG
+		}
+		
+		
 		if ($this->renderMode == 'schematic') {
 
 			// replace all POSITIONs to DIVs with schematic mode
@@ -143,8 +174,6 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 	 */
 	protected function _loadTemplate($id)
 	{
-		static $template;
-
 		// Try to find the newsletter by id.
 		// Supported both standard and custom
 
@@ -172,7 +201,7 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 	 */
 	function loadRenderer($type)
 	{
-		$class = 'MigurDocumentRenderer' . $type;
+		$class = 'MigurDocumentHtmlRenderer' . $type;
 
 		if (!class_exists($class)) {
 			$path = dirname(__FILE__) . DS . 'renderer' . DS . $type . '.php';
@@ -225,20 +254,22 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 		$urls = array_unique($matches[1]);
 		
 		$withs = array();
-		for($i=0; $i < count($urls); $i++) {
+		if (!empty($urls)) {
+			foreach($urls as $i => $val) {
 
-			$withs[] = str_replace(
-				$urls[$i],
-				JRoute::_(
-					'index.php?option=com_newsletter&task=newsletter.track&format=json&action=clicked&uid=' . $uid . '&nid=' . $newsletterId .
-					'&link=' . urlencode(base64_encode($urls[$i])), FALSE, 2
-				),
-				$fullhrefs[$i]
-			);	
+				$withs[] = str_replace(
+					$val,
+					JRoute::_(
+						'index.php?option=com_newsletter&task=newsletter.track&format=json&action=clicked&uid=' . $uid . '&nid=' . $newsletterId .
+						'&link=' . urlencode(base64_encode($val)), FALSE, 2
+					),
+					$fullhrefs[$i]
+				);	
+			}
+
+			$content = str_replace($fullhrefs, $withs, $content);
 		}
-		
-		$content = str_replace($fullhrefs, $withs, $content);
-		
+			
 		return true;
 	}
 

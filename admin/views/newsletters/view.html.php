@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 JLoader::import('helpers.statistics', JPATH_COMPONENT_ADMINISTRATOR, '');
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 
 /**
@@ -105,7 +105,7 @@ class NewsletterViewNewsletters extends MigurView
 
 		$bar = JToolBar::getInstance('newsletters');
 		$bar->appendButton('Link', 'default', 'COM_NEWSLETTER_SHOW_STATISTICS', 'index.php?option=com_newsletter&amp;view=statistic&amp;tmpl=component');
-		$bar->appendButton('Link', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&amp;view=newsletter');
+		$bar->appendButton('Standard', 'new', 'JTOOLBAR_NEW', 'newsletter.add', false);
 		$bar->appendButton('Standard', 'copy', 'JTOOLBAR_SAVE_AS_COPY', 'newsletter.save2copy', false);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'newsletters.delete', false);
 

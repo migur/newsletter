@@ -17,7 +17,7 @@ jimport('migur.library.toolbar');
 jimport('joomla.utilities.simplexml');
 jimport('joomla.html.html.sliders');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.combobox');
@@ -77,8 +77,6 @@ class NewsletterViewExtension extends MigurView
 		}
 
 		parent::display($tpl);
-
-		JavascriptHelper::addStringVar('siteRoot', JUri::root());
 	}
 
 }

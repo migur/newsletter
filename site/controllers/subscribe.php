@@ -126,6 +126,18 @@ class NewsletterControllerSubscribe extends JController
 			$subscriber->subscription_key = $subKey;
 		}
 
+		// Set user_id for subscriber if this is not set yet
+		if (empty($subscriber->user_id) && !empty($user->id)) {
+			
+			$db->setQuery(
+				"UPDATE #__newsletter_subscribers " .
+				" SET user_id=" . (int)$user->id .
+				" WHERE subscriber_id = " . (int)$subscriber->subscriber_id
+			);
+			$db->query();
+		}
+		
+		
 		// Add subscriptions to lists, ignore if already in db
 		foreach ($lists as $list) {
 			$db->setQuery(
@@ -287,24 +299,37 @@ class NewsletterControllerSubscribe extends JController
 		// Check token, die on error.
 		//JRequest::checkToken() or jexit('Invalid Token');
 
-		if (empty($uid) || empty($lists) || empty($nid)) {
-			jexit('One or more parameters is missing');
+		if (empty($uid) || empty($lists)) {
+			$this->setRedirect(
+				JRoute::_('index.php?option=com_newsletter&view=subscribe&layuout=unsubscribe', false),
+				JText::_('COM_NEWSLETTER_PARAMETERS_NOT_FOUND'),
+				'error');
+			return;
 		}
 
 		// Insert into db
 		// TODO: Add santiy checks, use model instead
-		$db->setQuery( "SELECT subscriber_id FROM #__newsletter_subscribers WHERE subscription_key = " . $db->quote(addslashes($uid)) );
+		$db->setQuery( "SELECT * FROM #__newsletter_subscribers WHERE subscription_key = " . $db->quote(addslashes($uid)) );
 		$subscriber = $db->loadObject();
 		if (empty($subscriber->subscriber_id)) {
-			jexit('The user not found');
+			$this->setRedirect(
+				JRoute::_('index.php?option=com_newsletter&view=subscribe&layuout=unsubscribe', false),
+				JText::_('COM_NEWSLETTER_USER_NOT_FOUND'),
+				'error');
+			return;
 		}
 
-		$db->setQuery( "SELECT newsletter_id FROM #__newsletter_newsletters WHERE newsletter_id = " . $db->quote(addslashes($nid)));
-		$newsletter = $db->loadObject();
-		if (empty($newsletter->newsletter_id)) {
-			jexit('The newsletter not found');
-		}
-		
+		// Check the newsletter if nid is present
+		if (!empty($nid)) {
+			$db->setQuery( "SELECT newsletter_id FROM #__newsletter_newsletters WHERE newsletter_id = " . $db->quote(addslashes($nid)));
+			$newsletter = $db->loadObject();
+			if (empty($newsletter->newsletter_id)) {
+				$this->setRedirect(
+					JRoute::_('index.php?option=com_newsletter&view=subscribe&layuout=unsubscribe', false),
+					JText::_('COM_NEWSLETTER_NEWSLETTER_NOT_FOUND'));
+				return;
+			}
+		}	
 		$app->triggerEvent(
 			'onMigurNewsletterBeforeUnsubscribe', 
 			array(
@@ -345,9 +370,10 @@ class NewsletterControllerSubscribe extends JController
 		));
 		
 		// Redirect to page
-		$message = JText::sprintf('Thank you %s for using our service!', $subscriber->name);
-		jexit($message);
-		//$this->setRedirect(base64_decode($sendto), $message, 'message');
+		$this->setRedirect(
+			JRoute::_('index.php?option=com_newsletter&view=subscribe&layuout=unsubscribe', false),
+			JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_USING_SERVICE', $subscriber->name),
+			'message');
 	}
 }
 
