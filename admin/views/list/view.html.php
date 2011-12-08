@@ -253,7 +253,7 @@ class NewsletterViewList extends MigurView
 		JavascriptHelper::addObject('statTotalSent', $res);
 
 
-		$data = StatisticsHelper::openedCount();
+		$data = StatisticsHelper::openedActionsCount();
 		$res = array(
 			'other' => empty($data['other']) ? 0 : $data['other'],
 			'opened' => empty($data['opened']) ? 0 : $data['opened'],

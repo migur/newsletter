@@ -20,6 +20,7 @@ JLoader::import('helpers.autocompleter', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.sent',           JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.subscriber',     JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.queue',          JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('models.automailing.manager', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
  * Class of the cron controller. Handles the  request of a "trigger" from remote server.
@@ -43,8 +44,9 @@ class NewsletterControllerCron extends JControllerForm
 		parent::__construct($config);
 	}
 
+	
 	/**
-	 * Sends the bulk of letters to queued subscribers.
+	 * Main entry point for triggering all cronjobs
 	 * 
 	 * Cron usage: 
 	 *  curl [BASE_URL]/index.php\?option=com_newsletter\&task=cron.send
@@ -53,7 +55,38 @@ class NewsletterControllerCron extends JControllerForm
 	 * @return void
 	 * @since  1.0
 	 */
-	public function send()
+	public function send() 
+	{
+		$res = array();
+		
+		try {
+			$res['mailing'] = $this->mailing('triggered');
+		} catch (Exception $e){
+			$res['mailing'] = array('error' => $e->getMessage());
+		}	
+
+		try {
+			$res['processBounced'] = $this->processBounced('triggered');
+		} catch (Exception $e){
+			$res['processBounced'] = array('error' => $e->getMessage());
+		}	
+		
+		NewsletterHelper::logMessage(json_encode($res), 'cron.txt');
+		jexit();
+	}
+
+	
+	/**
+	 * Sends the bulk of letters to queued subscribers.
+	 * 
+	 * Cron usage: 
+	 *  curl [BASE_URL]/index.php\?option=com_newsletter\&task=cron.mailing
+	 *  wget --delete-after [BASE_URL]/index.php\?option=com_newsletter\&task=cron.mailing
+	 *
+	 * @return void
+	 * @since  1.0
+	 */
+	public function mailing($mode = 'std')
 	{
 		ob_start();
 
@@ -62,7 +95,7 @@ class NewsletterControllerCron extends JControllerForm
 		$config   = JComponentHelper::getParams('com_newsletter');
 		
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
-		$count    = (int)  $config->get('mailer_cron_count');
+		$count    = (int)  $config->get('mailer_cron_count', 100);
 
 		if ($this->_checkAccess('mailer_cron')) {
 
@@ -205,44 +238,27 @@ class NewsletterControllerCron extends JControllerForm
 			}	
 		}
                 
-		ob_end_clean();
-		echo json_encode($response);
-		jexit();
+		if ($mode == 'std') {
+			
+			ob_end_clean();
+			echo json_encode($response);
+			jexit();
+			
+		} else {
+			return $response;
+		}	
 	}
-	
-	/**
-	 * Method for testing bounced emails
-	 */
-//	public function bounced(){
-//		
-//		$mailer = new MigurMailer();
-//		$subscriber = JTable::getInstance('subscriber', 'NewsletterTable');
-//		$subscriber->load('8316');
-//
-//		$subscriber->email = 'andreyalek2@gmail.com';
-//		var_dump(
-//			$mailer->send(array(
-//				'subscriber' => $subscriber,
-//				'newsletter_id' => 130,
-//				'type' => 'html'
-//			))
-//		);
-//		
-//		die;
-//	}
 
+	
 	/**
 	 * Process mailboxes for presence of bounced mails.
 	 * 
 	 * curl [BASE_URL]/index.php\?option=com_newsletter\&task=cron.processbounced
 	 * wget --delete-after [BASE_URL]/index.php\?option=com_newsletter\&task=cron.processbounced
 	 */
-	
-	public function processbounced()
+	public function processbounced($mode = 'std')
 	{
 		ob_start();
-
-		$debug = true;
 
 		$config   = JComponentHelper::getParams('com_newsletter');
 		
@@ -263,6 +279,8 @@ class NewsletterControllerCron extends JControllerForm
 
 			$mbprofiles = $bounceds->getMailboxesForBounsecheck();
 
+			$limit = JRequest::getInt('limit', 100);
+			
 			$processedAll = 0;
 			$response = array();
 			// Trying to check all bounces
@@ -276,9 +294,10 @@ class NewsletterControllerCron extends JControllerForm
 
 				try {
 
-					$mailbox = new MigurMailerMailbox($mbprofile);
-
-					$mails = $mailbox->getBouncedList();
+					$mailbox = new MigurMailerMailbox(&$mbprofile);
+					$mailbox->useCache();
+					
+					$mails = $mailbox->getBouncedList($limit);
 
 					if ($mails === false) {
 
@@ -302,7 +321,12 @@ class NewsletterControllerCron extends JControllerForm
 										$history->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
 
 										if ($mail->msgnum > 0) {
-											$mailbox->deleteMail($mail->msgnum);
+											
+											if (!$mailbox->deleteMail($mail->msgnum)) {
+												throw new Exception('Delete message error.');
+											}
+											
+											NewsletterHelper::logMessage('Mailbox.Delete mail.Position:'.$mail->msgnum);
 											$processed++;
 											$processedAll++;
 										}
@@ -315,34 +339,42 @@ class NewsletterControllerCron extends JControllerForm
 							}
 						}
 
-						$mailbox->close();
-
 						//Set summary information
 						$response[$mbprofile['username']]['processed'] = $processed;
+						$response[$mbprofile['username']]['fetched'] = $mailbox->fetched;
+						$response[$mbprofile['username']]['total'] = $mailbox->total;
 					}
 
+					// Update the state of mailbox
+					if ($mails !== false) {
+						$mbtable = JTable::getInstance('Mailboxprofile', 'NewsletterTable');
+						$mbtable->save($mailbox->mailboxProfile);
+						unset($mbtable);
+					}	
+					
 				} catch(Exception $e) {
 
-						if (!empty($mailbox)) {
-							$mailbox->close();
-						}	
-
-						$response[$mbprofile['username']]['errors'][] = $e->getMessage();
-						$response[$mbprofile['username']]['errors'][] = JText::_('COM_NEWSLETTER_CHECK_YOUR_MAILBOX_SETTINGS');
+					$response[$mbprofile['username']]['errors'][] = $e->getMessage();
+					$response[$mbprofile['username']]['errors'][] = JText::_('COM_NEWSLETTER_CHECK_YOUR_MAILBOX_SETTINGS');
+					$error = true;
 				}	
 
+				// Close mailbox and destroy
+				if (!empty($mailbox)) {
+					$mailbox->close();
+				}	
 				unset($mailbox);
 			}
 
 			if ($table) {
+				
 				$table->addToParams(array(
 					'mailer_cron_bounced_is_executed' => 0,
-					'mailer_cron_bounced_last_execution_time' => date('Y-m-d H:i:s')
-				));
+					'mailer_cron_bounced_last_execution_time' => date('Y-m-d H:i:s')));
 				$table->store();
 			}
 
-			NewsletterHelper::logMessage(json_encode($ret), '', $debug);
+			NewsletterHelper::logMessage(json_encode($response));
 
 			
 		} else {
@@ -354,59 +386,15 @@ class NewsletterControllerCron extends JControllerForm
 				$response = array('error' => JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_IS_IN_PROCESS_NOW'));
 			}	
 		}
-                
-		ob_end_clean();
-		echo json_encode($response);
-		jexit();
-	}
-	
-	public function processbouncedtest(){
-	
-		define('_PATH_BMH', JPATH_LIBRARIES.DS.'migur'.DS.'library'.DS.'mailer'.DS.'phpmailer'.DS);
-
-		include(_PATH_BMH . 'class.phpmailer-bmh.php');
-		//include(_PATH_BMH . 'callback_echo.php');
-
-		// testing examples
-		$bmh = new BounceMailHandler();
-		//$bmh->action_function    = 'callbackAction'; // default is 'callbackAction'
-		$bmh->verbose            = VERBOSE_SIMPLE; //VERBOSE_REPORT; //VERBOSE_DEBUG; //VERBOSE_QUIET; // default is VERBOSE_SIMPLE
-		//$bmh->use_fetchstructure = true; // true is default, no need to speficy
-		$bmh->testmode           = true; // false is default, no need to specify
-		//$bmh->debug_body_rule    = true; // false is default, no need to specify
-		//$bmh->debug_dsn_rule     = true; // false is default, no need to specify
-		//$bmh->purge_unprocessed  = false; // false is default, no need to specify
-		$bmh->disable_delete     = true; // false is default, no need to specify
-
-		/*
-		 * for local mailbox (to process .EML files)
-		 */
-		//$bmh->openLocalDirectory('/home/email/temp/mailbox');
-		//$bmh->processMailbox();
-
-		/*
-		 * for remote mailbox
-		 */
-		$bmh->mailhost           = 'imap.gmail.com'; // your mail server
-		$bmh->mailbox_username   = 'andreyalek2@gmail.com'; // your mailbox username
-		$bmh->mailbox_password   = 'gmail83twenty'; // your mailbox password
-		$bmh->port               = 993; // the port to access your mailbox, default is 143
-		$bmh->service            = 'imap'; // the service to use (imap or pop3), default is 'imap'
-		$bmh->service_option     = 'ssl'; // the service options (none, tls, notls, ssl, etc.), default is 'notls'
-		$bmh->boxname            = 'INBOX'; // the mailbox to access, default is 'INBOX'
-		//$bmh->moveHard           = true; // default is false
-		//$bmh->hardMailbox        = 'INBOX.hardtest'; // default is 'INBOX.hard' - NOTE: must start with 'INBOX.'
-		//$bmh->moveSoft           = true; // default is false
-		//$bmh->softMailbox        = 'INBOX.softtest'; // default is 'INBOX.soft' - NOTE: must start with 'INBOX.'
-		//$bmh->deleteMsgDate      = '2009-01-05'; // format must be as 'yyyy-mm-dd'
-
-		/*
-		 * rest used regardless what type of connection it is
-		 */
-		$bmh->openMailbox();
-		$bmh->processMailbox();
-		
-		die;
+        
+		if ($mode == 'std') {
+			ob_end_clean();
+			echo json_encode($response);
+			jexit();
+			
+		} else {
+			return $response;
+		}	
 	}
 	
 	/**
@@ -414,7 +402,6 @@ class NewsletterControllerCron extends JControllerForm
 	 * 
 	 * @param type $type "mailer_cron", "mailer_cron_bounced"
 	 */
-	
 	protected function _checkAccess($type)
 	{
 		$config   = JComponentHelper::getParams('com_newsletter');
@@ -458,6 +445,54 @@ class NewsletterControllerCron extends JControllerForm
 			}    
 		}
 		return (($lastExec + $interval < time()) || $forced) && !$isExec;
+	}
+	
+	public function automailing($mode = 'std'){
+		
+		/** 
+		 * Has 3 phases:
+		 * 1. Create new threads if needed
+		 * 
+		 * 2. Process all active threads (start, continue, destroy)
+		 * 
+		 * 3. Sanitize threads registry (#__automailing_threads)
+		 */
+		
+		// Phase #1
+		
+		$response = array();
+		
+		$plans = NewsletterAutomailingManager::getScheduledPlans();
+		
+		if (!empty($plans)) {
+			foreach($plans as $plan) {
+				// The plan entity can decide if it is time to start or not
+				// If yes then it creates an new thread based on this plan.
+				if (empty($plan->automailing_state)) {
+					$plan->start();
+				}	
+			}
+		}
+		
+		// Phase #2
+		$threads = NewsletterAutomailingManager::getAllThreads();
+		
+		if (!empty($threads)) {
+			foreach($threads as $thread) {
+				// Execute the thread. "WakeUp" in other words.
+				// All functionality is incapsulated by thread. There is trigger only
+				$thread->run();
+			}
+		}
+		
+		// Phase #3 ...........
+		
+		
+		if ($mode == 'std') {
+			jexit();
+		} else {
+			return $response;
+		}	
 	}
 }
 

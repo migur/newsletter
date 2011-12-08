@@ -165,6 +165,16 @@ class NewsletterModelBounceds extends MigurModelList
 		
 		//echo (string)$db->getQuery();
 		$result = $db->loadAssocList();
+		
+		foreach($result as &$mb) {
+			if (!empty($mb['data'])) {
+				$mb['data'] = (array)json_decode($mb['data']);
+			} else {
+				$mb['data'] = array();
+			}
+			
+		}
+		
 		return $result;
 	}
 }
