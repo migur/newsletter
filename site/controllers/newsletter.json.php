@@ -56,7 +56,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$newsletterId = JRequest::getInt('nid', 0);
 		$listId       = JRequest::getInt('lid', 0);
 		$action       = JRequest::getString('action', '');
-		$link         = base64_decode(urldecode(JRequest::getVar('link')));
+		$link         = base64_decode(urldecode(JRequest::getVar('link', '')));
 
 		try {
 			// Check the uid
@@ -72,24 +72,28 @@ class NewsletterControllerNewsletter extends JControllerForm
 				throw new Exception('Unknown action');
 			}
 
-			$text = "";
 			// If this is a "clicked" event we should save the link
-			if ($actionCode == NewsletterTableHistory::ACTION_CLICKED && !empty($link)) {
+			$text = ($actionCode == NewsletterTableHistory::ACTION_CLICKED)?
+				$link : "";
 
-				// Track the event
-				$db = JFactory::getDbo();
-				$db->setQuery(
-					'INSERT IGNORE INTO #__newsletter_sub_history SET ' .
-						'subscriber_id=' . (int)$subscriber->subscriber_id . ', ' .
-						'list_id=' . (int)$listId . ', ' .
-						'newsletter_id=' . (int)$newsletterId . ', ' .
-						'date="' . date('Y-m-d H:i:s') . '", ' .
-						'action=' . $actionCode . ', ' .
-						'text="' . addslashes($link) . '"'
-				);
-				$db->query();
-			}
-		} catch(Exception $e) {}
+			// Track the event
+			$db = JFactory::getDbo();
+			$db->setQuery(
+				'INSERT IGNORE INTO #__newsletter_sub_history SET ' .
+					'subscriber_id=' . (int)$subscriber->subscriber_id . ', ' .
+					'list_id=' . (int)$listId . ', ' .
+					'newsletter_id=' . (int)$newsletterId . ', ' .
+					'date="' . date('Y-m-d H:i:s') . '", ' .
+					'action=' . $actionCode . ', ' .
+					'text="' . addslashes($link) . '"'
+			);
+			$db->query();
+			
+		} catch(Exception $e) {
+			
+			// For debug
+			//echo $e->getMessage();
+		}
 		// Redirect it!
 		if (!empty($link)) {
 			$this->setRedirect($link);

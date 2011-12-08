@@ -185,11 +185,10 @@ class NewsletterViewDashboard extends MigurView
 		$fiewDaysBefore = date('Y-m-d 00:00:00', strtotime("-30 Days", time()));
 
 		JavascriptHelper::addObject('opensPerDay',
-				StatisticsHelper::activityPerDay(
+				StatisticsHelper::openedNewslettersPerDay(
 					$fiewDaysBefore,
 					$previousDay,
-					null,
-					NewsletterTableHistory::ACTION_OPENED
+					null
 				)
 		);
 		JavascriptHelper::addObject('subsPerDay',

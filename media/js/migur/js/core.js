@@ -634,3 +634,40 @@ Migur.validator = {
         });
     }
 }
+
+
+/**
+ * Helps to create long event-based multistep operations
+ */
+Migur.multistepProcess = function(){
+		
+	this.data = {};
+		
+	this.begin = function(){};
+	
+	this.step = function(){};
+	
+	this.end = function(){};
+	
+	this.processResult = function() {
+		if(data) {
+			this._data.push(data);
+			return true;
+		}
+		
+		return false;
+	};
+	
+	this.onComplete = function(res) {
+		if (this.processResult(res) == false) {
+			this.end(res);
+		} else {
+			this.step();
+		}
+	};
+	
+	this.start = function(data){
+		this.begin(data);
+		this.step();
+	};
+}
