@@ -265,5 +265,13 @@
             size="50"
             label="COM_NEWSLETTER_FACEBOOK_SECRET">
         </field>
+        <field
+            name="debug"
+            type="radio"
+            default="0"
+            label="COM_NEWSLETTER_DEBUG_COMPONENT">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
     </fieldset>
 </config>
