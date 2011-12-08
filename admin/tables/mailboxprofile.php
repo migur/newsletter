@@ -38,5 +38,25 @@ class NewsletterTableMailboxprofile extends MigurJTable
 		);
 	}
 
+	
+	/**
+	 * Pre-save processing. 
+	 * Convert 'data' to json.
+	 * 
+	 * @param array $src - array of data
+	 * @param type $orderingFilter
+	 * @param type $ignore
+	 * @return boolean
+	 */
+	public function save($src, $orderingFilter = '', $ignore = '')
+	{
+		if (empty($src['data'])) {
+			$src['data'] = array();
+		}	
+		
+		$src['data'] = json_encode($src['data']);
+		
+		return parent::save($src, $orderingFilter, $ignore);
+	}
 }
 

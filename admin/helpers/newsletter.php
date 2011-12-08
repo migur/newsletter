@@ -26,7 +26,6 @@ class NewsletterHelper
 
 	public static $_manifest = null;
 	
-	public static $logging = false;
 	/**
 	 * Configure the Linkbar.
 	 *
@@ -57,6 +56,11 @@ class NewsletterHelper
 				'index.php?option=com_newsletter&view=subscribers',
 				$vName == 'subscribers'
 		);
+//		JSubMenuHelper::addEntry(
+//				JText::_('COM_NEWSLETTER_SUBMENU_AUTOMAILING'),
+//				'index.php?option=com_newsletter&view=automailing',
+//				$vName == 'automailing'
+//		);
 		JSubMenuHelper::addEntry(
 				JText::_('COM_NEWSLETTER_SUBMENU_CONFIGURATION'),
 				'index.php?option=com_newsletter&view=configuration',
@@ -347,13 +351,25 @@ class NewsletterHelper
 		return $res;
 	}
 	
-	static public function logMessage($msg, $prefix = '', $force = false) {
+	
+	/**
+	 * Log a messagge into file.
+	 * 
+	 * @param string Message
+	 * @param string File name, usae current date otherwise
+	 * @param boolean Use to force the logging
+	 */ 
+	static public function logMessage($msg, $filename = null, $force = false) {
 		
-		if (!self::$logging && !$force) {
+		$params = JComponentHelper::getParams('com_newsletter');
+		$logging = $params->get('debug', false);
+		
+		if (!$logging && !$force) {
 			return;
 		}
 		
-		JLog::getInstance(date('Y-m-d') . '.txt')->addEntry(
+		$filename = !empty($filename)? $filename : (date('Y-m-d') . '.txt');
+		JLog::getInstance($filename)->addEntry(
 			array('comment' => $msg)
 		);
 	}
