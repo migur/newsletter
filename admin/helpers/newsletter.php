@@ -56,11 +56,11 @@ class NewsletterHelper
 				'index.php?option=com_newsletter&view=subscribers',
 				$vName == 'subscribers'
 		);
-//		JSubMenuHelper::addEntry(
-//				JText::_('COM_NEWSLETTER_SUBMENU_AUTOMAILING'),
-//				'index.php?option=com_newsletter&view=automailing',
-//				$vName == 'automailing'
-//		);
+		JSubMenuHelper::addEntry(
+				JText::_('COM_NEWSLETTER_SUBMENU_AUTOMAILING'),
+				'index.php?option=com_newsletter&view=automailing',
+				$vName == 'automailing'
+		);
 		JSubMenuHelper::addEntry(
 				JText::_('COM_NEWSLETTER_SUBMENU_CONFIGURATION'),
 				'index.php?option=com_newsletter&view=configuration',
