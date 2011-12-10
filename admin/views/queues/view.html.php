@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla view library
 jimport('joomla.application.component.view');
 JLoader::import('helpers.statistics', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.environment', JPATH_COMPONENT_ADMINISTRATOR, '');
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
@@ -56,6 +57,8 @@ class NewsletterViewQueues extends MigurView
 			return false;
 		}
 
+		EnvironmentHelper::showWarnings();
+		
 		// We don't need toolbar in the modal window.
 		if ($this->getLayout() !== 'modal') {
 			$this->addToolbar();

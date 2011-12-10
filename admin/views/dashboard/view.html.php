@@ -18,6 +18,7 @@ JHtml::_('behavior.tooltip');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JLoader::import('helpers.queue', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.statistics', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.environment', JPATH_COMPONENT_ADMINISTRATOR, '');
 jimport('simplepie.simplepie');
 
 /**
@@ -89,6 +90,8 @@ class NewsletterViewDashboard extends MigurView
 			return false;
 		}
 
+		EnvironmentHelper::showWarnings();
+		
 		// We don't need toolbar in the modal window.
 		if ($this->getLayout() !== 'modal') {
 			$this->addToolbar();
