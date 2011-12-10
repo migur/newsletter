@@ -41,22 +41,49 @@ class NewsletterTableMailboxprofile extends MigurJTable
 	
 	/**
 	 * Pre-save processing. 
-	 * Convert 'data' to json.
+	 * Convert 'data' to json. Encode password.
 	 * 
 	 * @param array $src - array of data
 	 * @param type $orderingFilter
 	 * @param type $ignore
 	 * @return boolean
 	 */
-	public function save($src, $orderingFilter = '', $ignore = '')
+	public function store($updateNulls = false) 
 	{
-		if (empty($src['data'])) {
-			$src['data'] = array();
+		if (!empty($this->data) && !is_string($this->data)) {
+			$this->data = json_encode($this->data);
 		}	
 		
-		$src['data'] = json_encode($src['data']);
+		if (!empty($this->password)) {
+			$this->password = base64_encode($this->password);
+		}
 		
-		return parent::save($src, $orderingFilter, $ignore);
+		return parent::store($updateNulls = false);
+	}
+	
+	
+	/**
+	 * Post-load processing. Decode password.
+	 * 
+	 * @param type $keys
+	 * @param type $reset
+	 * @return type 
+	 */
+	public function load($keys = null, $reset = true){
+		
+		if (!parent::load($keys, $reset)) {
+			return false;
+		};
+
+		if (!empty($this->password)) {
+			$this->password = base64_decode($this->password);
+		}
+
+		if (!empty($this->data)) {
+			$this->data = (array)json_decode($this->data);
+		}
+
+		return true;
 	}
 }
 
