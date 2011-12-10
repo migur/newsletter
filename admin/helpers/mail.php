@@ -15,6 +15,13 @@ JLoader::import('helpers.placeholder', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 class MailHelper
 {
+	const APPLICATION_HEADER = 'X-Application: Migur Newsletter';
+	
+	const EMAIL_NAME_HEADER = 'X-Email-Name';
+	
+	const NEWSLETTER_ID_HEADER = 'X-Newsletter-Id';
+	
+	const SUBSCRIBER_ID_HEADER = 'X-Subscriber-Id';
 	/*
 	 * The allowed types of a letter
 	 */
@@ -22,6 +29,7 @@ class MailHelper
 
 	public static $bounceds = array();
 
+	
 	/**
 	 * Load letter from DB, load SMTP settings
 	 *

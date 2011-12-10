@@ -204,7 +204,10 @@ class NewsletterControllerCron extends JControllerForm
 									NewsletterTableSent::BOUNCED_SOFT,
 
 								'html_content' => ($type == 'html') ? $letter->content : "",
-								'plaintext_content' => ($type == 'plain') ? $letter->content : ""
+								'plaintext_content' => ($type == 'plain') ? $letter->content : "",
+								'extra' => array(
+									'to' => $subscriber->email,
+									'error' => $letter->error)
 							));
 							unset($sent);
 						}
@@ -341,8 +344,10 @@ class NewsletterControllerCron extends JControllerForm
 
 						//Set summary information
 						$response[$mbprofile['username']]['processed'] = $processed;
-						$response[$mbprofile['username']]['fetched'] = $mailbox->fetched;
+						$response[$mbprofile['username']]['found'] = $mailbox->found;
 						$response[$mbprofile['username']]['total'] = $mailbox->total;
+						$response[$mbprofile['username']]['totalBounces'] = $mailbox->totalBounces;
+						$response[$mbprofile['username']]['lastPosition'] = $mailbox->lastPosition;
 					}
 
 					// Update the state of mailbox
@@ -381,9 +386,9 @@ class NewsletterControllerCron extends JControllerForm
 
 			$isExec = (bool) $config->get('mailer_cron_bounced_is_executed');
 			if (!$isExec) {
-				$response = array('error' => JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_INTERVAL_IS_NOT_EXEEDED'));
+				$response = array('errors' => array(JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_INTERVAL_IS_NOT_EXEDED')));
 			} else {
-				$response = array('error' => JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_IS_IN_PROCESS_NOW'));
+				$response = array('errors' => array(JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_IS_IN_PROCESS_NOW')));
 			}	
 		}
         

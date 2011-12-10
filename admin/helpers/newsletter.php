@@ -368,8 +368,8 @@ class NewsletterHelper
 			return;
 		}
 		
-		$filename = !empty($filename)? $filename : (date('Y-m-d') . '.txt');
-		JLog::getInstance($filename)->addEntry(
+		$filename = !empty($filename)? $filename : '';
+		JLog::getInstance($filename . date('Y-m-d') . '.txt')->addEntry(
 			array('comment' => $msg)
 		);
 	}
