@@ -55,10 +55,8 @@ class NewsletterViewConfiguration extends MigurView
 			JError::raiseError(500, implode("\n", $errors));
 			return false;
 		}
-		
-		foreach(EnvironmentHelper::getWarnings() as $w) {
-			JFactory::getApplication()->enqueueMessage($w, 'error');
-		}
+
+		EnvironmentHelper::showWarnings();
 		
 		$this->general = JComponentHelper::getParams('com_newsletter');
 
