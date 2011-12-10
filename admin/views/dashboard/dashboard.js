@@ -74,11 +74,11 @@ try {
 			
 			$('process-preloader')
 				.addClass('preloader')
-				.set('text', '0%')
+				.set('text', '')
 				.set('styles', {'display': 'block'});
 			
-			this.data.fetched = 0;
-			this.data.total = 0;
+			this.data.processed = 0;
+			this.data.totalBounces = 0;
 			this.data.mailboxes = {};
 			
 		};
@@ -100,42 +100,48 @@ try {
 			catch(e) {return false;}
 			
 			var success = true;
-			var fetched = 0;
-			var total = 0;
+			var processedNow = 0;
+			this.data.totalBounces	= 0;
 			
 			/* Add info into summary*/
 			var _this = this;
 			Object.each(data, function(element, key){
 				
+				// Handle errors
+				if (key == 'errors') {
+					this.data.errors = this.data.errors.split(element);
+					return;
+				}
+				
+				// Handle mailboxes
 				if (_this.data.mailboxes[key] == undefined) {
 					_this.data.mailboxes[key] = element
 				} else {
 					
-					_this.data.mailboxes[key].fetched += element.fetched;
-					_this.data.mailboxes[key].processed += element.processed;
+					_this.data.mailboxes[key].total = element.total;
+					_this.data.mailboxes[key].totalBounces = element.totalBounces;
 					_this.data.mailboxes[key].errors.concat(element.errors);
+					
+					_this.data.mailboxes[key].processed += element.processed;
 				}
 
 				/* Check for errors an if it happens then return false */
 				success = (element.errors.length == 0);
-				fetched += element.fetched;
-				total += element.total;
+				
+				_this.data.totalBounces += _this.data.mailboxes[key].found;
+				_this.data.processed    += element.processed;
+					
+				processedNow += element.processed;
 			});
 
-			// Add the count of fetched
-			this.data.fetched += fetched;
-
-			// Set total count
-			this.data.total = total;
-
 			// Set percent
-			if (this.data.total != 0) {
+			if (this.data.totalBounces != 0) {
 				$('process-preloader').set(
 					'text', 
-					Math.round(parseFloat(this.data.fetched) / parseFloat(this.data.total) * 100) + '%');
+					Math.round(parseFloat(this.data.processed) / parseFloat(this.data.totalBounces) * 100) + '%');
 			}		
 			
-			return success && fetched > 0;
+			return success && processedNow > 0;
 		}	
 
 		/* Setup functionality for end */
@@ -164,8 +170,8 @@ try {
 			var len = 0;
 			Object.each(res, function(elem, key){
 				text += "\n "+key+' '+Joomla.JText._("MAILBOX","mailbox")+':';
-				text += "\n "+elem.processed + ' ' + Joomla.JText._("BOUNCES_FOUND","bounces found");
-				text += "\n "+elem.fetched + ' ' + Joomla.JText._("NEW_MAILS","new mails");
+				text += "\n "+elem.found + ' ' + Joomla.JText._("BOUNCES_FOUND","bounced mails found");
+				text += "\n "+elem.processed + ' ' + Joomla.JText._("BOUNCES_PROCESSED","bounced mails processed");
 				text += "\n "+elem.errors.join(' ');
 				len++;
 			});
