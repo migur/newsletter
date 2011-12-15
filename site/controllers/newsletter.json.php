@@ -24,32 +24,6 @@ JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
  */
 class NewsletterControllerNewsletter extends JControllerForm
 {
-	/**
-	 * Render and send the letter to the selected emails
-	 *
-	 * @return void
-	 * @since  1.0
-	 */
-//	public function sendPreview()//deprecated
-//	{
-//		$emails = JRequest::getVar('emails');
-//		$newsletterId = JRequest::getVar('newsletter_id');
-//		$type = JRequest::getVar('type');
-//
-//		$data = array(
-//			'newsletter_id' => $newsletterId,
-//			'type' => $type,
-//			'tracking' => true
-//		);
-//		
-//		foreach ($emails as $email) {
-//			$data['subscribers'][] = SubscriberHelper::getByEmail($email[1]);
-//		}
-//
-//		$mailer = new MigurMailer();
-//		$mailer->sendToList($data);
-//	}
-
 	public function track() {
 
 		$subkey       = JRequest::getString('uid', '');
@@ -77,23 +51,37 @@ class NewsletterControllerNewsletter extends JControllerForm
 				$link : "";
 
 			// Track the event
-			$db = JFactory::getDbo();
-			$db->setQuery(
-				'INSERT IGNORE INTO #__newsletter_sub_history SET ' .
-					'subscriber_id=' . (int)$subscriber->subscriber_id . ', ' .
-					'list_id=' . (int)$listId . ', ' .
-					'newsletter_id=' . (int)$newsletterId . ', ' .
-					'date="' . date('Y-m-d H:i:s') . '", ' .
-					'action=' . $actionCode . ', ' .
-					'text="' . addslashes($link) . '"'
-			);
-			$db->query();
-			
+			// If type of action is ACTION_OPENED then check it 
+			// should be only one in the DB for sid-nid
+			if ($actionCode == NewsletterTableHistory::ACTION_OPENED) {
+
+				$table->load(array(
+					'subscriber_id' => (int)$subscriber->subscriber_id,
+					'newsletter_id' => (int)$newsletterId,
+					'action'        => $actionCode
+				));
+
+				if (!empty($table->history_id)) {
+					throw new Exception('no need to track');
+				} 
+			}
+
+			$table->save(array(
+				'subscriber_id' => (int)$subscriber->subscriber_id,
+				'list_id'       => (int)$listId,
+				'newsletter_id' => (int)$newsletterId,
+				'date'          => date('Y-m-d H:i:s'),
+				'action'        => $actionCode,
+				'text'          => addslashes($link)
+			));
+				
 		} catch(Exception $e) {
-			
-			// For debug
-			//echo $e->getMessage();
+			if ($e->getMessage() != 'no need to track') {
+				// For debug
+				//echo $e->getMessage();
+			}
 		}
+		
 		// Redirect it!
 		if (!empty($link)) {
 			$this->setRedirect($link);

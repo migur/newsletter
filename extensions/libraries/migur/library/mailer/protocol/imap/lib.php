@@ -76,12 +76,12 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
 	 * 
 	 * @return boolean
 	 */
-	public function deleteMail($mid) 
+	public function deleteMail($mid, $uid = 0) 
 	{
 		// TODO: Move this method to the Migur library. 
 		// It is not relayed to com_newsletter explicitly
 		if (!empty($this->_mailbox_link)) {
-			return @imap_delete($this->_mailbox_link, $mid);
+			return @imap_delete($this->_mailbox_link, $mid, $uid);
 		}	
 		return false;
 	}
@@ -142,9 +142,9 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
 	 * 
 	 * @return mixed
 	 */
-	public function getMessageBodyStructure($idx) 
+	public function getMessageBodyStructure($idx, $uid = 0) 
 	{
-		return imap_fetchstructure($this->_mailbox_link, $idx);
+		return imap_fetchstructure($this->_mailbox_link, $idx, $uid);
 	}
 	
 	/**
@@ -152,20 +152,20 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
 	 * 
 	 * @return mixed
 	 */
-	public function getMessageBodyStruct($pos, $no) 
+	public function getMessageBodyStruct($pos, $no, $uid = 0) 
 	{
-		return imap_bodystruct($this->_mailbox_link, $pos, $no);
+		return imap_bodystruct($this->_mailbox_link, $pos, $no, $uid);
 	}
 	
 	
 	/**
-	 * Get header structure 
+	 * Get header structure
 	 * 
 	 * @return mixed
 	 */
-	public function getMessageHeaderStructure($idx) 
+	public function getMessageHeaderStructure($idx, $uid = 0) 
 	{
-		return imap_fetchheader($this->_mailbox_link, $idx);
+		return imap_fetchheader($this->_mailbox_link, $idx, $uid);
 	}
 	
 
@@ -174,9 +174,9 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
 	 * 
 	 * @return mixed
 	 */
-	public function getMessageBody($idx) 
+	public function getMessageBody($idx, $uid = 0) 
 	{
-		return imap_body($this->_mailbox_link, $idx);
+		return imap_body($this->_mailbox_link, $idx, $uid);
 	}
 
 	/**
@@ -184,9 +184,9 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
 	 * 
 	 * @return mixed
 	 */
-	public function getMessageFetchedBody($idx, $sec) 
+	public function getMessageFetchedBody($idx, $sec, $uid = 0) 
 	{
-		return imap_fetchbody($this->_mailbox_link, $idx, $sec);
+		return imap_fetchbody($this->_mailbox_link, $idx, $sec, $uid);
 	}
 	
 	/**
@@ -216,7 +216,24 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
 	{
 		return imap_mail_move($this->_mailbox_link, $idx, $hardMailbox);
 	}		
-	
+
+
+	public function sort($mode, $reverse = 0)
+	{
+		return imap_sort($this->_mailbox_link, $mode, $reverse, SE_UID);
+	}
+
+
+	public function since($date)
+	{
+		return imap_search($this->_mailbox_link, 'ALL SINCE "1 November 2011"', SE_UID);
+	}
+
+	public function findBy($name, $value)
+	{
+		return imap_search($this->_mailbox_link, strtoupper($name).' "'.$value.'"', SE_UID);
+	}
+
   /**
    * Open a mail box
    * @return boolean

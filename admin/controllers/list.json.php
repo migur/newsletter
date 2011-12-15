@@ -139,7 +139,7 @@ class NewsletterControllerList extends JControllerForm
 
 		$sess = JFactory::getSession();
 		$data = $sess->get('list.' . $listId . '.file.uploaded', array());
-		if (!empty($data)) {
+		if (!empty($data['file']['filepath'])) {
 			if (($handle = fopen($data['file']['filepath'], "r")) !== FALSE) {
 				$data['fields'] = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
 			} else {
@@ -164,7 +164,7 @@ class NewsletterControllerList extends JControllerForm
 
 		$json = json_decode(JRequest::getString('jsondata', ''));
 
-		if ($json->enclosure == 'no' || empty($json->enclosure)) {
+		if (empty($json->enclosure) || $json->enclosure == 'no') {
 			$json->enclosure = "\0";
 		}
 
@@ -327,10 +327,6 @@ class NewsletterControllerList extends JControllerForm
 			return false;
 		}
 
-		if (!$settings = $this->_getSettings()) {
-			return;
-		}
-
 		if ($subtask == 'lists') {
 
 			$data = json_decode(JRequest::getString('jsondata', ''));
@@ -360,7 +356,7 @@ class NewsletterControllerList extends JControllerForm
 
 					echo json_encode(array(
 						'status' => 0,
-						'error' => 'Import failed!',
+						'error' => JText::_('COM_NEWSLETTER_EXCLUSION_FAILED'),
 						'total' => $total
 					));
 					return;
@@ -369,7 +365,7 @@ class NewsletterControllerList extends JControllerForm
 
 			echo json_encode(array(
 				'status' => 1,
-				'error' => 'Import complete!',
+				'error' => JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'),
 				'total' => $total
 			));
 			return;
@@ -377,6 +373,10 @@ class NewsletterControllerList extends JControllerForm
 
 		if ($subtask == 'parse') {
 
+			if (!$settings = $this->_getSettings()) {
+				return;
+			}
+			
 			$mapping = $settings->fields;
 
 			$sess = JFactory::getSession();

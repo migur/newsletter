@@ -89,7 +89,7 @@ class JFormFieldListslist extends JFormField
 			'list_id AS value, name AS text, internal'
 		);
 		$query->from('#__newsletter_lists AS l');
-		$query->where('status = 1');
+		$query->where('state = 1');
 		$query->order('name');
 
 		// Get the options.
