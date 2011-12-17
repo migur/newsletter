@@ -1,4 +1,4 @@
-# Ver 1.0.3b;
+# Ver 1.0.4b1;
 
 SET foreign_key_checks = 0;
 
@@ -15,5 +15,8 @@ DROP TABLE IF EXISTS `#__newsletter_sub_history`;
 DROP TABLE IF EXISTS `#__newsletter_sub_list`;
 DROP TABLE IF EXISTS `#__newsletter_downloads`;
 DROP TABLE IF EXISTS `#__newsletter_mailbox_profiles`;
+DROP TABLE IF EXISTS `#__newsletter_automailings`;
+DROP TABLE IF EXISTS `#__newsletter_automailing_items`;
+DROP TABLE IF EXISTS `#__newsletter_threads`;
 
 SET foreign_key_checks = 1;

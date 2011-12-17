@@ -173,7 +173,7 @@ class MigurMailerSender extends PHPMailer
 			
 		} catch(Exception $e) {	
 			
-			NewsletterHelper::logMessage('Mailer.Sender error: ' . $e->getMessage());
+			NewsletterHelper::logMessage('Mailer.Sender error: ' . $e->getMessage(), 'mailer/');
 			return false;
 		}
 		

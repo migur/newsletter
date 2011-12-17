@@ -134,5 +134,19 @@ class DataHelper
 		self::$managers[$com] = $man;
 		return self::$managers[$com];
 	}
-
+	
+	
+	/**
+	 * Converts each element of array to int
+	 */
+	public static function toArrayOfInts($data) 
+	{
+		$data = (array)$data;
+		
+		foreach($data as &$item) {
+			$item = (int)$item;
+		}
+		
+		return $data;
+	}
 }

@@ -13,9 +13,13 @@ defined('_JEXEC') or die;
 JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.history', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('tables.thread', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.mail', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('models.automailing.plans.common', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('models.automailing.plans.scheduled', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('models.automailing.plans.eventbased', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('models.automailing.threads.common', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('models.automailing.threads.eventbased', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
  * Class of subscribers list model of the component.
@@ -25,50 +29,156 @@ JLoader::import('models.automailing.threads.common', JPATH_COMPONENT_ADMINISTRAT
  */
 class NewsletterAutomailingManager
 {
+	protected $_error = null;
+	
 	/**
-	 * Get all registered plans.
+	 * Handle all plans for subscription. 
+	 * Main goal - to start "subscription" automailings for subscriber.
+	 * and subscription event.
+	 */
+	public function processSubscription($options) 
+	{
+		// Check required parameters
+		if (empty($options['subscriberId'])) {
+			NewsletterHelper::logMessage('AutomailingManager.processSubscription: subscriberId absent', 'automailing/');
+			return false;
+		}
+	
+		try {
+			
+			// Create subscription threads and run it 
+			$sid = $options['subscriberId'];
+			$plans = $this->getEventbasedPlans('subscription');
+
+			if (!empty($plans)){
+				foreach($plans as $plan) {
+
+					$thread = $plan->createThread(array(
+						'targets' => array(
+							'type' => 'subscriber',
+							'ids' => array(
+								$sid
+					))));
+
+					$thread->run();
+				}
+			}	
+			
+		} catch (Exception $e) {
+			
+			$this->setError($e->getMessage());
+			NewsletterHelper::logMessage('AutomailingManager.processSubscription:'.$e->getMessage(), 'automailing/');
+			return false;
+		}
+		
+		return true;
+	}
+
+	
+	
+	/**
+	 * Handle all plans for subscription. 
+	 * Main goal - to stop all automailings for unsubscribed user.
+	 */
+	public function processUnsubscription($options) 
+	{
+		// Check required parameters
+		if (empty($options['subscriberId'])) {
+			NewsletterHelper::logMessage('AutomailingManager.processSubscription: subscriberId absent', 'automailing/');
+			return false;
+		}
+	}
+
+	
+	
+	/**
+	 * Get all scheduled plans.
 	 */
 	public function getScheduledPlans() {
 		
 		$dbo = JFactory::getDbo();
-		$query = 
-			"SELECT * FROM #__newsletter_automailings AS a ".
-			"WHERE a.automailing_type = ".$dbo->quote('scheduled');
-
+		$query = $dbo->getQuery(true);
+		$query->select('*')
+			  ->from('#__newsletter_automailings')
+			  ->where('automailing_type = "scheduled"');
 		$dbo->setQuery($query);
-		$dbo->query();
 		$obj = $dbo->loadObjectList();
 		
 		$res = array();
 		
 		if (!empty($obj)) {
 			foreach($obj as $item) {
-				$res[] = NewsletterAutomlailingPlanCommon::factory($item);
+				$entity = NewsletterAutomlailingPlanCommon::factory($item->automailing_type);
+				$entity->bind($item);
+				$entity->paramsFromJson();
+				$res[] = $entity;
 			}	
+		}
 		
+		return $res;
+	}
+
+	/**
+	 * Get registered plans for necassary event.
+	 */
+	public function getEventbasedPlans($event = null) {
+		
+		$dbo = JFactory::getDbo();
+		$query = $dbo->getQuery(true);
+		$query->select('*')
+			  ->from('#__newsletter_automailings')
+			  ->where('automailing_type = "eventbased"');
+		
+		if (!empty($event)) {
+			$query->where('automailing_event = '.$dbo->quote($event));
+		}
+
+		$dbo->setQuery($query);
+		$obj = $dbo->loadObjectList();
+		
+		$res = array();
+		
+		if (!empty($obj)) {
+			foreach($obj as $item) {
+				$entity = NewsletterAutomlailingPlanCommon::factory($item->automailing_type);
+				$entity->bind($item);
+				$entity->paramsFromJson();
+				$res[] = $entity;
+			}	
+		}
+
+		return $res;
+	}
+	
+	public function getAutomailingThreads() {
+		
+		$dbo = JFactory::getDbo();
+		
+		$query = $dbo->getQuery(true);
+		$query->select('*')
+			  ->from('#__newsletter_threads')
+			  ->where('type="automail"');
+		$dbo->setQuery($query);
+		$obj = $dbo->loadObjectList();
+		
+		$res = array();
+		if (!empty($obj)) {
+			foreach($obj as $item) {
+				 $entity = NewsletterAutomlailingThreadCommon::factory($item->subtype);
+				 $entity->bind($item);
+				 $entity->paramsFromJson();
+				 $res[] = $entity;
+			}	
 		}
 		
 		return $res;
 	}
 	
-	public function getAllThreads() {
-		
-		$dbo = JFactory::getDbo();
-		$query = "SELECT * FROM #__newsletter_automailings_threads";
-
-		$dbo->setQuery($query);
-		$dbo->query();
-		$obj = $dbo->loadObjectList();
-		
-		$res = array();
-		
-		if (!empty($obj)) {
-			foreach($obj as $item) {
-				$res[] = new NewsletterAutomlailingThreadCommon($item);
-			}	
-		
-		}
-		
-		return $res;
+	public function setError($error){
+		$this->_error = $error;
+	}
+	
+	public function getLastError(){
+		return $this->_error;
 	}
 }

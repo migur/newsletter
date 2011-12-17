@@ -307,23 +307,30 @@ class MigurMailer extends JObject
 		// Get attachments
 		$atts = DownloadHelper::getByNewsletterId($params['newsletter_id']);
 		
-		// send the unique letter to each recipient
-		$sendRes = $sender->send(array(
-				'letter' => $letter,
-				'attach' => $atts,
-				'emails' => array($subscriber),
-				'smtpProfile' => $letter->smtp_profile,
-				'type' => $type,
-				'tracking' => $params['tracking']
-			));
+		try {
 
-		
-		// If sending failed
-		if (!$sendRes && $error = $sender->ErrorInfo) {
-			$res->error = $error;
+			// send the unique letter to each recipient
+			$sendRes = $sender->send(array(
+					'letter' => $letter,
+					'attach' => $atts,
+					'emails' => array($subscriber),
+					'smtpProfile' => $letter->smtp_profile,
+					'type' => $type,
+					'tracking' => $params['tracking']
+				));
+
+			// If sending failed
+			if (!$sendRes && !empty($sender->ErrorInfo)) {
+				throw new Exception ($sender->ErrorInfo);
+			}
+			
+		} catch (Exception $e) {
+			
+			$res->error = $e->getMessage();
+			NewsletterHelper::logMessage('Mailer.Sending error:'.$e->getMessage(), 'mailer/');
 			return $res;
-		}
-
+		}	
+		
 		$res->state = true;
 		return $res;
 	}

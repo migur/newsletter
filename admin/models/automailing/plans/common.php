@@ -18,75 +18,43 @@ JLoader::import('models.automailing.threads.common', JPATH_COMPONENT_ADMINISTRAT
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterAutomlailingPlanCommon extends JTable
+class NewsletterAutomlailingPlanCommon extends MigurJTable
 {
 	public $_threads = null;
 	
 	public $_series = null;
 	
+	
 	public function __construct($data = array()) {
 
 		parent::__construct('#__newsletter_automailings', 'automailing_id', JFactory::getDbo());
 		
-		foreach($data as $key => $value) {
-			$this->$key = $value;
-		}
+		if (!empty($data)) {
+			foreach($data as $key => $value) {
+				$this->$key = $value;
+			}
+		}	
 	}
 
 
 	public function start() {
-		throw new Exception('Need to be implemented in child class');
+		throw new Exception('Method Start need to be implemented in child class');
 	}
 
 	
-	/**
-	 * Creates the thread on basis of $this plan
-	 * 
-	 * @param object $data
-	 * 
-	 * @return NewsletterAutomlailingThreadCommon 
-	 */
-	public function createThread($data){
-		
-		$data = (object)$data;
-		
-		$thread = new NewsletterAutomlailingThreadCommon();
-		$thread->save(array(
-			'automailing_id' => $this->automailing_id,
-			'target_id' => !empty($data->targetId)? $data->targetId : null,
-			'target_type' => !empty($data->targetType)? $data->targetType : null,
-			'step' => 0
-		));
-		
-		array_push($this->_threads, $thread);
-		
-		return $thread;
+	public function createThread() {
+		throw new Exception('Method createThread need to be implemented in child class');
 	}
 	
+
 	/**
-	 * Get all threads for $this plan
-	 * 
-	 * @return array of NewsletterAutomlailingThreadCommon 
+	 * Give information if this plan has been executed once before
 	 */
-	public function getThreads() 
+	public function hasExecutedOnceBefore()
 	{
-		if ($this->_threads !== null) {
-			return $this->_threads;
-		}
-		
-		$dbo = JFactory::getDbo();
-		$query = 
-			"SELECT * FROM #__newsletter_automailings_threads ".
-			'where automailing_id='.(int)$this->automailing_id;
-		
-		$dbo->setQuery($query);
-		$dbo->query();
-		
-		$this->_threads = $dbo->loadObjectList();
-		
-		return $this->_threads;
+		return !empty($this->params['execsCount']);
 	}
-
+	
 	
 	/**
 	 * Get all items of a plan's series
@@ -100,16 +68,16 @@ class NewsletterAutomlailingPlanCommon extends JTable
 		}
 		
 		$dbo = JFactory::getDbo();
-		$query = 
-			"SELECT * FROM #__newsletter_automailings_series AS a ".
-			"WHERE a.automailing_id = ".(int)$this->automailing_id;
-
+		$query = $dbo->getQuery(true);
+		$query->select('*')
+			  ->from('#__newsletter_automailing_items')
+			  ->where('automailing_id = '.(int)$this->automailing_id);
 		$dbo->setQuery($query);
-		$dbo->query();
 		$this->_series = $dbo->loadObjectList();
 		
 		return $this->_series;
 	}
+	
 	
 	/**
 	 * Factory for a instances of NewsletterAutomlailingPlanCommon
@@ -118,21 +86,19 @@ class NewsletterAutomlailingPlanCommon extends JTable
 	 * 
 	 * @return instance of NewsletterAutomlailingPlanCommon
 	 */
-	public static function factory($data)
+	public static function factory($type)
 	{
 		// Decide what object we should create
-		if ($data->automailing_type == 'scheduled') {
+		if ($type == 'scheduled') {
 			JLoader::import('models.automailing.plans.scheduled', JPATH_COMPONENT_ADMINISTRATOR, '');
-			//include_once __FILE__.DS.'scheduled.php';
-			return new NewsletterAutomlailingPlanScheduled($data);
+			return new NewsletterAutomlailingPlanScheduled();
 		}
 
-		if ($data->automailing_type == 'eventbased') {
+		if ($type == 'eventbased') {
 			JLoader::import('models.automailing.plans.eventbased', JPATH_COMPONENT_ADMINISTRATOR, '');
-			//include_once __FILE__.DS.'eventbased.php';
-			$entity = new NewsletterAutomlailingPlanEventbased($data);
+			return new NewsletterAutomlailingPlanEventbased();
 		}
 		
-		throw new Exception('Unallowed type of instance:'.$data->automailing_type);
+		throw new Exception('Unallowed type of plan instance:'.$type);
 	}
 }

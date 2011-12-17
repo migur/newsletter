@@ -1,6 +1,6 @@
-# Version 1.0.3b;
+# Version 1.0.4b1;
 # Non-migration behavior if INSTALL proccess executes!;
-# Prev version 1.0.2b1;
+# Prev version 1.0.3b;
 
 SET foreign_key_checks = 0;
 
@@ -208,6 +208,7 @@ CREATE TABLE `#__newsletter_downloads`
 PRIMARY KEY (`downloads_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+
 CREATE TABLE `#__newsletter_mailbox_profiles` 
 (
 `mailbox_profile_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -223,40 +224,43 @@ CREATE TABLE `#__newsletter_mailbox_profiles`
 PRIMARY KEY (`mailbox_profile_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `jos_newsletter_automailings` 
-(
-`automailing_id` INT(11) NOT NULL AUTO_INCREMENT,
-`automailing_name` VARCHAR(255) DEFAULT NULL,
-`automailing_type` ENUM ('scheduled', 'eventbased'),
-`automailing_state` INT,
 
-PRIMARY KEY (`automailing_id`)
+CREATE TABLE `#__newsletter_automailings` (
+  `automailing_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `automailing_name` VARCHAR(255) DEFAULT NULL,
+  `automailing_type` ENUM('scheduled','eventbased') DEFAULT NULL,
+  `automailing_event` ENUM('subscription') DEFAULT NULL,
+  `automailing_state` INT(11) DEFAULT NULL,
+  `params` TEXT,
+
+  PRIMARY KEY (`automailing_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `jos_newsletter_automailings_series` 
-(
-`series_id` INT(11) NOT NULL AUTO_INCREMENT,
-`automailing_id` INT(11) DEFAULT NULL,
-`newsletter_id` INT(11) DEFAULT NULL,
-`time_start` TIMESTAMP,
-`time_offset` INT(11) DEFAULT NULL,
-`parent_id` INT(11) DEFAULT FALSE,
+CREATE TABLE `#__newsletter_automailing_items` (
+  `series_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `automailing_id` INT(11) DEFAULT NULL,
+  `newsletter_id` INT(11) DEFAULT NULL,
+  `time_start` TIMESTAMP NULL DEFAULT NULL,
+  `time_offset` INT(11) DEFAULT NULL,
+  `parent_id` INT(11) DEFAULT '0',
 
-PRIMARY KEY (`series_id`)
+  PRIMARY KEY (`series_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `jos_newsletter_automailings_threads` 
-(
-`thread_id` INT(11) NOT NULL AUTO_INCREMENT,
-`automailing_id` INT(11) DEFAULT NULL,
-`target_id` INT(11) DEFAULT NULL,
-`target_type` ENUM('subscriber', 'list'),
-`step` SMALLINT,
 
-PRIMARY KEY (`thread_id`)
+CREATE TABLE `#__newsletter_threads` (
+  `thread_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` INT(11) DEFAULT NULL,
+  `type` ENUM ('send', 'automail', 'read') NOT NULL,
+  `subtype` VARCHAR (255),
+  `resource` VARCHAR (255) NOT NULL COMMENT "The target point of a process. email for 'send' and 'read'",
+  `params` TEXT,
+
+  PRIMARY KEY (`thread_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
 
 
 CREATE INDEX `smtp_profile_id_idxfk` ON `#__newsletter_newsletters`(`smtp_profile_id`);

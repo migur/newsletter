@@ -26,12 +26,13 @@ class NewsletterAutomlailingPlanScheduled extends NewsletterAutomlailingPlanComm
 	 */
 	public function start()
 	{
-		/** No threads has been created yet for this single-threated plan */
-		if (count($this->getThreads()) > 0) {
+		// Check if this plan has no exwecutions in the past
+		if ($this->hasExecutedOnceBefore()) {
 			return false;
 		}
-
-		/** Check the date */
+		
+		/* No threads has been created yet for this single-threated plan
+		   Check the date */
 		$series = $this->getSeries();
 		
 		if (count($series) == 0 || mktime() < $series[0]->time_start) {
@@ -39,10 +40,40 @@ class NewsletterAutomlailingPlanScheduled extends NewsletterAutomlailingPlanComm
 		}
 			
 		/** Create thread and start it! */
-		$thread = $this->createThread(array());
-
-		/** Change the status of a plan */
-		$this->save(array('automailing_state' => 1));
+		$thread = $this->createThread();
+		
+		/** Change the status of a plan
+		 Increment the counter of executions */
+		$this->params['execsCount']++;
+		$this->automailing_state = 1;
+		$this->save(array());
+		
 		return true;
+	}
+	
+	/**
+	 * Creates the thread on basis of $this plan
+	 * 
+	 * @return NewsletterAutomlailingThreadCommon 
+	 */
+	public function createThread($options)
+	{
+		// Creates new thread
+		$thread = new NewsletterAutomlailingThreadScheduled();
+		$thread->save(array(
+			'parent_id' => $this->automailing_id,
+			'type'      => 'automail',
+			'subtype'   => 'scheduled',
+			'resource'  => null,
+			'params'    => array(
+				'step'      => 0, 
+				'timeCreated' => mktime(),
+				'targets'   => array(
+					'type' => $this->params['targets']['type'],
+					'ids'  => $this->params['targets']['ids']
+				)
+		)));
+		
+		return $thread;
 	}
 }

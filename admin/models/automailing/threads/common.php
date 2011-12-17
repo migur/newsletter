@@ -16,47 +16,40 @@ defined('_JEXEC') or die;
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterAutomlailingThreadCommon extends JTable
+class NewsletterAutomlailingThreadCommon extends MigurJTable
 {
 	public $_series = null;
 	
 	public function __construct($data = array()) {
 		
-		$data = (object)$data;
+		$data = (array)$data;
 		
-		parent::__construct('#__newsletter_automailings_threads', 'thread_id', JFactory::getDbo());
-		
-		/** Convert target Ids from json */
-		if (!empty($data->target_ids)) {
-			$data->target_ids = json_decode($data->target_ids);
-		}
+		parent::__construct('#__newsletter_threads', 'thread_id', JFactory::getDbo());
 		
 		/** Populate the entity */
-		foreach($data as $key => $value) {
+		foreach($data as $key => &$value) {
 			$this->$key = $value;
 		}
-		
-		$this->step = (int)$this->step;
 	}
 
 	public function run()
 	{
 		$series = $this->getSeries();
 		
-		for(; $this->step < count($series); $this->step++) {
+		for(; $this->params['step'] < count($series); $this->params['step']++) {
 			
-			if (false == $this->process($series[$this->step])) {
+			if (false == $this->process($series[$this->params['step']])) {
 				break;
 			}
 		}
-		
+
 		/** Check if this is a last step */
-		if ($this->step >= count($series)) {
+		if ($this->params['step'] >= count($series)) {
 			return $this->destroy();
 		}
 		
 		/** Otherwise increase the step and fall asleep */
-		return $this->save(array('step' => $this->step));
+		return $this->store();
 	}
 	
 	/**
@@ -82,8 +75,8 @@ class NewsletterAutomlailingThreadCommon extends JTable
 		
 		$dbo = JFactory::getDbo();
 		$query = 
-			"SELECT * FROM #__newsletter_automailings_series AS a ".
-			"WHERE a.automailing_id = ".(int)$this->automailing_id." ".
+			"SELECT * FROM #__newsletter_automailing_items AS a ".
+			"WHERE a.automailing_id = ".(int)$this->parent_id." ".
 			"ORDER BY time_offset";
 
 		$dbo->setQuery($query);
@@ -110,10 +103,9 @@ class NewsletterAutomlailingThreadCommon extends JTable
 			return false;
 		}
 
-		foreach($this->target_ids as $id) {
+		foreach($this->params['targets']['ids'] as $id) {
 
 			$list = $this->_getTargetItems($id);
-			
 			foreach($list as $sid) {
 			
 				$queue = JTable::getInstance('Queue', 'NewsletterTable');
@@ -142,20 +134,44 @@ class NewsletterAutomlailingThreadCommon extends JTable
 	 */
 	public function _getTargetItems($id)
 	{
-		if ($this->target_type == 'subscriber') {
+		if ($this->params['targets']['type'] == 'subscriber') {
 			return array($id);
 		}
 		
-		if ($this->target_type == 'list') {
+		if ($this->params['targets']['type'] == 'list') {
 			
 			$dbo = JFactory::getDbo();
-			$query = 
-				"SELECT subscriber_id FROM #__newsletter_lists AS l ".
-				"JOIN #__newsletter_sub_lists AS sl ON l.list_id = sl.list_id";
-			
+			$query = $dbo->getQuery(true);
+			$query->select('subscriber_id')
+				  ->from('#__newsletter_sub_list')
+				  ->where('list_id = '.(int)$id);
 			$dbo->setQUery($query);
-			$dbo->query();
 			return $dbo->loadAssocList(null, 'subscriber_id');
 		}
 	}
+	
+	
+	/**
+	 * Factory for a instances of NewsletterAutomlailingPlanCommon
+	 * 
+	 * @param type $data
+	 * 
+	 * @return instance of NewsletterAutomlailingPlanCommon
+	 */
+	public static function factory($type)
+	{
+		// Decide what object we should create
+		if ($type == 'scheduled') {
+			JLoader::import('models.automailing.threads.scheduled', JPATH_COMPONENT_ADMINISTRATOR, '');
+			return new NewsletterAutomlailingThreadScheduled();
+		}
+
+		if ($type == 'eventbased') {
+			JLoader::import('models.automailing.threads.eventbased', JPATH_COMPONENT_ADMINISTRATOR, '');
+			return new NewsletterAutomlailingThreadEventbased();
+		}
+		
+		throw new Exception('Unallowed type of thread instance:'.$type);
+	}
+	
 }
