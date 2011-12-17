@@ -58,6 +58,15 @@ class NewsletterControllerCron extends JControllerForm
 	public function send() 
 	{
 		$res = array();
+
+		// First check if we need to process some automailing items.
+		// It does not take much time...
+		try {
+			$res['automailing'] = $this->automailing('triggered');
+		} catch (Exception $e){
+			$res['automailing'] = array('error' => $e->getMessage());
+		}	
+		
 		
 		try {
 			$res['mailing'] = $this->mailing('triggered');
@@ -71,7 +80,7 @@ class NewsletterControllerCron extends JControllerForm
 			$res['processBounced'] = array('error' => $e->getMessage());
 		}	
 		
-		NewsletterHelper::logMessage(json_encode($res), 'cron.txt');
+		NewsletterHelper::logMessage(json_encode($res), 'cron/');
 		jexit();
 	}
 
@@ -223,7 +232,7 @@ class NewsletterControllerCron extends JControllerForm
 				$table->store();
 			}
 
-			NewsletterHelper::logMessage(json_encode($ret), '', $debug);
+			NewsletterHelper::logMessage(json_encode($ret), 'cron/', $debug);
 			
 			$response = array(
 				'data' => $ret,
@@ -329,7 +338,7 @@ class NewsletterControllerCron extends JControllerForm
 												throw new Exception('Delete message error.');
 											}
 											
-											NewsletterHelper::logMessage('Mailbox.Delete mail.Position:'.$mail->msgnum);
+											NewsletterHelper::logMessage('Mailbox.Delete mail.Position:'.$mail->msgnum, 'cron/');
 											$processed++;
 											$processedAll++;
 										}
@@ -379,7 +388,7 @@ class NewsletterControllerCron extends JControllerForm
 				$table->store();
 			}
 
-			NewsletterHelper::logMessage(json_encode($response));
+			NewsletterHelper::logMessage(json_encode($response), 'cron/');
 
 			
 		} else {
@@ -452,6 +461,8 @@ class NewsletterControllerCron extends JControllerForm
 		return (($lastExec + $interval < time()) || $forced) && !$isExec;
 	}
 	
+	
+	
 	public function automailing($mode = 'std'){
 		
 		/** 
@@ -464,7 +475,6 @@ class NewsletterControllerCron extends JControllerForm
 		 */
 		
 		// Phase #1
-		
 		$response = array();
 		
 		$plans = NewsletterAutomailingManager::getScheduledPlans();
@@ -480,7 +490,7 @@ class NewsletterControllerCron extends JControllerForm
 		}
 		
 		// Phase #2
-		$threads = NewsletterAutomailingManager::getAllThreads();
+		$threads = NewsletterAutomailingManager::getAutomailingThreads();
 		
 		if (!empty($threads)) {
 			foreach($threads as $thread) {
@@ -491,7 +501,6 @@ class NewsletterControllerCron extends JControllerForm
 		}
 		
 		// Phase #3 ...........
-		
 		
 		if ($mode == 'std') {
 			jexit();

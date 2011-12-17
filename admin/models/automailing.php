@@ -18,7 +18,7 @@ jimport('joomla.application.component.modeladmin');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelNewsletter extends JModelAdmin
+class NewsletterModelAutomailing extends JModelAdmin
 {
 
 	protected $_context;

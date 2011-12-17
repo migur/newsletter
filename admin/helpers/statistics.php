@@ -170,7 +170,7 @@ class StatisticsHelper
 			$query->where('h.newsletter_id in(' . implode(',', $ids) . ') ');
 		}
 
-		$query->where('h.action="' . NewsletterTableHistory::ACTION_OPENED . '"');
+		$query->where('h.action="' . NewsletterTableHistory::ACTION_CLICKED . '"');
 
 		//echo nl2br(str_replace('#__','jos_',$query)); //die();
 		$res['subscribers'] = count($dbo->setQuery($query)->loadAssocList());

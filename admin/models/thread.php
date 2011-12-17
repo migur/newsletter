@@ -18,7 +18,7 @@ jimport('joomla.application.component.modeladmin');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelNewsletter extends JModelAdmin
+class NewsletterModelThread extends JModelAdmin
 {
 
 	protected $_context;
@@ -33,7 +33,7 @@ class NewsletterModelNewsletter extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.0
 	 */
-	public function getTable($type = 'Newsletter', $prefix = 'NewsletterTable', $config = array())
+	public function getTable($type = 'Thread', $prefix = 'NewsletterTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -50,7 +50,7 @@ class NewsletterModelNewsletter extends JModelAdmin
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Get the form.
-		$form = $this->loadForm('com_newsletter.newsletter', 'newsletter', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_newsletter.thread', 'thread', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
 			return false;
 		}
@@ -66,21 +66,16 @@ class NewsletterModelNewsletter extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.newsletter.data', array());
+		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.thread.data', array());
 
 		if (empty($data)) {
 			$data = $this->getItem();
 		}
 		return $data;
 	}
-
-	/**
-	 * Method to get the script that have to be included on the form
-	 *
-	 * @return string Script files
-	 */
-	public function getScript()
-	{
-		return 'administrator/components/com_newsletter/models/forms/newsletter.js';
-	}
+	
+	
+	
+	
+	
 }

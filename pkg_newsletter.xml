@@ -2,7 +2,7 @@
 <extension type="package" version="1.6.0">
 <name>Migur Newsletter</name>
 <packagename>newsletter</packagename>
-<version>1.0.3b2</version>
+<version>1.0.4b2</version>
 <url>http://migur.com</url>
 <packager>Migur</packager>
 <packagerurl>http://migur.com</packagerurl>
@@ -15,6 +15,7 @@
     <!-- Don't change the direction! The component should be the last in line -->
     <file type="library" id="migur">migur.zip</file>
     <file type="module" id="mod_newsletter_subscribe" client="site">mod_newsletter_subscribe.zip</file>
+    <file type="plugin" id="plg_migurusersync" client="site">plg_migurusersync.zip</file>
     <file type="component" id="com_newsletter">com_newsletter.zip</file>
 </files>
 </extension>
