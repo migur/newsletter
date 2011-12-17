@@ -1,6 +1,6 @@
-# Version 1.0.3b;
+# Version 1.0.4b1;
 # Non-migration behavior if INSTALL proccess executes!;
-# Prev version 1.0.2b1;
+# Prev version 1.0.3b;
 
 SET foreign_key_checks = 0;
 
@@ -208,6 +208,7 @@ CREATE TABLE `#__newsletter_downloads`
 PRIMARY KEY (`downloads_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+
 CREATE TABLE `#__newsletter_mailbox_profiles` 
 (
 `mailbox_profile_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -222,6 +223,45 @@ CREATE TABLE `#__newsletter_mailbox_profiles`
 
 PRIMARY KEY (`mailbox_profile_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `#__newsletter_automailings` (
+  `automailing_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `automailing_name` VARCHAR(255) DEFAULT NULL,
+  `automailing_type` ENUM('scheduled','eventbased') DEFAULT NULL,
+  `automailing_event` ENUM('subscription') DEFAULT NULL,
+  `automailing_state` INT(11) DEFAULT NULL,
+  `params` TEXT,
+
+  PRIMARY KEY (`automailing_id`)
+) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `#__newsletter_automailing_items` (
+  `series_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `automailing_id` INT(11) DEFAULT NULL,
+  `newsletter_id` INT(11) DEFAULT NULL,
+  `time_start` TIMESTAMP NULL DEFAULT NULL,
+  `time_offset` INT(11) DEFAULT NULL,
+  `parent_id` INT(11) DEFAULT '0',
+
+  PRIMARY KEY (`series_id`)
+) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE `#__newsletter_threads` (
+  `thread_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` INT(11) DEFAULT NULL,
+  `type` ENUM ('send', 'automail', 'read') NOT NULL,
+  `subtype` VARCHAR (255),
+  `resource` VARCHAR (255) NOT NULL COMMENT "The target point of a process. email for 'send' and 'read'",
+  `params` TEXT,
+
+  PRIMARY KEY (`thread_id`)
+) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
 
 CREATE INDEX `smtp_profile_id_idxfk` ON `#__newsletter_newsletters`(`smtp_profile_id`);
 # ALTER TABLE `#__newsletter_newsletters` ADD CONSTRAINT `newsletters_smtp_profile_idfk` FOREIGN KEY `smtp_profile_id_idxfk` (`smtp_profile_id`) REFERENCES `#__newsletter_smtp_profiles` (`smtp_profile_id`);
@@ -275,8 +315,8 @@ INSERT  INTO `#__newsletter_template_styles`(`t_style_id`,`template`,`title`,`pa
 INSERT  INTO `#__newsletter_template_styles`(`t_style_id`,`template`,`title`,`params`) VALUES (8,'threecolumn1.xml','Standard threecolumn template (custom)','{\"width_column1\":\"50%\",\"height_column1\":\"50%\",\"width_column2\":\"50%\",\"height_column2\":\"50%\",\"image_top\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/top_image.png\",\"image_top_alt\":\"The top image\",\"image_top_width\":\"600px\",\"image_top_height\":\"100px\",\"image_bottom\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/bottom_image.png\",\"image_bottom_alt\":\"The bottom image\",\"image_bottom_width\":\"600px\",\"image_bottom_height\":\"100px\",\"table_background\":\"#000000\",\"text_color\":\"#000000\",\"t_style_id\":\"8\"}');
 
 # Data for the table `#__newsletter_subscribers`;
-insert  into `#__newsletter_subscribers`(`subscriber_id`,`name`,`email`,`state`,`html`,`user_id`,`created_on`,`created_by`,`modified_on`,`modified_by`,`locked_on`,`locked_by`,`confirmed`,`subscription_key`) values (1,'John Doe','john-doe@example.com',1,1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,'1','1234560000000011234567890');
-insert  into `#__newsletter_subscribers`(`subscriber_id`,`name`,`email`,`state`,`html`,`user_id`,`created_on`,`created_by`,`modified_on`,`modified_by`,`locked_on`,`locked_by`,`confirmed`,`subscription_key`) values (2,'Jane Doe','jane-doe@example.com',1,1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,'1','6543210000000021234567895');
+insert  into `#__newsletter_subscribers`(`subscriber_id`,`name`,`email`,`state`,`html`,`user_id`,`created_on`,`created_by`,`modified_on`,`modified_by`,`locked_on`,`locked_by`,`confirmed`,`subscription_key`) values (1,'John Doe','john-doe123123123@gmail.com',1,1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,'1','1234560000000011234567890');
+insert  into `#__newsletter_subscribers`(`subscriber_id`,`name`,`email`,`state`,`html`,`user_id`,`created_on`,`created_by`,`modified_on`,`modified_by`,`locked_on`,`locked_by`,`confirmed`,`subscription_key`) values (2,'Jane Doe','jane-doe123123123@gmail.com',1,1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,'1','6543210000000021234567895');
 
 # Data for the table `#__newsletter_lists`;
 insert  into `#__newsletter_lists`(`list_id`,`name`,`state`,`description`,`smtp_profile_id`,`ordering`,`created_on`,`created_by`,`modified_on`,`modified_by`,`locked_on`,`locked_by`,`send_at_reg`,`send_at_unsubscribe`) values (2,'Doe Family holiday!',1,'The letter for Doe family members about birthday of Baby Doe!',0,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,0,0);

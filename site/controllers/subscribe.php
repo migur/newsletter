@@ -12,6 +12,8 @@ defined('_JEXEC') or die('Restricted access');
 
 JLoader::import('helpers.placeholder', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.data', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('models.automailing.manager', JPATH_COMPONENT_ADMINISTRATOR, '');
 jimport('migur.library.mailer');
 
 /*
@@ -38,7 +40,7 @@ class NewsletterControllerSubscribe extends JController
 
 	/**
 	 * The method to bind subscriber to J! user.
-	 *
+	 * To test <b>?option=com_newsletter&task=subscribe.subscribe&newsletter-name=index.php
 	 * @return void
 	 * @since  1.0
 	 */
@@ -53,10 +55,10 @@ class NewsletterControllerSubscribe extends JController
 		$name = JRequest::getString('newsletter-name', null);
 		$email = JRequest::getString('newsletter-email', null);
 		$html = (int) JRequest::getInt('newsletter-html', null);
-		$lists = (array)JRequest::getVar('newsletter-lists', array());
+		$lists = DataHelper::toArrayOfInts(JRequest::getVar('newsletter-lists', array()));
 		$fbenabled = JRequest::getInt('fbenabled', array());
 		//$sendto = JRequest::getVar('sendto');
-
+		
 		// Check token, die on error.
 		JRequest::checkToken() or jexit('Invalid Token');
 
@@ -148,6 +150,13 @@ class NewsletterControllerSubscribe extends JController
 			$db->query();
 		}
 
+		
+		// Triggering the automailing process.
+		$amManager = new NewsletterAutomailingManager();
+		$amManager->processSubscription(array(
+			'subscriberId' => $subscriber->subscriber_id
+		));
+		
 		// If the email or subscriptions are needed to confirm then send the email
 		if ($confirmed == 1) {
  			$message = JText::sprintf('Thank you %s for subscribing to our Newsletter!', $name);
@@ -158,20 +167,25 @@ class NewsletterControllerSubscribe extends JController
 		// Let's send the subscription email
 		$db->setQuery("SELECT * FROM #__newsletter_lists WHERE list_id in (" . implode(',', $lists) . ')');
 		$mysqlObj = $db->loadObjectList();
+		
 		$titles = array();
-		foreach ($mysqlObj as $item) {
-			$titles[] = $item->name;
+		if (!empty($mysqlObj)) {
+			foreach ($mysqlObj as $item) {
+				$titles[] = $item->name;
+			}
 		}
+		
 		PlaceholderHelper::setPlaceholder('list', $titles);
 
 		/* Let's try to determine the wellcoming newsletter to send.
 		 *	Now we get the letter from the first list.
 		 */
-		$newsletterId = (int)$mysqlObj[0]->send_at_reg;
-		if ($newsletterId == 0) {
-		/* If the wellcoming letter is not defined
-		 *	then try to use the default wellcoming newsletter
-		 */
+		$newsletterId = !empty($mysqlObj)? (int)$mysqlObj[0]->send_at_reg : 0;
+			
+		if($newsletterId == 0) {
+			/* If the wellcoming letter is not defined
+			 *	then try to use the default wellcoming newsletter
+			 */
 			$newsletterId = (int)$comParams->get('subscription_newsletter_id');
 		}
 
@@ -188,15 +202,16 @@ class NewsletterControllerSubscribe extends JController
 				jexit('The error was occured. Please try again later');
 			}
 
+			$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
+			
 		} else {
 
 			// TODO: There should be the notification for admin instead.
 			JLog::getInstance()->addEntry(array('comment' => 'subscribe.subscribe: The wellcoming newsletter not found'));
-			jexit('The wellcoming newsletter is not defined');
+			$message = JText::_('The wellcoming newsletter is not defined');
 		}
 
 		// Redirect to page
-		$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
 		jexit($message);
 		//$this->setRedirect(base64_decode($sendto), $message, 'message');
 	}
@@ -359,7 +374,9 @@ class NewsletterControllerSubscribe extends JController
 			$res = $db->query();
 		}
 
-		
+		// Process automailing unsubscription
+		$amManager = new NewsletterAutomailingManager();
+		$amManager->processUnsubscription();
 		
 		$app->triggerEvent(
 			'onMigurNewsletterAfterUnsubscribe', 
