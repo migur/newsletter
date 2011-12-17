@@ -162,6 +162,12 @@
         <zip destfile="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe.zip" basedir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" />
         <delete dir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" />
 
+        <copy todir="${cfg.buildVersionDir}/packages/plg_migurusersync" preservelastmodified="true" overwrite="true">
+            <fileset dir="${basedir}/extensions/plugins/plg_migurusersync" />
+        </copy>
+        <zip destfile="${cfg.buildVersionDir}/packages/plg_migurusersync.zip" basedir="${cfg.buildVersionDir}/packages/plg_migurusersync" />
+        <delete dir="${cfg.buildVersionDir}/packages/plg_migurusersync" />
+
         <copy todir="${cfg.buildVersionDir}/packages/migur" preservelastmodified="true" overwrite="true">
             <fileset dir="${basedir}/extensions/libraries/migur" />
         </copy>

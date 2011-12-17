@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="plugin" group="user">
+	<name>Migur - User synchronisation plugin</name>
+	<author>Henrik Hussfelt</author>
+	<creationDate>November 2011</creationDate>
+	<copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>henrik@migur.com</authorEmail>
+	<authorUrl>www.migur.com</authorUrl>
+	<version>1.0</version>
+	<description>Plugin to synchronise users</description>
+
+	<files>
+		<filename plugin="migurusersync">migurusersync.php</filename>
+		<filename>index.html</filename>
+	</files>
+	
+	<languages>
+		<language tag="en-GB">en-GB.plg_user_migurusersync.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset 
+				name="basic"
+				label="PLG_MIGURUSERSYNC_JTOCOM_SYNC_LABEL">
+					
+				<field 
+					name="jtocomadd" 
+					type="list"
+					description="PLG_MIGURUSERSYNC_JTOCOM_SYNC_ONADDUSER_DESC"
+					label="PLG_MIGURUSERSYNC_JTOCOM_SYNC_ONADDUSER_LABEL" 
+					default="1" >
+					
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				
+				<field 
+					name="jtocomdelete" 
+					type="list"
+					description="PLG_MIGURUSERSYNC_JTOCOM_SYNC_ONDELETEUSER_DESC"
+					label="PLG_MIGURUSERSYNC_JTOCOM_SYNC_ONDELETEUSER_LABEL" 
+					default="1" >
+					
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>		
+				
+			</fieldset>
+		</fields>
+	</config>
+		
+	<updateservers>
+		<server type="extension" priority="1" name="Migur Update Site">http://update.migur.com/plg-migurusersync.xml</server>
+	</updateservers>
+</extension>
