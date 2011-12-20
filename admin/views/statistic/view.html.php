@@ -55,6 +55,7 @@ class NewsletterViewStatistic extends MigurView
 		JHTML::script('media/com_newsletter/js/migur/js/g.bar.js');
 		JHTML::script('media/com_newsletter/js/migur/js/raphael-migur-line.js');
 		JHTML::script('media/com_newsletter/js/migur/js/raphael-migur-pie.js');
+		JHTML::script('administrator/components/com_newsletter/views/statistic/hlines.js');
 		JHTML::script('administrator/components/com_newsletter/views/statistic/statistic.js');
 
 
