@@ -161,21 +161,15 @@ class commonManager
 
 	public function validateTable($name, $needed)
 	{
-
 		$db = JFactory::getDbo();
-		$db->setQuery('DESCRIBE ' . $name);
-		$result = $db->query();
+		$fields = @$db->getTableColumns($name);
 
-		$res = array();
-		if (empty($result)) {
+		if (empty($fields)) {
 			return false;
 		}
 
-		$fields = array();
-		while ($row = mysql_fetch_array($result)) {
-			$fields[] = $row[0];
-		}
-
+		$fields = array_keys($fields);
+		
 		foreach ($needed as $item) {
 			// Check the needed fields
 			if (!in_array($item, $fields)) {
