@@ -12,14 +12,18 @@ defined('_JEXEC') or die;
 
 jimport('joomla.utilities.simplexml');
 
+JLoader::import('helpers.data', JPATH_COMPONENT_ADMINISTRATOR, '');
+
 /**
  * Class of automailings list model of the component.
  *
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelAutomailings extends MigurModelList
+class NewsletterModelAutomailingTargets extends MigurModelList
 {
+	public $automailingId = null;
+	
 	/**
 	 * Method to auto-populate the model state.
 	 * Note. Calling getState in this method will result in recursion.
@@ -59,7 +63,7 @@ class NewsletterModelAutomailings extends MigurModelList
 		$this->setState('filter.search', $search);
 
 		// List state information.
-		parent::populateState('a.automailing_name', 'asc');
+		parent::populateState('a.time_offset', 'asc');
 	}
 
 	/**
@@ -97,22 +101,70 @@ class NewsletterModelAutomailings extends MigurModelList
 
 		// Select the required fields from the table.
 		$query->select('*');
-		$query->from('#__newsletter_automailings AS a');
+		$query->from('#__newsletter_automailing_targets');
 
-		// Filter by search in title.
-		$search = $this->getState('filter.search');
-		if (!empty($search)) {
-			$search = $db->Quote('%' . $db->getEscaped($search, true) . '%');
-			$query->where('(a.automailing_name LIKE ' . $search . ')');
+		if (!empty($this->automailingId)) {
+			$query->where('automailing_id='.(int)$this->automailingId);
 		}
-
-		// Add the list ordering clause. 
-		// Need to be setted in populateState
-		$orderCol = $this->state->get('list.ordering');
-		$orderDirn = $this->state->get('list.direction');
-		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
-
-		//echo nl2br(str_replace('#__','jos_',$query));
+		
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		return $query;
 	}
+	
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * @return type 
+	 */
+	public function getNames($aid) 
+	{
+		$this->automailingId = $aid;
+
+		$items = $this->getItems();
+		
+		$ids = array(
+			'list' => array(), 
+			'subscriber' => array()
+		);
+		
+		$names = array(
+			'list' => array(), 
+			'subscriber' => array()
+		);
+		
+		foreach($items as &$item) {
+			$ids[$item->target_type][] = $item->target_id;
+		}	
+		
+		foreach($ids as $idx => &$idList) {
+			
+			if ($idx == 'list' && !empty($idList)) {
+				
+				$dbo = JFactory::getDbo();
+				$query = $dbo->getQuery(true);
+				$query->select('name')
+					  ->from('#__newsletter_lists')
+					  ->where('list_id in ('.implode(',',$idList).')');
+				$dbo->setQUery($query);
+				$nms = $dbo->loadAssocList(null, 'name');
+				$names['list'] = array_merge($names['list'], $nms);
+			}	
+
+			if ($idx == 'subscriber' && !empty($idList)) {
+				
+				$dbo = JFactory::getDbo();
+				$query = $dbo->getQuery(true);
+				$query->select('name')
+					  ->from('#__newsletter_subscribers')
+					  ->where('subscriber_id in ('.implode(',',$idList).')');
+				$dbo->setQUery($query);
+				$names['subscriber'] = array_merge($names['subscriber'], $dbo->loadAssocList(null, 'name'));
+			}	
+		}
+		
+		return $names;
+	}
+	
 }

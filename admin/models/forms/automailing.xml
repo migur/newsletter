@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+        <field
+            type="text"
+            name="width_column1"
+            default="auto"
+            label="COM_NEWSLETTER_WIDTH"
+            description="COM_NEWSLETTER_WIDTH_COLUMN1"
+            class="inputbox validate-width_column1"
+            size="10"
+            required="false"
+            validate="cssdimension"
+/>
+        <field
+            type="text"
+            name="height_column1"
+            default="auto"
+            label="COM_NEWSLETTER_HEIGHT"
+            description="COM_NEWSLETTER_HEIGHT_COLUMN1"
+            class="inputbox validate-height_column1"
+            size="10"
+            required="false"
+            validate="cssdimension"
+ />
+        <field
+            type="text"
+            name="width_column2"
+            default="auto"
+            label="COM_NEWSLETTER_WIDTH"
+            description="COM_NEWSLETTER_WIDTH_COLUMN2"
+            class="inputbox validate-width_column2"
+            size="10"
+            required="false"
+            validate="cssdimension"
+/>
+        <field
+            type="text"
+            name="height_column2"
+            default="auto"
+            label="COM_NEWSLETTER_HEIGHT"
+            description="COM_NEWSLETTER_HEIGHT_COLUMN2"
+            class="inputbox validate-height_column2"
+            size="10"
+            required="false"
+            validate="cssdimension"
+ />
+        <field
+            type="text"
+            name="width_column3"
+            default="auto"
+            label="COM_NEWSLETTER_WIDTH"
+            description="COM_NEWSLETTER_WIDTH_COLUMN3"
+            class="inputbox validate-width_column3"
+            size="10"
+            required="false"
+            validate="cssdimension"
+/>
+        <field
+            type="text"
+            name="height_column3"
+            default="auto"
+            label="COM_NEWSLETTER_HEIGHT"
+            description="COM_NEWSLETTER_HEIGHT_COLUMN3"
+            class="inputbox validate-height_column3"
+            size="10"
+            required="false"
+            validate="cssdimension"
+ />
+        <field 
+            type="text"
+            name="image_top"
+            default=""
+            label="COM_NEWSLETTER_IMAGE_TOP"
+            class="inputbox validate-image_top"
+            size="10"
+            required="false"
+			validate="text"
+        />
+        <field
+            type="text"
+            name="image_top_alt"
+            default="The top image"
+            label="COM_NEWSLETTER_IMAGE_ALT"
+            class="inputbox validate-image_top_alt"
+            size="10"
+            required="false"
+            validate="text"
+        />
+        <field
+            type="text"
+            name="image_top_width"
+            default="auto"
+            label="COM_NEWSLETTER_WIDTH"
+            class="inputbox validate-image_top_width"
+            size="10"
+            required="true"
+            validate="cssdimension"
+        />
+        <field
+            type="text"
+            name="image_top_height"
+            default="auto"
+            label="COM_NEWSLETTER_HEIGHT"
+            class="inputbox validate-image_top_height"
+            size="10"
+            required="true"
+            validate="cssdimension"
+        />
+        <field
+            type="text"
+            name="image_bottom"
+            default=""
+            label="COM_NEWSLETTER_IMAGE_BOTTOM"
+            class="inputbox validate-image_bottom"
+            size="10"
+            required="false"
+			validate="text"
+        />
+        <field
+            type="text"
+            name="image_bottom_alt"
+            default="The bottom image"
+            label="COM_NEWSLETTER_IMAGE_ALT"
+            class="inputbox validate-image_bottom_alt"
+            size="10"
+            required="false"
+            validate="text"
+        />
+        <field
+            type="text"
+            name="image_bottom_width"
+            default="auto"
+            label="COM_NEWSLETTER_WIDTH"
+            class="inputbox validate-image_bottom_width"
+            size="10"
+            required="true"
+            validate="cssdimension"
+        />
+        <field
+            type="text"
+            name="image_bottom_height"
+            default="auto"
+            label="COM_NEWSLETTER_HEIGHT"
+            class="inputbox validate-image_bottom_height"
+            size="10"
+            required="true"
+            validate="cssdimension"
+        />
+        <field 
+            type="text"
+            name="table_background"
+            default="#FFFFFF"
+            label="COM_NEWSLETTER_TABLE_BACKGROUND_COLOR"
+            class="inputbox validate-table_background"
+            size="7"
+            required="true"
+            validate="csscolor"
+        />
+        <field
+            type="text"
+            name="text_color"
+            default="#000000"
+            label="COM_NEWSLETTER_TEXT_COLOR"
+            class="inputbox validate-text_color"
+            size="7"
+            required="true"
+            validate="csscolor"
+        />
+
+        <field
+            type="text"
+            name="title"
+            default=""
+            label="COM_NEWSLETTER_TEMPLATE_NAME"
+            class="inputbox validate-template_name"
+            size="50"
+            required="true"
+            validate="text"
+        />
+
+<!--
+        <fields name="information">
+            <field name="name" default = "Standard template" />
+            <field name="author" default = "Migur" />
+            <field name="creationDate" default = "December 2010" />
+            <field name="copyright" default = "Copyright (C) 2010 - Migur Ltd." />
+            <field name="license" default = "http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL" />
+            <field name="authorEmail" default = "info@migur.com" />
+            <field name="authorUrl" default = "http://migur.com/" />
+            <field name="version" default = "1.5.0" />
+            <field name="description" default = "This is the standard newsletter template." />
+        </fields>-->
+        <field name="t_style_id" type="hidden" />
+        <field name="params" type="hidden" />
+</form>

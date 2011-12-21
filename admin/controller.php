@@ -58,6 +58,11 @@ class NewsletterController extends JController
 					$idName = 't_style_id';
 					$viewRedir = 'templates';
 					break;
+				
+				case 'automailing':
+					$idName = 'automailing_id';
+					$viewRedir = 'automailings';
+					break;
 			}
 
 			if (empty($skipCheck)) {

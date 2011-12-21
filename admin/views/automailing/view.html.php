@@ -50,18 +50,40 @@ class NewsletterViewAutomailing extends MigurView
 	 */
 	public function display($tpl = null)
 	{
-		//TODO: Need to move css/js to SetDocument
-
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/automailing.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script('media/com_newsletter/js/migur/js/ajax.js');
-
 		// Set the document
 		$this->setDocument();
+
+		// We don't need toolbar in the modal window.
+		if ($this->getLayout() !== 'modal') {
+			$this->addToolbar();
+		}
+		
+		$aid = JRequest::getInt('automailing_id');
+
+		// Get automailing
+		$model = $this->getModel();
+		$item = $model->getItem();
+		$this->assignRef('automailing', $item);
+		
+		// Get item list (series)
+		$itemsModel = JModel::getInstance('AutomailingItems', 'NewsletterModel');
+		$amList = (object) array(
+				'items' => $itemsModel->getNormalizedItems($aid),
+				'state' => $itemsModel->getState(),
+				'listOrder' => $itemsModel->getState('list.ordering'),
+				'listDirn' => $itemsModel->getState('list.direction')
+		);
+		$this->assignRef('automailingItems', $amList);
+
+		$pagination = $itemsModel->getPagination();
+		$this->assignRef('pagination', $pagination);
+		
+		// Get target list
+		$targetsModel = JModel::getInstance('AutomailingTargets', 'NewsletterModel');
+		$targetsModel->automailingId = $aid;
+		$this->assignRef('automailingTargets', $targetsModel->getNames($aid));
 		
 		parent::display($tpl);
-
 	}
 
 	/**
@@ -98,10 +120,16 @@ class NewsletterViewAutomailing extends MigurView
 		$isNew = (!JRequest::getInt('automailing_id', false) );
 		JavascriptHelper::addStringVar('isNew', (int)$isNew);
 		$document = JFactory::getDocument();
+		
 		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_AUTOMAILING_CREATING') : JText::_('COM_NEWSLETTER_AUTOMAILING_EDITING'));
-		$document->addScript(JURI::root() . $this->script);
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/automailing/automailing.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/automailing/submitbutton.js");
+		
+		$document->addScript(JURI::root()."/administrator/components/com_newsletter/views/automailing/automailing.js");
+		$document->addScript(JURI::root()."/administrator/components/com_newsletter/views/automailing/submitbutton.js");
+		$document->addstylesheet(JURI::root().'/media/com_newsletter/css/admin.css');
+		$document->addstylesheet(JURI::root().'/media/com_newsletter/css/automailing.css');
+		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/core.js');
+		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/ajax.js');
+
 		JText::script('COM_NEWSLETTER_AUTOMAILING_ERROR_UNACCEPTABLE');
 	}
 

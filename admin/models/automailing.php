@@ -33,7 +33,7 @@ class NewsletterModelAutomailing extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.0
 	 */
-	public function getTable($type = 'Newsletter', $prefix = 'NewsletterTable', $config = array())
+	public function getTable($type = 'Automailing', $prefix = 'NewsletterTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -50,7 +50,7 @@ class NewsletterModelAutomailing extends JModelAdmin
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Get the form.
-		$form = $this->loadForm('com_newsletter.newsletter', 'newsletter', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_newsletter.automailing', 'automailing', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
 			return false;
 		}
@@ -66,21 +66,44 @@ class NewsletterModelAutomailing extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.newsletter.data', array());
+		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.automailing.data', array());
 
 		if (empty($data)) {
 			$data = $this->getItem();
 		}
 		return $data;
 	}
-
-	/**
-	 * Method to get the script that have to be included on the form
-	 *
-	 * @return string Script files
-	 */
-	public function getScript()
+	
+	public function getTargets() 
 	{
-		return 'administrator/components/com_newsletter/models/forms/newsletter.js';
+		// Create a new query object.
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('automailing_name, automailing_type, time_start, time_offset, status, sent, n.name AS newsletter_name');
+		$query->from('#__newsletter_automailing_items AS ai');
+		$query->join('', '#__newsletter_newsletters AS n ON n.newsletter_id = ai.newsletter_id');
+		$query->join('', '#__newsletter_automailings AS a ON a.automailing_id = ai.automailing_id');
+
+		if (!empty($this->automailingId)) {
+			$query->where('ai.automailing_id='.(int)$this->automailingId);
+		}
+		
+		// Filter by search in title.
+//		$search = $this->getState('filter.search');
+//		if (!empty($search)) {
+//			$search = $db->Quote('%' . $db->getEscaped($search, true) . '%');
+//			$query->where('(a.timeoffset LIKE ' . $search . ')');
+//		}
+
+		// Add the list ordering clause. 
+		// Need to be setted in populateState
+//		$orderCol = $this->state->get('list.ordering');
+//		$orderDirn = $this->state->get('list.direction');
+		$query->order('time_offset ASC');
+
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
+		return $query;
 	}
 }

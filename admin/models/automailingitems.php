@@ -12,14 +12,18 @@ defined('_JEXEC') or die;
 
 jimport('joomla.utilities.simplexml');
 
+JLoader::import('helpers.data', JPATH_COMPONENT_ADMINISTRATOR, '');
+
 /**
  * Class of automailings list model of the component.
  *
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelAutomailings extends MigurModelList
+class NewsletterModelAutomailingItems extends MigurModelList
 {
+	public $automailingId = null;
+	
 	/**
 	 * Method to auto-populate the model state.
 	 * Note. Calling getState in this method will result in recursion.
@@ -59,7 +63,7 @@ class NewsletterModelAutomailings extends MigurModelList
 		$this->setState('filter.search', $search);
 
 		// List state information.
-		parent::populateState('a.automailing_name', 'asc');
+		parent::populateState('a.time_offset', 'asc');
 	}
 
 	/**
@@ -96,23 +100,62 @@ class NewsletterModelAutomailings extends MigurModelList
 		$query = $db->getQuery(true);
 
 		// Select the required fields from the table.
-		$query->select('*');
-		$query->from('#__newsletter_automailings AS a');
+		$query->select('automailing_name, automailing_type, time_start, time_offset, status, sent, n.name AS newsletter_name');
+		$query->from('#__newsletter_automailing_items AS ai');
+		$query->join('', '#__newsletter_newsletters AS n ON n.newsletter_id = ai.newsletter_id');
+		$query->join('', '#__newsletter_automailings AS a ON a.automailing_id = ai.automailing_id');
 
-		// Filter by search in title.
-		$search = $this->getState('filter.search');
-		if (!empty($search)) {
-			$search = $db->Quote('%' . $db->getEscaped($search, true) . '%');
-			$query->where('(a.automailing_name LIKE ' . $search . ')');
+		if (!empty($this->automailingId)) {
+			$query->where('ai.automailing_id='.(int)$this->automailingId);
 		}
+		
+		// Filter by search in title.
+//		$search = $this->getState('filter.search');
+//		if (!empty($search)) {
+//			$search = $db->Quote('%' . $db->getEscaped($search, true) . '%');
+//			$query->where('(a.timeoffset LIKE ' . $search . ')');
+//		}
 
 		// Add the list ordering clause. 
 		// Need to be setted in populateState
-		$orderCol = $this->state->get('list.ordering');
-		$orderDirn = $this->state->get('list.direction');
-		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
+//		$orderCol = $this->state->get('list.ordering');
+//		$orderDirn = $this->state->get('list.direction');
+		$query->order('time_offset ASC');
 
-		//echo nl2br(str_replace('#__','jos_',$query));
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		return $query;
 	}
+	
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * @return type 
+	 */
+	public function getNormalizedItems($aid = null) 
+	{
+		if (!empty($aid)) {
+			$this->automailingId = $aid;
+		}	
+		
+		$items = $this->getItems();
+		
+		foreach($items as $idx => &$item) {
+			
+			// If this is a first element then check the automailing type to determine
+			// verbal interpretation of it
+			if ($idx == 0 && $item->automailing_type == 'eventbased') {
+				
+				$item->time_verbal = JText::_('COM_NEWSLETTER_EVENT_SUBSCRIPTION');
+			} else {
+				
+				$item->time_verbal = !empty($item->time_start)? 
+					$item->time_start : JText::_('COM_NEWSLETTER_AFTER').' '.DataHelper::timeIntervaltoVerbal($item->time_offset);
+			}	
+		}
+		
+		return $items;
+	}
+	
 }

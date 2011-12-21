@@ -149,4 +149,78 @@ class DataHelper
 		
 		return $data;
 	}
+	
+	
+	/**
+	 * 
+	 */
+	public static function timeIntervaltoVerbal($seconds, $items = array()) 
+	{
+		if (empty($items)) {
+			$items = array('weeks', 'days', 'hours');
+		}
+		
+		$minute = 60;
+		$hour = $minute * 60;
+		$day = $hour * 24;
+		$week = $day * 7;
+		
+		$weekCnt = floor($seconds / $week);
+		$seconds -= $weekCnt * $week; 
+
+		$dayCnt = floor($seconds / $day);
+		$seconds -= $dayCnt * $day; 
+
+		$hourCnt = floor($seconds / $hour);
+		$seconds -= $hourCnt * $hour; 
+		
+		$minCnt = floor($seconds / $minute);
+		$seconds -= $minCnt * $minute; 
+		
+		if ($weekCnt > 4) {
+			$dayCnt += $weekCnt * $week;
+			$weekCnt = 0;
+		}
+		
+		//var_dump($weekCnt.'-'.$dayCnt.'-'.$hourCnt.'-'.$minCnt.'-'.$seconds);
+		
+		$res = '';
+		foreach($items as $item) {
+			
+			switch($item) {
+				
+				case 'weeks':
+					if (!empty($weekCnt)) {
+						$res .= ' '.$weekCnt.' '.(($weekCnt == 1)? JText::_('COM_NEWSLETTER_WEEK') : JText::_('COM_NEWSLETTER_WEEKS'));
+					}	
+					break;
+
+				case 'days':
+					if (!empty($dayCnt)) {
+						$res .= ' '.$dayCnt.' '.(($dayCnt == 1)? JText::_('COM_NEWSLETTER_DAY') : JText::_('COM_NEWSLETTER_DAYS'));
+					}	
+					break;
+
+				case 'hours':
+					if (!empty($hourCnt)) {
+						$res .= ' '.$hourCnt.' '.(($hourCnt == 1)? JText::_('COM_NEWSLETTER_HOUR') : JText::_('COM_NEWSLETTER_HOURS'));
+					}	
+					break;
+					
+				case 'minutes':
+					if (!empty($minCnt)) {
+						$res .= ' '.$minCnt.' '.(($minCnt == 1)? JText::_('COM_NEWSLETTER_MINUTE') : JText::_('COM_NEWSLETTER_MINUTES'));
+					}	
+					break;
+					
+				case 'seconds':
+					if (!empty($seconds)) {
+						$res .= ' '.$seconds.' '.(($seconds == 1)? JText::_('COM_NEWSLETTER_SECOND') : JText::_('COM_NEWSLETTER_SECONDS'));
+					}	
+					break;
+			}
+		}
+		
+		return trim($res);
+	}
 }
