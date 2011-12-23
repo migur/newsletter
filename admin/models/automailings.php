@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The subscribers list model. Implements the standard functional for subscribers list view.
+ * The automailings list model. Implements the standard functionality for automailings list view.
  *
  * @version	   $Id:  $
  * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
@@ -10,66 +10,109 @@
 // no direct access
 defined('_JEXEC') or die;
 
-JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('tables.history', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('tables.thread', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('helpers.mail', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('models.automailing.plans.common', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('models.automailing.threads.common', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('models.automailing.threads.common', JPATH_COMPONENT_ADMINISTRATOR, '');
+jimport('joomla.utilities.simplexml');
 
 /**
- * Class of subscribers list model of the component.
+ * Class of automailings list model of the component.
  *
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterAutomailing extends MigurModelList
+class NewsletterModelAutomailings extends MigurModelList
 {
 	/**
-	 * Get all registered plans.
+	 * Method to auto-populate the model state.
+	 * Note. Calling getState in this method will result in recursion.
+	 *
+	 * @param string $ordering - name of column
+	 * @param string $direction - direction
+	 *
+	 * @return void
+	 * @since  1.0
 	 */
-	public function getScheduledPlans() {
-		
-		$dbo = JFactory::getDbo();
-		$query = 
-			' SELECT * FROM #__newsletter_automailings AS a '.
-			' WHERE a.automailing_type = "scheduled"';
+	protected function populateState($ordering = null, $direction = null)
+	{
+		// Initialise variables.
+		$app = JFactory::getApplication();
+		$session = JFactory::getSession();
 
-		$dbo->setQuery($query);
-		$dbo->query();
-		$obj = $dbo->loadObjectList();
-		
-		$res = array();
-		
-		if (!empty($obj)) {
-			foreach($obj as $item) {
-				$res[] = NewsletterAutomlailingPlanCommon::factory($item);
-			}	
+		// Adjust the context to support modal layouts.
+		if ($layout = JRequest::getVar('layout')) {
+			$this->context .= '.' . $layout;
 		}
-		
-		return $res;
+
+		$form = JRequest::getVar('form');
+		$name = $this->getName();
+		if ($form != $name) {
+			$search = $app->getUserState($this->context . '.filter.search');
+			$published = $app->getUserState($this->context . '.filter.published');
+			$published = ($published) ? $published : '';
+		} else {
+			$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
+			if ($search == "Search...") {
+				$search = "";
+			}
+			$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
+		}
+
+		$this->setState('filter.published', $published);
+		$this->setState('filter.search', $search);
+
+		// List state information.
+		parent::populateState('a.automailing_name', 'asc');
 	}
-	
-	public function getAutomailingThreads() {
-		
-		$dbo = JFactory::getDbo();
-		
-		$query = $dbo->getQuery(true);
-		$query->select('*')
-			  ->from('#__newsletter_threads')
-			  ->where('type="automailing"');
-		$dbo->query();
-		$obj = $dbo->loadObjectList();
-		
-		$res = array();
-		if (!empty($obj)) {
-			foreach($obj as $item) {
-				$res[] = new NewsletterAutomlailingThreadCommon($item);
-			}	
+
+	/**
+	 * Method to get a store id based on model configuration state.
+	 *
+	 * This is necessary because the model is used by the component and
+	 * different modules that might need different sets of data or different
+	 * ordering requirements.
+	 *
+	 * @param	string		$id	A prefix for the store id.
+	 *
+	 * @return	string		A store id.
+	 * @since	1.0
+	 */
+	protected function getStoreId($id = '')
+	{
+		// Compile the store id.
+		$id .= ':' . $this->getState('filter.search');
+		$id .= ':' . $this->getState('filter.state');
+
+		return parent::getStoreId($id);
+	}
+
+	/**
+	 * Build an SQL query to load the list data.
+	 *
+	 * @return	JDatabaseQuery
+	 * @since	1.0
+	 */
+	protected function getListQuery()
+	{
+		// Create a new query object.
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('*');
+		$query->from('#__newsletter_automailings AS a');
+
+		// Filter by search in title.
+		$search = $this->getState('filter.search');
+		if (!empty($search)) {
+			$search = $db->Quote('%' . $db->getEscaped($search, true) . '%');
+			$query->where('(a.automailing_name LIKE ' . $search . ')');
 		}
-		
-		return $res;
+
+		// Add the list ordering clause. 
+		// Need to be setted in populateState
+		$orderCol = $this->state->get('list.ordering');
+		$orderDirn = $this->state->get('list.direction');
+		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
+
+		//echo nl2br(str_replace('#__','jos_',$query));
+		return $query;
 	}
 }
