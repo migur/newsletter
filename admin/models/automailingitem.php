@@ -18,7 +18,7 @@ jimport('joomla.application.component.modeladmin');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelAutomailing extends JModelAdmin
+class NewsletterModelAutomailingItem extends JModelAdmin
 {
 
 	protected $_context;
@@ -33,7 +33,7 @@ class NewsletterModelAutomailing extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.0
 	 */
-	public function getTable($type = 'Automailing', $prefix = 'NewsletterTable', $config = array())
+	public function getTable($type = 'AutomailingItem', $prefix = 'NewsletterTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -50,7 +50,7 @@ class NewsletterModelAutomailing extends JModelAdmin
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Get the form.
-		$form = $this->loadForm('com_newsletter.automailing', 'automailing', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_newsletter.automailingitem', 'automailingitem', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
 			return false;
 		}
@@ -66,7 +66,7 @@ class NewsletterModelAutomailing extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.automailing.data', array());
+		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.automailingitem.data', array());
 
 		if (empty($data)) {
 			$data = $this->getItem();

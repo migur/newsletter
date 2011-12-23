@@ -58,7 +58,7 @@ class NewsletterHelper
 		);
 		JSubMenuHelper::addEntry(
 				JText::_('COM_NEWSLETTER_SUBMENU_AUTOMAILING'),
-				'index.php?option=com_newsletter&view=automailing',
+				'index.php?option=com_newsletter&view=automailings',
 				$vName == 'automailing'
 		);
 		JSubMenuHelper::addEntry(

@@ -244,10 +244,12 @@ CREATE TABLE `#__newsletter_automailing_items` (
   `time_start` TIMESTAMP NULL DEFAULT NULL,
   `time_offset` INT(11) DEFAULT NULL,
   `parent_id` INT(11) DEFAULT '0',
+  `status` INT(11),
+  `sent` INT(11),
+  `params` TEXT,
 
   PRIMARY KEY (`series_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-
 
 
 CREATE TABLE `#__newsletter_threads` (
@@ -261,6 +263,15 @@ CREATE TABLE `#__newsletter_threads` (
   PRIMARY KEY (`thread_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+
+CREATE TABLE `#__newsletter_automailing_targets` (
+  `am_target_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `automailing_id` INT(11) DEFAULT NULL,
+  `target_id` INT(11) DEFAULT NULL,
+  `target_type` VARCHAR (255) DEFAULT NULL,
+
+  PRIMARY KEY (`am_target_id`)
+) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
 CREATE INDEX `smtp_profile_id_idxfk` ON `#__newsletter_newsletters`(`smtp_profile_id`);
