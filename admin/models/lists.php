@@ -231,5 +231,30 @@ class NewsletterModelLists extends MigurModelList
 		//echo nl2br(str_replace('#__','jos_',$query));
 		$this->query = $query;
 	}
+	
+	
+	/**
+	 * Gets a list of all active lists 
+	 * without pagination and other limitations
+	 * 
+	 * @return array of objects
+	 */
+	public function getAllActive($idonly = false)
+	{
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+
+		$query->select('*')
+			  ->from('#__newsletter_lists')
+			  ->where('state=1');
+		
+		$db->setQuery($query);
+		
+		if (!empty($idonly)) {
+			return $db->loadObjectList(null, 'list_id');
+		}
+		
+		return $db->loadObjectList();
+	}
 
 }

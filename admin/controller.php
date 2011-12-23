@@ -65,8 +65,8 @@ class NewsletterController extends JController
 					break;
 			}
 
-			if (empty($skipCheck)) {
-				$id = JRequest::getCmd($idName);
+			if (empty($skipCheck) && !empty($idName)) {
+					$id = JRequest::getCmd($idName);
 				if (!$this->checkEditId('com_newsletter.edit.' . $view, $id)) {
 					// Somehow the person just went to the form - we don't allow that.
 					$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));

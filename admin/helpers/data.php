@@ -159,23 +159,14 @@ class DataHelper
 		if (empty($items)) {
 			$items = array('weeks', 'days', 'hours');
 		}
-		
-		$minute = 60;
-		$hour = $minute * 60;
-		$day = $hour * 24;
-		$week = $day * 7;
-		
-		$weekCnt = floor($seconds / $week);
-		$seconds -= $weekCnt * $week; 
 
-		$dayCnt = floor($seconds / $day);
-		$seconds -= $dayCnt * $day; 
-
-		$hourCnt = floor($seconds / $hour);
-		$seconds -= $hourCnt * $hour; 
+		$data = self::timeIntervalExplode($seconds);
 		
-		$minCnt = floor($seconds / $minute);
-		$seconds -= $minCnt * $minute; 
+		$weekCnt = $data['weeks'];
+		$dayCnt  = $data['days'];
+		$hourCnt = $data['hours'];
+		$minCnt  = $data['minutes'];
+		$seconds = $data['seconds'];		
 		
 		if ($weekCnt > 4) {
 			$dayCnt += $weekCnt * $week;
@@ -222,5 +213,66 @@ class DataHelper
 		}
 		
 		return trim($res);
+	}
+	
+	/**
+	 *
+	 * @param integer $seconds Interval in seconds to explode
+	 * @return array (weeks, days, hours, minutes, seconds) 
+	 */
+	public static function timeIntervalExplode($seconds)
+	{
+		$minute = 60;
+		$hour = $minute * 60;
+		$day = $hour * 24;
+		$week = $day * 7;
+		
+		$weekCnt = floor($seconds / $week);
+		$seconds -= $weekCnt * $week; 
+
+		$dayCnt = floor($seconds / $day);
+		$seconds -= $dayCnt * $day; 
+
+		$hourCnt = floor($seconds / $hour);
+		$seconds -= $hourCnt * $hour; 
+		
+		$minCnt = floor($seconds / $minute);
+		$seconds -= $minCnt * $minute; 
+		
+		return array(
+			'weeks' => $weekCnt, 
+			'days'  => $dayCnt, 
+			'hours' => $hourCnt,
+			'minutes' => $minCnt,
+			'seconds' => $seconds
+		);
+	}
+	
+	/**
+	 * Get data from specified column of each element of array
+	 * 
+	 * @param type $array
+	 * @param type $colName 
+	 */
+	public function getColumnData($array, $colName)
+	{
+		$res = array();
+		foreach($array as $item) {
+			
+			if (is_array($item)) {
+				
+				$res[] = $item[$colName];
+				
+			} elseif (is_object($item)) {
+				
+				$res[] = $item->$colName;
+				
+			} else {
+				
+				return false;
+			}	
+		}
+		
+		return $res;
 	}
 }

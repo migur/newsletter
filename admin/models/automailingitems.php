@@ -100,7 +100,7 @@ class NewsletterModelAutomailingItems extends MigurModelList
 		$query = $db->getQuery(true);
 
 		// Select the required fields from the table.
-		$query->select('automailing_name, automailing_type, time_start, time_offset, status, sent, n.name AS newsletter_name');
+		$query->select('series_id, automailing_name, automailing_type, time_start, time_offset, status, sent, n.name AS newsletter_name');
 		$query->from('#__newsletter_automailing_items AS ai');
 		$query->join('', '#__newsletter_newsletters AS n ON n.newsletter_id = ai.newsletter_id');
 		$query->join('', '#__newsletter_automailings AS a ON a.automailing_id = ai.automailing_id');
@@ -145,17 +145,42 @@ class NewsletterModelAutomailingItems extends MigurModelList
 			
 			// If this is a first element then check the automailing type to determine
 			// verbal interpretation of it
-			if ($idx == 0 && $item->automailing_type == 'eventbased') {
-				
-				$item->time_verbal = JText::_('COM_NEWSLETTER_EVENT_SUBSCRIPTION');
+			if ($idx == 0) {
+				if($item->automailing_type == 'eventbased') {
+					$item->time_verbal = JText::_('COM_NEWSLETTER_EVENT_SUBSCRIPTION');
+				} else {
+					$item->time_verbal = date('Y-m-d', strtotime($item->time_start));
+				}	
 			} else {
-				
-				$item->time_verbal = !empty($item->time_start)? 
-					$item->time_start : JText::_('COM_NEWSLETTER_AFTER').' '.DataHelper::timeIntervaltoVerbal($item->time_offset);
-			}	
+				$item->time_verbal = JText::_('COM_NEWSLETTER_AFTER').' '.DataHelper::timeIntervaltoVerbal($item->time_offset);
+			}
 		}
 		
 		return $items;
 	}
+
 	
+	public function getAllItems($aid) 
+	{
+		if (!empty($aid)) {
+			$this->automailingId = $aid;
+		}	
+		
+		// Create a new query object.
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('series_id, automailing_name, automailing_type, time_start, time_offset, status, sent, n.name AS newsletter_name');
+		$query->from('#__newsletter_automailing_items AS ai');
+		$query->join('', '#__newsletter_newsletters AS n ON n.newsletter_id = ai.newsletter_id');
+		$query->join('', '#__newsletter_automailings AS a ON a.automailing_id = ai.automailing_id');
+		$query->where('ai.automailing_id='.(int)$aid);
+		$query->order('time_offset ASC');
+
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
+		$db->setQuery($query);
+		
+		return $db->loadObjectList();
+	}
 }

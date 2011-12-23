@@ -167,4 +167,56 @@ class NewsletterModelAutomailingTargets extends MigurModelList
 		return $names;
 	}
 	
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * @return type 
+	 */
+	public function getRelatedLists($aid, $usePagination = false) 
+	{
+		$dbo = JFactory::getDbo();
+		$query = $dbo->getQuery(true);
+		$query->select('*')
+			  ->from('#__newsletter_lists AS l')
+			  ->join('', '#__newsletter_automailing_targets AS at ON at.target_type="list" AND at.target_id = l.list_id')
+			  ->where('l.state=1')
+			  ->where('at.automailing_id='.(int)$aid);
+
+		if (!empty($usePagination)) {
+			$dbo->setQuery($query, $this->getStart(), $this->getState('list.limit'));
+		} else {
+			$dbo->setQuery($query);
+		}	
+
+		return $dbo->loadObjectList();
+	}
+
+	
+	/**
+	 * Gets a list of all active lists 
+	 * without pagination and other limitations
+	 * 
+	 * @return array of objects
+	 */
+	public function findByAid($aid, $idonly = false)
+	{
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+
+		$query->select('*')
+			  ->from('#__newsletter_automailing_targets')
+		      ->where('automailing_id='.(int)$aid);
+		
+		$db->setQuery($query);
+		
+		if (!empty($idonly)) {
+			return $db->loadObjectList(null, 'am_target_id');
+		}
+		
+		return $db->loadObjectList();
+	}
+	
+	
 }

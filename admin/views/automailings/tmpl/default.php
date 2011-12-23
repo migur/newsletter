@@ -54,7 +54,7 @@ defined('_JEXEC') or die;
 									</td>
 									<td>
 										<a href="<?php echo JRoute::_('index.php?option=com_newsletter&task=automailing.edit&tmpl=component&automailing_id='.(int) $item->automailing_id); ?>"
-										   rel="{handler: 'iframe', size: {x: 820, y: 430} }"
+										   rel="{handler: 'iframe', size: {x: 820, y: 480} }"
 										   class="modal" >
 											<?php echo $this->escape($item->automailing_name); ?>
 										</a>

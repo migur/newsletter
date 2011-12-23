@@ -5,7 +5,7 @@
 				<span id="am-name-label"><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_NAME') . ":"; ?>&nbsp;&nbsp;</span>
 			</td>
 			<td>
-				<span id="am-name"><b><?php echo $this->escape($this->automailingItems->items[0]->automailing_name); ?></b></span>
+				<span id="am-name"><b><?php echo $this->escape($this->automailing->automailing_name); ?></b></span>
 			</td>	
 		</tr>	
 		<tr>
@@ -13,7 +13,7 @@
 				<span id="am-email-label"><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_TYPE') . ":"; ?>&nbsp;&nbsp;</span>
 			</td>
 			<td>
-				<span id="am-email"><b><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_'.strtoupper($this->automailingItems->items[0]->automailing_type)); ?></b></span>
+				<span id="am-email"><b><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_'.strtoupper($this->automailing->automailing_type)); ?></b></span>
 			</td>
 		</tr>	
 		<tr>
@@ -23,10 +23,9 @@
 			<td>
 				<div id="am-targets">
 					<?php
-						foreach($this->automailingTargets as &$list) {
-							foreach($list as &$name) { ?>
-								<span><?php echo $this->escape($name); ?></span>
-					<?php }} ?>
+						foreach($this->automailingTargets->items as &$list) { ?>
+								<span><?php echo $this->escape($list->name); ?></span>
+					<?php } ?>
 			</td>
 		</tr>	
 	</table>	
@@ -53,7 +52,7 @@
 			<tfoot>
 				<tr>
 					<td colspan="4">
-						<?php echo $this->pagination->getListFooter(); ?>
+						<?php echo $this->automailingItems->pagination->getListFooter(); ?>
 					</td>
 				</tr>
 			</tfoot>
