@@ -14,7 +14,7 @@ window.addEvent('domready', function() {
 			
 			data = (data != '')? data.parseQueryString() : {};
 
-			$('test-result').addClass('preloader');
+			$$('.test-result')[0].addClass('preloader');
 
 			new Request({
 				url: migurSiteRoot + url,
@@ -22,13 +22,13 @@ window.addEvent('domready', function() {
 				data: data,
 				
 				onComplete: function(res){
-					$('test-result').removeClass('preloader');
-					$('test-result').set('html', res);
+					$$('.test-result')[0].removeClass('preloader');
+					$$('.test-result')[0].set('html', res);
 				},
 				
 				onError: function(res){
-					$('test-result').removeClass('preloader');
-					$('test-result').set('html', '<ERROR>'+res);
+					$$('.test-result')[0].removeClass('preloader');
+					$$('.test-result')[0].set('html', '<ERROR>'+res);
 				}
 				
 			}).send();
@@ -36,7 +36,20 @@ window.addEvent('domready', function() {
 		});
 	
 	
-	
+		$('result-type').addEvent('click', function(){
+			
+			var visible = $$('.test-result')[0];
+			
+			var nonVisible = (visible.hasClass('test-html'))? 
+				 $$('.test-text')[0] : $$('.test-html')[0];
+			
+			visible.removeClass('test-result');
+			visible.setStyle('display', 'none');
+			
+			nonVisible.addClass('test-result');
+			nonVisible.setStyle('display', 'block');
+			
+		});
 	
 	
 	} catch(e){}
