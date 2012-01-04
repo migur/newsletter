@@ -22,13 +22,15 @@ defined('_JEXEC') or die;
 					</div>
 
 					<div class="fltrt">
-						<?php echo $this->form->getLabel('automailing_type'); ?>
-						<?php echo $this->form->getInput('automailing_type'); ?>
+						<?php echo $this->form->getLabel('automailing_event'); ?>
+						<?php echo $this->form->getInput('automailing_event'); ?>
 					</div>
 				</div>	
 					
 				<input type="hidden" name="task" value="" />
-				<input type="hidden" name="automailing_id" value="0" />
+				<?php echo $this->form->getInput('automailing_type'); ?>
+				<?php echo $this->form->getInput('automailing_id'); ?>
+				<input type="hidden" name="automailing_id" value="<?php echo $this->form->getValue('automailing_id'); ?>" />
 				<?php echo JHtml::_('form.token'); ?>
             </form>
 				

@@ -10,15 +10,20 @@
             size="40"
             required="true"
 		/>
+		
         <field
-            type="automailingTypes"
-            name="automailing_type"
+            type="automailingEvents"
+            name="automailing_event"
             default=""
             label="COM_NEWSLETTER_TYPE"
             description="COM_NEWSLETTER_TYPE"
             class="inputbox validate-automailing-name"
             required="true"
 		/>
+		
+        <field name="automailing_type" type="hidden" />
+		
         <field name="automailing_id" type="hidden" />
+		
         <field name="params" type="hidden" />
 </form>

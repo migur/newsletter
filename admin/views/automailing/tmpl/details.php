@@ -13,7 +13,7 @@
 				<span id="am-email-label"><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_TYPE') . ":"; ?>&nbsp;&nbsp;</span>
 			</td>
 			<td>
-				<span id="am-email"><b><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_'.strtoupper($this->automailing->automailing_type)); ?></b></span>
+				<span id="am-email"><b><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_TYPE_'.strtoupper($this->automailing->automailing_event)); ?></b></span>
 			</td>
 		</tr>	
 		<tr>

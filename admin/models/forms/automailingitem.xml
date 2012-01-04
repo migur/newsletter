@@ -9,6 +9,7 @@
             description="COM_NEWSLETTER_NAME"
             class="inputbox validate-newsletter"
             required="true"
+			validate="nonzero"
 		/>
         <field
             type="timeinterval"
