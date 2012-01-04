@@ -14,8 +14,8 @@ defined('_JEXEC') or die;
 			</div>
 
 			<div>
-				<?php echo $this->form->getLabel('automailing_type'); ?>
-				<?php echo $this->form->getInput('automailing_type'); ?>
+				<?php echo $this->form->getLabel('automailing_event'); ?>
+				<?php echo $this->form->getInput('automailing_event'); ?>
 			</div>
 
 		<input type="hidden" name="task" value="" />

@@ -2,7 +2,20 @@
 window.addEvent('domready', function() {
 try {	
 	
+
+	if (isNew == 0) {
+
+		$("form-automailing").grab(
+			new Element('input', {
+				'type' : 'hidden',
+				'value': automailing.automailing_event,
+				'name' : 'jform[automailing_event]'
+			}));
+
+		$("jform_automailing_event").setProperty('disabled', true);
+	}
 	
+
 	$$('.item .close').addEvent('click', function(ev){
 		
 		ev.stop();
@@ -52,10 +65,7 @@ try {
 	
 	
 	
-	if (isNew == 0) {
-		$('jform_automailing_type').setProperty('readonly', true);
-	}
-	
-	
-} catch(e) {}	
+} catch(e) {
+	console.log(e);
+}	
 });

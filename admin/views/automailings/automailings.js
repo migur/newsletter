@@ -29,15 +29,15 @@ try {
        }
    });
 
-///* Expand the functionality of the delete button */
-//$$('#automailings-trash .toolbar')[0].addEvent('click', function(el){
-//	if ($(this).getElements('span')[0].hasClass('toolbar-inactive')) return false;
-//	
-//	if( confirm(Joomla.Text._('COM_NEWSLETTER_ONE_OR_MORE_NEWSLETTERS_MAY_USE', 'One or more newsletters may use this automailing(s). Do you want to delete?')) ) {
-//		Joomla.submitform('automailings.delete', $$('[name=automailingsForm]')[0]);
-//	};
-//	return false;
-//});
+/* Expand the functionality of the delete button */
+$$('#automailings-trash .toolbar')[0].addEvent('click', function(el){
+	if ($(this).getElements('span')[0].hasClass('toolbar-inactive')) return false;
+	
+	if( confirm(Joomla.JText._('COM_NEWSLETTER_ARE_YOU_SURE_QM', 'Are you sure?')) ) {
+		Joomla.submitform('automailings.delete', $$('[name=automailingsForm]')[0]);
+	};
+	return false;
+});
 
 /* Expand the functionality of the edit button */
 $$('#automailings-edit a')[0].addEvent('click', function(ev){
