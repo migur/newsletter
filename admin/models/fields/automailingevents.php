@@ -18,7 +18,7 @@ JFormHelper::loadFieldClass('list');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class JFormFieldAutomailingTypes extends JFormFieldList
+class JFormFieldAutomailingEvents extends JFormFieldList
 {
 
 	/**
@@ -27,7 +27,7 @@ class JFormFieldAutomailingTypes extends JFormFieldList
 	 * @var		string
 	 * @since	1.0
 	 */
-	protected $type = 'automailingtypes';
+	protected $type = 'automailingevents';
 
 	/**
 	 * Method to get the field options.
@@ -39,8 +39,8 @@ class JFormFieldAutomailingTypes extends JFormFieldList
 	{
 		// Initialize variables.
 		$options = array(
-			array('value' => 'scheduled', 'text' => JText::_('COM_NEWSLETTER_SCHEDULED_AUTOMAILING')),
-			array('value' => 'eventbased.subscription', 'text' => JText::_('COM_NEWSLETTER_FROM_SUBSCRIPTION_DATE'))
+			array('value' => 'date', 'text' => JText::_('COM_NEWSLETTER_SCHEDULED_AUTOMAILING')),
+			array('value' => 'subscription', 'text' => JText::_('COM_NEWSLETTER_FROM_SUBSCRIPTION_DATE'))
 		);
 		
 		array_unshift($options, JHtml::_('select.option', '', '-- '.JText::_('COM_NEWSLETTER_SELECT_TYPE').' --'));

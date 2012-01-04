@@ -62,7 +62,9 @@ class NewsletterViewAutomailing extends MigurView
 		
 		// Get automailing form
 		$model = $this->getModel();
-		$this->assignRef('automailing', $model->getItem());
+		$automailing = $model->getItem();
+		$this->assignRef('automailing', $automailing);
+		JavascriptHelper::addObject('automailing', $automailing);
 		$this->assignRef('form', $this->get('form', 'automailing'));
 		
 		

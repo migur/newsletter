@@ -78,27 +78,30 @@ class NewsletterControllerAutomailing extends JControllerForm
 		$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=automailing'.$this->getRedirectToItemAppend($aid, 'automailing_id'), false));
 	}
 
+	
 	/**
-	 * Unbind the subscriber from the list
-	 *
+	 * Assign the subscriber to the list
+	 * 
 	 * @return void
 	 * @since 1.0
 	 */
-	public function assignItem()
+	public function unbindList()
 	{
 		$aid = JRequest::getInt('automailing_id', null, 'post');
-		$lid = JRequest::getInt('item_id', null, 'post');
 		
 		if (JRequest::getMethod() == "POST") {
 
-			$table = JTable::getInstance('AutomailingItem', 'NewsletterTable');
-			$table->load(array(
+			$lid = JRequest::getInt('list_to_unbind', null, 'post');
+			
+			$table = JTable::getInstance('AutomailingTarget', 'NewsletterTable');
+			$res = $table->load(array(
 				'automailing_id' => $aid,
-				'target_id' => $lid,
+				'target_id' => JRequest::getInt('list_to_unbind', null, 'post'),
 				'target_type' => 'list'
 			));
-			$res = $table->delete();
-
+			$table->delete();
+			
+			
 			if ($res) {
 				$this->setMessage(JText::_("COM_NEWSLETTER_UNBIND_SUCCESS"));
 			} else {
@@ -108,6 +111,7 @@ class NewsletterControllerAutomailing extends JControllerForm
 		
 		$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=automailing'.$this->getRedirectToItemAppend($aid, 'automailing_id'), false));
 	}
+
 	
 	/**
 	 * Unbind the subscriber from the list
