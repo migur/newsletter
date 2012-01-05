@@ -309,6 +309,14 @@ CREATE INDEX extension_id_idxfk ON #__newsletter_newsletters_ext(extension_id);
 
 CREATE INDEX newsletter_queue_state ON #__newsletter_queue(state);
 
+CREATE INDEX automailing_ids_idxfk ON #__newsletter_automailing_targets(automailing_id);
+ALTER TABLE #__newsletter_automailing_targets ADD FOREIGN KEY (automailing_id) REFERENCES #__newsletter_automailings (automailing_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE INDEX automailing_ids_idxfk ON #__newsletter_automailing_items(automailing_id);
+ALTER TABLE #__newsletter_automailing_items ADD FOREIGN KEY (automailing_id) REFERENCES #__newsletter_automailings (automailing_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE INDEX newsletter_ids_idxfk ON #__newsletter_automailing_items(newsletter_id);
+ALTER TABLE #__newsletter_automailing_items ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 # Data for the table `#__newsletter_extensions`;
 insert  into `#__newsletter_extensions`(`extension_id`,`title`,`extension`,`params`,`type`) values (1,'Article Module','mod_article','{}',1);

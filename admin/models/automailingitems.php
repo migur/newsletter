@@ -152,7 +152,9 @@ class NewsletterModelAutomailingItems extends MigurModelList
 					$item->time_verbal = date('Y-m-d', strtotime($item->time_start));
 				}	
 			} else {
-				$item->time_verbal = JText::_('COM_NEWSLETTER_AFTER').' '.DataHelper::timeIntervaltoVerbal($item->time_offset);
+				$item->time_verbal = 
+					(($item->time_offset > 0)? JText::_('COM_NEWSLETTER_AFTER').' ' : '') . 
+					DataHelper::timeIntervaltoVerbal($item->time_offset);
 			}
 		}
 		

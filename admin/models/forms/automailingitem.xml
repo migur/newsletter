@@ -3,7 +3,7 @@
         <field
             type="newsletters"
             name="newsletter_id"
-			scope="static"
+			scope=""
             default=""
             label="COM_NEWSLETTER_NAME"
             description="COM_NEWSLETTER_NAME"

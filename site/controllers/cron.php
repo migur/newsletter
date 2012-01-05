@@ -475,7 +475,7 @@ class NewsletterControllerCron extends JControllerForm
 		 */
 		
 		// Phase #1
-		$response = array();
+		$response = array('plansStarted' => 0);
 		
 		$plans = NewsletterAutomailingManager::getScheduledPlans();
 		
@@ -484,7 +484,9 @@ class NewsletterControllerCron extends JControllerForm
 				// The plan entity can decide if it is time to start or not
 				// If yes then it creates an new thread based on this plan.
 				if (empty($plan->automailing_state)) {
-					$plan->start();
+					if ($plan->start() === true) {
+						$response['plansStarted']++;
+					}
 				}	
 			}
 		}
@@ -500,10 +502,13 @@ class NewsletterControllerCron extends JControllerForm
 			}
 		}
 		
+		$response['threadsProcessed'] = count($threads);
+		
 		// Phase #3 ...........
 		
 		if ($mode == 'std') {
-			jexit();
+			NewsletterHelper::logMessage('Automailing.Finished: '.json_encode($response), 'automailing/');
+			NewsletterHelper::jsonResponse('ok', '', $response);
 		} else {
 			return $response;
 		}	

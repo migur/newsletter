@@ -50,5 +50,13 @@ CREATE TABLE `#__newsletter_automailing_targets` (
   PRIMARY KEY (`am_target_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+CREATE INDEX automailing_ids_idxfk ON #__newsletter_automailing_targets(automailing_id);
+ALTER TABLE #__newsletter_automailing_targets ADD FOREIGN KEY (automailing_id) REFERENCES #__newsletter_automailings (automailing_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE INDEX automailing_ids_idxfk ON #__newsletter_automailing_items(automailing_id);
+ALTER TABLE #__newsletter_automailing_items ADD FOREIGN KEY (automailing_id) REFERENCES #__newsletter_automailings (automailing_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE INDEX newsletter_ids_idxfk ON #__newsletter_automailing_items(newsletter_id);
+ALTER TABLE #__newsletter_automailing_items ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 SET foreign_key_checks = 1;

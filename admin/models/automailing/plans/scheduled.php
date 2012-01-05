@@ -10,6 +10,9 @@
 // no direct access
 defined('_JEXEC') or die;
 
+JLoader::import('models.automailing.threads.scheduled', JPATH_COMPONENT_ADMINISTRATOR, '');
+
+
 /**
  * Common methods
  *
@@ -45,6 +48,7 @@ class NewsletterAutomlailingPlanScheduled extends NewsletterAutomlailingPlanComm
 		/** Change the status of a plan
 		 Increment the counter of executions */
 		$this->params['execsCount']++;
+		
 		$this->automailing_state = 1;
 		$this->save(array());
 		
@@ -56,8 +60,18 @@ class NewsletterAutomlailingPlanScheduled extends NewsletterAutomlailingPlanComm
 	 * 
 	 * @return NewsletterAutomlailingThreadCommon 
 	 */
-	public function createThread($options)
+	public function createThread($options = array())
 	{
+		// Get all targets
+		$tergetsModel = JModel::getInstance('AutomailingTargets', 'NewsletterModel');
+		$targets = $tergetsModel->findByAid($this->automailing_id);
+
+		// Get their ids
+		$targetIds = array();
+		foreach($targets as $target){
+			$targetIds[] = $target->target_id;
+		}
+		
 		// Creates new thread
 		$thread = new NewsletterAutomlailingThreadScheduled();
 		$thread->save(array(
@@ -69,8 +83,8 @@ class NewsletterAutomlailingPlanScheduled extends NewsletterAutomlailingPlanComm
 				'step'      => 0, 
 				'timeCreated' => mktime(),
 				'targets'   => array(
-					'type' => $this->params['targets']['type'],
-					'ids'  => $this->params['targets']['ids']
+					'type' => $targets[0]->target_type,
+					'ids'  => $targetIds
 				)
 		)));
 		

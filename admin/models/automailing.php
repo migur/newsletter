@@ -73,4 +73,23 @@ class NewsletterModelAutomailing extends JModelAdmin
 		}
 		return $data;
 	}
+	
+	public function save($data) {
+		
+		if (empty($data['automailing_type']) && !empty($data['automailing_event'])) {
+			
+			switch($data['automailing_event']) {
+				
+				case 'date':
+					$data['automailing_type'] = 'scheduled';
+					break;
+
+				case 'subscription':
+					$data['automailing_type'] = 'eventbased';
+					break;
+			}
+		} 
+		
+		return parent::save($data);
+	}
 }

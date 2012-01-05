@@ -9,11 +9,15 @@
 	</div>	
 	<div class="clr"></div>
 	<?php 
-	foreach($this->automailingItems->items as $idx => $serie) { ?>
-		<div class="item">
+	foreach($this->automailingItems->items as $idx => $serie) { 
+		$editable = ($serie->status == 0 || $this->automailing->automailing_type == 'eventbased');
+	?>
+	<div class="<?php echo ($editable)? 'item' : 'item-processed'; ?>">
 			
-			<a href="#" class="edit"><?php echo JText::_('COM_NEWSLETTER_EDIT'); ?></a>
-			<a href="#" class="close"></a>
+			<?php if ($editable) { ?>
+				<a href="#" class="edit"><?php echo JText::_('COM_NEWSLETTER_EDIT'); ?></a>
+				<a href="#" class="close"></a>
+			<?php } ?>	
 			<div class="date"><?php echo $this->escape($serie->time_verbal); ?></div>
 			<div class="name"><?php echo $this->escape($serie->newsletter_name); ?></div>
 			<input type="hidden" value="<?php echo $serie->series_id; ?>" name="cid[]" />			
