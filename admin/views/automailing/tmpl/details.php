@@ -68,7 +68,16 @@
 						<?php echo $this->escape($item->newsletter_name); ?>
 					</td>
 					<td>
-						<?php echo $this->escape($item->status); ?>
+						<?php 
+							if ($this->automailing->automailing_type == 'eventbased') {
+								echo '---';
+							} else {
+								switch($item->status) {
+									case 0: echo '<span style="color:gray">'.JText::_('COM_NEWSLETTER_QUEUE_INPROGRESS').'</span>'; break;
+									default: echo '<span style="color:green">'.JText::_('COM_NEWSLETTER_PROCESSED').'</span>'; break; 
+								}		
+							}	
+						?>
 					</td>
 					<td>
 						<?php echo $this->escape($item->sent); ?>
