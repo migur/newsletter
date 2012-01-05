@@ -356,7 +356,7 @@ class NewsletterControllerCron extends JControllerForm
 						$response[$mbprofile['username']]['found'] = $mailbox->found;
 						$response[$mbprofile['username']]['total'] = $mailbox->total;
 						$response[$mbprofile['username']]['totalBounces'] = $mailbox->totalBounces;
-						$response[$mbprofile['username']]['lastPosition'] = $mailbox->lastPosition;
+						//$response[$mbprofile['username']]['lastPosition'] = $mailbox->lastPosition;
 					}
 
 					// Update the state of mailbox
