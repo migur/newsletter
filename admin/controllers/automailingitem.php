@@ -34,10 +34,10 @@ class NewsletterControllerAutomailingItem extends JControllerForm
 			$msg = JText::_("COM_NEWSLETTER_START_TIME_IS_EMPTY");
 		}
 
-		if (isset($jform['time_offset']) && empty($jform['time_offset'])) {
-			$err = true;
-			$msg = JText::_("COM_NEWSLETTER_TIME_OFFSET_IS_EMPTY");
-		}
+//		if (isset($jform['time_offset']) && empty($jform['time_offset'])) {
+//			$err = true;
+//			$msg = JText::_("COM_NEWSLETTER_TIME_OFFSET_IS_EMPTY");
+//		}
 
 		
 		if (empty($err) && parent::save()) {

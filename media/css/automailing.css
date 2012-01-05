@@ -54,6 +54,18 @@
 	max-width: 280px;
 }
 
+#series-container .item-processed {
+    background-color: #D9F9EA;
+    border: 1px solid #C8F8D8;
+    border-radius: 8px 8px 8px 8px;
+    margin: 3px auto;
+    overflow: hidden;
+    padding: 3px 5px;
+	position: relative; 
+	max-width: 280px;
+}
+
+
 #series-container .close { 
 	position: absolute; 
 	right: 4px; 

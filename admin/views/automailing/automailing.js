@@ -47,8 +47,8 @@ try {
 		SqueezeBox.open(href, {
 			handler: 'iframe',
 			size: {
-				x: 350,
-				y: 175
+				x: 400,
+				y: 200
 			}
 		});
 	});

@@ -5,7 +5,11 @@
  */
 
 #amitem {
-	margin: 8px;
+	margin: 25px 0 8px 8px;
+}
+
+#jform_newsletter_id {
+	width: 225px;
 }
 
 label {

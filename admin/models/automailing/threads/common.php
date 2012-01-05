@@ -102,7 +102,8 @@ class NewsletterAutomlailingThreadCommon extends MigurJTable
 		if (mktime() < $serie->time_absolute) {
 			return false;
 		}
-
+		
+		$sents = 0;
 		foreach($this->params['targets']['ids'] as $id) {
 
 			$list = $this->_getTargetItems($id);
@@ -116,10 +117,17 @@ class NewsletterAutomlailingThreadCommon extends MigurJTable
 					'created'       => date('Y-m-d H:i:s'),
 					'state'			=> 1
 				));
-				
 				unset($queue);
+				
+				$sents++;
 			}
 		}
+		
+		// Update the count of sent items and state of Item
+		$serieModel = JModel::getInstance('AutomailingItem', 'NewsletterModel');
+		$serie->sent += $sents;
+		$serie->status++;
+		$serieModel->save((array)$serie);
 		
 		return true;
 	}

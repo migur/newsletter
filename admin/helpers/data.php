@@ -157,9 +157,13 @@ class DataHelper
 	public static function timeIntervaltoVerbal($seconds, $items = array()) 
 	{
 		if (empty($items)) {
-			$items = array('weeks', 'days', 'hours');
+			$items = array('weeks', 'days', 'hours', 'immediately');
 		}
 
+		if ($seconds == 0 && in_array('immediately', $items)) {
+			return JText::_('COM_NEWSLETTER_IMMEDIATELY');
+		}
+		
 		$data = self::timeIntervalExplode($seconds);
 		
 		$weekCnt = $data['weeks'];
