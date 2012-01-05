@@ -243,9 +243,13 @@ class MigurMailerMailbox
 		// Nix 4000 mails = 180sec
 		//$res = $this->protocol->since(0);
 
-		$res = $this->protocol->findBy('body', MailHelper::APPLICATION_HEADER);
+		$res = (array)$this->protocol->findBy('body', MailHelper::APPLICATION_HEADER);
 
 		$this->totalBounces = count($res);
+
+		if(empty($res)) {
+			return true;
+		}
 		
 		NewsletterHelper::logMessage('Mailbox.Bounceds.Ids found:'.json_encode($res), 'mailbox/'); //die;
 
