@@ -219,7 +219,7 @@ CREATE TABLE `#__newsletter_mailbox_profiles`
 `is_ssl` ENUM('1','0') DEFAULT '0',
 `username` VARCHAR(255) DEFAULT NULL,
 `password` VARCHAR(255) DEFAULT NULL,
-`data` TEXT,
+`data` LONGBLOB,
 
 PRIMARY KEY (`mailbox_profile_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
