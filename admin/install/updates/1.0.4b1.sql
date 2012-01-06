@@ -4,6 +4,8 @@
 
 SET foreign_key_checks = 0;
 
+ALTER TABLE `#__newsletter_mailbox_profiles` MODIFY COLUMN  `data` LONGBLOB;
+
 CREATE TABLE `#__newsletter_automailings` (
   `automailing_id` INT(11) NOT NULL AUTO_INCREMENT,
   `automailing_name` VARCHAR(255) DEFAULT NULL,
