@@ -229,7 +229,7 @@ CREATE TABLE `#__newsletter_automailings` (
   `automailing_id` INT(11) NOT NULL AUTO_INCREMENT,
   `automailing_name` VARCHAR(255) DEFAULT NULL,
   `automailing_type` ENUM('scheduled','eventbased') DEFAULT NULL,
-  `automailing_event` ENUM('subscription') DEFAULT NULL,
+  `automailing_event` ENUM('date','subscription') DEFAULT NULL,
   `automailing_state` INT(11) DEFAULT NULL,
   `params` TEXT,
 
@@ -240,7 +240,7 @@ CREATE TABLE `#__newsletter_automailings` (
 CREATE TABLE `#__newsletter_automailing_items` (
   `series_id` INT(11) NOT NULL AUTO_INCREMENT,
   `automailing_id` INT(11) DEFAULT NULL,
-  `newsletter_id` INT(11) DEFAULT NULL,
+  `newsletter_id` BIGINT(11) DEFAULT NULL,
   `time_start` TIMESTAMP NULL DEFAULT NULL,
   `time_offset` INT(11) DEFAULT NULL,
   `parent_id` INT(11) DEFAULT '0',
