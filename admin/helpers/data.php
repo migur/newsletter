@@ -173,6 +173,7 @@ class DataHelper
 		$seconds = $data['seconds'];		
 		
 		if ($weekCnt > 4) {
+			$week = 7;
 			$dayCnt += $weekCnt * $week;
 			$weekCnt = 0;
 		}
