@@ -259,7 +259,7 @@ class NewsletterControllerCron extends JControllerForm
 			}
 		}
 		
-		var_dump($response); die('finish');
+		//die('finish');
 		
 		if ($mode == 'std') {
 			

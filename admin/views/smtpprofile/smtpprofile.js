@@ -63,6 +63,13 @@ window.addEvent('domready', function() { try {
     });
 
 
+	if (migurIsJoomlaProfile == true) {
+		Array.each($$('.element-standard') , function(el){
+			el.setProperty('disabled', 'disabled');
+		});
+	}
+
+
 } catch(e){
     if (console && console.log) console.log(e);
 } });

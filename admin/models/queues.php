@@ -163,6 +163,7 @@ class NewsletterModelQueues extends JModelList
 	{
 
 		$smtpModel = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$smtpModel->load($id);
 		
 		// Initialise variables.
 		$db = $this->getDbo();
@@ -172,9 +173,16 @@ class NewsletterModelQueues extends JModelList
 		$query->join('left', '`#__newsletter_newsletters` AS n ON n.newsletter_id = q.newsletter_id');
 
 		$and = 'n.smtp_profile_id='.(int)$id;
-		if ($id == $smtpModel->getDefaultSmtpId()) {
-			$and .= ' OR n.smtp_profile_id='.(int)NewsletterTableMailboxprofile::MAILBOX_DEFAULT;
+		
+		if ($smtpModel->isDefaultProfile()) {
+			$and .= ' OR n.smtp_profile_id='.(int)NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID;
 		}
+		
+		// Back compatibility
+		if ($smtpModel->isJoomlaProfile()) {
+			$and .= ' OR n.smtp_profile_id='.(int)NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID;
+		}
+		
 		$query->where('q.state=1 AND ('. $and .')');
 		$db->setQuery($query, 0, $limit);
 		//echo $query; die;
