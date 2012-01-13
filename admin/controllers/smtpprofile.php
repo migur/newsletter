@@ -14,6 +14,8 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer.sender');
 
+JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
+
 class NewsletterControllerSmtpprofile extends JControllerForm
 {
 
@@ -63,24 +65,23 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 		return true;
 	}
 
-	/**
-	 * Redirection after standard saving
-	 *
-	 * @return void
-	 * @since 1.0
-	 */
+	
 	public function save()
 	{
 		$form = JRequest::getVar('jform');
 		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$model->load($form['smtp_profile_id']);
-		$form['params'] = array_merge((array)$model->params, $form['params']);
-		JRequest::setVar('jform', $form, 'post');
 		
+		if ($model->isJoomlaProfile()) {
+			$form = array_merge((array) $model->toArray(), array('params' => $form['params']));
+		}
+		JRequest::setVar('jform', $form, 'post');
+
 		parent::save();
 
 		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
 	}
+
 	
 	/**
 	 * Redirection after standard saving

@@ -49,7 +49,7 @@ class JFormFieldSmtpprofiles extends JFormFieldList
 			'pop_before_smtp, username, password'
 		);
 		$query->from('#__newsletter_smtp_profiles AS a');
-		$query->order('a.smtp_profile_name');
+		$query->order('is_joomla DESC, a.smtp_profile_name ASC');
 
 		// Get the options.
 		$db->setQuery($query);
@@ -67,8 +67,6 @@ class JFormFieldSmtpprofiles extends JFormFieldList
 		if (empty($options)) {
 			$options = array();
 		}	
-		
-		array_unshift($options, JHtml::_('select.option', '0', JText::_('COM_NEWSLETTER_JOOMLA_MAIL_SETTINGS')));
 		
 		if (empty($this->element['scope']) || $this->element['scope'] != 'withoutDef') {
 			array_unshift($options, JHtml::_('select.option', '-1', JText::_('COM_NEWSLETTER_PROFILE')));

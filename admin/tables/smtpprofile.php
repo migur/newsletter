@@ -18,10 +18,6 @@ defined('_JEXEC') or die;
  */
 class NewsletterTableSmtpprofile extends MigurJTable
 {
-
-	const SMTP_DEFAULT = -1;
-	
-	const JOOMLA_PROFILE_ID = -2;
 	/**
 	 * The constructor of a class.
 	 *
@@ -37,58 +33,6 @@ class NewsletterTableSmtpprofile extends MigurJTable
 				'smtp_profile_id',
 				$_db
 		);
-	}
-	
-	
-	/**
-	 * Overload behavior to store entity with id=0 (Joomla default smtp)
-	 * 
-	 * @param type $src
-	 * @param type $orderingFilter
-	 * @param type $ignore
-	 * @return type 
-	 */
-	public function save($src, $orderingFilter = '', $ignore = '')
-	{
-		if ($src['smtp_profile_id'] == 0) {
-			$src['smtp_profile_id'] = NewsletterTableSmtpprofile::JOOMLA_PROFILE_ID;
-		}
-		
-		if ($this->smtp_profile_id == 0) {
-			$this->smtp_profile_id = NewsletterTableSmtpprofile::JOOMLA_PROFILE_ID;
-		}
-		
-		$res = parent::save($src, $orderingFilter, $ignore);
-		
-		if ($this->smtp_profile_id == NewsletterTableSmtpprofile::JOOMLA_PROFILE_ID) {
-			$this->smtp_profile_id = 0;
-		}
-		
-	}
-
-	/**
-	 * Overload behavior to load entity with id=0 (Joomla default smtp)
-	 * 
-	 * @param type $src
-	 * @param type $orderingFilter
-	 * @param type $ignore
-	 * @return type 
-	 */
-	public function load($keys = null, $reset = true)
-	{
-		if (is_array($keys) && $keys['smtp_profile_id'] == 0) {
-			$keys['smtp_profile_id'] = NewsletterTableSmtpprofile::JOOMLA_PROFILE_ID;
-		} elseif (!is_array($keys) && !is_object($keys) && $keys == 0) {
-			$keys = NewsletterTableSmtpprofile::JOOMLA_PROFILE_ID;
-		}
-		
-		$res = parent::load($keys, $reset);
-		
-		if ($this->smtp_profile_id == NewsletterTableSmtpprofile::JOOMLA_PROFILE_ID) {
-			$this->smtp_profile_id = 0;
-		}	
-		
-		return $res;
 	}
 }
 

@@ -48,11 +48,6 @@ window.addEvent('domready', function() {
 			
 			var id = $('jform_general_smtp_default').getProperty('value');
 			
-			if (id < 1) {
-				alert('Please selet profile');
-				return;
-			}
-			
             var href = "index.php?option=com_newsletter&task=smtpprofile.edit&tmpl=component&smtp_profile_id="+id;
 
             SqueezeBox.open(href, {

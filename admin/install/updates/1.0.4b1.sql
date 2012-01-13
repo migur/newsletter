@@ -5,9 +5,8 @@
 SET foreign_key_checks = 0;
 
 ALTER TABLE `#__newsletter_mailbox_profiles` MODIFY COLUMN  `data` LONGBLOB;
-
 ALTER TABLE `#__newsletter_smtp_profiles` ADD COLUMN  `params` TEXT;
-UPDATE #__newsletter_smtp_profiles SET `params` = '{"periodLength":"60","sentsPerPeriodLimit":"100","inProcess":0,"periodStartTime":0,"sentsPerLastPeriod":0}'
+ALTER TABLE `#__newsletter_smtp_profiles` ADD COLUMN  `is_joomla` SMALLINT;
 
 CREATE TABLE `#__newsletter_automailings` (
   `automailing_id` INT(11) NOT NULL AUTO_INCREMENT,
