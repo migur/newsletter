@@ -50,6 +50,11 @@ defined('_JEXEC') or die;
 
 				<p><?php echo $this->ssForm->getLabel('periodLength', 'params'); ?></p>
 				<dd><?php echo $this->ssForm->getInput('periodLength', 'params'); ?></dd>
+
+				<?php echo $this->ssForm->getInput('inProcess', 'params'); ?>
+				<?php echo $this->ssForm->getInput('periodStartTime', 'params'); ?>
+				<?php echo $this->ssForm->getInput('sentsPerLastPeriod', 'params'); ?>
+				
 			</fieldset>	
         </dl>
 

@@ -13,7 +13,6 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.modeladmin');
 
 JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
  * Class of SMTPprofile model of the component.
@@ -23,7 +22,14 @@ JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
  */
 class NewsletterModelEntitySmtpprofile extends MigurModel
 {
-
+	// This value represents the default profile 
+	// in tables. Real ID need to calculate
+	const DEFAULT_SMTP_ID = -1;
+	
+	// This value represents the joomla profile 
+	// in tables. Real ID need to calculate
+	const JOOMLA_SMTP_ID = 0;
+	
 	protected $_defaults = array(
 		'params' => array(
 			'inProcess'           => 0,
@@ -86,9 +92,14 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 	
 	public function isJoomlaProfile()
 	{
-		return ($this->smtp_profile_id == NewsletterTableMailboxprofile::JOOMLA_PROFILE_ID);
+		return ($this->_data->is_joomla);
 	}
 
+	
+	public function isDefaultProfile()
+	{
+		return ($this->getDefaultSmtpId() == $this->_data->smtp_profile_id);
+	}
 	
 	/**
 	 * Can load default profile or J! profile in addition to standard behavior 
@@ -99,30 +110,38 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 	{
 
 		if (!is_array($data) && !is_object($data)) {
-
+			
 			// Assume that this is ID
 			$data = (int) $data;
 
 			// If user wants to load DEFAULT SMTPP then determine it.
-			if ($data == NewsletterTableSmtpprofile::SMTP_DEFAULT) {
+			if ($data == NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID) {
 				$data = $this->getDefaultSmtpId();
 			}
-		}
-
-		// Fix for situation when PARAMS is NULL (after upgrading to 1.0.4)
-		if(parent::load($data)) {
 			
-			if (empty($this->_data->params)) {
-				$this->_data->params = (object)$this->_defaults['params'];
-				$this->save();
+			// If we determine that need to load J! SMTPP
+			// then change filter to load it.
+			if ($data == NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID) {
+				$data = array('is_joomla' => 1);
 			}
 		}
 
-		if ($data == 0) {
-			return $this->setFromArray(array_merge($this->toArray(), (array)$this->_getJoomlaProfile()));
+		if(!parent::load($data)) {
+			return false;
+		}	
+
+		// If loaded profile is J! profile
+		// then fill it with J! SMTP settings
+		if ($this->isJoomlaProfile()) {
+			$this->setFromArray(array_merge($this->toArray(), (array)$this->_getJoomlaProfile()));
 		}
 		
-		return $this->toObject();
+		if(empty($this->_data->params)) {
+			$this->_data->params = (object)$this->_defaults['params'];
+			$this->save();
+		}
+		
+		return true;
 	}
 
 	/**

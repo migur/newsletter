@@ -67,6 +67,7 @@ CREATE TABLE `#__newsletter_smtp_profiles`
 `password` VARCHAR(255),
 `mailbox_profile_id` INT(11),
 `params` TEXT,
+`is_joomla` SMALLINT,
 
 PRIMARY KEY (`smtp_profile_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

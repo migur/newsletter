@@ -77,7 +77,7 @@ class MigurModel extends JModel
 			$data['params'] = (object) $data['params'];
 		}
 
-		$this->_data = (object) $data;
+		$this->_data = (object)$data;
 		return $this->_data;
 	}
 

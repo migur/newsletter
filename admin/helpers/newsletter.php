@@ -310,7 +310,7 @@ class NewsletterHelper
 
 				'JOIN #__newsletter_newsletters AS n  '.
 					'ON (n.smtp_profile_id = sp.smtp_profile_id) '.
-					'OR (n.smtp_profile_id = '.NewsletterTableSmtpprofile::SMTP_DEFAULT.' AND sp.smtp_profile_id='.$smtpId.') '.
+					'OR (n.smtp_profile_id = '.NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID.' AND sp.smtp_profile_id='.$smtpId.') '.
 
 				// get mailboxes for sent newsletters without errors
 				'WHERE n.newsletter_id = ' . (int)$nid
