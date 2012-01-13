@@ -190,19 +190,26 @@ class NewsletterControllerSubscribe extends JController
 		}
 
 		if ($newsletterId > 0) {
-			$mailer = new MigurMailer();
-			$res = $mailer->send(array(
-				'type' => $html? 'html' : 'plain',
-				'subscriber' => $subscriber,
-				'newsletter_id' => $newsletterId,
-				'tracking' => true
-			));
+			
+			try {
+				
+				$mailer = new MigurMailer();
+				$res = $mailer->send(array(
+					'type' => $html? 'html' : 'plain',
+					'subscriber' => $subscriber,
+					'newsletter_id' => $newsletterId,
+					'tracking' => true
+				));
 
-			if (!$res->state) {
-				jexit('The error was occured. Please try again later');
-			}
+				if (!$res->state) {
+					jexit('The error was occured. Please try again later');
+				}
 
-			$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
+				$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
+				
+			} catch(Exception $e) {
+				$message = $e->getMessage();
+			}	
 			
 		} else {
 
