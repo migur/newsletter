@@ -66,6 +66,7 @@ CREATE TABLE `#__newsletter_smtp_profiles`
 `username` VARCHAR(255),
 `password` VARCHAR(255),
 `mailbox_profile_id` INT(11),
+`params` TEXT,
 
 PRIMARY KEY (`smtp_profile_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
@@ -190,8 +191,8 @@ PRIMARY KEY (`extension_id`)
 CREATE TABLE `#__newsletter_queue`
 (
 `queue_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-`newsletter_id` INT(11) NOT NULL,
-`subscriber_id` INT(11) NOT NULL,
+`newsletter_id` BIGINT(20) NOT NULL,
+`subscriber_id` BIGINT(20) NOT NULL,
 `list_id` INT(11) NOT NULL,
 `created` DATETIME NOT NULL,
 `state` INT(11) NOT NULL,
@@ -317,6 +318,13 @@ ALTER TABLE #__newsletter_automailing_items ADD FOREIGN KEY (automailing_id) REF
 
 CREATE INDEX newsletter_ids_idxfk ON #__newsletter_automailing_items(newsletter_id);
 ALTER TABLE #__newsletter_automailing_items ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE INDEX newsletter_ids_idxfk ON #__newsletter_queue(newsletter_id);
+ALTER TABLE #__newsletter_queue ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE INDEX subscriber_ids_idxfk ON #__newsletter_queue(subscriber_id);
+ALTER TABLE #__newsletter_queue ADD FOREIGN KEY (subscriber_id) REFERENCES #__newsletter_subscribers (subscriber_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
 
 # Data for the table `#__newsletter_extensions`;
 insert  into `#__newsletter_extensions`(`extension_id`,`title`,`extension`,`params`,`type`) values (1,'Article Module','mod_article','{}',1);

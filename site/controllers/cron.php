@@ -99,157 +99,168 @@ class NewsletterControllerCron extends JControllerForm
 	{
 		ob_start();
 
-		$debug = true;
-
 		$config   = JComponentHelper::getParams('com_newsletter');
-		
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
-		$count    = (int)  $config->get('mailer_cron_count', 100);
 
-		if ($this->_checkAccess('mailer_cron')) {
+		// 1. Get all SMTP profiles for which are data in queue.
+		$model = JModel::getInstance('Newsletters', 'NewsletterModel');
+		$smtpProfiles = $model->getUsedInQueue();
+		$response = array();
+		// 2. Get process it in cycle
+		if (!empty($smtpProfiles)) {
 
-			$table = JTable::getInstance('jextension', 'NewsletterTable');
+			$queueManager = JModel::getInstance('Queues', 'NewsletterModel');
+			$queueItem    = JModel::getInstance('Queue',      'NewsletterModelEntity');
+			$subscriber   = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$newsletter   = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
 			
-			// set the isExecuted flag
-			if ($table->load(array('name' => 'com_newsletter'))) {
-				$table->addToParams(array('mailer_cron_is_executed' => 1));
-				$table->store();
-			}
+			foreach($smtpProfiles as $smtpProfile) {
 
-			$db = JFactory::getDbo();
-			$db->debug(0);
-			$query = $db->getQuery(true);
-			$query->select('newsletter_id, subscriber_id')
-				->from('#__newsletter_queue')
-				->where('state=1')
-				->group('newsletter_id, subscriber_id')
-				->order('newsletter_id');
-			$list = $db->setQuery($query, 0, $count)->loadAssocList();
+				$responseItem = array(
+					'profile' => array(
+						'id'    => $smtpProfile->smtp_profile_id,
+						'name'  => $smtpProfile->smtp_profile_name,
+						'email' => $smtpProfile->username ),
+					'processed' => 0,
+					'data' => array(),
+					'error' => '');
 
-			$ret = array();
-			if (!empty($list)) {
-
-				$queue      = JTable::getInstance('queue', 'NewsletterTable');
-				$subscriber = JTable::getInstance('subscriber', 'NewsletterTable');
-
-				$mailer = new MigurMailer();
-
-				foreach ($list as $item) {
-
-					$subscriber->load($item['subscriber_id']);
-                                        
-					$type = ($subscriber->html == 1) ? 'html' : 'plain';
+				// Check if mailing from this SMTP is in progress (in other thread)
+				if (!$smtpProfile->isInProcess()) {
 					
-					$letter = $mailer->send(array(
-						'subscriber' => $subscriber,
-						'newsletter_id' => $item['newsletter_id'],
-						'type'          => $type
-					));
+					// Before we start to process SMTPP we need to set execution flag
+					$smtpProfile->setInProcess(1);
 
-					$ret[] = array(
-						'newsletter_id' => $item['newsletter_id'],
-						'email' => $subscriber->email,
-						'subscriber_id' => $subscriber->subscriber_id,
-						'state' => (int)$letter->state,
-						'error' => $letter->error
-					);
-
-					// Set up the sending start time
-					$nl = JTable::getInstance('newsletter', 'NewsletterTable');
-					$nl->load(array('newsletter_id' => $item['newsletter_id']));
-
-					if ( $nl->sent_started == '0000-00-00 00:00:00' || strtotime($nl->sent_started) <= 0 ) {
-						$nl->save(array(
-							'sent_started' => date('Y-m-d H:i:s')
-						));
+					//	Check if it is time for new period.
+					if ($smtpProfile->isNeedNewPeriod()) {
+						$smtpProfile->startNewPeriod();
 					}
-					unset($nl);
 
-					// Update the queue item after success mailing
-					$st = $letter->state? 0 : 2;
-                                        
-					$db->setQuery(
-							'UPDATE #__newsletter_queue SET state='.$st
-							.' WHERE newsletter_id=' . $item['newsletter_id']
-							.' AND subscriber_id=' . $item['subscriber_id']);
-					$db->query();
+					// Process mails of this SMTP profile only if we need it
+					if ($smtpProfile->needToSendCount() > 0) {
 
-					// Get all records which refers to the current user and the current newsletter
-					$query = $db->getQuery(true);
-					$query->select('*')
-						->from('#__newsletter_queue')
-						->where('newsletter_id=' . $item['newsletter_id'])
-						->where('subscriber_id=' . $item['subscriber_id']);
-					$group = $db->setQuery($query)->loadAssocList();
+						// Get mails that we need to send
+						$queueItems = $queueManager->getUnsentSidNidBySmtp($smtpProfile->smtp_profile_id, $smtpProfile->needToSendCount());
 
-					// Process all lists in which the user is present
-					foreach ($group as $groupItem) {
+						$ret = array();
+						if (!empty($queueItems)) {
 
-						// Add notes to history for each list
-						$history = JTable::getInstance('history', 'NewsletterTable');
-						$history->save(array(
-							'newsletter_id' => $groupItem['newsletter_id'],
-							'subscriber_id' => $groupItem['subscriber_id'],
-							'list_id'       => $groupItem['list_id'],
-							'date'    => date('Y-m-d H:i:s'),
-							'action'  => $letter->state?
-								NewsletterTableHistory::ACTION_SENT :
-								NewsletterTableHistory::ACTION_BOUNCED,
-							'text'    => ''
-						));
-						unset($history);
+							$mailer = new MigurMailer();
+
+							// Let's process these mails
+							foreach ($queueItems as $qi) {
+
+								try {
+
+									$queueItem->setFromArray($qi);
+
+									// Let's load subscriber. Exception on fail.
+									if (!$subscriber->load($queueItem->subscriber_id)) {
+										throw new Exception(JText::_('COM_NEWSLETTER_SUBSCRIBER_NOT_FOUND'));
+									}
+
+									// Let's load newsletter. Exception on fail.
+									if(!$newsletter->load($queueItem->newsletter_id)) {
+										throw new Exception(JText::_('COM_NEWSLETTER_NEWSLETTER_NOT_FOUND'));
+									}
+
+									// Send mail. Exception from mailer on fail.
+									$letter = $mailer->send(array(
+										'subscriber'    => $subscriber->toObject(),
+										'newsletter_id' => $queueItem->newsletter_id,
+										'type'          => $subscriber->getType()
+									));
+
+									// Now all good and we can update informtion 
+									// about this mailing
+
+									// Set up the sending start time
+									$newsletter->updateSentTime();
+
+									// Update the queue item after mailing
+									$queueManager->updateState(
+										$letter->state? 0 : 2,
+										$queueItem->newsletter_id,
+										$queueItem->subscriber_id );
+
+									// Get all records which refers
+									// to the current user and the current newsletter
+									$group = $queueManager->getItemsByFilter(array(
+										'newsletter_id' => $queueItem->newsletter_id,
+										'subscriber_id' => $queueItem->subscriber_id
+									));
+
+									// Process all lists in which the user is present
+									foreach ($group as $groupItem) {
+
+										// Add notes to history for each list
+										$history = JTable::getInstance('history', 'NewsletterTable');
+										$history->save(array(
+											'newsletter_id' => $groupItem->newsletter_id,
+											'subscriber_id' => $groupItem->subscriber_id,
+											'list_id'       => $groupItem->list_id,
+											'date'			=> date('Y-m-d H:i:s'),
+											'action'		=> $letter->state?
+												NewsletterTableHistory::ACTION_SENT :
+												NewsletterTableHistory::ACTION_BOUNCED,
+											'text'			=> ''
+										));
+										unset($history);
 
 
-						// Add the sended letter to the sents for each list
-						if ($doSave) {
-							$sent = JTable::getInstance('sent', 'NewsletterTable');
-							$sent->save(array(
-								'newsletter_id' => $groupItem['newsletter_id'],
-								'subscriber_id' => $groupItem['subscriber_id'],
-								'list_id'       => $groupItem['list_id'],
-								'sent_date' => date('Y-m-d H:i:s'),
-								'bounced'   => ($letter->state)?
-									NewsletterTableSent::BOUNCED_NO :
-									NewsletterTableSent::BOUNCED_SOFT,
+										// Add the sent letter to the sents for each list
+										if ($doSave) {
+											$sent = JTable::getInstance('sent', 'NewsletterTable');
+											$sent->save(array(
+												'newsletter_id' => $groupItem->newsletter_id,
+												'subscriber_id' => $groupItem->subscriber_id,
+												'list_id'       => $groupItem->list_id,
+												'sent_date'     => date('Y-m-d H:i:s'),
+												'bounced'       => ($letter->state)?
+													NewsletterTableSent::BOUNCED_NO :
+													NewsletterTableSent::BOUNCED_SOFT,
 
-								'html_content' => ($type == 'html') ? $letter->content : "",
-								'plaintext_content' => ($type == 'plain') ? $letter->content : "",
-								'extra' => array(
-									'to' => $subscriber->email,
-									'error' => $letter->error)
-							));
-							unset($sent);
+												'html_content'      => ($subscriber->getType() == 'html') ? $letter->content : "",
+												'plaintext_content' => ($subscriber->getType() == 'plain') ? $letter->content : "",
+												'extra' => array(
+													'to' => $subscriber->email,
+													'error' => $letter->error)
+											));
+											unset($sent);
+										}
+									}
+
+									$responseItem['processed']++;
+									$smtpProfile->updateSentsPerPeriodCount();
+
+								} catch(Exception $e) {
+									$ret[] = array(
+										'newsletter_id' => $queueItem->newsletter_id,
+										'email'         => $subscriber->email,
+										'subscriber_id' => $subscriber->subscriber_id,
+										'error'         => $e->getMessage()
+									);
+								}
+							}
 						}
+
+						NewsletterHelper::logMessage(json_encode($ret), 'cron/');
+						$responseItem['data'] = $ret;
 					}
+
+					// Finish to process SMTPP by shouting down the execution flag
+					$smtpProfile->setInProcess(0);
+					
+				} else {
+					$responseItem['error'] = 'In process';
 				}
+				
+				$response[] = $responseItem;
 			}
-
-			if ($table) {
-				$table->addToParams(array(
-					'mailer_cron_is_executed' => 0,
-					'mailer_cron_last_execution_time' => date('Y-m-d H:i:s')
-				));
-				$table->store();
-			}
-
-			NewsletterHelper::logMessage(json_encode($ret), 'cron/', $debug);
-			
-			$response = array(
-				'data' => $ret,
-				'count' => count($list),
-				'error' => ''
-			);
-			
-		} else {
-                    
-			$isExec = (bool) $config->get('mailer_cron_is_executed');
-			if (!$isExec) {
-				$response = array('error' => JText::_('COM_NEWSLETTER_MAILING_INTERVAL_IS_NOT_EXEEDED'));
-			} else {
-				$response = array('error' => JText::_('COM_NEWSLETTER_MAILING_IS_IN_PROCESS_NOW'));
-			}	
 		}
-                
+		
+		var_dump($response); die('finish');
+		
 		if ($mode == 'std') {
 			
 			ob_end_clean();

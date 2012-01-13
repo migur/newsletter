@@ -59,6 +59,8 @@ class MailHelper
 
 		$letter->params = (array) json_decode($letter->params);
 		PlaceholderHelper::setPlaceholders($letter->params);
+
+		// Set data when using J! SMTP profile
 		if ($letter->smtp_profile_id < 1) {
 
 			if (!empty($letter->params['newsletter_from_email'])) {
@@ -129,13 +131,15 @@ class MailHelper
 	 */
 	public function getJoomlaProfile()
 	{
+		JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
+		JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 		$config = new JConfig();
 		$data = JArrayHelper::fromObject($config);
 
 		$res = new JObject();
 		$res->smtp_profile_id = 0;
-		$res->smtp_profile_name = JText::_('COM_NEWSLETTER_JOOMLA_MAIL_SETTINGS');
+		$res->smtp_profile_name = JText::_('COM_NEWSLETTER_JOOMLA_SMTP_PROFILE');
 		$res->from_name = $data['fromname'];
 		$res->from_email = $data['mailfrom'];
 		$res->reply_to_email = $data['mailfrom'];
@@ -146,7 +150,9 @@ class MailHelper
 		$res->pop_before_smtp = 0;
 		$res->username = $data['smtpuser'];
 		$res->password = $data['smtppass'];
-
+		$res->mailbox_profile_id = NewsletterTableMailboxprofile::MAILBOX_DEFAULT;
+		$res->params = new stdClass();
+		
 		return $res;
 	}
 

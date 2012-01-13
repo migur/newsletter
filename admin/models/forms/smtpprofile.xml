@@ -12,49 +12,49 @@
                         validate=""
 		 />
 
-                <field name="from_name"
-                        type="text"
-                        label="COM_NEWSLETTER_FROM_NAME"
-                        description="COM_NEWSLETTER_FROM_NAME"
-                        class="inputbox validate-from_name"
-                        size="70"
-                        default=""
-                        required="true"
-                        validate=""
-                 />
+		<field name="from_name"
+				type="text"
+				label="COM_NEWSLETTER_FROM_NAME"
+				description="COM_NEWSLETTER_FROM_NAME"
+				class="inputbox validate-from_name"
+				size="70"
+				default=""
+				required="true"
+				validate=""
+		 />
 
-                <field name="from_email"
-                        type="text"
-                        label="COM_NEWSLETTER_FROM_EMAIL"
-                        description="COM_NEWSLETTER_FROM_EMAIL"
-                        class="inputbox validate-from_email"
-                        size="70"
-                        default=""
-                        required="true"
-                        validate=""
-                 />
-                 
-                <field name="reply_to_name"
-                        type="text"
-                        label="COM_NEWSLETTER_TO_NAME"
-                        description="COM_NEWSLETTER_TO_NAME"
-                        class="inputbox validate-reply_to_name"
-                        size="70"
-                        default=""
-                        required="true"
-                        validate=""
-                 />
+		<field name="from_email"
+				type="text"
+				label="COM_NEWSLETTER_FROM_EMAIL"
+				description="COM_NEWSLETTER_FROM_EMAIL"
+				class="inputbox validate-from_email"
+				size="70"
+				default=""
+				required="true"
+				validate=""
+		 />
 
-                <field name="reply_to_email"
-                        type="text"
-                        label="COM_NEWSLETTER_TO_EMAIL"
-                        description="COM_NEWSLETTER_TO_EMAIL"
-                        class="inputbox validate-reply_to_email"
-                        size="70"
-                        default=""
-                        required="true"
-                        validate=""
-                 />
+		<field name="reply_to_name"
+				type="text"
+				label="COM_NEWSLETTER_TO_NAME"
+				description="COM_NEWSLETTER_TO_NAME"
+				class="inputbox validate-reply_to_name"
+				size="70"
+				default=""
+				required="true"
+				validate=""
+		 />
+
+		<field name="reply_to_email"
+				type="text"
+				label="COM_NEWSLETTER_TO_EMAIL"
+				description="COM_NEWSLETTER_TO_EMAIL"
+				class="inputbox validate-reply_to_email"
+				size="70"
+				default=""
+				required="true"
+				validate=""
+		 />
 
 		<field name="smtp_server"
 			type="text"
@@ -119,8 +119,39 @@
 				default=""
 				label="COM_NEWSLETTER_MAILBOX_PROFILE"
 				description="COM_NEWSLETTER_MAILBOX_PROFILE">
-			</field>
+		</field>
+		
+        <fields name="params">
 
+            <field name="periodLength"
+                    type="text"
+                    label="COM_NEWSLETTER_PERIOD_LENGTH"
+                    description="COM_NEWSLETTER_PERIOD_LENGTH"
+                    class="inputbox validate-period_length"
+                    size="30"
+                    default=""
+                    required="true"
+                    validate=""
+             />
+			 
+            <field name="sentsPerPeriodLimit"
+                    type="text"
+                    label="COM_NEWSLETTER_PERIOD_COUNT"
+                    description="COM_NEWSLETTER_PERIOD_COUNT"
+                    class="inputbox validate-period_count"
+                    size="30"
+                    default=""
+                    required="true"
+                    validate=""
+             />
+			 
+			<field name="inProcess" type="hidden"></field>
+			<field name="periodStartTime" type="hidden"></field>
+			<field name="sentsPerLastPeriod" type="hidden"></field>
+			
+        </fields>
+		
 		<field name="smtp_profile_id" type="hidden"></field>
+		
 	</fieldset>
 </form>
