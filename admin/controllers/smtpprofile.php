@@ -71,7 +71,12 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 	 */
 	public function save()
 	{
-
+		$form = JRequest::getVar('jform');
+		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$model->load($form['smtp_profile_id']);
+		$form['params'] = array_merge((array)$model->params, $form['params']);
+		JRequest::setVar('jform', $form, 'post');
+		
 		parent::save();
 
 		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
