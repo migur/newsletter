@@ -151,4 +151,65 @@ class NewsletterModelQueues extends JModelList
 		// List state information.
 		parent::populateState('q.created', 'asc');
 	}
+	
+	
+	/**
+	 * Get all items that will be sent with this smtp profile and status=1
+	 * 
+	 * @param type $id
+	 * @return type 
+	 */
+	public function getUnsentSidNidBySmtp($id, $limit = 0) 
+	{
+
+		$smtpModel = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		
+		// Initialise variables.
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->select('DISTINCT q.newsletter_id, q.subscriber_id');
+		$query->from('`#__newsletter_queue` AS q');
+		$query->join('left', '`#__newsletter_newsletters` AS n ON n.newsletter_id = q.newsletter_id');
+
+		$and = 'n.smtp_profile_id='.(int)$id;
+		if ($id == $smtpModel->getDefaultSmtpId()) {
+			$and .= ' OR n.smtp_profile_id='.(int)NewsletterTableMailboxprofile::MAILBOX_DEFAULT;
+		}
+		$query->where('q.state=1 AND ('. $and .')');
+		$db->setQuery($query, 0, $limit);
+		//echo $query; die;
+		
+		return $db->loadObjectList();
+	}
+	
+	
+	public function updateState($state, $nid, $sid)
+	{
+		$db = $this->getDbo();
+		
+		$db->setQuery(
+				'UPDATE #__newsletter_queue SET state='.$state
+				.' WHERE newsletter_id=' . $nid
+				.' AND subscriber_id=' . $sid);
+		return $db->query();
+	}
+	
+	public function getItemsByFilter($params)
+	{
+		$params = (array)$params;
+		
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from('#__newsletter_queue');
+		
+		if (!empty($params)) {
+			foreach($params as $name => $val) {
+				$query->where($name.'='.$db->quote($val));
+			}
+		}	
+		
+		$db->setQuery($query);
+		return $db->loadObjectList();
+	}
 }

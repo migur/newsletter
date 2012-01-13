@@ -4,6 +4,10 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+ dl {
+	 overflow: hidden;
+ }
+ 
 #smtpprofile-form dd {
     width: 200px;
     float: right;
@@ -21,15 +25,22 @@
 
 
 #smtpprofile-form input {
-    width: 200px;
+    width: 195px;
 }
 
 
 #smtpprofile-form {
-    width: 350px;
+    width: 360px;
 }
 
 .buttons-container {
     float: right;
-    margin: 20px 0;
+    margin: 10px 0;
 }
+
+fieldset.period-conf {
+	margin: 10px 5px 0;
+	width:338px;
+	padding: 7px;
+}
+

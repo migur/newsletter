@@ -41,8 +41,9 @@ if ($msg) {
 	$sess->set('migur.queue', null);
 }
 
-JFormHelper::addRulePath(JPATH_COMPONENT . DS . 'models' . DS . 'rules');
-JTable::addIncludePath(JPATH_COMPONENT . DS . 'tables');
+JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'rules');
+JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'tables');
+JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'entities', 'NewsletterModelEntity');
 
 // Add the site root to JS
 JavascriptHelper::addStringVar('migurSiteRoot', JUri::root());

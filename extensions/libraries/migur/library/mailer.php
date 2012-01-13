@@ -201,14 +201,23 @@ class MigurMailer extends JObject
 			}	
 
 			// send the unique letter to each recipient
-			$bounced = $sender->send(array(
-					'letter' => $letter,
-					'attach' => $atts,
-					'emails' => array($item),
-					'smtpProfile' => $letter->smtp_profile,
-					'type' => $type,
-					'tracking' => $params['tracking']
-				));
+			try {
+				$bounced = $sender->send(array(
+						'letter' => $letter,
+						'attach' => $atts,
+						'emails' => array($item),
+						'smtpProfile' => $letter->smtp_profile,
+						'type' => $type,
+						'tracking' => $params['tracking']
+					));
+				
+			} catch(Exception $e) {
+				
+				if (JError::getError('unset')) {
+					$this->setError(JError::getError('unset')->get('message'));
+				}	
+				$res = false;
+			}	
 
 			// If sending failed
 			if (!$bounced) {
@@ -242,8 +251,9 @@ class MigurMailer extends JObject
 		// load letter to send....
 		$letter = MailHelper::loadLetter($params['newsletter_id']);
 		if (empty($letter->newsletter_id)) {
-			$this->setError('Lading letter error or newsletter_id is not defined');
-			return false;
+			$msg = 'Lading letter error or newsletter_id is not defined';
+			$this->setError($msg);
+			throw new Exception($msg);
 		}
 
 		// Retrieve the email for bounced letters
@@ -252,15 +262,12 @@ class MigurMailer extends JObject
 		// Use the phpMailer exceptions
 		$sender = new MigurMailerSender(array('exceptions'=>true));
 
-		// Result object
-		$res = new StdClass();
-		$res->state = false;
-
 		$subscriber = $params['subscriber'];
 		$type = MailHelper::filterType(!empty($params['type']) ? $params['type'] : null);
 		if (!$type) {
-			$res->error = 'The type "' . $type . '" is not supported';
-			return $res;
+			$msg = 'The type "' . $type . '" is not supported';
+			$this->setError($msg);
+			throw new Exception ($msg);
 		}
 
 
@@ -268,8 +275,9 @@ class MigurMailer extends JObject
 		SubscriberHelper::saveRealUser();
 		
 		if (!SubscriberHelper::emulateUser(array('email' => $subscriber->email))) {
-			$res->error = 'The user ' . $subscriber->email . ' is absent';
-			return $res;
+			$msg = 'The user ' . $subscriber->email . ' is absent';
+			$this->setError($msg);
+			throw new Exception ($msg);
 		}
 
 		PlaceholderHelper::setPlaceholder('newsletter id', $letter->newsletter_id);
@@ -283,6 +291,9 @@ class MigurMailer extends JObject
 
 		SubscriberHelper::restoreRealUser();
 
+		// Result object
+		$res = new StdClass();
+		$res->state = false;
 		$res->content = $letter->content;
 
 		if ($letter->content === false) {

@@ -37,7 +37,7 @@ window.addEvent('domready', function() {
                 handler: 'iframe',
                 size: {
                     x: 400,
-                    y: 440
+                    y: 590
                 }
             });
         });
@@ -59,7 +59,7 @@ window.addEvent('domready', function() {
                 handler: 'iframe',
                 size: {
                     x: 400,
-                    y: 440
+                    y: 590
                 }
             });
         });

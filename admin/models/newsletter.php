@@ -20,7 +20,8 @@ jimport('joomla.application.component.modeladmin');
  */
 class NewsletterModelNewsletter extends JModelAdmin
 {
-
+	protected $_data;
+	
 	protected $_context;
 
 	/**
