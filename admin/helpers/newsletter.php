@@ -374,7 +374,12 @@ class NewsletterHelper
 			@JLog::getInstance($filename . date('Y-m-d') . '.txt')->addEntry(
 				array('comment' => $msg)
 			);
-		} catch(Exception $e) {}	
+		} catch(Exception $e) {
+			
+			return false;
+		}	
+		
+		return true;
 	}
 
 	
