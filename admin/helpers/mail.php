@@ -43,25 +43,23 @@ class MailHelper
 		$letter = JTable::getInstance('Newsletter', 'NewsletterTable');
 		$letter->load((int) $id);
 
+		// If letter absent then fail.
 		if (!$letter) {
 			return false;
 		}
+		
 		$letter = (object) $letter->getProperties();
-
-		if ($letter->smtp_profile_id > 0) {
-			$profile = JTable::getInstance('Smtpprofile', 'NewsletterTable');
-			$profile->load((int) $letter->smtp_profile_id);
-		} else {
-			$profile = MailHelper::getJoomlaProfile();
-		}
-
-		$letter->smtp_profile = (object) $profile->getProperties();
-
 		$letter->params = (array) json_decode($letter->params);
 		PlaceholderHelper::setPlaceholders($letter->params);
 
+		$profileEntity = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$profileEntity->load((int)$letter->smtp_profile_id);
+		
+		$letter->smtp_profile = $profileEntity->toObject();
+
+
 		// Set data when using J! SMTP profile
-		if ($letter->smtp_profile_id < 1) {
+		if ($letter->smtp_profile_id == NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID) {
 
 			if (!empty($letter->params['newsletter_from_email'])) {
 				$letter->smtp_profile->from_email = $letter->params['newsletter_from_email'];
@@ -76,6 +74,7 @@ class MailHelper
 				$letter->smtp_profile->reply_to_name = $letter->params['newsletter_to_name'];
 			}
 		}
+	
 		return $letter;
 	}
 

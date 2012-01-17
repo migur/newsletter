@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 JLoader::import('tables.history', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('models.entity.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
  * Class of SMTPprofiles list model of the component.
@@ -163,4 +164,38 @@ class NewsletterModelSmtpprofiles extends MigurModelList
 		$this->query = $query;
 	}
 
+	
+	/**
+	 * Get all SMTP profiles
+	 */
+	public function getAllItems($includeDefault = false)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		$query->select('*');
+		$query->from('#__newsletter_smtp_profiles AS a');
+		$query->order('is_joomla DESC, a.smtp_profile_name ASC');
+		// Get the options.
+		$db->setQuery($query);
+
+		$list = $db->loadObjectList();
+
+		// Add default SMTP profile to list as copy
+		if ($includeDefault) {
+			$params = JComponentHelper::getParams('com_newsletter');
+			$defaultId = $params->get('general_smtp_default');
+			
+			foreach($list as $item) {
+				if ($item->smtp_profile_id == $defaultId) {
+					$defItem = clone($item);
+					$defItem->smtp_profile_id = (string)NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID;
+					$list[] = $defItem;
+					break;
+				}
+			}
+		}
+		
+		return $list;
+	}
 }

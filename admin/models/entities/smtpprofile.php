@@ -144,6 +144,29 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 		return true;
 	}
 
+	
+	/**
+	 * Load Joomla SMTP profile
+	 * 
+	 * @param type $data 
+	 */
+	public function loadJoomla()
+	{
+		return $this->load(NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID);
+	}
+	
+	
+	/**
+	 * Load default SMTP profile
+	 * 
+	 * @param type $data 
+	 */
+	public function loadDefault()
+	{
+		return $this->load(NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID);
+	}
+	
+	
 	/**
 	 * Get SMTP default profile or J! profile if the default is not configured.
 	 *
