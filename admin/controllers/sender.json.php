@@ -45,16 +45,15 @@ class NewsletterControllerSender extends JControllerForm
 		$newsletterId = JRequest::getInt('newsletter_id');
 		$lists = JRequest::getVar('lists');
 
-
-		$subscribers = array();
-		$table = JTable::getInstance('queue', 'NewsletterTable');
+		$added  = 0;
+		$errors = 0;
 
 		if (empty($newsletterId) || empty($lists)) {
 			$this->setError('Required data is absent');
-			echo json_encode(array('state' => '0', 'error' => 'Required data is absent'));
-			return false;
+			NewsletterHelper::jsonError(JText::_('Required data is absent'));
 		}
 
+		
 		foreach ($lists as $list) {
 
 			$dbo = JFactory::getDbo();
@@ -70,30 +69,39 @@ class NewsletterControllerSender extends JControllerForm
 			if (!empty($subs)) {
 				foreach ($subs as $item) {
 
-					// do not add the new row if it exists...
-
-					$table->set('queue_id', null);
-
-					$res = $table->load(array(
+					$table = JTable::getInstance('queue', 'NewsletterTable');
+					if (!$table->load(array(
 							'newsletter_id' => $newsletterId,
-							'subscriber_id' => $item['subscriber_id']
-						));
+							'subscriber_id' => $item['subscriber_id']))) {
 
-					if (!$res) {
-						$table->save(array(
+						// add new row only if it does not exist...
+						if ($table->save(array(
 							'newsletter_id' => $newsletterId,
 							'subscriber_id' => $item['subscriber_id'],
 							'created' => date('Y-m-d H:i:s'),
-							'state' => 1
-						));
+							'state' => 1))) {
+							
+							$added++; 
+							
+						} else {
+							
+							$errors++;
+						}
 					}
+					unset($table);
 				}
 			}
 		}
 
-		echo json_encode(array('state' => '1', 'error' => 'Ok'));
-		return true;
+		$data = array(
+			'added'  => $added,
+			'errors' => $errors);
+		
+		if ($errors > 0) {
+			NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_AN_ERROR_OCCURED'), $data);
+		}
+		
+		NewsletterHelper::jsonMessage('ok', $data);
 	}
-
 }
 
