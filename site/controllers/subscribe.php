@@ -92,8 +92,9 @@ class NewsletterControllerSubscribe extends JController
 
 
 		// If subscriber does not exist before, add it
+		// Add it as confirmed user.
 		if (!isset($subscriber->subscriber_id)) {
-			$db->setQuery("INSERT INTO #__newsletter_subscribers(name,email,state,html,user_id,created_on,created_by,modified_on,modified_by)"
+			$db->setQuery("INSERT INTO #__newsletter_subscribers(name,email,state,html,user_id,created_on,created_by,modified_on,modified_by,confirmed)"
 				. " VALUES("
 				. $db->quote($name) . ", "
 				. $db->quote($email) . ", "
@@ -103,7 +104,8 @@ class NewsletterControllerSubscribe extends JController
 				. $db->quote(date('Y-m-d H:i:s')) . ", "
 				. $db->quote($user->id) . ", "
 				. $db->quote(date('Y-m-d H:i:s')) . ", "
-				. $db->quote($user->id)
+				. $db->quote($user->id) . ", "
+				. "1"
 				. ")"
 			);
 
@@ -205,21 +207,18 @@ class NewsletterControllerSubscribe extends JController
 					jexit('The error was occured. Please try again later');
 				}
 
-				$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
-				
 			} catch(Exception $e) {
-				$message = $e->getMessage();
+				jexit($e->getMessage());
 			}	
 			
 		} else {
-
 			// TODO: There should be the notification for admin instead.
 			JLog::getInstance()->addEntry(array('comment' => 'subscribe.subscribe: The wellcoming newsletter not found'));
-			$message = JText::_('The wellcoming newsletter is not defined');
 		}
-
-		// Redirect to page
+		
+		$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
 		jexit($message);
+		// Redirect to page
 		//$this->setRedirect(base64_decode($sendto), $message, 'message');
 	}
 
