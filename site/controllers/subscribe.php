@@ -80,6 +80,7 @@ class NewsletterControllerSubscribe extends JController
 		$fbSecret = $comParams->get('fbsecret');
 		
 		$confirmed = 0;
+		$isNew = false;
 		
 		// Let's try to get user data from FB
 		if (!empty($fbAppId) && !empty($fbSecret) && !empty($fbenabled)) {
@@ -103,7 +104,7 @@ class NewsletterControllerSubscribe extends JController
 				. $db->quote(date('Y-m-d H:i:s')) . ", "
 				. $db->quote($user->id) . ", "
 				. $db->quote(date('Y-m-d H:i:s')) . ", "
-				. $db->quote($user->id) . ", "
+				. $db->quote($user->id)
 				. ")"
 			);
 
@@ -125,11 +126,24 @@ class NewsletterControllerSubscribe extends JController
 
 			$subscriber->subscription_key = $subKey;
 			
+			$isNew = true;
+			
 		} else {
 			
 			$confirmed = ($confirmed == 1)? 1 : $subscriber->confirmed;
 		}
 
+		// Fotfix to set confirmed to 1 anyway
+		$confirmed = 1;
+		$db->setQuery(
+			"UPDATE #__newsletter_subscribers " .
+			" SET confirmed=1".
+			" WHERE subscriber_id = ".$db->quote($subscriber->subscriber_id)
+		);
+		$db->query();
+		// End hotfix
+		
+		
 		// Set user_id for subscriber if this is not set yet
 		if (empty($subscriber->user_id) && !empty($user->id)) {
 			
@@ -159,8 +173,9 @@ class NewsletterControllerSubscribe extends JController
 			'subscriberId' => $subscriber->subscriber_id
 		));
 		
+		// Hotfix. No need to send email
 		// If the email or subscriptions are needed to confirm then send the email
-		if ($confirmed == 1) {
+		if (1 || $isNew == false) {
  			$message = JText::sprintf('Thank you %s for subscribing to our Newsletter!', $name);
 			jexit($message);
 		}
@@ -188,28 +203,28 @@ class NewsletterControllerSubscribe extends JController
 			/* If the wellcoming letter is not defined
 			 *	then try to use the default wellcoming newsletter
 			 */
-			$newsletterId = (int)$comParams->get('subscription_newsletter_id');
+			$newsletterId = (string)$comParams->get('subscription_newsletter_id');
 		}
 
+		$message = JText::sprintf('Thank you %s for subscribing to our Newsletter!', $name);
 		if ($newsletterId > 0) {
 			
 			try {
 				
 				$mailer = new MigurMailer();
-				$res = $mailer->send(array(
+				if($mailer->send(array(
 					'type' => $html? 'html' : 'plain',
 					'subscriber' => $subscriber,
 					'newsletter_id' => $newsletterId,
 					'tracking' => true
-				));
-
-				if (!$res->state) {
+				))) {
+					$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
+				} else {
 					NewsletterHelper::logMessage('Subscription. Sending of wellcoming letter failed. '.json_encode($mailer->getErrors()));
-					jexit('The error was occured. Please try again later');
 				}
 
 			} catch(Exception $e) {
-				jexit($e->getMessage());
+				NewsletterHelper::logMessage('Subscription. Sending of wellcoming letter failed. '.$e->getMessage());
 			}	
 			
 		} else {
@@ -217,7 +232,6 @@ class NewsletterControllerSubscribe extends JController
 			NewsletterHelper::logMessage('Subscription. The wellcoming newsletter not found');
 		}
 		
-		$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
 		jexit($message);
 		// Redirect to page
 		//$this->setRedirect(base64_decode($sendto), $message, 'message');
