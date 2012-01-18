@@ -131,8 +131,9 @@ class NewsletterControllerCron extends JControllerForm
 					// Before we start to process SMTPP we need to set execution flag
 					$smtpProfile->setInProcess(1);
 
-					//	Check if it is time for new period.
-					if ($smtpProfile->isNeedNewPeriod()) {
+					// Check if it is time for new period.
+					// If it triggered by admin manualy then start process anyway.
+					if ($smtpProfile->isNeedNewPeriod() || $this->_isForced()) {
 						$smtpProfile->startNewPeriod();
 					}
 
@@ -210,6 +211,7 @@ class NewsletterControllerCron extends JControllerForm
 
 										// Add the sent letter to the sents for each list
 										if ($doSave) {
+											
 											$sent = JTable::getInstance('sent', 'NewsletterTable');
 											$sent->save(array(
 												'newsletter_id' => $groupItem->newsletter_id,
@@ -224,8 +226,8 @@ class NewsletterControllerCron extends JControllerForm
 												'plaintext_content' => ($subscriber->getType() == 'plain') ? $letter->content : "",
 												'extra' => array(
 													'to' => $subscriber->email,
-													'error' => $letter->error)
-											));
+													'error' => $letter->errors)));
+											
 											unset($sent);
 										}
 									}
@@ -262,10 +264,8 @@ class NewsletterControllerCron extends JControllerForm
 		//die('finish');
 		
 		if ($mode == 'std') {
-			
-			ob_end_clean();
-			echo json_encode($response);
-			jexit();
+			// Send and exit
+			NewsletterHelper::jsonMessage('ok', $response);
 			
 		} else {
 			return $response;
@@ -472,7 +472,30 @@ class NewsletterControllerCron extends JControllerForm
 		return (($lastExec + $interval < time()) || $forced) && !$isExec;
 	}
 	
-	
+
+	public function _isForced()
+	{
+		if(JRequest::getBool('forced', false)) {
+                    
+			$conf = JFactory::getConfig();
+			$handler = $conf->get('session_handler', 'none');
+			$sessId = JRequest::getVar(JRequest::getString('sessname', ''), false, 'COOKIE');
+			if(empty($sessId)){
+				return false; //'Unknown session';
+			}    
+			$data = JSessionStorage::getInstance($handler, array())->read($sessId);
+			session_decode($data);
+			$user = $_SESSION['__default']['user'];
+				$levels = $user->getAuthorisedGroups();
+			if ( max($levels) < 7 ) {
+				return false; //'Unauthorized user';
+			}    
+			
+			return true;
+		}
+		
+		return false;
+	}
 	
 	public function automailing($mode = 'std'){
 		

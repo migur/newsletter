@@ -467,3 +467,7 @@ textarea.focused {
 #html-area img {
 /*    width: 100% !important;*/
 }
+
+#send-preview-preloader {
+	float:left;
+}

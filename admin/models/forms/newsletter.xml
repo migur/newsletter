@@ -37,7 +37,7 @@
             name="smtp_profile_id"
             type="smtpprofiles"
             default="0"
-			scope="withoutDef"
+			scope=""
             label="COM_NEWSLETTER_SMTP_PROFILE"
             description="COM_NEWSLETTER_SMTP_PROFILE"
             class="selectbox validate-smtp_profile_id autosaverable"

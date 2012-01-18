@@ -210,23 +210,34 @@ class MigurMailer extends JObject
 						'type' => $type,
 						'tracking' => $params['tracking']
 					));
+
+				// If sending failed
+				if(!$bounced) {
+					
+					// Copy all errors into here
+					foreach($sender->getErrors() as $item) {
+						$this->setError($item);
+					}	
+					
+					throw new Exception();
+				}
 				
 			} catch(Exception $e) {
 				
-				if (JError::getError('unset')) {
-					$this->setError(JError::getError('unset')->get('message'));
-				}	
+				// Check if there JException occured
+				$error = JError::getError('unset');
+				if (!empty($error)){
+					$this->setError($error->get('message'));
+				}
+				
+				// Check if exeption occured
+				$msg = $e->getMessage();
+				if (!empty($msg)) {
+					$this->setError($msg);
+				}
+				
 				$res = false;
 			}	
-
-			// If sending failed
-			if (!$bounced) {
-
-				if (JError::getError('unset')) {
-					$this->setError(JError::getError('unset')->get('message'));
-				}	
-				$res = false;
-			}
 		}
 
 		SubscriberHelper::restoreRealUser();
@@ -237,7 +248,7 @@ class MigurMailer extends JObject
 	 * The main send of one letter to one or mode recipients.
 	 * The mail content generates for each user
 	 *
-	 * @param  array $params the letter, subscriber, type
+	 * @param  array $params newsletter_id, subscriber(object), type ('html'|'plain'), tracking(bool)
 	 *
 	 * @return boolean
 	 * @since  1.0
@@ -294,6 +305,7 @@ class MigurMailer extends JObject
 		// Result object
 		$res = new StdClass();
 		$res->state = false;
+		$res->errors = array();
 		$res->content = $letter->content;
 
 		if ($letter->content === false) {
@@ -329,7 +341,7 @@ class MigurMailer extends JObject
 					'type' => $type,
 					'tracking' => $params['tracking']
 				));
-
+			
 			// If sending failed
 			if (!$sendRes && !empty($sender->ErrorInfo)) {
 				throw new Exception ($sender->ErrorInfo);
@@ -337,7 +349,13 @@ class MigurMailer extends JObject
 			
 		} catch (Exception $e) {
 			
-			$res->error = $e->getMessage();
+			$error = JError::getError('unset');
+			if (!empty($error)){
+				$msg = $error->get('message');
+				$this->setError($msg);
+				$res->errors[] = $msg;
+			}
+			$res->errors[] = $e->getMessage();
 			NewsletterHelper::logMessage('Mailer.Sending error:'.$e->getMessage(), 'mailer/');
 			return $res;
 		}	

@@ -359,8 +359,8 @@ class NewsletterHelper
 	 * @param string File name, usae current date otherwise
 	 * @param boolean Use to force the logging
 	 */ 
-	static public function logMessage($msg, $filename = null, $force = false) {
-		
+	static public function logMessage($msg, $filename = null, $force = false) 
+	{
 		$params = JComponentHelper::getParams('com_newsletter');
 		$logging = $params->get('debug', false);
 		
@@ -369,11 +369,20 @@ class NewsletterHelper
 		}
 		
 		$filename = !empty($filename)? $filename : '';
-		JLog::getInstance($filename . date('Y-m-d') . '.txt')->addEntry(
-			array('comment' => $msg)
-		);
+		
+		try {
+			@JLog::getInstance($filename . date('Y-m-d') . '.txt')->addEntry(
+				array('comment' => $msg)
+			);
+		} catch(Exception $e) {
+			
+			return false;
+		}	
+		
+		return true;
 	}
 
+	
 	static public function debugBacktrace($html = true, $compact = true) {
 		
 		$backtracel = '';

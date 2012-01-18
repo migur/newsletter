@@ -15,7 +15,8 @@ class EnvironmentHelper {
 
 	static public $warnings = array(
 		'checkJoomla' => 'You have old version of Joomla. Please update.',
-		'checkImap' => 'Imap library is unavailable. Please install.'
+		'checkImap' => 'Imap library is unavailable. Please install.',
+		'checkLogs' => 'The component debuging is turned on but system cant write into /logs'
 	);
 
 	/**
@@ -108,6 +109,18 @@ class EnvironmentHelper {
 			function_exists('imap_bodystruct') &&
 			function_exists('imap_utf7_decode') &&
 			function_exists('imap_getmailboxes');
+	}
+	
+	
+	/**
+	 * Check the ability to write into /logs if admin turn on debug
+	 *  
+	 */
+	public static function checkLogs() 
+	{
+		$params = JComponentHelper::getParams('com_newsletter');
+		$logging = (int)$params->get('debug', '0');
+		return is_writable(JPATH_ROOT . '/logs') || empty($logging);
 	}
 
 }

@@ -44,9 +44,9 @@ class JFormFieldSmtpprofiles extends JFormFieldList
 		$query = $db->getQuery(true);
 
 		$query->select(
-			'smtp_profile_id AS value, smtp_profile_name AS text, from_name, from_email, reply_to_email, ' .
+			'CASE is_joomla WHEN 1 THEN 0 ELSE smtp_profile_id END AS value, smtp_profile_name AS text, from_name, from_email, reply_to_email, ' .
 			'reply_to_name, smtp_server, smtp_port, is_ssl, ' .
-			'pop_before_smtp, username, password'
+			'pop_before_smtp, username, password, is_joomla'
 		);
 		$query->from('#__newsletter_smtp_profiles AS a');
 		$query->order('is_joomla DESC, a.smtp_profile_name ASC');

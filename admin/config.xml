@@ -209,7 +209,7 @@
             name="subscription_newsletter_id"
             type="newsletters"
             scope="static"
-            default="0"
+            default="1"
             label="COM_NEWSLETTER_CONFIG_SUBSCRIPTION_NEWSLETTER"
             description="COM_NEWSLETTER_CONFIG_SUBSCRIPTION_NEWSLETTER">
         </field>
@@ -274,4 +274,20 @@
             <option value="0">JNO</option>
         </field>
     </fieldset>
+	
+	<fieldset
+		name="permissions"
+		label="JCONFIG_PERMISSIONS_LABEL"
+		description="JCONFIG_PERMISSIONS_DESC"
+		>
+
+		<field
+			name="rules"
+			type="rules"
+			label="JCONFIG_PERMISSIONS_LABEL"
+			filter="rules"
+			validate="rules"
+			component="com_newsfeeds"
+			section="component"/>
+	</fieldset>
 </config>
