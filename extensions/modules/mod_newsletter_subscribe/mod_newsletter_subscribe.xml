@@ -7,13 +7,12 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>info@migur.com</authorEmail>
 	<authorUrl>www.migur.com</authorUrl>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<description>MOD_NEWSLETTER_SUBSCRIBE_DESCRIPTION</description>
 	<files>
 		<filename
 			module="mod_newsletter_subscribe">mod_newsletter_subscribe.php</filename>
 		<folder>tmpl</folder>
-		<folder>fields</folder>
 		<folder>css</folder>
 		<folder>scripts</folder>
 		<filename>helper.php</filename>
@@ -31,7 +30,7 @@
 		<fields name="params">
 			<fieldset 
                 name="basic"
-                addfieldpath="/modules/mod_newsletter_subscribe/fields">
+                addfieldpath="/administrator/components/com_newsletter/models/fields">
 				<field
 					name="termslink"
 					type="text"

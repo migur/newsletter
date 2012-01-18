@@ -11,3 +11,10 @@ form.mod-newsletter fieldset {
 #mod-subscriber-termslink {
     font-weight: bold;
 }
+
+#newsletter-terms-container {
+	border: 1px solid transparent;
+	display: inline;
+	padding: 3px 3px 0;
+	margin: 0px;
+}
