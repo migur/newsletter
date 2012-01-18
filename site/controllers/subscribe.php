@@ -74,14 +74,13 @@ class NewsletterControllerSubscribe extends JController
 		$db->setQuery("SELECT * FROM #__newsletter_subscribers WHERE email = " . $db->quote($email));
 		$subscriber = $db->loadObject();
 
-
-		$subKey = SubscriberHelper::createSubscriptionKey($subscriber->subscriber_id);
 		// Decide need the confirmation or not
 		//Get the FB settings
 		$fbAppId  = $comParams->get('fbappid');
 		$fbSecret = $comParams->get('fbsecret');
 		
-		$confirmed = $subKey;
+		$confirmed = 0;
+		
 		// Let's try to get user data from FB
 		if (!empty($fbAppId) && !empty($fbSecret) && !empty($fbenabled)) {
 			$me = SubscriberHelper::getFbMe($fbAppId, $fbSecret);
@@ -90,9 +89,10 @@ class NewsletterControllerSubscribe extends JController
 			}
 		}
 
-
 		// If subscriber does not exist before, add it
-		if (!isset($subscriber->subscriber_id)) {
+		// Add it as confirmed user.
+		if (empty($subscriber->subscriber_id)) {
+			
 			$db->setQuery("INSERT INTO #__newsletter_subscribers(name,email,state,html,user_id,created_on,created_by,modified_on,modified_by)"
 				. " VALUES("
 				. $db->quote($name) . ", "
@@ -103,7 +103,7 @@ class NewsletterControllerSubscribe extends JController
 				. $db->quote(date('Y-m-d H:i:s')) . ", "
 				. $db->quote($user->id) . ", "
 				. $db->quote(date('Y-m-d H:i:s')) . ", "
-				. $db->quote($user->id)
+				. $db->quote($user->id) . ", "
 				. ")"
 			);
 
@@ -113,9 +113,7 @@ class NewsletterControllerSubscribe extends JController
 
 			// Create the subscriber key
 			$subKey = SubscriberHelper::createSubscriptionKey($subscriber->subscriber_id);
-			if ($confirmed !== 1) {
-				$confirmed = $subKey;
-			}
+			$confirmed = ($confirmed == 1)? 1 : $subKey;
 
 			$db->setQuery(
 				"UPDATE #__newsletter_subscribers " .
@@ -126,6 +124,10 @@ class NewsletterControllerSubscribe extends JController
 			$db->query();
 
 			$subscriber->subscription_key = $subKey;
+			
+		} else {
+			
+			$confirmed = ($confirmed == 1)? 1 : $subscriber->confirmed;
 		}
 
 		// Set user_id for subscriber if this is not set yet
@@ -202,24 +204,22 @@ class NewsletterControllerSubscribe extends JController
 				));
 
 				if (!$res->state) {
+					NewsletterHelper::logMessage('Subscription. Sending of wellcoming letter failed. '.json_encode($mailer->getErrors()));
 					jexit('The error was occured. Please try again later');
 				}
 
-				$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
-				
 			} catch(Exception $e) {
-				$message = $e->getMessage();
+				jexit($e->getMessage());
 			}	
 			
 		} else {
-
 			// TODO: There should be the notification for admin instead.
-			JLog::getInstance()->addEntry(array('comment' => 'subscribe.subscribe: The wellcoming newsletter not found'));
-			$message = JText::_('The wellcoming newsletter is not defined');
+			NewsletterHelper::logMessage('Subscription. The wellcoming newsletter not found');
 		}
-
-		// Redirect to page
+		
+		$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
 		jexit($message);
+		// Redirect to page
 		//$this->setRedirect(base64_decode($sendto), $message, 'message');
 	}
 
