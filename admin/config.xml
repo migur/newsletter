@@ -113,7 +113,35 @@
                 value="0">JNO</option>
         </field>
 
-    </fieldset>
+		<field
+            name="users_autoconfirm"
+            type="radio"
+            default="0"
+            label="COM_NEWSLETTER_AUTOCONFIRM_USERS"
+            description="COM_NEWSLETTER_AUTOCONFIRM_USERS">
+            <option
+                value="1">JYES</option>
+            <option
+                value="0">JNO</option>
+        </field>
+		
+		<field
+            name="confirm_mail_subject"
+            type="text"
+            default=""
+            label="COM_NEWSLETTER_SUBJECT_OF_CONFIRMATION_LETTER"
+            description="COM_NEWSLETTER_SUBJECT_OF_CONFIRMATION_LETTER">
+        </field>
+
+		<field
+            name="confirm_mail_body"
+            type="textarea"
+            default=""
+            label="COM_NEWSLETTER_BODY_OF_CONFIRMATION_LETTER"
+            description="COM_NEWSLETTER_BODY_OF_CONFIRMATION_LETTER">
+        </field>
+	
+	</fieldset>
 
     <fieldset name="newsletters"
     label="COM_NEWSLETTER_CONFIG"
@@ -213,7 +241,7 @@
             label="COM_NEWSLETTER_CONFIG_SUBSCRIPTION_NEWSLETTER"
             description="COM_NEWSLETTER_CONFIG_SUBSCRIPTION_NEWSLETTER">
         </field>
-    </fieldset>
+	</fieldset>
 
 
     <fieldset name="advanced"

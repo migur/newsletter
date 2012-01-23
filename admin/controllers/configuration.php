@@ -92,10 +92,25 @@ class NewsletterControllerConfiguration extends JController
 			'id' => $id,
 			'option' => $option
 		);
+		
+		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$newsletter->loadFallBackNewsletter();
+		$newsletter->subject = $data['params']['confirm_mail_subject'];
+		$newsletter->plain = $data['params']['confirm_mail_body'];
+		
+		//var_dump($data, $newsletter->toArray()); die;
+		
+		$return2 = $newsletter->save();
+
+		
+
+		unset($data['params']['confirm_mail_subject']);
+		unset($data['params']['confirm_mail_body']);
+
 		$return = $model->save($data);
 
 		// Check the return value.
-		if ($return === false) {
+		if ($return2 === false || $return === false) {
 			// Save the data in the session.
 			$app->setUserState('com_newsletter.config.global.data', $data);
 

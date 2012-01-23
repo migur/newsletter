@@ -90,6 +90,7 @@ CREATE TABLE `#__newsletter_newsletters`
 `created` DATETIME NOT NULL,
 `sent_started` DATETIME NOT NULL,
 `type` INT(11) NOT NULL,
+`category` INT(11),
 
 PRIMARY KEY (`newsletter_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

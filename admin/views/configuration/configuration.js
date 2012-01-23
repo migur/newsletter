@@ -6,6 +6,24 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+Migur.app.autoconfirmManager = {
+
+	init: function(){
+		$$('#jform_users_autoconfirm0, #jform_users_autoconfirm1').addEvent('change', this.updateControls);
+		this.updateControls();
+	},
+	
+	updateControls: function() {
+		
+		var val = $('jform_users_autoconfirm1').getProperty('checked');
+		$('jform_confirm_mail_subject').setProperty('readonly', val);
+		$('jform_confirm_mail_subject').setStyle('color', val? '#ccc' : '#666');
+		$('jform_confirm_mail_body').setProperty('readonly', val);
+		$('jform_confirm_mail_body').setStyle('color', val? '#ccc' : '#666');	
+	}
+}
+
+
 window.addEvent('domready', function() {
     try {
 
@@ -123,6 +141,10 @@ window.addEvent('domready', function() {
             $$('[name=task]')[0].setProperty('value', 'configuration.export');
             $$('[name=adminForm]')[0].submit();
         });
+
+
+		// Manage accessibility to subject/body with autoconfirm flag
+		Migur.app.autoconfirmManager.init();
 
     } catch(e){
         if (console && console.log) console.log(e);

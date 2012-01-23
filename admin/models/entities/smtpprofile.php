@@ -10,8 +10,6 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modeladmin');
-
 JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**

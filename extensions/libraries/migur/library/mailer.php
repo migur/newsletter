@@ -92,6 +92,30 @@ class MigurMailer extends JObject
 		return $data;
 	}
 
+	
+	/**
+	 * Renders subject. As a plain-type template. 
+	 * Available the same placeholders as for mail body.
+	 * 
+	 * @param   string Subject to render
+	 * 
+	 * @return	string
+	 * @since	1.0
+	 */
+	public function renderSubject($subject)
+	{
+		$params = array(
+			'template' => (object)array(
+				'content' => $subject),
+			'tracking' => false);
+		
+		// Create ALWAYS NEW instance
+		$document = MigurMailerDocument::factory('plain', $params);
+		//$this->triggerEvent('onMailerBeforeRender');
+		return $document->render();
+	}
+	
+	
 	/**
 	 * Get parse only Template standard or custom.
 	 *
@@ -187,6 +211,8 @@ class MigurMailer extends JObject
 					'tracking' => true
 				));
 
+			$letter->subject = $this->renderSubject($letter->subject);
+			
 			if ($letter->content === false) {
 				$res = false;
 				break;
@@ -292,13 +318,15 @@ class MigurMailer extends JObject
 		}
 
 		PlaceholderHelper::setPlaceholder('newsletter id', $letter->newsletter_id);
-		
+
 		// render the content of letter for each user
 		$letter->content = $this->render(array(
 				'type' => $type,
 				'newsletter_id' => $letter->newsletter_id,
 				'tracking' => true
 			));
+		
+		$letter->subject = $this->renderSubject($letter->subject);
 
 		SubscriberHelper::restoreRealUser();
 
@@ -331,7 +359,6 @@ class MigurMailer extends JObject
 		$atts = DownloadHelper::getByNewsletterId($params['newsletter_id']);
 		
 		try {
-
 			// send the unique letter to each recipient
 			$sendRes = $sender->send(array(
 					'letter' => $letter,
