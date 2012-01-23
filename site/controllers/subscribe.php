@@ -91,7 +91,7 @@ class NewsletterControllerSubscribe extends JController
 		}
 		
 		
-		// Insert into db
+		// Get from db
 		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		$subscriber->load(array('email' => $email));
 		
@@ -105,7 +105,6 @@ class NewsletterControllerSubscribe extends JController
 				'html' 	=> $html,
 				'user_id' => $emailsAreEqual? $user->id : 0,
 				'confirmed' => $confirmed));
-			$isNew = true;
 			
 		} else {
 			

@@ -27,6 +27,20 @@ window.addEvent('domready', function() {
             return regex.test(value);
     });
 
+    document.formvalidator.setHandler('newsletter-terms',
+        function (value) {
+			
+			value = $$('[name=newsletter-terms]')[0].getProperty('checked');
+			if (!value) {
+				$('newsletter-terms-container').setStyle('border', '1px solid red');
+			} else {
+				$('newsletter-terms-container').setStyle('border', '1px solid transparent');
+			}
+			
+			return value;
+    });
+
+
     modNewsletterSubmit = function(el) {
 
         var form = $(el.form);

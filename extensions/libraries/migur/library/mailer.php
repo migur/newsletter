@@ -274,7 +274,7 @@ class MigurMailer extends JObject
 	 * The main send of one letter to one or mode recipients.
 	 * The mail content generates for each user
 	 *
-	 * @param  array $params the letter, subscriber, type
+	 * @param  array $params newsletter_id, subscriber(object), type ('html'|'plain'), tracking(bool)
 	 *
 	 * @return boolean
 	 * @since  1.0
@@ -333,6 +333,7 @@ class MigurMailer extends JObject
 		// Result object
 		$res = new StdClass();
 		$res->state = false;
+		$res->errors = array();
 		$res->content = $letter->content;
 
 		if ($letter->content === false) {
@@ -367,7 +368,7 @@ class MigurMailer extends JObject
 					'type' => $type,
 					'tracking' => $params['tracking']
 				));
-
+			
 			// If sending failed
 			if (!$sendRes && !empty($sender->ErrorInfo)) {
 				throw new Exception ($sender->ErrorInfo);
@@ -377,9 +378,11 @@ class MigurMailer extends JObject
 			
 			$error = JError::getError('unset');
 			if (!empty($error)){
-				$this->setError($error->get('message'));
+				$msg = $error->get('message');
+				$this->setError($msg);
+				$res->errors[] = $msg;
 			}
-			$res->error = $e->getMessage();
+			$res->errors[] = $e->getMessage();
 			NewsletterHelper::logMessage('Mailer.Sending error:'.$e->getMessage(), 'mailer/');
 			return $res;
 		}	

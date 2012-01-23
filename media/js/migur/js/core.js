@@ -677,3 +677,84 @@ Migur.multistepProcess = function(){
 		this.step();
 	};
 }
+
+
+Migur.jsonResponseParser = function() {
+	
+	this.errors = [];
+	
+	this.response = null;
+	
+	this.setResponse = function(response) 
+	{
+		try { 
+			this.response = JSON.decode(response);
+			
+			if (
+				this.response.state === undefined ||
+				this.response.messages === undefined ||
+				this.response.data === undefined
+			) {
+				this.errors.push('Some required fields is missing.');
+				return false;
+			}
+		} 
+		catch(e) {
+			this.errors.push('Response is not JSON.');
+			return false;
+		}
+		
+		return true;
+	}
+
+
+	this.isError = function() 
+	{
+		return (this.getState() != 'ok');
+	}
+
+
+	this.getState = function() 
+	{
+		if (this.response === null) {
+			return 'unknown error';
+		}
+
+		if (this.response.state == true) {
+			return 'ok';
+		}
+		
+		return 'errors'
+	}
+
+
+	this.getMessages = function() 
+	{
+		if (this.response === null) return false;
+		return this.response.messages;
+	}
+	
+
+	this.getMessagesAsList = function(delimiter) 
+	{
+		if (this.response === null) return false;
+		
+		if (delimiter === null) {
+			delimiter = "\n";
+		}
+		
+		var result = '';
+		Array.each(this.getMessages(), function(item){
+			result += (item + delimiter);
+		});
+		
+		return result;
+	}
+	
+	this.getData = function(){
+		
+		if (this.response === null) return false;
+		
+		return this.response.data;
+	}
+}
