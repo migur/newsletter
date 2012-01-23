@@ -64,7 +64,7 @@ defined('_JEXEC') or die; ?>
 				</a>
 			</fieldset>
 		</div>
-		<div>
+		<div id="newsletter-submit-container">
 			<input
 				type="button"
 				value="<?php echo JText::_('MOD_NEWSLETTER_SUBSCRIBE'); ?>"

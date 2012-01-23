@@ -30,6 +30,9 @@ class MigurModel extends JModel
 	
 	protected $_data = null;
 
+	protected $_keyName = null;
+	
+	
 	public function __construct($config = array())
 	{
 		$res = parent::__construct($config);
@@ -46,7 +49,6 @@ class MigurModel extends JModel
 	 */
 	public function toArray()
 	{
-
 		return (array) $this->_data;
 	}
 
@@ -89,6 +91,10 @@ class MigurModel extends JModel
 	 */
 	public function load($data)
 	{
+		if (empty($data)) {
+			return false;
+		}
+		
 		$table = $this->getTable();
 		$res = $table->load($data);
 
@@ -148,6 +154,21 @@ class MigurModel extends JModel
 
 		return $this->_data->$name;
 	}
-
+	
+	
+	public function getId() 
+	{
+		if (empty($this->_keyName)) {
+			$table = $this->getTable();
+			$this->_keyName = $table->getKeyName();
+			unset($table);
+		}
+		
+		if (empty($this->_data->{$this->_keyName})) {
+			return null;
+		}
+		
+		return $this->_data->{$this->_keyName};
+	}
 }
 
