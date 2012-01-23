@@ -15,7 +15,7 @@ Migur.app.autoconfirmManager = {
 	
 	updateControls: function() {
 		
-		var val = $('jform_users_autoconfirm1').getProperty('checked');
+		var val = $('jform_users_autoconfirm0').getProperty('checked');
 		$('jform_confirm_mail_subject').setProperty('readonly', val);
 		$('jform_confirm_mail_subject').setStyle('color', val? '#ccc' : '#666');
 		$('jform_confirm_mail_body').setProperty('readonly', val);
