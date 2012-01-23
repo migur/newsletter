@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelEntityQueue extends MigurModel
+class NewsletterModelEntityList extends MigurModel
 {
 	/**
 	 * Returns a reference to the a Table object, always creating it.
@@ -26,7 +26,7 @@ class NewsletterModelEntityQueue extends MigurModel
 	 * @return	JTable	A database object
 	 * @since	1.0.4
 	 */
-	public function getTable($type = 'Queue', $prefix = 'NewsletterTable')
+	public function getTable($type = 'List', $prefix = 'NewsletterTable')
 	{
 		return JTable::getInstance($type, $prefix);
 	}

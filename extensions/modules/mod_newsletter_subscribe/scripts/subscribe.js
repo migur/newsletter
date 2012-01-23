@@ -40,9 +40,12 @@ window.addEvent('domready', function() {
             new Request({
                 url: migurSiteRoot + 'index.php?option=com_newsletter&task=subscribe.subscribe',
                 onComplete: function(res){
+					$('newsletter-submit-container').removeClass('preloader');
                     alert(res);
                 }
             }).send(query);
+			
+			$('newsletter-submit-container').addClass('preloader');
         }
     }
 });

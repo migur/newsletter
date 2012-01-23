@@ -55,219 +55,127 @@ class NewsletterControllerSubscribe extends JController
 		$name = JRequest::getString('newsletter-name', null);
 		$email = JRequest::getString('newsletter-email', null);
 		$html = (int) JRequest::getInt('newsletter-html', null);
-		$lists = DataHelper::toArrayOfInts(JRequest::getVar('newsletter-lists', array()));
+		$listsIds = DataHelper::toArrayOfInts(JRequest::getVar('newsletter-lists', array()));
 		$fbenabled = JRequest::getInt('fbenabled', array());
 		//$sendto = JRequest::getVar('sendto');
 		
 		// Check token, die on error.
 		JRequest::checkToken() or jexit('Invalid Token');
 
-		if (empty($name) || empty($email) || !in_array($html, array(0,1)) || empty($lists)) {
+		if (empty($name) || empty($email) || !in_array($html, array(0,1)) || empty($listsIds)) {
 			jexit('One or more parameters is missing');
 		}
 
 		$comParams = JComponentHelper::getComponent('com_newsletter')->params;
 
-
-		// Insert into db
-		// TODO: Add santiy checks, use model instead
-		$db->setQuery("SELECT * FROM #__newsletter_subscribers WHERE email = " . $db->quote($email));
-		$subscriber = $db->loadObject();
-
-		// Decide need the confirmation or not
-		//Get the FB settings
+		$isNew = false;
+		
+		// Let's check if we can create user as confirmed
+		$confirmed = ($comParams->get('users_autoconfirm') == '1');
+		
+		// try to get user data from FB
 		$fbAppId  = $comParams->get('fbappid');
 		$fbSecret = $comParams->get('fbsecret');
-		
-		$confirmed = 0;
-		
-		// Let's try to get user data from FB
 		if (!empty($fbAppId) && !empty($fbSecret) && !empty($fbenabled)) {
 			$me = SubscriberHelper::getFbMe($fbAppId, $fbSecret);
 			if (!empty($me->email) && $me->email == $email) {
-				$confirmed = 1;
+				$confirmed = true;
 			}
 		}
+		
+		// If it is a user's email
+		$emailsAreEqual = false;
+		if (!empty($user->id) && $user->email == $email) {
+			$confirmed = true;
+			$emailsAreEqual = true;
+		}
+		
+		
+		// Insert into db
+		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$subscriber->load(array('email' => $email));
+		
+		// If subscriber does not exist then create it
+		if (!$subscriber->getId()) {
 
-		// If subscriber does not exist before, add it
-		// Add it as confirmed user.
-		if (empty($subscriber->subscriber_id)) {
-			
-			$db->setQuery("INSERT INTO #__newsletter_subscribers(name,email,state,html,user_id,created_on,created_by,modified_on,modified_by)"
-				. " VALUES("
-				. $db->quote($name) . ", "
-				. $db->quote($email) . ", "
-				. "1, "
-				. $db->quote($html) . ", "
-				. $db->quote($user->id) . ", "
-				. $db->quote(date('Y-m-d H:i:s')) . ", "
-				. $db->quote($user->id) . ", "
-				. $db->quote(date('Y-m-d H:i:s')) . ", "
-				. $db->quote($user->id) . ", "
-				. ")"
-			);
-
-			$db->query();
-			$db->setQuery("SELECT * FROM #__newsletter_subscribers WHERE email = " . $db->quote($email));
-			$subscriber = $db->loadObject();
-
-			// Create the subscriber key
-			$subKey = SubscriberHelper::createSubscriptionKey($subscriber->subscriber_id);
-			$confirmed = ($confirmed == 1)? 1 : $subKey;
-
-			$db->setQuery(
-				"UPDATE #__newsletter_subscribers " .
-				" SET subscription_key=" . $db->quote($subKey) .
-				", confirmed=" . $db->quote($confirmed) .
-				" WHERE subscriber_id = " . $db->quote($subscriber->subscriber_id)
-			);
-			$db->query();
-
-			$subscriber->subscription_key = $subKey;
+			$subscriber->create(array(
+				'name'  => $name,
+				'email' => $email,
+				'state' => '1',
+				'html' 	=> $html,
+				'user_id' => $emailsAreEqual? $user->id : 0,
+				'confirmed' => $confirmed));
+			$isNew = true;
 			
 		} else {
 			
-			$confirmed = ($confirmed == 1)? 1 : $subscriber->confirmed;
-		}
-
-		// Set user_id for subscriber if this is not set yet
-		if (empty($subscriber->user_id) && !empty($user->id)) {
+			// Update subscriber
+			if ($confirmed == true) {
+				// Confirm subscriber and 
+				// ALL ITS ASSIGNINGS TO LISTS
+				$subscriber->confirm();
+			}	
 			
-			$db->setQuery(
-				"UPDATE #__newsletter_subscribers " .
-				" SET user_id=" . (int)$user->id .
-				" WHERE subscriber_id = " . (int)$subscriber->subscriber_id
-			);
-			$db->query();
-		}
-		
-		
-		// Add subscriptions to lists, ignore if already in db
-		foreach ($lists as $list) {
-			$db->setQuery(
-				"INSERT IGNORE INTO #__newsletter_sub_list SET subscriber_id = " . $subscriber->subscriber_id .
-				", list_id = " . $db->quote((int) $list) .
-				", confirmed = " . $db->quote($confirmed)
-			);
-			$db->query();
+			if ($emailsAreEqual) {
+				// If user is authorized
+				$subscriber->user_id = $user->id;
+				$subscriber->save();
+			}	
 		}
 
 		
+		// Add subscribers to lists, ignore if already in db
+		$assignedListsIds = array();
+		foreach ($listsIds as $list) {
+			if (!$subscriber->isInList($list)) {
+				$subscriber->assignToList($list);
+				$assignedListsIds[] = $list;
+			}
+		}
+
 		// Triggering the automailing process.
 		$amManager = new NewsletterAutomailingManager();
 		$amManager->processSubscription(array(
 			'subscriberId' => $subscriber->subscriber_id
 		));
-		
-		// If the email or subscriptions are needed to confirm then send the email
-		if ($confirmed == 1) {
- 			$message = JText::sprintf('Thank you %s for subscribing to our Newsletter!', $name);
-			jexit($message);
-		}
 
-
-		// Let's send the subscription email
-		$db->setQuery("SELECT * FROM #__newsletter_lists WHERE list_id in (" . implode(',', $lists) . ')');
-		$mysqlObj = $db->loadObjectList();
 		
-		$titles = array();
-		if (!empty($mysqlObj)) {
-			foreach ($mysqlObj as $item) {
-				$titles[] = $item->name;
+		// If subscriber is confirmed then no need to send emails.
+		$message = JText::sprintf('Thank you %s for subscribing to our Newsletter!', $name);
+		
+		if (!$subscriber->isConfirmed()) {
+			
+			// Get lists we assigned
+			$listManager = JModel::getInstance('Lists', 'NewsletterModel');
+			$lists = $listManager->getItemsByIds($assignedListsIds);
+
+			// Let's send newsletters
+			$mailer = new MigurMailer();
+			foreach($lists as $list) {
+				try {
+					$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+					$newsletter->loadAsWelcoming($list->send_at_reg);
+					
+					PlaceholderHelper::setPlaceholder('listname', $list->name);
+
+					if($mailer->send(array(
+						'type'          => $newsletter->isFallback()? 'plain' : $subscriber->getType(),
+						'subscriber'    => $subscriber->toObject(),
+						'newsletter_id' => $newsletter->newsletter_id,
+						'tracking'      => true
+					))) {
+						$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
+					} else {
+						throw new Exception(json_encode($mailer->getErrors()));
+					}
+
+				} catch(Exception $e) {
+					NewsletterHelper::logMessage('Subscription. Sending of wellcoming letter failed. '.$e->getMessage());
+				}	
 			}
-		}
+		}	
 		
-		PlaceholderHelper::setPlaceholder('list', $titles);
-
-		/* Let's try to determine the wellcoming newsletter to send.
-		 *	Now we get the letter from the first list.
-		 */
-		$newsletterId = !empty($mysqlObj)? (int)$mysqlObj[0]->send_at_reg : 0;
-			
-		if($newsletterId == 0) {
-			/* If the wellcoming letter is not defined
-			 *	then try to use the default wellcoming newsletter
-			 */
-			$newsletterId = (int)$comParams->get('subscription_newsletter_id');
-		}
-
-		if ($newsletterId > 0) {
-			
-			try {
-				
-				$mailer = new MigurMailer();
-				$res = $mailer->send(array(
-					'type' => $html? 'html' : 'plain',
-					'subscriber' => $subscriber,
-					'newsletter_id' => $newsletterId,
-					'tracking' => true
-				));
-
-				if (!$res->state) {
-					NewsletterHelper::logMessage('Subscription. Sending of wellcoming letter failed. '.json_encode($mailer->getErrors()));
-					jexit('The error was occured. Please try again later');
-				}
-
-			} catch(Exception $e) {
-				jexit($e->getMessage());
-			}	
-			
-		} else {
-			// TODO: There should be the notification for admin instead.
-			NewsletterHelper::logMessage('Subscription. The wellcoming newsletter not found');
-		}
-		
-		$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
 		jexit($message);
-		// Redirect to page
-		//$this->setRedirect(base64_decode($sendto), $message, 'message');
-	}
-
-	/**
-	 * The method to bind subscriber to J! user.
-	 *
-	 * @return void
-	 * @since  1.0
-	 */
-	public function confirm()
-	{
-		// Initialise variables.
-		$app = JFactory::getApplication();
-		$user = JFactory::getUser();
-		$db = JFactory::getDbo();
-
-		// Get variables from request
-		$subKey = JRequest::getString('id', null);
-
-		if (empty($subKey)) {
-			// Redirect to page
-			$message = JText::_("The error has occured. Please try again later");
-			$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid='.$subKey, $message, 'error');
-			return;
-		}
-		$db->setQuery("SELECT subscriber_id FROM #__newsletter_subscribers WHERE subscription_key=" . $db->quote($subKey));
-		$subscriber = $db->loadObject();
-		if (count($subscriber) < 1) {
-			// Redirect to page
-			$message = JText::_("The error has occured. Please try again later");
-			$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid='.$subKey, $message, 'error');
-			return;
-		}
-		
-		// Insert into db
-		// TODO: Add santiy checks, use model instead
-		$db->setQuery("UPDATE #__newsletter_subscribers set confirmed=1 WHERE confirmed=" . $db->quote($subKey));
-		$subscriber = $db->query();
-
-		$db->setQuery("UPDATE #__newsletter_sub_list set confirmed=1 WHERE confirmed=" . $db->quote($subKey));
-		$subscriber = $db->query();
-
-		//die();
-		// Redirect to page
-		$message = JText::_("Your subscription has confirmed successfully. Thanks!");
-		$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid='.$subKey, $message, 'message');
-
-		return true;
 	}
 
 	/**

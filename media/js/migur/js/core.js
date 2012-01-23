@@ -46,6 +46,12 @@ Migur.storage = {};
 Migur.translations = {};
 
 /**
+ * Namespace for all methods and objects for current page (application)
+ */
+Migur.app = {};
+
+
+/**
  * Need for Table Column ordering in multiple-forms page.
  * Expand the functionality to handle multiform pages
  *

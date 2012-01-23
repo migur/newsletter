@@ -7,6 +7,7 @@ SET foreign_key_checks = 0;
 ALTER TABLE `#__newsletter_mailbox_profiles` MODIFY COLUMN  `data` LONGBLOB;
 ALTER TABLE `#__newsletter_smtp_profiles` ADD COLUMN  `params` TEXT;
 ALTER TABLE `#__newsletter_smtp_profiles` ADD COLUMN  `is_joomla` SMALLINT;
+ALTER TABLE `#__newsletter_newsletters` ADD COLUMN  `category` INT(11);
 
 CREATE TABLE `#__newsletter_automailings` (
   `automailing_id` INT(11) NOT NULL AUTO_INCREMENT,

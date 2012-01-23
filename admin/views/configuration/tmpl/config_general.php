@@ -54,5 +54,18 @@
                     <td><?php next($items); echo current($items)->label; ?></td>
                     <td><?php echo current($items)->input; ?></td>
                 </tr>
+                <tr class="row<?php echo $i % 2; ?>">
+                    <td colspan="2">
+						<?php next($items); ?>
+						<?php echo current($items)->label; ?>
+						<?php echo current($items)->input; ?>
+						<?php next($items); ?>
+						<?php echo current($items)->label; ?>
+						<?php echo current($items)->input; ?>
+						<?php next($items); ?>
+						<?php echo current($items)->label; ?>
+						<?php echo current($items)->input; ?>
+					</td>
+                </tr>
         </tbody>
     </table>

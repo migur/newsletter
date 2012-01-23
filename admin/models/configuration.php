@@ -74,7 +74,12 @@ class NewsletterModelConfiguration extends JModelForm
 
 	public function loadFormData()
 	{
-		return $this->getComponent()->params->toArray();
+		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$newsletter->loadFallBackNewsletter();
+		$result = $this->getComponent()->params->toArray();
+		$result['confirm_mail_subject'] = $newsletter->subject;
+		$result['confirm_mail_body'] = $newsletter->plain;
+		return $result;
 	}
 
 	/**

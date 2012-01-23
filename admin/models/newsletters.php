@@ -73,7 +73,9 @@ class NewsletterModelNewsletters extends JModelList
 			)
 		);
 		$query->from('`#__newsletter_newsletters` AS n');
-
+		// 2 is system internal newsletters. No need to show it.
+		$query->where('(category = 0 OR category IS NULL)');
+		
 		// Filtering the data
 		if (!empty($this->filtering)) {
 			foreach ($this->filtering as $field => $val)
