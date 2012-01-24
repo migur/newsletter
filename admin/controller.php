@@ -82,5 +82,4 @@ class NewsletterController extends JController
 
 		return $this;
 	}
-
 }

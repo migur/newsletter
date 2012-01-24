@@ -127,6 +127,7 @@ class NewsletterModelConfiguration extends JModelForm
 				$asset->title = $data['option'];
 				$asset->setLocation($root->id, 'last-child');
 			}
+			
 			$asset->rules = (string) $rules;
 
 			if (!$asset->check() || !$asset->store()) {
