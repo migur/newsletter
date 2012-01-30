@@ -85,12 +85,12 @@ class NewsletterHelper
 		$obj = self::getManifest();
 		$product = $obj->monsterName;
 
-		$domain = $_SERVER['HTTP_HOST'];
+		$domain = $_SERVER['SERVER_NAME'];
 		
 		$monster_url = $params->get('monster_url');
 
-		//$monster_url = 'monster.woody.php.nixsolutions.com';
 		$url = $monster_url . '/service/check/license/license_key/' . urlencode($lkey) . '/product/' . urlencode($product) . '/domain/' . urlencode($domain);
+		
 		if (empty($url) || strpos($url, 'http://') === false) {
 			$url = 'http://' . $url;
 		}
