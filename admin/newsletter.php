@@ -24,6 +24,7 @@ jimport('migur.migur');
 JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.acl', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 // Add translations used in JavaScript
 JavascriptHelper::requireTranslations();
@@ -53,11 +54,20 @@ $cache = JFactory::getCache('com_newsletter');
 $cache->setCaching(true);
 $cache->setLifeTime(900); // cache to 5 min
 
+// Check ACL
+if (!AclHelper::taskIsAllowed()) {
+	JRequest::setVar('task', null);
+	JRequest::setVar('view', 'error');
+	JRequest::setVar('layout', 'denied');
+	JRequest::setVar('format', null);
+}
 
 // Get an instance of the controller
+// Here we get full task 
 $controller = JController::getInstance('Newsletter');
 
 // Perform the Request task
+// Here we get only tail of a task 
 $controller->execute(JRequest::getCmd('task'));
 
 // Trigger events after exacution

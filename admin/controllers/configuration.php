@@ -102,11 +102,11 @@ class NewsletterControllerConfiguration extends JController
 		
 		$return2 = $newsletter->save();
 
-		
-
 		unset($data['params']['confirm_mail_subject']);
 		unset($data['params']['confirm_mail_body']);
 
+		$data['option'] = 'com_newsletter';
+		
 		$return = $model->save($data);
 
 		// Check the return value.

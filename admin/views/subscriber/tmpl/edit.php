@@ -6,7 +6,7 @@ defined('_JEXEC') or die;
 <div id="subscriber-form-edit" class="width-100 fltlft">
 	<fieldset class="adminform" id="subscriber-edit-main">
 	   <legend><?php echo JText::_('COM_NEWSLETTER_INFORMATION'); ?></legend>
-	   <?php echo $this->loadTemplate('default', ''); ?>
+	   <?php echo $this->loadTemplate('subscriber'); ?>
 	</fieldset>
 	<fieldset class="adminform" id="subscriber-edit-lists">
 	   <legend><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></legend>

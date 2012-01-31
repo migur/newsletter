@@ -133,6 +133,29 @@ abstract class JHtmlMultigrid
 	 * @return array $options
 	 * @since 1.0
 	 */
+	public static function typesOptions($lists = array())
+	{
+		$data = array(
+			array('value' => '1', 'text' => JText::_('COM_NEWSLETTER_MIGURTYPE_SUBSCRIBER')),
+			array('value' => '2', 'text' => JText::_('COM_NEWSLETTER_JUSERTYPE_SUBSCRIBER'))
+		);
+		
+		$options = array();
+		// Build the options array
+		foreach ($data as $item) {
+			$options[] = JHtml::_('select.option', $item['value'], $item['text']);
+		}
+		return $options;
+	}
+	
+	
+	/**
+	 * Builds a list of options based on lists array
+	 * @param array $lists
+	 *
+	 * @return array $options
+	 * @since 1.0
+	 */
 	public static function templateOptions($config = array())
 	{
 		// Build the active state filter options.

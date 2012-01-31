@@ -24,6 +24,14 @@
 					</select>
 				</div>
 				<div class="fltlft">
+					<div class="label"><?php echo JText::_('COM_NEWSLETTER_TYPE'); ?></div>
+
+					<select name="filter_type" class="inputbox fltlt" onchange="this.form.submit()">
+							<option value=""><?php echo JText::_('COM_NEWSLETTER_FILTER_ON_TYPES');?></option>
+							<?php echo JHtml::_('select.options', JHtml::_('multigrid.typesOptions'), 'value', 'text', $this->subscribers->state->get('filter.type'), true);?>
+					</select>
+				</div>
+				<div class="fltlft">
 					<div class="label"><?php echo JText::_('COM_NEWSLETTER_FILTER'); ?></div>
 					<input type="text" name="filter_search" id="ss_filter_search" class="migur-search" value="<?php echo $this->escape($this->subscribers->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
 
@@ -58,23 +66,29 @@
 			</tr>
 		</tfoot>
 		<tbody>
-		<?php foreach ($this->subscribers->items as $i => $item) : ?>
+		<?php
+		$subscriber = $this->subscriberModel; 
+		foreach ($this->subscribers->items as $i => $item) : 
+			$subscriber->setFromArray($item);
+		?>
+
 			<tr class="row<?php echo $i % 2; ?>">
 				<td>
-					<?php echo JHtml::_('multigrid.id', $i, $item->id, false, 'cid', 'subscribersForm'); ?>
+					<?php echo JHtml::_('multigrid.id', $i, $subscriber->getExtendedId(), false, 'cid', 'subscribersForm'); ?>
 				</td>
 				<td>
-                                    <a href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&subscriber_id='.(int) $item->id); ?>"
-                                       rel="{handler: 'iframe', size: {x: 965, y: 540}}"
-                                       class="modal" >
-                                        <?php echo $this->escape($item->name); ?>
-                                    </a>
+					<a href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&subscriber_id='.$subscriber->getExtendedId()); ?>"
+					   rel="{handler: 'iframe', size: {x: 965, y: 540}}"
+					   class="modal" >
+						<?php echo $this->escape($item->name); ?>
+					</a>
+					<div class="<?php echo $subscriber->isJoomlaUserType()? 'juser-type-icon' : 'subscriber-type-icon'; ?>"></div>
 				</td>
 				<td>
-                                        <?php echo $this->escape($item->email); ?>
+                                        <?php echo $this->escape($subscriber->email); ?>
 				</td>
 				<td class="center">
-					<?php echo JHtml::_('multigrid.enabled', $item->state, $i, 'tick.png', 'publish_x.png', 'subscribers.', 'subscribersForm'); ?>
+					<?php echo JHtml::_('multigrid.enabled', $subscriber->state, $i, 'tick.png', 'publish_x.png', 'subscribers.', 'subscribersForm'); ?>
 				</td>
 			</tr>
 			<?php endforeach; ?>
