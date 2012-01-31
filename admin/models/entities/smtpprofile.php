@@ -74,6 +74,12 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 	}
 
 	
+	public function kill()
+	{
+		$this->_data->params->inProcess = 0;
+		$this->save();
+	}
+	
 	public function setInProcess($val = 1)
 	{
 		$this->params->inProcess = $val;
@@ -93,10 +99,20 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 		return ($this->_data->is_joomla);
 	}
 
-	
+	/**
+	 * True if this id matches with Default Smtp Id
+	 * or if the default smtpp is the Joomla smtpp
+	 * and this smtpp is Jomla one.
+	 * 
+	 * @return type 
+	 */
 	public function isDefaultProfile()
 	{
-		return ($this->getDefaultSmtpId() == $this->_data->smtp_profile_id);
+		$defId = $this->getDefaultSmtpId();
+		
+		return 
+			($defId == $this->_data->smtp_profile_id) || 
+			($defId == 0 && $this->isJoomlaProfile());
 	}
 	
 	/**
