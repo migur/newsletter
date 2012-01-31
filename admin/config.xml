@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: config.xml 19439 2010-11-10 15:42:23Z chdemko $ -->
 <config>
+	
 	<fieldset name="general"
 		label="COM_NEWSLETTER_CONFIG_GENERAL"
 		description="COM_NEWSLETTER_CONFIG_GENERAL">
@@ -302,20 +303,19 @@
             <option value="0">JNO</option>
         </field>
     </fieldset>
-	
-	<fieldset
-		name="permissions"
-		label="JCONFIG_PERMISSIONS_LABEL"
-		description="JCONFIG_PERMISSIONS_DESC"
-		>
 
-		<field
-			name="rules"
-			type="rules"
-			label="JCONFIG_PERMISSIONS_LABEL"
-			filter="rules"
-			validate="rules"
-			component="com_newsfeeds"
-			section="component"/>
-	</fieldset>
+	<fieldset 
+		name="permissions" 
+		label="JCONFIG_PERMISSIONS_LABEL" 
+		description="JCONFIG_PERMISSIONS_DESC"
+	>
+		<field 
+			name="rules" 
+			type="rules" 
+			label="JCONFIG_PERMISSIONS_LABEL" 
+			filter="rules" 
+			component="com_newsletter" 
+			section="component" />
+	</fieldset>	
+	
 </config>

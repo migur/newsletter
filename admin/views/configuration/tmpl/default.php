@@ -33,6 +33,8 @@ defined('_JEXEC') or die;
 		echo $this->loadTemplate('advanced', 'config');
 		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_IMPORT_EXPORT'), 'tab-export');
 		echo $this->loadTemplate('export', 'config');
+		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PERMISSIONS'), 'tab-permissions');
+		echo $this->loadTemplate('permissions', 'config');
 		echo JHtml::_('tabs.end');
 		?>
 		<div>

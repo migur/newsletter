@@ -74,11 +74,13 @@ class NewsletterModelSubscribers extends MigurModelList
 		$name = $this->getName();
 		if ($form != $name) {
 			$list = $app->getUserState($this->context . '.filter.list');
+			$type = $app->getUserState($this->context . '.filter.type');
 			$published = $app->getUserState($this->context . '.filter.published');
 			$published = ($published) ? $published : '';
 			$search = $app->getUserState($this->context . '.filter.search');
 		} else {
 			$list = $this->getUserStateFromRequest($this->context . '.filter.list', 'filter_list', '');
+			$type = $this->getUserStateFromRequest($this->context . '.filter.type', 'filter_type', '');
 			$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
 			$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 			if ($search == "Search...") {
@@ -86,6 +88,7 @@ class NewsletterModelSubscribers extends MigurModelList
 			}
 		}
 
+		$this->setState('filter.type', $type);
 		$this->setState('filter.list', $list);
 		$this->setState('filter.published', $published);
 		$this->setState('filter.search', $search);
@@ -127,19 +130,69 @@ class NewsletterModelSubscribers extends MigurModelList
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 
+		
+//		10000 users 4500 subscribers - result 606ms (filesort)
+//		10000 users 4500 subscribers - result 351ms (indexes)
+//		
+//		14500 subscribers - result 353ms (filesort)
+//		14500 subscribers - result 16ms (indexes)
+		
+		
 		// Select the required fields from the table.
-		$query->select(
-			$this->getState(
-				'list.select',
-				'DISTINCT a.subscriber_id AS id, a.name, a.email, a.state, a.created_on' .
-				', a.created_by, a.modified_on, a.modified_by' .
-				', a.locked_on, a.locked_by'
-			)
-		);
+//		$query->select('a.subscriber_id AS id, a.name, a.email, a.state, a.created_on' .
+//				', a.created_by, a.modified_on, a.modified_by, a.locked_on, a.locked_by');
+//
+//		$query->from('#__newsletter_subscribers AS a');
+		
 
-		$query->from('#__newsletter_subscribers AS a');
-		$query->leftJoin("#__newsletter_sub_list AS sl ON a.subscriber_id=sl.subscriber_id");
+//SELECT COUNT(*) 
+//FROM jos_users AS u
+//LEFT JOIN jos_newsletter_subscribers AS s ON s.user_id = u.id
+//WHERE s.subscriber_id IS NULL;
+//
+//SELECT COUNT(*)
+//FROM jos_users AS u
+//WHERE u.id NOT IN (SELECT s.user_id FROM jos_newsletter_subscribers AS s);		
+		
+		
+		$query->select('*');
+		
+//		$query->from(
+//		'(SELECT s.subscriber_id, s.name, s.email, s.state, s.html, s.user_id
+//		FROM jos_newsletter_subscribers AS s
+//		WHERE s.user_id = 0 OR s.user_id IS NULL
+//
+//		UNION 
+//
+//		SELECT s.subscriber_id, u.name, u.email, u.block, s.html, s.user_id
+//		FROM jos_newsletter_subscribers AS s
+//		JOIN jos_users AS u ON (s.user_id > 0 AND u.id = s.user_id)
+//
+//		UNION 
+//
+//		SELECT NULL AS subscriber_id, u.name, u.email, u.block, 1 AS html, u.id
+//		FROM jos_newsletter_subscribers AS s
+//		RIGHT JOIN jos_users AS u ON (u.id = s.user_id AND s.subscriber_id IS NULL)) AS a');
 
+
+		
+// May halp to optimize it!!!!!!!!!!!!!!!!!!!!!11111
+//		CREATE TEMPORARY TABLE temp_union TYPE=HEAP *cool_select_statement_1*;
+//		INSERT INTO temp_union *cool_select_statement_2*;
+//		SELECT * FROM temp_union *order_and_group_by_stuff*;
+//		DROP TABLE temp_union;
+		
+		$query->from(
+			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
+			FROM jos_newsletter_subscribers AS s
+			LEFT JOIN jos_users AS u ON (s.user_id = u.id)
+
+			UNION
+
+			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
+			FROM jos_newsletter_subscribers AS s
+			RIGHT JOIN jos_users AS u ON (s.user_id = u.id)) AS a');
+		
 		// Filtering the data
 		if (!empty($this->filtering)) {
 			foreach ($this->filtering as $field => $val)
@@ -150,9 +203,22 @@ class NewsletterModelSubscribers extends MigurModelList
 		// Filter by list state
 		$list = $this->getState('filter.list');
 		if (!empty($list)) {
+			$query->leftJoin("#__newsletter_sub_list AS sl ON a.subscriber_id=sl.subscriber_id");
 			$query->where('sl.list_id = ' . (int) $list);
 		}
 
+		// Filter by list state
+		$type = $this->getState('filter.type');
+		
+		if ($type == 1) {
+			$query->where('a.user_id IS NULL');
+		}
+		
+		if ($type == 2) {
+			$query->where('a.user_id > 0');
+		}
+		
+		
 		// Filter by published state
 		$published = $this->getState('filter.published');
 		if (in_array($published, array('0', '1'))) {
@@ -179,11 +245,11 @@ class NewsletterModelSubscribers extends MigurModelList
 		$orderDirn = $this->state->get('list.direction');
 
 		if ($orderCol == 'a.ordering' || $orderCol == 'a.name') {
-			$orderCol = 'name ' . $orderDirn . ', a.subscriber_id';
+			$orderCol = 'name';
 		}
 		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
 
-		// echo nl2br(str_replace('#__','jos_',$query)); die;
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$this->query = $query;
 	}
 

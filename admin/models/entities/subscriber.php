@@ -18,8 +18,98 @@ defined('_JEXEC') or die;
  */
 class NewsletterModelEntitySubscriber extends MigurModel
 {
-	public function getType() {
+	/**
+	 * Load subscriber or juser.
+	 * If you specify j[JUserId] as input data then you get 
+	 * JUser "in a body of subscriber
+	 * 
+	 * @param arrray|int $data
+	 * 
+	 * @return boolean 
+	 */
+	public function load($data)
+	{
+		if ((is_numeric($data) && $data < 0) || !parent::load($data)) {
+
+			// If the J! user is being requested
+			if ((is_numeric($data) && $data < 0) || !empty($data['email'])) {
+				
+				if (!$this->_checkOnTheFly($data)) {
+					return false;
+				}
+
+				$data = array('user_id' => $this->getId());
+			}
+		}
 		
+		if (!empty($this->_data->user_id)) {
+			
+			$jUser = JUser::getInstance($this->_data->user_id);
+			$this->_data->name = $jUser->name;
+			$this->_data->email = $jUser->email;
+			$this->_data->state = !$jUser->block;
+			$this->_data->created_on = !$jUser->registerDate;
+			$this->_data->created_by = !$jUser->block;
+			$this->_data->confirmed = empty($jUser->activation);
+		}
+		
+		return true;
+	}
+
+	
+	protected function _checkOnTheFly($data)
+	{
+		if (empty($data)) {
+			return false;
+		}
+		
+		// If not then load J! user and create row in subscribers for it
+		$dbo = JFactory::getDbo();
+		$query = $dbo->getQuery(true);
+		$query->select('*')
+			  ->from('#__users');
+
+		if (is_numeric($data)) {
+			$query->where('id = '.abs((int)$data));
+		} else {
+			foreach($data as $name => $item) {
+				$query->where($name.'='.$dbo->quote($item));
+			}
+		}	
+		$dbo->setQuery($query);
+		$user = $dbo->loadAssoc();
+
+		if (empty($user['id'])) {
+			return false;
+		}
+
+		if (parent::load(array('user_id' => $user['id']))) {
+			return true;
+		}
+		
+		$data = array();
+		$data['user_id'] = $user['id'];
+		$data['created_on'] = date('Y-m-d H:i:s');
+		$data['created_by'] = JFactory::getUser()->id;
+		$data['modified_on'] = 0;
+		$data['modified_by'] = 0;
+		$data['locked_on'] = 0;
+		$data['locked_by'] = 0;
+
+		if (!parent::save($data)) {
+			return false;
+		}
+
+		$this->_createSubscriptionKey();
+		$this->_data->confirmed = empty($table->activation)? 1 : $this->_data->subscription_key;
+		return parent::save();
+	}
+	
+	/**
+	 * Get type of newsletter user prefer to recieve
+	 */
+	public function getType() 
+	{
 		return ($this->html == 1) ? 'html' : 'plain';
 	}
 	
@@ -49,6 +139,10 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	 */
 	protected function _createSubscriptionKey()
 	{
+		if (!empty($this->_data->subscription_key)) {
+			return;
+		}
+		
 		$sid = $this->_data->subscriber_id;
 		// to get the constant length
 		$mask = '000000000';
@@ -58,7 +152,7 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	
 	
 	/**
-	 * Shorthand for creation.
+	 * Shorthand for creation of free Migur subscriber (not bound to J! user).
 	 * 
 	 * @param type $data
 	 * @return type 
@@ -72,32 +166,90 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		}	
 		
 		$data['created_on'] = date('Y-m-d H:i:s');
-		$data['created_by'] = $data['user_id'];
+		$data['created_by'] = JFactory::getUser()->id;
 		$data['modified_on'] = 0;
 		$data['modified_by'] = 0;
+		$data['locked_on'] = 0;
+		$data['locked_by'] = 0;
 
 		if ($this->save($data)) {
 			
 			$this->_data->confirmed = (empty($data['confirmed']) || $data['confirmed'] != 1)?
 				$this->_data->subscription_key : 1;
-			
-			return $this->save();
-		}	
-			
+			return parent::save();
+		}
+		
 		return false;
 	}
 	
-	
-	public function save($data = array()) 
+	/**
+	 * Save user and check if it has a subscription key
+	 * 
+	 * @param array|object $data
+	 * @return boolean 
+	 */
+	public function save($data = array(), $isJUser = false) 
 	{
-		if(!parent::save($data)) {
+		// Load state if data not loaded yet and $data has sid but does NOT have uid. 
+		// Need to determine if this is a J! user
+		if (!$this->getId() && !empty($data['subscriber_id']) && !isset($data['user_id'])) {
+			if (!$this->load($data['subscriber_id'])){
+				return false;
+			}
+		}
+
+		// Check if this should be a J! user entity.
+		if (!empty($data['user_id'])) {
+			$uid = $data['user_id'];
+		} else {
+			$uid = !empty($this->_data->user_id)? $this->_data->user_id : null;
+		}
+
+		// If this is a J! user or need to create it
+		if (!empty($uid) || $isJUser) {
+
+			if(empty($uid)) {
+				$data['username'] = $data['name'];
+				$data['password'] = '';
+				$data['sendEmail'] = '1';
+				$data['block'] = '0';
+				$data['groups'] = array('2');
+				$data['params'] = array();
+			}
+			
+			$jUser = new JUser($uid);
+			
+			$jUser->bind($data);
+			
+			if (!$jUser->save()) {
+				return false;
+			}
+		
+			// Sanitize model
+			$data['name'] = '';
+			$data['email'] = '';
+			$data['created_on'] = 0;
+			$data['modified_on'] = date('Y-m-d H:i:s');
+			$data['modified_by'] = JFactory::getUser()->id;
+			$data['user_id'] = $jUser->id;
+		}	
+
+		// Check if this is a new record 
+		if (!$this->getId() && !$this->extractId($data)) {
+			$data['created_by'] = JFactory::getUser()->id;
+			$data['modified_on'] = 0;
+			$data['modified_by'] = 0;
+			$data['locked_on'] = 0;
+			$data['locked_by'] = 0;
+		}
+		
+		// Save the rest or all
+		if (!parent::save($data)) {
 			return false;
 		}
 		
-		if (empty($this->_data->subscription_key)) {
-			$this->_createSubscriptionKey();
-			return $this->save();
-		}
+		$this->_createSubscriptionKey();
+		return parent::save();
 		
 		return true;
 	}
@@ -156,6 +308,44 @@ class NewsletterModelEntitySubscriber extends MigurModel
 				'confirmed'        => $this->_data->confirmed));
 	}
 	
+	
+	/**
+	 * Bind current subscriber to list.
+	 *
+	 * @param	array	$data	The form data.
+	 *
+	 * @return	boolean	True on success.
+	 * @since	1.0
+	 */
+	public function unbindFromList($lid)
+	{
+		if (empty($lid)) {
+			return false;
+		}
+		
+		// Load the row. If it exists then nothing to do
+		if (!$this->isInList($lid)) {
+			return true;
+		}
+
+		// Delete and finish.
+		$table = $this->getTable('sublist');
+		if (!$table->load(array(
+				'subscriber_id' => (int)$this->_data->subscriber_id,
+				'list_id' => (int)$lid))
+		) { 
+			return false;
+		}
+		
+		return $table->delete();
+	}
+	
+	
+	/**
+	 * Confirm subscriber and all its subscriptions to lists
+	 * 
+	 * @return boolean true on success
+	 */
 	public function confirm() 
 	{
 		$this->_data->confirmed = 1;
@@ -167,5 +357,35 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		$db = JFactory::getDbo();
 		$db->setQuery("UPDATE #__newsletter_sub_list set confirmed=1 WHERE confirmed=" . $db->quote($this->_data->subscription_key));
 		return $subscriber = $db->query();
+	}
+
+	
+	/**
+	 * Used to get id for juser/subscriber.
+	 * Return subscriber_id if this is a subscriber
+	 * or 'j[#__users.id]' if this entity is the wrapper for J! user via subscriber entity
+	 * 
+	 * @return string
+	 */
+	public function getExtendedId() 
+	{
+		$id = $this->getId();
+		if(!empty($id)) {
+			return $id;
+		}
+
+		return '-'.$this->_data->user_id;
+	}
+
+	
+	/**
+	 * Check if this entity is the wrapper for J! user type
+	 * Covers with TRUE all unbound yet J! users and bound ones to subscriber's table
+	 * 
+	 * @return boolean 
+	 */
+	public function isJoomlaUserType() 
+	{
+		return !empty($this->_data->user_id);
 	}
 }

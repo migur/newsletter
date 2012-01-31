@@ -42,18 +42,30 @@ class NewsletterControllerSubscriber extends JControllerForm
 	{
 		if (JRequest::getMethod() == "POST") {
 
-			$model = $this->getModel();
-			$data = (object) array(
-					'subscriber_id' => JRequest::getInt('subscriber_id', null, 'post'),
-					'list_id' => JRequest::getInt('list_to_subscribe', null, 'post')
-			);
-			if ($model->assignToList($data)) {
+			try {
+				
+				$sid = JRequest::getInt('subscriber_id', null, 'post');
+				$lid = JRequest::getInt('list_to_subscribe', null, 'post');
+				
+				$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+				
+				if (!$model->load($sid)) {
+					throw new Exception();
+				}
+				
+				if (!$model->assignToList($lid)) {
+					throw new Exception();
+				} 
+
 				$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_SUCCESS"));
-			} else {
+				
+			} catch (Exception $e) {
+				
 				$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_FAILED"), 'error');
 			}
 		}
-		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($data->subscriber_id, 'subscriber_id'), false));
+
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($sid, 'subscriber_id'), false));
 	}
 
 	/**
@@ -66,19 +78,30 @@ class NewsletterControllerSubscriber extends JControllerForm
 	{
 		if (JRequest::getMethod() == "POST") {
 
-			$model = $this->getModel();
-			$data = (object) array(
-					'subscriber_id' => JRequest::getInt('subscriber_id', null, 'post'),
-					'list_id' => JRequest::getInt('list_to_unbind', null, 'post')
-			);
+			try {
+				
+				$sid = JRequest::getInt('subscriber_id', null, 'post');
+				$lid = JRequest::getInt('list_to_unbind', null, 'post');
+				
+				$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+				
+				if (!$model->load($sid)) {
+					throw new Exception();
+				}
+				
+				if (!$model->unbindFromList($lid)) {
+					throw new Exception();
+				} 
 
-			if ($model->unbindFromList($data)) {
 				$this->setMessage(JText::_("COM_NEWSLETTER_UNBIND_SUCCESS"));
-			} else {
+				
+			} catch (Exception $e) {
+				
 				$this->setMessage(JText::_("COM_NEWSLETTER_UNBIND_FAILED"), 'error');
 			}
 		}
-		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($data->subscriber_id, 'subscriber_id'), false));
+
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($sid, 'subscriber_id'), false));
 	}
 
 	/**
@@ -145,6 +168,22 @@ class NewsletterControllerSubscriber extends JControllerForm
 
 		return $append;
 	}
-
+	
+	
+	/**
+	 * Load data to autocreate subscriber row for J! user
+	 */
+	public function edit($key = null, $urlVar = null)
+	{
+		$sid = JRequest::getInt('subscriber_id');
+		if ($sid < 0) {
+			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$model->load($sid);
+			JRequest::setVar('subscriber_id', $model->getId());
+			unset($model);
+		}	
+		
+		return parent::edit($key, $urlVar);
+	}
 }
 

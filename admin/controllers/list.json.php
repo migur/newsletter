@@ -193,10 +193,10 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function import()
 	{
-
-		$subtask = JRequest::getString('subtask', '');
+		$type        = JRequest::getString('subscriber_type', '');
+		$subtask     = JRequest::getString('subtask', '');
 		$currentList = JRequest::getInt('list_id', '0');
-
+		
 		if ($currentList < 1) {
 			echo json_encode(array('status' => '0', 'error' => 'No list Id'));
 			return false;
@@ -243,35 +243,34 @@ class NewsletterControllerList extends JControllerForm
 				}
 				fclose($handle);
 
-				$subscriber = JModel::getInstance('subscriber', 'newsletterModel');
-
+				$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+				
 				$absent = 0;
 				$processed = 0;
 
 				foreach ($res as $row) {
-
-					$user = $subscriber->getItem(array('email' => $row['email']));
-					$userData = ($user) ? $user->getProperties() : array();
+					
+					$userData = array();
+					if ($subscriber->load(array('email' => $row['email']))) {
+						$userData = $subscriber->toArray();
+					}
+					
 					//$subId = $userData['subscriber_id'];
 					// overwrite the user if needed or if user is absent
 					if ($settings->overwrite || empty($userData['subscriber_id'])) {
-						$saveData = array_merge($userData, $row);
-						if (empty($saveData['subscriber_id'])) {
-							$saveData['subscriber_id'] = 0;
+						if (empty($userData['confirmed'])) {
+							$userData['confirmed'] = 1;
 						}
-						$subscriber->setState('subscriber.id', 0);
-						$subscriber->getState();
-						$subscriber->save($saveData);
-						$userData['subscriber_id'] = $subscriber->getState('subscriber.id');
+						$saveData = array_merge($userData, $row);
+						$isJuser = ($type == 'juser') && !$subscriber->getId();
+						$subscriber->save($saveData, $type == 'juser');
+						$userData['subscriber_id'] = $subscriber->subscriber_id;
 					}
 
 					if ($userData['subscriber_id']) {
 
 						//echo "asign\n";
-						$res = $subscriber->assignToList((object) array(
-									'subscriber_id' => $userData['subscriber_id'],
-									'list_id' => $currentList
-							));
+						$res = $subscriber->assignToList($currentList);
 
 						if (!$res) {
 							echo json_encode(array(
@@ -291,6 +290,8 @@ class NewsletterControllerList extends JControllerForm
 					}
 				}
 
+				die;
+				
 				unlink($file['file']['filepath']);
 				$sess->clear('list.' . $currentList . '.file.uploaded');
 
