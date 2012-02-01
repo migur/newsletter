@@ -15,6 +15,9 @@ iframe {
     width: 100%;
 }
 
+.MooDialog iframe {
+    overflow: hidden !important;
+}
 
 #tabs-sub-container > .current {
 /*    width: 600px;*/
@@ -466,4 +469,8 @@ textarea.focused {
 
 #html-area img {
 /*    width: 100% !important;*/
+}
+
+#send-preview-preloader {
+	float:left;
 }

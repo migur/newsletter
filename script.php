@@ -141,6 +141,10 @@ class com_newsletterInstallerScript
                     $sess->set('com-newsletter-backup', $this->backedup);
             }
 
+			
+			// Populate and check initial required data in DB
+			$this->_setInitialData();
+			
             /* Redirect after installation. Make sure the component was installed the last if
                there is package */
             JInstaller::getInstance()->setRedirectURL('index.php?option=com_newsletter&view=wellcome');
@@ -246,5 +250,28 @@ class com_newsletterInstallerScript
 			}
 		}
 		return $idx;
+	}
+
+	
+	/**
+	 * Preforms check and restore/populate initial data into DB
+	 */
+	protected function _setInitialData() 
+	{
+		// Check/set the record for J! SMTP profile in SMTP_PROFILES table 
+//		$dbo = JFactory::getDbo();
+//		$dbo->setQuery('select * from #__newsletter_smtp_profiles where is_joomla=1');
+//		$list = $dbo->loadObjectList();
+//		
+//		if (count($list) == 0) {
+//			
+//			$dbo->setQuery(
+//				'INSERT INTO #__newsletter_smtp_profiles SET '.
+//				'params="{\"periodLength\":\"60\",\"sentsPerPeriodLimit\":\"100\",\"inProcess\":0,\"periodStartTime\":0,\"sentsPerLastPeriod\":0}", '.
+//				'is_joomla=1, '.
+//				'mailbox_profile_id=-1, '.
+//				'pop_before_smtp="0"');
+//			$dbo->query();
+//		}
 	}
 }

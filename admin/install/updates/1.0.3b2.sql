@@ -6,6 +6,4 @@ SET foreign_key_checks = 0;
 
 ALTER TABLE `#__newsletter_mailbox_profiles` MODIFY COLUMN  `data` LONGBLOB;
 
-ALTER TABLE `#__newsletter_sent` ADD COLUMN  `extra` LONGBLOB;
-
 SET foreign_key_checks = 1;

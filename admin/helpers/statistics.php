@@ -37,8 +37,13 @@ class StatisticsHelper
 	{
 		$dbo = JFactory::getDbo();
 		$query = $dbo->getQuery(true);
+		
+		$subquery = 
+			' SELECT DISTINCT newsletter_id, subscriber_id, bounced ' .
+			' FROM #__newsletter_sent';
+		
 		$query->select('(CASE bounced WHEN "" THEN "NO" ELSE bounced END) AS bounced, count(*) as cnt')
-			->from('#__newsletter_sent AS ns');
+			->from('(' . $subquery . ') AS ns');
 
 		if (is_array($ids)) {
 			$query->where('newsletter_id in(' . implode(',', $ids) . ') ');
@@ -46,7 +51,7 @@ class StatisticsHelper
 
 		$query->group('bounced');
 
-		//echo nl2br(str_replace('#__','jos_',$query));
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$data = $dbo->setQuery($query)->loadAssocList();
 
 		$res = array();
@@ -165,7 +170,7 @@ class StatisticsHelper
 			$query->where('h.newsletter_id in(' . implode(',', $ids) . ') ');
 		}
 
-		$query->where('h.action="' . NewsletterTableHistory::ACTION_OPENED . '"');
+		$query->where('h.action="' . NewsletterTableHistory::ACTION_CLICKED . '"');
 
 		//echo nl2br(str_replace('#__','jos_',$query)); //die();
 		$res['subscribers'] = count($dbo->setQuery($query)->loadAssocList());
@@ -301,7 +306,7 @@ class StatisticsHelper
 
 		$dbo = JFactory::getDbo();
 		$query = $dbo->getQuery(true);
-		$query->select('subscriber_id')
+		$query->select('DISTINCT subscriber_id')
 			->from('#__newsletter_sub_history as h')
 			->where('h.action="' . NewsletterTableHistory::ACTION_OPENED . '"')
 			->where('h.date >= "' . $startDate . '" AND h.date <= "' . $endDate . '"');
@@ -310,9 +315,7 @@ class StatisticsHelper
 			$query->where('h.newsletter_id in(' . implode(',', $ids) . ') ');
 		}
 
-		$query->group('subscriber_id');
-
-		//echo nl2br(str_replace('#__','jos_',$query)); //die();
+		//echo nl2br(str_replace('#__','jos_',$query)); die();
 		return count($dbo->setQuery($query)->loadAssocList());
 	}
 
@@ -332,6 +335,10 @@ class StatisticsHelper
 		$query->select('count(*) as total')
 			->from('#__newsletter_sub_history as h')
 			->where('h.action="' . NewsletterTableHistory::ACTION_CLICKED . '"');
+		
+		if (!empty($ids)) {
+			$query->where('h.newsletter_id in (' . implode(',', $ids) . ')');
+		}	
 
 		//echo nl2br(str_replace('#__','jos_',$query)); //die();
 		$res = $dbo->setQuery($query)->loadAssoc();

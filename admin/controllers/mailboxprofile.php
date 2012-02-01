@@ -74,7 +74,6 @@ class NewsletterControllerMailboxprofile extends JControllerForm
 	 */
 	public function save()
 	{
-
 		parent::save();
 
 		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
@@ -137,7 +136,7 @@ class NewsletterControllerMailboxprofile extends JControllerForm
 			$mailbox->close();
 		}
 
-		$mailbox->getLastError();
+		$err = $mailbox->getLastError();
 		
 		if (empty($err)) {
 			$err = 'Unknown error';

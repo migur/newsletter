@@ -92,6 +92,30 @@ class MigurMailer extends JObject
 		return $data;
 	}
 
+	
+	/**
+	 * Renders subject. As a plain-type template. 
+	 * Available the same placeholders as for mail body.
+	 * 
+	 * @param   string Subject to render
+	 * 
+	 * @return	string
+	 * @since	1.0
+	 */
+	public function renderSubject($subject)
+	{
+		$params = array(
+			'template' => (object)array(
+				'content' => $subject),
+			'tracking' => false);
+		
+		// Create ALWAYS NEW instance
+		$document = MigurMailerDocument::factory('plain', $params);
+		//$this->triggerEvent('onMailerBeforeRender');
+		return $document->render();
+	}
+	
+	
 	/**
 	 * Get parse only Template standard or custom.
 	 *
@@ -187,6 +211,8 @@ class MigurMailer extends JObject
 					'tracking' => true
 				));
 
+			$letter->subject = $this->renderSubject($letter->subject);
+			
 			if ($letter->content === false) {
 				$res = false;
 				break;
@@ -201,23 +227,43 @@ class MigurMailer extends JObject
 			}	
 
 			// send the unique letter to each recipient
-			$bounced = $sender->send(array(
-					'letter' => $letter,
-					'attach' => $atts,
-					'emails' => array($item),
-					'smtpProfile' => $letter->smtp_profile,
-					'type' => $type,
-					'tracking' => $params['tracking']
-				));
+			try {
+				$bounced = $sender->send(array(
+						'letter' => $letter,
+						'attach' => $atts,
+						'emails' => array($item),
+						'smtpProfile' => $letter->smtp_profile,
+						'type' => $type,
+						'tracking' => $params['tracking']
+					));
 
-			// If sending failed
-			if (!$bounced) {
-
-				if (JError::getError('unset')) {
-					$this->setError(JError::getError('unset')->get('message'));
-				}	
+				// If sending failed
+				if(!$bounced) {
+					
+					// Copy all errors into here
+					foreach($sender->getErrors() as $item) {
+						$this->setError($item);
+					}	
+					
+					throw new Exception();
+				}
+				
+			} catch(Exception $e) {
+				
+				// Check if there JException occured
+				$error = JError::getError('unset');
+				if (!empty($error)){
+					$this->setError($error->get('message'));
+				}
+				
+				// Check if exeption occured
+				$msg = $e->getMessage();
+				if (!empty($msg)) {
+					$this->setError($msg);
+				}
+				
 				$res = false;
-			}
+			}	
 		}
 
 		SubscriberHelper::restoreRealUser();
@@ -228,7 +274,7 @@ class MigurMailer extends JObject
 	 * The main send of one letter to one or mode recipients.
 	 * The mail content generates for each user
 	 *
-	 * @param  array $params the letter, subscriber, type
+	 * @param  array $params newsletter_id, subscriber(object), type ('html'|'plain'), tracking(bool)
 	 *
 	 * @return boolean
 	 * @since  1.0
@@ -242,8 +288,9 @@ class MigurMailer extends JObject
 		// load letter to send....
 		$letter = MailHelper::loadLetter($params['newsletter_id']);
 		if (empty($letter->newsletter_id)) {
-			$this->setError('Lading letter error or newsletter_id is not defined');
-			return false;
+			$msg = 'Lading letter error or newsletter_id is not defined';
+			$this->setError($msg);
+			throw new Exception($msg);
 		}
 
 		// Retrieve the email for bounced letters
@@ -252,15 +299,12 @@ class MigurMailer extends JObject
 		// Use the phpMailer exceptions
 		$sender = new MigurMailerSender(array('exceptions'=>true));
 
-		// Result object
-		$res = new StdClass();
-		$res->state = false;
-
 		$subscriber = $params['subscriber'];
 		$type = MailHelper::filterType(!empty($params['type']) ? $params['type'] : null);
 		if (!$type) {
-			$res->error = 'The type "' . $type . '" is not supported';
-			return $res;
+			$msg = 'The type "' . $type . '" is not supported';
+			$this->setError($msg);
+			throw new Exception ($msg);
 		}
 
 
@@ -268,21 +312,28 @@ class MigurMailer extends JObject
 		SubscriberHelper::saveRealUser();
 		
 		if (!SubscriberHelper::emulateUser(array('email' => $subscriber->email))) {
-			$res->error = 'The user ' . $subscriber->email . ' is absent';
-			return $res;
+			$msg = 'The user ' . $subscriber->email . ' is absent';
+			$this->setError($msg);
+			throw new Exception ($msg);
 		}
 
 		PlaceholderHelper::setPlaceholder('newsletter id', $letter->newsletter_id);
-		
+
 		// render the content of letter for each user
 		$letter->content = $this->render(array(
 				'type' => $type,
 				'newsletter_id' => $letter->newsletter_id,
 				'tracking' => true
 			));
+		
+		$letter->subject = $this->renderSubject($letter->subject);
 
 		SubscriberHelper::restoreRealUser();
 
+		// Result object
+		$res = new StdClass();
+		$res->state = false;
+		$res->errors = array();
 		$res->content = $letter->content;
 
 		if ($letter->content === false) {
@@ -299,31 +350,43 @@ class MigurMailer extends JObject
 		}	
 		
 		// Add info about newsleerter and subscriber
-		$sender->AddCustomHeader('X-Email-Name:' . $letter->name);
-		$sender->AddCustomHeader('X-Application: Migur Newsletter');
-		$sender->AddCustomHeader('X-Newsletter-Id:' . $params['newsletter_id']);
-		$sender->AddCustomHeader('X-Subscriber-Id:' . $subscriber->subscriber_id);
+		$sender->AddCustomHeader(MailHelper::APPLICATION_HEADER);
+		$sender->AddCustomHeader(MailHelper::EMAIL_NAME_HEADER    . ':' . $letter->name);
+		$sender->AddCustomHeader(MailHelper::NEWSLETTER_ID_HEADER . ':' . $params['newsletter_id']);
+		$sender->AddCustomHeader(MailHelper::SUBSCRIBER_ID_HEADER . ':' . $subscriber->subscriber_id);
 		
 		// Get attachments
 		$atts = DownloadHelper::getByNewsletterId($params['newsletter_id']);
 		
-		// send the unique letter to each recipient
-		$sendRes = $sender->send(array(
-				'letter' => $letter,
-				'attach' => $atts,
-				'emails' => array($subscriber),
-				'smtpProfile' => $letter->smtp_profile,
-				'type' => $type,
-				'tracking' => $params['tracking']
-			));
-
-		
-		// If sending failed
-		if (!$sendRes && $error = $sender->ErrorInfo) {
-			$res->error = $error;
+		try {
+			// send the unique letter to each recipient
+			$sendRes = $sender->send(array(
+					'letter' => $letter,
+					'attach' => $atts,
+					'emails' => array($subscriber),
+					'smtpProfile' => $letter->smtp_profile,
+					'type' => $type,
+					'tracking' => $params['tracking']
+				));
+			
+			// If sending failed
+			if (!$sendRes && !empty($sender->ErrorInfo)) {
+				throw new Exception ($sender->ErrorInfo);
+			}
+			
+		} catch (Exception $e) {
+			
+			$error = JError::getError('unset');
+			if (!empty($error)){
+				$msg = $error->get('message');
+				$this->setError($msg);
+				$res->errors[] = $msg;
+			}
+			$res->errors[] = $e->getMessage();
+			NewsletterHelper::logMessage('Mailer.Sending error:'.$e->getMessage(), 'mailer/');
 			return $res;
-		}
-
+		}	
+		
 		$res->state = true;
 		return $res;
 	}

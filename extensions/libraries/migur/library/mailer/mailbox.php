@@ -243,11 +243,15 @@ class MigurMailerMailbox
 		// Nix 4000 mails = 180sec
 		//$res = $this->protocol->since(0);
 
-		$res = $this->protocol->findBy('body', MailHelper::APPLICATION_HEADER);
+		$res = (array)$this->protocol->findBy('body', MailHelper::APPLICATION_HEADER);
 
 		$this->totalBounces = count($res);
+
+		if(empty($res)) {
+			return true;
+		}
 		
-		NewsletterHelper::logMessage('Mailbox.Bounceds.Ids found:'.json_encode($res)); //die;
+		NewsletterHelper::logMessage('Mailbox.Bounceds.Ids found:'.json_encode($res), 'mailbox/'); //die;
 
 		// Handle partial processing option
 		if (!empty($max)) {
@@ -320,11 +324,11 @@ class MigurMailerMailbox
 						$processed = $this->processBounce($x, 'BODY', $c_total);
 					}
 					
-					NewsletterHelper::logMessage('Mailbox.Mail processed.Position:'.$x.',time:'.(string)(mktime()-$time).',id:'.$messageId.',date:'.$date);
+					NewsletterHelper::logMessage('Mailbox.Mail processed.Position:'.$x.',time:'.(string)(mktime()-$time).',id:'.$messageId.',date:'.$date, 'mailbox/');
 					
 				} else {
 					
-					NewsletterHelper::logMessage('Mailbox.Mail in cache.Position:'.$x.',id:'.$messageId);
+					NewsletterHelper::logMessage('Mailbox.Mail in cache.Position:'.$x.',id:'.$messageId, 'mailbox/');
 				}
 			}
 			

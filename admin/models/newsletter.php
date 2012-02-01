@@ -20,7 +20,8 @@ jimport('joomla.application.component.modeladmin');
  */
 class NewsletterModelNewsletter extends JModelAdmin
 {
-
+	protected $_data;
+	
 	protected $_context;
 
 	/**
@@ -72,15 +73,5 @@ class NewsletterModelNewsletter extends JModelAdmin
 			$data = $this->getItem();
 		}
 		return $data;
-	}
-
-	/**
-	 * Method to get the script that have to be included on the form
-	 *
-	 * @return string Script files
-	 */
-	public function getScript()
-	{
-		return 'administrator/components/com_newsletter/models/forms/newsletter.js';
 	}
 }

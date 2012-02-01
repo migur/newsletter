@@ -10,6 +10,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
+JLoader::import('models.entities.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.history', JPATH_COMPONENT_ADMINISTRATOR, '');
@@ -157,7 +158,7 @@ class NewsletterModelBounceds extends MigurModelList
 			
 			' JOIN #__newsletter_newsletters AS n  '.
 				'ON (n.smtp_profile_id = sp.smtp_profile_id) '.
-				'OR (n.smtp_profile_id = '.NewsletterTableSmtpprofile::SMTP_DEFAULT.' AND sp.smtp_profile_id='.$smtpId.') '.
+				'OR (n.smtp_profile_id = '.NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID.' AND sp.smtp_profile_id='.$smtpId.') '.
 			
 			' JOIN #__newsletter_queue AS q ON q.newsletter_id = n.newsletter_id '.
 			

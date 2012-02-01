@@ -4,19 +4,15 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-#subscriber-form {
-    text-align: right;
-    width: 310px;
-}
 
 #subscriber-form dt {
     text-align: left;
-    width: 100px;
+    width: 130px;
     float: left;
 }
 
 #subscriber-form dd {
-    padding: 2px 0px 0px 100px;
+    padding: 2px 15px 0px 140px;
     margin: 0;
 }
 #subscriber-form .radiobuttons {
@@ -81,15 +77,22 @@
 }
 
 #subscriber-form input,
+#subscriber-form select,
 #subscriber-form label {
     float: none;
     display: inline;
+	margin: 0px 5px;
 }
 
 #subscriber-form #jform_name,
 #subscriber-form #jform_email {
     width:100%;
 }
+
+#subscriber-form dt, 
+#subscriber-form dd {
+	margin-bottom: 5px;
+} 
 
 #sslist-container {
     clear: both;
@@ -101,4 +104,10 @@
     clear: both;
     overflow: auto;
     height: 135px;
+}
+
+#usertype-container {
+	line-height: 18px;
+	margin-top: 20px;
+	float: left;
 }

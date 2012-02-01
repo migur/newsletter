@@ -101,6 +101,42 @@ class NewsletterTableSent extends JTable
 			'bounced' => $bounces[$bounceType],
 			'recieved_date' => date('Y-m-d H:i:s')
 		));
-	}	
+	}
+
+
+	/**
+	 * Pre-store. Convert 'extra' to json
+	 * 
+	 * @param type $updateNulls 
+	 */
+	public function store($updateNulls = false)
+	{
+		if (!empty($this->extra) && !is_string($this->extra)) {
+			$this->extra = json_encode($this->extra);
+		}
+		
+		return parent::store($updateNulls);
+	}
+
+
+	/**
+	 * Post-load. Convert 'extra' to array
+	 * 
+	 * @param type $updateNulls 
+	 */
+	public function load($keys = null, $reset = true)
+	{
+		if (!parent::load($keys, $reset)) {
+			return false;
+		}
+		
+		if (!empty($this->extra) && !is_array($this->extra)) {
+			$this->extra = (array)json_decode($this->extra);
+		}
+		
+		return true;
+	}
+	
+	
 }
 

@@ -18,9 +18,6 @@ defined('_JEXEC') or die;
  */
 class NewsletterTableSmtpprofile extends MigurJTable
 {
-
-	const SMTP_DEFAULT = -1;
-	
 	/**
 	 * The constructor of a class.
 	 *
@@ -37,6 +34,5 @@ class NewsletterTableSmtpprofile extends MigurJTable
 				$_db
 		);
 	}
-
 }
 

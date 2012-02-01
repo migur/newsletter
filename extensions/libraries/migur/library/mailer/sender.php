@@ -25,6 +25,8 @@ jimport('joomla.error.log');
  */
 class MigurMailerSender extends PHPMailer
 {
+	protected $_errors;
+	
 	/**
 	 * The constructor of a class
 	 *
@@ -164,16 +166,16 @@ class MigurMailerSender extends PHPMailer
 		}
 		
 		try {
-			
-			$res = parent::Send();
-			
-			if (!$res) {
-				throw new Exception('Sending failed');
+			if (!parent::Send()) {
+				throw new Exception();
 			}
-			
 		} catch(Exception $e) {	
-			
-			NewsletterHelper::logMessage('Mailer.Sender error: ' . $e->getMessage());
+
+			$msg = $e->getMessage();
+			if (!empty($msg)) {
+				$this->setError($msg);
+			}	
+			NewsletterHelper::logMessage('Mailer.Sender error: ' . json_encode($this->getErrors()), 'mailer/');
 			return false;
 		}
 		
@@ -236,4 +238,25 @@ class MigurMailerSender extends PHPMailer
 
 		return $res;
 	}	
+	
+	/**
+	 * Get last error
+	 * 
+	 * @return string
+	 */
+	public function getErrors()
+	{
+		return $this->_errors;
+	}
+	
+	/**
+	 * Adds the error message to the error container.
+	 * @access protected
+	 * @return void
+	 */
+	public function setError($msg)
+	{
+		$this->_errors[] = JText::_($msg);
+		return parent::SetError($msg);
+	}
 }

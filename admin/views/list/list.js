@@ -272,6 +272,8 @@ try {
                 }
 
                 alert(res.error + "\n\n"+Joomla.JText._('TOTAL_PROCESSED', 'Total processed')+": " + res.total);
+				Cookie.write('jpanetabs_tabs-list', 3);
+				window.location.reload();
             }
         }).send('&list_id=' + id + '&jsondata='+JSON.encode(data));
     });
@@ -341,6 +343,8 @@ try {
 
         });
 
+		var st = $$('input[name=subscriber_type]:checked')[0].getProperty('value');
+
         if (notEnough == true) {
             alert(Joomla.JText._('PLEASE_FILL_ALL_REQUIRED_FIELDS','Please fill all required fields'));
         } else {
@@ -360,7 +364,7 @@ try {
                     alert(res.error + "\n\n"+Joomla.JText._('PROCESSED', 'Processed')+": " + res.processed + "\n"+Joomla.JText._('ABSENT', 'Absent')+": " + res.absent + "\n"+Joomla.JText._('SKIPPED','Skipped')+": " + res.skipped + "\n"+Joomla.JText._('TOTAL','Total')+": " + res.total);
                     document.location.reload();
                 }
-            }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res) );
+            }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res) + '&subscriber_type=' +  st);
         }
     });
 

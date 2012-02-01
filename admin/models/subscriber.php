@@ -64,12 +64,20 @@ class NewsletterModelSubscriber extends JModelAdmin
 			return false;
 		}
 
+		// User is exsit. 
+		// No need to work with its type
+		if (!empty($data['subscriber_id'])) {
+			$form->removeField('type');
+			unset($data['type']);
+		}
+		
 		if (!empty($data)) {
 			$form->bind($data);
 		}
 		return $form;
 	}
 
+	
 	/**
 	 * Method to get the data that should be injected in the form.
 	 *
@@ -86,6 +94,7 @@ class NewsletterModelSubscriber extends JModelAdmin
 		return $data;
 	}
 
+	
 	/**
 	 * Method to get the script that have to be included on the form
 	 *
@@ -97,151 +106,105 @@ class NewsletterModelSubscriber extends JModelAdmin
 		return 'administrator/components/com_newsletter/models/forms/subscriber.js';
 	}
 
+	
 	/**
-	 * Method to check if user is already binded to the list.
-	 *
-	 * @param	array	$data	The ids of subscriber and list.
-	 *
-	 * @return	object on success, false or null on fail
-	 * @since	1.0
+	 * Override this to add ability to save info about J! user too.
+	 * 
+	 * @param int $data
+	 * 
+	 * @return object
 	 */
-	public function isInList($data)
-	{
-		if (!empty($data->subscriber_id) && !empty($data->list_id)) {
-			// Initialise variables;
-			$table = $this->getTable('sublist');
-
-			// Load the row if saving an existing record.
-			return $table->load(array(
-				'subscriber_id' => $data->subscriber_id,
-				'list_id' => $data->list_id
-			));
-		}
-
-		return false;
-	}
-
-	/**
-	 * Method to save the form data.
-	 *
-	 * @param	array	$data	The form data.
-	 *
-	 * @return	boolean	True on success.
-	 * @since	1.0
-	 */
-	public function assignToList($data)
-	{
-		if (!empty($data->subscriber_id) && !empty($data->list_id)) {
-			// Initialise variables;
-			$table = $this->getTable('sublist');
-			// Allow an exception to be throw.
-			try {
-				// Load the row. If it exists then nothing to do
-				// Bind the data.
-				if ($this->isInList($data)) {
-					return true;
-				}
-
-				$table->reset();
-				$table->set($table->getKeyName(), null);
-
-				if (!$table->bind($data)) {
-					$this->setError($table->getError());
-					return false;
-				}
-
-				// Store the data.
-				if (!$table->store()) {
-					$this->setError($table->getError());
-					return false;
-				}
-
-				// Clean the cache.
-				$cache = JFactory::getCache($this->option);
-				$cache->clean();
-			} catch (Exception $e) {
-				$this->setError($e->getMessage());
-				return false;
-			}
-
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Method to unbind the subscriber from list.
-	 *
-	 * @param	array	$data	The form data.
-	 *
-	 * @return	boolean	True on success.
-	 * @since	1.0
-	 */
-	public function unbindFromList($data)
-	{
-		if (!empty($data->subscriber_id) && !empty($data->list_id)) {
-
-			// Initialise variables;
-			$table = $this->getTable('sublist');
-
-			// Allow an exception to be throw.
-			try {
-				$table->reset();
-				$table->set($table->getKeyName(), null);
-
-				// Load the row. If it doesn't exists then nothing to do
-				if (!$this->isInList($data)) {
-					return true;
-				}
-
-
-				// Bind the data.
-				if (!$table->bind($data)) {
-					$this->setError($table->getError());
-					return false;
-				}
-
-				// Store the data.
-				if (!$table->delete()) {
-					$this->setError($table->getError());
-					return false;
-				}
-
-				// Clean the cache.
-				$cache = JFactory::getCache($this->option);
-				$cache->clean();
-			} catch (Exception $e) {
-				$this->setError($e->getMessage());
-				return false;
-			}
-
-			return true;
-		}
-
-		return false;
-	}
-
 	public function save($data)
 	{
-
-		if (parent::save($data)) {
-			if ($this->getState('subscriber.new')) {
-				$id = $this->getState('subscriber.id');
-				$table = $this->getTable();
-				$table->load($id);
-				// No confirmation need if we create the subscriber from admin
-				$table->confirmed = 1;
-				// Current date
-				$table->created_on = date('Y-m-d H:i:s');
-			
-				$table->subscription_key = SubscriberHelper::createSubscriptionKey($id);
-				
-				$table->store();
-			}
-			return true;
-		}
-		return false;
+		$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		
+		$isJUser = (!empty($data['type']) && $data['type'] == 2);
+		
+		return $model->save($data, $isJUser);
 	}
+	
+	
+	/**
+	 * Override this to add ability to get info about J! user too.
+	 * 
+	 * @param int $pk
+	 * 
+	 * @return object
+	 */
+	public function getItem($pk = null)
+	{
+		$pk	= (!empty($pk)) ? $pk : (int) $this->getState($this->getName().'.id');
+		
+		$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		
+		if(!$model->load($pk)) {
+			return false;
+		}
 
+		return JArrayHelper::toObject($model->toArray(), 'JObject');
+	}
+	
+	
+	/**
+	 * Override this to add ability to delete JUsers user too.
+	 * 
+	 * @param int $data
+	 * 
+	 * @return object
+	 */
+	public function delete(&$pks)
+	{
+		// Initialise variables.
+		$dispatcher	= JDispatcher::getInstance();
+		$user		= JFactory::getUser();
+		$pks		= (array) $pks;
+		$table		= $this->getTable();
+		$jUser		= JTable::getInstance('user');
+		$model		= JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+
+		
+		// Include the content plugins for the on delete events.
+		JPluginHelper::importPlugin('content');
+
+		// Iterate the items to delete each one.
+		foreach ($pks as $i => $pk) {
+			$model->load($pk);
+			
+			$pk = $model->getId();
+			
+			if ($table->load($pk)) {
+
+				$context = $this->option.'.'.$this->name;
+
+				// Trigger the onContentBeforeDelete event.
+				$result = $dispatcher->trigger($this->event_before_delete, array($context, $table));
+				if (in_array(false, $result, true)) {
+					$this->setError($table->getError());
+					return false;
+				}
+				// Delete from subscriber's table
+				if (!$table->delete($pk)) {
+					$this->setError($table->getError());
+					return false;
+				}
+
+				// Delete J! User if it present
+				if ($model->user_id && !$jUser->delete($model->user_id)) {
+					$this->setError($jUser->getError());
+					return false;
+				}
+				
+				// Trigger the onContentAfterDelete event.
+				$dispatcher->trigger($this->event_after_delete, array($context, $table));
+
+			} else {
+				$this->setError($table->getError());
+				return false;
+			}
+		}
+
+		// Clear the component's cache
+		$this->cleanCache();
+		return true;
+	}
 }

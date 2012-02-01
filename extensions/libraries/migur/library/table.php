@@ -79,46 +79,6 @@ class MigurJTable extends JTable
 	}
 
 	/**
-	 * Add the conversion of params field to JSON when data binds ONLY
-	 * if params is ARRAY, OBJECT or JOBJECT
-	 *
-	 * @param	array $hash named array
-	 * 
-	 * @return	null|string	null is operation was satisfactory, otherwise returns an error
-	 * @since   1.0
-	 */
-	public function bind($src, $ignore = array())
-	{
-		// If the source value is not an array or object return false.
-		if (!is_object($src) && !is_array($src)) {
-			$e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_BIND_FAILED_INVALID_SOURCE_ARGUMENT', get_class($this)));
-			$this->setError($e);
-			return false;
-		}
-
-		// If the source value is an object, get its accessible properties.
-		if (is_object($src)) {
-			$src = get_object_vars($src);
-		}
-
-		if (isset($src['params'])) {
-
-			if (!is_string($src['params'])) {
-
-				if (is_object($src['params']) && get_class($src['params']) == 'JObject') {
-					$src['params'] = $src['params']->getProperties();
-				}
-
-				if (is_array($src['params']) || is_object($src['params'])) {
-					$src['params'] = json_encode($src['params']);
-				}
-			}
-		}
-
-		return parent::bind($src, $ignore);
-	}
-
-	/**
 	 * The simplest vay to add the ARRAY to JSON "params" field.
 	 *
 	 * @param  array $array - the data to add
@@ -139,7 +99,81 @@ class MigurJTable extends JTable
 		}
 
 		$this->params = json_encode(array_merge($this->params, $array));
+
 		return $this->params;
 	}
+	
+	/**
+	 * Pre-save processing. 
+	 * Convert 'params' to json. Encode password.
+	 * 
+	 * @param $updateNulls See JTable
+	 * 
+	 * @return boolean
+	 */
+	public function store($updateNulls = false) 
+	{
+		if (isset($this->params)) {
+			$buff = $this->params;
+			$this->paramsToJson();
+		}	
+		
+		$res = parent::store($updateNulls = false);
+		
+		if (isset($buff)) {
+			$this->params = $buff;
+		}
+		
+		return $res;
+	}
+	
+	
+	/**
+	 * Converts array|object to json
+	 * 
+	 * @param array|object $this->params
+	 * 
+	 * @return string Encoded entity 
+	 */
+	public function paramsToJson() 
+	{
+		if (!is_string($this->params)) {
 
+			if (is_object($this->params) && get_class($this->params) == 'JObject') {
+				$this->params = $this->params->getProperties();
+			}
+
+			// If the source value is an object, get its accessible properties.
+			if (is_object($this->params)) {
+				$this->params = get_object_vars($this->params);
+			}
+			
+			if (is_array($this->params) || is_object($this->params)) {
+				$this->params = json_encode($this->params);
+			}
+		}
+		
+		return $this->params;
+	}	
+	
+	
+	/**
+	 * Converts json string to array|object
+	 * 
+	 * @param string $params
+	 * 
+	 * @return string Decoded entity 
+	 */
+	public function paramsFromJson() 
+	{
+		if (empty($this->params)) {
+			$this->params = array();
+		}
+		
+		if (is_string($this->params)) {
+			$this->params = (array)json_decode($this->params, true);
+		}
+		
+		return $this->params;
+	}	
 }

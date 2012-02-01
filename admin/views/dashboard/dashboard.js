@@ -30,6 +30,8 @@ try {
 
     $$('#toolbar-progress .queue-list')[0].addEvent('click', function(ev){
 
+		ev.stop();
+
 		$('process-preloader').addClass('preloader');
 		
         new Request({
@@ -38,26 +40,37 @@ try {
 				
 				$('process-preloader').removeClass('preloader');
 				
-				try {var res = JSON.decode(result);} 
-				catch(e) {res = undefined;}
-
 				var text;
-
-                if (typeof res == 'undefined' || typeof res.error == 'undefined' || res.error != '') {
-					
-					var error = (typeof res == 'undefined' || typeof res.error == 'undefined')? 'unknown' : res.error;
-                    text = Joomla.JText._('AN_ERROR_OCCURED', 'An error occured')+': \n' + error;
-	                alert(text); 
-					return;
-                }
 				
-                if (res.error == '' && res.count == 0) {
+				var parser = new Migur.jsonResponseParser();
+				parser.setResponse(result);
+				
+				if (parser.isError()) {
+					if (parser.getState() == 'unknown error') {
+						text = Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured');
+					} else {	
+						text = Joomla.JText._('AN_ERROR_OCCURED', 'An error occured!') + "\n" +
+							   parser.getMessagesAsList();
+					}
+
+					alert(text);
+					return;
+				}
+
+				var count = 0;
+				var data = parser.getData();
+				Array.each(data, function(el){
+					count += el.processed;
+				});
+
+                if (count == 0) {
                     text = Joomla.JText._('THERE_ARE_NO_EMAILS_TO_SEND','There are no emails to send');
 	                alert(text); 
 					return;
                 }
-                if (res.error == '' && res.count > 0) {
-                    text = ""+res.count+" "+Joomla.JText._('NEWSLETTERS_HAS_BEEN_SENT_SUCESSFULLY', 'newsletters has been sent sucessfully');
+				
+                if (count > 0) {
+                    text = ""+count+" "+Joomla.JText._('NEWSLETTERS_HAS_BEEN_SENT_SUCESSFULLY', 'newsletters has been sent sucessfully');
 					alert(text);
 					window.location.reload();
 				}	

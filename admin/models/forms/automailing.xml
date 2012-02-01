@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+        <field
+            type="text"
+            name="automailing_name"
+            default=""
+            label="COM_NEWSLETTER_NAME"
+            description="COM_NEWSLETTER_NAME"
+            class="inputbox validate-automailing-name"
+            size="40"
+            required="true"
+		/>
+		
+        <field
+            type="automailingEvents"
+            name="automailing_event"
+            default=""
+            label="COM_NEWSLETTER_TYPE"
+            description="COM_NEWSLETTER_TYPE"
+            class="inputbox validate-automailing-name"
+            required="true"
+		/>
+		
+        <field name="automailing_type" type="hidden" />
+		
+        <field name="automailing_id" type="hidden" />
+		
+        <field name="params" type="hidden" />
+</form>

@@ -3,6 +3,8 @@
 defined('_JEXEC') or die;
 ?>
 
+<fieldset>
+<legend><?php echo JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER'); ?></legend>
 <form id="subscriber-form" class="form-validate" name="subscriberForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
     <dl>
         <dt>
@@ -23,6 +25,12 @@ defined('_JEXEC') or die;
         <dd>
             <?php echo $this->ssForm->getInput('html'); ?>
         </dd>
+        <dt style="width:140px">
+            <?php echo $this->ssForm->getLabel('type'); ?>
+        </dt>
+        <dd>
+            <?php echo $this->ssForm->getInput('type'); ?>
+        </dd>
     </dl>
 
 
@@ -34,9 +42,12 @@ defined('_JEXEC') or die;
 
     <div>
             <?php echo $this->ssForm->getInput('subscriber_id'); ?>
+            <?php echo $this->ssForm->getInput('confirmed'); ?>
+		
             <input type="hidden" name="subscriber_id" value="<?php echo $this->ssForm->getValue('subscriber_id'); ?>" />
             <input type="hidden" name="task" value="" />
             <?php echo JHtml::_('form.token'); ?>
     </div>
 
 </form>
+</fieldset>	

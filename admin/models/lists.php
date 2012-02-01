@@ -10,6 +10,8 @@
 // no direct access
 defined('_JEXEC') or die;
 
+JLoader::import('models.entities.list', JPATH_COMPONENT_ADMINISTRATOR, '');
+
 /**
  * Class of the lists model of the component.
  *
@@ -230,6 +232,97 @@ class NewsletterModelLists extends MigurModelList
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		$this->query = $query;
+	}
+	
+	
+	/**
+	 * Gets a list of all active lists 
+	 * without pagination and other limitations
+	 * 
+	 * @return array of objects
+	 */
+	public function getAllActive($idonly = false)
+	{
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+
+		$query->select('*')
+			  ->from('#__newsletter_lists')
+			  ->where('state=1');
+		
+		$db->setQuery($query);
+		
+		if (!empty($idonly)) {
+			return $db->loadObjectList(null, 'list_id');
+		}
+		
+		return $db->loadObjectList();
+	}
+	
+	/**
+	 * Get collection of entities of welcoming newsletters 
+	 * found in provided lists.
+	 * 
+	 * @param array $lists ids of lists
+	 * @return array collection of entities 
+	 */
+	public function getItemsByIds($data) 
+	{
+		if (empty($data)) {
+			return array();
+		}
+		
+		$data = (array)$data;
+		
+		$dbo = JFactory::getDbo();
+		$query = $dbo->getQuery(true);
+		$query
+			->select('*')
+			->from('#__newsletter_lists')
+			->where('list_id in ('.implode(',', $data).')');
+		$dbo->setQuery($query);
+		$lists = $dbo->loadObjectList();
+
+		$result = array();
+		foreach($lists as $list) {
+			$model = JModel::getInstance('List', 'NewsletterModelEntity');
+			$model->setFromArray($list);
+			$result[] = $model;
+		}
+
+		return $result;
+	}
+	
+	
+	/**
+	 * Get collection of entities of welcoming newsletters 
+	 * found in provided lists.
+	 * 
+	 * @param array $lists ids of lists
+	 * @return array collection of entities 
+	 */
+	public function getWelcomingLettersFor($lists) 
+	{
+		$lists = (array)$lists;
+		
+		$dbo = JFactory::getDbo();
+		$query = $dbo->getQuery(true);
+		$query
+			->select('send_at_reg')
+			->from('#__newsletter_lists')
+			->where('list_id in ('.implode(',', $lists).')');
+		
+		$dbo->setQuery($query);
+		$nids = $dbo->loadAssocList(null, 'send_at_reg');
+		
+		$result = array();
+		foreach($nids as $nid) {
+			$model = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+			$model->loadAsWelcoming($nid);
+			$result[] = $model;
+		}
+
+		return $result;
 	}
 
 }
