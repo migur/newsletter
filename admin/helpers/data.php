@@ -16,7 +16,7 @@ class DataHelper
 {
 
 	static $importables = array(
-		//'jusers', // Available since 1.0.4
+		'jusers', // Available since 1.0.4
 		'acymailing',
 		'ccnewsletter',
 		'rsmail',
@@ -84,105 +84,14 @@ class DataHelper
 		return (array) $files;
 	}
 
-	/**
-	 * Imports the data about subscribers and lists into com_newsletter
-	 *
-	 * @param  array - the array of the objects(subscriber - list)
-	 *
-	 * @return boolean - true on success
-	 * @since  1.0
-	 */
-	public function importLists($list)
-	{
-		$lists = array();
-		$subs = array();
 
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-
-		foreach ($list as $obj) {
-
-			$lists[$obj->list_name] = 0;
-			$subs[$obj->email] = $obj;
-
-			// Add new subscribers with not existing emails
-			if (!empty($obj->email)) {
-				$query = $db->getQuery(true);
-				$query->select('subscriber_id, email');
-				$query->from('#__newsletter_subscribers');
-				$query->where('email = "' . addslashes(stripslashes($obj->email)) . '"');
-				$db->setQuery($query);
-				$res = $db->loadObject();
-
-				if (!empty($res)) {
-					$subId = $res->subscriber_id;
-				} else {
-
-					$db->setQuery(
-						'INSERT IGNORE INTO `#__newsletter_subscribers` ' .
-						'SET email = "' . addslashes(stripslashes($obj->email)) . '", ' .
-						'name = "' . addslashes(stripslashes($obj->name)) . '", ' .
-						'created_on = "' . addslashes(stripslashes($obj->created)) . '", ' .
-						'user_id = 0, ' .
-						'confirmed = 1, ' .
-						'subscription_key = 0');
-					$db->query();
-					$subId = $db->insertId();
-					SubscriberHelper::setSubscriptionKey($subId);
-				}
-			}
-
-			// Create non-exist list.
-			if (!empty($obj->list_name)) {
-				$query = $db->getQuery(true);
-				$query->select('list_id, name');
-				$query->from('#__newsletter_lists');
-				$query->where('name = "' . addslashes(stripslashes($obj->list_name)) . '"');
-				$db->setQuery($query);
-				$res = $db->loadObject();
-				if (!empty($res)) {
-					$listId = $res->list_id;
-				} else {
-					$db->setQuery(
-						'INSERT IGNORE INTO `#__newsletter_lists` ' .
-						'SET name = "' . addslashes(stripslashes($obj->list_name)) . '", ' .
-						'created_on = "' . date('Y-m-d H:i:s') . '"');
-
-					$db->query();
-					$listId = $db->insertId();
-				}
-			}
-
-			// Join user only if the $subId and $listId are present.
-			if (!empty($subId) && !empty($listId)) {
-
-				$query = $db->getQuery(true);
-				$query->select('list_id, subscriber_id');
-				$query->from('#__newsletter_sub_list');
-				$query->where('list_id = ' . $listId);
-				$query->where('subscriber_id = ' . $subId);
-				$db->setQuery($query);
-				$res = $db->loadObject();
-
-				if (empty($res)) {
-					$query = 'INSERT IGNORE INTO `#__newsletter_sub_list` ' .
-						'SET list_id = ' . $listId . ', ' .
-						'subscriber_id = ' . $subId;
-					$db->setQuery($query);
-					$db->query();
-				}
-			}
-		}
-
-		return true;
-	}
 
 	/**
 	 * Get all supported components and check if they are valid to import
 	 *
 	 * @return array - array of objects (info about component)
 	 */
-	function getSupportedComponents()
+	public function getSupportedComponents()
 	{
 		// Fetch all supported component managers
 		$res = array();
@@ -211,7 +120,7 @@ class DataHelper
 	 * @return object  - an instance of a mananger
 	 * @since  1.0
 	 */
-	public function getComponentInstance($com)
+	public static function getComponentInstance($com)
 	{
 		if (!empty(self::$managers[$com]) && is_object(self::$managers[$com])) {
 			return self::$managers[$com];
@@ -225,31 +134,150 @@ class DataHelper
 		self::$managers[$com] = $man;
 		return self::$managers[$com];
 	}
-
+	
+	
 	/**
-	 * Fetch data from the component via component manager.
-	 * The type of a data determines the $type (only 'lists' for now)
-	 *
-	 * @param  string - the type of a component
-	 * @param  string - the type of a fetched data
-	 *
-	 * @return mixed  - bool false on fail, the array of objects of success
-	 * @since  1.0
+	 * Converts each element of array to int
 	 */
-	public function exportFromComponent($com, $type)
+	public static function toArrayOfInts($data) 
 	{
-		if (!in_array($com, self::$importables)) {
-			return false;
+		$data = (array)$data;
+		
+		foreach($data as &$item) {
+			$item = (int)$item;
+		}
+		
+		return $data;
+	}
+	
+	
+	/**
+	 * 
+	 */
+	public static function timeIntervaltoVerbal($seconds, $items = array()) 
+	{
+		if (empty($items)) {
+			$items = array('weeks', 'days', 'hours', 'immediately');
 		}
 
-		switch ($type) {
+		if ($seconds == 0 && in_array('immediately', $items)) {
+			return JText::_('COM_NEWSLETTER_IMMEDIATELY');
+		}
+		
+		$data = self::timeIntervalExplode($seconds);
+		
+		$weekCnt = $data['weeks'];
+		$dayCnt  = $data['days'];
+		$hourCnt = $data['hours'];
+		$minCnt  = $data['minutes'];
+		$seconds = $data['seconds'];		
+		
+		if ($weekCnt > 4) {
+			$week = 7;
+			$dayCnt += $weekCnt * $week;
+			$weekCnt = 0;
+		}
+		
+		//var_dump($weekCnt.'-'.$dayCnt.'-'.$hourCnt.'-'.$minCnt.'-'.$seconds);
+		
+		$res = '';
+		foreach($items as $item) {
+			
+			switch($item) {
+				
+				case 'weeks':
+					if (!empty($weekCnt)) {
+						$res .= ' '.$weekCnt.' '.(($weekCnt == 1)? JText::_('COM_NEWSLETTER_WEEK') : JText::_('COM_NEWSLETTER_WEEKS'));
+					}	
+					break;
 
-			case 'lists':
-				return self::getComponentInstance($com)->exportLists();
-			default:
+				case 'days':
+					if (!empty($dayCnt)) {
+						$res .= ' '.$dayCnt.' '.(($dayCnt == 1)? JText::_('COM_NEWSLETTER_DAY') : JText::_('COM_NEWSLETTER_DAYS'));
+					}	
+					break;
+
+				case 'hours':
+					if (!empty($hourCnt)) {
+						$res .= ' '.$hourCnt.' '.(($hourCnt == 1)? JText::_('COM_NEWSLETTER_HOUR') : JText::_('COM_NEWSLETTER_HOURS'));
+					}	
+					break;
+					
+				case 'minutes':
+					if (!empty($minCnt)) {
+						$res .= ' '.$minCnt.' '.(($minCnt == 1)? JText::_('COM_NEWSLETTER_MINUTE') : JText::_('COM_NEWSLETTER_MINUTES'));
+					}	
+					break;
+					
+				case 'seconds':
+					if (!empty($seconds)) {
+						$res .= ' '.$seconds.' '.(($seconds == 1)? JText::_('COM_NEWSLETTER_SECOND') : JText::_('COM_NEWSLETTER_SECONDS'));
+					}	
+					break;
+			}
+		}
+		
+		return trim($res);
+	}
+	
+	/**
+	 *
+	 * @param integer $seconds Interval in seconds to explode
+	 * @return array (weeks, days, hours, minutes, seconds) 
+	 */
+	public static function timeIntervalExplode($seconds)
+	{
+		$minute = 60;
+		$hour = $minute * 60;
+		$day = $hour * 24;
+		$week = $day * 7;
+		
+		$weekCnt = floor($seconds / $week);
+		$seconds -= $weekCnt * $week; 
+
+		$dayCnt = floor($seconds / $day);
+		$seconds -= $dayCnt * $day; 
+
+		$hourCnt = floor($seconds / $hour);
+		$seconds -= $hourCnt * $hour; 
+		
+		$minCnt = floor($seconds / $minute);
+		$seconds -= $minCnt * $minute; 
+		
+		return array(
+			'weeks' => $weekCnt, 
+			'days'  => $dayCnt, 
+			'hours' => $hourCnt,
+			'minutes' => $minCnt,
+			'seconds' => $seconds
+		);
+	}
+	
+	/**
+	 * Get data from specified column of each element of array
+	 * 
+	 * @param type $array
+	 * @param type $colName 
+	 */
+	public function getColumnData($array, $colName)
+	{
+		$res = array();
+		foreach($array as $item) {
+			
+			if (is_array($item)) {
+				
+				$res[] = $item[$colName];
+				
+			} elseif (is_object($item)) {
+				
+				$res[] = $item->$colName;
+				
+			} else {
+				
 				return false;
+			}	
 		}
-
-		return false;
+		
+		return $res;
 	}
 }

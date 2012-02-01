@@ -10,6 +10,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
+JLoader::import('models.entities.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.history', JPATH_COMPONENT_ADMINISTRATOR, '');
@@ -145,26 +146,49 @@ class NewsletterModelBounceds extends MigurModelList
 		$smtpId = MailHelper::getDefaultSmtp('idOnly');
 		$mailboxId = MailHelper::getDefaultMailbox('idOnly');
 		
+		
+		// Get mailbox ids with start mailing date
 		$db->setQuery(
-			'SELECT DISTINCT mp.* '. 
-			'FROM #__newsletter_mailbox_profiles AS mp '.
+			' SELECT DISTINCT mp.mailbox_profile_id, min(q.created) AS startdate '. 
+			' FROM #__newsletter_mailbox_profiles AS mp '.
 			
-			'RIGHT JOIN #__newsletter_smtp_profiles AS sp '.
+			' RIGHT JOIN #__newsletter_smtp_profiles AS sp '.
 				'ON (sp.mailbox_profile_id = mp.mailbox_profile_id) '.
 				'OR (sp.mailbox_profile_id = '.NewsletterTableMailboxprofile::MAILBOX_DEFAULT.' AND mp.mailbox_profile_id='.$mailboxId.') '.
 			
-			'JOIN #__newsletter_newsletters AS n  '.
+			' JOIN #__newsletter_newsletters AS n  '.
 				'ON (n.smtp_profile_id = sp.smtp_profile_id) '.
-				'OR (n.smtp_profile_id = '.NewsletterTableSmtpprofile::SMTP_DEFAULT.' AND sp.smtp_profile_id='.$smtpId.') '.
+				'OR (n.smtp_profile_id = '.NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID.' AND sp.smtp_profile_id='.$smtpId.') '.
 			
-			'JOIN #__newsletter_queue AS q ON q.newsletter_id = n.newsletter_id '.
+			' JOIN #__newsletter_queue AS q ON q.newsletter_id = n.newsletter_id '.
 			
 			// get mailboxes for sent newsletters without errors
-			'WHERE q.state = ' . NewsletterTableQueue::STATE_SENT
+			' WHERE q.state = ' . NewsletterTableQueue::STATE_SENT.
+			' GROUP BY mp.mailbox_profile_id'
 		);
+
+		// Get mailboxes and their start dates
+		$db->setQuery(
+			' SELECT DISTINCT mp.*, t.startdate'. 
+			' FROM #__newsletter_mailbox_profiles AS mp '.
+			' JOIN ('.(string)$db->getQuery().') as t ON mp.mailbox_profile_id=t.mailbox_profile_id');
 		
-		//echo (string)$db->getQuery();
+		//echo (string)$db->getQuery(); die;
 		$result = $db->loadAssocList();
+		
+		foreach($result as &$mb) {
+			if (!empty($mb['data'])) {
+				$mb['data'] = (array)json_decode($mb['data']);
+			} else {
+				$mb['data'] = array(
+					'lastDate' => NULL,
+					'ids'=>array()
+				);
+			}
+			
+			$mb['password'] = base64_decode($mb['password']);
+		}
+		
 		return $result;
 	}
 }

@@ -9,7 +9,7 @@
 			size="30"
 			default=""
 			required="true"
-                        validate="username"
+            validate="username"
 		/>
 
 		<field name="email"
@@ -35,8 +35,23 @@
 		 >
                     <option value="1">JYES</option>
                     <option value="0">JNO</option>
-                 </field>
+		 </field>
 
-		 <field name="subscriber_id" type="hidden" />
+		<field
+            name="type"
+			type="subscriberTypes"
+			label="COM_NEWSLETTER_SUBSCRIBER_TYPE"
+			description="COM_NEWSLETTER_SUBSCRIBER_TYPE"
+			class="inputbox"
+			required="true"
+		/>
+
+		<field name="subscriber_id" type="hidden" />
+		
+		<field 
+			name="confirmed" 
+			type="hidden" 
+			default="1"
+		/>
 	</fieldset>
 </form>

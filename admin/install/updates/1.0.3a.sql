@@ -1,4 +1,4 @@
-# Version 1.0.3b;
+# Version 1.0.3a;
 # Migration(upgrade).Uses only if UPDATE proccess executes!;
 # Prev version 1.0.2a;
 
@@ -17,7 +17,7 @@ CREATE TABLE `#__newsletter_mailbox_profiles` (
   `password` VARCHAR(255) DEFAULT NULL,
 
   PRIMARY KEY (`mailbox_profile_id`)
-) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 ALTER TABLE `#__newsletter_smtp_profiles` ADD COLUMN `mailbox_profile_id` INT(11);
 

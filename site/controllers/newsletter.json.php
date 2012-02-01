@@ -24,39 +24,13 @@ JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
  */
 class NewsletterControllerNewsletter extends JControllerForm
 {
-	/**
-	 * Render and send the letter to the selected emails
-	 *
-	 * @return void
-	 * @since  1.0
-	 */
-//	public function sendPreview()//deprecated
-//	{
-//		$emails = JRequest::getVar('emails');
-//		$newsletterId = JRequest::getVar('newsletter_id');
-//		$type = JRequest::getVar('type');
-//
-//		$data = array(
-//			'newsletter_id' => $newsletterId,
-//			'type' => $type,
-//			'tracking' => true
-//		);
-//		
-//		foreach ($emails as $email) {
-//			$data['subscribers'][] = SubscriberHelper::getByEmail($email[1]);
-//		}
-//
-//		$mailer = new MigurMailer();
-//		$mailer->sendToList($data);
-//	}
-
 	public function track() {
 
 		$subkey       = JRequest::getString('uid', '');
 		$newsletterId = JRequest::getInt('nid', 0);
 		$listId       = JRequest::getInt('lid', 0);
 		$action       = JRequest::getString('action', '');
-		$link         = base64_decode(urldecode(JRequest::getVar('link')));
+		$link         = base64_decode(urldecode(JRequest::getVar('link', '')));
 
 		try {
 			// Check the uid
@@ -72,24 +46,42 @@ class NewsletterControllerNewsletter extends JControllerForm
 				throw new Exception('Unknown action');
 			}
 
-			$text = "";
 			// If this is a "clicked" event we should save the link
-			if ($actionCode == NewsletterTableHistory::ACTION_CLICKED && !empty($link)) {
+			$text = ($actionCode == NewsletterTableHistory::ACTION_CLICKED)?
+				$link : "";
 
-				// Track the event
-				$db = JFactory::getDbo();
-				$db->setQuery(
-					'INSERT IGNORE INTO #__newsletter_sub_history SET ' .
-						'subscriber_id=' . (int)$subscriber->subscriber_id . ', ' .
-						'list_id=' . (int)$listId . ', ' .
-						'newsletter_id=' . (int)$newsletterId . ', ' .
-						'date="' . date('Y-m-d H:i:s') . '", ' .
-						'action=' . $actionCode . ', ' .
-						'text="' . addslashes($link) . '"'
-				);
-				$db->query();
+			// Track the event
+			// If type of action is ACTION_OPENED then check it 
+			// should be only one in the DB for sid-nid
+			if ($actionCode == NewsletterTableHistory::ACTION_OPENED) {
+
+				$table->load(array(
+					'subscriber_id' => (int)$subscriber->subscriber_id,
+					'newsletter_id' => (int)$newsletterId,
+					'action'        => $actionCode
+				));
+
+				if (!empty($table->history_id)) {
+					throw new Exception('no need to track');
+				} 
 			}
-		} catch(Exception $e) {}
+
+			$table->save(array(
+				'subscriber_id' => (int)$subscriber->subscriber_id,
+				'list_id'       => (int)$listId,
+				'newsletter_id' => (int)$newsletterId,
+				'date'          => date('Y-m-d H:i:s'),
+				'action'        => $actionCode,
+				'text'          => addslashes($link)
+			));
+				
+		} catch(Exception $e) {
+			if ($e->getMessage() != 'no need to track') {
+				// For debug
+				//echo $e->getMessage();
+			}
+		}
+		
 		// Redirect it!
 		if (!empty($link)) {
 			$this->setRedirect($link);

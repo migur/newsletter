@@ -19,6 +19,7 @@ JHtml::_('behavior.tooltip');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JLoader::import('helpers.module', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.environment', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
  * Class of the configuration view. Displays the model data.
@@ -55,6 +56,11 @@ class NewsletterViewConfiguration extends MigurView
 			return false;
 		}
 
+		EnvironmentHelper::showWarnings(array(
+			'checkJoomla',
+			'checkImap',
+			'checkLogs'));
+		
 		$this->general = JComponentHelper::getParams('com_newsletter');
 
 		//$model = JModel::getInstance('extensions', 'NewsletterModel');

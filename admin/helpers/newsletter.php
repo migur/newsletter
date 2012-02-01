@@ -26,7 +26,6 @@ class NewsletterHelper
 
 	public static $_manifest = null;
 	
-	public static $logging = false;
 	/**
 	 * Configure the Linkbar.
 	 *
@@ -58,6 +57,11 @@ class NewsletterHelper
 				$vName == 'subscribers'
 		);
 		JSubMenuHelper::addEntry(
+				JText::_('COM_NEWSLETTER_SUBMENU_AUTOMAILING'),
+				'index.php?option=com_newsletter&view=automailings',
+				$vName == 'automailing'
+		);
+		JSubMenuHelper::addEntry(
 				JText::_('COM_NEWSLETTER_SUBMENU_CONFIGURATION'),
 				'index.php?option=com_newsletter&view=configuration',
 				$vName == 'configuration'
@@ -81,12 +85,12 @@ class NewsletterHelper
 		$obj = self::getManifest();
 		$product = $obj->monsterName;
 
-		$domain = $_SERVER['HTTP_HOST'];
+		$domain = $_SERVER['SERVER_NAME'];
 		
 		$monster_url = $params->get('monster_url');
 
-		//$monster_url = 'monster.woody.php.nixsolutions.com';
 		$url = $monster_url . '/service/check/license/license_key/' . urlencode($lkey) . '/product/' . urlencode($product) . '/domain/' . urlencode($domain);
+		
 		if (empty($url) || strpos($url, 'http://') === false) {
 			$url = 'http://' . $url;
 		}
@@ -306,7 +310,7 @@ class NewsletterHelper
 
 				'JOIN #__newsletter_newsletters AS n  '.
 					'ON (n.smtp_profile_id = sp.smtp_profile_id) '.
-					'OR (n.smtp_profile_id = '.NewsletterTableSmtpprofile::SMTP_DEFAULT.' AND sp.smtp_profile_id='.$smtpId.') '.
+					'OR (n.smtp_profile_id = '.NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID.' AND sp.smtp_profile_id='.$smtpId.') '.
 
 				// get mailboxes for sent newsletters without errors
 				'WHERE n.newsletter_id = ' . (int)$nid
@@ -347,17 +351,38 @@ class NewsletterHelper
 		return $res;
 	}
 	
-	static public function logMessage($msg, $prefix = '', $force = false) {
+	
+	/**
+	 * Log a messagge into file.
+	 * 
+	 * @param string Message
+	 * @param string File name, usae current date otherwise
+	 * @param boolean Use to force the logging
+	 */ 
+	static public function logMessage($msg, $filename = null, $force = false) 
+	{
+		$params = JComponentHelper::getParams('com_newsletter');
+		$logging = $params->get('debug', false);
 		
-		if (!self::$logging && !$force) {
+		if (!$logging && !$force) {
 			return;
 		}
 		
-		JLog::getInstance(date('Y-m-d') . '.txt')->addEntry(
-			array('comment' => $msg)
-		);
+		$filename = !empty($filename)? $filename : '';
+		
+		try {
+			@JLog::getInstance($filename . date('Y-m-d') . '.txt')->addEntry(
+				array('comment' => $msg)
+			);
+		} catch(Exception $e) {
+			
+			return false;
+		}	
+		
+		return true;
 	}
 
+	
 	static public function debugBacktrace($html = true, $compact = true) {
 		
 		$backtracel = '';
@@ -437,4 +462,28 @@ class NewsletterHelper
 	static public function jsonMessage($messages = array(), $data = array(), $exit = true) {
 		self::jsonResponse(true, $messages, $data, $exit);
 	}	
+	
+	static public function getParam($name) 
+	{
+		$table = JTable::getInstance('user');
+		if (!$table->load(array('element' => 'com_newsletter'))) {
+			return false;
+		}
+		$table->params = (object)json_decode($table->params);
+		
+		return $table->params->{$name};
+	}
+	
+	
+	static public function setParam($name, $value) 
+	{
+		$table = JTable::getInstance('user');
+		if (!$table->load(array('element' => 'com_newsletter'))) {
+			return false;
+		}
+		$table->params = (object)json_decode($table->params);
+		$table->params->{$name} = $value;
+		$table->params = json_encode($table->params);
+		return $table->store();
+	}
 }

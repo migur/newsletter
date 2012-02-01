@@ -18,3 +18,4 @@ if (!defined('MIGUR')) {
 jimport('migur.library.modellist');
 jimport('migur.library.view');
 jimport('migur.library.table');
+jimport('migur.library.model');

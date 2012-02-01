@@ -28,6 +28,8 @@ JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
 JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'rules');
 JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'tables');
 JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models');
+JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'entities', 'NewsletterModelEntity');
+
 
 // Get an instance of the controller prefixed by Newsletter
 $controller = JController::getInstance('Newsletter');

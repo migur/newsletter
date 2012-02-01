@@ -737,6 +737,8 @@ window.addEvent('domready', function() {
                     }
                 }
             
+				console.log(id, sets, vals);
+			
                 $('jform_params_newsletter_from_name').set('value', vals.from_name);
                 $('jform_params_newsletter_from_email').set('value', vals.from_email);
                 $('jform_params_newsletter_to_name').set('value', vals.reply_to_name);
@@ -1145,6 +1147,8 @@ window.addEvent('domready', function() {
                 type: type
             },
             onComplete: function(res){
+				
+				$('send-preview-preloader').removeClass('preloader');
                 
 				try{ res = JSON.decode(res); }
 				catch (e) { res = null; }
@@ -1153,11 +1157,14 @@ window.addEvent('domready', function() {
                 if (res && res.state == true) {
                     text = Joomla.JText._('THE_PREVIEWS_WERE_SUCCESFULLY_MAILED',"The previews were succesfully mailed");
                 } else {
-                    text = Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', "An unknown error occured!");
+                    text = Joomla.JText._('AN_ERROR_OCCURED', "An error occured!") + "\n" +
+							res.messages.join("\n");
                 }
                 alert(text);
             }
         }).send();
+		
+		$('send-preview-preloader').addClass('preloader');
     });
 
 

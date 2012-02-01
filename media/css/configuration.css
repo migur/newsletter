@@ -19,9 +19,18 @@
 
 #config-extensions .current,
 #config-config  .current {
-    height: 400px;
+    min-height: 400px;
 }
 
 td fieldset {
     background-color: transparent;
+}
+
+#jform_confirm_mail_body {
+	width: 99%;
+	height: 70px;
+}
+
+#jform_confirm_mail_subject {
+	width: 99%;
 }

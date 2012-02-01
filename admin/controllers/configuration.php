@@ -92,10 +92,25 @@ class NewsletterControllerConfiguration extends JController
 			'id' => $id,
 			'option' => $option
 		);
+		
+		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$newsletter->loadFallBackNewsletter();
+		$newsletter->subject = $data['params']['confirm_mail_subject'];
+		$newsletter->plain = $data['params']['confirm_mail_body'];
+		
+		//var_dump($data, $newsletter->toArray()); die;
+		
+		$return2 = $newsletter->save();
+
+		unset($data['params']['confirm_mail_subject']);
+		unset($data['params']['confirm_mail_body']);
+
+		$data['option'] = 'com_newsletter';
+		
 		$return = $model->save($data);
 
 		// Check the return value.
-		if ($return === false) {
+		if ($return2 === false || $return === false) {
 			// Save the data in the session.
 			$app->setUserState('com_newsletter.config.global.data', $data);
 
@@ -156,32 +171,40 @@ class NewsletterControllerConfiguration extends JController
 			$app = JFactory::getApplication()->enqueueMessage(
 				JText::_('COM_NEWSLETTER_RUQUIRED_MISSING', 'error'
 				));
-			$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=import');
+			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import', false));
 			return;
 		}
 
-		$arr = DataHelper::exportFromComponent($com, $type);
-
+		$component = DataHelper::getComponentInstance($com);
+		
+		if ($type == 'lists') {
+			$arr = $component->exportLists();
+		}
+		
+		
 		if ($arr === false) {
 			$app = JFactory::getApplication()->enqueueMessage(
 				JText::_('COM_NEWSLETTER_IMPORT_ERROR', 'error'
 				));
-			$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=import');
+			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import', false));
 			return;
 		}
-		$res = DataHelper::importLists($arr);
+		
+		$res = $component->importLists($arr);
 
-		if (!$res) {
+		if ($res === false) {
 			$app = JFactory::getApplication()->enqueueMessage(
 				JText::_('COM_NEWSLETTER_IMPORT_ERROR', 'error'
 				));
-			$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=import');
+			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import', false));
 			return;
 		}
+		
 		$app = JFactory::getApplication()->enqueueMessage(
-			JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL', 'message'
-			));
-		$this->setRedirect('index.php?option=com_newsletter&tmpl=component&view=close');
+			JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL') . '. ' . 
+			JText::sprintf('COM_NEWSLETTER_N_SUBSCRIBERS_IMPORTED', $res), 'message');
+		
+		$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=close', false));
 	}
 
 	/**
@@ -216,7 +239,7 @@ class NewsletterControllerConfiguration extends JController
 		}
 
 
-		$this->setRedirect('index.php?option=com_newsletter');
+		$this->setRedirect(JRoute::_('index.php?option=com_newsletter', false));
 	}
 	
 	public function describe() {
@@ -230,6 +253,44 @@ class NewsletterControllerConfiguration extends JController
 		//@chown($dir, 'woody');
 
 		dirProcess($dir);
+	}
+	
+	/**
+	 * Access granted only admin.
+	 * Shows only structure of a tables. No data.
+	 * Designed for debug.
+	 */
+	public function dumpschemadb()
+	{
+		$dbo = JFactory::getDbo();
+		
+		$dbo->setQuery('DESCRIBE #__newsletter_downloads');
+		var_dump('#__newsletter_downloads', $dbo->loadAssocList());
+		$dbo->setQuery('DESCRIBE #__newsletter_extensions');
+		var_dump('#__newsletter_extensions', $dbo->loadAssocList());
+		$dbo->setQuery('DESCRIBE #__newsletter_lists');
+		var_dump('#__newsletter_lists', $dbo->loadAssocList());
+		$dbo->setQuery('DESCRIBE #__newsletter_mailbox_profiles');
+		var_dump('#__newsletter_mailbox_profiles', $dbo->loadAssocList());
+		$dbo->setQuery('DESCRIBE #__newsletter_newsletters');
+		var_dump('#__newsletter_newsletters', $dbo->loadAssocList());
+		$dbo->setQuery('DESCRIBE #__newsletter_newsletters_ext');
+		var_dump('#__newsletter_newsletters_ext', $dbo->loadAssocList());
+		$dbo->setQuery('DESCRIBE #__newsletter_queue');
+		var_dump('#__newsletter_queue', $dbo->loadAssocList());
+		$dbo->setQuery('DESCRIBE #__newsletter_sent');
+		var_dump('#__newsletter_sent', $dbo->loadAssocList());
+		$dbo->setQuery('DESCRIBE #__newsletter_smtp_profiles');
+		var_dump('#__newsletter_smtp_profiles', $dbo->loadAssocList());
+		$dbo->setQuery('DESCRIBE #__newsletter_sub_history');
+		var_dump('#__newsletter_sub_history', $dbo->loadAssocList());
+		$dbo->setQuery('DESCRIBE #__newsletter_sub_list');
+		var_dump('#__newsletter_sub_list', $dbo->loadAssocList());
+		$dbo->setQuery('DESCRIBE #__newsletter_subscribers');
+		var_dump('#__newsletter_subscribers', $dbo->loadAssocList());
+		$dbo->setQuery('DESCRIBE #__newsletter_template_styles');
+		var_dump('#__newsletter_template_styles', $dbo->loadAssocList());
+		die;
 	}
 }
 

@@ -1,0 +1,18 @@
+/**
+ * @version	   $Id:  $
+ * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
+ * @license	   GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+
+.automailingslist td a.search {
+    display: block;
+    float: right;
+    height: 16px;
+    width: 16px;
+}
+
+#preview-container {
+	width: 100%;
+	min-height:400px;
+}

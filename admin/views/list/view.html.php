@@ -76,14 +76,20 @@ class NewsletterViewList extends MigurView
 
 		$modelSubs = new NewsletterModelSubscribers();
 		$modelSubs->setState('list.limit', 10);
-		$this->subs = $modelSubs->getSubscribersByList(array(
-			'list_id' => JRequest::getInt('list_id')
-		));
 		
-		$items = $modelSubs->getUnsubscribedList(array(
-			'list_id' => JRequest::getInt('list_id')
-		));
+		if (!empty($listId)) {
+			$this->subs = $modelSubs->getSubscribersByList(array(
+				'list_id' => JRequest::getInt('list_id')
+			));
 
+			$items = $modelSubs->getUnsubscribedList(array(
+				'list_id' => JRequest::getInt('list_id')
+			));
+		} else {
+			$items = array();
+			$this->subs = array();
+		}
+		
 		$ss = (object) array(
 				'items' => $items,
 				'state' => $modelSubs->getState(),
@@ -253,7 +259,7 @@ class NewsletterViewList extends MigurView
 		JavascriptHelper::addObject('statTotalSent', $res);
 
 
-		$data = StatisticsHelper::openedCount();
+		$data = StatisticsHelper::openedActionsCount();
 		$res = array(
 			'other' => empty($data['other']) ? 0 : $data['other'],
 			'opened' => empty($data['opened']) ? 0 : $data['opened'],

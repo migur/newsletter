@@ -45,7 +45,7 @@ Migur.chart.line = function(containerId, xLabels, data, width, height, pdLabels)
 
                 var rect = raphael.rect(lLeft + 7, lTop, lWidth, lHeight + 2);
                 rect.attr({
-                    fill: "90-#dee-#fff",
+                    fill: "90-#deebff-#ffffff",
                     "stroke-width": 0
                 });
 
@@ -57,9 +57,15 @@ Migur.chart.line = function(containerId, xLabels, data, width, height, pdLabels)
                             smooth: true,
                             opacity: 50,
                             colors: [colorsList[colorIdx]],
-                            stretch: true
+                            stretch: true,
+							type:'soft'
                         }
                     );
+
+					bars.each(function(){
+						this.bar.attr('stroke', '#fff');
+						this.bar.attr('stroke-width', 1);
+					});	
 
                     bars.hover(
                         function() {
@@ -159,10 +165,10 @@ Migur.chart.line = function(containerId, xLabels, data, width, height, pdLabels)
                 for(i = 0; i < pdLabels.length; ++i) {
                     var clr = colorsList[i];
                     
-                    raphael.g["disc"](x + 5, h * i + offset, 5)
+                    raphael.g["disc"](x + 20, h * i + offset, 5)
                     .attr({fill: clr, stroke: "none"});
 
-                    raphael.text(x + 20, h * i + offset, pdLabels[i])
+                    raphael.text(x + 35, h * i + offset, pdLabels[i])
                     .attr(raphael.g.txtattr)
                     .attr({fill: "#000", "text-anchor": "start"});
                 };

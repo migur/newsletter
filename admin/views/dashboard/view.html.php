@@ -18,6 +18,7 @@ JHtml::_('behavior.tooltip');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JLoader::import('helpers.queue', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.statistics', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.environment', JPATH_COMPONENT_ADMINISTRATOR, '');
 jimport('simplepie.simplepie');
 
 /**
@@ -89,6 +90,11 @@ class NewsletterViewDashboard extends MigurView
 			return false;
 		}
 
+		EnvironmentHelper::showWarnings(array(
+			'checkJoomla',
+			'checkImap',
+			'checkLogs'));
+		
 		// We don't need toolbar in the modal window.
 		if ($this->getLayout() !== 'modal') {
 			$this->addToolbar();
@@ -185,11 +191,10 @@ class NewsletterViewDashboard extends MigurView
 		$fiewDaysBefore = date('Y-m-d 00:00:00', strtotime("-30 Days", time()));
 
 		JavascriptHelper::addObject('opensPerDay',
-				StatisticsHelper::activityPerDay(
+				StatisticsHelper::openedNewslettersPerDay(
 					$fiewDaysBefore,
 					$previousDay,
-					null,
-					NewsletterTableHistory::ACTION_OPENED
+					null
 				)
 		);
 		JavascriptHelper::addObject('subsPerDay',

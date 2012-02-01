@@ -44,14 +44,21 @@ window.addEvent('domready', function() { try {
 						$$('#mailbox-toolbar .preloader')[0].destroy();
 					}	
 					
-					res = JSON.decode(res);
+					try { res = JSON.decode(res); }
+					catch (e) { res = false; }
 					
 					if (res && res.status == 'ok') {
 						alert(Joomla.JText._('CONNECTION_OK', 'Connection ok!'));
 						return;
 					}
 					
-					alert(Joomla.JText._('CONNECTION_FAILED','Connection failed!'));
+					var text = Joomla.JText._('CONNECTION_FAILED','Connection failed!');
+					
+					if(res.status) {
+						text += "\n" + res.status;
+					}
+						
+					alert(text);
 					return;
 					
 				}

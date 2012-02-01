@@ -27,22 +27,35 @@ class MigurMailerMailbox
 	 */
 	public $bounceds = array();
 
+	public $disableDelete = true;
+
+	public $error = array();
+
+	public $found = 0;
+
 	public $messages = array();
 
-	public $state = 'notInitialized';
+	public $mailboxProfile = null;
 
 	public $moveHard = false;
 	
-	public $disableDelete = true;
-
-	public $maxMessages = 1000;
-	/**
-	 * Array contains the emails that have been detected as bounced
-	 */
+	// Array contains the emails that have been detected as bounced
 	public $protocol = array();
+	
+	public $state = 'notInitialized';
 
-	public function __construct($options)
+	public $total = 0;
+	
+	public $totalBounces = 0;
+
+	public $useCache = false;
+	
+
+	
+	public function __construct(&$options)
 	{
+		$this->mailboxProfile = $options;
+		
 		if (empty($this->protocol)) {
 			$this->setProtocol($options);
 		}
@@ -50,6 +63,15 @@ class MigurMailerMailbox
 		$this->state = 'disconnected';
 	}
 
+	/**
+	 * Turn on/off cache using
+	 * 
+	 * @param boolean $flag 
+	 */
+	public function useCache($flag = true) {
+		$this->useCache = $flag;
+	}
+	
 	/**
 	 * Is connected?
 	 * @return boolean
@@ -114,23 +136,34 @@ class MigurMailerMailbox
 		// Workaround to be able to use phpmailer-bmh
 		$this->_mailbox_link = $this->protocol->getMailResource();
 
+		if (!$res) {
+			$this->setError($this->protocol->getLastError());
+		}
+		
 		return $res;
 	}
 
 	/**
 	 * Deletes the letter from inbox
 	 * 
-	 * @param integet/string $mid The number of letter in mailbox 
+	 * @param integet/string $uid The UID of letter in mailbox 
 	 * 
 	 * @return boolean
 	 */
-	public function deleteMail($mid)
+	public function deleteMail($uid)
 	{
 		if (!$this->isConnected()) {
 			return false;
 		}
 
-		return $this->protocol->deleteMail($mid);
+		if($this->protocol->deleteMail($uid, FT_UID)) {
+
+			$this->removeFromCache($uid);
+			return true;
+		}
+
+		$this->setError($this->protocol->getLastError());
+		return false;
 	}
 
 	/**
@@ -147,26 +180,13 @@ class MigurMailerMailbox
 		return $this->protocol->close();
 	}
 
-	/**
-	 * Closes the mailbox
-	 * 
-	 * @return boolean
-	 */
-	public function getLastError()
-	{
-		if (empty($this->protocol)) {
-			return null;
-		}	
-		
-		return $this->protocol->getLastError();
-	}
 
 	/**
 	 * Scan all mails and detect bounced ones.
 	 * 
 	 * @return array of bounced letters
 	 */
-	public function getBouncedList()
+	public function getBouncedList($limit)
 	{
 		if (!$this->connect()) {
 			return false;
@@ -174,7 +194,9 @@ class MigurMailerMailbox
 
 		$this->bounceds = array();
 		
-		if(!$this->processMailbox()) {
+		if(!$this->processMailbox($limit)) {
+			
+			$this->setEror($this->protocol->getLastError());
 			return false;
 		}
 		
@@ -186,49 +208,81 @@ class MigurMailerMailbox
 	 * @param string $max       (maximum limit messages processed in one batch, if not given uses the property $maxMessages
 	 * @return boolean
 	 */
-	function processMailbox($max=false)
+	function processMailbox($max = false)
 	{
 		if (!$this->isConnected()) {
 			return false;
 		}
 		
-		$met = ini_get('max_execution_time');
-		if ($met < 6000 && $met != 0) {
-			set_time_limit(6000);
-		}
-
 		$this->protocol->setTimeout(6000);
+		$met = ini_get('max_execution_time');
 
 //		if ($this->moveHard && ( $this->disableDelete === false )) {
 //			$this->disableDelete = true;
 //		}
 
+		$c_deleted = 0;
+		$c_moved = 0;
+		$useFetchstructure = false;
+
+		// initialize counters
+//		if ($offset === false) {
+//			$x = $this->_getStartPosition();
+//		} else {
+//			$x = $offset;
+//		}	
+		
+		$c_total = $this->protocol->getMessagesCount();
+		$this->total = $c_total;
+
+		// Gmail 4000 mails = 1sec
+		// Nix 4000 mails = 180sec
+		//$res = $this->protocol->sort('SORTARRIVAL');
+
+		// Gmail 4000 mails = 1sec
+		// Nix 4000 mails = 180sec
+		//$res = $this->protocol->since(0);
+
+		$res = (array)$this->protocol->findBy('body', MailHelper::APPLICATION_HEADER);
+
+		$this->totalBounces = count($res);
+
+		if(empty($res)) {
+			return true;
+		}
+		
+		NewsletterHelper::logMessage('Mailbox.Bounceds.Ids found:'.json_encode($res), 'mailbox/'); //die;
+
+		// Handle partial processing option
 		if (!empty($max)) {
 			$this->maxMessages = $max;
 		}
+		
+		// Get unprocessed mails
+		$bounces = array_diff($res, $this->getCache());
 
-		// initialize counters
-		$c_total = $this->protocol->getMessagesCount();
-		$c_fetched = $c_total;
-		$c_processed = 0;
-		$c_unprocessed = 0;
-		$c_deleted = 0;
-		$c_moved = 0;
-		$this->output('Total: ' . $c_total . ' messages ');
-		// proccess maximum number of messages
-		if ($c_fetched > $this->maxMessages) {
-			$c_fetched = $this->maxMessages;
-			$this->output('Processing first ' . $c_fetched . ' messages ');
-		}
+		$this->found = count($bounces);
+		
+		$count = 0;
+		
+		// Fetch them all
+		foreach($bounces as &$x) {
 
-		$useFetchstructure = false;
-
-		$time = mktime();
-		for ($x = 1; $x <= $c_fetched; $x++) {
+			// If we've parsed $max messages then it's time to stop
+			if (!empty($this->maxMessages) && $count >= $this->maxMessages) {
+				break;
+			}
+			
+			$time = mktime();
+			// Think 5 minutes to retrive 1 message is more than enough
+			set_time_limit(300);
+			
+			$messageId = '';
+			$processed = false;
 			
 			// fetch the messages one at a time
 			if ($useFetchstructure) {
-				$structure = $this->protocol->getMessageBodyStructure($x);
+				$structure = $this->protocol->getMessageBodyStructure($x, FT_UID);
 				if ($structure->type == 1 && $structure->ifsubtype && $structure->subtype == 'REPORT' && $structure->ifparameters && $this->isParameter($structure->parameters, 'REPORT-TYPE', 'delivery-status')) {
 					$processed = $this->processBounce($x, 'DSN', $c_total);
 				} else { // not standard DSN msg
@@ -237,32 +291,54 @@ class MigurMailerMailbox
 				}
 			} else {
 				
-				$header = $this->protocol->getMessageHeaderStructure($x);
+				$header = $this->protocol->getMessageHeaderStructure($x, FT_UID);
+				//$header = $this->protocol->getMessageHeaders($x);
+				
+				// Get the message id
+				$inCache = false;
+				
+				if (preg_match("/Message\-ID\:\s*(\<[^\>]+\>)/is", $header, $match)) {
+					$messageId = $match[1];
+					$inCache = $this->checkCache($messageId);
+				}
 
-				// Could be multi-line, if the new line begins with SPACE or HTAB
-				if (preg_match("/Content-Type:((?:[^\n]|\n[\t ])+)(?:\n[^\t ]|$)/is", $header, $match)) {
-					if (preg_match("/multipart\/report/is", $match[1]) && preg_match("/report-type=[\"']?delivery-status[\"']?/is", $match[1])) {
-						// standard DSN msg
-						$processed = $this->processBounce($x, 'DSN', $c_total);
-					} else { // not standard DSN msg
-						$this->output('Msg #' . $x . ' is not a standard DSN message', VERBOSE_REPORT);
+				if (preg_match('/^Date\:\s*(.+)\s*$/im', $header, $match)) {
+					$date = strtotime(trim($match[1], "\r\n"));
+				}
+				
+				if (!$inCache) {
+					
+					$this->addToCache($x);
+					
+					// Could be multi-line, if the new line begins with SPACE or HTAB
+					if (preg_match("/Content-Type:((?:[^\n]|\n[\t ])+)(?:\n[^\t ]|$)/is", $header, $match)) {
+						if (preg_match("/multipart\/report/is", $match[1]) && preg_match("/report-type=[\"']?delivery-status[\"']?/is", $match[1])) {
+							// standard DSN msg
+							$processed = $this->processBounce($x, 'DSN', $c_total);
+						} else { // not standard DSN msg
+							$this->output('Msg #' . $x . ' is not a standard DSN message', VERBOSE_REPORT);
+							$processed = $this->processBounce($x, 'BODY', $c_total);
+						}
+					} else { // didn't get content-type header
+						$this->output('Msg #' . $x . ' is not a well-formatted MIME mail, missing Content-Type', VERBOSE_REPORT);
 						$processed = $this->processBounce($x, 'BODY', $c_total);
 					}
-				} else { // didn't get content-type header
-					$this->output('Msg #' . $x . ' is not a well-formatted MIME mail, missing Content-Type', VERBOSE_REPORT);
-					$processed = $this->processBounce($x, 'BODY', $c_total);
+					
+					NewsletterHelper::logMessage('Mailbox.Mail processed.Position:'.$x.',time:'.(string)(mktime()-$time).',id:'.$messageId.',date:'.$date, 'mailbox/');
+					
+				} else {
+					
+					NewsletterHelper::logMessage('Mailbox.Mail in cache.Position:'.$x.',id:'.$messageId, 'mailbox/');
 				}
 			}
 			
-			$deleteFlag[$x] = false;
-			$moveFlag[$x] = false;
+			$this->setLastDate($date);
 			
-			if ($processed) {
-				$c_processed++;
-			} else { // not processed
-				$c_unprocessed++;
-			}
+			$count++;
 		}
+		
+		// Restore the time limit
+		set_time_limit($met);
 		
 		return true;
 	}
@@ -288,7 +364,7 @@ class MigurMailerMailbox
 
 	/**
 	 * Function to process each individual message
-	 * @param int    $pos            (message number)
+	 * @param int    $pos            (message UID)
 	 * @param string $type           (DNS or BODY type)
 	 * @param string $totalFetched   (total number of messages in mailbox)
 	 * @return boolean
@@ -297,7 +373,7 @@ class MigurMailerMailbox
 	{
 		$time = mktime();
 		//var_dump('process bounce ' . $pos .'-'.  $type .'-'.  $totalFetched);
-		$header = $this->protocol->getMessageHeaders($pos); //imap_header
+		$header = $this->protocol->getMessageHeaders($pos, FT_UID); //imap_header
 		//var_dump('headers ' . (mktime() - $time));
 
 		if (!empty($header->subject)) {
@@ -318,9 +394,9 @@ class MigurMailerMailbox
 		if ($type == 'DSN') {
 			// first part of DSN (Delivery Status Notification), human-readable explanation
 			//var_dump('getMessageBody ' . (mktime() - $time));
-			$dsn_msg = $this->protocol->getMessageBody($pos, "1");
+			$dsn_msg = $this->protocol->getMessageBody($pos, "1", FT_UID);
 			//var_dump('getMessageBody(end) ' . (mktime() - $time));
-			$dsn_msg_structure = $this->protocol->getMessageBodyStruct($pos, "1");
+			$dsn_msg_structure = $this->protocol->getMessageBodyStruct($pos, "1", FT_UID);
 			//var_dump('getMessageBodyStruct(end) ' . (mktime() - $time));
 
 			if ($dsn_msg_structure->encoding == 4) {
@@ -330,7 +406,7 @@ class MigurMailerMailbox
 			}
 
 			// second part of DSN (Delivery Status Notification), delivery-status
-			$dsn_report = $this->protocol->getMessageBody($pos, "2");//imap_fetchbody($this->_mailbox_link, $pos, "2");
+			$dsn_report = $this->protocol->getMessageBody($pos, "2", FT_UID);//imap_fetchbody($this->_mailbox_link, $pos, "2");
 			//var_dump('getMessageBody(pos2)-end ' . (mktime() - $time));
 
 			// process bounces by rules
@@ -338,14 +414,14 @@ class MigurMailerMailbox
 		} elseif ($type == 'BODY') {
 			
 			//var_dump('getMessageBodyStructure ' . (mktime() - $time));
-			$structure = $this->protocol->getMessageBodyStructure($pos); // imap_fetchstructure($this->_mailbox_link, $pos);
+			$structure = $this->protocol->getMessageBodyStructure($pos, FT_UID); // imap_fetchstructure($this->_mailbox_link, $pos);
 			//var_dump('getMessageBodyStructure-end ' . (mktime() - $time));
 			
 			switch ($structure->type) {
 				case 0: // Content-type = text
 				case 1: // Content-type = multipart
 					//var_dump('getMessageBody2 ' . (mktime() - $time));
-					$body = $this->protocol->getMessageFetchedBody($pos, "1");//imap_fetchbody($this->_mailbox_link, $pos, "1");
+					$body = $this->protocol->getMessageFetchedBody($pos, "1", FT_UID);//imap_fetchbody($this->_mailbox_link, $pos, "1");
 					//var_dump('getMessageBody2-end ' . (mktime() - $time));
 					// Detect encoding and decode - only base64
 					if (!empty($structure->parts[0]->encoding) && $structure->parts[0]->encoding == 4) {
@@ -361,7 +437,7 @@ class MigurMailerMailbox
 				case 2: // Content-type = message
 					//var_dump('getMessageBody3 ' . (mktime() - $time));
 					
-					$body = $this->protocol->getMessageBody($pos);//imap_body($this->_mailbox_link, $pos);
+					$body = $this->protocol->getMessageBody($pos, FT_UID);//imap_body($this->_mailbox_link, $pos);
 					//var_dump('getMessageBody3-end ' . (mktime() - $time));
 					
 					if ($structure->encoding == 4) {
@@ -413,12 +489,11 @@ class MigurMailerMailbox
 		}
 		
 		//var_dump('process bounce-end ' . (mktime() - $time));
-
+		return true;
 	}
 
 	public function output($msg)
 	{
-
 		$this->messages[] = $msg;
 	}
 
@@ -427,7 +502,7 @@ class MigurMailerMailbox
 	 */
 
 	/* Callback (action) function
-	 * @param int     $msgnum        the message number returned by Bounce Mail Handler
+	 * @param int     $msgnum        the message UID returned by Bounce Mail Handler
 	 * @param string  $bounce_type   the bounce type: 'antispam','autoreply','concurrent','content_reject','command_reject','internal_error','defer','delayed'        => array('remove'=>0,'bounce_type'=>'temporary'),'dns_loop','dns_unknown','full','inactive','latin_only','other','oversize','outofoffice','unknown','unrecognized','user_reject','warning'
 	 * @param string  $email         the target email address
 	 * @param string  $subject       the subject, ignore now
@@ -438,7 +513,7 @@ class MigurMailerMailbox
 	 * @param int     $totalFetched  total number of messages in the mailbox
 	 * @return boolean
 	 */
-	function callbackAction($msgnum, $body, $bounce_type, $email, $subject, $xheader, $remove, $rule_no=false, $rule_cat=false, $totalFetched=0)
+	function callbackAction($msgUid, $body, $bounce_type, $email, $subject, $xheader, $remove, $rule_no=false, $rule_cat=false, $totalFetched=0)
 	{
 
 //	if ($subject == 'Undelivered Mail Returned to Sender') {
@@ -483,7 +558,7 @@ class MigurMailerMailbox
 		}
 
 		$this->bounceds[] = (object) array(
-				'msgnum' => $msgnum,
+				'msgnum' => $msgUid,
 				'bounce_type' => $bounce_type,
 				'subscriber_id' => $sid,
 				'newsletter_id' => $nid,
@@ -499,4 +574,133 @@ class MigurMailerMailbox
 		return true;
 	}
 
+	
+	/**
+	 * Checks if the UID is present in the chache array
+	 * 
+	 * @param string $uid The message UID.
+	 * 
+	 * @return boolean
+	 * 
+	 * @since 1.0.3
+	 */
+	public function checkCache($uid) 
+	{
+		return 
+			(in_array($uid, $this->mailboxProfile['data']['ids']) &&
+			$this->useCache == true);
+	}
+
+	
+	/**
+	 * Returns all entries from cache
+	 * 
+	 * @return array
+	 * 
+	 * @since 1.0.3
+	 */
+	public function getCache() 
+	{
+		if (empty($this->mailboxProfile['data']['ids'])) {
+			return array();
+		}
+		
+		return $this->mailboxProfile['data']['ids'];
+	}
+
+	
+	/**
+	 * Clears UIDs cache
+	 * 
+	 * @since 1.0.3
+	 */
+	public function clearCache() 
+	{
+		$this->mailboxProfile['data'] = array(
+			'lastDate' => null,
+			'ids' => array()
+		);
+	}
+
+	
+	/** 
+	 * Add NEW message id to array cache
+	 *
+	 * @param string $uid UID of a letter
+	 * 
+	 * @since 1.0.3
+	 */
+	public function addToCache($uid)
+	{
+		/** Add to cache */
+		if (!in_array($uid, $this->mailboxProfile['data']['ids'])) {
+			array_push($this->mailboxProfile['data']['ids'], $uid);
+		}	
+	}
+
+	/** 
+	 * Remove from cache by UID
+	 *
+	 * @param string $uid UID of a letter
+	 * 
+	 * @since 1.0.3
+	 */
+	public function removeFromCache($uid)
+	{
+		/** Add to cache */
+		$id = array_search($uid, $this->mailboxProfile['data']['ids']);
+		if ($id !== false) {
+			unset($this->mailboxProfile['data']['ids'][$id]);
+		}	
+	}	
+	
+	/** 
+	 * Set timestamp of a date
+	 *
+	 * @param string|int $date timestamp
+	 * 
+	 * @since 1.0.3
+	 */
+	public function setLastDate($date)
+	{
+		/** Add to cache */
+		$this->mailboxProfile['data']['lastDate'] = (int)$date;
+	}
+
+	
+	/** 
+	 * Get timestamp of a date
+	 *
+	 * @return int timestamp
+	 * 
+	 * @since 1.0.3
+	 */
+	public function getLastDate()
+	{
+		return (int)$this->mailboxProfile['data']['lastDate'];
+	}
+
+
+	/**
+	 * Set error message
+	 * 
+	 * @param type $error
+	 * 
+	 * @since 1.0.3
+	 */
+	public function setError($error){
+		$this->error = $error;
+	}
+	
+	
+	/**
+	 * Get error message
+	 * 
+	 * @return string Error message
+	 * 
+	 * @since 1.0.3
+	 */
+	public function getLastError(){
+		return $this->error;
+	}
 }

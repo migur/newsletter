@@ -5,7 +5,7 @@
  */
 
 #main-container {
-    max-height: 565px;
+    max-height: 550px;
     overflow: auto;
 }
 
@@ -54,4 +54,9 @@
 
 dd {
     margin: 0 !important;
+}
+
+#all-in-one {
+	margin-left: 30px;
+	margin-bottom: 20px;
 }
