@@ -308,3 +308,12 @@
     overflow: auto;
     height: 450px;
 }
+
+#usertype-selector {
+	line-height: 20px;
+	float: right;
+}
+
+#usertype-selector div {
+	margin-right: 20px;
+}

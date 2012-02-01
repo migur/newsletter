@@ -51,7 +51,6 @@ class NewsletterViewNewsletter extends MigurView
 	public function display($tpl = null)
 	{
 		//TODO: Need to move css/js to SetDocument
-
 		JHTML::stylesheet('media/com_newsletter/css/admin.css');
 		JHTML::stylesheet('media/com_newsletter/css/newsletter.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
@@ -88,12 +87,18 @@ class NewsletterViewNewsletter extends MigurView
 		$this->form = $this->get('Form', 'newsletter');
 		$this->newsletter = $this->get('Item');
 
-
-		// get the SmtpProfiles data
-		$this->setModel(
-			JModel::getInstance('smtpprofiles', 'NewsletterModel')
+		$smtpModel = JModel::getInstance('SMtpProfile', 'NewsletterModelEntity'); 
+		
+		// Let's add J! profile
+		$smtpp = $smtpModel->loadJoomla();
+		JavascriptHelper::addObject(
+				'joomlaDe',
+				JComponentHelper::getParams('com_newsletter')->toArray() //array('autosaver' => array('on' => true))
 		);
-		$this->smtpprofiles = $this->get('Items', 'smtpprofiles');
+		
+		// get the SmtpProfiles data
+		$smtpprofilesManager = JModel::getInstance('smtpprofiles', 'NewsletterModel');
+		$this->assignRef('smtpprofiles', $smtpprofilesManager->getAllItems('withDefault'));
 
 		// get all the Extensions
 		$this->modules = MigurModuleHelper::getSupported(array('withoutInfo'=>true));
@@ -181,10 +186,8 @@ class NewsletterViewNewsletter extends MigurView
             (object)array(
                 'htmlTemplate' => (object)array(
                     'template' => (object)array(
-                        'id' => $this->htmlTemplateId
-                    ),
-                    'extensions' => (array)$this->usedExts
-                ),
+                        'id' => $this->htmlTemplateId),
+                    'extensions' => (array)$this->usedExts),
                 'templates' => (array)$this->templates->items,
                 'modules' => (array)$this->modules,
                 'plugins' => (array)$this->plugins,
@@ -219,7 +222,10 @@ class NewsletterViewNewsletter extends MigurView
 		$bar->appendButton('Separator', null, '50');
 		$bar->appendButton('Link', 'apply', 'JTOOLBAR_APPLY', '#', false);
 		$bar->appendButton('Standard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
-		$bar->appendButton('Standard', 'default', 'COM_NEWSLETTER_TUTORIAL', '', false);
+
+                $helpLink = 'http://migur.com/support/documentation/newsletter/' . NewsletterHelper::getManifest()->version . '/newsletters';
+		$bar->appendButton('Popup', 'default', 'COM_NEWSLETTER_TUTORIAL', $helpLink, 1000, 600, 0, 0);
+//                $bar->appendButton('Standard', 'default', 'COM_NEWSLETTER_TUTORIAL', '', false);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
 	}
 

@@ -1,10 +1,16 @@
-# Version 1.0.3b;
+# Version 1.0.4b1;
 # Migration(upgrade).Uses only if UPDATE proccess executes!;
-# Prev version 1.0.3a;
+# Prev version 1.0.3b2;
 
 SET foreign_key_checks = 0;
 
 ALTER TABLE `#__newsletter_mailbox_profiles` MODIFY COLUMN  `data` LONGBLOB;
+ALTER TABLE `#__newsletter_smtp_profiles` ADD COLUMN  `params` TEXT;
+ALTER TABLE `#__newsletter_smtp_profiles` ADD COLUMN  `is_joomla` SMALLINT;
+ALTER TABLE `#__newsletter_newsletters` ADD COLUMN  `category` INT(11);
+
+CREATE INDEX email_idx   ON #__newsletter_subscribers(email);
+CREATE INDEX user_id_idx ON #__newsletter_subscribers(user_id);
 
 CREATE TABLE `#__newsletter_automailings` (
   `automailing_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -60,5 +66,15 @@ ALTER TABLE #__newsletter_automailing_items ADD FOREIGN KEY (automailing_id) REF
 
 CREATE INDEX newsletter_ids_idxfk ON #__newsletter_automailing_items(newsletter_id);
 ALTER TABLE #__newsletter_automailing_items ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE #__newsletter_queue MODIFY COLUMN `newsletter_id` BIGINT(20);
+DELETE FROM #__newsletter_queue WHERE newsletter_id NOT IN (SELECT newsletter_id FROM #__newsletter_newsletters);
+CREATE INDEX newsletter_ids_idxfk ON #__newsletter_queue(newsletter_id);
+ALTER TABLE #__newsletter_queue ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE #__newsletter_queue MODIFY COLUMN `subscriber_id` BIGINT(20);
+DELETE FROM #__newsletter_queue WHERE subscriber_id NOT IN (SELECT subscriber_id FROM #__newsletter_subscribers);
+CREATE INDEX subscriber_ids_idxfk ON #__newsletter_queue(subscriber_id);
+ALTER TABLE #__newsletter_queue ADD FOREIGN KEY (subscriber_id) REFERENCES #__newsletter_subscribers (subscriber_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 SET foreign_key_checks = 1;

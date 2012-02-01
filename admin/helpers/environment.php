@@ -15,7 +15,9 @@ class EnvironmentHelper {
 
 	static public $warnings = array(
 		'checkJoomla' => 'You have old version of Joomla. Please update.',
-		'checkImap' => 'Imap library is unavailable. Please install.'
+		'checkImap' => 'Imap library is unavailable. Please install.',
+		'checkLogs' => 'The component debuging is turned on but system cant write into /logs',
+		'checkUserConflicts' => 'Some J! users and subscribers have equal emails (%s conflicts) '
 	);
 
 	/**
@@ -51,8 +53,12 @@ class EnvironmentHelper {
 		// Do checks
 		$res = array();
 		foreach ($methods as $m) {
-			if (!self::$m()) {
-				array_push($res, JText::_(self::$warnings[$m]));
+			$data = array();
+			if (!self::$m(&$data)) {
+				array_push($res, JText::sprintf(
+					'COM_NEWSLETTER_ENVIRONMENT_'.strtoupper($m), 
+					isset($data[0])? $data[0] : '', 
+					isset($data[1])? $data[1] : ''));
 			}
 		}
 
@@ -66,8 +72,8 @@ class EnvironmentHelper {
 	 * 
 	 * @since 1.0.3
 	 */
-	public static function showWarnings($checkList = array()) {
-		
+	public static function showWarnings($checkList = array()) 
+	{
 		$app = JFactory::getApplication();
 		foreach (self::getWarnings($checkList) as $w) {
 			$app->enqueueMessage($w, 'error');
@@ -109,5 +115,32 @@ class EnvironmentHelper {
 			function_exists('imap_utf7_decode') &&
 			function_exists('imap_getmailboxes');
 	}
+	
+	
+	/**
+	 * Check the ability to write into /logs if admin turn on debug
+	 *  
+	 */
+	public static function checkLogs() 
+	{
+		$params = JComponentHelper::getParams('com_newsletter');
+		$logging = (int)$params->get('debug', '0');
+		return is_writable(JPATH_ROOT . '/logs') || empty($logging);
+	}
 
+	
+	public static function checkUserConflicts(&$data)
+	{
+		$dbo = JFactory::getDbo();
+		$dbo->setQuery(
+			'SELECT COUNT(*) AS cnt '.
+			'FROM #__users AS u '.
+			'JOIN #__newsletter_subscribers AS s ON u.email = s.email '.
+			'WHERE u.id != s.user_id');
+		$res = $dbo->loadAssoc();
+		$conflictsCount = $res['cnt'];
+		
+		$data[0] = $conflictsCount;
+		return $conflictsCount == 0;
+	}
 }

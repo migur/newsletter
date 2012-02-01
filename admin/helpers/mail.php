@@ -43,23 +43,23 @@ class MailHelper
 		$letter = JTable::getInstance('Newsletter', 'NewsletterTable');
 		$letter->load((int) $id);
 
+		// If letter absent then fail.
 		if (!$letter) {
 			return false;
 		}
+		
 		$letter = (object) $letter->getProperties();
-
-		if ($letter->smtp_profile_id > 0) {
-			$profile = JTable::getInstance('Smtpprofile', 'NewsletterTable');
-			$profile->load((int) $letter->smtp_profile_id);
-		} else {
-			$profile = MailHelper::getJoomlaProfile();
-		}
-
-		$letter->smtp_profile = (object) $profile->getProperties();
-
 		$letter->params = (array) json_decode($letter->params);
 		PlaceholderHelper::setPlaceholders($letter->params);
-		if ($letter->smtp_profile_id < 1) {
+
+		$profileEntity = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$profileEntity->load((int)$letter->smtp_profile_id);
+		
+		$letter->smtp_profile = $profileEntity->toObject();
+
+
+		// Set data when using J! SMTP profile
+		if ($letter->smtp_profile_id == NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID) {
 
 			if (!empty($letter->params['newsletter_from_email'])) {
 				$letter->smtp_profile->from_email = $letter->params['newsletter_from_email'];
@@ -74,6 +74,7 @@ class MailHelper
 				$letter->smtp_profile->reply_to_name = $letter->params['newsletter_to_name'];
 			}
 		}
+	
 		return $letter;
 	}
 
@@ -129,13 +130,15 @@ class MailHelper
 	 */
 	public function getJoomlaProfile()
 	{
+		JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
+		JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 		$config = new JConfig();
 		$data = JArrayHelper::fromObject($config);
 
 		$res = new JObject();
 		$res->smtp_profile_id = 0;
-		$res->smtp_profile_name = JText::_('COM_NEWSLETTER_JOOMLA_MAIL_SETTINGS');
+		$res->smtp_profile_name = JText::_('COM_NEWSLETTER_JOOMLA_SMTP_PROFILE');
 		$res->from_name = $data['fromname'];
 		$res->from_email = $data['mailfrom'];
 		$res->reply_to_email = $data['mailfrom'];
@@ -146,7 +149,9 @@ class MailHelper
 		$res->pop_before_smtp = 0;
 		$res->username = $data['smtpuser'];
 		$res->password = $data['smtppass'];
-
+		$res->mailbox_profile_id = NewsletterTableMailboxprofile::MAILBOX_DEFAULT;
+		$res->params = new stdClass();
+		
 		return $res;
 	}
 

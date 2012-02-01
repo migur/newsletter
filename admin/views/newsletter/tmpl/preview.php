@@ -1,15 +1,18 @@
 <div id="tab-preview-container">
 
 		<fieldset class="autocompleter-migur email-container">
-			<ul class="autocompleter-items"></ul>
-			<div class="clr"></div>
-            <?php echo $this->form->getInput('newsletter_preview_email'); ?>
-			<input
-                type="button"
-                onclick=""
-                id="button-newsletter-send-preview"
-                value="<?php  echo JText::_('COM_NEWSLETTER_SEND_PREVIEW'); ?>"
-            />
+				<ul class="autocompleter-items"></ul>
+				<div class="clr"></div>
+				<?php echo $this->form->getInput('newsletter_preview_email'); ?>
+				<div>
+					<input
+						type="button"
+						onclick=""
+						id="button-newsletter-send-preview"
+						value="<?php  echo JText::_('COM_NEWSLETTER_SEND_PREVIEW'); ?>"
+					/>
+					<div id="send-preview-preloader"></div>
+				</div>	
 
 		</fieldset>
 

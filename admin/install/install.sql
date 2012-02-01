@@ -50,6 +50,10 @@ CREATE TABLE `#__newsletter_subscribers`
 PRIMARY KEY (`subscriber_id`,`user_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+CREATE INDEX email_idx ON #__newsletter_subscribers(email);
+CREATE INDEX user_id_idx ON #__newsletter_subscribers(user_id);
+
+
 
 CREATE TABLE `#__newsletter_smtp_profiles`
 (
@@ -66,6 +70,8 @@ CREATE TABLE `#__newsletter_smtp_profiles`
 `username` VARCHAR(255),
 `password` VARCHAR(255),
 `mailbox_profile_id` INT(11),
+`params` TEXT,
+`is_joomla` SMALLINT,
 
 PRIMARY KEY (`smtp_profile_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
@@ -88,6 +94,7 @@ CREATE TABLE `#__newsletter_newsletters`
 `created` DATETIME NOT NULL,
 `sent_started` DATETIME NOT NULL,
 `type` INT(11) NOT NULL,
+`category` INT(11),
 
 PRIMARY KEY (`newsletter_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
@@ -190,8 +197,8 @@ PRIMARY KEY (`extension_id`)
 CREATE TABLE `#__newsletter_queue`
 (
 `queue_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-`newsletter_id` INT(11) NOT NULL,
-`subscriber_id` INT(11) NOT NULL,
+`newsletter_id` BIGINT(20) NOT NULL,
+`subscriber_id` BIGINT(20) NOT NULL,
 `list_id` INT(11) NOT NULL,
 `created` DATETIME NOT NULL,
 `state` INT(11) NOT NULL,
@@ -318,6 +325,13 @@ ALTER TABLE #__newsletter_automailing_items ADD FOREIGN KEY (automailing_id) REF
 CREATE INDEX newsletter_ids_idxfk ON #__newsletter_automailing_items(newsletter_id);
 ALTER TABLE #__newsletter_automailing_items ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
+CREATE INDEX newsletter_ids_idxfk ON #__newsletter_queue(newsletter_id);
+ALTER TABLE #__newsletter_queue ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE INDEX subscriber_ids_idxfk ON #__newsletter_queue(subscriber_id);
+ALTER TABLE #__newsletter_queue ADD FOREIGN KEY (subscriber_id) REFERENCES #__newsletter_subscribers (subscriber_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
 # Data for the table `#__newsletter_extensions`;
 insert  into `#__newsletter_extensions`(`extension_id`,`title`,`extension`,`params`,`type`) values (1,'Article Module','mod_article','{}',1);
 insert  into `#__newsletter_extensions`(`extension_id`,`title`,`extension`,`params`,`type`) values (2,'Image Module','mod_img','{}',1);
@@ -345,9 +359,10 @@ insert  into `#__newsletter_sub_list`(`sublist_id`,`subscriber_id`,`list_id`,`co
 insert  into `#__newsletter_sub_list`(`sublist_id`,`subscriber_id`,`list_id`,`confirmed`) values (2,1,2,'');
 
 # Data for the table `#__newsletter_newsletters`;
-insert  into `#__newsletter_newsletters`(`newsletter_id`,`name`,`subject`,`alias`,`smtp_profile_id`,`t_style_id`,`plain`,`params`,`ordering`,`language`,`checked_out`,`checked_out_time`,`created`,`sent_started`,`type`) VALUES (96,'Birthday of Baby Doe!','Baby Doe','',0,5,'Meet the Baby Doe!\nCongratulations for [username]! \n\nTo unsubscribe: [unsubscription link]','{\"newsletter_from_name\":\"John Doe\",\"newsletter_from_email\":\"johndoe@example.com\",\"newsletter_to_name\":\"John Doe\",\"newsletter_to_email\":\"johndoe@example.com\"}',0,'',0,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0);
-
+insert  into `#__newsletter_newsletters`(`newsletter_id`,`name`,`subject`,`alias`,`smtp_profile_id`,`t_style_id`,`plain`,`params`,`ordering`,`language`,`checked_out`,`checked_out_time`,`created`,`sent_started`,`type`) VALUES (1,'Welcoming newsletter','Welcome to Migur Newsletter','welcomingnewsletter',0,5,'Wellcome to Migur Newsletter\nHi! Wellocme to migur newsletter. You need to complete registration. Please follow this link\nconfirmation link [confirmation link]','{\"newsletter_from_name\":\"Migur Newsletter\",\"newsletter_from_email\":\"\",\"newsletter_to_name\":\"Migur Newsletter\",\"newsletter_to_email\":\"\"}',0,'',0,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',1);
+insert  into `#__newsletter_newsletters`(`newsletter_id`,`name`,`subject`,`alias`,`smtp_profile_id`,`t_style_id`,`plain`,`params`,`ordering`,`language`,`checked_out`,`checked_out_time`,`created`,`sent_started`,`type`) VALUES (96,'Birthday of Baby Doe!','Baby Doe','birthdayofbabydoe',0,5,'Meet the Baby Doe!\nCongratulations for [username]! \n\nTo unsubscribe: [unsubscription link]','{\"newsletter_from_name\":\"John Doe\",\"newsletter_from_email\":\"johndoe@example.com\",\"newsletter_to_name\":\"John Doe\",\"newsletter_to_email\":\"johndoe@example.com\"}',0,'',0,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0);
 # Data for the table `#__newsletter_newsletters_ext`;
+insert  into `#__newsletter_newsletters_ext`(`newsletters_ext_id`,`newsletter_id`,`extension_id`,`position`,`params`,`ordering`,`native`,`title`,`showtitle`) values (1,1,4,'header_module_position','{"text":"<p>Hi! Wellocme to migur newsletter. You need to complete registration. Please follow this link<\/p>\n<p>[confirmation link]<\/p>"}',1,0,'Wellcome to Migur Newsletter',1);
 insert  into `#__newsletter_newsletters_ext`(`newsletters_ext_id`,`newsletter_id`,`extension_id`,`position`,`params`,`ordering`,`native`,`title`,`showtitle`) values (6,96,4,'header_module_position','{\"text\":\"<p>Meet the Baby Doe!<\\/p>\\n<p>Congratulations for [username]!<\\/p>\"}',1,0,'Text Module',1);
 
 SET foreign_key_checks = 1;

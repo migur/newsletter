@@ -40,16 +40,20 @@ class JFormFieldSmtpprofiles extends JFormFieldList
 		// Initialize variables.
 		$options = array();
 
+		// Just to be sure that record for Joomla profile is exist
+		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$model->load(0);
+		
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
 		$query->select(
-			'smtp_profile_id AS value, smtp_profile_name AS text, from_name, from_email, reply_to_email, ' .
+			'CASE is_joomla WHEN 1 THEN 0 ELSE smtp_profile_id END AS value, smtp_profile_name AS text, from_name, from_email, reply_to_email, ' .
 			'reply_to_name, smtp_server, smtp_port, is_ssl, ' .
-			'pop_before_smtp, username, password'
+			'pop_before_smtp, username, password, is_joomla'
 		);
 		$query->from('#__newsletter_smtp_profiles AS a');
-		$query->order('a.smtp_profile_name');
+		$query->order('is_joomla DESC, a.smtp_profile_name ASC');
 
 		// Get the options.
 		$db->setQuery($query);
@@ -67,8 +71,6 @@ class JFormFieldSmtpprofiles extends JFormFieldList
 		if (empty($options)) {
 			$options = array();
 		}	
-		
-		array_unshift($options, JHtml::_('select.option', '0', JText::_('COM_NEWSLETTER_JOOMLA_MAIL_SETTINGS')));
 		
 		if (empty($this->element['scope']) || $this->element['scope'] != 'withoutDef') {
 			array_unshift($options, JHtml::_('select.option', '-1', JText::_('COM_NEWSLETTER_PROFILE')));

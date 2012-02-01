@@ -90,7 +90,10 @@ class NewsletterViewDashboard extends MigurView
 			return false;
 		}
 
-		EnvironmentHelper::showWarnings();
+		EnvironmentHelper::showWarnings(array(
+			'checkJoomla',
+			'checkImap',
+			'checkLogs'));
 		
 		// We don't need toolbar in the modal window.
 		if ($this->getLayout() !== 'modal') {

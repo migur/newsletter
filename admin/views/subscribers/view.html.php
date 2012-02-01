@@ -17,6 +17,8 @@ JHtml::_('behavior.tooltip');
 jimport('joomla.application.component.view');
 jimport('migur.library.toolbar');
 
+JLoader::import('helpers.environment', JPATH_COMPONENT_ADMINISTRATOR, '');
+
 /**
  * Class of the subscribers list view. Displays the model data.
  *
@@ -43,6 +45,7 @@ class NewsletterViewSubscribers extends MigurView
 		JHTML::_('behavior.modal');
 		//TODO: Need to move css/js to SetDocument
 		JHTML::stylesheet('media/com_newsletter/css/admin.css');
+		JHTML::stylesheet('media/com_newsletter/css/subscribers.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
 		JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
 		JHTML::script('media/com_newsletter/js/migur/js/search.js');		
@@ -53,6 +56,10 @@ class NewsletterViewSubscribers extends MigurView
 			JModel::getInstance('lists', 'NewsletterModel')
 		);
 
+		EnvironmentHelper::showWarnings(array(
+			'checkUserConflicts'));
+		
+		
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
 			JError::raiseError(500, implode("\n", $errors));
@@ -85,6 +92,8 @@ class NewsletterViewSubscribers extends MigurView
 		);
 		$this->assignRef('lists', $lists);
 
+		$this->assignRef('subscriberModel', JModel::getInstance('Subscriber', 'NewsletterModelEntity'));
+		
 		parent::display($tpl);
 	}
 
@@ -101,7 +110,7 @@ class NewsletterViewSubscribers extends MigurView
 		$bar = MigurToolBar::getInstance('subscribers');
 		$bar->appendButton('Link', 'cancel', 'COM_NEWSLETTER_REMOVE_FROM_LIST', 'list.unbindgroup', false);
 		$bar->appendButton('Link', 'copy', 'COM_NEWSLETTER_ASSIGN_TO_LIST', 'list.assigngroup', false);
-		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&amp;view=subscriber&amp;tmpl=component', 350, 150, 0, 0);
+		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&amp;view=subscriber&amp;tmpl=component', 400, 220, 0, 0);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'subscribers.delete', false);
 		$bar->appendButton('Standard', 'unpublish', 'JTOOLBAR_DISABLE', 'subscribers.unpublish', false);
 		$bar->appendButton('Standard', 'publish', 'JTOOLBAR_ENABLE', 'subscribers.publish', false);

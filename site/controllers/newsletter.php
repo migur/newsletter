@@ -178,8 +178,10 @@ class NewsletterControllerNewsletter extends JControllerForm
 		}
 
 		$mailer = new MigurMailer();
-		$res = $mailer->sendToList($data);
-
+		if(!$mailer->sendToList($data)) {
+			NewsletterHelper::jsonError($mailer->getErrors(), $emails);
+		}
+		
 		NewsletterHelper::jsonMessage('ok', $emails);
 	}
 }

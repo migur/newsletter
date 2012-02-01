@@ -85,12 +85,12 @@ class NewsletterHelper
 		$obj = self::getManifest();
 		$product = $obj->monsterName;
 
-		$domain = $_SERVER['HTTP_HOST'];
+		$domain = $_SERVER['SERVER_NAME'];
 		
 		$monster_url = $params->get('monster_url');
 
-		//$monster_url = 'monster.woody.php.nixsolutions.com';
 		$url = $monster_url . '/service/check/license/license_key/' . urlencode($lkey) . '/product/' . urlencode($product) . '/domain/' . urlencode($domain);
+		
 		if (empty($url) || strpos($url, 'http://') === false) {
 			$url = 'http://' . $url;
 		}
@@ -310,7 +310,7 @@ class NewsletterHelper
 
 				'JOIN #__newsletter_newsletters AS n  '.
 					'ON (n.smtp_profile_id = sp.smtp_profile_id) '.
-					'OR (n.smtp_profile_id = '.NewsletterTableSmtpprofile::SMTP_DEFAULT.' AND sp.smtp_profile_id='.$smtpId.') '.
+					'OR (n.smtp_profile_id = '.NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID.' AND sp.smtp_profile_id='.$smtpId.') '.
 
 				// get mailboxes for sent newsletters without errors
 				'WHERE n.newsletter_id = ' . (int)$nid
@@ -359,8 +359,8 @@ class NewsletterHelper
 	 * @param string File name, usae current date otherwise
 	 * @param boolean Use to force the logging
 	 */ 
-	static public function logMessage($msg, $filename = null, $force = false) {
-		
+	static public function logMessage($msg, $filename = null, $force = false) 
+	{
 		$params = JComponentHelper::getParams('com_newsletter');
 		$logging = $params->get('debug', false);
 		
@@ -369,11 +369,20 @@ class NewsletterHelper
 		}
 		
 		$filename = !empty($filename)? $filename : '';
-		JLog::getInstance($filename . date('Y-m-d') . '.txt')->addEntry(
-			array('comment' => $msg)
-		);
+		
+		try {
+			@JLog::getInstance($filename . date('Y-m-d') . '.txt')->addEntry(
+				array('comment' => $msg)
+			);
+		} catch(Exception $e) {
+			
+			return false;
+		}	
+		
+		return true;
 	}
 
+	
 	static public function debugBacktrace($html = true, $compact = true) {
 		
 		$backtracel = '';
@@ -453,4 +462,28 @@ class NewsletterHelper
 	static public function jsonMessage($messages = array(), $data = array(), $exit = true) {
 		self::jsonResponse(true, $messages, $data, $exit);
 	}	
+	
+	static public function getParam($name) 
+	{
+		$table = JTable::getInstance('user');
+		if (!$table->load(array('element' => 'com_newsletter'))) {
+			return false;
+		}
+		$table->params = (object)json_decode($table->params);
+		
+		return $table->params->{$name};
+	}
+	
+	
+	static public function setParam($name, $value) 
+	{
+		$table = JTable::getInstance('user');
+		if (!$table->load(array('element' => 'com_newsletter'))) {
+			return false;
+		}
+		$table->params = (object)json_decode($table->params);
+		$table->params->{$name} = $value;
+		$table->params = json_encode($table->params);
+		return $table->store();
+	}
 }

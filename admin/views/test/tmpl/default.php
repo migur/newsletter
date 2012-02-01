@@ -36,6 +36,13 @@ defined('_JEXEC') or die;
 			<td><input class="test-params" value="" size="80" /></td>
 			<td><input class="test-other" value="" size="60" /></td>
 		</tr>
+		<tr class="row0">
+			<td><a class="test-title" href="#">Cron.Mailing</a></td>
+			<td><select class="test-method"><option selected value="get">GET</option><option value="post">POST</option></td>
+			<td><input class="test-url" value="<?php echo 'index.php?option=com_newsletter&task=cron.mailing'; ?>" size="60"/></td>
+			<td><input class="test-params" value="" size="80" /></td>
+			<td><input class="test-other" value="" size="60" /></td>
+		</tr>
 		<tr class="row1">
 			<td><a class="test-title" href="#">Logs.Automailing</a></td>
 			<td><select class="test-method"><option selected value="get">GET</option><option value="post">POST</option></td>
@@ -50,7 +57,7 @@ defined('_JEXEC') or die;
 			<td><input class="test-params" value="" size="80" /></td>
 			<td><input class="test-other" value="" size="60" /></td>
 		</tr>
-		<tr class="row0">
+		<tr class="row1">
 			<td><a class="test-title" href="#">Logs.Mailer</a></td>
 			<td><select class="test-method"><option selected value="get">GET</option><option value="post">POST</option></td>
 			<td><input class="test-url" value="<?php echo '/logs/mailer/'.date('Y-m-d').'.txt'; ?>" size="60"/></td>
@@ -62,5 +69,5 @@ defined('_JEXEC') or die;
 
 <input type="button" id="result-type" value="HTML/TEXT" />
 
-<div class="test-result test-html" style="height:600px; background-color: #111111; color: #00FF00; padding: 10px;"></div>
-<textarea class="test-text" style="height:600px; width:98%; background-color: #111111; color: #00FF00; padding: 10px; font-size: 12px;"></textarea>
+<div class="test-result test-html" style="height:600px; background-color: #111111; color: #00FF00; padding: 10px; font-size: 12px; overflow: auto;"></div>
+<textarea class="test-text" style="height:600px; width:98%; background-color: #111111; color: #00FF00; padding: 10px; font-size: 12px; overflow: auto; display: none;"></textarea>

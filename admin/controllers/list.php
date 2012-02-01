@@ -148,22 +148,20 @@ class NewsletterControllerList extends JControllerForm
 	{
 		if (JRequest::getMethod() == "POST") {
 
-			$model = $this->getModel('Subscriber', 'NewsletterModel');
+			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
 			$subscribers = JRequest::getVar('cid', null, 'post');
 			$lists = json_decode(JRequest::getVar('list_id', null, 'post'));
 
 			if (!empty($lists) && !empty($subscribers)) {
-				foreach($lists as $listId) {
-					foreach ($subscribers as $subscriberId) {
-
-						$data = (object) array(
-								'subscriber_id' => $subscriberId,
-								'list_id' => $listId
-						);
-
-
-						if ($model->assignToList($data)) {
+				
+				foreach ($subscribers as $subscriberId) {
+					// Need to load to add row  for j! user "on the fly"
+					$model->load($subscriberId);
+					
+					foreach($lists as $listId) {
+						
+						if ($model->assignToList($listId)) {
 							$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_SUCCESS"));
 						} else {
 							$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_FAILED"), 'error');
@@ -185,22 +183,20 @@ class NewsletterControllerList extends JControllerForm
 	{
 		if (JRequest::getMethod() == "POST") {
 
-			$model = $this->getModel('Subscriber', 'NewsletterModel');
+			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
 			$subscribers = JRequest::getVar('cid', null, 'post');
 			$lists = json_decode(JRequest::getVar('list_id', null, 'post'));
 
 			if (!empty($lists) && !empty($subscribers)) {
-				foreach($lists as $listId) {
-					foreach ($subscribers as $subscriberId) {
 
-						$data = (object) array(
-								'subscriber_id' => $subscriberId,
-								'list_id' => $listId
-						);
+				foreach ($subscribers as $subscriberId) {
+					// Need to load to add row  for j! user "on the fly"
+					$model->load($subscriberId);
+					
+					foreach($lists as $listId) {
 
-
-						if ($model->unbindFromList($data)) {
+						if ($model->unbindFromList($listId)) {
 							$this->setMessage(JText::_("COM_NEWSLETTER_UNBIND_SUCCESS"));
 						} else {
 							$this->setMessage(JText::_("COM_NEWSLETTER_UNBIND_FAILED"), 'error');
