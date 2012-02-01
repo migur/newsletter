@@ -40,6 +40,10 @@ class JFormFieldSmtpprofiles extends JFormFieldList
 		// Initialize variables.
 		$options = array();
 
+		// Just to be sure that record for Joomla profile is exist
+		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$model->load(0);
+		
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 

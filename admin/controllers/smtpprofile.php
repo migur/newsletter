@@ -35,37 +35,13 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 		$this->registerTask('savenclose', 'save');
 	}
 
-	/**
-	 * Method override to check if you can edit an existing record.
-	 *
-	 * @param	array	$data	An array of input data.
-	 * @param	string	$key	The name of the key for the primary key.
-	 *
-	 * @return	boolean
-	 * @since	1.0
-	 */
-	protected function allowEdit($data = array(), $key = 'id')
-	{
-		//TODO: Remove and check the method
+	protected function checkEditId($context, $id) {
 		return true;
 	}
 
 	/**
-	 * Method override to check if you can save an existing record.
-	 *
-	 * @param	array	$data	An array of input data.
-	 * @param	string	$key	The name of the key for the primary key.
-	 *
-	 * @return	boolean
-	 * @since	1.0
+	 * Save action
 	 */
-	protected function allowSave($data = array(), $key = 'id')
-	{
-		//TODO: Remove and check the method
-		return true;
-	}
-
-	
 	public function save()
 	{
 		$form = JRequest::getVar('jform');
@@ -73,9 +49,10 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 		$model->load($form['smtp_profile_id']);
 		
 		if ($model->isJoomlaProfile()) {
-			$form = array_merge((array) $model->toArray(), array('params' => $form['params']));
+			$buffer = array_merge($model->toArray(), $form);
+			$buffer['params'] = array_merge((array)$model->params, $form['params']);
+			JRequest::setVar('jform', $buffer, 'post');
 		}
-		JRequest::setVar('jform', $form, 'post');
 
 		parent::save();
 

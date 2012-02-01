@@ -219,11 +219,16 @@ class NewsletterModelNewsletters extends JModelList
 		$spids = $db->loadAssocList(null, 'smtp_profile_id');
 		
 		$res = array();
+		$ids = array();
 		foreach($spids as $spid){
 			
 			$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 			$model->load($spid);
-			$res[] = $model;
+			
+			if (!in_array($model->getId(), $ids)) {
+				$res[] = $model;
+				$ids[] = $model->getId();
+			}
 		}
 		
 		return $res;

@@ -30,7 +30,10 @@ JLoader::import('models.automailing.manager', JPATH_COMPONENT_ADMINISTRATOR, '')
  */
 class NewsletterControllerCron extends JControllerForm
 {
-
+	
+	protected $_isAdminAuthorized = null;
+	
+	
 	/**
 	 * The constructor of a class
 	 *
@@ -122,9 +125,15 @@ class NewsletterControllerCron extends JControllerForm
 						'name'  => $smtpProfile->smtp_profile_name,
 						'email' => $smtpProfile->username ),
 					'processed' => 0,
+					'success'   => 0,
 					'data' => array(),
 					'error' => '');
 
+				// First check if the process is not hanged up
+				if($smtpProfile->isInProcess() || $smtpProfile->isNeedNewPeriod()) {
+					$smtpProfile->kill();
+				}
+				
 				// Check if mailing from this SMTP is in progress (in other thread)
 				if (!$smtpProfile->isInProcess()) {
 					
@@ -133,16 +142,16 @@ class NewsletterControllerCron extends JControllerForm
 
 					// Check if it is time for new period.
 					// If it triggered by admin manualy then start process anyway.
-					if ($smtpProfile->isNeedNewPeriod() || $this->_isForced()) {
+					if ($smtpProfile->isNeedNewPeriod() || $this->_isAdminAuthorized()) {
 						$smtpProfile->startNewPeriod();
 					}
 
 					// Process mails of this SMTP profile only if we need it
 					if ($smtpProfile->needToSendCount() > 0) {
+						echo "{$smtpProfile->needToSendCount()}\n";
 
 						// Get mails that we need to send
 						$queueItems = $queueManager->getUnsentSidNidBySmtp($smtpProfile->smtp_profile_id, $smtpProfile->needToSendCount());
-
 						$ret = array();
 						if (!empty($queueItems)) {
 
@@ -151,9 +160,11 @@ class NewsletterControllerCron extends JControllerForm
 							// Let's process these mails
 							foreach ($queueItems as $qi) {
 
-								try {
+								$letter = new stdClass();
 
-									$queueItem->setFromArray($qi);
+								$queueItem->setFromArray($qi);
+								
+								try {
 
 									// Let's load subscriber. Exception on fail.
 									if (!$subscriber->load($queueItem->subscriber_id)) {
@@ -177,12 +188,6 @@ class NewsletterControllerCron extends JControllerForm
 
 									// Set up the sending start time
 									$newsletter->updateSentTime();
-
-									// Update the queue item after mailing
-									$queueManager->updateState(
-										$letter->state? 0 : 2,
-										$queueItem->newsletter_id,
-										$queueItem->subscriber_id );
 
 									// Get all records which refers
 									// to the current user and the current newsletter
@@ -232,7 +237,6 @@ class NewsletterControllerCron extends JControllerForm
 										}
 									}
 
-									$responseItem['processed']++;
 									$smtpProfile->updateSentsPerPeriodCount();
 
 								} catch(Exception $e) {
@@ -243,6 +247,15 @@ class NewsletterControllerCron extends JControllerForm
 										'error'         => $e->getMessage()
 									);
 								}
+								
+								// Update the queue item after mailing
+								$queueManager->updateState(
+									!empty($letter->state)? 0 : 2,
+									$queueItem->newsletter_id,
+									$queueItem->subscriber_id );
+								
+								$responseItem['processed']++;
+								$responseItem['success'] += !empty($letter->state)? 1 : 0;
 							}
 						}
 
@@ -260,9 +273,7 @@ class NewsletterControllerCron extends JControllerForm
 				$response[] = $responseItem;
 			}
 		}
-		
-		//die('finish');
-		
+
 		if ($mode == 'std') {
 			// Send and exit
 			NewsletterHelper::jsonMessage('ok', $response);
@@ -473,25 +484,34 @@ class NewsletterControllerCron extends JControllerForm
 	}
 	
 
-	public function _isForced()
+	public function _isAdminAuthorized()
 	{
+		if ($this->_isAdminAuthorized !== null) {
+			return $this->_isAdminAuthorized;
+		}
+		
 		if(JRequest::getBool('forced', false)) {
                     
 			$conf = JFactory::getConfig();
 			$handler = $conf->get('session_handler', 'none');
 			$sessId = JRequest::getVar(JRequest::getString('sessname', ''), false, 'COOKIE');
-			if(empty($sessId)){
-				return false; //'Unknown session';
-			}    
-			$data = JSessionStorage::getInstance($handler, array())->read($sessId);
-			session_decode($data);
-			$user = $_SESSION['__default']['user'];
-				$levels = $user->getAuthorisedGroups();
-			if ( max($levels) < 7 ) {
-				return false; //'Unauthorized user';
-			}    
 			
-			return true;
+			if(!empty($sessId)){
+				
+				$data = JSessionStorage::getInstance($handler, array())->read($sessId);
+
+				// Save session
+				$sessTmp = $_SESSION;
+				$_SESSION = array();
+				session_decode($data);
+				$user = $_SESSION['__default']['user'];
+				$_SESSION = $sessTmp;
+				$this->_isAdminAuthorized = (bool)$user->authorise('core.admin');
+			} else {
+				$this->_isAdminAuthorized = false;
+			}
+			
+			return $this->_isAdminAuthorized;
 		}
 		
 		return false;
