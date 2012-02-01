@@ -7,7 +7,7 @@
 /* TODO: Need to move all *newsletters* styles to newsletters.css */
 
 iframe {
-    overflow: auto;
+    overflow: hidden;
 }
 
 div.toolbar-list li a span {

@@ -222,10 +222,8 @@ class NewsletterViewNewsletter extends MigurView
 		$bar->appendButton('Separator', null, '50');
 		$bar->appendButton('Link', 'apply', 'JTOOLBAR_APPLY', '#', false);
 		$bar->appendButton('Standard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
-
-                $helpLink = 'http://migur.com/support/documentation/newsletter/' . NewsletterHelper::getManifest()->version . '/newsletters';
-		$bar->appendButton('Popup', 'default', 'COM_NEWSLETTER_TUTORIAL', $helpLink, 1000, 600, 0, 0);
-//                $bar->appendButton('Standard', 'default', 'COM_NEWSLETTER_TUTORIAL', '', false);
+		$helpLink = 'http://migur.com/support/documentation/newsletter/' . NewsletterHelper::getManifest()->version . '/newsletters';
+        $bar->appendButton('Popup', 'default', 'COM_NEWSLETTER_TUTORIAL', $helpLink, 1000, 600, 0, 0);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
 	}
 
