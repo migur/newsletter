@@ -462,4 +462,28 @@ class NewsletterHelper
 	static public function jsonMessage($messages = array(), $data = array(), $exit = true) {
 		self::jsonResponse(true, $messages, $data, $exit);
 	}	
+	
+	static public function getParam($name) 
+	{
+		$table = JTable::getInstance('user');
+		if (!$table->load(array('element' => 'com_newsletter'))) {
+			return false;
+		}
+		$table->params = (object)json_decode($table->params);
+		
+		return $table->params->{$name};
+	}
+	
+	
+	static public function setParam($name, $value) 
+	{
+		$table = JTable::getInstance('user');
+		if (!$table->load(array('element' => 'com_newsletter'))) {
+			return false;
+		}
+		$table->params = (object)json_decode($table->params);
+		$table->params->{$name} = $value;
+		$table->params = json_encode($table->params);
+		return $table->store();
+	}
 }

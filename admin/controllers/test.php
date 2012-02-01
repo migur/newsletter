@@ -29,7 +29,7 @@ class NewsletterControllerTest extends JControllerForm
 
 		$dbo = JFactory::getDbo();
 		for($i=$start; $i < $start + $count; $i++) {
-			$dbo->setQuery('INSERT INTO jos_users (name,username,email,password,userType,block,sendEmail,registerDate,lastVisitDate,activation,params) values("zFake User '.$i.'", "zfakeuser'.$i.'", "zfakeuser'.$i.'@gmail.com", "", "", "", 1, "'.date('Y-m-d H:i:s').'", 0, "", "{}")');
+			$dbo->setQuery('INSERT INTO #__users (name,username,email,password,userType,block,sendEmail,registerDate,lastVisitDate,activation,params) values("zFake User '.$i.'", "zfakeuser'.$i.'", "zfakeuser'.$i.'@gmail.com", "", "", "", 1, "'.date('Y-m-d H:i:s').'", 0, "", "{}")');
 			//echo $dbo->getQuery();
 			$dbo->query();
 		}
@@ -51,7 +51,7 @@ class NewsletterControllerTest extends JControllerForm
 
 		$dbo = JFactory::getDbo();
 		for($i=$start; $i < $start + $count; $i++) {
-			$dbo->setQuery('INSERT INTO jos_newsletter_subscribers (name,email,state,html,user_id,created_on,created_by,modified_on,modified_by,locked_on,locked_by,confirmed,subscription_key,extra) values("zFake Subscriber '.$i.'", "zfakesubscriber'.$i.'@gmail.com", "1", "1", "0", "'.date('Y-m-d H:i:s').'", "0", "0", "0", "0", "0", "1", "0", "{}")');
+			$dbo->setQuery('INSERT INTO #__newsletter_subscribers (name,email,state,html,user_id,created_on,created_by,modified_on,modified_by,locked_on,locked_by,confirmed,subscription_key,extra) values("zFake Subscriber '.$i.'", "zfakesubscriber'.$i.'@gmail.com", "1", "1", "0", "'.date('Y-m-d H:i:s').'", "0", "0", "0", "0", "0", "1", "0", "{}")');
 			//echo $dbo->getQuery();
 			$dbo->query();
 		}
@@ -69,7 +69,7 @@ class NewsletterControllerTest extends JControllerForm
 	{
 		$dbo = JFactory::getDbo();
 		for($i=$start; $i < $start + $count; $i++) {
-			$dbo->setQuery('DELETE FROM jos_newsletter_subscribers WHERE name LIKE "zFake%"');
+			$dbo->setQuery('DELETE FROM #__newsletter_subscribers WHERE name LIKE "zFake%"');
 			//echo $dbo->getQuery();
 			$dbo->query();
 		}

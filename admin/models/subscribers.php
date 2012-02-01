@@ -146,33 +146,33 @@ class NewsletterModelSubscribers extends MigurModelList
 		
 
 //SELECT COUNT(*) 
-//FROM jos_users AS u
-//LEFT JOIN jos_newsletter_subscribers AS s ON s.user_id = u.id
+//FROM #__users AS u
+//LEFT JOIN #__newsletter_subscribers AS s ON s.user_id = u.id
 //WHERE s.subscriber_id IS NULL;
 //
 //SELECT COUNT(*)
-//FROM jos_users AS u
-//WHERE u.id NOT IN (SELECT s.user_id FROM jos_newsletter_subscribers AS s);		
+//FROM #__users AS u
+//WHERE u.id NOT IN (SELECT s.user_id FROM #__newsletter_subscribers AS s);		
 		
 		
 		$query->select('*');
 		
 //		$query->from(
 //		'(SELECT s.subscriber_id, s.name, s.email, s.state, s.html, s.user_id
-//		FROM jos_newsletter_subscribers AS s
+//		FROM #__newsletter_subscribers AS s
 //		WHERE s.user_id = 0 OR s.user_id IS NULL
 //
 //		UNION 
 //
 //		SELECT s.subscriber_id, u.name, u.email, u.block, s.html, s.user_id
-//		FROM jos_newsletter_subscribers AS s
-//		JOIN jos_users AS u ON (s.user_id > 0 AND u.id = s.user_id)
+//		FROM #__newsletter_subscribers AS s
+//		JOIN #__users AS u ON (s.user_id > 0 AND u.id = s.user_id)
 //
 //		UNION 
 //
 //		SELECT NULL AS subscriber_id, u.name, u.email, u.block, 1 AS html, u.id
-//		FROM jos_newsletter_subscribers AS s
-//		RIGHT JOIN jos_users AS u ON (u.id = s.user_id AND s.subscriber_id IS NULL)) AS a');
+//		FROM #__newsletter_subscribers AS s
+//		RIGHT JOIN #__users AS u ON (u.id = s.user_id AND s.subscriber_id IS NULL)) AS a');
 
 
 		
@@ -184,14 +184,14 @@ class NewsletterModelSubscribers extends MigurModelList
 		
 		$query->from(
 			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
-			FROM jos_newsletter_subscribers AS s
-			LEFT JOIN jos_users AS u ON (s.user_id = u.id)
+			FROM #__newsletter_subscribers AS s
+			LEFT JOIN #__users AS u ON (s.user_id = u.id)
 
 			UNION
 
 			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
-			FROM jos_newsletter_subscribers AS s
-			RIGHT JOIN jos_users AS u ON (s.user_id = u.id)) AS a');
+			FROM #__newsletter_subscribers AS s
+			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS a');
 		
 		// Filtering the data
 		if (!empty($this->filtering)) {
@@ -267,12 +267,19 @@ class NewsletterModelSubscribers extends MigurModelList
 
 		// Select the required fields from the table.
 		$query->select(
-			'DISTINCT a.subscriber_id AS id, a.name, a.email, a.state, a.created_on' .
-			', a.created_by, a.modified_on, a.modified_by' .
-			', a.locked_on, a.locked_by'
-		);
+			'DISTINCT a.subscriber_id AS id, a.name, a.email');
 
-		$query->from('#__newsletter_subscribers AS a');
+		$query->from(
+			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
+			FROM #__newsletter_subscribers AS s
+			LEFT JOIN #__users AS u ON (s.user_id = u.id)
+
+			UNION
+
+			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
+			FROM #__newsletter_subscribers AS s
+			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS a');
+		
 		$query->join('', "#__newsletter_sub_list AS sl ON a.subscriber_id=sl.subscriber_id");
 
 		if (!empty($params['list_id'])) {
@@ -289,7 +296,7 @@ class NewsletterModelSubscribers extends MigurModelList
 		}
 		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
 
-		//echo nl2br(str_replace('#__','jos_',$query)); //die;
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$db->setQuery($query);
 		return $db->loadObjectList();
 	}

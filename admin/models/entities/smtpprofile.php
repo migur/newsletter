@@ -74,6 +74,12 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 	}
 
 	
+	public function kill()
+	{
+		$this->_data->params->inProcess = 0;
+		$this->save();
+	}
+	
 	public function setInProcess($val = 1)
 	{
 		$this->params->inProcess = $val;
@@ -93,10 +99,20 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 		return ($this->_data->is_joomla);
 	}
 
-	
+	/**
+	 * True if this id matches with Default Smtp Id
+	 * or if the default smtpp is the Joomla smtpp
+	 * and this smtpp is Jomla one.
+	 * 
+	 * @return type 
+	 */
 	public function isDefaultProfile()
 	{
-		return ($this->getDefaultSmtpId() == $this->_data->smtp_profile_id);
+		$defId = $this->getDefaultSmtpId();
+		
+		return 
+			($defId == $this->_data->smtp_profile_id) || 
+			($defId == 0 && $this->isJoomlaProfile());
 	}
 	
 	/**
@@ -107,31 +123,34 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 	public function load($data)
 	{
 
-		if (!is_array($data) && !is_object($data)) {
+		if(!parent::load($data)) {
 			
-			// Assume that this is ID
-			$data = (int) $data;
+			if (
+				!is_numeric($data) ||
+				($data != NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID &&
+				 $data != NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID)
+			) {
+				return false;
+			}
 
 			// If user wants to load DEFAULT SMTPP then determine it.
 			if ($data == NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID) {
 				$data = $this->getDefaultSmtpId();
 			}
-			
+
 			// If we determine that need to load J! SMTPP
 			// then change filter to load it.
 			if ($data == NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID) {
-				$data = array('is_joomla' => 1);
+				if (!$this->load(array('is_joomla' => 1))) {
+					$this->save((array)$this->_getJoomlaProfile());
+				}
 			}
-		}
-
-		if(!parent::load($data)) {
-			return false;
 		}	
 
 		// If loaded profile is J! profile
 		// then fill it with J! SMTP settings
 		if ($this->isJoomlaProfile()) {
-			$this->setFromArray(array_merge($this->toArray(), (array)$this->_getJoomlaProfile()));
+			$this->addFromArray($this->_getJoomlaProfile());
 		}
 		
 		if(empty($this->_data->params)) {
@@ -204,6 +223,7 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 		$res->username = $data['smtpuser'];
 		$res->password = $data['smtppass'];
 		$res->mailbox_profile_id = NewsletterTableMailboxprofile::MAILBOX_DEFAULT;
+		$res->is_joomla = 1;
 
 		return $res;
 	}
