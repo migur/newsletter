@@ -17,6 +17,8 @@ JHtml::_('behavior.tooltip');
 jimport('joomla.application.component.view');
 jimport('migur.library.toolbar');
 
+JLoader::import('helpers.environment', JPATH_COMPONENT_ADMINISTRATOR, '');
+
 /**
  * Class of the subscribers list view. Displays the model data.
  *
@@ -54,6 +56,10 @@ class NewsletterViewSubscribers extends MigurView
 			JModel::getInstance('lists', 'NewsletterModel')
 		);
 
+		EnvironmentHelper::showWarnings(array(
+			'checkUserConflicts'));
+		
+		
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
 			JError::raiseError(500, implode("\n", $errors));

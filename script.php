@@ -82,9 +82,37 @@ class com_newsletterInstallerScript
 					}
 				}
 			}
+			return true;
+		}
+
+		
+		if ($type == 'update') {
+			
+			// Check the component version 
+			$extensionTable = JTable::getInstance('Extension', 'JTable');
+			
+			$extensionTable->load(array(
+				'type'    => 'component',
+				'element' => 'com_newsletter'));
+
+			if (!empty($extensionTable->extension_id)) {
+				$manifestOld = json_decode($extensionTable->manifest_cache);
+				$manifestNew = $parent->getParent()->getManifest();
+				
+				$res = version_compare(
+					(string)$manifestNew->version, 
+					(string)$manifestOld->version);
+
+				// If the fist is greater than second
+				if ($res < 0) {
+					JFactory::getApplication()->enqueueMessage(JText::_('COM_NEWSLETTER_SYSTEM_ALREADY_HAS_NEWER_VERSION'), 'error');
+					return false;
+				}
+			}
+			return true;
 		}
 		
-		return true;
+		return false;
 	}
 
 	/**
