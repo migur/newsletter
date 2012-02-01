@@ -74,7 +74,12 @@ class NewsletterModelConfiguration extends JModelForm
 
 	public function loadFormData()
 	{
-		return $this->getComponent()->params->toArray();
+		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$newsletter->loadFallBackNewsletter();
+		$result = $this->getComponent()->params->toArray();
+		$result['confirm_mail_subject'] = $newsletter->subject;
+		$result['confirm_mail_body'] = $newsletter->plain;
+		return $result;
 	}
 
 	/**
@@ -108,7 +113,6 @@ class NewsletterModelConfiguration extends JModelForm
 	 */
 	public function save($data)
 	{
-		JTable::addIncludePath(JPATH_LIBRARIES . DS . 'joomla' . DS . 'database' . DS . 'table');
 		$table = JTable::getInstance('extension');
 		// Save the rules.
 		if (isset($data['params']) && isset($data['params']['rules'])) {
@@ -123,6 +127,7 @@ class NewsletterModelConfiguration extends JModelForm
 				$asset->title = $data['option'];
 				$asset->setLocation($root->id, 'last-child');
 			}
+			
 			$asset->rules = (string) $rules;
 
 			if (!$asset->check() || !$asset->store()) {

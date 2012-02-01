@@ -11,6 +11,7 @@
 defined('JPATH_BASE') or die;
 
 jimport('phpmailer.phpmailer');
+jimport('phpmailer.smtp');
 jimport('joomla.mail.helper');
 jimport('migur.library.mailer.transport.smtp');
 jimport('joomla.mail.mail');
@@ -22,9 +23,10 @@ jimport('joomla.error.log');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurMailerSender extends JMail
+class MigurMailerSender extends PHPMailer
 {
-
+	protected $_errors;
+	
 	/**
 	 * The constructor of a class
 	 *
@@ -40,7 +42,7 @@ class MigurMailerSender extends JMail
 			$this->_setData($params);
 		}
 
-		parent::__construct();
+		parent::__construct(!empty($params['exceptions']));
 	}
 
 	/**
@@ -76,14 +78,39 @@ class MigurMailerSender extends JMail
 	{
 		$auth = empty($profile->username) ? null : 'auth';
 
-		$this->useSMTP(
-			$auth,
-			$profile->smtp_server,
-			$profile->username,
-			$profile->password,
-			($profile->is_ssl == 0) ? false : 'ssl',
-			$profile->smtp_port
-		);
+		switch($profile->is_ssl) {
+			
+			case 1: 
+				$secure = 'ssl'; break;
+			
+			case 2: 
+				$secure = 'tls'; break;
+			
+			default: 
+				$secure = false;
+		}
+		
+		$this->SMTPAuth = $auth;
+		$this->Host		= $profile->smtp_server;
+		$this->Username = $profile->username;
+		$this->Password = $profile->password;
+		$this->Port		= $profile->smtp_port;
+
+		if ($secure == 'ssl' || $secure == 'tls') {
+			$this->SMTPSecure = $secure;
+		}
+
+		if (($this->SMTPAuth !== null && $this->Host !== null && $this->Username !== null && $this->Password !== null)
+			|| ($this->SMTPAuth === null && $this->Host !== null)) {
+			$this->IsSMTP();
+
+			return true;
+		}
+		else {
+			$this->IsMail();
+
+			return false;
+		}
 	}
 
 	/**
@@ -100,22 +127,35 @@ class MigurMailerSender extends JMail
 			$this->_setData($params);
 		}
 
-		parent::ClearAddresses();
-		parent::setSender(array($this->smtpProfile->from_email, $this->smtpProfile->from_name));
-		parent::setSubject($this->letter->subject);
+		$this->ClearAddresses();
+		
+		$this->AddReplyTo(
+			JMailHelper::cleanAddress($this->smtpProfile->reply_to_email),
+			JMailHelper::cleanText($this->smtpProfile->reply_to_name)
+		);
+		
+		$this->SetFrom(
+			JMailHelper::cleanAddress($this->smtpProfile->from_email),
+			JMailHelper::cleanText($this->smtpProfile->from_name)
+		);
+		
+		$this->Subject = JMailHelper::cleanText($this->letter->subject);
 
-		parent::setBody($this->letter->content);
+		$this->Body = JMailHelper::cleanText($this->letter->content);
 		foreach($this->attach as $item) {
 			$parts = explode(DS, $item->filename);
 			$full  = JPATH_ROOT.DS.$item->filename;
 			if(function_exists('mime_content_type')) {
 				$mime = mime_content_type($full);
-			} else {
+			} elseif (function_exists('finfo_open')) {
 				$finfo = finfo_open(FILEINFO_MIME);
 				$mime = finfo_file($finfo, $full);
 				finfo_close($finfo);
 				list($mime) = explode(';', $mime);
-			}
+			} else {
+				$mime = 'application/octet-stream';
+			}	
+			
 			parent::AddAttachment($full, '', 'base64', $mime);
 		}	
 		parent::IsHTML($params['type'] == 'html');
@@ -124,10 +164,99 @@ class MigurMailerSender extends JMail
 				parent::addAddress($email->email, !empty($email->name) ? $email->name : "");
 			}
 		}
-		if (parent::Send() !== true) {
-			JLog::getInstance()->addEntry(array('comment' => 'mailer.sender: ' . JError::getError()->get('message')));
+		
+		try {
+			if (!parent::Send()) {
+				throw new Exception();
+			}
+		} catch(Exception $e) {	
+
+			$msg = $e->getMessage();
+			if (!empty($msg)) {
+				$this->setError($msg);
+			}	
+			NewsletterHelper::logMessage('Mailer.Sender error: ' . json_encode($this->getErrors()), 'mailer/');
 			return false;
 		}
+		
 		return true;
+	}
+	
+	/**
+	 * Wraps the original CreateHeader to be able to set some headers
+	 */
+	public function CreateHeader() {
+		
+		$result = parent::CreateHeader();		
+		
+		preg_match_all('/Return-Path:[^\n\r]+[\n\r]/', $result, $matches);
+		
+		if (count($matches[0]) > 1) {
+			$start = strpos($result, $matches[0][0]);
+			$length = strlen($matches[0][0]);
+			$result = substr_replace($result, '', $start, $length);
+		}
+		
+// mail.ru testing headers
+//		$result = "Date: Thu, 20 Oct 2011 18:52:09 +0300\r\nReturn-Path:andreyalek-ru@mail.ru\r\nReturn-Receipt-To:andreyalek-ru@mail.ru\r\n".
+//					"To:andreyalek-ru@mail.ru\r\nFrom: Andrey <august-ru@mail.ru>\r\n".
+//					"Reply-to: Andrey <august-ru@mail.ru>\r\nSubject: Baby Doe\r\n".
+//					"Message-ID: <d10f643bf3f7b3bb1303d279ff28f526@migur.woody.php.nixsolutions.com>\r\n".
+//					"X-Priority: 3\r\nX-Mailer: PHPMailer 5.1 (phpmailer.sourceforge.net)\r\n".
+//					"Email-Name: Birthday of Baby Doe!(copy)\r\nSubscriber-ID: 8316\r\n".
+//					"MIME-Version: 1.0\r\nContent-Type: multipart/mixed;boundary=\"b1_d10f643bf3f7b3bb1303d279ff28f526\"\r\n";
+
+		// gmail
+//		$result = "Date: Thu, 20 Oct 2011 18:52:09 +0300\r\nReturn-Path:august-ru@mail.ru\r\nReturn-Receipt-To:august-ru@mail.ru\r\n".
+//					"To: Woody woody <bounced@nobodydomaintrololo.com>\r\nFrom: Andrey <andreyalek@gmail.com>\r\n".
+//					"Reply-to: Andrey <andreyalek@gmail.com>\r\nSubject: Baby Doe\r\n".
+//					"Message-ID: <d10f643bf3f7b3bb1303d279ff28f526@migur.woody.php.nixsolutions.com>\r\n".
+//					"X-Priority: 3\r\nX-Mailer: PHPMailer 5.1 (phpmailer.sourceforge.net)\r\n".
+//					"Email-Name: Birthday of Baby Doe!(copy)\r\nSubscriber-ID: 8316\r\n".
+//					"MIME-Version: 1.0\r\nContent-Type: multipart/mixed;boundary=\"b1_d10f643bf3f7b3bb1303d279ff28f526\"\r\n";
+
+		return $result;
+	}
+	
+	/**
+	* Check connection
+	* @return bool
+	*/
+	public function checkConnection($smtpOptions) 
+	{
+		$this->setSMTP($smtpOptions);
+		
+		try {
+			$res = $this->SmtpConnect();
+		} catch(Exception $e) {
+			$res = false;
+		}	
+
+		if ($res){
+			$this->SmtpClose();
+		}
+
+		return $res;
+	}	
+	
+	/**
+	 * Get last error
+	 * 
+	 * @return string
+	 */
+	public function getErrors()
+	{
+		return $this->_errors;
+	}
+	
+	/**
+	 * Adds the error message to the error container.
+	 * @access protected
+	 * @return void
+	 */
+	public function setError($msg)
+	{
+		$this->_errors[] = JText::_($msg);
+		return parent::SetError($msg);
 	}
 }

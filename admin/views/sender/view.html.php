@@ -10,13 +10,16 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+
+JLoader::import('helpers.mail', JPATH_COMPONENT_ADMINISTRATOR, '');
+
 // import Joomla view library
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
 jimport('joomla.application.component.view');
 jimport('joomla.html.pagination');
 jimport('migur.library.toolbar');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 
 /**
  * Class of the  view. Displays the model data.
@@ -80,6 +83,8 @@ class NewsletterViewSender extends MigurView
 				'listOrder' => $modelLists->getState('list.ordering'),
 				'listDirn' => $modelLists->getState('list.direction')
 		);
+		
+		JavascriptHelper::addStringVar('defaultMailbox', MailHelper::getDefaultMailbox('idOnly'));
 
 		$modelLists->setState('limit', $limit);
 

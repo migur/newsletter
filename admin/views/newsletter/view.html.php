@@ -22,7 +22,7 @@ JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.download', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHTML::_('behavior.modal');
@@ -51,7 +51,6 @@ class NewsletterViewNewsletter extends MigurView
 	public function display($tpl = null)
 	{
 		//TODO: Need to move css/js to SetDocument
-
 		JHTML::stylesheet('media/com_newsletter/css/admin.css');
 		JHTML::stylesheet('media/com_newsletter/css/newsletter.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
@@ -72,7 +71,6 @@ class NewsletterViewNewsletter extends MigurView
 
 
 		//TODO: Bulk-code. Need to refactor.
-		JavascriptHelper::addStringVar('siteRoot', JUri::root());
 
 		JavascriptHelper::addObject(
 				'comParams',
@@ -80,12 +78,6 @@ class NewsletterViewNewsletter extends MigurView
 		);
 
 		$nId = JRequest::getInt('newsletter_id');
-
-		JavascriptHelper::addObject(
-				'Migur.storage.newsletter',
-				NewsletterHelper::get($nId),
-				'global'
-		);
 
 		$script = $this->get('Script');
 		$this->script = $script;
@@ -95,24 +87,27 @@ class NewsletterViewNewsletter extends MigurView
 		$this->form = $this->get('Form', 'newsletter');
 		$this->newsletter = $this->get('Item');
 
-
-		// get the SmtpProfiles data
-		$this->setModel(
-			JModel::getInstance('smtpprofiles', 'NewsletterModel')
+		$smtpModel = JModel::getInstance('SMtpProfile', 'NewsletterModelEntity'); 
+		
+		// Let's add J! profile
+		$smtpp = $smtpModel->loadJoomla();
+		JavascriptHelper::addObject(
+				'joomlaDe',
+				JComponentHelper::getParams('com_newsletter')->toArray() //array('autosaver' => array('on' => true))
 		);
-		$this->smtpprofiles = $this->get('Items', 'smtpprofiles');
-
+		
+		// get the SmtpProfiles data
+		$smtpprofilesManager = JModel::getInstance('smtpprofiles', 'NewsletterModel');
+		$this->assignRef('smtpprofiles', $smtpprofilesManager->getAllItems('withDefault'));
 
 		// get all the Extensions
 		$this->modules = MigurModuleHelper::getSupported(array('withoutInfo'=>true));
-		//var_dump($this->modules); die();
-		$this->plugins = MigurPluginHelper::getSupported(array('withoutInfo'=>true));
-
+		$this->plugins = MigurPluginHelper::getSupported(array('withoutInfo'=>true), 'com_newsletter.newsletter');
 
 		// get the Extensions used in this newsletter
 		$model = JModel::getInstance('newsletterext', 'NewsletterModel');
 		$this->usedExts = $model->getExtensionsBy($nId);
-		//var_dump($this->usedExts); die();
+		
 		// Get a list of all templates
 		$this->setModel(
 			JModel::getInstance('templates', 'NewsletterModel')
@@ -173,7 +168,6 @@ class NewsletterViewNewsletter extends MigurView
 		$this->attItemslistOrder = "asc";
 
 		// getting of an xml from
-		//var_dump($this->templates->items); die();
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
 			JError::raiseError(500, implode("\n", $errors));
@@ -192,13 +186,12 @@ class NewsletterViewNewsletter extends MigurView
             (object)array(
                 'htmlTemplate' => (object)array(
                     'template' => (object)array(
-                        'id' => $this->htmlTemplateId
-                    ),
-                    'extensions' => (array)$this->usedExts
-                ),
+                        'id' => $this->htmlTemplateId),
+                    'extensions' => (array)$this->usedExts),
                 'templates' => (array)$this->templates->items,
                 'modules' => (array)$this->modules,
-                'plugins' => (array)$this->plugins
+                'plugins' => (array)$this->plugins,
+				'newsletter' => NewsletterHelper::get($nId)
             )
 			
         );

@@ -20,7 +20,7 @@ body{width:100% !important;} .ReadMsgBody{width:100%;} .ExternalClass{width:100%
 body{-webkit-text-size-adjust:none; -ms-text-size-adjust:none;}
 body{margin:0; padding:0;}
 
-img{height:auto; line-height:100%; outline:none; text-decoration:none;}
+img{line-height:100%; outline:none; text-decoration:none;}
 
 #backgroundTable{height:100% !important; margin:0; padding:0; width:100% !important;}
 
@@ -38,14 +38,17 @@ h1 a:active, h2 a:active,  h3 a:active, h4 a:active, h5 a:active, h6 a:active {
 h1 a:visited, h2 a:visited,  h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
     color: purple !important; }
 
-table td { border-collapse:collapse; }
+table td { 
+	border-collapse:collapse; 
+	vertical-align: top;
+}
 
 .yshortcuts, .yshortcuts a, .yshortcuts a:link,.yshortcuts a:visited, .yshortcuts a:hover, .yshortcuts a span { color: black; text-decoration: none !important; border-bottom: none !important; background: none !important;}
 </style>
 
-<table background="#000000" width="600px">
+<table bgcolor="[table_background]" width="600px" style="color:[text_color]">
     <tr>
-        <td colspan="3">
+        <td valign="top" colspan="3">
             <img
                 src="[image_top.src]"
                 width="[image_top.width]"
@@ -54,28 +57,28 @@ table td { border-collapse:collapse; }
         </td>
     </tr>
     <tr>
-        <td colspan="3">
+        <td valign="top" colspan="3">
             <position type="modules" name="header_module_position" alt="Header module position" />
         </td>
     </tr>
     <tr>
-        <td width="[width_column1]" height="[height_column1]">
+        <td valign="top" width="[width_column1]" height="[height_column1]">
             <position type="modules" name="col1_module_position" alt="Column 1 module position" />
         </td>
-        <td width="[width_column2]" height="[height_column2]">
+        <td valign="top" width="[width_column2]" height="[height_column2]">
             <position type="modules" name="col2_module_position" alt="Column 2 module position" />
         </td>
-        <td>
+        <td valign="top" width="[width_column3]" height="[height_column3]">
             <position type="modules" name="col3_module_position" alt="Column 3 module position" />
         </td>
     </tr>
     <tr>
-        <td colspan="3">
+        <td valign="top" colspan="3">
             <position type="modules" name="footer_module_position" alt="Footer module position" />
         </td>
     </tr>
     <tr>
-        <td colspan="3">
+        <td valign="top" colspan="3">
             <img
                 src="[image_bottom.src]"
                 width="[image_bottom.width]"
@@ -83,7 +86,7 @@ table td { border-collapse:collapse; }
                 alt="[image_bottom.alt]" />
         </td>
     </tr>
-    <tr><td colspan="3" align="center">To unsubscribe or change subscriber options visit [unsubscription link]<tr>
+    <tr><td valign="top" colspan="3" align="center">To unsubscribe or change subscriber options visit [unsubscription link]<tr>
 </table>
 ]]>
     </template>

@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // import Joomla view library
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 jimport('joomla.application.component.view');
 jimport('migur.library.toolbar');
@@ -64,6 +64,9 @@ class NewsletterViewTemplates extends MigurView
 
 		$modelTemps = $this->getModel('templates');
 
+		$pagination = $modelTemps->getPagination();
+
+		
 		$temps = (object) array(
 				'items' => $modelTemps->getItems(),
 				'state' => $modelTemps->getState(),
@@ -71,7 +74,7 @@ class NewsletterViewTemplates extends MigurView
 				'listDirn' => $modelTemps->getState('list.direction')
 		);
 		$this->assignRef('templates', $temps);
-
+		$this->assignRef('pagination', $pagination);
 
 		parent::display($tpl);
 	}
@@ -87,9 +90,8 @@ class NewsletterViewTemplates extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_TEMPLATES_TITLE'), 'article.png');
 
 		$bar = JToolBar::getInstance('templates');
-		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=template&tmpl=component', 890, 690, 0, 0);
-		$bar->appendButton('Standard', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
-		//$bar->appendButton('Standard', 'copy', 'COM_NEWSLETTER_COPY', 'templates.copy', false);
+		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=template&tmpl=component', 880, 680, 0, 0);
+		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
 
 		// Load the submenu.

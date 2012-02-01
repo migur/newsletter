@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: config.xml 19439 2010-11-10 15:42:23Z chdemko $ -->
 <config>
+	
 	<fieldset name="general"
 		label="COM_NEWSLETTER_CONFIG_GENERAL"
 		description="COM_NEWSLETTER_CONFIG_GENERAL">
@@ -32,22 +33,76 @@
         <field
             name="general_smtp_default"
             type="smtpprofiles"
+			scope="withoutDef"
             default=""
             label="COM_NEWSLETTER_SMTP_DEFAULT"
             description="COM_NEWSLETTER_SMTP_DEFAULT">
         </field>
-
+        <field
+            name="newsletter_smtp_edit"
+            type="button"
+			class="button"
+            label=" "
+            description="COM_NEWSLETTER_EDIT"
+			required="false"
+			value="COM_NEWSLETTER_EDIT">
+        </field>
         <field
             name="newsletter_smtp_create"
             type="button"
-                        class="button"
+			class="button"
             label=" "
             description="COM_NEWSLETTER_CREATE_SMTP_PROFILE"
-                        required="false"
-                        value="COM_NEWSLETTER_CREATE_SMTP_PROFILE">
+			required="false"
+			value="COM_NEWSLETTER_CREATE_SMTP_PROFILE">
+        </field>
+        <field
+            name="newsletter_smtp_delete"
+            type="button"
+			class="button"
+            label=" "
+            description="COM_NEWSLETTER_DELETE_SMTP_PROFILE"
+			required="false"
+			value="COM_NEWSLETTER_DELETE_SMTP_PROFILE">
         </field>
 
         <field
+            name="general_mailbox_default"
+            type="mailboxprofiles"
+            default=""
+			scope="withoutDef"
+            label="COM_NEWSLETTER_MAILBOX_DEFAULT"
+            description="COM_NEWSLETTER_MAILBOX_DEFAULT">
+        </field>
+        <field
+            name="newsletter_mailbox_edit"
+            type="button"
+			class="button"
+            label=" "
+            description="COM_NEWSLETTER_EDIT"
+			required="false"
+			value="COM_NEWSLETTER_EDIT">
+        </field>
+        <field
+            name="newsletter_mailbox_create"
+            type="button"
+			class="button"
+            label=" "
+            description="COM_NEWSLETTER_CREATE_MAILBOX_PROFILE"
+			required="false"
+			value="COM_NEWSLETTER_CREATE_MAILBOX_PROFILE">
+        </field>
+        <field
+            name="newsletter_mailbox_delete"
+            type="button"
+			class="button"
+            label=" "
+            description="COM_NEWSLETTER_DELETE_MAILBOX_PROFILE"
+			required="false"
+			value="COM_NEWSLETTER_DELETE_MAILBOX_PROFILE">
+        </field>
+		
+		<field
             name="autosaver_enabled"
             type="radio"
             default="0"
@@ -59,7 +114,35 @@
                 value="0">JNO</option>
         </field>
 
-    </fieldset>
+		<field
+            name="users_autoconfirm"
+            type="radio"
+            default="0"
+            label="COM_NEWSLETTER_AUTOCONFIRM_USERS"
+            description="COM_NEWSLETTER_AUTOCONFIRM_USERS">
+            <option
+                value="1">JYES</option>
+            <option
+                value="0">JNO</option>
+        </field>
+		
+		<field
+            name="confirm_mail_subject"
+            type="text"
+            default=""
+            label="COM_NEWSLETTER_SUBJECT_OF_CONFIRMATION_LETTER"
+            description="COM_NEWSLETTER_SUBJECT_OF_CONFIRMATION_LETTER">
+        </field>
+
+		<field
+            name="confirm_mail_body"
+            type="textarea"
+            default=""
+            label="COM_NEWSLETTER_BODY_OF_CONFIRMATION_LETTER"
+            description="COM_NEWSLETTER_BODY_OF_CONFIRMATION_LETTER">
+        </field>
+	
+	</fieldset>
 
     <fieldset name="newsletters"
     label="COM_NEWSLETTER_CONFIG"
@@ -116,6 +199,16 @@
         </field>
 
         <field
+            name="mailer_cron_bounced_last_execution_time"
+            type="text"
+            readonly="true"
+            default="0"
+            size="30"
+            label="COM_NEWSLETTER_CONFIG_CRON_BOUNCED_LAST"
+            description="COM_NEWSLETTER_CONFIG_CRON_BOUNCED_LAST">
+        </field>
+
+		<field
             name="mailer_cron_is_executed"
             type="mapper"
                         readonly="true"
@@ -129,14 +222,27 @@
         </field>
 
         <field
+            name="mailer_cron_bounced_is_executed"
+            type="mapper"
+                        readonly="true"
+            default="0"
+            label="COM_NEWSLETTER_CONFIG_CRON_BOUNCED_EXECUTED"
+            description="COM_NEWSLETTER_CONFIG_CRON_EXECUTED">
+            <option
+                value="1">JYES</option>
+            <option
+                value="0">JNO</option>
+        </field>
+
+        <field
             name="subscription_newsletter_id"
             type="newsletters"
             scope="static"
-            default="0"
+            default="1"
             label="COM_NEWSLETTER_CONFIG_SUBSCRIPTION_NEWSLETTER"
             description="COM_NEWSLETTER_CONFIG_SUBSCRIPTION_NEWSLETTER">
         </field>
-    </fieldset>
+	</fieldset>
 
 
     <fieldset name="advanced"
@@ -188,5 +294,28 @@
             size="50"
             label="COM_NEWSLETTER_FACEBOOK_SECRET">
         </field>
+        <field
+            name="debug"
+            type="radio"
+            default="0"
+            label="COM_NEWSLETTER_DEBUG_COMPONENT">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
     </fieldset>
+
+	<fieldset 
+		name="permissions" 
+		label="JCONFIG_PERMISSIONS_LABEL" 
+		description="JCONFIG_PERMISSIONS_DESC"
+	>
+		<field 
+			name="rules" 
+			type="rules" 
+			label="JCONFIG_PERMISSIONS_LABEL" 
+			filter="rules" 
+			component="com_newsletter" 
+			section="component" />
+	</fieldset>	
+	
 </config>

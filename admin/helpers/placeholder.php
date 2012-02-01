@@ -18,13 +18,19 @@ class PlaceholderHelper
 
 	public static $_instances = array(array());
 
-
 	/*
 	 * The container for placeholders
 	 */
 	public static $placeholders = array();
-	protected static $_initialized = false;
+	
+	/*
+	 * Tags to enclose placeholders
+	 */
+	public static $openedTag = '[';
+	public static $closedTag = ']';
 
+	protected static $_initialized = false;
+	
 	/**
 	 * Get the instance of a placeholder
 	 * If the class for placeholder is not founded
@@ -95,7 +101,6 @@ class PlaceholderHelper
 			$data = self::getPlaceholder($name, $default);
 		}
 
-		//var_dump($data);// die();
 		return $pholder->render($data, array('name'=>$name));
 	}
 
@@ -118,16 +123,18 @@ class PlaceholderHelper
 			self::$placeholders['image_top.alt'] = array('data' => null, 'default' => 'The top image');
 			self::$placeholders['image_bottom.alt'] = array('data' => null, 'default' => 'The bottom image');
 			self::$placeholders['sitename'] = array('data' => null, 'default' => JFactory::getConfig()->get('sitename'));
+			self::$placeholders['table_background'] = array('data' => null, 'default' => '#FFFFFF');
+			self::$placeholders['text_color'] = array('data' => null, 'default' => '#000000');
 
 			self::$placeholders['unsubscription link'] = array(
 				'data' => null,
-				'default' => JUri::getInstance()->toString(array('host', 'scheme')) . JRoute::_('index.php?option=com_newsletter&task=subscribe.showunsubscribe', false) . '&uid=[subscription key]',
+				'default' => JUri::getInstance()->toString(array('host', 'scheme')) . JRoute::_('index.php?option=com_newsletter&task=subscribe.showunsubscribe', false) . '&uid=[subscription key]&nid=[newsletter id]',
 				'class' => 'link'
 			);
 
 			self::$placeholders['confirmation link'] = array(
 				'data' => null,
-				'default' => JRoute::_('index.php?option=com_newsletter&task=subscribe.confirm', false) . '&id=[subscription key]',
+				'default' => JUri::getInstance()->toString(array('host', 'scheme')) . JRoute::_('index.php?option=com_newsletter&task=subscribe.confirm', false) . '&id=[subscription key]',
 				'class' => 'link'
 			);
 
@@ -202,7 +209,6 @@ class PlaceholderHelper
 	 */
 	public static function setPlaceholders($array, $reset = false)
 	{
-
 		self::_init($reset);
 
 		foreach ($array as $name => $data) {
@@ -211,5 +217,17 @@ class PlaceholderHelper
 			}
 		}
 	}
+	
+	public static function fetchFromString($string)
+	{
+		$preg = "/\\".self::$openedTag."([^\\".self::$closedTag."]+)\\".self::$closedTag."/";
+		
+		preg_match_all($preg, $string, $matches);
+		
+		if (empty($matches[1])) {
+			return array();
+		}	
 
+		return array_values(array_unique($matches[1]));
+	}
 }

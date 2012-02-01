@@ -1,4 +1,4 @@
-<form id="form-lists" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=subscribers&form=lists');?>" method="post" name="listsForm">
+<form id="form-lists" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=subscribers&form=lists', false);?>" method="post" name="listsForm">
     <fieldset>
         <legend><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></legend>
     	<fieldset class="filter-bar">

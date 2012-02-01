@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 // import view library
 JLoader::import('helpers.statistics', JPATH_COMPONENT_ADMINISTRATOR, '');
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 jimport('migur.library.toolbar');
@@ -74,22 +74,29 @@ class NewsletterViewList extends MigurView
 			JavaScriptHelper::addObject('uploadData', $data);
 		}
 
-		$modelSubs = $this->getModel('subscribers');
-		$modelSubs->setUnsubscribedQuery(array(
-			'list_id' => JRequest::getInt('list_id')
-		));
+		$modelSubs = new NewsletterModelSubscribers();
+		$modelSubs->setState('list.limit', 10);
+		
+		if (!empty($listId)) {
+			$this->subs = $modelSubs->getSubscribersByList(array(
+				'list_id' => JRequest::getInt('list_id')
+			));
 
+			$items = $modelSubs->getUnsubscribedList(array(
+				'list_id' => JRequest::getInt('list_id')
+			));
+		} else {
+			$items = array();
+			$this->subs = array();
+		}
+		
 		$ss = (object) array(
-				'items' => $modelSubs->getItems(),
+				'items' => $items,
 				'state' => $modelSubs->getState(),
 				'listOrder' => $modelSubs->getState('list.unsubscribed.ordering'),
 				'listDirn' => $modelSubs->getState('list.unsubscribed.direction')
 		);
 		$this->assignRef('subscribers', $ss);
-
-		$modelSubs->setState('filter.list', JRequest::getInt('list_id'));
-		$modelSubs->setDefaultQuery();
-		$this->subs = $modelSubs->getItems();
 
 
 		// get data for "excluded"
@@ -179,8 +186,9 @@ class NewsletterViewList extends MigurView
 	protected function addToolbar()
 	{
 		$bar = JToolBar::getInstance('multitab-toolbar');
+		$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'list.apply', false);
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'list.save', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CLOSE', false, false);
+		$bar->appendButton('Link', 'cancel', 'JTOOLBAR_CLOSE', 'index.php?option=com_newsletter&view=close&tmpl=component', false);
 
 		$bar = MigurToolBar::getInstance('import-toolbar');
 		$bar->appendButton('Link', 'export', 'COM_NEWSLETTER_IMPORT_FROM_FILE', '#');
@@ -227,6 +235,7 @@ class NewsletterViewList extends MigurView
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.bar.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-line.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-pie.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/message.js');
 
 		$document->addScriptDeclaration('var urlRoot = "' . JURI::root(true) . '";');
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
@@ -250,7 +259,7 @@ class NewsletterViewList extends MigurView
 		JavascriptHelper::addObject('statTotalSent', $res);
 
 
-		$data = StatisticsHelper::openedCount();
+		$data = StatisticsHelper::openedActionsCount();
 		$res = array(
 			'other' => empty($data['other']) ? 0 : $data['other'],
 			'opened' => empty($data['opened']) ? 0 : $data['opened'],

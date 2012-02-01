@@ -30,6 +30,15 @@ iframe {
 #tabs {
 /*    width: 850px;*/
 /*    height: 370px;*/
+	background-color: #FFFFFF;
+	border: 1px solid #CCCCCC;
+    margin-bottom: 10px;
+    text-align: left;
+	border-style: solid;
+}
+
+#tabs-legend {
+    margin: -15px 0 15px -10px;
 }
 
 #tabs-sub-container
@@ -459,5 +468,9 @@ textarea.focused {
 }
 
 #html-area img {
-    width: 100% !important;
+/*    width: 100% !important;*/
+}
+
+#send-preview-preloader {
+	float:left;
 }

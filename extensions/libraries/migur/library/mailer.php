@@ -17,6 +17,7 @@ jimport('migur.library.mailer.sender');
 JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.mail', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.download', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.history', JPATH_COMPONENT_ADMINISTRATOR, '');
 jimport('joomla.error.log');
 
@@ -52,11 +53,13 @@ class MigurMailer extends JObject
 			return false;
 		}
 
-		$document = MigurMailerDocument::getInstance($params['type'], $params);
+		// Create ALWAYS NEW instance
+		$document = MigurMailerDocument::factory($params['type'], $params);
 		//$this->triggerEvent('onMailerBeforeRender');
 		$data = $document->render(false, $params);
 		//$this->triggerEvent('onMailerAfterRender');
-		//var_dump($data);// die();
+		
+		// Finish with it. Destroy.
 		unset($document);
 
 		return $data;
@@ -80,16 +83,39 @@ class MigurMailer extends JObject
 			return false;
 		}
 
-		$document = MigurMailerDocument::getInstance($params['type'], $params);
+		$document = MigurMailerDocument::factory($params['type'], $params);
 		//$this->triggerEvent('onMailerBeforeRender');
 		$data = $document->render(false, $params);
 		//$this->triggerEvent('onMailerAfterRender');
-		//var_dump($data);// die();
 		unset($document);
 
 		return $data;
 	}
 
+	
+	/**
+	 * Renders subject. As a plain-type template. 
+	 * Available the same placeholders as for mail body.
+	 * 
+	 * @param   string Subject to render
+	 * 
+	 * @return	string
+	 * @since	1.0
+	 */
+	public function renderSubject($subject)
+	{
+		$params = array(
+			'template' => (object)array(
+				'content' => $subject),
+			'tracking' => false);
+		
+		// Create ALWAYS NEW instance
+		$document = MigurMailerDocument::factory('plain', $params);
+		//$this->triggerEvent('onMailerBeforeRender');
+		return $document->render();
+	}
+	
+	
 	/**
 	 * Get parse only Template standard or custom.
 	 *
@@ -110,9 +136,12 @@ class MigurMailer extends JObject
 		/* if we get int then this is the custom template (schematic mode),
 		 * otherwise set raw mode
 		 */
-		$params['renderMode'] = ($params['t_style_id'] == strval(intval($params['t_style_id']))) ? 'schematic' : 'raw';
-		//var_dump($params, intval($params['t_style_id'])); die();
-		$document = MigurMailerDocument::getInstance($params['type'], $params);
+		//$params['renderMode'] = ($params['t_style_id'] == strval(intval($params['t_style_id']))) ? 'schematic' : 'raw';
+		// No more RAW mode. It displayed not correct
+		if (empty($params['renderMode'])) {
+			$params['renderMode'] = 'schematic';
+		}	
+		$document = MigurMailerDocument::factory($params['type'], $params);
 		//$this->triggerEvent('onMailerBeforeRender');
 		$document->render(false, $params);
 		$tpl = $document->getTemplate();
@@ -172,7 +201,9 @@ class MigurMailer extends JObject
 				$res = false;
 				break;
 			}
-
+			
+			PlaceholderHelper::setPlaceholder('newsletter id', $letter->newsletter_id);
+			
 			// render the content of letter for each user
 			$letter->content = $this->render(array(
 					'type' => $type,
@@ -180,31 +211,59 @@ class MigurMailer extends JObject
 					'tracking' => true
 				));
 
+			$letter->subject = $this->renderSubject($letter->subject);
+			
 			if ($letter->content === false) {
 				$res = false;
 				break;
 			}
 
-			//Add custom headers
-			$sender->AddCustomHeader('Email-Name:' . $letter->name);
-			$sender->AddCustomHeader('Subscriber-ID:' . $item->subscriber_id);
+			if (!empty($letter->name)) {
+				$sender->AddCustomHeader('Email-Name:' . $letter->name);
+			}	
+			
+			if (!empty($item->subscriber_id)) {
+				$sender->AddCustomHeader('Subscriber-ID:' . $item->subscriber_id);
+			}	
 
 			// send the unique letter to each recipient
-			$bounced = $sender->send(array(
-					'letter' => $letter,
-					'attach' => $atts,
-					'emails' => array($item),
-					'smtpProfile' => $letter->smtp_profile,
-					'type' => $type,
-					'tracking' => $params['tracking']
-				));
+			try {
+				$bounced = $sender->send(array(
+						'letter' => $letter,
+						'attach' => $atts,
+						'emails' => array($item),
+						'smtpProfile' => $letter->smtp_profile,
+						'type' => $type,
+						'tracking' => $params['tracking']
+					));
 
-			// If sending failed
-			if (!$bounced) {
-
-				$this->setError(JError::getError('unset')->get('message'));
+				// If sending failed
+				if(!$bounced) {
+					
+					// Copy all errors into here
+					foreach($sender->getErrors() as $item) {
+						$this->setError($item);
+					}	
+					
+					throw new Exception();
+				}
+				
+			} catch(Exception $e) {
+				
+				// Check if there JException occured
+				$error = JError::getError('unset');
+				if (!empty($error)){
+					$this->setError($error->get('message'));
+				}
+				
+				// Check if exeption occured
+				$msg = $e->getMessage();
+				if (!empty($msg)) {
+					$this->setError($msg);
+				}
+				
 				$res = false;
-			}
+			}	
 		}
 
 		SubscriberHelper::restoreRealUser();
@@ -215,40 +274,50 @@ class MigurMailer extends JObject
 	 * The main send of one letter to one or mode recipients.
 	 * The mail content generates for each user
 	 *
-	 * @param  array $params the letter, subscriber, type
+	 * @param  array $params newsletter_id, subscriber(object), type ('html'|'plain'), tracking(bool)
 	 *
 	 * @return boolean
 	 * @since  1.0
 	 */
 	public function send($params = null)
 	{
+		if (empty($params['tracking'])) {
+			$params['tracking'] = false;
+		}
+		
 		// load letter to send....
 		$letter = MailHelper::loadLetter($params['newsletter_id']);
 		if (empty($letter->newsletter_id)) {
-			$this->setError('Lading letter error or newsletter_id is not defined');
-			return false;
+			$msg = 'Lading letter error or newsletter_id is not defined';
+			$this->setError($msg);
+			throw new Exception($msg);
 		}
 
-		$sender = new MigurMailerSender();
-
-		// Result object
-		$res = new StdClass();
-		$res->state = false;
+		// Retrieve the email for bounced letters
+		$profiles = NewsletterHelper::getMailProfiles($params['newsletter_id']);
+		
+		// Use the phpMailer exceptions
+		$sender = new MigurMailerSender(array('exceptions'=>true));
 
 		$subscriber = $params['subscriber'];
 		$type = MailHelper::filterType(!empty($params['type']) ? $params['type'] : null);
 		if (!$type) {
-			$res->error = 'The type "' . $type . '" is not supported';
-			return $res;
+			$msg = 'The type "' . $type . '" is not supported';
+			$this->setError($msg);
+			throw new Exception ($msg);
 		}
+
 
 		// emulate user environment
 		SubscriberHelper::saveRealUser();
-
+		
 		if (!SubscriberHelper::emulateUser(array('email' => $subscriber->email))) {
-			$res->error = 'The user ' . $subscriber->email . ' is absent';
-			return $res;
+			$msg = 'The user ' . $subscriber->email . ' is absent';
+			$this->setError($msg);
+			throw new Exception ($msg);
 		}
+
+		PlaceholderHelper::setPlaceholder('newsletter id', $letter->newsletter_id);
 
 		// render the content of letter for each user
 		$letter->content = $this->render(array(
@@ -256,39 +325,69 @@ class MigurMailer extends JObject
 				'newsletter_id' => $letter->newsletter_id,
 				'tracking' => true
 			));
+		
+		$letter->subject = $this->renderSubject($letter->subject);
+
+		SubscriberHelper::restoreRealUser();
+
+		// Result object
+		$res = new StdClass();
+		$res->state = false;
+		$res->errors = array();
+		$res->content = $letter->content;
 
 		if ($letter->content === false) {
 			return $res;
 		}
+		
+		// Add custom headers
 
-		//Add custom headers
-		$sender->AddCustomHeader('Email-Name', $letter->name);
-		$sender->AddCustomHeader('Subscriber-ID', $subscriber->subscriber_id);
+		// Set the email to bounce
+		if (!empty($profiles['mailbox']['username'])) {
+			$sender->AddCustomHeader('Return-Path:' . $profiles['mailbox']['username']);
+			$sender->AddCustomHeader('Return-Receipt-To:' . $profiles['mailbox']['username']);
+			$sender->AddCustomHeader('Errors-To:' . $profiles['mailbox']['username']);
+		}	
+		
+		// Add info about newsleerter and subscriber
+		$sender->AddCustomHeader(MailHelper::APPLICATION_HEADER);
+		$sender->AddCustomHeader(MailHelper::EMAIL_NAME_HEADER    . ':' . $letter->name);
+		$sender->AddCustomHeader(MailHelper::NEWSLETTER_ID_HEADER . ':' . $params['newsletter_id']);
+		$sender->AddCustomHeader(MailHelper::SUBSCRIBER_ID_HEADER . ':' . $subscriber->subscriber_id);
 		
 		// Get attachments
 		$atts = DownloadHelper::getByNewsletterId($params['newsletter_id']);
 		
-		// send the unique letter to each recipient
-		$sendRes = $sender->send(array(
-				'letter' => $letter,
-				'attach' => $atts,
-				'emails' => array($subscriber),
-				'smtpProfile' => $letter->smtp_profile,
-				'type' => $type,
-				'tracking' => $params['tracking']
-			));
-
-		// If sending failed
-		if (!$sendRes) {
-			$res->error = JError::getError('unset')->get('message');
+		try {
+			// send the unique letter to each recipient
+			$sendRes = $sender->send(array(
+					'letter' => $letter,
+					'attach' => $atts,
+					'emails' => array($subscriber),
+					'smtpProfile' => $letter->smtp_profile,
+					'type' => $type,
+					'tracking' => $params['tracking']
+				));
+			
+			// If sending failed
+			if (!$sendRes && !empty($sender->ErrorInfo)) {
+				throw new Exception ($sender->ErrorInfo);
+			}
+			
+		} catch (Exception $e) {
+			
+			$error = JError::getError('unset');
+			if (!empty($error)){
+				$msg = $error->get('message');
+				$this->setError($msg);
+				$res->errors[] = $msg;
+			}
+			$res->errors[] = $e->getMessage();
+			NewsletterHelper::logMessage('Mailer.Sending error:'.$e->getMessage(), 'mailer/');
 			return $res;
-		}
-
-		SubscriberHelper::restoreRealUser();
-
-		$res->content = $letter->content;
+		}	
+		
 		$res->state = true;
 		return $res;
 	}
-
 }

@@ -7,7 +7,7 @@ defined('_JEXEC') or die;
     <tr>
         <td width="45%" style="vertical-align: top;">
 
-            <form id="form-templates" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=templates&form=templates');?>" method="post" name="adminForm" >
+            <form id="form-templates" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=templates&form=templates');?>" method="post" name="templatesForm" >
                 <fieldset>
                 <legend><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></legend>
 
@@ -30,15 +30,16 @@ defined('_JEXEC') or die;
                                                 <input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
                                         </th>
                                         <th class="left">
-                                                <?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_TEMPLATE', 'a.title', $this->templates->listDirn, $this->templates->listOrder, null, null, 'adminForm'); ?>
+                                                <?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_TEMPLATE', 'a.title', $this->templates->listDirn, $this->templates->listOrder, null, null, 'templatesForm'); ?>
                                         </th>
                                 </tr>
                         </thead>
                         <tfoot>
-                                <tr>
-                                        <td colspan="2">
-                                        </td>
-                                </tr>
+							<tr>
+								<td colspan="2">
+									<?php echo $this->pagination->getListFooter(); ?>
+								</td>
+							</tr>
                         </tfoot>
                         <tbody>
                         <?php
@@ -48,7 +49,7 @@ defined('_JEXEC') or die;
                                         <td class="center">
                                             <?php
                                                 $idx = $item->t_style_id;
-                                                echo JHtml::_('multigrid.id', $i, $idx, false, 'cid', 'adminForm');
+                                                echo JHtml::_('multigrid.id', $i, $idx, false, 'cid', 'templatesForm');
                                             ?>
                                         </td>
                                         <td>
@@ -95,5 +96,3 @@ defined('_JEXEC') or die;
         </td>
     </tr>
 </table>
-
-<?php //var_dump($_SESSION); ?>

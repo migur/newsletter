@@ -17,7 +17,7 @@ jimport('migur.library.toolbar');
 jimport('joomla.utilities.simplexml');
 jimport('joomla.html.html.sliders');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.combobox');
@@ -45,7 +45,6 @@ class NewsletterViewExtension extends MigurView
 		JHTML::stylesheet('media/com_newsletter/css/extension.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
 		JHTML::script(JURI::root() . "/administrator/components/com_newsletter/views/extension/submitbutton.js");
-		JHTML::script(JURI::root() . "/administrator/components/com_newsletter/views/extension/extension.js");
 
 		$type        = JRequest::getString('type', '');
 		$native      = JRequest::getInt('native', null);
@@ -78,8 +77,6 @@ class NewsletterViewExtension extends MigurView
 		}
 
 		parent::display($tpl);
-
-		JavascriptHelper::addStringVar('siteRoot', JUri::root());
 	}
 
 }

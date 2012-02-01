@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // import Joomla view library
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 jimport('joomla.application.component.view');
 JLoader::import('helpers.statistics', JPATH_COMPONENT_ADMINISTRATOR, '');
@@ -55,6 +55,7 @@ class NewsletterViewStatistic extends MigurView
 		JHTML::script('media/com_newsletter/js/migur/js/g.bar.js');
 		JHTML::script('media/com_newsletter/js/migur/js/raphael-migur-line.js');
 		JHTML::script('media/com_newsletter/js/migur/js/raphael-migur-pie.js');
+		JHTML::script('administrator/components/com_newsletter/views/statistic/hlines.js');
 		JHTML::script('administrator/components/com_newsletter/views/statistic/statistic.js');
 
 
@@ -84,13 +85,11 @@ class NewsletterViewStatistic extends MigurView
 
 		$ids = (!empty($ids)) ? explode(',', $ids) : null;
 
-		//var_dump($ids); die();
-
 		$data = StatisticsHelper::totalSent($ids);
 		JavascriptHelper::addObject('statTotalSent', $data);
 
 
-		$data = StatisticsHelper::openedCount($ids);
+		$data = StatisticsHelper::openedActionsCount($ids);
 		JavascriptHelper::addObject('statOpenedCount', $data);
 
 
@@ -104,19 +103,20 @@ class NewsletterViewStatistic extends MigurView
 		$data = StatisticsHelper::totalClicks($ids);
 		JavascriptHelper::addObject('statTotalClicks', $data);
 
-		$theHour = 3600;
-		$theDay = $theHour * 24;
+		$previousDay = date('Y-m-d 00:00:00', strtotime("-1 day", time()));
+		$thisDay = date('Y-m-d 00:00:00');
 		
-		$previousDay = date('Y-m-d 00:00:00', time() - $theDay);
-		$fiewDaysBefore = date('Y-m-d 00:00:00', time() - $theDay * $days);
+		$daysIdentifier = ($days == 1)? "-1 day" : "-" . $days . " Days";
+		$fiewDaysBefore = date('Y-m-d 00:00:00', strtotime($daysIdentifier, time()));
 
-		$previousHour =  date('Y-m-d H:00:00', time() - $theHour);
-		$oneDayBefore = date('Y-m-d H:00:00', time() - $theDay);
-
+		$previousHour =  date('Y-m-d H:00:00', strtotime("-1 hour", time()));
+		$thisHour =  date('Y-m-d H:00:00');
+		$oneDayBefore = date('Y-m-d H:00:00', strtotime("-1 day", time()));
+		
 		JavascriptHelper::addObject('clicksPerDay',
 			StatisticsHelper::activityPerDay(
 				$fiewDaysBefore,
-				$previousDay,
+				$thisDay,
 				$ids,
 				NewsletterTableHistory::ACTION_CLICKED
 			)
@@ -125,7 +125,7 @@ class NewsletterViewStatistic extends MigurView
 		JavascriptHelper::addObject('viewsPerDay',
 			StatisticsHelper::activityPerDay(
 				$fiewDaysBefore,
-				$previousDay,
+				$thisDay,
 				$ids,
 				NewsletterTableHistory::ACTION_OPENED
 			)
@@ -134,7 +134,7 @@ class NewsletterViewStatistic extends MigurView
 		JavascriptHelper::addObject('clicksPerHour',
 			StatisticsHelper::activityPerHour(
 				$oneDayBefore,
-				$previousHour,
+				$thisHour,
 				$ids,
 				NewsletterTableHistory::ACTION_CLICKED
 			)
@@ -143,7 +143,7 @@ class NewsletterViewStatistic extends MigurView
 		JavascriptHelper::addObject('viewsPerHour',
 			StatisticsHelper::activityPerHour(
 				$oneDayBefore,
-				$previousHour,
+				$thisHour,
 				$ids,
 				NewsletterTableHistory::ACTION_OPENED
 			)

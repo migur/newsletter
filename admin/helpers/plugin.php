@@ -29,10 +29,11 @@ abstract class MigurPluginHelper
 	 * @return JObject - data
 	 * @since 1.0
 	 */
-	public static function getInfo($plugin, $native = false)
+	public static function getInfo($plugin, $native = false, $group = 'migur')
 	{
-		$root = (!$native) ? JPATH_COMPONENT_ADMINISTRATOR . DS . 'extensions' . DS . 'plugins' : JPATH_SITE . DS . 'plugins';
+		$root = (!$native) ? JPATH_COMPONENT_ADMINISTRATOR . DS . 'extensions' . DS . 'plugins' : JPATH_SITE . DS . 'plugins' . DS . $group;
 		$path = JPath::clean($root . DS . $plugin . DS . $plugin . '.xml');
+
 		if (file_exists($path)) {
 			$xml = simplexml_load_file($path);
 		} else {
@@ -45,7 +46,6 @@ abstract class MigurPluginHelper
 //				$xml->{$name} = JText::_($item);
 //			}
 //		}
-		//var_dump($path, $xml); die();
 		return $xml;
 	}
 
@@ -54,18 +54,26 @@ abstract class MigurPluginHelper
 	 * 
 	 * @return array - the list of supported modules 
 	 */
-	public function getSupported($params = array())
+	public function getSupported($params = array(), $namespace = '')
 	{
 		$extensions = array_merge(
 				self::getNativeSupported(),
 				self::getLocallySupported()
 		);
 
-		foreach ($extensions as &$item) {
+		for($i = 0; $i < count($extensions); $i++) {
 
+			$item = $extensions[$i];
 			// Add the info about module
+			$xml = self::getInfo($item->extension, $item->native);
+			
+			if (!self::namespaceCheckOccurence($namespace, (string)$xml->namespace)) {
+				unset($extensions[$i]);
+				continue;
+			}
+			
 			if (!isset($params['withoutInfo'])) {
-				$item->xml = self::getInfo($item->extension, $item->native);
+				$item->xml = $xml;
 			}
 
 			if (empty($item->params)) {
@@ -94,7 +102,7 @@ abstract class MigurPluginHelper
 		if (!empty($params['extension_id']) && !empty($params['native'])) {
 			JError::raiseError(E_ERROR, "The module " . $params['extension_id'] . " could not found in the list of supported modules (native = " . $params['native'] . ")");
 		}
-
+		
 		return $extensions;
 	}
 
@@ -114,13 +122,13 @@ abstract class MigurPluginHelper
 		// Select the required fields from the table.
 		$query->select(
 			'extension_id, title, extension, params, '
-			. $db->Quote(NewsletterTableExtension::TYPE_PLUGIN) . ' AS type, '
+			. $db->Quote(NewsletterTableNExtension::TYPE_PLUGIN) . ' AS type, '
 			. '\'0\' AS native'
 		);
 		$query->from('`#__newsletter_extensions` AS a');
 
 		// Filter by module
-		$query->where('a.type = ' . $db->Quote(NewsletterTableExtension::TYPE_PLUGIN));
+		$query->where('a.type = ' . $db->Quote(NewsletterTableNExtension::TYPE_PLUGIN));
 		$query->order('a.title ASC');
 
 		//echo nl2br(str_replace('#__','jos_',$query));
@@ -136,7 +144,24 @@ abstract class MigurPluginHelper
 	 */
 	public function getNativeSupported()
 	{
-		return array();
+		// Fetch it
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select(
+			"extension_id, `name` as title, element as extension, params, type, ".
+			"'1' AS native"
+		);
+		$query->from('`#__extensions` AS a');
+
+		// Filter by module
+		$query->where("a.type = 'plugin'");
+		$query->where("a.folder = 'migur'");
+		$query->order('a.name ASC');
+
+		//echo nl2br(str_replace('#__','jos_',$query));
+		return $db->setQuery($query)->loadObjectList();
 	}
 
 	/**
@@ -212,4 +237,56 @@ abstract class MigurPluginHelper
 		return null;
 	}
 
+/* Unused
+        public static function triggerBefore() {
+            
+            list($controller, $action) = explode(JRequest('task', ''));
+            
+            if (empty($controller)){
+                $controller = 'default';
+            }
+            
+            if (empty($action)){
+                $action = 'default';
+            }
+            
+            self::$controller = strtolower($controller);
+            self::$action = strtolower($action);
+
+            $app = JFactory::getApplication();
+            $app->triggerEvent('onMigurNewsletterBefore'.ucwords(self::$controller).ucwords(self::$action), array());
+            
+        }
+        
+        
+        public static function triggerAfter() {
+            
+            $app = JFactory::getApplication();
+            $app->triggerEvent('onMigurNewsletterAfter'.ucwords(self::$controller).ucwords(self::$action), array());
+        }
+ */
+	
+	public static function namespaceCheckOccurence($requestedNamespace = '', $extNamespace = '')
+	{
+		// If $requestedNamespace is empty then allow for all
+		if (empty($requestedNamespace)) {
+			return true;
+		}
+		// If extension does not has the namespace and 
+		// the requested is not empty then denie it
+		if (empty($extNamespace) && !empty($requestedNamespace)) {
+			return false;
+		}
+		
+		$req = explode('.', $requestedNamespace);
+		$ext = explode('.', $extNamespace);
+		
+		for($i=0; $i < count($req); $i++) {
+			if ($req[$i] != $ext[$i]) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 }

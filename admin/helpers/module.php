@@ -12,7 +12,7 @@ defined('JPATH_BASE') or die;
 
 // Import library dependencies
 jimport('joomla.application.module.helper');
-JLoader::import('tables.extension', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('tables.nextension', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
  * Module helper class
@@ -56,7 +56,6 @@ abstract class MigurModuleHelper extends JModuleHelper
 			}
 		}
 
-		//var_dump($path, $xml); die();
 		return $xml;
 	}
 
@@ -99,7 +98,6 @@ abstract class MigurModuleHelper extends JModuleHelper
 			$path = JPATH_SITE . '/modules/' . $module->module . '/' . $module->module . '.php';
 		}
 
-		//var_dump('MigurModuleHelper->renderModule():' . $path);
 		// Load the module
 		if (empty($module->user) && file_exists($path)) {
 			$lang = JFactory::getLanguage();
@@ -126,8 +124,6 @@ abstract class MigurModuleHelper extends JModuleHelper
 			} catch (Exception $e) {
 
 			}
-
-			//var_dump($module->content); die();
 
 			JFactory::$application = $app;
 		}
@@ -162,16 +158,13 @@ abstract class MigurModuleHelper extends JModuleHelper
 		foreach (explode(' ', $attribs['style']) as $style) {
 			$chromeMethod = 'modChrome_' . $style;
 
-			//var_dump($chromeMethod);// die();
 			// Apply chrome and render module
 			if (function_exists($chromeMethod)) {
 				$module->style = $attribs['style'];
 
 				ob_start();
 				$chromeMethod($module, $params, $attribs);
-				//var_dump($module->content);// die();
 				$module->content = ob_get_contents();
-				//var_dump($module->content);// die();
 				ob_end_clean();
 			}
 		}
@@ -189,14 +182,13 @@ abstract class MigurModuleHelper extends JModuleHelper
 	 */
 	protected static function &_load()
 	{
-		static $clean;
-		if (!empty($clean)) {
-			return $clean;
+		if (!empty(self::$clean)) {
+			return self::$clean;
 		}
 
 		if (self::$itemId < 1) {
-			$clean = array();
-			return $clean;
+			self::$clean = array();
+			return self::$clean;
 		}
 
 		$app = JFactory::getApplication();
@@ -238,11 +230,11 @@ abstract class MigurModuleHelper extends JModuleHelper
 
 		$modules = array_merge($modulesCom, $modulesNat);
 
-		$clean = array();
+		self::$clean = array();
 
 		if ($db->getErrorNum()) {
 			JError::raiseWarning(500, JText::sprintf('JLIB_APPLICATION_ERROR_MODULE_LOAD', $db->getErrorMsg()));
-			return $clean;
+			return self::$clean;
 		}
 
 		// Apply negative selections and eliminate duplicates
@@ -263,12 +255,11 @@ abstract class MigurModuleHelper extends JModuleHelper
 				$module->params = $module->params_default;
 			}
 
-			$clean[$module->id] = $module;
+			self::$clean[$module->id] = $module;
 		}
 		// Return to simple indexing that matches the query order.
-		$clean = array_values($clean);
-		//var_dump($clean); die();
-		return $clean;
+		self::$clean = array_values(self::$clean);
+		return self::$clean;
 	}
 
 	/**
@@ -281,11 +272,10 @@ abstract class MigurModuleHelper extends JModuleHelper
 	 */
 	public static function getModule($name, $title = null)
 	{
-		//var_dump($name); die();
 		$result = null;
 		$modules = self::_load();
 		$total = count($modules);
-		//var_dump($name, $modules); die();
+		
 		for ($i = 0; $i < $total; $i++) {
 			// Match the name of the module
 			if ($modules[$i]->name == $name) {
@@ -348,7 +338,6 @@ abstract class MigurModuleHelper extends JModuleHelper
 	 */
 	public static function getSupported($params = array())
 	{
-		//var_dump($params); die();
 		$extensions = array_merge(
 				self::getNativeSupported(),
 				self::getLocallySupported()
@@ -411,7 +400,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 		$query->from('`#__newsletter_extensions` AS a');
 
 		// Filter by module
-		$query->where('a.type = ' . $db->Quote(NewsletterTableExtension::TYPE_MODULE));
+		$query->where('a.type = ' . $db->Quote(NewsletterTableNExtension::TYPE_MODULE));
 		$query->order('a.title ASC');
 
 		//echo nl2br(str_replace('#__','jos_',$query));
@@ -433,7 +422,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 		$array = self::getNativeSupportedNames();
 
 		$sqlIn = "'" . implode('\',\'', $array) . "'";
-		//var_dump($sqlIn); die();
+		
 		// Fetch it
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -441,7 +430,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 		// Select the required fields from the table.
 		$query->select(
 			'extension_id, name as title, element as extension, params, '
-			. $db->Quote(NewsletterTableExtension::TYPE_MODULE) . ' AS type, '
+			. $db->Quote(NewsletterTableNExtension::TYPE_MODULE) . ' AS type, '
 			. '\'1\' AS native'
 		);
 		$query->from('`#__extensions` AS a');
@@ -476,7 +465,6 @@ abstract class MigurModuleHelper extends JModuleHelper
 			} else {
 				$item->desc = JText::_('COM_MODULES_NODESCRIPTION');
 			}
-			//var_dump($item); die();
 		}
 
 		return JArrayHelper::sortObjects($modules, 'title', 1, false);

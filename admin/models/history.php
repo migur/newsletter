@@ -113,7 +113,7 @@ class NewsletterModelHistory extends MigurModelList
 		$action = $this->getTable('history', 'newsletterTable')->getMappingFor('action');
 		$query->select("a.history_id, a.subscriber_id, a.list_id, a.newsletter_id, a.date, {$action}, a.text, n.name");
 		$query->from('#__newsletter_sub_history AS a');
-		$query->join('', '#__newsletter_newsletters AS n ON a.newsletter_id = n.newsletter_id');
+		$query->join('LEFT', '#__newsletter_newsletters AS n ON a.newsletter_id = n.newsletter_id');
 		//$query->join('LEFT', '#__newsletter_lists AS l ON a.list_id = l.list_id');
 
 
@@ -133,8 +133,12 @@ class NewsletterModelHistory extends MigurModelList
 		}
 		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
 
-		//echo nl2br(str_replace('#__','jos_',$query)); //die();
+		//echo nl2br(str_replace('#__','jos_',$query)); die();
 		return $query;
 	}
 
+	public function setBounced($sid, $nid, $bounceType)
+	{
+		return JTable::getInstance('History', 'NewsletterTable')->setBounced($sid, $nid, $bounceType);
+	}	
 }

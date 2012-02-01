@@ -1,0 +1,124 @@
+/**
+ * @version	   $Id:  $
+ * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
+ * @license	   GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+
+#am-targets span {
+    background-color: #D9EAF9;
+    border: 1px solid #C8D8F8;
+    border-radius: 8px 8px 8px 8px;
+    float: left;
+    margin: 3px 3px 3px 0;
+    overflow: hidden;
+    padding: 3px 5px;
+	display: block;
+}
+
+#series {
+	margin-bottom: 10px;
+}
+
+#series-list-container {
+	width: 100%;
+}
+
+#series-list-container td {
+	vertical-align: top;
+}
+
+#form-container {
+	margin: 10px 0 0 3px;
+	width: 570px;
+}
+
+#series-container, 
+#lists-container {
+	height:325px;
+	overflow: auto;
+}
+
+#series-container {
+	padding-right: 5px;
+}
+
+#series-container .item {
+    background-color: #D9EAF9;
+    border: 1px solid #C8D8F8;
+    border-radius: 8px 8px 8px 8px;
+    margin: 3px auto;
+    overflow: hidden;
+    padding: 3px 5px;
+	position: relative; 
+	max-width: 280px;
+}
+
+#series-container .item-processed {
+    background-color: #D9F9EA;
+    border: 1px solid #C8F8D8;
+    border-radius: 8px 8px 8px 8px;
+    margin: 3px auto;
+    overflow: hidden;
+    padding: 3px 5px;
+	position: relative; 
+	max-width: 280px;
+}
+
+
+#series-container .close { 
+	position: absolute; 
+	right: 4px; 
+	top: 5px; 
+	display: block; 
+	width: 7px; 
+	height: 7px; 
+	font-size: 1px; 
+	background: url('../images/close.gif'); 
+}
+
+#series-container .edit { 
+	position: absolute; 
+	right: 25px; 
+	top: 1px; 
+}
+
+#series-container .date {
+	font-weight: bold;
+	font-size: 12px;
+	text-align: center;
+}
+
+#series-container .name {
+	color: #888888;
+	text-align: center;
+}
+
+#series-container .arrow { 
+	display: block; 
+	width: 30px; 
+	height: 30px; 
+	font-size: 1px; 
+	background: url('../images/arrow-white.png') no-repeat; 
+	margin: auto;
+}
+
+#amitem {
+	margin: 8px;
+}
+
+label {
+	width: 70px;
+}
+
+input.inputbox {
+	width: 220px;
+}
+
+.automailing-new {
+	padding: 10px;
+}
+
+#automailing-wrapper {
+	margin:10px 10px 0 0;
+}

@@ -19,7 +19,7 @@ JHtml::_('behavior.tooltip');
 jimport('joomla.application.component.view');
 jimport('joomla.html.pagination');
 jimport('migur.library.toolbar');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 
 /**
  * Class of the import view.

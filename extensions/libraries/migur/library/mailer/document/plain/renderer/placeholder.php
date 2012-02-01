@@ -15,7 +15,7 @@ JLoader::import('helpers.placeholder', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurDocumentRendererPlaceholder extends JDocumentRenderer
+class MigurDocumentPlainRendererPlaceholder extends JDocumentRenderer
 {
 
 	/**
@@ -29,7 +29,6 @@ class MigurDocumentRendererPlaceholder extends JDocumentRenderer
 	 */
 	public function render($name, $attribs = array(), $content = null)
 	{
-		//var_dump(func_get_args());
 		return PlaceholderHelper::render($name, 'plain');
 	}
 

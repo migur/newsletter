@@ -55,7 +55,7 @@ defined('_JEXEC') or die; ?>
 		</div>
 		<div>
 			<fieldset id="newsletter-terms" class="required checkboxes">
-				<input id="newsletter-terms0" name="newsletter-terms" type="checkbox" />
+				<div id="newsletter-terms-container"><input id="newsletter-terms0" class="validate-newsletter-terms" name="newsletter-terms" type="checkbox" /></div>
 				<a	rel="{handler: 'iframe', size: {x: 820, y: 400} }"
 					class="modal"
 					href="<?php echo $termslink; ?>"
@@ -64,7 +64,7 @@ defined('_JEXEC') or die; ?>
 				</a>
 			</fieldset>
 		</div>
-		<div>
+		<div id="newsletter-submit-container">
 			<input
 				type="button"
 				value="<?php echo JText::_('MOD_NEWSLETTER_SUBSCRIBE'); ?>"
@@ -78,7 +78,7 @@ defined('_JEXEC') or die; ?>
 </div>
 
 <script text="javascript">
-    migurSiteRoot = "<?php echo JUri::root(); ?>";
-    migurName = "<?php echo $userName; ?>";
-    migurEmail = "<?php echo $userEmail; ?>";
+	migurSiteRoot = "<?php echo JUri::root(); ?>";
+	migurName = "<?php echo $userName; ?>";
+	migurEmail = "<?php echo $userEmail; ?>";
 </script>

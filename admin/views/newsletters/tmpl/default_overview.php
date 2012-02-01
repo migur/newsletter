@@ -26,7 +26,7 @@
 	var legend = {
 		data:[["## Not bounced", "## Opened"]],
 		position: 'south' }
-	data = [ statOpenedCount.total, statOpenedCount.opened ];
+	data = [ statTotalSent.no, statOpenedCount.opened ];
 	//data = [ 0,1 ];
 	var tsPie = Migur.chart.pie("newsletters_opened", legend, data, 100, 100, 80);
 

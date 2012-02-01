@@ -100,6 +100,25 @@ class NewsletterTableHistory extends JTable
 		$res .= " ELSE '{$item}' END) as {$fieldName}";
 		return $res;
 	}
+	
+	
+	public function setBounced($sid, $nid) 
+	{
+		if (empty($sid)) {
+			return false;
+		}
 
+		$this->load(array(
+			'subscriber_id' => $sid,
+			'newsletter_id' => $nid,
+			'action' => NewsletterTableHistory::ACTION_BOUNCED
+		));
+
+		return $this->save(array(
+			'subscriber_id' => $sid,
+			'newsletter_id' => $nid,
+			'action' => NewsletterTableHistory::ACTION_BOUNCED,
+			'date' => date('Y-m-d H:i:s')
+		));
+	}
 }
-

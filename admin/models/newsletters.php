@@ -36,6 +36,7 @@ class NewsletterModelNewsletters extends JModelList
 				'name', 'n.name',
 				'se', 'n.name',
 				'alias', 'n.alias',
+                                'sent_to',
 				'ordering', 'n.ordering',
 				'language', 'n.language',
 				'checked_out', 'n.checked_out',
@@ -68,11 +69,13 @@ class NewsletterModelNewsletters extends JModelList
 				'n.checked_out AS checked_out,' .
 				'n.checked_out_time AS checked_out_time,' .
 				'n.ordering AS ordering,' .
-				'n.language, n.sent_started, 123 AS sent_to'
+				'n.language, n.sent_started, "---" AS sent_to'
 			)
 		);
 		$query->from('`#__newsletter_newsletters` AS n');
-
+		// 2 is system internal newsletters. No need to show it.
+		$query->where('(category = 0 OR category IS NULL)');
+		
 		// Filtering the data
 		if (!empty($this->filtering)) {
 			foreach ($this->filtering as $field => $val)
@@ -170,6 +173,7 @@ class NewsletterModelNewsletters extends JModelList
 		parent::populateState('name', 'asc');
 	}
 
+	
 	/**
 	 * Build an SQL query to load the list data.
 	 *
@@ -189,8 +193,44 @@ class NewsletterModelNewsletters extends JModelList
 		$query->order('name');
 		$db->setQuery($query);
 		$res = $db->loadObjectList();
-//		var_dump($query->__toString(), $res); die();
 		return $res;
 	}
 
+	
+	/**
+	 * Build an SQL query to load the list data.
+	 *
+	 * @return	JDatabaseQuery
+	 * @since	1.0
+	 */
+	public function getUsedInQueue()
+	{
+		// Initialise variables.
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('DISTINCT n.smtp_profile_id');
+		$query->from('#__newsletter_newsletters AS n');
+		$query->join('', '#__newsletter_queue AS q ON q.newsletter_id = n.newsletter_id');
+		$query->where('q.state = 1');
+		$query->order('n.smtp_profile_id');
+		$db->setQuery($query);
+		$spids = $db->loadAssocList(null, 'smtp_profile_id');
+		
+		$res = array();
+		$ids = array();
+		foreach($spids as $spid){
+			
+			$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+			$model->load($spid);
+			
+			if (!in_array($model->getId(), $ids)) {
+				$res[] = $model;
+				$ids[] = $model->getId();
+			}
+		}
+		
+		return $res;
+	}
 }

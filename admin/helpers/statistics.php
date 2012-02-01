@@ -35,12 +35,15 @@ class StatisticsHelper
 	 */
 	public static function totalSent($ids = null)
 	{
-
-
 		$dbo = JFactory::getDbo();
 		$query = $dbo->getQuery(true);
+		
+		$subquery = 
+			' SELECT DISTINCT newsletter_id, subscriber_id, bounced ' .
+			' FROM #__newsletter_sent';
+		
 		$query->select('(CASE bounced WHEN "" THEN "NO" ELSE bounced END) AS bounced, count(*) as cnt')
-			->from('#__newsletter_sent AS ns');
+			->from('(' . $subquery . ') AS ns');
 
 		if (is_array($ids)) {
 			$query->where('newsletter_id in(' . implode(',', $ids) . ') ');
@@ -48,7 +51,7 @@ class StatisticsHelper
 
 		$query->group('bounced');
 
-		//echo nl2br(str_replace('#__','jos_',$query));
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$data = $dbo->setQuery($query)->loadAssocList();
 
 		$res = array();
@@ -72,7 +75,7 @@ class StatisticsHelper
 	}
 
 	/**
-	 * Get statistics "Total sent and bounced".
+	 * Get count of "open" actions. All actions or for the list of newsletters.
 	 *
 	 * @static
 	 * @param ids   array of newsletter_id
@@ -80,33 +83,35 @@ class StatisticsHelper
 	 * @return array - the statistics data
 	 * @since 1.0
 	 */
-	public static function openedCount($ids = null)
+	public static function openedActionsCount($ids = null)
 	{
 
 		$dbo = JFactory::getDbo();
 		$query = $dbo->getQuery(true);
-		$query->select('(CASE h.action WHEN "4" THEN "OPENED" ELSE "OTHER" END) AS action, count(*) as cnt')
-			->from('#__newsletter_sent AS ns')
-			->join(
-				'LEFT',
-				'#__newsletter_sub_history as h '
-				. 'ON ns.subscriber_id=h.subscriber_id AND ns.list_id=h.list_id AND ns.newsletter_id=h.newsletter_id '
-				. 'AND h.action="' . NewsletterTableHistory::ACTION_OPENED . '"')
-			->where('ns.bounced=NULL OR ns.bounced="" OR ns.bounced="no"');
+		$query
+			->select('DISTINCT (CASE h.action WHEN "4" THEN "OPENED" ELSE "OTHER" END) AS action, count(*) as cnt')
+			->from('#__newsletter_sub_history as h')
+			->where('h.action="' . NewsletterTableHistory::ACTION_OPENED . '"');			
 
 		if (is_array($ids)) {
+			$query->join('','#__newsletter_newsletters AS ns ON ns.newsletter_id = h.newsletter_id');
 			$query->where('ns.newsletter_id in(' . implode(',', $ids) . ') ');
 		}
 
 		$query->group('h.action');
 
-		//echo nl2br(str_replace('#__','jos_',$query));die();
+		//echo nl2br(str_replace('#__','jos_',$query)); die();
 		$data = $dbo->setQuery($query)->loadAssocList();
 
 		$res = array();
 		$total = 0;
 		foreach ($data as $item) {
-			$res[strtolower($item['action'])] = intval($item['cnt']);
+			
+			if (empty($res[strtolower($item['action'])])) {
+				$res[strtolower($item['action'])] = 0;
+			}
+			$res[strtolower($item['action'])] += intval($item['cnt']);
+			
 			$total += intval($item['cnt']);
 		}
 
@@ -128,7 +133,7 @@ class StatisticsHelper
 	}
 
 	/**
-	 * Get count of opened newsletters.
+	 * Get total count of opened newsletters.
 	 * Active subscriber = Subscriber that got a newsletter and opened it.
 	 *
 	 * @static
@@ -144,13 +149,11 @@ class StatisticsHelper
 		$res = array();
 
 		$query = $dbo->getQuery(true);
-		$query->select('distinct n.newsletter_id')
-			->from('#__newsletter_newsletters AS n')
-			->join('', '#__newsletter_sub_history AS h')
-			->where('h.newsletter_id=n.newsletter_id');
+		$query->select('distinct h.newsletter_id, h.subscriber_id')
+			->from('#__newsletter_sub_history AS h');
 
 		if (is_array($ids)) {
-			$query->where('n.newsletter_id in(' . implode(',', $ids) . ') ');
+			$query->where('h.newsletter_id in(' . implode(',', $ids) . ') ');
 		}
 
 		$query->where('h.action="' . NewsletterTableHistory::ACTION_OPENED . '"');
@@ -159,15 +162,15 @@ class StatisticsHelper
 		$res['newsletters'] = count($dbo->setQuery($query)->loadAssocList());
 
 		$query = $dbo->getQuery(true);
-		$query->select('distinct s.subscriber_id')
-			->from('#__newsletter_sub_history as h')
-			->join('', '#__newsletter_subscribers AS s ON s.subscriber_id=h.subscriber_id');
+		$query->select('distinct h.subscriber_id')
+			->from('#__newsletter_sub_history as h');
+			//->join('', '#__newsletter_subscribers AS s ON s.subscriber_id=h.subscriber_id');
 
 		if (is_array($ids)) {
 			$query->where('h.newsletter_id in(' . implode(',', $ids) . ') ');
 		}
 
-		$query->where('h.action="' . NewsletterTableHistory::ACTION_OPENED . '"');
+		$query->where('h.action="' . NewsletterTableHistory::ACTION_CLICKED . '"');
 
 		//echo nl2br(str_replace('#__','jos_',$query)); //die();
 		$res['subscribers'] = count($dbo->setQuery($query)->loadAssocList());
@@ -299,11 +302,11 @@ class StatisticsHelper
 	public static function activeSubscribersCount($startDate, $endDate, $ids = null)
 	{
 		$startDate = date("Y-m-d 00:00:00", strtotime($startDate));
-		$endDate = date("Y-m-d 00:00:00", strtotime($endDate));
+		$endDate = date("Y-m-d 23:59:59", strtotime($endDate));
 
 		$dbo = JFactory::getDbo();
 		$query = $dbo->getQuery(true);
-		$query->select('subscriber_id')
+		$query->select('DISTINCT subscriber_id')
 			->from('#__newsletter_sub_history as h')
 			->where('h.action="' . NewsletterTableHistory::ACTION_OPENED . '"')
 			->where('h.date >= "' . $startDate . '" AND h.date <= "' . $endDate . '"');
@@ -312,9 +315,7 @@ class StatisticsHelper
 			$query->where('h.newsletter_id in(' . implode(',', $ids) . ') ');
 		}
 
-		$query->group('subscriber_id');
-
-		//echo nl2br(str_replace('#__','jos_',$query)); //die();
+		//echo nl2br(str_replace('#__','jos_',$query)); die();
 		return count($dbo->setQuery($query)->loadAssocList());
 	}
 
@@ -334,6 +335,10 @@ class StatisticsHelper
 		$query->select('count(*) as total')
 			->from('#__newsletter_sub_history as h')
 			->where('h.action="' . NewsletterTableHistory::ACTION_CLICKED . '"');
+		
+		if (!empty($ids)) {
+			$query->where('h.newsletter_id in (' . implode(',', $ids) . ')');
+		}	
 
 		//echo nl2br(str_replace('#__','jos_',$query)); //die();
 		$res = $dbo->setQuery($query)->loadAssoc();
@@ -345,7 +350,8 @@ class StatisticsHelper
 
 	/**
 	 * Get total count of selected ACTIVITY for newsletters or
-	 * activity for selected range.
+	 * activity for selected range. 
+	 * No matter if the letter exists or not. Main goal is activity = data from history
 	 *
 	 * @static
 	 * @param start date ('YYYY-MM-DD HH:MM:SS')
@@ -359,7 +365,7 @@ class StatisticsHelper
 	public static function activityPerDay($startDate, $endDate, $ids, $activity)
 	{
 		$startDate = date("Y-m-d 00:00:00", strtotime($startDate));
-		$endDate = date("Y-m-d 00:00:00", strtotime($endDate));
+		$endDate = date("Y-m-d 23:59:59", strtotime($endDate));
 
 		//TODO: Implement the functionality for calculating statistics
 		$dbo = JFactory::getDbo();
@@ -369,7 +375,7 @@ class StatisticsHelper
 		$query = $dbo->getQuery(true);
 		$query->select('DATE(date) AS day, count(*) as count')
 			->from('#__newsletter_sub_history as h')
-			->join('', '#__newsletter_newsletters as n ON n.newsletter_id=h.newsletter_id')
+		//	->join('', '#__newsletter_newsletters as n ON n.newsletter_id=h.newsletter_id')
 			->where('h.action=' . $dbo->quote($activity))
 			->group('day');
 
@@ -386,7 +392,7 @@ class StatisticsHelper
 		}
 
 
-		//echo nl2br(str_replace('#__', 'jos_', $query));die();
+		//echo nl2br(str_replace('#__', 'jos_', $query));//die();
 		$res = $dbo->setQuery($query)->loadAssocList();
 
 
@@ -399,19 +405,17 @@ class StatisticsHelper
 
 		$date = date('Y-m-d', strtotime($startDate));
 		$end = date('Y-m-d', strtotime($endDate));
-		$theDay = 3600 * 24;
+		
 		while ($date <= $endDate) {
 
 			if (!isset($assoc[$date])) {
 				$assoc[$date] = 0;
 			}
 
-			$date = date('Y-m-d', strtotime($date) + $theDay);
+			$date = date('Y-m-d', strtotime("+1 day", strtotime($date)));
 		}
 
 		ksort($assoc);
-		//var_dump($assoc);
-		//die();
 		return $assoc;
 	}
 
@@ -430,7 +434,7 @@ class StatisticsHelper
 	public static function activeSubscribersPerDay($startDate, $endDate, $ids)
 	{
 		$startDate = date("Y-m-d 00:00:00", strtotime($startDate));
-		$endDate = date("Y-m-d 00:00:00", strtotime($endDate));
+		$endDate = date("Y-m-d 23:59:59", strtotime($endDate));
 
 		//TODO: Implement the functionality for calculating statistics
 		$dbo = JFactory::getDbo();
@@ -464,7 +468,10 @@ class StatisticsHelper
 		// add absent dates
 		$assoc = array();
 		foreach ($res as $item) {
-			$assoc[$item['day']] = (int) $item['count'];
+			if (empty($assoc[$item['day']])) {
+				$assoc[$item['day']] = 0;
+			}
+			$assoc[$item['day']]++;
 		}
 		unset($res);
 
@@ -477,15 +484,83 @@ class StatisticsHelper
 				$assoc[$date] = 0;
 			}
 
-			$date = date('Y-m-d', strtotime($date) + $theDay);
+			$date = date('Y-m-d', strtotime("+1 day", strtotime($date)));
 		}
 
 		ksort($assoc);
-		//var_dump($assoc);
-		//die();
 		return $assoc;
 	}
 
+	
+	/**
+	 * Get total count of oppened newsletters per day for newsletters and
+	 * selected range.
+	 *
+	 * @static
+	 * @param start date ('YYYY-MM-DD HH:MM:SS')
+	 * @param end   date ('YYYY-MM-DD HH:MM:SS')
+	 * @param ids   array of newsletter_id
+	 *
+	 * @return array - the statistics data
+	 * @since 1.0
+	 */
+	public static function openedNewslettersPerDay($startDate, $endDate, $ids)
+	{
+		$startDate = date("Y-m-d 00:00:00", strtotime($startDate));
+		$endDate = date("Y-m-d 23:59:59", strtotime($endDate));
+
+		$dbo = JFactory::getDbo();
+
+		// Query to get rows "date - newsletter_id - subscriber_id"
+		// Couple of "newsletter_id - subscriber_id" is ONE REAL mail (newsletter for subscriber)
+		$query = $dbo->getQuery(true);
+		$query->select('DISTINCT DATE(date) AS day, newsletter_id, subscriber_id')
+			->from('#__newsletter_sub_history as h')
+			->where('h.action="' . NewsletterTableHistory::ACTION_OPENED . '"');
+
+		if (!empty($startDate)) {
+			$query->where('h.date >= "' . $startDate . '"');
+		}
+
+		if (!empty($endDate)) {
+			$query->where('h.date <= "' . $endDate . '"');
+		}
+
+		if (is_array($ids)) {
+			$query->where('h.newsletter_id in(' . implode(',', $ids) . ') ');
+		}
+
+		// Query to calculate count of rows "date - newsletter_id - subscriber_id" 
+		// for each day
+		$query = 'SELECT day, COUNT(*) as cnt FROM ('.(string)$query.') as h GROUP BY day';
+
+		//echo nl2br(str_replace('#__', 'jos_', $query));die();
+		$res = $dbo->setQuery($query)->loadAssocList();
+
+
+		// add absent dates
+		$assoc = array();
+		foreach ($res as $item) {
+			$assoc[$item['day']] = $item['cnt'];
+		}
+		unset($res);
+
+		$date = date('Y-m-d', strtotime($startDate));
+		$end = date('Y-m-d', strtotime($endDate));
+		$theDay = 3600 * 24;
+		while ($date <= $endDate) {
+
+			if (!isset($assoc[$date])) {
+				$assoc[$date] = 0;
+			}
+
+			$date = date('Y-m-d', strtotime("+1 day", strtotime($date)));
+		}
+
+		ksort($assoc);
+		return $assoc;
+	}
+	
 	/**
 	 * Get amount of new subscribers for each day during period".
 	 *
@@ -532,7 +607,7 @@ class StatisticsHelper
 	public static function activityPerHour($startDate, $endDate, $ids, $activity)
 	{
 		$startDate = date("Y-m-d H:00:00", strtotime($startDate));
-		$endDate = date("Y-m-d H:00:00", strtotime($endDate));
+		$endDate = date("Y-m-d H:59:59", strtotime($endDate));
 
 		//TODO: Implement the functionality for calculating statistics
 		$dbo = JFactory::getDbo();
@@ -584,7 +659,7 @@ class StatisticsHelper
 		}
 
 		ksort($assoc);
-//		var_dump($res);die();
+		
 		return $assoc;
 	}
 
@@ -598,14 +673,14 @@ class StatisticsHelper
 
 		$date = date('Y-m-d', strtotime($startDate));
 		$end = date('Y-m-d', strtotime($endDate));
-		$theDay = 3600 * 24;
+		
 		while ($date <= $endDate) {
 
 			if (!isset($assoc[$date])) {
 				$assoc[$date] = 0;
 			}
 
-			$date = date('Y-m-d', strtotime($date) + $theDay);
+			$date = date('Y-m-d', strtotime("+1 day", strtotime($date)));
 		}
 		$res = $assoc;
 	}

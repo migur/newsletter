@@ -26,7 +26,7 @@
 			label="COM_NEWSLETTER_TYPE"
 			description="COM_NEWSLETTER_TYPE"
 			class="inputbox validate-type autosaverable"
-			default="1"
+			default="0"
 			required="true"
 		 >
             <option value="0">COM_NEWSLETTER_ORDINARY</option>
@@ -36,7 +36,8 @@
         <field
             name="smtp_profile_id"
             type="smtpprofiles"
-            default=""
+            default="0"
+			scope=""
             label="COM_NEWSLETTER_SMTP_PROFILE"
             description="COM_NEWSLETTER_SMTP_PROFILE"
             class="selectbox validate-smtp_profile_id autosaverable"
@@ -112,18 +113,19 @@
 			default=""
 		 />
 
-                 <field name="newsletter_preview_email"
-                        type="text"
-                        label="COM_NEWSLETTER_PREVIEW_EMAIL"
-                        description="COM_NEWSLETTER_PREVIEW_EMAIL"
-                        class="inputbox validate-newsletter_preview_email"
-                        size="70"
-                        default=""
-                        required="false"
-                        validate=""
-                 />
+		 <field name="newsletter_preview_email"
+				type="text"
+				label="COM_NEWSLETTER_PREVIEW_EMAIL"
+				description="COM_NEWSLETTER_PREVIEW_EMAIL"
+				class="inputbox validate-newsletter_preview_email"
+				size="70"
+				default=""
+				required="false"
+				validate=""
+		 />
 
-                 <field name="t_style_id" type="hidden" required="true"/>
-                 <field name="newsletter_id" type="hidden" />
+		 <field name="t_style_id" type="hidden" required="true"/>
+		 <field name="alias" type="hidden" />
+		 <field name="newsletter_id" type="hidden" />
 	</fieldset>
 </form>

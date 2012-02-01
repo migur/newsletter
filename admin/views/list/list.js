@@ -105,7 +105,7 @@ try {
         }
 
         if (typeof (req) == 'undefined') {
-            alert('An unknown error occured!');
+            alert(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured!'));
             return;
         }
 
@@ -196,7 +196,7 @@ try {
         }
 
         if (!res.delimiter) {
-            alert('The delimiter is not set');
+            alert(Joomla.JText._('THE_DELIMITER_IS_NOT_SET','The delimiter is not set'));
             return false;
         }
 
@@ -267,11 +267,13 @@ try {
             url: '?option=com_newsletter&task=list.exclude&subtask=lists&format=json',
             onComplete: function(res){
                 if (!res) {
-                    alert('An unknown error occured');
+                    alert(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED','An unknown error occured!'));
                     return;
                 }
 
-                alert(res.error + "\n\nTotal processed: " + res.total);
+                alert(res.error + "\n\n"+Joomla.JText._('TOTAL_PROCESSED', 'Total processed')+": " + res.total);
+				Cookie.write('jpanetabs_tabs-list', 3);
+				window.location.reload();
             }
         }).send('&list_id=' + id + '&jsondata='+JSON.encode(data));
     });
@@ -341,8 +343,10 @@ try {
 
         });
 
+		var st = $$('input[name=subscriber_type]:checked')[0].getProperty('value');
+
         if (notEnough == true) {
-            alert('Please fill all required fields');
+            alert(Joomla.JText._('PLEASE_FILL_ALL_REQUIRED_FIELDS','Please fill all required fields'));
         } else {
             $$('[name=subtask]').set('value', 'import-file-apply');
             var id = $$('[name=list_id]').get('value');
@@ -353,14 +357,14 @@ try {
                 url: '?option=com_newsletter&task=list.import&subtask=parse&format=json',
                 onComplete: function(res){
                     if (!res) {
-                        alert('An unknown error occured');
+                        alert(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED','An unknown error occured!'));
                         return;
                     }
 
-                    alert(res.error + "\n\nProcessed: " + res.processed + "\nAbsent: " + res.absent + "\nSkipped: " + res.skipped + "\nTotal: " + res.total);
+                    alert(res.error + "\n\n"+Joomla.JText._('PROCESSED', 'Processed')+": " + res.processed + "\n"+Joomla.JText._('ABSENT', 'Absent')+": " + res.absent + "\n"+Joomla.JText._('SKIPPED','Skipped')+": " + res.skipped + "\n"+Joomla.JText._('TOTAL','Total')+": " + res.total);
                     document.location.reload();
                 }
-            }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res) );
+            }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res) + '&subscriber_type=' +  st);
         }
     });
 
@@ -398,7 +402,7 @@ try {
         });
 
         if (notEnough == true) {
-            alert('Please fill all required fields');
+            alert(Joomla.JText._('PLEASE_FILL_ALL_REQUIRED_FIELDS','Please fill all required fields'));
         } else {
             $$('[name=subtask]').set('value', 'exclude-file-apply');
             var id = $$('[name=list_id]').get('value');
@@ -409,11 +413,11 @@ try {
                 url: '?option=com_newsletter&task=list.exclude&subtask=parse&format=json',
                 onComplete: function(res){
                     if (!res) {
-                        alert('An unknown error occured');
+                        alert(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured'));
                         return;
                     }
 
-                    alert(res.error + "\n\nProcessed: " + res.processed + "\nAbsent: " + res.absent + "\nTotal: " + res.total);
+                    alert(res.error + "\n\n"+Joomla.JText._('PROCESSED', 'Processed')+": " + res.processed + "\n"+Joomla.JText._('ABSENT', 'Absent')+": " + res.absent + "\n" + Joomla.JText._('TOTAL','Total')+": " + res.total);
                     document.location.reload();
                 }
             }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res) );
@@ -518,16 +522,6 @@ try {
         }
     }
 
-    $$('#multitab-toolbar-cancel a')
-        .removeProperty('onclick')
-        .addEvent('click', function(){
-            if (window && window.parent && window.parent.SqueezeBox) {
-                window.parent.SqueezeBox.close();
-            }
-            return false;
-        });
-		
-		
     $$('input, select, textarea').addEvent('blur', function(){
 		Migur.validator.tabIndicator(
 			'#listForm',

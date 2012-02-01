@@ -31,17 +31,26 @@ try {
 
 /* Expand the functionality of the delete button */
 $$('#templates-trash .toolbar')[0].addEvent('click', function(el){
-	if ($(this).getElements('span')[0].hasClass('toolbar-inactive')) return;
+	if ($(this).getElements('span')[0].hasClass('toolbar-inactive')) return false;
 	
 	if( confirm('One or more newsletters may use this template(s). Do you want to delete?') ) {
-		javascript:Joomla.submitbutton('templates.delete');
+		Joomla.submitform('templates.delete', $$('[name=templatesForm]')[0]);
 	};
+	return false;
 });
 
 /* Expand the functionality of the edit button */
-$$('#templates-edit .toolbar')[0].addEvent('click', function(el){
-	if ($(this).getElements('span')[0].hasClass('toolbar-inactive')) return;
-	return Joomla.submitbutton('template.edit');
+$$('#templates-edit a')[0].addEvent('click', function(ev){
+
+	ev.stop();
+	
+	if ($$('[name=cid[]]').length > 0) {
+		$$('[name=cid[]]').each(function(el){
+			if(el.getProperty('checked')) {
+				el.getParent('tr').getElements('.modal').fireEvent('click');
+			}
+		});
+	}	
 });
 
 

@@ -63,7 +63,6 @@ class MigurMailerDocumentPlain extends MigurMailerDocument
 	 */
 	protected function _loadTemplate($params)
 	{
-		//die(var_dump(debug_backtrace()));
 		$template = new stdClass();
 		$template->content = $this->_letter->plain;
 		return $template;
@@ -79,7 +78,7 @@ class MigurMailerDocumentPlain extends MigurMailerDocument
 	 */
 	public function loadRenderer($type)
 	{
-		$class = 'MigurDocumentRenderer' . $type;
+		$class = 'MigurDocumentPlainRenderer' . $type;
 
 		if (!class_exists($class)) {
 			$path = dirname(__FILE__) . DS . 'renderer' . DS . $type . '.php';

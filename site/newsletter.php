@@ -28,12 +28,40 @@ JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
 JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'rules');
 JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'tables');
 JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models');
+JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'entities', 'NewsletterModelEntity');
+
 
 // Get an instance of the controller prefixed by Newsletter
 $controller = JController::getInstance('Newsletter');
 
+// ACL
+	$resource = JRequest::getString('view','') .'.'. JRequest::getString('layout','default');
+	
+	switch($resource){
+		
+		case 'subscribe.unsubscribe':
+			
+			if(!JFactory::getUser()->id && !JRequest::getString('uid', NULL)) {
+				
+				JFactory::getApplication()->redirect(
+					JRoute::_('index.php?option=com_users&view=login'), 
+					JText::_('COM_NEWSLETTER_LOGIN_FIRST'), 
+					'message');
+			}	
+	}
+
+// Add translations used in JavaScript
+JavascriptHelper::requireTranslations();
+
+// Load 'Migur' group of plugins
+JPluginHelper::importPlugin('migur');
+$app = JFactory::getApplication();
+$app->triggerEvent('onMigurNewsletterStart');
+
 // Perform the Request task
 $controller->execute(JRequest::getCmd('task'));
+
+$app->triggerEvent('onMigurNewsletterEnd');
 
 // Redirect if set by the controller
 $controller->redirect();

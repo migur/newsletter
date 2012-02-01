@@ -7,21 +7,30 @@
 #config-extensions,
 #config-config {
     float: left;
-    width: 48%;
+    width: 45%;
     margin: 0 0 0 5px;
 }
 
 #config-config {
     float: right;
-    width: 48%;
+    width: 50%;
     margin: 0 5px 0 0;
 }
 
 #config-extensions .current,
 #config-config  .current {
-    height: 400px;
+    min-height: 400px;
 }
 
 td fieldset {
     background-color: transparent;
+}
+
+#jform_confirm_mail_body {
+	width: 99%;
+	height: 70px;
+}
+
+#jform_confirm_mail_subject {
+	width: 99%;
 }

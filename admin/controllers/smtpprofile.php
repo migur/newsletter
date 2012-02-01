@@ -12,6 +12,9 @@ defined('_JEXEC') or die('Restricted access');
 
 // import Joomla controllerform library
 jimport('joomla.application.component.controllerform');
+jimport('migur.library.mailer.sender');
+
+JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 class NewsletterControllerSmtpprofile extends JControllerForm
 {
@@ -32,46 +35,41 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 		$this->registerTask('savenclose', 'save');
 	}
 
-	/**
-	 * Method override to check if you can edit an existing record.
-	 *
-	 * @param	array	$data	An array of input data.
-	 * @param	string	$key	The name of the key for the primary key.
-	 *
-	 * @return	boolean
-	 * @since	1.0
-	 */
-	protected function allowEdit($data = array(), $key = 'id')
-	{
-		//TODO: Remove and check the method
+	protected function checkEditId($context, $id) {
 		return true;
 	}
 
 	/**
-	 * Method override to check if you can save an existing record.
-	 *
-	 * @param	array	$data	An array of input data.
-	 * @param	string	$key	The name of the key for the primary key.
-	 *
-	 * @return	boolean
-	 * @since	1.0
+	 * Save action
 	 */
-	protected function allowSave($data = array(), $key = 'id')
+	public function save()
 	{
-		//TODO: Remove and check the method
-		return true;
+		$form = JRequest::getVar('jform');
+		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$model->load($form['smtp_profile_id']);
+		
+		if ($model->isJoomlaProfile()) {
+			$buffer = array_merge($model->toArray(), $form);
+			$buffer['params'] = array_merge((array)$model->params, $form['params']);
+			JRequest::setVar('jform', $buffer, 'post');
+		}
+
+		parent::save();
+
+		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
 	}
 
+	
 	/**
 	 * Redirection after standard saving
 	 *
 	 * @return void
 	 * @since 1.0
 	 */
-	public function save()
+	public function delete()
 	{
 
-		parent::save();
+		parent::delete();
 
 		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
 	}
@@ -107,5 +105,18 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 		return $append;
 	}
 
+	public function checkConnection()
+	{
+		$mailbox = JRequest::getVar('jform');
+	
+		$sender = new MigurMailerSender();
+		$res = $sender->checkConnection((object)$mailbox);
+		
+		echo json_encode(array(
+			'status' => $res? 'ok' : 'Unable to connect'
+		));
+		jexit();
+	}
+	
 }
 

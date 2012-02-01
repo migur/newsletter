@@ -54,10 +54,13 @@
 		<li>
 			<label><?php echo JText::_('COM_NEWSLETTER_WEBSITE'); ?></label>
             <div id="link-website-dd">
-                <a id="link-website" href="#" rel="index.php?option=com_newsletter&view=show&alias=%s"></a>
+                <a id="link-website" target="_blank" href="#" rel="index.php?option=com_newsletter&view=show&alias=%s"></a>
                 <a id="link-website-prompt" href="#">
                     <?php echo JText::_('COM_NEWSLETTER_START_TO_INPUT'); ?>
                 </a>
+                <div id="link-website-msg" style="color:gray">
+                   ( <?php echo JText::_('COM_NEWSLETTER_LINK_AVAILABLE_AFTER_SAVING'); ?> )
+                </div>
             </div>
         </li>
     </ul>

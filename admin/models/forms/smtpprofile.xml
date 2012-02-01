@@ -5,62 +5,62 @@
 			type="text"
 			label="COM_NEWSLETTER_NAME"
 			description="COM_NEWSLETTER_NAME"
-			class="inputbox validate-name"
+			class="inputbox validate-name element-standard"
 			size="100"
 			default=""
 			required="true"
                         validate=""
 		 />
 
-                <field name="from_name"
-                        type="text"
-                        label="COM_NEWSLETTER_FROM_NAME"
-                        description="COM_NEWSLETTER_FROM_NAME"
-                        class="inputbox validate-from_name"
-                        size="70"
-                        default=""
-                        required="true"
-                        validate=""
-                 />
+		<field name="from_name"
+				type="text"
+				label="COM_NEWSLETTER_FROM_NAME"
+				description="COM_NEWSLETTER_FROM_NAME"
+				class="inputbox validate-from_name element-standard"
+				size="70"
+				default=""
+				required="true"
+				validate=""
+		 />
 
-                <field name="from_email"
-                        type="text"
-                        label="COM_NEWSLETTER_FROM_EMAIL"
-                        description="COM_NEWSLETTER_FROM_EMAIL"
-                        class="inputbox validate-from_email"
-                        size="70"
-                        default=""
-                        required="true"
-                        validate=""
-                 />
-                 
-                <field name="reply_to_name"
-                        type="text"
-                        label="COM_NEWSLETTER_TO_NAME"
-                        description="COM_NEWSLETTER_TO_NAME"
-                        class="inputbox validate-reply_to_name"
-                        size="70"
-                        default=""
-                        required="true"
-                        validate=""
-                 />
+		<field name="from_email"
+				type="text"
+				label="COM_NEWSLETTER_FROM_EMAIL"
+				description="COM_NEWSLETTER_FROM_EMAIL"
+				class="inputbox validate-from_email element-standard"
+				size="70"
+				default=""
+				required="true"
+				validate=""
+		 />
 
-                <field name="reply_to_email"
-                        type="text"
-                        label="COM_NEWSLETTER_TO_EMAIL"
-                        description="COM_NEWSLETTER_TO_EMAIL"
-                        class="inputbox validate-reply_to_email"
-                        size="70"
-                        default=""
-                        required="true"
-                        validate=""
-                 />
+		<field name="reply_to_name"
+				type="text"
+				label="COM_NEWSLETTER_TO_NAME"
+				description="COM_NEWSLETTER_TO_NAME"
+				class="inputbox validate-reply_to_name element-standard"
+				size="70"
+				default=""
+				required="true"
+				validate=""
+		 />
+
+		<field name="reply_to_email"
+				type="text"
+				label="COM_NEWSLETTER_TO_EMAIL"
+				description="COM_NEWSLETTER_TO_EMAIL"
+				class="inputbox validate-reply_to_email element-standard"
+				size="70"
+				default=""
+				required="true"
+				validate=""
+		 />
 
 		<field name="smtp_server"
 			type="text"
 			label="COM_NEWSLETTER_SMTP_SERVER"
 			description="COM_NEWSLETTER_SMTP_SERVER"
-			class="inputbox validate-smtp_server"
+			class="inputbox validate-smtp_server element-standard"
                         size="70"
                         default=""
                         required="true"
@@ -71,49 +71,88 @@
 			type="text"
 			label="COM_NEWSLETTER_SMTP_PORT"
 			description="COM_NEWSLETTER_SMTP_PORT"
-			class="inputbox validate-smtp_port"
+			class="inputbox validate-smtp_port element-standard"
                         size="70"
                         default=""
                         required="true"
                         validate=""
 		 />
 
-                 <field name="username"
-                        type="text"
-                        label="COM_NEWSLETTER_USERNAME"
-                        description="COM_NEWSLETTER_USERNAME"
-                        class="inputbox validate-username"
-                        size="70"
-                        default=""
-                        required="true"
-                        validate=""
-                 />
+		 <field name="username"
+				type="text"
+				label="COM_NEWSLETTER_USERNAME"
+				description="COM_NEWSLETTER_USERNAME"
+				class="inputbox validate-username element-standard"
+				size="70"
+				default=""
+				required="false"
+				validate=""
+		 />
 
-                 <field name="password"
-                        type="text"
-                        label="COM_NEWSLETTER_PASSWORD"
-                        description="COM_NEWSLETTER_PASSWORD"
-                        class="inputbox validate-password"
-                        size="70"
-                        default=""
-                        required="true"
-                        validate=""
-                 />
+		 <field name="password"
+				type="password"
+				label="COM_NEWSLETTER_PASSWORD"
+				description="COM_NEWSLETTER_PASSWORD"
+				class="inputbox validate-password element-standard"
+				size="70"
+				default=""
+				required="false"
+				validate=""
+		 />
 
-                 <field name="is_ssl"
-                        type="list"
-                        label="COM_NEWSLETTER_SSL"
-                        description="COM_NEWSLETTER_SSL"
-                        class="inputbox validate-is_ssl"
-                        default=""
-                        required="true"
-                        validate=""
-                >
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
+		 <field name="is_ssl"
+				type="list"
+				label="COM_NEWSLETTER_ENCRYPT"
+				description="COM_NEWSLETTER_ENCRYPT"
+				class="inputbox validate-is_ssl element-standard"
+				default=""
+				required="true"
+				validate=""
+		>
+			<option value="0">JNO</option>
+			<option value="1">COM_NEWSLETTER_SSL</option>
+			<option value="2">COM_NEWSLETTER_TLS</option>
+		</field>
 
+		 <field name="mailbox_profile_id"
+				type="mailboxprofiles"
+				class="inputbox validate-mailbox_profile_id element-standard"
+				default=""
+				label="COM_NEWSLETTER_MAILBOX_PROFILE"
+				description="COM_NEWSLETTER_MAILBOX_PROFILE">
+		</field>
+		
+        <fields name="params">
 
-                <field name="smtp_profile_id" type="hidden"></field>
+            <field name="periodLength"
+                    type="text"
+                    label="COM_NEWSLETTER_PERIOD_LENGTH"
+                    description="COM_NEWSLETTER_PERIOD_LENGTH"
+                    class="inputbox validate-period_length"
+                    size="30"
+                    default=""
+                    required="true"
+                    validate=""
+             />
+			 
+            <field name="sentsPerPeriodLimit"
+                    type="text"
+                    label="COM_NEWSLETTER_PERIOD_COUNT"
+                    description="COM_NEWSLETTER_PERIOD_COUNT"
+                    class="inputbox validate-period_count"
+                    size="30"
+                    default=""
+                    required="true"
+                    validate=""
+             />
+			 
+			<field name="inProcess" type="hidden"></field>
+			<field name="periodStartTime" type="hidden"></field>
+			<field name="sentsPerLastPeriod" type="hidden"></field>
+			
+        </fields>
+		
+		<field name="smtp_profile_id" type="hidden"></field>
+		
 	</fieldset>
 </form>

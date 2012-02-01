@@ -83,6 +83,7 @@ class com_newsletterInstallerScript
 				}
 			}
 		}
+		
 		return true;
 	}
 
@@ -97,6 +98,16 @@ class com_newsletterInstallerScript
 	 */
 	function postflight($type, $parent)
 	{
+            // In both cases check if the tables/extension.php is not exists!
+		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'tables'.DS.'extension.php');
+//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3.sql');
+//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3b.sql');
+//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3b2.sql');
+//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3b3.sql');
+//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3c.sql');
+//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3d.sql');
+//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.4a.sql');
+			
             //error_reporting(E_ALL);
             //ini_set('display_errors', 1);
             /* Dirty hack. Changes the type of the update adapter for sites of com_newsletter 
@@ -130,6 +141,10 @@ class com_newsletterInstallerScript
                     $sess->set('com-newsletter-backup', $this->backedup);
             }
 
+			
+			// Populate and check initial required data in DB
+			$this->_setInitialData();
+			
             /* Redirect after installation. Make sure the component was installed the last if
                there is package */
             JInstaller::getInstance()->setRedirectURL('index.php?option=com_newsletter&view=wellcome');
@@ -158,7 +173,7 @@ class com_newsletterInstallerScript
 
 		while ($row = mysql_fetch_row($res)) {
 
-			if (strpos($row[0], self::$comNamespace) !== false) {
+			if (!empty($row[0]) && !empty(self::$comNamespace) && strpos($row[0], self::$comNamespace) !== false) {
 
 				$this->tables[] = $row[0];
 
@@ -195,7 +210,7 @@ class com_newsletterInstallerScript
 		
 		$matches = array();
 		preg_match_all('/CONSTRAINT[\s]+\`([^\`]+)\`[\s]+FOREIGN\sKEY/', $text, $matches);
-		//var_dump($text, $matches);
+		
 		if (!empty($matches[1])) {
 			foreach($matches[1] as $fkey) {
 				$sql = 'ALTER TABLE ' . $table . ' DROP FOREIGN KEY ' . $fkey . ';';
@@ -235,5 +250,28 @@ class com_newsletterInstallerScript
 			}
 		}
 		return $idx;
+	}
+
+	
+	/**
+	 * Preforms check and restore/populate initial data into DB
+	 */
+	protected function _setInitialData() 
+	{
+		// Check/set the record for J! SMTP profile in SMTP_PROFILES table 
+//		$dbo = JFactory::getDbo();
+//		$dbo->setQuery('select * from #__newsletter_smtp_profiles where is_joomla=1');
+//		$list = $dbo->loadObjectList();
+//		
+//		if (count($list) == 0) {
+//			
+//			$dbo->setQuery(
+//				'INSERT INTO #__newsletter_smtp_profiles SET '.
+//				'params="{\"periodLength\":\"60\",\"sentsPerPeriodLimit\":\"100\",\"inProcess\":0,\"periodStartTime\":0,\"sentsPerLastPeriod\":0}", '.
+//				'is_joomla=1, '.
+//				'mailbox_profile_id=-1, '.
+//				'pop_before_smtp="0"');
+//			$dbo->query();
+//		}
 	}
 }

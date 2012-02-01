@@ -14,11 +14,18 @@ try {
 
 		event.stop();
 
+		var nid = $$('[name=newsletter_id]')[0].getProperty('value');
+
+		if (nid == '' || nid < 1) {
+			alert(Joomla.JText._('PLEASE_SAVE_THE_NEWSLETTER_FIRST', "Please save the newsletter first!"));
+			return false;
+		}
+
 		var el = this;
 		var id = el.getProperty('rel')
 
 		new Request.JSON({
-			url: siteRoot + 'administrator/index.php?option=com_newsletter&task=newsletter.fileunbind&format=json',
+			url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=newsletter.fileunbind&format=json',
 			data: {
 				download_id: id
 			},
@@ -44,7 +51,7 @@ try {
             if (event.id == 'fileattach') {
 
                 new Request.JSON({
-                    url: siteRoot + 'administrator/index.php?option=com_newsletter&task=newsletter.fileattach&format=json',
+                    url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=newsletter.fileattach&format=json',
                     data: {
                         filename: event.value,
                         newsletter_id: $$('[name="newsletter_id"]')[0].getProperty('value')
@@ -61,7 +68,7 @@ try {
 										'<td>'+res.data.filename+'</td><td>'+res.data.size+'</td><td>'+res.data.type+'</td>'+
 										'<td class="center">'+
 										'<a rel="'+res.data.newsletter_id+'" class="remove-link" href="#">' +
-										'<img border="0" src="' + siteRoot + 'media/media/images/remove.png" alt="Remove" style="margin:0;">'+
+										'<img border="0" src="' + migurSiteRoot + 'media/media/images/remove.png" alt="'+Joomla.JText._('REMOVE', 'Remove')+'" style="margin:0;">'+
 										'</a>'+
 										'</td>' }
 							);
@@ -76,6 +83,32 @@ try {
             }
         });
     }
+
+	$('newsletter_upload').addEvent('click', function(ev){
+
+		ev.stop();
+
+		var nid = $$('[name=newsletter_id]')[0].getProperty('value');
+
+		if (nid == '' || nid < 1) {
+			alert(Joomla.JText._('PLEASE_SAVE_THE_NEWSLETTER_FIRST', "Please save the newsletter first!"));
+			return false;
+		}
+
+
+		var href = migurSiteRoot + "administrator/index.php?option=com_media&view=images&tmpl=component&asset=&author=&fieldid=fileattach&folder=";
+
+		SqueezeBox.open(href, {
+			handler: 'iframe',
+			size: {
+				x: 700,
+				y: 445
+			}
+		});
+
+		return true;
+	});
+
 
 
 } catch(e){

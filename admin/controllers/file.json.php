@@ -13,7 +13,6 @@ defined('_JEXEC') or die;
 
 jimport('joomla.filesystem.file');
 jimport('joomla.filesystem.folder');
-jimport('joomla.error.log');
 JLoader::import('helpers.media', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 class NewsletterControllerFile extends JController {
@@ -37,7 +36,6 @@ class NewsletterControllerFile extends JController {
 
 		// Get the user
 		$user = JFactory::getUser();
-		$log = JLog::getInstance('upload.error.php');
 
 		// Get some data from the request
 		$file = JRequest::getVar('Filedata', '', 'files', 'array');
@@ -58,7 +56,7 @@ class NewsletterControllerFile extends JController {
 			$filepath = JPath::clean(JPATH_COMPONENT . DS . $folder . DS . strtolower($file['name']));
 
 			if (!MediaHelper::canUpload($file, $err)) {
-				$log->addEntry(array('comment' => 'Invalid: ' . $filepath . ': ' . $err));
+				
 				$response = array(
 					'status' => '0',
 					'error' => JText::_($err)
@@ -86,7 +84,7 @@ class NewsletterControllerFile extends JController {
 
 			if (JFile::exists($filepath)) {
 				// File exists
-				$log->addEntry(array('comment' => 'File exists: ' . $filepath . ' by user_id ' . $user->id));
+				
 				$response = array(
 					'status' => '0',
 					'error' => JText::_('COM_MEDIA_ERROR_FILE_EXISTS')
@@ -94,8 +92,8 @@ class NewsletterControllerFile extends JController {
 				echo json_encode($response);
 				return;
 			} elseif (!$user->authorise('core.create', 'com_media')) {
+				
 				// File does not exist and user is not authorised to create
-				$log->addEntry(array('comment' => 'Create not permitted: ' . $filepath . ' by user_id ' . $user->id));
 				$response = array(
 					'status' => '0',
 					'error' => JText::_('COM_MEDIA_ERROR_CREATE_NOT_PERMITTED')
@@ -106,8 +104,8 @@ class NewsletterControllerFile extends JController {
 
 			$file = (array) $object_file;
 			if (!JFile::upload($file['tmp_name'], $file['filepath'])) {
+				
 				// Error in upload
-				$log->addEntry(array('comment' => 'Error on upload: ' . $filepath));
 				$response = array(
 					'status' => '0',
 					'error' => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE')
@@ -117,7 +115,6 @@ class NewsletterControllerFile extends JController {
 			} else {
 				// Trigger the onContentAfterSave event.
 				//$dispatcher->trigger('onContentAfterSave', array('com_media.file', &$object_file), null);
-				$log->addEntry(array('comment' => $folder));
 				$response = array(
 					'status' => '1',
 					'error' => JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', substr($file['filepath'], strlen('COM_MEDIA_BASE')))
@@ -139,7 +136,13 @@ class NewsletterControllerFile extends JController {
 	public function fileinfo() {
 
 		$filename = JRequest::getString('filename');
-		$size = getimagesize($filename);
+		$size = @getimagesize($filename);
+		if (empty($size)) {
+			$size = array(
+				'3' => 'width="auto" height="auto"',
+				"mime" => "image"
+			);
+		}
 		jexit(json_encode($size));
 	}
 

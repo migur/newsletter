@@ -41,6 +41,24 @@ class NewsletterTableSent extends JTable
 		);
 	}
 
+	/**
+	 * Get all allowed action names (used via JText).
+	 *
+	 * @return array of action names
+	 */
+	public function getBounces()
+	{
+		$oClass = new ReflectionClass(get_class($this));
+		$consts = $oClass->getConstants();
+		$this->actions = array();
+		foreach ($consts as $name => $item) {
+			if (substr($name, 0, 7) == 'BOUNCED') {
+				$this->actions[$name] = $item;
+			}
+		}
+		return $this->actions;
+	}
+	
 	public function deleteAll()
 	{
 
@@ -58,5 +76,67 @@ class NewsletterTableSent extends JTable
 		return true;
 	}
 
+	
+	public function setBounced($sid, $nid, $bounceType)
+	{
+		$bounceType = 'BOUNCED_'. strtoupper($bounceType);
+		$bounces = $this->getBounces();
+		
+		if (!in_array($bounceType, array_keys($bounces))) {
+			return false;
+		}
+
+		$this->load(array(
+			'subscriber_id' => $sid,
+			'newsletter_id' => $nid
+		));
+
+		if (empty($this->sent_id)){
+			return false;
+		}
+
+		return $this->save(array(
+			'subscriber_id' => $sid,
+			'newsletter_id' => $nid,
+			'bounced' => $bounces[$bounceType],
+			'recieved_date' => date('Y-m-d H:i:s')
+		));
+	}
+
+
+	/**
+	 * Pre-store. Convert 'extra' to json
+	 * 
+	 * @param type $updateNulls 
+	 */
+	public function store($updateNulls = false)
+	{
+		if (!empty($this->extra) && !is_string($this->extra)) {
+			$this->extra = json_encode($this->extra);
+		}
+		
+		return parent::store($updateNulls);
+	}
+
+
+	/**
+	 * Post-load. Convert 'extra' to array
+	 * 
+	 * @param type $updateNulls 
+	 */
+	public function load($keys = null, $reset = true)
+	{
+		if (!parent::load($keys, $reset)) {
+			return false;
+		}
+		
+		if (!empty($this->extra) && !is_array($this->extra)) {
+			$this->extra = (array)json_decode($this->extra);
+		}
+		
+		return true;
+	}
+	
+	
 }
 

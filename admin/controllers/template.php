@@ -62,7 +62,7 @@ class NewsletterControllerTemplate extends JControllerForm
 
 			return true;
 		} else {
-			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($recordId, $key), false));
+			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($recordId, $key) . '&tmpl=component', false));
 		}
 
 		return false;
@@ -81,7 +81,6 @@ class NewsletterControllerTemplate extends JControllerForm
 		$tpl = JRequest::getString('template');
 		$standard = $model->getTemplateBy($tpl);
 
-		//var_dump($tpl); die();
 		$table = JTable::getInstance('Template', 'NewsletterTable');
 		$table->save(array(
 			'template' => $tpl,

@@ -67,9 +67,10 @@ class NewsletterModelSmtpprofile extends JModelAdmin
 	{
 		// Check the session for previously entered form data.
 		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.smtpprofile.data', array());
-
 		if (empty($data)) {
-			$data = $this->getItem();
+			$model = JModel::getInstance('SmtpProfile', 'NewsletterModelEntity');
+			$model->load(JRequest::getInt('smtp_profile_id'));
+			$data = $model->toArray();
 		}
 		return $data;
 	}

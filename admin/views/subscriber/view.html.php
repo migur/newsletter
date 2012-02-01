@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // import Joomla view library
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 jimport('joomla.html.pagination');
@@ -61,6 +61,10 @@ class NewsletterViewSubscriber extends MigurView
 
 		if ($this->getLayout() == 'edit') {
 
+			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$model->load($this->subscriberId);
+			$this->subscriber = $model;
+			
 			$model = $this->setModel(
 					JModel::getInstance('lists', 'NewsletterModel')
 			);
@@ -127,7 +131,7 @@ class NewsletterViewSubscriber extends MigurView
 	{
 		$isNew = (!JRequest::get('subscriber_id', false) );
 		$document = JFactory::getDocument();
-		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_SUBSCRIBER_CREATING') : JText::_('COM_NEWSLETTER_SUBSCRIBER_EDITING'));
+		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER') : JText::_('COM_NEWSLETTER_SUBSCRIBER_EDITING'));
 		$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/subscriber/submitbutton.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/subscriber/subscriber.js");

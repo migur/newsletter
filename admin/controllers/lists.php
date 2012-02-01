@@ -40,7 +40,7 @@ class NewsletterControllerLists extends JControllerAdmin
 	public function publish()
 	{
             parent::publish();
-            $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=subscribers'));
+            $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=subscribers', false));
         }
 
 	/**
@@ -50,7 +50,14 @@ class NewsletterControllerLists extends JControllerAdmin
 	 */
 	public function delete()
 	{
+            // Workaround for wrong foreign key. Removing all of entries from sub_list before removing list itself
+            $cids = (array)JRequest::getVar('cid', array());
+            if (!empty($cids)) {
+                $dbo = JFactory::getDbo();
+                $dbo->setQuery("DELETE FROM #__newsletter_sub_list WHERE list_id in ('".implode("','", $cids)."')");
+                $dbo->query();
+            }
             parent::delete();
-            $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=subscribers'));
+            $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=subscribers', false));
         }
 }

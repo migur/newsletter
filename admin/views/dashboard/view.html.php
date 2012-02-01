@@ -13,11 +13,12 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla view library
 jimport('joomla.application.component.view');
 jimport('migur.library.toolbar');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JLoader::import('helpers.queue', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.statistics', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.environment', JPATH_COMPONENT_ADMINISTRATOR, '');
 jimport('simplepie.simplepie');
 
 /**
@@ -57,7 +58,6 @@ class NewsletterViewDashboard extends MigurView
 		JHTML::script('media/com_newsletter/js/migur/js/g.bar.js');
 		JHTML::script('media/com_newsletter/js/migur/js/raphael-migur-line.js');
 
-
 		$script = $this->get('Script');
 		$this->script = $script;
 
@@ -90,6 +90,11 @@ class NewsletterViewDashboard extends MigurView
 			return false;
 		}
 
+		EnvironmentHelper::showWarnings(array(
+			'checkJoomla',
+			'checkImap',
+			'checkLogs'));
+		
 		// We don't need toolbar in the modal window.
 		if ($this->getLayout() !== 'modal') {
 			$this->addToolbar();
@@ -120,11 +125,11 @@ class NewsletterViewDashboard extends MigurView
 		
 		$this->info = NewsletterHelper::getCommonInfo();
 
-		JavascriptHelper::addStringVar('siteRoot', JUri::root());
-
 		$this->setStatisticsData();
 
-		//var_dump($xml); die();
+		$sess = JFactory::getSession();
+		JavascriptHelper::addStringVar('sessname', $sess->getName());
+
 		parent::display($tpl);
 
 		// Set the document
@@ -155,10 +160,8 @@ class NewsletterViewDashboard extends MigurView
 		$bar->appendButton('Link', 'options', 'COM_NEWSLETTER_CONFIGURATION', 'index.php?option=com_newsletter&amp;view=configuration');
 
 		$bar = MigurToolBar::getInstance('help-toolbar');
-		$bar->appendButton('Popup', 'publish', 'COM_NEWSLETTER_ABOUT', 'http://migur.com/products/newsletter', 1000, 600, 0, 0);
-                
-                $helpLink = 'http://migur.com/support/documentation/newsletter/' . NewsletterHelper::getManifest()->version;
-		$bar->appendButton('Popup', 'help', 'COM_NEWSLETTER_HELP', $helpLink, 1000, 600, 0, 0);
+		$bar->appendButton('Popup', 'publish', 'COM_NEWSLETTER_ABOUT', 'http://migur.com/products/newsletter', 800, 600, 0, 0);
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter');
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
@@ -173,7 +176,7 @@ class NewsletterViewDashboard extends MigurView
 	protected function setDocument()
 	{
 		$document = JFactory::getDocument();
-		$document->setTitle('COM_NEWSLETTER_DASHBOARD_TITLE');
+		//$document->setTitle('COM_NEWSLETTER_DASHBOARD_TITLE');
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/subscriber/submitbutton.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/dashboard/dashboard.js");
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
@@ -184,18 +187,16 @@ class NewsletterViewDashboard extends MigurView
 		$theHour = 3600;
 		$theDay = $theHour * 24;
 		$days = 30;
-		$previousDay = date('Y-m-d 00:00:00', time() - $theDay);
-		$fiewDaysBefore = date('Y-m-d 00:00:00', time() - $theDay * $days);
+		$previousDay = date('Y-m-d 00:00:00', strtotime("-1 day", time()));
+		$fiewDaysBefore = date('Y-m-d 00:00:00', strtotime("-30 Days", time()));
 
 		JavascriptHelper::addObject('opensPerDay',
-				StatisticsHelper::activityPerDay(
+				StatisticsHelper::openedNewslettersPerDay(
 					$fiewDaysBefore,
 					$previousDay,
-					null,
-					NewsletterTableHistory::ACTION_OPENED
+					null
 				)
 		);
-
 		JavascriptHelper::addObject('subsPerDay',
 				StatisticsHelper::activeSubscribersPerDay(
 					$fiewDaysBefore,

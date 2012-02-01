@@ -36,7 +36,7 @@ class NewsletterModelExtension extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.0
 	 */
-	public function getTable($type = 'Extension', $prefix = 'NewsletterTable', $config = array())
+	public function getTable($type = 'NExtension', $prefix = 'NewsletterTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -64,7 +64,7 @@ class NewsletterModelExtension extends JModelAdmin
 		$this->setState('item.client_id', $clientId);
 		$this->setState('item.module', $module);
 		$this->setState('item.module.native', $native);
-		$this->setState('item.extension.type', $type);
+		$this->setState('item.nextension.type', $type);
 
 		// Get the form.
 		$form = $this->loadForm('com_newsletter.'.$type, $type, array('control' => 'jform', 'load_data' => $loadData));
@@ -83,23 +83,32 @@ class NewsletterModelExtension extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.extension.data', array());
+		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.nextension.data', array());
 		if (empty($data)) {
 
-			$id     = $this->getState($this->getName().'.id');
-			$native = $this->getState('item.module.native');
+			$form = JRequest::getVar('jform');
+			
+			if (!empty($form)) {
+				$data = $form;
+			} else {	
+			
+				$id     = $this->getState($this->getName().'.id');
+				$native = $this->getState('item.module.native');
 
-			$modules = MigurModuleHelper::getSupported(array(
-				'extension_id' => $id,
-				'native'       => $native
-			));
+				$modules = MigurModuleHelper::getSupported(array(
+					'extension_id' => $id,
+					'native'       => $native
+				));
 
-			$data = new JObject($modules[0]);
-			if (!empty($data->params)) {
-				$data->setProperties($data->params);
+				$data = new JObject($modules[0]);
+				if (!empty($data->params)) {
+					$data->setProperties($data->params);
+				}
+				unset($data->params);
+
 			}
-			unset($data->params);
 		}
+		
 		return $data;
 	}
 
@@ -121,12 +130,11 @@ class NewsletterModelExtension extends JModelAdmin
 
 		$clientId = $this->getState('item.client_id', 0);
 		$native   = $this->getState('item.module.native', 0);
-		$type     = $this->getState('item.extension.type', 0).'s';
+		$type     = $this->getState('item.nextension.type', 0).'s';
 		$lang		= JFactory::getLanguage();
 		$client		= JApplicationHelper::getClientInfo($clientId);
 
 		// Load the core and/or local language file(s).
-		//var_dump($client->path); die();
 			$lang->load($module, $client->path, null, false, false)
 		||	$lang->load($module, $client->path.DS.$type.DS.$module, null, false, false)
 		||	$lang->load($module, $client->path, $lang->getDefault(), false, false)
@@ -138,7 +146,6 @@ class NewsletterModelExtension extends JModelAdmin
 			JPath::clean(JPATH_COMPONENT_ADMINISTRATOR.DS.'extensions'.DS.$type.DS.$module.DS.$module.'.xml') :
 			JPath::clean(JPATH_SITE.DS.$type.DS.$module.DS.$module.'.xml');
 
-		//var_dump($formFile); die();
 		if (file_exists($formFile)) {
 			// Get the module form.
 			if (!$form->loadFile($formFile, false, '//config')) {

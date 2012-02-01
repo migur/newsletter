@@ -65,9 +65,11 @@ abstract class modNewsletterSubscribeHelper
 		if ($user->id > 0) {
 			$db = JFactory::getDbo();
 			$sql = 'SELECT * FROM #__newsletter_subscribers WHERE user_id=' . $db->quote($user->id);
-			//var_dump($sql); die();
 			$subscriber = $db->setQuery($sql)->loadObject();
-			return $subscriber->name;
+			
+			if (!empty($subscriber)) {
+				return $subscriber->name;
+			}	
 		}
 
 		return '';
@@ -117,7 +119,9 @@ abstract class modNewsletterSubscribeHelper
 	public function getFbMe($app_id, $app_secret)
 	{
 		$args = array();
+		
 		parse_str(trim($_COOKIE['fbs_' . $app_id], '\\"'), $args);
+		
 		ksort($args);
 		$payload = '';
 		foreach ($args as $key => $value) {

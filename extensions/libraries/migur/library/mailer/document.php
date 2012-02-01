@@ -85,6 +85,7 @@ class MigurMailerDocument extends JDocument
 			return;
 		}
 
+		
 		// And finaly try to find the template.
 		if (!empty($params['t_style_id'])) {
 			$this->_template = $this->_loadTemplate($params['t_style_id']);
@@ -149,6 +150,33 @@ class MigurMailerDocument extends JDocument
 	}
 
 	/**
+	 * Returns the global JDocument object, only creating it
+	 * if it doesn't already exist.
+	 *
+	 * @param  type $type The document type to instantiate
+	 *
+	 * @return object  The document object.
+	 * @since  1.0
+	 */
+	public static function factory($type = 'html', $attributes = array())
+	{
+		$signature = serialize(array($type, $attributes));
+		
+		// Determine the path and class
+		$class = 'MigurMailerDocument' . $type;
+		if (!class_exists($class)) {
+			$path = dirname(__FILE__) . DS . 'document' . DS . $type . DS . $type . '.php';
+			if (file_exists($path)) {
+				require_once $path;
+			} else {
+				JError::raiseError(500, JText::_('JLIB_DOCUMENT_ERROR_UNABLE_LOAD_DOC_CLASS'));
+			}
+		}
+
+		return  new $class($attributes);
+	}
+	
+	/**
 	 * Get the template
 	 *
 	 * @return	string	The template name
@@ -160,6 +188,7 @@ class MigurMailerDocument extends JDocument
 
 		// set the letter id for the Helper
 		MigurModuleHelper::$itemId = $letter->newsletter_id;
+		MigurModuleHelper::$clean = null;
 
 		return $letter;
 	}
@@ -172,6 +201,10 @@ class MigurMailerDocument extends JDocument
 	 */
 	protected function _parseTemplate()
 	{
+		if (empty($this->_template)) {
+			throw new Exception('ParseTemplate: template entity is empty');
+		}	
+		
 		$replaces = array();
 		foreach ($this->parsedTags as $name => $val) {
 			$matches = array();
@@ -205,6 +238,8 @@ class MigurMailerDocument extends JDocument
 		}
 
 		$this->_parsed = $replaces;
+		
+		return true;
 	}
 
 	/**
@@ -218,38 +253,40 @@ class MigurMailerDocument extends JDocument
 	 */
 	public function render($caching = false, $params = array())
 	{
-		$this->init($params);
+		try {
+			// first pass of rendering.
+			$this->parse();
+			$this->_template->content = $this->_renderTemplate();
 
-		// first pass of rendering.
-		$this->parse();
-		$this->_template->content = $this->_renderTemplate();
+			// The second pass. Some dynamic data can contain placeholders.
+			// In other words - placeholders in placeholders...
+			$this->_parseTemplate();
+			$this->_template->content = $this->_renderTemplate();
 
-		//var_dump($this->_template->content);die();
-		// The second pass. Some dynamic data can contain placeholders.
-		// In other words - placeholders in placeholders...
-		$this->_parseTemplate();
-		$this->_template->content = $this->_renderTemplate();
+			$this->_parseTemplate();
+			$this->_template->content = $this->_renderTemplate();
 
-		$this->_parseTemplate();
-		$this->_template->content = $this->_renderTemplate();
+			// Set absolute links
+			$this->repairLinks($this->_template->content);
 
-		// Set absolute links
-		$this->repairLinks($this->_template->content);
+			// Trigger plugins (GA and so on)
+			$this->triggerEvent('onafterrender');
 
-		// Trigger plugins (GA and so on)
-		$this->triggerEvent('onafterrender');
-		
-		// Add tracking by com_newsletter
-		if (!empty($this->tracking)) {
-			$this->track(
-				$this->_template->content,
-				PlaceholderHelper::getPlaceholder('subscription key'),
-				$params['newsletter_id']
-			);
-		}
-
-		//var_dump($this->_template->content); die();
-		return $this->_template->content;
+			// Add tracking by com_newsletter
+			if (!empty($this->tracking)) {
+				$this->track(
+					$this->_template->content,
+					PlaceholderHelper::getPlaceholder('subscription key'),
+					$params['newsletter_id']
+				);
+			}
+			
+			return $this->_template->content;
+			
+		} catch(Exception $e) {
+			
+			return false;
+		}	
 	}
 
 	/**
@@ -270,7 +307,6 @@ class MigurMailerDocument extends JDocument
 		foreach ($this->_parsed as $parsedTag) {
 			foreach ($parsedTag AS $jdoc => $args) {
 				$replace[] = $jdoc;
-				//var_dump($args);
 				$with[] = $this->getBuffer($args['type'], $args['name'], $args['attribs']);
 			}
 		}
@@ -296,6 +332,8 @@ class MigurMailerDocument extends JDocument
 			'height_column1' => 'height_column1',
 			'width_column2' => 'width_column2',
 			'height_column2' => 'height_column2',
+			'width_column3' => 'width_column3',
+			'height_column3' => 'height_column3',
 			'image_top' => 'image_top.src',
 			'image_top_alt' => 'image_top.alt',
 			'image_top_width' => 'image_top.width',
@@ -358,14 +396,12 @@ class MigurMailerDocument extends JDocument
 	 */
 	public function getBuffer($type = null, $name = null, $attribs = array())
 	{
-		//var_dump(func_get_args());//die();
 		// If no type is specified, return the whole buffer
 		if ($type === null) {
 			return parent::$_buffer;
 		}
 
 		$result = null;
-		//var_dump(parent::$_buffer[$type][$name]);// die();
 		if (isset(parent::$_buffer[$type][$name])) {
 			return parent::$_buffer[$type][$name];
 		}
@@ -431,34 +467,35 @@ class MigurMailerDocument extends JDocument
 	{
 		// Gets all links (href and src attributes has been parsed)
 		preg_match_all("/(?:href[\s\=\"\']+|src[\s\=\"\']+)([^\"\']+)/", $content, $matches);
-		$search = array_unique($matches[1]);
 
 		$withs = array();
-		foreach ($search as $item) {
-
+		for($i=0; $i < count($matches[0]); $i++) {
+                        $item = $matches[1][$i];
 			// if this link is relative then repair it!
-			if (substr($item, 0, 4) != 'http') {
+			if (!empty($item) && substr($item, 0, 4) != 'http') {
+				
 				$pathprefix = JUri::base(true);
 
 				// remove the path prefix from the begin of item
-				if (strpos($item, $pathprefix) === 0) {
+				if (!empty($pathprefix) && strpos($item, $pathprefix) === 0) {
 					$item = substr($item, strlen($pathprefix));
 				}
 
 				// remove the '/' from the begin of item
-				if ($item[0] == '/') {
+				if ($item[0] == '/' && sizeof($item) > 1) {
 					$item = substr($item, 1);
-				}
+				}	
 
 				// Compile link
 				$item = JUri::root() . $item;
 				$item = str_replace('&amp;', '&', $item);
 
 			}
-			$withs[] = $item;
+
+			$withs[] = str_replace($matches[1][$i], $item, $matches[0][$i]);
 		}
 
-		$content = str_replace($search, $withs, $content);
+		$content = str_replace($matches[0], $withs, $content);
 		return true;
 	}
 	

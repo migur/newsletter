@@ -20,7 +20,7 @@ form #filter-bar
 }
 
 .filter-panel {
-    height: 45px;
+/*    height: 45px;*/
 }
 
 .icon-16-slide-up {
@@ -254,4 +254,39 @@ textarea.invalid {
 .tab-invalid {
     color: red !important;
     font-weight: bold;
+}
+
+.preloader {
+/*	background: url('../../system/images/mootree_loader.gif') left top no-repeat;*/
+	background: url('../images/preloader.gif') left top no-repeat;
+	padding-left: 22px;
+	line-height: 18px;
+	color: #888;
+	min-height: 18px;
+	min-width: 18px;
+	display: block;
+}
+
+.icon-32-messaging {
+    background-image: url("../images/icon-32-messaging.png");
+}
+
+.icon-32-alert {
+    background-image: url("../images/icon-32-alert.png");
+}
+
+.juser-type-icon {
+    background: url("../images/joomla-icon.png") no-repeat 1px 1px;
+	height: 16px;
+	width: 16px;
+	float: right;
+	margin: 0 5px;
+}
+
+.subscriber-type-icon {
+    background: url("../images/migur-newsletter-16x16.png") no-repeat;
+	height: 16px;
+	width: 16px;
+	float: right;
+	margin: 0 5px;
 }

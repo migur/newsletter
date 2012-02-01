@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+        <field
+            type="newsletters"
+            name="newsletter_id"
+			scope=""
+            default=""
+            label="COM_NEWSLETTER_NAME"
+            description="COM_NEWSLETTER_NAME"
+            class="inputbox validate-newsletter"
+            required="true"
+			validate="nonzero"
+		/>
+        <field
+            type="timeinterval"
+            name="time_offset"
+			size="4"
+            default=""
+            label="COM_NEWSLETTER_TIME_INTERVAL"
+            description="COM_NEWSLETTER_TIME_INTERVAL"
+            class="inputbox validate-timeoffset"
+            required="false"
+		/>
+        <field
+            type="calendar"
+            name="time_start"
+			size="10"
+            default=""
+            label="COM_NEWSLETTER_START_DATE"
+            description="COM_NEWSLETTER_START_DATE"
+            class="inputbox validate-timestart"
+            required="false"
+		/>
+        <field name="series_id" type="hidden" />
+        <field name="automailing_id" type="hidden" />
+</form>

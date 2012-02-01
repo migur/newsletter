@@ -14,7 +14,7 @@ defined('JPATH_BASE') or die;
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurDocumentRendererModules extends JDocumentRenderer
+class MigurDocumentHtmlRendererModules extends JDocumentRenderer
 {
 	/**
 	 * Renders multiple modules script and returns the results as a string

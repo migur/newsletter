@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.form.helper');
 jimport('migur.library.toolbar');
 jimport('joomla.html.pagination');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
 
 // import Joomla view library
 
@@ -36,13 +36,14 @@ class NewsletterViewSmtpprofile extends MigurView
 		JHTML::stylesheet('media/com_newsletter/css/admin.css');
 		JHTML::stylesheet('media/com_newsletter/css/smtpprofile.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		//JHTML::script('media/com_newsletter/js/migur/js/message.js');
-		//$script = $this->get('Script');
-		//$this->script = $script;
-
 
 		$this->ssForm = $this->get('Form', 'smtpprofile');
-		//var_dump($this->ssForm); die();
+		
+		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$model->load(JRequest::getInt('smtp_profile_id'));
+		
+		JavascriptHelper::addStringVar('migurIsJoomlaProfile', $model->isJoomlaProfile());
+		
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
 			JError::raiseError(500, implode("\n", $errors));
@@ -57,6 +58,7 @@ class NewsletterViewSmtpprofile extends MigurView
 		$this->setDocument();
 	}
 
+	
 	/**
 	 * Add the page title and toolbar.
 	 *
@@ -65,10 +67,12 @@ class NewsletterViewSmtpprofile extends MigurView
 	protected function addToolbar()
 	{
 		$bar = JToolBar::getInstance('smtp-toolbar', 'smtpprofileForm');
+		$bar->appendButton('Standard', 'publish', 'COM_NEWSLETTER_CHECK', 'smtpprofile.checkconnection', false);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'smtpprofile.save', false);
 	}
 
+	
 	/**
 	 * Method to set up the document properties
 	 *
@@ -79,9 +83,9 @@ class NewsletterViewSmtpprofile extends MigurView
 		$isNew = (!JRequest::get('smtp_profile_id', false) );
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_SMTP_CREATING') : JText::_('COM_NEWSLETTER_SMTP_EDITING'));
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/smtpprofile/submitbutton.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/smtpprofile/smtpprofile.js");
-		JText::script('COM_NEWSLETTER_SMTP_ERROR_UNACCEPTABLE');
+		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/smtpprofile/submitbutton.js");
+		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/smtpprofile/smtpprofile.js");
+		JText::script('COM_NEWSLETTER_MAILBOX_ERROR_UNACCEPTABLE');
 	}
 
 }
