@@ -133,7 +133,7 @@ class MigurModel extends JModel
 	public function save($data = array())
 	{
 		if (!empty($data)) {
-			$this->setFromArray($data);
+			$this->addFromArray($data);
 		}
 
 		$data = $this->toArray();
@@ -143,7 +143,7 @@ class MigurModel extends JModel
 		// If you provide the PK then this metod perform update.
 		// If all ok then method return new Id
 		if($table->save($this->toArray())) {
-			$this->setFromArray($table->getProperties());
+			$this->addFromArray($table->getProperties());
 			return $this->{$table->getKeyName()};
 		}
 		

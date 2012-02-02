@@ -162,12 +162,6 @@
         <zip destfile="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe.zip" basedir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" />
         <delete dir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" />
 
-        <copy todir="${cfg.buildVersionDir}/packages/plg_migurusersync" preservelastmodified="true" overwrite="true">
-            <fileset dir="${basedir}/extensions/plugins/plg_migurusersync" />
-        </copy>
-        <zip destfile="${cfg.buildVersionDir}/packages/plg_migurusersync.zip" basedir="${cfg.buildVersionDir}/packages/plg_migurusersync" />
-        <delete dir="${cfg.buildVersionDir}/packages/plg_migurusersync" />
-
         <copy todir="${cfg.buildVersionDir}/packages/migur" preservelastmodified="true" overwrite="true">
             <fileset dir="${basedir}/extensions/libraries/migur" />
         </copy>
@@ -180,30 +174,6 @@
         <delete  file="${cfg.buildVersionDir}/pkg_newsletter.zip" />
         <zip destfile="${cfg.buildVersionDir}/pkg_newsletter.zip" basedir="${cfg.buildVersionDir}" />
 
-    </target>
-
-    <target name="build_component" depends="update_extensions" description="packages the final component file">
-        <zip destfile="${cfg.buildVersionDir}/components/${cfg.comName}.zip" basedir="${cfg.comDir}" />
-    </target>
-
-    <target name="build_plugins" description="packages any plugins">
-        <!-- add all plugin directories here -->
-        <!-- EX: <zip destfile="${cfg.buildVersionDir}/plugins/aplugin.zip" basedir="${cfg.versionDir}/aplugin" /> -->
-        <!--         <zip destfile="${cfg.buildVersionDir}/plugins/billets_plugin_ambrasubs.zip" basedir="${cfg.versionDir}/billets_plugin_ambrasubs" /> -->
-    </target>
-
-    <target name="build_modules" description="packages any modules">
-        <!-- add all module directories here -->
-        <!-- EX: <zip destfile="${cfg.buildVersionDir}/modules/amodule.zip" basedir="${cfg.versionDir}/amodule" /> -->
-    </target>
-
-    <target name="update_extensions" depends="build_plugins, build_modules" description="copies fresh builds of plugins and extensions to the admin/extensions folder">
-        <copy todir="${cfg.extensionsDir}" overwrite="true">
-            <fileset dir="${cfg.buildVersionDir}/plugins" />
-        </copy>
-        <copy todir="${cfg.extensionsDir}" overwrite="true">
-            <fileset dir="${cfg.buildVersionDir}/modules" />
-        </copy>
     </target>
 
     <target name="info" description="prints information">

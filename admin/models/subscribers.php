@@ -130,58 +130,7 @@ class NewsletterModelSubscribers extends MigurModelList
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 
-		
-//		10000 users 4500 subscribers - result 606ms (filesort)
-//		10000 users 4500 subscribers - result 351ms (indexes)
-//		
-//		14500 subscribers - result 353ms (filesort)
-//		14500 subscribers - result 16ms (indexes)
-		
-		
-		// Select the required fields from the table.
-//		$query->select('a.subscriber_id AS id, a.name, a.email, a.state, a.created_on' .
-//				', a.created_by, a.modified_on, a.modified_by, a.locked_on, a.locked_by');
-//
-//		$query->from('#__newsletter_subscribers AS a');
-		
-
-//SELECT COUNT(*) 
-//FROM #__users AS u
-//LEFT JOIN #__newsletter_subscribers AS s ON s.user_id = u.id
-//WHERE s.subscriber_id IS NULL;
-//
-//SELECT COUNT(*)
-//FROM #__users AS u
-//WHERE u.id NOT IN (SELECT s.user_id FROM #__newsletter_subscribers AS s);		
-		
-		
 		$query->select('*');
-		
-//		$query->from(
-//		'(SELECT s.subscriber_id, s.name, s.email, s.state, s.html, s.user_id
-//		FROM #__newsletter_subscribers AS s
-//		WHERE s.user_id = 0 OR s.user_id IS NULL
-//
-//		UNION 
-//
-//		SELECT s.subscriber_id, u.name, u.email, u.block, s.html, s.user_id
-//		FROM #__newsletter_subscribers AS s
-//		JOIN #__users AS u ON (s.user_id > 0 AND u.id = s.user_id)
-//
-//		UNION 
-//
-//		SELECT NULL AS subscriber_id, u.name, u.email, u.block, 1 AS html, u.id
-//		FROM #__newsletter_subscribers AS s
-//		RIGHT JOIN #__users AS u ON (u.id = s.user_id AND s.subscriber_id IS NULL)) AS a');
-
-
-		
-// May halp to optimize it!!!!!!!!!!!!!!!!!!!!!11111
-//		CREATE TEMPORARY TABLE temp_union TYPE=HEAP *cool_select_statement_1*;
-//		INSERT INTO temp_union *cool_select_statement_2*;
-//		SELECT * FROM temp_union *order_and_group_by_stuff*;
-//		DROP TABLE temp_union;
-		
 		$query->from(
 			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
 			FROM #__newsletter_subscribers AS s

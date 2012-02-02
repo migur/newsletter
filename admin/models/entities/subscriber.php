@@ -44,13 +44,12 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		
 		if (!empty($this->_data->user_id)) {
 			
-			$jUser = JUser::getInstance($this->_data->user_id);
+			$jUser = JTable::getInstance('user');
+			$jUser->load($this->_data->user_id);
 			$this->_data->name = $jUser->name;
 			$this->_data->email = $jUser->email;
 			$this->_data->state = !$jUser->block;
-			$this->_data->created_on = !$jUser->registerDate;
-			$this->_data->created_by = !$jUser->block;
-			$this->_data->confirmed = empty($jUser->activation);
+			$this->_data->created_on = $jUser->registerDate;
 		}
 		
 		return true;
@@ -208,20 +207,24 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		// If this is a J! user or need to create it
 		if (!empty($uid) || $isJUser) {
 
-			if(empty($uid)) {
+			$jUser = JTable::getInstance('user');
+			
+			if (!$jUser->load($uid)) {
 				$data['username'] = $data['name'];
 				$data['password'] = '';
 				$data['sendEmail'] = '1';
 				$data['block'] = '0';
 				$data['groups'] = array('2');
 				$data['params'] = array();
+				
+			} else {
+				// Dont touch the nick and pass!!!
+				unset($data['username']);
+				unset($data['password']);
 			}
 			
-			$jUser = new JUser($uid);
-			
 			$jUser->bind($data);
-			
-			if (!$jUser->save()) {
+			if (!$jUser->store()) {
 				return false;
 			}
 		
@@ -235,7 +238,7 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		}	
 
 		// Check if this is a new record 
-		if (!$this->getId() && !$this->extractId($data)) {
+		if (!$this->getId()) {
 			$data['created_by'] = JFactory::getUser()->id;
 			$data['modified_on'] = 0;
 			$data['modified_by'] = 0;
