@@ -216,8 +216,8 @@ class NewsletterControllerList extends JControllerForm
 			if (($handle = fopen($file['file']['filepath'], "r")) !== FALSE) {
 
 				$res = array();
-				$skipped = 0;
 				$total = 0;
+				$skipped = 0;
 
 				//get the header
 				fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
@@ -245,69 +245,91 @@ class NewsletterControllerList extends JControllerForm
 
 				$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 				
-				$absent = 0;
-				$processed = 0;
-
+				$errors    = 0;
+				$added     = 0;
+				$updated   = 0;
+				$assigned  = 0;
 				foreach ($res as $row) {
 					
-					$userData = array();
-					if ($subscriber->load(array('email' => $row['email']))) {
-						$userData = $subscriber->toArray();
+					$success = true;
+					
+					// Try to load a man
+					$isExists = $subscriber->load(array('email' => $row['email']));
+					
+					// Set confirmed is it's empty
+					if (!$subscriber->confirmed == 0) {
+						$subscriber->confirmed = 1;
 					}
 					
-					//$subId = $userData['subscriber_id'];
-					// overwrite the user if needed or if user is absent
-					if ($settings->overwrite || empty($userData['subscriber_id'])) {
-						if (empty($userData['confirmed'])) {
-							$userData['confirmed'] = 1;
-						}
-						$saveData = array_merge($userData, $row);
-						$isJuser = ($type == 'juser') && !$subscriber->getId();
-						$subscriber->save($saveData, $type == 'juser');
-						$userData['subscriber_id'] = $subscriber->subscriber_id;
-					}
-
-					if ($userData['subscriber_id']) {
-
-						//echo "asign\n";
-						$res = $subscriber->assignToList($currentList);
-
-						if (!$res) {
-							echo json_encode(array(
-								'status' => 0,
-								'error' => 'Import failed!',
-								'processed' => $processed,
-								'skipped' => $skipped,
-								'absent' => $absent,
-								'total' => $total
-							));
-							return;
-						} else {
-							$processed++;
-						}
+					if (!$isExists) {
+						// If user is not exists then add it!
+						$success = $subscriber->save($row, $type == 'juser');
+						$added++;
+						
 					} else {
-						$absent++;
+						
+						if ($settings->overwrite) {
+							// If user is present and we can update it...
+							$success = $subscriber->save($row);
+							$updated++;
+							
+						}	
+					}
+					 
+					if ($subscriber->getId() && $success) {
+
+						// Assign the man only if he is not in list already
+						if(!$subscriber->isInList($currentList)) {
+							if($subscriber->assignToList($currentList)) {
+
+								$assigned++;
+
+							} else {
+
+								$errors++;
+							}
+						}	
+						
+					} else {
+						
+						$errors++;
 					}
 				}
 
-				die;
+				if (!empty($errors)) {
+					
+					$result = json_encode(array(
+						'status'  => 0,
+						'error'   => 'Import failed!',
+						'total'   => $total,
+						'skipped' => $skipped,
+						'errors'  => $errors,
+						'added'   => $added,
+						'updated' => $updated,
+						'assigned'=> $assigned));
+					
+				} else {
 				
-				unlink($file['file']['filepath']);
-				$sess->clear('list.' . $currentList . '.file.uploaded');
+					unlink($file['file']['filepath']);
+					$sess->clear('list.' . $currentList . '.file.uploaded');
 
-				echo json_encode(array(
-					'status' => '1',
-					'error' => 'Import complete!',
-					'processed' => $processed,
-					'skipped' => $skipped,
-					'absent' => $absent,
-					'total' => $total
-				));
-				return;
+					$result = json_encode(array(
+						'status'  => '1',
+						'error'   => 'Import complete!',
+						'total'   => $total,
+						'skipped' => $skipped,
+						'errors'  => $errors,
+						'added'   => $added,
+						'updated' => $updated,
+						'assigned'=> $assigned));
+				}
+				
 			} else {
-				echo json_encode(array('status' => '0', 'error' => 'Cannot open file'));
-				return false;
+				$result = json_encode(array('status' => '0', 'error' => 'Cannot open file'));
 			}
+			
+			echo $result;
+			return;
 		}
 	}
 
