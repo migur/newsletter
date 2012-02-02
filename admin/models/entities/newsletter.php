@@ -70,7 +70,7 @@ class NewsletterModelEntityNewsletter extends MigurModel
 				'subject' => 'You have subscribed for [listname] at [sitename]',
 				'alias'   => 'fallbacknewsletter',
 				'smtp_profile_id' => 0,
-				't_style_id' => 0,
+				't_style_id' => null,
 				'plain'    =>
 					"Hello!\n".
 					"Thank you for subscribing to our newsletter.\n".

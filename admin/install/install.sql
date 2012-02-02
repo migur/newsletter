@@ -100,6 +100,7 @@ PRIMARY KEY (`newsletter_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
+
 CREATE TABLE `#__newsletter_lists`
 (
 `list_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
