@@ -59,7 +59,16 @@ class NewsletterModelQueues extends JModelList
 		$query->select('q.*, n.name AS newsletter_name, s.email AS subscriber_email, s.name AS subscriber_name');
 		$query->from('`#__newsletter_queue` AS q');
 		$query->join('left', '`#__newsletter_newsletters` AS n ON n.newsletter_id = q.newsletter_id');
-		$query->join('left', '`#__newsletter_subscribers` AS s ON s.subscriber_id = q.subscriber_id');
+		$query->join('left',
+			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
+			FROM #__newsletter_subscribers AS s
+			LEFT JOIN #__users AS u ON (s.user_id = u.id)
+
+			UNION
+
+			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
+			FROM #__newsletter_subscribers AS s
+			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS s ON s.subscriber_id = q.subscriber_id');
 
 		// Filtering the data
 		if (!empty($this->filtering)) {
