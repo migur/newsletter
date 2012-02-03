@@ -102,7 +102,7 @@
         value="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_FILE_REFRESH'); ?>"
     />
 
-
+	
     <input
         type="button"
         name="newsletter_upload"
@@ -110,5 +110,29 @@
         id="import-file-apply"
         value="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_FILE_APPLY'); ?>"
     />
+	
+	
+	<div id="usertype-selector">
+		<div class="fltlft">
+			<?php echo JText::_('COM_NEWSLETTER_IMPORT_AS').":"; ?>
+		</div>	
+		<input
+			type="radio"
+			name="subscriber_type"
+			onclick=""
+			value="juser"
+		/>
+		<div class="fltlft"><?php echo JText::_('COM_NEWSLETTER_JUSERTYPE_SUBSCRIBER'); ?></div>
+		
+		<input
+			type="radio"
+			name="subscriber_type"
+			onclick=""
+			value="migur"
+			checked="checked"
+		/>
+		<div class="fltlft"><?php echo JText::_('COM_NEWSLETTER_MIGURTYPE_SUBSCRIBER'); ?></div>
+		
+	</div>	
 
 </div>

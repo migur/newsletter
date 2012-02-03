@@ -84,6 +84,27 @@ class MigurModel extends JModel
 	}
 
 	/**
+	 * Add to model data from array
+	 * 
+	 * @param array|object $data
+	 * @return object Link to data 
+	 */
+	public function addFromArray($data)
+	{
+		$data = (array) $data;
+
+		if (isset($data['params'])) {
+			if (is_string($data['params'])) {
+				$data['params'] = json_decode($data['params']);
+			}
+			$data['params'] = (object) $data['params'];
+		}
+
+		$this->_data = (object)array_merge((array)$this->_data, (array)$data);
+		return $this->_data;
+	}
+	
+	/**
 	 * Load data from storage by id
 	 * 
 	 * @param type $data Value of PK or array with fields to match
@@ -97,10 +118,8 @@ class MigurModel extends JModel
 		
 		$table = $this->getTable();
 		$res = $table->load($data);
-
-		if ($res) {
-			$this->setFromArray($table->getProperties());
-		}
+		
+		$this->setFromArray($res? $table->getProperties() : array());
 
 		return $res;
 	}
@@ -114,7 +133,7 @@ class MigurModel extends JModel
 	public function save($data = array())
 	{
 		if (!empty($data)) {
-			$this->setFromArray($data);
+			$this->addFromArray($data);
 		}
 
 		$data = $this->toArray();
@@ -124,7 +143,7 @@ class MigurModel extends JModel
 		// If you provide the PK then this metod perform update.
 		// If all ok then method return new Id
 		if($table->save($this->toArray())) {
-			$this->setFromArray($table->getProperties());
+			$this->addFromArray($table->getProperties());
 			return $this->{$table->getKeyName()};
 		}
 		
@@ -158,17 +177,48 @@ class MigurModel extends JModel
 	
 	public function getId() 
 	{
-		if (empty($this->_keyName)) {
-			$table = $this->getTable();
-			$this->_keyName = $table->getKeyName();
-			unset($table);
-		}
-		
-		if (empty($this->_data->{$this->_keyName})) {
+		$keyName = $this->_getKeyName();
+
+		if (empty($this->_data->{$keyName})) {
 			return null;
 		}
 		
-		return $this->_data->{$this->_keyName};
+		return $this->_data->{$keyName};
+	}
+	
+	/**
+	 * Tries to find ID in data
+	 * 
+	 * @param type $data 
+	 */
+	public function extractId($data) 
+	{
+		if (is_string($data) || is_numeric($data)) {
+			return (string)$data;
+		}
+		
+		$data = (array)$data;
+		$keyName = $this->_getKeyName();
+		
+		return isset($data[$keyName])? $data[$keyName] : null;
+	}
+	
+	
+	/**
+	 * Gets an ID from table
+	 * 
+	 * @return type 
+	 */
+	protected function _getKeyName() 
+	{
+		if (empty($this->_keyName)) {
+		
+			$table = $this->getTable();
+			$this->_keyName = $table->getKeyName();
+			unset($table);
+		}	
+
+		return $this->_keyName;
 	}
 }
 

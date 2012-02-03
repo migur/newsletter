@@ -157,6 +157,8 @@ class NewsletterControllerSubscribe extends JController
 					
 					PlaceholderHelper::setPlaceholder('listname', $list->name);
 
+					//NewsletterHelper::logMessage('Subscription. Before sending: '.json_encode(array($newsletter->toObject(), $subscriber->toObject())));
+					
 					if($mailer->send(array(
 						'type'          => $newsletter->isFallback()? 'plain' : $subscriber->getType(),
 						'subscriber'    => $subscriber->toObject(),
@@ -177,6 +179,57 @@ class NewsletterControllerSubscribe extends JController
 		jexit($message);
 	}
 
+
+
+	/**
+	 * The method to cunfirm the subscription.
+	 *
+	 * @return void
+	 * @since  1.0
+	 */
+	public function confirm()
+	{
+		// Initialise variables.
+		$app = JFactory::getApplication();
+		$user = JFactory::getUser();
+		$db = JFactory::getDbo();
+
+		// Get variables from request
+		$subKey = JRequest::getString('id', null);
+
+		if (empty($subKey)) {
+			// Redirect to page
+			$message = JText::_("The error has occured. Please try again later");
+			$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid='.$subKey, $message, 'error');
+			return;
+		}
+		$db->setQuery("SELECT subscriber_id FROM #__newsletter_subscribers WHERE subscription_key=" . $db->quote($subKey));
+		$subscriber = $db->loadObject();
+		if (count($subscriber) < 1) {
+			// Redirect to page
+			$message = JText::_("The error has occured. Please try again later");
+			$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid='.$subKey, $message, 'error');
+			return;
+		}
+		
+		// Insert into db
+		// TODO: Add santiy checks, use model instead
+		$db->setQuery("UPDATE #__newsletter_subscribers set confirmed=1 WHERE confirmed=" . $db->quote($subKey));
+		$subscriber = $db->query();
+
+		$db->setQuery("UPDATE #__newsletter_sub_list set confirmed=1 WHERE confirmed=" . $db->quote($subKey));
+		$subscriber = $db->query();
+
+		//die();
+		// Redirect to page
+		$message = JText::_("Your subscription has confirmed successfully. Thanks!");
+		$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid='.$subKey, $message, 'message');
+
+		return true;
+	}
+	
+	
+	
 	/**
 	 * The method to check the input data and render the
 	 * lists to unsubscribe.
@@ -184,7 +237,6 @@ class NewsletterControllerSubscribe extends JController
 	 * @return void
 	 * @since  1.0
 	 */
-
 	public function showUnsubscribe()
 	{
 		// Get variables from request

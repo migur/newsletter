@@ -322,7 +322,6 @@ class NewsletterModelLists extends MigurModelList
 			$result[] = $model;
 		}
 
-		var_dump($result[0]->toArray());
 		return $result;
 	}
 

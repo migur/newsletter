@@ -343,6 +343,8 @@ try {
 
         });
 
+		var st = $$('input[name=subscriber_type]:checked')[0].getProperty('value');
+
         if (notEnough == true) {
             alert(Joomla.JText._('PLEASE_FILL_ALL_REQUIRED_FIELDS','Please fill all required fields'));
         } else {
@@ -359,10 +361,19 @@ try {
                         return;
                     }
 
-                    alert(res.error + "\n\n"+Joomla.JText._('PROCESSED', 'Processed')+": " + res.processed + "\n"+Joomla.JText._('ABSENT', 'Absent')+": " + res.absent + "\n"+Joomla.JText._('SKIPPED','Skipped')+": " + res.skipped + "\n"+Joomla.JText._('TOTAL','Total')+": " + res.total);
+                    alert(
+						res.error + "\n\n"+
+						Joomla.JText._('TOTAL','Total')+": " + res.total + "\n"+
+						Joomla.JText._('SKIPPED','Skipped')+": " + res.skipped + "\n"+
+						Joomla.JText._('ERRORS', 'Errors')+": " + res.errors + "\n"+
+						Joomla.JText._('ADDED', 'Added')+": " + res.added + "\n"+
+						Joomla.JText._('UPDATED', 'Updated')+": " + res.updated + "\n"+
+						Joomla.JText._('ASSIGNED', 'Assigned')+": " + res.assigned + "\n"
+					);
+						
                     document.location.reload();
                 }
-            }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res) );
+            }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res) + '&subscriber_type=' +  st);
         }
     });
 

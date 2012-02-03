@@ -50,6 +50,10 @@ CREATE TABLE `#__newsletter_subscribers`
 PRIMARY KEY (`subscriber_id`,`user_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+CREATE INDEX email_idx ON #__newsletter_subscribers(email);
+CREATE INDEX user_id_idx ON #__newsletter_subscribers(user_id);
+
+
 
 CREATE TABLE `#__newsletter_smtp_profiles`
 (
@@ -94,6 +98,7 @@ CREATE TABLE `#__newsletter_newsletters`
 
 PRIMARY KEY (`newsletter_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
 
 
 CREATE TABLE `#__newsletter_lists`

@@ -165,7 +165,7 @@ class MigurMailer extends JObject
 		// load letter to send....
 		$letter = MailHelper::loadLetter($params['newsletter_id']);
 		if (empty($letter->newsletter_id)) {
-			$this->setError('Lading letter error or newsletter_id is not defined');
+			$this->setError('Loading letter error or newsletter_id is not defined. Id:'.$params['newsletter_id']);
 			return false;
 		}
 
@@ -197,7 +197,7 @@ class MigurMailer extends JObject
 
 			// emulate user environment
 			if (!SubscriberHelper::emulateUser(array('email' => $item->email))) {
-				$this->setError('The user ' . $item->email . ' is absent');
+				$this->setError('The user "' . $item->email . '" is absent');
 				$res = false;
 				break;
 			}
@@ -288,7 +288,7 @@ class MigurMailer extends JObject
 		// load letter to send....
 		$letter = MailHelper::loadLetter($params['newsletter_id']);
 		if (empty($letter->newsletter_id)) {
-			$msg = 'Lading letter error or newsletter_id is not defined';
+			$msg = 'Loading letter error or newsletter_id is not defined. Id:'.$params['newsletter_id'];
 			$this->setError($msg);
 			throw new Exception($msg);
 		}
@@ -312,7 +312,7 @@ class MigurMailer extends JObject
 		SubscriberHelper::saveRealUser();
 		
 		if (!SubscriberHelper::emulateUser(array('email' => $subscriber->email))) {
-			$msg = 'The user ' . $subscriber->email . ' is absent';
+			$msg = 'The user "' . $subscriber->email . '" is absent';
 			$this->setError($msg);
 			throw new Exception ($msg);
 		}

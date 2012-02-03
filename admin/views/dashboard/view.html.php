@@ -90,7 +90,10 @@ class NewsletterViewDashboard extends MigurView
 			return false;
 		}
 
-		EnvironmentHelper::showWarnings();
+		EnvironmentHelper::showWarnings(array(
+			'checkJoomla',
+			'checkImap',
+			'checkLogs'));
 		
 		// We don't need toolbar in the modal window.
 		if ($this->getLayout() !== 'modal') {
@@ -149,7 +152,7 @@ class NewsletterViewDashboard extends MigurView
 		$bar->appendButton('Popup', 'export', 'COM_NEWSLETTER_NEWSLETTER_SEND', 'index.php?option=com_newsletter&amp;view=sender&amp;tmpl=component', 920, 450, 0, 0);
 
 		$bar = MigurToolBar::getInstance('subscribers-toolbar');
-		$bar->appendButton('Popup', 'new', 'COM_NEWSLETTER_SUBSCRIBER_CREATE', 'index.php?option=com_newsletter&amp;view=subscriber&amp;tmpl=component', 350, 150, 0, 0);
+		$bar->appendButton('Popup', 'new', 'COM_NEWSLETTER_SUBSCRIBER_CREATE', 'index.php?option=com_newsletter&amp;view=subscriber&amp;tmpl=component', 400, 220, 0, 0);
 		$bar->appendButton('Popup', 'new', 'COM_NEWSLETTER_LIST_CREATE', 'index.php?option=com_newsletter&amp;view=list&amp;tmpl=component', 1000, 600, 0, 0);
 
 		$bar = MigurToolBar::getInstance('config-toolbar');

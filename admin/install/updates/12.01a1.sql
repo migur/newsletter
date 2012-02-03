@@ -9,6 +9,11 @@ ALTER TABLE `#__newsletter_smtp_profiles` ADD COLUMN  `params` TEXT;
 ALTER TABLE `#__newsletter_smtp_profiles` ADD COLUMN  `is_joomla` SMALLINT;
 ALTER TABLE `#__newsletter_newsletters` ADD COLUMN  `category` INT(11);
 
+ALTER TABLE `#__newsletter_newsletters` ADD FOREIGN KEY (t_style_id) REFERENCES #__newsletter_template_styles (t_style_id) ON DELETE SET NULL ON UPDATE CASCADE;
+
+CREATE INDEX email_idx   ON #__newsletter_subscribers(email);
+CREATE INDEX user_id_idx ON #__newsletter_subscribers(user_id);
+
 CREATE TABLE `#__newsletter_automailings` (
   `automailing_id` INT(11) NOT NULL AUTO_INCREMENT,
   `automailing_name` VARCHAR(255) DEFAULT NULL,
