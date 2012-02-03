@@ -33,9 +33,18 @@ defined('_JEXEC') or die;
 		echo $this->loadTemplate('advanced', 'config');
 		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_IMPORT_EXPORT'), 'tab-export');
 		echo $this->loadTemplate('export', 'config');
-		// Coming in 12.02
-		//echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PERMISSIONS'), 'tab-permissions');
-		//echo $this->loadTemplate('permissions', 'config');
+		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PERMISSIONS'), 'tab-permissions');
+		?>
+		
+		<?php
+		// First check if user has access to the component.
+		if (AclHelper::canConfigureComponent()) {
+			echo $this->loadTemplate('permissions', 'config');
+		} else { ?>
+			<center>
+			<?php echo JText::_('COM_NEWSLETTER_YOU_CANT_CHANGE_COMPONENT_PERMISSIONS'); ?>
+			</center>
+		<?php }	
 		echo JHtml::_('tabs.end');
 		?>
 		<div>

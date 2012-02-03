@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <access component="com_contact">
 	<section name="component">
+		<action name="core.admin" title="JACTION_ADMIN" description="JACTION_ADMIN_COMPONENT_DESC" />
+		<action name="core.manage" title="JACTION_MANAGE" description="JACTION_MANAGE_COMPONENT_DESC" />
 		<action name="com_newsletter.newsletter.new" title="COM_NEWSLETTER_NEWSLETTER_CREATING" description="COM_NEWSLETTER_NEWSLETTER_CREATING" />
 		<action name="com_newsletter.newsletter.edit" title="COM_NEWSLETTER_NEWSLETTER_EDITING" description="COM_NEWSLETTER_NEWSLETTER_EDITING" />
 		<action name="com_newsletter.list.new" title="COM_NEWSLETTER_LIST_CREATING" description="COM_NEWSLETTER_LIST_CREATING" />
