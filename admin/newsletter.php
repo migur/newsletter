@@ -94,5 +94,9 @@ try {
 	
 } catch (Exception $e) {
 	
+	NewsletterHelper::logMessage(
+		'Uncatched exeption: '.  json_encode($e->__toString()));
+	
+	throw $e;
 }
 
