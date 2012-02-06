@@ -47,7 +47,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		return
 			/* newsletter.add have no similar with core.create
 			   because it is not inheritance of J! core.create */
-			//parent::allowAdd($data) &&
+			/* parent::allowAdd($data) && */
 			AclHelper::actionIsAllowed('newsletter.add');
 	}
 
@@ -61,7 +61,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	protected function allowEdit($data = array(), $key = 'id')
 	{
 		return 
-			parent::allowEdit($data, $key) &&
+			/* parent::allowEdit($data, $key) && */
 			AclHelper::actionIsAllowed('newsletter.edit');
 	}
 

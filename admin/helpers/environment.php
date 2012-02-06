@@ -143,4 +143,10 @@ class EnvironmentHelper {
 		$data[0] = $conflictsCount;
 		return $conflictsCount == 0;
 	}
+	
+	public static function checkAcl()
+	{
+		$asset = JTable::getInstance('asset');
+		return $asset->loadByName('com_newsletter');
+	}
 }

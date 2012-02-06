@@ -44,7 +44,7 @@ class NewsletterControllerList extends JControllerForm
 	protected function allowAdd($data = array(), $key = 'id')
 	{
 		return 
-			parent::allowAdd($data, $key) &&
+			/* parent::allowAdd($data, $key) && */
 			AclHelper::actionIsAllowed('list.add');
 	}
 
@@ -58,7 +58,7 @@ class NewsletterControllerList extends JControllerForm
 	protected function allowEdit($data = array(), $key = 'id')
 	{
 		return 
-			parent::allowEdit($data, $key) &&
+			/* parent::allowEdit($data, $key) && */
 			AclHelper::actionIsAllowed('list.edit');
 	}
 

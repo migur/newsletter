@@ -59,7 +59,8 @@ class NewsletterViewConfiguration extends MigurView
 		EnvironmentHelper::showWarnings(array(
 			'checkJoomla',
 			'checkImap',
-			'checkLogs'));
+			'checkLogs',
+			'checkAcl'));
 		
 		$this->general = JComponentHelper::getParams('com_newsletter');
 
