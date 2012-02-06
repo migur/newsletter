@@ -11,10 +11,17 @@ defined('_JEXEC') or die;
         echo JHtml::_('tabs.start', 'tabs-list', array('startOffset'=> $this->subtask));
         echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_OVERVIEW'), 'tab-overview');
         echo $this->loadTemplate('overview', '');
-        echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_IMPORT'), 'tab-import');
-        echo $this->loadTemplate('import', '');
-        echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_EXCLUDE'), 'tab-exclude');
-        echo $this->loadTemplate('exclude', '');
+		
+		if (
+			( $this->isNew && AclHelper::actionIsAllowed('list.add')) || 
+			(!$this->isNew && AclHelper::actionIsAllowed('list.edit'))
+		) {
+			echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_IMPORT'), 'tab-import');
+			echo $this->loadTemplate('import', '');
+			echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_EXCLUDE'), 'tab-exclude');
+			echo $this->loadTemplate('exclude', '');
+		}
+		
         echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_SUBSCRIBERS'), 'tab-subscribers');
         echo $this->loadTemplate('subscribers', '');
         echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_UNSUBSCRIBED'), 'tab-unsubscribed');

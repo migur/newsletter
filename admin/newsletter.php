@@ -25,7 +25,10 @@ try {
 	JLoader::import('helpers.acl', JPATH_COMPONENT_ADMINISTRATOR, '');
 	
 	// First check if user has access to the component.
-	if (!AclHelper::canAccessComponent() || !AclHelper::taskIsAllowed()) {
+	if (
+		!AclHelper::canAccessComponent() /*|| 
+		!AclHelper::actionIsAllowed(JRequest::getCmd('task'))*/
+	) {
 		AclHelper::redirectToAccessDenied();
 	}
 	
@@ -54,8 +57,9 @@ try {
 	JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'tables');
 	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'entities', 'NewsletterModelEntity');
 
-	// Add the site root to JS
+	// Add the site root and user's ACL to JS
 	JavascriptHelper::addStringVar('migurSiteRoot', JUri::root());
+	JavascriptHelper::addObject('migurUserAcl', AclHelper::toArray());
 
 	// Setup the cache
 	$cache = JFactory::getCache('com_newsletter');

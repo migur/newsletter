@@ -45,9 +45,17 @@
 					<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 				</td>
 				<td>
-                                    <a href="<?php echo JRoute::_("index.php?option=com_newsletter&amp;task=newsletter.edit&amp;&newsletter_id=" . (int) $item->id); ?>">
-                                        <?php echo $this->escape($item->name); ?>
-                                    </a>
+				<?php 
+				if (AclHelper::actionIsAllowed('newsletter.edit')) { 
+				?>
+					<a href="<?php echo JRoute::_("index.php?option=com_newsletter&task=newsletter.edit&newsletter_id=" . (int) $item->id, false); ?>">
+						<?php echo $this->escape($item->name); ?>
+					</a>
+				<?php 
+				} else {	
+					echo $this->escape($item->name); 
+				}
+				?>
 				</td>
 				<td>
 					<?php

@@ -1,9 +1,12 @@
 <?php
 // no direct access
 defined('_JEXEC') or die;
+
+$showFull = AclHelper::canConfigureComponent(); 
+
 ?>
 
-<fieldset id="config-extensions">
+<fieldset id="config-extensions" <?php if (!$showFull) { ?> style="width:98%" <?php } ?>>
 	<legend><?php echo JText::_('COM_NEWSLETTER_INSTALLED_EXTESIONS'); ?></legend>
 	<?php
 	echo JHtml::_('tabs.start', 'tabs-extensions');
@@ -16,6 +19,8 @@ defined('_JEXEC') or die;
 	echo JHtml::_('tabs.end');
 	?>
 </fieldset>
+
+<?php if ($showFull) { ?>
 <fieldset id="config-config">
 	<legend><?php echo JText::_('COM_NEWSLETTER_GLOBAL_CONFIG'); ?></legend>
 	<form name="adminForm" method="POST" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
@@ -54,3 +59,4 @@ defined('_JEXEC') or die;
 		</div>
 	</form>
 </fieldset>
+<?php } ?>

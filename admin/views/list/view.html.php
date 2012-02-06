@@ -42,6 +42,21 @@ class NewsletterViewList extends MigurView
 	 */
 	public function display($tpl = null)
 	{
+		$isNew = (!JRequest::getInt('list_id', false) );
+		
+		if (
+			( $isNew && !AclHelper::actionIsAllowed('list.add')) ||
+			(!$isNew && !AclHelper::actionIsAllowed('list.edit'))
+		) {
+			$msg = $isNew? 'JLIB_APPLICATION_ERROR_CREATE_RECORD_NOT_PERMITTED' : 'JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED';
+			JFactory::getApplication()->redirect(
+				JRoute::_('index.php?option=com_newsletter&view=subscribers', false),
+				JText::_($msg), 
+				'error');
+			return;
+		}	
+		
+		
 		//TODO: Bulk-code. Need to refactor
 
 		$listId = JRequest::getInt('list_id', 0);
@@ -185,9 +200,16 @@ class NewsletterViewList extends MigurView
 	 */
 	protected function addToolbar()
 	{
+		$isNew = !JRequest::getInt('list_id', false);
+		
 		$bar = JToolBar::getInstance('multitab-toolbar');
-		$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'list.apply', false);
-		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'list.save', false);
+		if (
+			( $isNew && AclHelper::actionIsAllowed('list.add')) || 
+			(!$isNew && AclHelper::actionIsAllowed('list.edit'))
+		) {
+			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'list.apply', false);
+			$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'list.save', false);
+		}	
 		$bar->appendButton('Link', 'cancel', 'JTOOLBAR_CLOSE', 'index.php?option=com_newsletter&view=close&tmpl=component', false);
 
 		$bar = MigurToolBar::getInstance('import-toolbar');
