@@ -30,22 +30,39 @@ class NewsletterControllerList extends JControllerForm
 
 		// Apply, Save & New, and Save As copy should be standard on forms.
 		$this->registerTask('savenclose', 'save');
+		
+		$this->view_list = 'subscribers';
 	}
 
+	
 	/**
-	 * Method override to check if you can edit an existing record.
-	 *
-	 * @param	array	$data	An array of input data.
-	 * @param	string	$key	The name of the key for the primary key.
-	 *
-	 * @return	boolean
-	 * @since	1.0
+	 * See parent's phpdoc
+	 * 
+	 * @return  boolean
+	 * @since   11.1
+	 */
+	protected function allowAdd($data = array(), $key = 'id')
+	{
+		return 
+			parent::allowAdd($data, $key) &&
+			AclHelper::actionIsAllowed('list.add');
+	}
+
+
+	/**
+	 * See parent's phpdoc
+	 * 
+	 * @return  boolean
+	 * @since   11.1
 	 */
 	protected function allowEdit($data = array(), $key = 'id')
 	{
-		return true;
+		return 
+			parent::allowEdit($data, $key) &&
+			AclHelper::actionIsAllowed('list.edit');
 	}
 
+	
 	/**
 	 * Save the configuration
 	 * @return	boolean
@@ -135,7 +152,7 @@ class NewsletterControllerList extends JControllerForm
 		$sess = JFactory::getSession();
 		$sess->set('list.' . $listId . '.file.uploaded', $data);
 
-		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($listId, 'list_id') . '&subtask=' . $subtask, false));
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $this->view_item . $this->getRedirectToItemAppend($listId, 'list_id') . '&subtask=' . $subtask, false));
 		return;
 	}
 
@@ -146,6 +163,14 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function assignGroup()
 	{
+		if (!$this->allowEdit($data, $key)) {
+			$this->setError(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
+			$this->setMessage($this->getError(), 'error');
+			$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=' . $this->view_list . $this->getRedirectToListAppend(), false));
+			return false;
+		}
+		
+		
 		if (JRequest::getMethod() == "POST") {
 
 			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
@@ -171,7 +196,7 @@ class NewsletterControllerList extends JControllerForm
 				}
 			}
 		}
-		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=subscribers', false));
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
 	}
 
 	/**
@@ -181,6 +206,14 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function unbindGroup()
 	{
+		if (!$this->allowEdit($data, $key)) {
+			$this->setError(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
+			$this->setMessage($this->getError(), 'error');
+			$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list.$this->getRedirectToListAppend(), false));
+			return false;
+		}
+		
+		
 		if (JRequest::getMethod() == "POST") {
 
 			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
@@ -206,7 +239,7 @@ class NewsletterControllerList extends JControllerForm
 				}
 			}
 		}
-		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=subscribers', false));
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view='.$this->view_list, false));
 	}
 }
 

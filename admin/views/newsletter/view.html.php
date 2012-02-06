@@ -50,6 +50,21 @@ class NewsletterViewNewsletter extends MigurView
 	 */
 	public function display($tpl = null)
 	{
+		$isNew = (!JRequest::getInt('newsletter_id', false) );
+		
+		if (
+			( $isNew && !AclHelper::actionIsAllowed('newsletter.add')) ||
+			(!$isNew && !AclHelper::actionIsAllowed('newsletter.edit'))
+		) {
+			$msg = $isNew? 'JLIB_APPLICATION_ERROR_CREATE_RECORD_NOT_PERMITTED' : 'JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED';
+			JFactory::getApplication()->redirect(
+				JRoute::_('index.php?option=com_newsletter&view=newsletters', false),
+				JText::_($msg), 
+				'error');
+			return;
+		}	
+		
+		
 		//TODO: Need to move css/js to SetDocument
 		JHTML::stylesheet('media/com_newsletter/css/admin.css');
 		JHTML::stylesheet('media/com_newsletter/css/newsletter.css');
@@ -68,7 +83,6 @@ class NewsletterViewNewsletter extends MigurView
 
 		JHTML::script('media/com_newsletter/js/migur/js/guide.js');
 		JHTML::stylesheet('media/com_newsletter/css/guide.css');
-
 
 		//TODO: Bulk-code. Need to refactor.
 
@@ -218,10 +232,17 @@ class NewsletterViewNewsletter extends MigurView
 		'article.png');
 
 		$bar = JToolBar::getInstance('toolbar');
-		$bar->appendButton('Link', 'autosaver', '', '#', false);
-		$bar->appendButton('Separator', null, '50');
-		$bar->appendButton('Link', 'apply', 'JTOOLBAR_APPLY', '#', false);
-		$bar->appendButton('Standard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
+		
+		if (
+			( $isNew && AclHelper::actionIsAllowed('newsletter.add' )) ||
+			(!$isNew && AclHelper::actionIsAllowed('newsletter.edit')) 
+		) {
+			$bar->appendButton('Link', 'autosaver', '', '#', false);
+			$bar->appendButton('Separator', null, '50');
+			$bar->appendButton('Link', 'apply', 'JTOOLBAR_APPLY', '#', false);
+			$bar->appendButton('Standard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
+		}
+		
 		$helpLink = 'http://migur.com/support/documentation/newsletter/' . NewsletterHelper::getManifest()->version . '/newsletters';
         $bar->appendButton('Popup', 'default', 'COM_NEWSLETTER_TUTORIAL', $helpLink, 1000, 600, 0, 0);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);

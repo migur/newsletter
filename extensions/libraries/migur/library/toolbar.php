@@ -32,6 +32,10 @@ class MigurToolBar extends JToolBar
 {
 
 	protected $_formName = '';
+	
+	protected $_actionPrefix = '';
+	
+	protected $_useAcl = false;
 
 	/**
 	 * The constructor of a class
@@ -41,13 +45,17 @@ class MigurToolBar extends JToolBar
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function __construct($name = 'toolbar', $form = null)
+	public function __construct($name = 'toolbar', $form = null, $actionPrefix = '', $useAcl = false)
 	{
 		parent::__construct($name);
 
 		$this->_formName = ($form) ? $form : $name . 'Form';
 		
 		$this->addButtonPath(JPATH_LIBRARIES.DS.'migur'.DS.'library'.DS.'button');
+		
+		$this->_actionPrefix = $actionPrefix;
+		
+		$this->_useAcl = $useAcl;
 	}
 
 	/**
@@ -59,7 +67,7 @@ class MigurToolBar extends JToolBar
 	 * @return	JToolBar	The MigurToolBar object.
 	 * @since   1.0
 	 */
-	public static function getInstance($name = 'toolbar', $form = null)
+	public static function getInstance($name = 'toolbar', $form = null, $actionPrefix = '', $useAcl = false)
 	{
 		static $instances;
 
@@ -97,5 +105,20 @@ class MigurToolBar extends JToolBar
 			),
 			$html
 		);
+	}
+	
+	public function appendButton() 
+	{
+		$args = func_get_args();
+
+		$action = $args[1];
+		
+		if ($this->_useAcl) {
+			if (!AclHelper::actionIsAllowed($this->_actionPrefix.'.'.$action)) {
+				return false;
+			}
+		}
+		
+		return call_user_func_array(array('parent', 'appendButton'), $args);
 	}
 }

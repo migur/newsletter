@@ -84,7 +84,9 @@ class NewsletterViewConfiguration extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_CONFIGURATION_TITLE'), 'article.png');
 
 		$bar = JToolBar::getInstance('toolbar');
-		$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'configuration.apply', false);
+		if (AclHelper::canConfigureComponent()) {
+			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'configuration.apply', false);
+		}	
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));

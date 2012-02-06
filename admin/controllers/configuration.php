@@ -56,8 +56,8 @@ class NewsletterControllerConfiguration extends JController
 		$option = "com_newsletter";
 
 		// Check if the user is authorized to do this.
-		if (!JFactory::getUser()->authorise('core.admin', $option)) {
-			JFactory::getApplication()->redirect('index.php', JText::_('JERROR_ALERTNOAUTHOR'));
+		if (!AclHelper::canConfigureComponent()) {
+			AclHelper::redirectToAccessDenied();
 			return;
 		}
 
@@ -106,7 +106,6 @@ class NewsletterControllerConfiguration extends JController
 		unset($data['params']['confirm_mail_body']);
 
 		$data['option'] = 'com_newsletter';
-		
 		$return = $model->save($data);
 
 		// Check the return value.

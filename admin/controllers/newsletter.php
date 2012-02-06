@@ -34,7 +34,39 @@ class NewsletterControllerNewsletter extends JControllerForm
 		// Apply, Save & New, and Save As copy should be standard on forms.
 	}
 
+	
 
+	/**
+	 * See parent's phpdoc
+	 * 
+	 * @return  boolean
+	 * @since   11.1
+	 */
+	protected function allowAdd($data = array())
+	{
+		return
+			/* newsletter.add have no similar with core.create
+			   because it is not inheritance of J! core.create */
+			//parent::allowAdd($data) &&
+			AclHelper::actionIsAllowed('newsletter.add');
+	}
+
+
+	/**
+	 * See parent's phpdoc
+	 * 
+	 * @return  boolean
+	 * @since   11.1
+	 */
+	protected function allowEdit($data = array(), $key = 'id')
+	{
+		return 
+			parent::allowEdit($data, $key) &&
+			AclHelper::actionIsAllowed('newsletter.edit');
+	}
+
+	
+	
 	/**
 	 * Creates the letter for a preview
 	 *
@@ -48,11 +80,30 @@ class NewsletterControllerNewsletter extends JControllerForm
 		echo $mailer->render($data);
 	}
 	
+	
+	
+	/**
+	 * Bulk save method for saving of newsletter 
+	 * or copying of several ones.
+	 * 
+	 * @return type 
+	 */
 	public function save(){
+		
 		
 		$task = JRequest::getString('task');
 		
 		if (!empty($task) && strpos($task, 'save2copy') !== false) {
+
+			// Actualy on this step will be performed 
+			// the checking for NEWSLETTER.ADD permission. It's ok
+			if (!$this->allowSave()) {
+				$this->setError(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
+				$this->setMessage($this->getError(), 'error');
+				$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list.$this->getRedirectToListAppend(), false));
+
+				return false;
+			}
 			
 			$nIds = JRequest::getVar('cid', array());
 			

@@ -54,20 +54,26 @@
                                     <?php echo JHtml::_('multigrid.id', $i, $item->list_id, false, 'cid', 'listsForm'); ?>
 				</td>
 				<td>
-                                    <a href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=list.edit&list_id='.(int) $item->list_id); ?>"
-                                       rel="{handler: 'iframe', size: {x: 990, y: 580}}"
-                                       class="modal" >
-                                        <?php echo $this->escape($item->name); ?>
-                                    </a>
-                                </td>
+				<?php 
+				if (AclHelper::actionIsAllowed('list.edit')) { ?>
+					<a href="<?php echo JRoute::_("index.php?option=com_newsletter&tmpl=component&layout=edit&task=list.edit&list_id=".(int) $item->list_id, false); ?>"
+					   rel="{handler: 'iframe', size: {x: 990, y: 580}}"
+					   class="modal" >
+						<?php echo $this->escape($item->name); ?>
+					</a>
+				<?php } else { 
+					echo $this->escape($item->name);
+				}
+				?>	
+				</td>
 				<td>
-                                    <?php 
-                                        if (intval($item->subscribers) > 0) {
-                                            echo '<a href="#" onclick="document.subscribersForm.filter_list.value=\'' . $item->list_id . '\';document.subscribersForm.submit();">' . $this->escape(intval($item->subscribers)) . '</a>';
-                                        } else {
-                                            echo '<span style="color:#cccccc">0</span>';
-                                        }
-                                    ?>
+				<?php 
+					if (intval($item->subscribers) > 0) {
+						echo '<a href="#" onclick="document.subscribersForm.filter_list.value=\'' . $item->list_id . '\';document.subscribersForm.submit();">' . $this->escape(intval($item->subscribers)) . '</a>';
+					} else {
+						echo '<span style="color:#cccccc">0</span>';
+					}
+				?>
 				</td>
 				<td class="center">
 					<?php echo JHtml::_('multigrid.enabled', $item->state, $i, 'tick.png', 'publish_x.png', 'lists.', 'listsForm'); ?>
