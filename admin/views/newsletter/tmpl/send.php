@@ -14,6 +14,10 @@
                 <?php echo $this->form->getInput('subject'); ?>
 		</li>
 		<li>
+                <?php echo $this->form->getLabel('encoding', 'params'); ?>
+                <?php echo $this->form->getInput('encoding', 'params'); ?>
+		</li>
+		<li>
                 <?php echo $this->form->getLabel('type'); ?>
                 <?php echo $this->form->getInput('type'); ?>
 		</li>

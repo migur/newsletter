@@ -87,6 +87,17 @@
                     required="true"
                     validate=""
              />
+			 
+			<field name="encoding"
+				type="encodings"
+				label="COM_NEWSLETTER_ENCODING"
+				description="COM_NEWSLETTER_ENCODING"
+				class="inputbox validate-encoding autosaverable"
+				default="utf-8"
+				required="true"
+				validate=""
+			 />
+			 
              <field name="attachments" type="hidden" />
 
         </fields>
