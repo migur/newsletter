@@ -129,6 +129,14 @@ class NewsletterControllerCron extends JControllerForm
 					'data' => array(),
 					'error' => '');
 
+				// Need to send notice if system cannot send the requiered count of 
+				// letters for mailing interval.
+				if ($smtpProfile->isNeedNewPeriod() && $smtpProfile->needToSendCount() > 0) {
+					NewsletterHelper::logMessage(
+						JText::_('COM_NEWSLETTER_NOTICE_SENDING_INTERVAL_TOO_SHORT'),
+						'mailing');
+				}
+				
 				// First check if the process is not hanged up
 				if($smtpProfile->isInProcess() || $smtpProfile->isNeedNewPeriod()) {
 					$smtpProfile->kill();

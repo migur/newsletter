@@ -37,6 +37,16 @@ try {
 	JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 
+	// Now we log all the troubles into our DB.
+	JLog::addLogger(
+		array(
+			'logger' => 'database',
+			'db_table' => '#_newsletter_logs'),
+		JLog::EMERGENCY | JLog::ALERT | JLog::CRITICAL | JLog::ERROR
+	);
+	
+	JLog::add('ololo', JLog::ERROR); die;
+	
 	// Add translations used in JavaScript
 	JavascriptHelper::requireTranslations();
 
