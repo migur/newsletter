@@ -8,8 +8,6 @@ window.addEvent('domready', function() {
 	
 	$$('.timeinterval .timeinterval-count').addEvent('keyup', function(ev){
 		
-		console.log('trololo');
-		
 		var valueCnt = $(this).getProperty('value');
 		var valueType = $(this).getSiblings('.timeinterval-type')[0].getProperty('value');
 		var seconds = 0;

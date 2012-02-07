@@ -173,7 +173,6 @@ Migur.chart.hline = {
 				this.bar.label.attr('text-anchor', 'start');
 			}
 			
-			console.log(this.bar);
 		});
 	},
 	

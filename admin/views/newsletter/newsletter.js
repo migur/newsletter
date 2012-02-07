@@ -737,8 +737,6 @@ window.addEvent('domready', function() {
                     }
                 }
             
-				console.log(id, sets, vals);
-			
                 $('jform_params_newsletter_from_name').set('value', vals.from_name);
                 $('jform_params_newsletter_from_email').set('value', vals.from_email);
                 $('jform_params_newsletter_to_name').set('value', vals.reply_to_name);
