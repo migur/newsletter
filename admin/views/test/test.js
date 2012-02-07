@@ -9,7 +9,6 @@ window.addEvent('domready', function() {
 			var params = row.getElements('.test-params')[0].getProperty('value');
 			var other = row.getElements('.test-other')[0].getProperty('value');
 			
-			//console.log(url, method, params, other);
 			var data = params + ((other != '')? '&'+other : '');
 			
 			data = (data != '')? data.parseQueryString() : {};
