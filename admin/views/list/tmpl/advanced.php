@@ -1,12 +1,6 @@
     <div id="tab-container-advanced" class="form-text">
         <dl>
             <dt>
-                <?php echo $this->listForm->getLabel('list_encoding'); ?>
-            </dt>
-            <dd>
-                <?php echo $this->listForm->getInput('list_encoding'); ?>
-            </dd>
-            <dt>
                 <?php echo $this->listForm->getLabel('send_at_reg'); ?>
             </dt>
             <dd>

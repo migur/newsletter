@@ -33,19 +33,6 @@
             required="true"
         >
         </field>
-
-
-        <field
-            type="text"
-            name="list_encoding"
-            default="iso-8859-1"
-            label="COM_NEWSLETTER_ENCODING"
-            description="COM_NEWSLETTER_ENCODING"
-            class="inputbox validate-list_encoding"
-            size="40"
-            maxlength="40"
-            required="true"
-        />
         <field 
             type="newsletters"
             scope="static"
