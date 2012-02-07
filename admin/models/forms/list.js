@@ -20,10 +20,4 @@ window.addEvent('domready', function() {
             regex=/^.+$/;
             return regex.test(value);
         });
-
-    document.formvalidator.setHandler('list_encoding',
-        function (value) {
-            regex=/^.+$/;
-            return regex.test(value);
-        });
 });

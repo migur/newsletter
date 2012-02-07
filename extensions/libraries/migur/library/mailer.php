@@ -226,6 +226,8 @@ class MigurMailer extends JObject
 				$sender->AddCustomHeader('Subscriber-ID:' . $item->subscriber_id);
 			}	
 
+			$letter->encoding = $letter->params['encoding'];
+
 			// send the unique letter to each recipient
 			try {
 				$bounced = $sender->send(array(
@@ -327,6 +329,8 @@ class MigurMailer extends JObject
 			));
 		
 		$letter->subject = $this->renderSubject($letter->subject);
+
+		$letter->encoding = $letter->params['encoding'];
 
 		SubscriberHelper::restoreRealUser();
 

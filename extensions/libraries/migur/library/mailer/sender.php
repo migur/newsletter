@@ -141,6 +141,10 @@ class MigurMailerSender extends PHPMailer
 		
 		$this->Subject = JMailHelper::cleanText($this->letter->subject);
 
+		if (!empty($this->letter->encoding)) {
+			$this->CharSet = $this->letter->encoding;
+		}	
+		
 		$this->Body = JMailHelper::cleanText($this->letter->content);
 		foreach($this->attach as $item) {
 			$parts = explode(DS, $item->filename);
