@@ -282,6 +282,23 @@ CREATE TABLE `#__newsletter_automailing_targets` (
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
+
+CREATE TABLE `#__newsletter_logs` (
+  `log_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `message` TEXT(255),
+  `date` DATETIME,
+  `priority` INT(11),
+  `category` VARCHAR(255) NOT NULL DEFAULT 'common',
+  `params` TEXT,
+
+  PRIMARY KEY (`log_id`)
+) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE INDEX `date_idfk` ON `#__newsletter_logs`(`date`);
+CREATE INDEX `category_idfk` ON `#__newsletter_logs`(`category`);
+
+
+
 CREATE INDEX `smtp_profile_id_idxfk` ON `#__newsletter_newsletters`(`smtp_profile_id`);
 # ALTER TABLE `#__newsletter_newsletters` ADD CONSTRAINT `newsletters_smtp_profile_idfk` FOREIGN KEY `smtp_profile_id_idxfk` (`smtp_profile_id`) REFERENCES `#__newsletter_smtp_profiles` (`smtp_profile_id`);
 

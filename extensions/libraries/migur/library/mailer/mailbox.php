@@ -251,7 +251,7 @@ class MigurMailerMailbox
 			return true;
 		}
 		
-		NewsletterHelper::logMessage('Mailbox.Bounceds.Ids found:'.json_encode($res), 'mailbox/'); //die;
+		LogHelper::addDebug('Mailbox.Bounceds.Ids found:'.json_encode($res), 'mailbox/'); //die;
 
 		// Handle partial processing option
 		if (!empty($max)) {
@@ -324,11 +324,11 @@ class MigurMailerMailbox
 						$processed = $this->processBounce($x, 'BODY', $c_total);
 					}
 					
-					NewsletterHelper::logMessage('Mailbox.Mail processed.Position:'.$x.',time:'.(string)(mktime()-$time).',id:'.$messageId.',date:'.$date, 'mailbox/');
+					LogHelper::addDebug('Mailbox.Mail processed.Position:'.$x.',time:'.(string)(mktime()-$time).',id:'.$messageId.',date:'.$date, 'mailbox/');
 					
 				} else {
 					
-					NewsletterHelper::logMessage('Mailbox.Mail in cache.Position:'.$x.',id:'.$messageId, 'mailbox/');
+					LogHelper::addDebug('Mailbox.Mail in cache.Position:'.$x.',id:'.$messageId, 'mailbox/');
 				}
 			}
 			

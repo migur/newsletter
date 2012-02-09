@@ -24,6 +24,8 @@ jimport('joomla.error.log');
 // Add the helper
 JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.log', JPATH_COMPONENT_ADMINISTRATOR, '');
+JHtml::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR.DS.'helpers'.DS.'html');
 
 JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'rules');
 JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'tables');
