@@ -198,8 +198,8 @@ PRIMARY KEY (`extension_id`)
 CREATE TABLE `#__newsletter_queue`
 (
 `queue_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-`newsletter_id` BIGINT(20) NOT NULL,
-`subscriber_id` BIGINT(20) NOT NULL,
+`newsletter_id` BIGINT(20) DEFAULT NULL,
+`subscriber_id` BIGINT(20) DEFAULT NULL,
 `list_id` INT(11) NOT NULL,
 `created` DATETIME NOT NULL,
 `state` INT(11) NOT NULL,
