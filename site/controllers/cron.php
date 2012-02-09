@@ -45,6 +45,8 @@ class NewsletterControllerCron extends JControllerForm
 	public function __construct($config = array())
 	{
 		parent::__construct($config);
+		
+		LogHelper::startJoomlaDbErrorLogger();
 	}
 
 	
@@ -60,6 +62,9 @@ class NewsletterControllerCron extends JControllerForm
 	 */
 	public function send() 
 	{
+		
+		LogHelper::addDebug('COM_NEWSLETTER_CRON_STARTED', 'cron');
+		
 		$res = array();
 
 		// First check if we need to process some automailing items.
@@ -83,7 +88,7 @@ class NewsletterControllerCron extends JControllerForm
 			$res['processBounced'] = array('error' => $e->getMessage());
 		}	
 		
-		NewsletterHelper::logMessage(json_encode($res), 'cron/');
+		LogHelper::addDebug('COM_NEWSLETTER_CRON_FINISHED', 'cron', $res);
 		jexit();
 	}
 
@@ -100,6 +105,8 @@ class NewsletterControllerCron extends JControllerForm
 	 */
 	public function mailing($mode = 'std')
 	{
+		LogHelper::addDebug('Mailing started', 'mailing');
+		
 		ob_start();
 
 		$config   = JComponentHelper::getParams('com_newsletter');
@@ -132,9 +139,12 @@ class NewsletterControllerCron extends JControllerForm
 				// Need to send notice if system cannot send the requiered count of 
 				// letters for mailing interval.
 				if ($smtpProfile->isNeedNewPeriod() && $smtpProfile->needToSendCount() > 0) {
-					NewsletterHelper::logMessage(
-						JText::_('COM_NEWSLETTER_NOTICE_SENDING_INTERVAL_TOO_SHORT'),
-						'mailing');
+					LogHelper::addMessage(
+						JText::_('COM_NEWSLETTER_SENDING_INTERVAL_TOO_SHORT'),
+						'mailing',
+						array(
+							'smtpprofile' => $smtpProfile->smtp_profile_name
+					));
 				}
 				
 				// First check if the process is not hanged up
@@ -267,7 +277,11 @@ class NewsletterControllerCron extends JControllerForm
 							}
 						}
 
-						NewsletterHelper::logMessage(json_encode($ret), 'cron/');
+						LogHelper::addMessage(
+							'COM_NEWSLETTER_SENT_MAILS_BY_CRON', 
+							'cron',
+							$ret);
+						
 						$responseItem['data'] = $ret;
 					}
 
@@ -368,7 +382,7 @@ class NewsletterControllerCron extends JControllerForm
 												throw new Exception('Delete message error.');
 											}
 											
-											NewsletterHelper::logMessage('Mailbox.Delete mail.Position:'.$mail->msgnum, 'cron/');
+											LogHelper::addDebug('Mailbox.Delete mail.Position:'.$mail->msgnum, 'cron');
 											$processed++;
 											$processedAll++;
 										}
@@ -418,8 +432,10 @@ class NewsletterControllerCron extends JControllerForm
 				$table->store();
 			}
 
-			NewsletterHelper::logMessage(json_encode($response), 'cron/');
-
+			LogHelper::logMessage(
+				'COM_NEWSLETTER_BOUNCES_CHECKED',
+				'bounces',
+				$response);
 			
 		} else {
 
@@ -569,7 +585,7 @@ class NewsletterControllerCron extends JControllerForm
 		// Phase #3 ...........
 		
 		if ($mode == 'std') {
-			NewsletterHelper::logMessage('Automailing.Finished: '.json_encode($response), 'automailing/');
+			LogHelper::addDebug('Automailing.Finished: '.json_encode($response), 'automailing/');
 			NewsletterHelper::jsonResponse('ok', '', $response);
 		} else {
 			return $response;

@@ -133,6 +133,29 @@ abstract class JHtmlMultigrid
 	 * @return array $options
 	 * @since 1.0
 	 */
+	public static function generalOptions($lists = array(), $text = 'text', $value = 'value')
+	{
+		$options = array();
+		// Build the options array
+		foreach ($lists as $list) {
+			if (!empty($text) && !empty($value)) {
+				$list = (array)$list;
+				$options[] = JHtml::_('select.option', $list[$value], $list[$text]);
+			}	else {
+				$options[] = JHtml::_('select.option', $list, $list);
+			}
+		}
+		return $options;
+	}
+
+	
+	/**
+	 * Builds a list of options based on lists array
+	 * @param array $lists
+	 *
+	 * @return array $options
+	 * @since 1.0
+	 */
 	public static function typesOptions($lists = array())
 	{
 		$data = array(

@@ -249,7 +249,7 @@ class MigurMailerMailbox
 
 		$res = $this->protocol->findBy('body', 'Holiday Greetings');
 
-		NewsletterHelper::logMessage('Sort.Dump:'.json_encode($res), 'mailbox/'); die;
+		LogHelper::addDebug('Sort.Dump:'.json_encode($res), 'mailbox/'); die;
 
 		// Handle partial processing option
 		if (!empty($max)) {
@@ -315,12 +315,12 @@ class MigurMailerMailbox
 						$processed = $this->processBounce($x, 'BODY', $c_total);
 					}
 					
-					NewsletterHelper::logMessage('Mailbox.Mail processed.Position:'.$x.',time:'.(string)(mktime()-$time).',id:'.$messageId.',date:'.$date, 'mailbox/');
+					LogHelper::addDebug('Mailbox.Mail processed.Position:'.$x.',time:'.(string)(mktime()-$time).',id:'.$messageId.',date:'.$date, 'mailbox/');
 					
 					$this->fetched++;
 				} else {
 					
-					NewsletterHelper::logMessage('Mailbox.Mail in cache.Position:'.$x.',id:'.$messageId, 'mailbox/');
+					LogHelper::addDebug('Mailbox.Mail in cache.Position:'.$x.',id:'.$messageId, 'mailbox/');
 				}
 			}
 			
@@ -582,7 +582,7 @@ class MigurMailerMailbox
 	{
 		if ($max === null) {
 			$max = $this->protocol->getMessagesCount();
-			NewsletterHelper::logMessage('Mailbox.Get start position. Total count:'.$max, 'mailbox/');
+			LogHelper::addDebug('Mailbox.Get start position. Total count:'.$max, 'mailbox/');
 		}
 
 		// Finaly we found it
@@ -603,7 +603,7 @@ class MigurMailerMailbox
 			$date = strtotime(trim($match[1], "\r\n"));
 		}
 
-		NewsletterHelper::logMessage('Mailbox.Get start position. Hit to '.$position.'('.$min.'-'.$max.'),date:'.$date, 'mailbox/');
+		LogHelper::addDebug('Mailbox.Get start position. Hit to '.$position.'('.$min.'-'.$max.'),date:'.$date, 'mailbox/');
 
 		// In first phase we find first cached message id
 		if ($date > $this->getLastDate()) {

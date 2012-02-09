@@ -1,5 +1,5 @@
 /**
- * The main submit functionality for forms in dashboard view.
+ * The main submit functionality for forms in logs view.
  *
  * @version	   $Id:  $
  * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
@@ -38,13 +38,14 @@ Joomla.submitbutton = function(task)
 	
 		if (isValid)
 		{
-			Joomla.submitform(task, document.subscriberForm);
+			Joomla.submitform(task);
 			return true;
 		}
 		else
 		{
-			//alert(Joomla.JText._('COM_NEWSLETTER_ERROR_UNACCEPTABLE','Some values are unacceptable'));
+			alert(Joomla.JText._('COM_NEWSLETTER_ERROR_UNACCEPTABLE','Some values are unacceptable'));
 			return false;
 		}
 	}
 }
+

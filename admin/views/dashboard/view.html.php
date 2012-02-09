@@ -58,31 +58,6 @@ class NewsletterViewDashboard extends MigurView
 		JHTML::script('media/com_newsletter/js/migur/js/g.bar.js');
 		JHTML::script('media/com_newsletter/js/migur/js/raphael-migur-line.js');
 
-		$script = $this->get('Script');
-		$this->script = $script;
-
-		$this->ssForm = $this->get('Form', 'subscriber');
-
-		if ($this->getLayout() == 'edit') {
-
-			$this->setModel(
-				JModel::getInstance('lists', 'NewsletterModel')
-			);
-
-			$this->setModel(
-				JModel::getInstance('newsletters', 'NewsletterModel')
-			);
-
-			$this->setModel(
-				JModel::getInstance('history', 'NewsletterModel')
-			);
-
-			// call getItems from model 'lists' via JView->get()
-			$this->subscriberItems = $this->get('Items');
-			$this->listItems = $this->get('Items', 'lists');
-			$this->newsletterItems = $this->get('Items', 'newsletters');
-			$this->historyItems = $this->get('Items', 'history');
-		}
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
@@ -95,10 +70,7 @@ class NewsletterViewDashboard extends MigurView
 			'checkImap',
 			'checkLogs'));
 		
-		// We don't need toolbar in the modal window.
-		if ($this->getLayout() !== 'modal') {
-			$this->addToolbar();
-		}
+		$this->addToolbar();
 
 		$stat = QueueHelper::getCount();
 		$sent = 0;
@@ -145,6 +117,9 @@ class NewsletterViewDashboard extends MigurView
 	protected function addToolbar()
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_DASHBOARD_TITLE'), 'article.png');
+		$bar = JToolBar::getInstance();
+		$bar->appendButton('Link', 'alert', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
+
 		JToolBarHelper::custom('', 'progress', '', '', false);
 
 		$bar = MigurToolBar::getInstance('newsletters-toolbar');

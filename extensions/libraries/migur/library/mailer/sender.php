@@ -179,7 +179,12 @@ class MigurMailerSender extends PHPMailer
 			if (!empty($msg)) {
 				$this->setError($msg);
 			}	
-			NewsletterHelper::logMessage('Mailer.Sender error: ' . json_encode($this->getErrors()), 'mailer/');
+			
+			LogHelper::addDebug(
+				'Mailer.Sender error.', 
+				'mailer', 
+				$this->getErrors());
+			
 			return false;
 		}
 		

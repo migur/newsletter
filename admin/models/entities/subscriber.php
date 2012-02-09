@@ -37,9 +37,11 @@ class NewsletterModelEntitySubscriber extends MigurModel
 				if (!$this->_checkOnTheFly($data)) {
 					return false;
 				}
-
-				$data = array('user_id' => $this->getId());
 			}
+		}
+		
+		if (is_null($this->_data->params)) {
+			$this->_data->params = new stdClass;
 		}
 		
 		if (!empty($this->_data->user_id)) {

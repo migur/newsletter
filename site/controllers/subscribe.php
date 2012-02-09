@@ -157,8 +157,6 @@ class NewsletterControllerSubscribe extends JController
 					
 					PlaceholderHelper::setPlaceholder('listname', $list->name);
 
-					//NewsletterHelper::logMessage('Subscription. Before sending: '.json_encode(array($newsletter->toObject(), $subscriber->toObject())));
-					
 					if($mailer->send(array(
 						'type'          => $newsletter->isFallback()? 'plain' : $subscriber->getType(),
 						'subscriber'    => $subscriber->toObject(),
@@ -171,7 +169,7 @@ class NewsletterControllerSubscribe extends JController
 					}
 
 				} catch(Exception $e) {
-					NewsletterHelper::logMessage('Subscription. Sending of wellcoming letter failed. '.$e->getMessage());
+					LogHelper::addError('COM_NEWSLETTER_WELCOMING_SEND_FAILED', 'subscription', (array)$e);
 				}	
 			}
 		}	

@@ -387,7 +387,7 @@ class MigurMailer extends JObject
 				$res->errors[] = $msg;
 			}
 			$res->errors[] = $e->getMessage();
-			NewsletterHelper::logMessage('Mailer.Sending error:'.$e->getMessage(), 'mailer/');
+			LogHelper::addError('COM_NEWSLETTER_MAILER_SUND_ERROR', 'mailer', array('error' => $e->getMessage()));
 			return $res;
 		}	
 		

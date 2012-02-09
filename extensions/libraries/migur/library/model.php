@@ -100,7 +100,7 @@ class MigurModel extends JModel
 			$data['params'] = (object) $data['params'];
 		}
 
-		$this->_data = (object)array_merge((array)$this->_data, (array)$data);
+		$this->_data = (object)array_merge_recursive((array)$this->_data, (array)$data);
 		return $this->_data;
 	}
 	
@@ -135,8 +135,6 @@ class MigurModel extends JModel
 		if (!empty($data)) {
 			$this->addFromArray($data);
 		}
-
-		$data = $this->toArray();
 
 		$table = $this->getTable();
 		

@@ -36,17 +36,9 @@ try {
 	JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
+	JLoader::import('helpers.log', JPATH_COMPONENT_ADMINISTRATOR, '');
+	JHtml::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR.DS.'helpers'.DS.'html');
 
-	// Now we log all the troubles into our DB.
-	JLog::addLogger(
-		array(
-			'logger' => 'database',
-			'db_table' => '#_newsletter_logs'),
-		JLog::EMERGENCY | JLog::ALERT | JLog::CRITICAL | JLog::ERROR
-	);
-	
-	JLog::add('ololo', JLog::ERROR); die;
-	
 	// Add translations used in JavaScript
 	JavascriptHelper::requireTranslations();
 
@@ -108,8 +100,10 @@ try {
 	
 } catch (Exception $e) {
 	
-	NewsletterHelper::logMessage(
-		'Uncatched exeption: '.  json_encode($e->__toString()));
+	LogHelper::addDebug(
+		'COM_NEWSLETTER_UNKNOWN_ERROR',
+		'common',
+		(array)$e);
 	
 	throw $e;
 }
