@@ -12,7 +12,7 @@
         <copyright>Migur Ltd</copyright>
         <license>GPL</license>
         <!--  The version string is recorded in the components table -->
-        <version>12.01a</version>
+        <version>12.01b1</version>
         <!-- The description is optional and defaults to the name -->
         <description>MIGUR_DESCRIPTION</description>
 

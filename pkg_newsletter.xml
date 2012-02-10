@@ -2,7 +2,7 @@
 <extension type="package" version="1.6.0">
 <name>Migur Newsletter</name>
 <packagename>newsletter</packagename>
-<version>12.01a1</version>
+<version>12.01b1</version>
 <url>http://migur.com</url>
 <packager>Migur</packager>
 <packagerurl>http://migur.com</packagerurl>
