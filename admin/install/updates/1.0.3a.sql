@@ -1,6 +1,9 @@
-# Version 1.0.3a;
+# Version 1.0.3a1;
 # Migration(upgrade).Uses only if UPDATE proccess executes!;
 # Prev version 1.0.2a;
+
+
+# Renamed from 1.0.3 to be applied after 1.0.3a and before 1.0.3b1;
 
 SET foreign_key_checks = 0;
 

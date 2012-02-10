@@ -1,6 +1,27 @@
-# Version 1.0.4b1;
+# Version 12.01b1;
 # Non-migration behavior if INSTALL proccess executes!;
-# Prev version 1.0.3b;
+# Prev version 1.0.3b2;
+
+# J! stores last used updating schema in _schemas table;
+# The better way to name update patches is YY.MMaX.sql; 
+# Note that YY.MM.sql is the latest update for YY.MM version;
+# You cant add any updates for YY.MM[aX|bY] version if you already used;
+# YY.MM.sql update;
+
+# SQL history of updates for each release;
+
+# --> previous releases;
+
+#    1.0.3       Bad naming. Should be 1.0.3a;
+# --> release 1.0.3b;
+
+#    1.0.3b1     Cannot be applied if previous update patch was 1.0.3 (1.0.3b1 < 1.0.3)!!!!!;
+#    1.0.3b2     Cannot be applied if previous update patch was 1.0.3 (1.0.3b2 < 1.0.3)!!!!!;
+# --> release 1.0.3b2;
+
+#    12.01a1;
+# --> release 12.01b1;
+
 
 SET foreign_key_checks = 0;
 
@@ -198,8 +219,8 @@ PRIMARY KEY (`extension_id`)
 CREATE TABLE `#__newsletter_queue`
 (
 `queue_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-`newsletter_id` BIGINT(20) NOT NULL,
-`subscriber_id` BIGINT(20) NOT NULL,
+`newsletter_id` BIGINT(20) DEFAULT NULL,
+`subscriber_id` BIGINT(20) DEFAULT NULL,
 `list_id` INT(11) NOT NULL,
 `created` DATETIME NOT NULL,
 `state` INT(11) NOT NULL,
