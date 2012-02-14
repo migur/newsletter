@@ -4,12 +4,50 @@
 
 SET foreign_key_checks = 0;
 
+
+
+# Fixes for version 1.0.2b;
+
+# Firstly fixes will be applied from script _fixVersion1_0_2b;
+
+ALTER TABLE #__newsletter_sub_history MODIFY COLUMN `newsletter_id` BIGINT(20);
+ALTER TABLE #__newsletter_sub_history MODIFY COLUMN `subscriber_id` BIGINT(20);
+ALTER TABLE #__newsletter_sub_history MODIFY COLUMN `list_id`       BIGINT(20);
+
+ALTER TABLE #__newsletter_sub_history ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE #__newsletter_sub_history ADD FOREIGN KEY (subscriber_id) REFERENCES #__newsletter_subscribers (subscriber_id) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE #__newsletter_sub_history ADD FOREIGN KEY (list_id) REFERENCES #__newsletter_lists (list_id) ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE #__newsletter_sub_list ADD FOREIGN KEY (list_id) REFERENCES #__newsletter_lists (list_id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE #__newsletter_sub_list ADD FOREIGN KEY (subscriber_id) REFERENCES #__newsletter_subscribers (subscriber_id) ON DELETE CASCADE ON UPDATE CASCADE;
+# End of fixes;
+
+# Fixes for 1.0.3;
+CREATE TABLE IF NOT EXISTS `#__newsletter_mailbox_profiles` (
+  `mailbox_profile_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `mailbox_profile_name` VARCHAR(255) DEFAULT NULL,
+  `mailbox_server` VARCHAR(255) DEFAULT NULL,
+  `mailbox_server_type` VARCHAR(255) DEFAULT NULL,
+  `mailbox_port` INT(11) DEFAULT NULL,
+  `is_ssl` ENUM('1','0') DEFAULT '0',
+  `username` VARCHAR(255) DEFAULT NULL,
+  `password` VARCHAR(255) DEFAULT NULL,
+  `data` LONGBLOB,
+
+  PRIMARY KEY (`mailbox_profile_id`)
+) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+# Other fixes cannot be applied here.;
+# See script _fixVersion1_0_3b;
+
+# End of fixes;
+
+
+
 ALTER TABLE `#__newsletter_mailbox_profiles` MODIFY COLUMN  `data` LONGBLOB;
 ALTER TABLE `#__newsletter_smtp_profiles` ADD COLUMN  `params` TEXT;
 ALTER TABLE `#__newsletter_smtp_profiles` ADD COLUMN  `is_joomla` SMALLINT;
 ALTER TABLE `#__newsletter_newsletters` ADD COLUMN  `category` INT(11);
-
-ALTER TABLE `#__newsletter_newsletters` ADD FOREIGN KEY (t_style_id) REFERENCES #__newsletter_template_styles (t_style_id) ON DELETE SET NULL ON UPDATE CASCADE;
 
 CREATE INDEX email_idx   ON #__newsletter_subscribers(email);
 CREATE INDEX user_id_idx ON #__newsletter_subscribers(user_id);
@@ -78,5 +116,11 @@ ALTER TABLE #__newsletter_queue MODIFY COLUMN `subscriber_id` BIGINT(20);
 DELETE FROM #__newsletter_queue WHERE subscriber_id NOT IN (SELECT subscriber_id FROM #__newsletter_subscribers);
 CREATE INDEX subscriber_ids_idxfk ON #__newsletter_queue(subscriber_id);
 ALTER TABLE #__newsletter_queue ADD FOREIGN KEY (subscriber_id) REFERENCES #__newsletter_subscribers (subscriber_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE #__newsletter_sub_history MODIFY COLUMN `newsletter_id` BIGINT(20);
+ALTER TABLE #__newsletter_sub_history MODIFY COLUMN `subscriber_id` BIGINT(20);
+ALTER TABLE #__newsletter_sub_history MODIFY COLUMN `list_id`       BIGINT(20);
+
+
 
 SET foreign_key_checks = 1;
