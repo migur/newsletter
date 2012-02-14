@@ -54,12 +54,19 @@ class NewsletterControllerQueues extends JControllerAdmin
 					$unset++;
 				}
 			}
+
+			if ($unset > 0) {
+				JFactory::getApplication()->enqueueMessage(sprintf(JText::_('COM_NEWSLETTER_QUEUES_ITEMS_CANNOT_DELETED'), $unset), 'message');
+			}
+			
+			if (empty($cids)) {
+				$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list, false));
+				return;
+			}
+			
 			JRequest::setVar('cid', $cids);
 		}
 		
-		if ($unset > 0) {
-			JFactory::getApplication()->enqueueMessage(sprintf(JText::_('COM_NEWSLETTER_QUEUES_ITEMS_CANNOT_DELETED'), $unset), 'message');
-		}
 		
 		parent::delete();
 	}
