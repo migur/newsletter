@@ -229,4 +229,41 @@ abstract class JHtmlMultigrid
 		return $html;
 	}
 
+	
+	static function renderObject($data, $level = 0, $color = 'black') 
+	{
+		$spaces = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		$res = '';
+		
+		if (is_array($data) || is_object($data)) {
+			
+			foreach($data as $key => $value) {
+				
+				if (!is_numeric($key)) {
+					
+					switch($key){
+						
+						case 'error':
+						case 'errors':
+							$color = 'red';
+							break;
+						
+						default: 
+							$color = 'black';
+							break;
+					}
+					$res .= substr($spaces, 0, $level*12) . '<span style="color:'.$color.'">'.$key.'</span>' . ':';
+					$res .= (is_array($value) || is_object($value))? '<br/>' : '';
+				}
+				
+				$res .= self::renderObject($value, $level+1, $color);
+			}
+			
+		} else {
+			$res .= '<span style="color:'.$color.'">' . substr($spaces, 0, $level*12) . $data . '</span><br/>';
+		}
+		
+		return $res;
+	}
+	
 }

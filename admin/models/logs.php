@@ -182,7 +182,7 @@ class NewsletterModelLogs extends JModelList
 		$this->setState('filter.priority', $priority);
 		
 		// List state information.
-		parent::populateState('l.date', 'asc');
+		parent::populateState('l.date', 'desc');
 	}
 
 	

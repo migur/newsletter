@@ -406,27 +406,45 @@ class NewsletterHelper
 		self::jsonResponse(true, $messages, $data, $exit);
 	}	
 	
+	
+	
+	/**
+	 * Get parameter directly from the parameters of component 
+	 * from extensions table
+	 * 
+	 * @param type $name
+	 * @return type 
+	 */
 	static public function getParam($name) 
 	{
-		$table = JTable::getInstance('user');
-		if (!$table->load(array('element' => 'com_newsletter'))) {
+		$table = JTable::getInstance('extension');
+		if ( empty($table) || !$table->load(array('element' => 'com_newsletter'))) {
 			return false;
 		}
-		$table->params = (object)json_decode($table->params);
-		
-		return $table->params->{$name};
+				
+		$params = (object)json_decode($table->params);
+		return isset($params->{$name})? $params->{$name} : null;
 	}
 	
 	
+	
+	/**
+	 * Sets the param of component directly into extensions table
+	 * 
+	 * @param type $name
+	 * @param type $value
+	 * @return type 
+	 */
 	static public function setParam($name, $value) 
 	{
-		$table = JTable::getInstance('user');
-		if (!$table->load(array('element' => 'com_newsletter'))) {
+		$table = JTable::getInstance('extension');
+		if ( empty($table) || !$table->load(array('element' => 'com_newsletter'))) {
 			return false;
 		}
-		$table->params = (object)json_decode($table->params);
-		$table->params->{$name} = $value;
-		$table->params = json_encode($table->params);
+		
+		$params = (object)json_decode($table->params);
+		$params->{$name} = $value;
+		$table->params = json_encode($params);
 		return $table->store();
 	}
 }

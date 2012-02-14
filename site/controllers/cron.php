@@ -63,7 +63,7 @@ class NewsletterControllerCron extends JControllerForm
 	public function send() 
 	{
 		
-		LogHelper::addDebug('COM_NEWSLETTER_CRON_STARTED', 'cron');
+		LogHelper::addDebug('Cron started', 'cron');
 		
 		$res = array();
 
@@ -88,10 +88,11 @@ class NewsletterControllerCron extends JControllerForm
 			$res['processBounced'] = array('error' => $e->getMessage());
 		}	
 		
-		LogHelper::addDebug('COM_NEWSLETTER_CRON_FINISHED', 'cron', $res);
+		LogHelper::addDebug('Cron finished', 'cron', $res);
 		jexit();
 	}
 
+	
 	
 	/**
 	 * Sends the bulk of letters to queued subscribers.
@@ -306,6 +307,7 @@ class NewsletterControllerCron extends JControllerForm
 	}
 
 	
+	
 	/**
 	 * Process mailboxes for presence of bounced mails.
 	 * 
@@ -316,198 +318,174 @@ class NewsletterControllerCron extends JControllerForm
 	{
 		ob_start();
 
+		$response = array();
+		
 		$config   = JComponentHelper::getParams('com_newsletter');
 		
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
 		$count    = (int)  $config->get('mailer_cron_count');
 
-		if ($this->_checkAccess('mailer_cron_bounced')) {
+		$isExec = NewsletterHelper::getParam('mailer_cron_bounced_is_executed');
+		if ($isExec === null) {
+			NewsletterHelper::setParam('mailer_cron_bounced_is_executed', 0);
+		}
+		$isExec = (bool)$isExec;
+		
+		$lastExec = NewsletterHelper::getParam('mailer_cron_bounced_last_execution_time');
+		$lastExec = !empty($lastExec) ? strtotime($lastExec) : 0;
 
-			$table = JTable::getInstance('jextension', 'NewsletterTable');
+		$interval = (int)NewsletterHelper::getParam('mailer_cron_bounced_interval');
+		$interval = $interval * 60;
+		
+		$timeHasCome = ($lastExec + $interval) < time();
+		$isAdmin = $this->_isAdminAuthorized();
 
-			// set the isExecuted flag
-			if ($table->load(array('name' => 'com_newsletter'))) {
-				$table->addToParams(array('mailer_cron_bounced_is_executed' => 1));
-				$table->store();
-			}
-			
-			$bounceds = JModel::getInstance('Bounceds', 'NewsletterModel');
+		// Post warning if found unfinished checking process
+		if ($timeHasCome && $isExec && !$isAdmin) {
+			LogHelper::addWarning(
+				'COM_NEWSLETTER_BOUNCES_UNFINISHED_FOUND',
+				LogHelper::CAT_BOUNCES);
+		}
 
-			$mbprofiles = $bounceds->getMailboxesForBounsecheck();
+		// Pre check if the isExec is too long
+		if ($isExec && ((time() - $lastExec) > $interval * 10)) {
+			NewsletterHelper::setParam('mailer_cron_bounced_is_executed', 0);
+			$isExec = false;
+			LogHelper::addWarning(
+				JText::_('COM_NEWSLETTER_BOUNCES_HANGEDUP_FOUND'),
+				LogHelper::CAT_BOUNCES);
+		}
 
-			$limit = JRequest::getInt('limit', 100);
-			
-			$processedAll = 0;
-			$response = array();
-			// Trying to check all bounces
-			foreach($mbprofiles as $mbprofile) {
+		
+		// If this is a admins request then return 
+		// message and exit
+		if ($isExec) {
+			NewsletterHelper::jsonError(array(JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_IS_IN_PROCESS_NOW')));
+		}
+		
+		
+		// If this is a regular CRON or external request 
+		// then return message and exit
+		if (!$isAdmin && !$timeHasCome) {
+			NewsletterHelper::jsonError(array(JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_INTERVAL_IS_NOT_EXEDED')));
+		}	
 
-				$processed = 0;
-				$response[$mbprofile['username']] = array(
-					'errors' => array(),
-					'processed' => 0
-				);
+		
+		NewsletterHelper::setParam('mailer_cron_bounced_is_executed', 1);
 
-				try {
+		$bounceds = JModel::getInstance('Bounceds', 'NewsletterModel');
 
-					$mailbox = new MigurMailerMailbox(&$mbprofile);
-					$mailbox->useCache();
-					
-					$mails = $mailbox->getBouncedList($limit);
+		$mbprofiles = $bounceds->getMailboxesForBounsecheck();
 
-					if ($mails === false) {
+		$limit = JRequest::getInt('limit', 100);
+		
+		$processedAll = 0;
+		// Trying to check all bounces
+		foreach($mbprofiles as $mbprofile) {
+			$processed = 0;
+			$response[$mbprofile['username']] = array(
+				'errors' => array(),
+				'processed' => 0
+			);
 
-						$response[$mbprofile['username']]['errors'][] = $mailbox->getLastError();
+			try {
 
-					} else {
+				$mailbox = new MigurMailerMailbox(&$mbprofile);
+				$mailbox->useCache();
 
-						if (!empty($mails)) {
+				$mails = $mailbox->getBouncedList($limit);
 
-							foreach($mails as &$mail) {
+				if ($mails === false) {
 
-								if (!empty($mail->subscriber_id) && !empty($mail->newsletter_id) && !empty($mail->bounce_type)) 
+					$response[$mbprofile['username']]['errors'][] = $mailbox->getLastError();
+
+				} else {
+
+					if (!empty($mails)) {
+
+						foreach($mails as &$mail) {
+
+							if (!empty($mail->subscriber_id) && !empty($mail->newsletter_id) && !empty($mail->bounce_type)) 
+							{
+								$queue = JTable::getInstance('Queue', 'NewsletterTable');
+								if ($queue->setBounced($mail->subscriber_id, $mail->newsletter_id, NewsletterTableQueue::STATE_BOUNCED))
 								{
-									$queue = JTable::getInstance('Queue', 'NewsletterTable');
-									if ($queue->setBounced($mail->subscriber_id, $mail->newsletter_id, NewsletterTableQueue::STATE_BOUNCED))
-									{
-										$sent = JModel::getInstance('Sent', 'NewsletterModel');
-										$sent->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
+									$sent = JModel::getInstance('Sent', 'NewsletterModel');
+									$sent->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
 
-										$history = JModel::getInstance('History', 'NewsletterModel');
-										$history->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
+									$history = JModel::getInstance('History', 'NewsletterModel');
+									$history->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
 
-										if ($mail->msgnum > 0) {
-											
-											if (!$mailbox->deleteMail($mail->msgnum)) {
-												throw new Exception('Delete message error.');
-											}
-											
-											LogHelper::addDebug('Mailbox.Delete mail.Position:'.$mail->msgnum, 'cron');
-											$processed++;
-											$processedAll++;
+									if ($mail->msgnum > 0) {
+
+										if (!$mailbox->deleteMail($mail->msgnum)) {
+											throw new Exception('Delete message error.');
 										}
 
-										unset($history);
-										unset($sent);
+										LogHelper::addDebug('Mailbox.Delete mail.Position:'.$mail->msgnum, 'cron');
+										$processed++;
+										$processedAll++;
 									}
-									unset($queue);
+
+									unset($history);
+									unset($sent);
 								}
+								unset($queue);
 							}
 						}
-
-						//Set summary information
-						$response[$mbprofile['username']]['processed'] = $processed;
-						$response[$mbprofile['username']]['found'] = $mailbox->found;
-						$response[$mbprofile['username']]['total'] = $mailbox->total;
-						$response[$mbprofile['username']]['totalBounces'] = $mailbox->totalBounces;
-						//$response[$mbprofile['username']]['lastPosition'] = $mailbox->lastPosition;
 					}
 
-					// Update the state of mailbox
-					if ($mails !== false) {
-						$mbtable = JTable::getInstance('Mailboxprofile', 'NewsletterTable');
-						$mbtable->save($mailbox->mailboxProfile);
-						unset($mbtable);
-					}	
-					
-				} catch(Exception $e) {
+					//Set summary information
+					$response[$mbprofile['username']]['processed'] = $processed;
+					$response[$mbprofile['username']]['found'] = $mailbox->found;
+					$response[$mbprofile['username']]['total'] = $mailbox->total;
+					$response[$mbprofile['username']]['totalBounces'] = $mailbox->totalBounces;
+					//$response[$mbprofile['username']]['lastPosition'] = $mailbox->lastPosition;
+				}
 
-					$response[$mbprofile['username']]['errors'][] = $e->getMessage();
-					$response[$mbprofile['username']]['errors'][] = JText::_('COM_NEWSLETTER_CHECK_YOUR_MAILBOX_SETTINGS');
-					$error = true;
+				// Update the state of mailbox
+				if ($mails !== false) {
+					$mbtable = JTable::getInstance('Mailboxprofile', 'NewsletterTable');
+					$mbtable->save($mailbox->mailboxProfile);
+					unset($mbtable);
 				}	
 
-				// Close mailbox and destroy
-				if (!empty($mailbox)) {
-					$mailbox->close();
-				}	
-				unset($mailbox);
-			}
+			} catch(Exception $e) {
 
-			if ($table) {
-				
-				$table->addToParams(array(
-					'mailer_cron_bounced_is_executed' => 0,
-					'mailer_cron_bounced_last_execution_time' => date('Y-m-d H:i:s')));
-				$table->store();
-			}
+				$response[$mbprofile['username']]['errors'][] = $e->getMessage();
+				$response[$mbprofile['username']]['errors'][] = JText::_('COM_NEWSLETTER_CHECK_YOUR_MAILBOX_SETTINGS');
+				$error = true;
+			}	
 
-			LogHelper::logMessage(
-				'COM_NEWSLETTER_BOUNCES_CHECKED',
-				'bounces',
+			// Close mailbox and destroy
+			if (!empty($mailbox)) {
+				$mailbox->close();
+			}	
+			unset($mailbox);
+		}
+
+		NewsletterHelper::setParam('mailer_cron_bounced_is_executed', 0);
+		NewsletterHelper::setParam('mailer_cron_bounced_last_execution_time', date('Y-m-d H:i:s'));
+
+		LogHelper::addMessage(
+			JText::_('COM_NEWSLETTER_BOUNCE_CHECK_FINISHED'),
+			LogHelper::CAT_BOUNCES,
+			$response);
+        
+		if ($mode == 'std') {
+			
+			NewsletterHelper::jsonMessage(
+				array(JText::_('COM_NEWSLETTER_BOUNCE_CHECK_FINISHED')),
 				$response);
 			
 		} else {
-
-			$isExec = (bool) $config->get('mailer_cron_bounced_is_executed');
-			if (!$isExec) {
-				$response = array('errors' => array(JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_INTERVAL_IS_NOT_EXEDED')));
-			} else {
-				$response = array('errors' => array(JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_IS_IN_PROCESS_NOW')));
-			}	
-		}
-        
-		if ($mode == 'std') {
-			ob_end_clean();
-			echo json_encode($response);
-			jexit();
 			
-		} else {
 			return $response;
 		}	
 	}
 	
-	/**
-	 * 
-	 * 
-	 * @param type $type "mailer_cron", "mailer_cron_bounced"
-	 */
-	protected function _checkAccess($type)
-	{
-		$config   = JComponentHelper::getParams('com_newsletter');
-		$isExec   = (bool) $config->get($type.'_is_executed');
-
-		$lastExec = $config->get($type.'_last_execution_time');
-		$lastExec = !empty($lastExec) ? strtotime($lastExec) : 0;
-
-		$interval = (int)  $config->get('mailer_cron_interval');
-		$interval = $interval * 60;
-		
-		// Pre check if the isExec is too long
-		$table = JTable::getInstance('jextension', 'NewsletterTable');
-		
-		if ($isExec && $table->load(array('name' => 'com_newsletter'))) {
-			
-			// If execution does about 10 times of interval then forse to set $isExec = 0
-			if ($lastExec == 0 || ((time() - $lastExec) > $interval*10)) {
-			
-				$table->addToParams(array($type.'_is_executed' => 0));
-				$table->store();
-				$isExec = false;
-			}
-		}
-
-		$forced = JRequest::getBool('forced', false);
-		if($forced) {
-                    
-			$conf = JFactory::getConfig();
-			$handler = $conf->get('session_handler', 'none');
-			$sessId = JRequest::getVar(JRequest::getString('sessname', ''), false, 'COOKIE');
-			if(empty($sessId)){
-				return false; //'Unknown session';
-			}    
-			$data = JSessionStorage::getInstance($handler, array())->read($sessId);
-			session_decode($data);
-			$user = $_SESSION['__default']['user'];
-				$levels = $user->getAuthorisedGroups();
-			if ( max($levels) < 7 ) {
-				return false; //'Unauthorized user';
-			}    
-		}
-		return (($lastExec + $interval < time()) || $forced) && !$isExec;
-	}
 	
-
+	
 	public function _isAdminAuthorized()
 	{
 		if ($this->_isAdminAuthorized !== null) {

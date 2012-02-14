@@ -103,15 +103,11 @@
 				</td>
 				
 				<td>
-				<?php 
-					$title = ""; 
-					if(!empty($item->params)) { 
-						$item->params = json_decode($item->params);
-						foreach($item->params as $name => $value) {
-							$title.=$this->escape($name.": ".(string)$value)."</br>";
-						}
-				?>
-					<label class="search icon-16-search hasTip" style="width:16px;height:16px" title="<?php echo $this->escape($title); ?>">
+				<?php if(!empty($item->params)) { ?>
+					<label 
+						class="search icon-16-search hasTip" 
+						style="width:16px;height:16px" 
+						title="<?php echo $this->escape(JHtml::_('multigrid.renderObject', json_decode($item->params))); ?>">
 					</label>	
 				<?php }	?>
 				</td>

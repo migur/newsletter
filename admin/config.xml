@@ -171,31 +171,12 @@
         </field>
 
         <field
-            name="mailer_cron_interval"
+            name="mailer_cron_bounced_interval"
             type="text"
             default="10"
-                        size="10"
-            label="COM_NEWSLETTER_CONFIG_CRON_INTERVAL"
-            description="COM_NEWSLETTER_CONFIG_CRON_INTERVAL">
-        </field>
-
-        <field
-            name="mailer_cron_count"
-            type="text"
-            default="10"
-                        size="10"
-            label="COM_NEWSLETTER_CONFIG_CRON_COUNT"
-            description="COM_NEWSLETTER_CONFIG_CRON_COUNT">
-        </field>
-
-        <field
-            name="mailer_cron_last_execution_time"
-            type="text"
-            readonly="true"
-            default="0"
-            size="30"
-            label="COM_NEWSLETTER_CONFIG_CRON_LAST"
-            description="COM_NEWSLETTER_CONFIG_CRON_LAST">
+			size="10"
+            label="COM_NEWSLETTER_CONFIG_CRON_BOUNCE_INTERVAL"
+            description="COM_NEWSLETTER_CONFIG_CRON_BOUNCE_INTERVAL">
         </field>
 
         <field
@@ -209,7 +190,7 @@
         </field>
 
 		<field
-            name="mailer_cron_is_executed"
+            name="mailer_cron_bounced_is_executed"
             type="mapper"
                         readonly="true"
             default="0"
