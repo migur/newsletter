@@ -88,8 +88,6 @@ class NewsletterViewAutomailingItem extends MigurView
 		$am = $amItemsModel->getItem($aid);
 		$this->assignRef('automailing', $am);
 		
-		//var_dump($item, $amItems, $am); die;
-		
 		parent::display($tpl);
 	}
 

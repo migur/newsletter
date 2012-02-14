@@ -100,7 +100,7 @@ class StatisticsHelper
 
 		$query->group('h.action');
 
-		//echo nl2br(str_replace('#__','jos_',$query)); die();
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$data = $dbo->setQuery($query)->loadAssocList();
 
 		$res = array();
@@ -158,7 +158,7 @@ class StatisticsHelper
 
 		$query->where('h.action="' . NewsletterTableHistory::ACTION_OPENED . '"');
 
-		//echo nl2br(str_replace('#__','jos_',$query)); //die();
+		//echo nl2br(str_replace('#__','jos_',$query));
 		$res['newsletters'] = count($dbo->setQuery($query)->loadAssocList());
 
 		$query = $dbo->getQuery(true);
@@ -172,7 +172,7 @@ class StatisticsHelper
 
 		$query->where('h.action="' . NewsletterTableHistory::ACTION_CLICKED . '"');
 
-		//echo nl2br(str_replace('#__','jos_',$query)); //die();
+		//echo nl2br(str_replace('#__','jos_',$query));
 		$res['subscribers'] = count($dbo->setQuery($query)->loadAssocList());
 
 		return $res;
@@ -199,7 +199,7 @@ class StatisticsHelper
 			->from('#__newsletter_subscribers AS s')
 			->where('created_on >= "' . $startDate . '" AND created_on <= "' . $endDate . '"');
 
-		//echo nl2br(str_replace('#__','jos_',$query)); //die();
+		//echo nl2br(str_replace('#__','jos_',$query));
 		$res = $dbo->setQuery($query)->loadAssoc();
 		return $res['cnt'];
 	}
@@ -236,7 +236,7 @@ class StatisticsHelper
 			->where('h.date >= "' . $startDate . '" AND h.date <= "' . $endDate . '"')
 			->group('h.subscriber_id');
 
-		//echo nl2br(str_replace('#__','jos_',$query)); //die();
+		//echo nl2br(str_replace('#__','jos_',$query));
 		return count($dbo->setQuery($query)->loadAssocList());
 	}
 
@@ -282,7 +282,7 @@ class StatisticsHelper
 
 		$query->group('h.subscriber_id HAVING cnt1=cnt2');
 
-		//echo nl2br(str_replace('#__','jos_',$query)); die();
+		//echo nl2br(str_replace('#__','jos_',$query));
 		return count($dbo->setQuery($query)->loadAssocList());
 	}
 
@@ -315,7 +315,7 @@ class StatisticsHelper
 			$query->where('h.newsletter_id in(' . implode(',', $ids) . ') ');
 		}
 
-		//echo nl2br(str_replace('#__','jos_',$query)); die();
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		return count($dbo->setQuery($query)->loadAssocList());
 	}
 
@@ -340,7 +340,7 @@ class StatisticsHelper
 			$query->where('h.newsletter_id in (' . implode(',', $ids) . ')');
 		}	
 
-		//echo nl2br(str_replace('#__','jos_',$query)); //die();
+		//echo nl2br(str_replace('#__','jos_',$query));
 		$res = $dbo->setQuery($query)->loadAssoc();
 		return array('total' => (int) $res['total']);
 
@@ -392,7 +392,7 @@ class StatisticsHelper
 		}
 
 
-		//echo nl2br(str_replace('#__', 'jos_', $query));//die();
+		//echo nl2br(str_replace('#__', 'jos_', $query));
 		$res = $dbo->setQuery($query)->loadAssocList();
 
 
@@ -461,7 +461,7 @@ class StatisticsHelper
 		}
 
 
-		//echo nl2br(str_replace('#__', 'jos_', $query));die();
+		//echo nl2br(str_replace('#__', 'jos_', $query));die;
 		$res = $dbo->setQuery($query)->loadAssocList();
 
 
@@ -534,7 +534,7 @@ class StatisticsHelper
 		// for each day
 		$query = 'SELECT day, COUNT(*) as cnt FROM ('.(string)$query.') as h GROUP BY day';
 
-		//echo nl2br(str_replace('#__', 'jos_', $query));die();
+		//echo nl2br(str_replace('#__', 'jos_', $query));die;
 		$res = $dbo->setQuery($query)->loadAssocList();
 
 
@@ -583,7 +583,7 @@ class StatisticsHelper
 			->where('created_on >= "' . $startDate . '" AND created_on <= "' . $endDate . '"')
 			->group('day, s.subscriber_id');
 
-		//echo nl2br(str_replace('#__', 'jos_', $query));die();
+		//echo nl2br(str_replace('#__', 'jos_', $query));die;
 		$res = $dbo->setQuery($query)->loadAssocList();
 
 		self::_fillDate($startDate, $endDate, $res);
@@ -634,7 +634,7 @@ class StatisticsHelper
 		}
 
 
-		//echo nl2br(str_replace('#__', 'jos_', $query));die();
+		//echo nl2br(str_replace('#__', 'jos_', $query));die;
 		$res = $dbo->setQuery($query)->loadAssocList();
 
 

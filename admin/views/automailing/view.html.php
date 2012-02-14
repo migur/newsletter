@@ -121,9 +121,6 @@ class NewsletterViewAutomailing extends MigurView
 			$this->assignRef('automailingTargets', $targetsModel->getNames($aid));
 		}	
 		
-		
-		//var_dump($allLists); die;
-		
 		parent::display($tpl);
 	}
 

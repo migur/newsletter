@@ -29,7 +29,7 @@ class QueueHelper
 		$query->from('#__newsletter_queue');
 		$query->group('newsletter_id');
 		
-		//echo nl2br(str_replace('#__','jos_',$query->__toString())); die();
+		//echo nl2br(str_replace('#__','jos_',$query->__toString())); die;
 		$data = $dbo->setQuery($query)->loadAssocList();
 		return $data;
 	}

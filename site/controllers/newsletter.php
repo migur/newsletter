@@ -102,7 +102,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		SubscriberHelper::restoreRealUser();
 
-		echo $res; die();
+		echo $res; die;
 //		echo json_encode(array(
 //			'state' => '1',
 //			'error' => $res,
@@ -145,7 +145,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		$content = MigurModuleHelper::renderModule($modules[0]);
 
-		echo $content; die();
+		echo $content; die;
 	}
 	/**
 	 * Render and send the letter to the selected emails

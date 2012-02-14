@@ -283,7 +283,7 @@ class NewsletterModelSubscribers extends MigurModelList
 		$orderDirn = $this->state->get('list.unsubscribed.direction');
 		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
 
-		//echo nl2br(str_replace('#__','jos_',$query)); //die();
+		//echo nl2br(str_replace('#__','jos_',$query));
 		$db->setQuery($query);
 		
 		return $db->loadObjectList();

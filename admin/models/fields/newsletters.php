@@ -66,7 +66,6 @@ class JFormFieldNewsletters extends JFormFieldList
 				$query->where('type=1 AND used_as_static=0');
 			}
 		}
-		//echo $this->element['scope']; die();
 		$query->order('ns.name');
 
 		// Get the options.

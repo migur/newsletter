@@ -194,7 +194,6 @@ class NewsletterModelQueues extends JModelList
 		
 		$query->where('q.state=1 AND ('. $and .')');
 		$db->setQuery($query, 0, $limit);
-		//echo $query; die;
 		
 		return $db->loadObjectList();
 	}

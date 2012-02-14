@@ -159,10 +159,6 @@ Migur.ajax.autosaver = new Class({
 			return false;
 		}
 		
-//		if (this.options.observState != data) {
-//			console.log(data);
-//		}
-		
         var res = ( this.options.observState != data  || this.forceIsChanged);
 		this.forceIsChanged = false;
 		return res;
