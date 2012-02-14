@@ -106,6 +106,8 @@ class NewsletterViewQueues extends MigurView
 		$bar->appendButton('Custom', '', 'preloader', '');
 		$bar->appendButton('Link', 'messaging', 'COM_NEWSLETTER_PROCESS_QUEUE', '#');
 		$bar->appendButton('Link', 'alert', 'COM_NEWSLETTER_PROCESS_BOUNCES', '#');
+		$bar->appendButton('Separator', null, '30');
+		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'queues.delete', false);
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
