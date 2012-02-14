@@ -380,7 +380,7 @@ class NewsletterControllerCron extends JControllerForm
 		$limit = JRequest::getInt('limit', 100);
 		
 		$processedAll = 0;
-		sleep(120);
+		
 		// Trying to check all bounces
 		foreach($mbprofiles as $mbprofile) {
 			$processed = 0;
