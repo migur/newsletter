@@ -251,7 +251,7 @@ class MigurMailerMailbox
 			return true;
 		}
 		
-		LogHelper::addDebug('Mailbox.Bounceds.Ids found:'.json_encode($res), 'mailbox/'); //die;
+		LogHelper::addDebug('Mailbox.Bounceds.Ids found:'.json_encode($res), 'mailbox/');
 
 		// Handle partial processing option
 		if (!empty($max)) {

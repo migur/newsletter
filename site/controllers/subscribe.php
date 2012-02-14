@@ -59,7 +59,7 @@ class NewsletterControllerSubscribe extends JController
 		$fbenabled = JRequest::getInt('fbenabled', array());
 		//$sendto = JRequest::getVar('sendto');
 		
-		// Check token, die on error.
+		// Check token, d_i_e on error.
 		JRequest::checkToken() or jexit('Invalid Token');
 
 		if (empty($name) || empty($email) || !in_array($html, array(0,1)) || empty($listsIds)) {
@@ -218,7 +218,6 @@ class NewsletterControllerSubscribe extends JController
 		$db->setQuery("UPDATE #__newsletter_sub_list set confirmed=1 WHERE confirmed=" . $db->quote($subKey));
 		$subscriber = $db->query();
 
-		//die();
 		// Redirect to page
 		$message = JText::_("Your subscription has confirmed successfully. Thanks!");
 		$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid='.$subKey, $message, 'message');
@@ -241,7 +240,7 @@ class NewsletterControllerSubscribe extends JController
 		$uid = JRequest::getString('uid', '');
 		$nid = JRequest::getString('nid', '');
 
-		// Check token, die on error.
+		// Check token, d_i_e on error.
 		//JRequest::checkToken() or jexit('Invalid Token');
 
 		if (empty($uid) || empty($nid)) {
@@ -275,7 +274,7 @@ class NewsletterControllerSubscribe extends JController
 		$nid   = JRequest::getString('newsletter-nid', '');
 		$lists = JRequest::getVar('newsletter-lists', array());
 
-		// Check token, die on error.
+		// Check token, d_i_e on error.
 		//JRequest::checkToken() or jexit('Invalid Token');
 
 		if (empty($uid) || empty($lists)) {

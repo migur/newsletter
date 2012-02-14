@@ -160,7 +160,7 @@ class NewsletterModelSmtpprofiles extends MigurModelList
 		$orderDirn = $this->state->get('list.direction', 'asc');
 		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
 
-		//echo nl2br(str_replace('#__','jos_',$query)); die();
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$this->query = $query;
 	}
 

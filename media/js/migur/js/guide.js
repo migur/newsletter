@@ -182,14 +182,12 @@ Migur.widgets.guide = new Class({
 			return false;
 		}	
 
-        //console.log('destroying...');
 		var step = this.steps[this.currentStep];
 		
 		var dom = this._getDom(step.target.dom);
         dom.removeEvent(step.target.event, this.currentListener);
 		dom.eliminate('migur-widget-guide');
 
-        //console.log('canceling fx...');
         this._fx.cancel();
         delete (this._fx);
         
@@ -210,7 +208,6 @@ Migur.widgets.guide = new Class({
 	bounceIt: function(){
 
 		if (!this._fx) {
-            //console.log('creating fx...');
 			this._fx = new Fx.Morph(this.domEl, {
 				duration: 300, 
 				transition: Fx.Transitions.Sine.easeOut,

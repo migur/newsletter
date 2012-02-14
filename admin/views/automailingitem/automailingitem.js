@@ -14,7 +14,6 @@ try {
 		
 	$('jform_time_start_img').addEvent('click', function(){
 		$$('.calendar')[0].set('top', 0);
-		console.log($$('body > .calendar'));
 	});	
 	
 } catch(e) {}	

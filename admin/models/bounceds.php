@@ -172,8 +172,6 @@ class NewsletterModelBounceds extends MigurModelList
 			' SELECT DISTINCT mp.*, t.startdate'. 
 			' FROM #__newsletter_mailbox_profiles AS mp '.
 			' JOIN ('.(string)$db->getQuery().') as t ON mp.mailbox_profile_id=t.mailbox_profile_id');
-		
-		//echo (string)$db->getQuery(); die;
 		$result = $db->loadAssocList();
 		
 		foreach($result as &$mb) {

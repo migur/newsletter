@@ -98,8 +98,6 @@ class NewsletterControllerConfiguration extends JController
 		$newsletter->subject = $data['params']['confirm_mail_subject'];
 		$newsletter->plain = $data['params']['confirm_mail_body'];
 		
-		//var_dump($data, $newsletter->toArray()); die;
-		
 		$return2 = $newsletter->save();
 
 		unset($data['params']['confirm_mail_subject']);
@@ -153,7 +151,7 @@ class NewsletterControllerConfiguration extends JController
 		header("Content-Length: " . strlen($data));
 		header("Content-Disposition: attachment; filename=newslettter-data-export-" . date('Y-m-d-H-i-s') . '.csv');
 		echo $data;
-		die();
+		die;
 	}
 
 	/**

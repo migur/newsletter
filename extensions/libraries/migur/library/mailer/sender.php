@@ -217,7 +217,7 @@ class MigurMailerSender extends PHPMailer
 
 		// gmail
 //		$result = "Date: Thu, 20 Oct 2011 18:52:09 +0300\r\nReturn-Path:august-ru@mail.ru\r\nReturn-Receipt-To:august-ru@mail.ru\r\n".
-//					"To: Woody woody <bounced@nobodydomaintrololo.com>\r\nFrom: Andrey <andreyalek@gmail.com>\r\n".
+//					"To: Woody woody <bounced@nobodydomaintr.com>\r\nFrom: Andrey <andreyalek@gmail.com>\r\n".
 //					"Reply-to: Andrey <andreyalek@gmail.com>\r\nSubject: Baby Doe\r\n".
 //					"Message-ID: <d10f643bf3f7b3bb1303d279ff28f526@migur.woody.php.nixsolutions.com>\r\n".
 //					"X-Priority: 3\r\nX-Mailer: PHPMailer 5.1 (phpmailer.sourceforge.net)\r\n".

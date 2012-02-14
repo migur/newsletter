@@ -180,7 +180,7 @@ class NewsletterHelper
 			->join('LEFT', '#__newsletter_lists AS l ON (ns.newsletter_id = l.send_at_reg OR ns.newsletter_id = l.send_at_unsubscribe)')
 			->where('newsletter_id=' . (int) $id);
 
-		//echo nl2br(str_replace('#__','jos_',$query)); die();
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$data = $dbo->setQuery($query)->loadAssoc();
 
 		if (!empty($data)) {

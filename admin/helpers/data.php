@@ -77,7 +77,6 @@ class DataHelper
 		$query->join('left', '#__newsletter_lists AS l ON sl.list_id=l.list_id');
 
 		// Set the query
-		//echo $query->__toString(); die();
 		$db->setQuery($query);
 		$files = $db->loadObjectList();
 
@@ -177,8 +176,6 @@ class DataHelper
 			$dayCnt += $weekCnt * $week;
 			$weekCnt = 0;
 		}
-		
-		//var_dump($weekCnt.'-'.$dayCnt.'-'.$hourCnt.'-'.$minCnt.'-'.$seconds);
 		
 		$res = '';
 		foreach($items as $item) {
