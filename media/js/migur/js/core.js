@@ -739,7 +739,7 @@ Migur.jsonResponseParser = function() {
 	{
 		if (this.response === null) return false;
 		
-		if (delimiter === null) {
+		if (!delimiter) {
 			delimiter = "\n";
 		}
 		

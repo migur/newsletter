@@ -28,6 +28,9 @@ JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
  */
 class LogHelper
 {
+	
+	const CAT_BOUNCES = 'bounces';
+	
 	/**
 	 * Set db logger. Since all JErrors E_ERROR will be added to log.
 	 * Usefull if you render something J! native. 
@@ -100,13 +103,27 @@ class LogHelper
 	 * @param string File name, usae current date otherwise
 	 * @param boolean Use to force the logging
 	 */ 
+	static public function addWarning($msg, $category = null, $data = null) 
+	{
+		return self::addEntry(JLog::WARNING, $msg, $category, $data);
+	}
+	
+	
+
+	/**
+	 * Log a message into log.
+	 * 
+	 * @param string Message
+	 * @param string File name, usae current date otherwise
+	 * @param boolean Use to force the logging
+	 */ 
 	static public function addError($msg, $category = null, $data = null) 
 	{
 		return self::addEntry(JLog::ERROR, $msg, $category, $data);
 	}
 
 	
-	
+
 	/**
 	 * Log a message into log.
 	 * 
@@ -118,6 +135,7 @@ class LogHelper
 	{
 		return self::addEntry(JLog::ERROR, $error->get('message'), $error->get('category'), array('code' => $error->get('code')));
 	}
+	
 	
 	
 	/**
