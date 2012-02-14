@@ -343,7 +343,7 @@ class NewsletterControllerCron extends JControllerForm
 		// Post warning if found unfinished checking process
 		if ($timeHasCome && $isExec && !$isAdmin) {
 			LogHelper::addWarning(
-				'COM_NEWSLETTER_BOUNCES_UNFINISHED_FOUND',
+				JText::_('COM_NEWSLETTER_BOUNCE_UNFINISHED_FOUND'),
 				LogHelper::CAT_BOUNCES);
 		}
 
@@ -352,7 +352,7 @@ class NewsletterControllerCron extends JControllerForm
 			NewsletterHelper::setParam('mailer_cron_bounced_is_executed', 0);
 			$isExec = false;
 			LogHelper::addWarning(
-				JText::_('COM_NEWSLETTER_BOUNCES_HANGEDUP_FOUND'),
+				JText::_('COM_NEWSLETTER_BOUNCE_HANGEDUP_FOUND'),
 				LogHelper::CAT_BOUNCES);
 		}
 
@@ -380,6 +380,7 @@ class NewsletterControllerCron extends JControllerForm
 		$limit = JRequest::getInt('limit', 100);
 		
 		$processedAll = 0;
+		sleep(120);
 		// Trying to check all bounces
 		foreach($mbprofiles as $mbprofile) {
 			$processed = 0;

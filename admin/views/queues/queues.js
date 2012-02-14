@@ -86,8 +86,7 @@ window.addEvent('domready', function() {
 					if (parser.getState() == 'unknown error') {
 						text = Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured');
 					} else {	
-						text = Joomla.JText._('AN_ERROR_OCCURED', 'An error occured!') + "\n" +
-							   parser.getMessagesAsList();
+						text = parser.getMessagesAsList();
 					}
 
 					alert(text);
