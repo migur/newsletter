@@ -30,4 +30,9 @@ class NewsletterModelEntityQueue extends MigurModel
 	{
 		return JTable::getInstance($type, $prefix);
 	}
+	
+	public function isSent()
+	{
+		return $this->_data->state != 1;
+	}
 }
