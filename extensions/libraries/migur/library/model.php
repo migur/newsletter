@@ -100,7 +100,7 @@ class MigurModel extends JModel
 			$data['params'] = (object) $data['params'];
 		}
 
-		$this->_data = (object)array_merge_recursive((array)$this->_data, (array)$data);
+		$this->_data = (object)array_merge((array)$this->_data, (array)$data);
 		return $this->_data;
 	}
 	
@@ -217,6 +217,23 @@ class MigurModel extends JModel
 		}	
 
 		return $this->_keyName;
+	}
+	
+	
+	
+	/**
+	 * 
+	 * 
+	 */
+	public function delete()
+	{
+		$table = $this->getTable();
+		
+		if (!$this->getId() || !$table->delete($this->getId())) {
+			return false;
+		}
+		
+		return true;
 	}
 }
 
