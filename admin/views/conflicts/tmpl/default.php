@@ -1,6 +1,6 @@
 <?php $filterList = $this->state->get('filter.list'); ?>
 
-<form id="form-subscribers" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=subscribers&form=subscribers');?>" method="post" name="adminForm" >
+<form id="form-subscribers" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=conflicts&form=conflicts');?>" method="post" name="adminForm" >
     <fieldset>
         <legend><?php echo JText::_('COM_NEWSLETTER_SUBSCRIBERS'); ?></legend>
 	<table class="sslist adminlist">
@@ -10,19 +10,19 @@
 					<input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
 				</th>
 				<th class="left" width="24%">
-					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_NAME', 'subName', $this->listDirn, $this->listOrder, null, null, 'subscribersForm'); ?>
+					<?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_NAME', 'subName', $this->listDirn, $this->listOrder, null, null, 'subscribersForm'); ?>
 					<div class="subscriber-type-icon" style="float:left"></div>
 				</th>
 				<th class="left" width="25%">
-					<?php echo JHtml::_('multigrid.sort', 'JGLOBAL_EMAIL', 'subEmail', $this->listDirn, $this->listOrder, null, null, 'subscribersForm'); ?>
+					<?php echo JHtml::_('grid.sort', 'JGLOBAL_EMAIL', 'subEmail', $this->listDirn, $this->listOrder, null, null, 'subscribersForm'); ?>
 					<div class="subscriber-type-icon" style="float:left"></div>
 				</th>
 				<th class="left" width="25%">
-					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_NAME', 'userName', $this->listDirn, $this->listOrder, null, null, 'subscribersForm'); ?>
+					<?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_NAME', 'userName', $this->listDirn, $this->listOrder, null, null, 'subscribersForm'); ?>
 					<div class="juser-type-icon" style="float:left"></div>
 				</th>
 				<th class="left">
-					<?php echo JHtml::_('multigrid.sort', 'JGLOBAL_EMAIL', 'userEmail', $this->listDirn, $this->listOrder, null, null, 'subscribersForm'); ?>
+					<?php echo JHtml::_('grid.sort', 'JGLOBAL_EMAIL', 'userEmail', $this->listDirn, $this->listOrder, null, null, 'subscribersForm'); ?>
 					<div class="juser-type-icon" style="float:left"></div>
 				</th>
 			</tr>
@@ -40,7 +40,7 @@
 
 			<tr class="row<?php echo $i % 2; ?>">
 				<td>
-					<?php echo JHtml::_('multigrid.id', $i, $item->subSubId, false, 'cid', 'subscribersForm'); ?>
+					<?php echo JHtml::_('grid.id', $i, $item->subSubId, false, 'cid', 'subscribersForm'); ?>
 				</td>
 				<td>
 					<?php echo $this->escape($item->subName); ?>

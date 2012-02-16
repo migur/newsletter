@@ -251,4 +251,89 @@ class NewsletterModelConflict extends JModelAdmin
 		
 		return true;
 	}	
+
+	
+	/**
+	 * Gets all subscriber-user rows.
+	 * Swithes all connections connections of subscriber to a user:
+	 * - history, - lists
+	 * Deletes all conflicted subscribers
+	 * 
+	 * @param type $cids Subscribers ids
+	 */
+	public function deleteUsers($cids)
+	{
+		$dbo = JFactory::getDbo();
+		
+		// Gets all subscriber-user rows.
+		$query = $dbo->getQuery(true); 
+		$query->select('s.subscriber_id AS subId, u.id AS userId');
+		$query->from('#__newsletter_subscribers AS s');
+		$query->join('', '#__users AS u ON s.email = u.email');
+		$query->where('s.subscriber_id in(' . implode(',', $cids) . ')');
+		
+		$dbo->setQuery($query);
+		$res = $dbo->loadObjectList();
+		
+		// Process each row.
+		$user = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		
+		foreach($res as $row) {
+			
+			// Load user
+			if(!$user->load('-'.$row->userId)) {
+				return false;
+			}
+			
+			// Delete subscriber row
+			if (!$user->delete()) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+
+	
+	
+	/**
+	 * Gets all subscriber-user rows.
+	 * Swithes all connections connections of subscriber to a user:
+	 * - history, - lists
+	 * Deletes all conflicted subscribers
+	 * 
+	 * @param type $cids Subscribers ids
+	 */
+	public function deleteSubscribers($cids)
+	{
+		$dbo = JFactory::getDbo();
+		
+		// Gets all subscriber-user rows.
+		$query = $dbo->getQuery(true); 
+		$query->select('s.subscriber_id AS subId, u.id AS userId');
+		$query->from('#__newsletter_subscribers AS s');
+		$query->join('', '#__users AS u ON s.email = u.email');
+		$query->where('s.subscriber_id in(' . implode(',', $cids) . ')');
+		
+		$dbo->setQuery($query);
+		$res = $dbo->loadObjectList();
+		
+		// Process each row.
+		$sub = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		
+		foreach($res as $row) {
+			
+			// Load user
+			if(!$sub->load($row->subId)) {
+				return false;
+			}
+			
+			// Delete subscriber row
+			if (!$sub->delete()) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 }
