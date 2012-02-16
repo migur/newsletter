@@ -16,8 +16,7 @@ class EnvironmentHelper {
 	static public $warnings = array(
 		'checkJoomla' => 'You have old version of Joomla. Please update.',
 		'checkImap' => 'Imap library is unavailable. Please install.',
-		'checkLogs' => 'The component debuging is turned on but system cant write into /logs',
-		'checkUserConflicts' => 'Some J! users and subscribers have equal emails (%s conflicts) '
+		'checkLogs' => 'The component debuging is turned on but system cant write into /logs'
 	);
 
 	/**
@@ -141,6 +140,7 @@ class EnvironmentHelper {
 		$conflictsCount = $res['cnt'];
 		
 		$data[0] = $conflictsCount;
+		$data[1] = '<a href="'.JRoute::_('index.php?option=com_newsletter&view=conflicts', true).'">'.JText::_('COM_NEWSLETTER_HERE').'</a>';
 		return $conflictsCount == 0;
 	}
 	

@@ -32,10 +32,60 @@ class NewsletterControllerConflicts extends JControllerAdmin
 	
 	public function deleteUsers() 
 	{
+		// Check for request forgeries
+		JRequest::checkToken() or die(JText::_('JINVALID_TOKEN'));
+
+		// Get items to remove from the request.
+		$cid	= JRequest::getVar('cid', array(), '', 'array');
+
+		if (!is_array($cid) || count($cid) < 1) {
+			JError::raiseWarning(500, JText::_($this->text_prefix.'_NO_ITEM_SELECTED'));
+		} else {
+			// Get the model.
+			$model = $this->getModel();
+
+			// Make sure the item ids are integers
+			jimport('joomla.utilities.arrayhelper');
+			JArrayHelper::toInteger($cid);
+
+			// Remove the items.
+			if ($model->deleteUsers($cid)) {
+				$this->setMessage(JText::plural($this->text_prefix.'_N_ITEMS_DELETED', count($cid)));
+			} else {
+				$this->setError(JText::plural('COM_NEWSLETTER_CONFLICTS_MERGING_FAILED', count($cid)));
+			}
+		}
+
+		$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list, false));
 	}
 
 	public function deleteSubs() 
 	{
+		// Check for request forgeries
+		JRequest::checkToken() or die(JText::_('JINVALID_TOKEN'));
+
+		// Get items to remove from the request.
+		$cid	= JRequest::getVar('cid', array(), '', 'array');
+
+		if (!is_array($cid) || count($cid) < 1) {
+			JError::raiseWarning(500, JText::_($this->text_prefix.'_NO_ITEM_SELECTED'));
+		} else {
+			// Get the model.
+			$model = $this->getModel();
+
+			// Make sure the item ids are integers
+			jimport('joomla.utilities.arrayhelper');
+			JArrayHelper::toInteger($cid);
+
+			// Remove the items.
+			if ($model->deleteSubscribers($cid)) {
+				$this->setMessage(JText::plural($this->text_prefix.'_N_ITEMS_DELETED', count($cid)));
+			} else {
+				$this->setError(JText::plural('COM_NEWSLETTER_CONFLICTS_MERGING_FAILED', count($cid)));
+			}
+		}
+
+		$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list, false));
 	}
 
 	public function mergeUsers() 
@@ -58,7 +108,7 @@ class NewsletterControllerConflicts extends JControllerAdmin
 
 			// Remove the items.
 			if ($model->mergePreservingUsers($cid)) {
-				$this->setMessage(JText::plural($this->text_prefix.'_N_ITEMS_DELETED', count($cid)));
+				$this->setMessage(JText::plural($this->text_prefix.'_N_ITEMS_MERGED', count($cid)));
 			} else {
 				$this->setError(JText::plural('COM_NEWSLETTER_CONFLICTS_MERGING_FAILED', count($cid)));
 			}
@@ -87,7 +137,7 @@ class NewsletterControllerConflicts extends JControllerAdmin
 
 			// Remove the items.
 			if ($model->mergePreservingSubs($cid)) {
-				$this->setMessage(JText::plural($this->text_prefix.'_N_ITEMS_DELETED', count($cid)));
+				$this->setMessage(JText::plural($this->text_prefix.'_N_ITEMS_MERGED', count($cid)));
 			} else {
 				$this->setError(JText::plural('COM_NEWSLETTER_CONFLICTS_MERGING_FAILED', count($cid)));
 			}

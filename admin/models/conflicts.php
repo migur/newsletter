@@ -43,6 +43,7 @@ class NewsletterModelConflicts extends MigurModelList
 				'list', 'sl.list_id',
 				'publish_up', 'a.publish_up',
 				'publish_down', 'a.publish_down',
+				'subName', 'subEmail', 'userName', 'userEmail'
 			);
 		}
 
