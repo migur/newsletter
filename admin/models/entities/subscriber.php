@@ -393,4 +393,29 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	{
 		return !empty($this->_data->user_id);
 	}
+
+	
+	
+	/**
+	 * Deletes subscriber's and/or user's row
+	 * 
+	 * @return type 
+	 */
+	public function delete()
+	{
+		if (!$this->getId() || !parent::delete($this->getId())) {
+			return false;
+		}
+		
+		if ($this->isJoomlaUserType()) {
+			
+			$table = $this->getTable('user', 'JTable');
+			
+			if (!$table->delete($this->_data->user_id)) {
+				return false;
+			}
+		}	
+		
+		return true;
+	}
 }
