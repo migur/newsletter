@@ -29,9 +29,14 @@ class NewsletterControllerConflicts extends JControllerAdmin
 	{
 		return parent::getModel($name, $prefix, $config);
 	}
+
 	
 	
-	
+	/**
+	 * Deletes subscribers by cids
+	 * 
+	 * @since 12.02
+	 */
 	public function deleteSubs() 
 	{
 		// Check for request forgeries
@@ -61,6 +66,13 @@ class NewsletterControllerConflicts extends JControllerAdmin
 		$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list, false));
 	}
 
+	
+	
+	/**
+	 * Merge all lists and history into users row
+	 * 
+	 * @since 12.02
+	 */
 	public function mergeUsers() 
 	{
 		// Check for request forgeries
@@ -90,6 +102,14 @@ class NewsletterControllerConflicts extends JControllerAdmin
 		$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list, false));
 	}
 
+	
+	
+	/**
+	 * Merge all lists and history into users row with replacing 
+	 * user's migur data with subscriber's data.
+	 * 
+	 * @since 12.02
+	 */
 	public function mergeSubs() 
 	{
 		// Check for request forgeries
