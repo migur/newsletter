@@ -403,18 +403,13 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	 */
 	public function delete()
 	{
+		if ($this->isJoomlaUserType()) {
+			throw Exception('The deleting of Joomla users is not allowed');
+		}
+			
 		if (!$this->getId() || !parent::delete($this->getId())) {
 			return false;
 		}
-		
-		if ($this->isJoomlaUserType()) {
-			
-			$table = $this->getTable('user', 'JTable');
-			
-			if (!$table->delete($this->_data->user_id)) {
-				return false;
-			}
-		}	
 		
 		return true;
 	}

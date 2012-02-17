@@ -31,5 +31,44 @@ class NewsletterControllerSubscribers extends JControllerAdmin
 		$model = parent::getModel($name, $prefix, $config);
 		return $model;
 	}
+	
+	
+	/**
+	 * Check each element and delete deleteable ones
+	 */
+	public function delete() {
+		
+		$cids = JRequest::getVar('cid', array());
+		
+		$unset = 0;
+		
+		if (!empty($cids)) {
 
+			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			
+			foreach($cids as $idx => $cid) {
+				
+				$model->load($cid);
+				
+				if ($model->isJoomlaUserType()) {
+					unset($cids[$idx]);
+					$unset++;
+				}
+			}
+
+			if ($unset > 0) {
+				JFactory::getApplication()->enqueueMessage(sprintf(JText::_('COM_NEWSLETTER_SUBSCRIBERS_ITEMS_CANNOT_DELETED'), $unset), 'message');
+			}
+			
+			if (empty($cids)) {
+				$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list, false));
+				return;
+			}
+			
+			JRequest::setVar('cid', $cids);
+		}
+		
+		
+		parent::delete();
+	}
 }
