@@ -722,34 +722,43 @@ window.addEvent('domready', function() {
         $('jform_smtp_profile_id').addEvent('change', function () {
             var inputs = $$('.smtp-dependency');
 
-            if( $(this).get('value') != '0' ) {
-                var id = $(this).get('value');
-                var sets = this.retrieve('optionsData');
-                var vals = {
-					from_name: '',
-					from_email: '',
-					reply_to_name:'',
-					reply_to_email:''
-				};
-                for (var i=0; i < sets.length; i++) {
-                    if (sets[i].smtp_profile_id == id) {
-                        vals = sets[i];
-                    }
-                }
+			var sets = this.retrieve('optionsData');
+			var id = $(this).get('value');
+
+			var vals = {
+				from_name: '',
+				from_email: '',
+				reply_to_name:'',
+				reply_to_email:''
+			};
+
+			for (var i=0; i < sets.length; i++) {
+				if (sets[i].smtp_profile_id == id) {
+					vals = sets[i];
+				}
+			}
+				
+            if( id != 0 && vals.is_joomla != 1) {
             
                 $('jform_params_newsletter_from_name').set('value', vals.from_name);
                 $('jform_params_newsletter_from_email').set('value', vals.from_email);
                 $('jform_params_newsletter_to_name').set('value', vals.reply_to_name);
                 $('jform_params_newsletter_to_email').set('value', vals.reply_to_email);
+				
                 inputs.addEvent('keydown', function(){
                     return false;
                 });
+				
                 inputs.setProperty('readonly', true);
+				
             } else {
                 inputs.removeProperty('readonly');
                 inputs.removeEvents('keydown');
                 inputs.each(function(el){
-                    el.set('value', el.retrieve('value'));
+					var val = el.retrieve('value');
+					if (val) {
+	                    el.set('value', val);
+					}	
                 });
             }
         });
@@ -760,6 +769,7 @@ window.addEvent('domready', function() {
             $(this).store('value', $(this).get('value'));
         });
 
+		$('jform_smtp_profile_id').fireEvent('change');
 
         /* "Clear Profile" button -> change-handler */
         $('button-newsletter-clear-profile').addEvent('click', function () {

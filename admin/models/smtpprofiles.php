@@ -185,9 +185,8 @@ class NewsletterModelSmtpprofiles extends MigurModelList
 		if ($includeDefault) {
 			$params = JComponentHelper::getParams('com_newsletter');
 			$defaultId = $params->get('general_smtp_default');
-			
 			foreach($list as $item) {
-				if ($item->smtp_profile_id == $defaultId) {
+				if ($item->smtp_profile_id == $defaultId || ($defaultId == 0 && $item->is_joomla == 1)) {
 					$defItem = clone($item);
 					$defItem->smtp_profile_id = (string)NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID;
 					$list[] = $defItem;
