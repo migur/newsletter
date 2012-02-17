@@ -94,6 +94,5 @@ class NewsletterTableSubscriber extends JTable
 		}
 		return count($this->getErrors()) == 0;
 	}
-
 }
 
