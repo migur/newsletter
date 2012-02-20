@@ -119,6 +119,7 @@ class NewsletterModelConflict extends JModelAdmin
 				return false;
 			}
 
+			
 			// Merge lists...
 			
 			// Load all subscriber's lists
@@ -140,6 +141,7 @@ class NewsletterModelConflict extends JModelAdmin
 			$userLists = array(); foreach($res as $row) { $userLists[] = $row['list_id']; }
 			
 			$lists = array_diff($subLists, $userLists);
+			
 			
 			// Merge list entries
 			if (!empty($lists)) {
