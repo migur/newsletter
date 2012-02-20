@@ -133,7 +133,7 @@ class NewsletterModelConflicts extends MigurModelList
 
 		$query->select(
 			's.subscriber_id AS subSubId, s.name AS subName, s.email AS subEmail, '.
-			'u.name AS userName, u.email AS userEmail');
+			'u.id AS userId, u.name AS userName, u.email AS userEmail');
 		$query->from('#__newsletter_subscribers AS s');
 		$query->join('', '#__users AS u ON s.email = u.email AND s.user_id != u.id');
 

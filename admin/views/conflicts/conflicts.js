@@ -9,18 +9,6 @@
 window.addEvent('domready', function() {
     try {
 		
-		if ($('conflict-resolver-link')) {
-			
-			$('conflict-resolver-link').addEvent('click', function(ev){
-
-				ev.stop();
-
-				SqueezeBox.open(url, {
-					handler: 'iframe',
-					size: {x: 900, y: 600}
-				});
-			});
-		}	
 
     } catch(e) {
         if (console && console.conflict) console.conflict(e);

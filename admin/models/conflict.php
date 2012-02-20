@@ -246,11 +246,10 @@ class NewsletterModelConflict extends JModelAdmin
 			
 			// Move all data from subscriber into Joomla user
 			$subData = $sub->toArray();
-			unset($subData[$sub->getKeyName()]);
+			unset($subData['subscriber_id']);
 			unset($subData['email']);
 			unset($subData['user_id']);
-			$user->addFromArray($subData);
-			$user->save();
+			$user->save($subData, 'isJUser');
 			
 			// Delete subscriber row
 			if (!$sub->delete()) {

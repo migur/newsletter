@@ -85,6 +85,21 @@ window.addEvent('domready', function() { try {
     $$('#subscribers-copy span')[0].addClass('disabled');
     $$('#subscribers-cancel span')[0].addClass('disabled');
 
+
+//	if ($('conflict-resolver-link')) {
+//			
+//		$('conflict-resolver-link').addEvent('click', function(ev){
+//			ev.stop();
+//			
+//			var url = migurSiteRoot + 'administrator/index.php?option=com_newsletter&view=conflicts&tmpl=component';
+//			
+//			SqueezeBox.open(url, {
+//				handler: 'iframe',
+//				size: {x: 900, y: 600}
+//			});
+//		});
+//	}	
+
 } catch(e) {
     if (console && console.log) console.log(e);
 } });
