@@ -98,7 +98,7 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 			$append .= '&layout=' . $layout;
 		}
 
-		if ($recordId) {
+		if ($recordId !== null) {
 			$append .= '&' . $urlVar . '=' . $recordId;
 		}
 
@@ -107,10 +107,15 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 
 	public function checkConnection()
 	{
-		$mailbox = JRequest::getVar('jform');
+		$smtpId = JRequest::getVar('smtp_profile_id');
 	
+		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$model->load($smtpId);
+		
+		$smtpSettings = $model->toObject();
+		
 		$sender = new MigurMailerSender();
-		$res = $sender->checkConnection((object)$mailbox);
+		$res = $sender->checkConnection($smtpSettings);
 		
 		echo json_encode(array(
 			'status' => $res? 'ok' : 'Unable to connect'
