@@ -140,7 +140,11 @@ class EnvironmentHelper {
 		$conflictsCount = $res['cnt'];
 		
 		$data[0] = $conflictsCount;
-		$data[1] = '<a href="'.JRoute::_('index.php?option=com_newsletter&view=conflicts', true).'">'.JText::_('COM_NEWSLETTER_HERE').'</a>';
+		$data[1] = 
+			'<a id="conflict-resolver-link" '.
+			'href="'.JRoute::_('index.php?option=com_newsletter&view=conflicts', false).'">'.
+			JText::_('COM_NEWSLETTER_HERE').
+			'</a>';
 		return $conflictsCount == 0;
 	}
 	

@@ -1,8 +1,9 @@
 <?php $filterList = $this->state->get('filter.list'); ?>
 
 <form id="form-subscribers" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=conflicts&form=conflicts');?>" method="post" name="adminForm" >
-    <fieldset>
-        <legend><?php echo JText::_('COM_NEWSLETTER_SUBSCRIBERS'); ?></legend>
+    <fieldset id="wrapper">
+        <legend><?php echo JText::_('COM_NEWSLETTER_CONFLICT_TITLE'); ?></legend>
+		<?php //echo JToolbar::getInstance()->render(); ?>
 	<table class="sslist adminlist">
 		<thead>
 			<tr>
@@ -43,13 +44,21 @@
 					<?php echo JHtml::_('grid.id', $i, $item->subSubId, false, 'cid', 'subscribersForm'); ?>
 				</td>
 				<td>
-					<?php echo $this->escape($item->subName); ?>
+					<a href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&subscriber_id='.$item->subSubId); ?>"
+					    rel="{handler: 'iframe', size: {x: 965, y: 540}}"
+					    class="modal" >
+						<?php echo $this->escape($item->subName); ?>
+					</a>
 				</td>
 				<td>
 					<?php echo $this->escape($item->subEmail); ?>
 				</td>
 				<td>
-					<?php echo $this->escape($item->userName); ?>
+					<a href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&subscriber_id=-'.$item->userId); ?>"
+					    rel="{handler: 'iframe', size: {x: 965, y: 540}}"
+					    class="modal" >
+						<?php echo $this->escape($item->userName); ?>
+					</a>
 				</td>
 				<td>
 					<?php echo $this->escape($item->userEmail); ?>
