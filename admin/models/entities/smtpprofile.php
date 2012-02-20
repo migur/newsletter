@@ -96,7 +96,7 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 	
 	public function isJoomlaProfile()
 	{
-		return ($this->_data->is_joomla);
+		return !empty($this->_data->is_joomla);
 	}
 
 	/**
@@ -122,7 +122,6 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 	 */
 	public function load($data)
 	{
-
 		if(!parent::load($data)) {
 			
 			if (
@@ -157,7 +156,8 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 			$this->_data->params = (object)$this->_defaults['params'];
 			$this->save();
 		}
-		
+
+		//var_dump($this->toArray()); die;
 		return true;
 	}
 
