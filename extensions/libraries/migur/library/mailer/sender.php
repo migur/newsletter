@@ -180,10 +180,7 @@ class MigurMailerSender extends PHPMailer
 				$this->setError($msg);
 			}	
 			
-			LogHelper::addDebug(
-				'Mailer.Sender error.', 
-				'mailer', 
-				$this->getErrors());
+			LogHelper::addDebug('Mailer.Sender error.', LogHelper::CAT_MAILER, $this->getErrors());
 			
 			return false;
 		}

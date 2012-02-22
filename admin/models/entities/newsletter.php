@@ -97,11 +97,7 @@ class NewsletterModelEntityNewsletter extends MigurModel
 	
 	public function isFallback() 
 	{
-		$params = JComponentHelper::getParams('com_newsletter');
-		$nid = (string)$params->get('subscription_fallback_newsletter_id');
-		
-		return 
-			!empty($this->_data->newsletter_id) && ($this->_data->newsletter_id == $nid);
+		return $this->_data->category == self::CATEGORY_FALLBACK;
 	}
 
 	

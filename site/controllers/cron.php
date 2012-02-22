@@ -391,14 +391,47 @@ class NewsletterControllerCron extends JControllerForm
 
 			try {
 
+				// Try to conect
 				$mailbox = new MigurMailerMailbox(&$mbprofile);
+
+				$logData = (array)$mbprofile; 
+				unset($logData['password']);
+
+				
+				if (!$mailbox->connect()) {
+					
+					// Try to connect without certificates
+					if (!$mailbox->protocol->getOption('noValidateCert')) {
+						$mailbox->protocol->setOption('noValidateCert', true);
+						
+						// Fail if we cant
+						if (!$mailbox->connect()) {
+							
+							// Log about accident
+							LogHelper::addError(
+								'COM_NEWSLETTER_MAILBOX_CANT_CONNECT',
+								LogHelper::CAT_BOUNCES,
+								$logData);
+							
+							throw new Exception($mailbox->getLastError());
+						}
+					}
+					
+					// Log about accident
+					LogHelper::addWarning(
+						'COM_NEWSLETTER_MAILBOX_CANT_CONNECT_WITH_CERT',
+						LogHelper::CAT_MAILBOX,
+						$logData);
+				}	
+				
 				$mailbox->useCache();
 
 				$mails = $mailbox->getBouncedList($limit);
 
 				if ($mails === false) {
-
-					$response[$mbprofile['username']]['errors'][] = $mailbox->getLastError();
+					
+					$error = $mailbox->getLastError();
+					$response[$mbprofile['username']]['errors'][] = $error;
 
 				} else {
 
@@ -420,6 +453,13 @@ class NewsletterControllerCron extends JControllerForm
 									if ($mail->msgnum > 0) {
 
 										if (!$mailbox->deleteMail($mail->msgnum)) {
+											
+											// Log about accident
+											LogHelper::addWarning(
+												'COM_NEWSLETTER_MAILBOX_CANT_DELETE_BOUNCED_MAIL',
+												LogHelper::CAT_MAILBOX,
+												$logData);
+
 											throw new Exception('Delete message error.');
 										}
 
