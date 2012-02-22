@@ -44,10 +44,29 @@ class NewsletterModelEntitySubscriber extends MigurModel
 			$this->_data->params = new stdClass;
 		}
 		
+		// If we have the user_id then we must ensure 
+		// that this user exists
 		if (!empty($this->_data->user_id)) {
 			
 			$jUser = JTable::getInstance('user');
-			$jUser->load($this->_data->user_id);
+			
+			// If user absent let's decide what to do with subscriber row...
+			if (!$jUser->load($this->_data->user_id)) {
+				
+				$this->_data->user_id = 0;
+				
+				// If required data is present....
+				if (!empty($this->_data->email)) {
+					// Convert it to Migur subscriber
+					parent::save();
+					return true;
+				} else {
+					// Delete it!
+					$this->delete();
+					return false;
+				}	
+			}
+			
 			$this->_data->name = $jUser->name;
 			$this->_data->email = $jUser->email;
 			$this->_data->state = !$jUser->block;

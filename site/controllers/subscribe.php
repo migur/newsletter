@@ -157,19 +157,25 @@ class NewsletterControllerSubscribe extends JController
 					
 					PlaceholderHelper::setPlaceholder('listname', $list->name);
 
-					if($mailer->send(array(
+					$res = $mailer->send(array(
 						'type'          => $newsletter->isFallback()? 'plain' : $subscriber->getType(),
 						'subscriber'    => $subscriber->toObject(),
 						'newsletter_id' => $newsletter->newsletter_id,
-						'tracking'      => true
-					))) {
+						'tracking'      => true));
+					if($res->state) {
 						$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
 					} else {
 						throw new Exception(json_encode($mailer->getErrors()));
 					}
 
 				} catch(Exception $e) {
-					LogHelper::addError('COM_NEWSLETTER_WELCOMING_SEND_FAILED', 'subscription', (array)$e);
+					LogHelper::addError(
+						'COM_NEWSLETTER_WELCOMING_SEND_FAILED', 
+						LogHelper::CAT_SUBSCRIPTION, 
+						array(
+							'Error' => $e->getMessage(),
+							'Email' => $subscriber->email,
+							'Newsletter' => $newsletter->name));
 				}	
 			}
 		}	
@@ -244,7 +250,16 @@ class NewsletterControllerSubscribe extends JController
 		//JRequest::checkToken() or jexit('Invalid Token');
 
 		if (empty($uid) || empty($nid)) {
-			jexit('One or more parameters is missing');
+			
+			// Log about trouble
+			LogHelper::addError(
+				'COM_NEWSLETTER_UNSUBSCRIPTION_FAILED_PARAMETERS_NOT_FOUND',
+				LogHelper::CAT_SUBSCRIPTION,
+				array(
+					'Newsletter id' => $nid,
+					'Subscriber\'s key' => $uid));
+
+			jexit(JText::_('COM_NEWSLETTER_UNSUBSCRIPTION_FAILED_PARAMETERS_NOT_FOUND'));
 		}
 
 		JRequest::setVar('view', 'subscribe');
@@ -274,84 +289,106 @@ class NewsletterControllerSubscribe extends JController
 		$nid   = JRequest::getString('newsletter-nid', '');
 		$lists = JRequest::getVar('newsletter-lists', array());
 
-		// Check token, d_i_e on error.
-		//JRequest::checkToken() or jexit('Invalid Token');
-
-		if (empty($uid) || empty($lists)) {
-			$this->setRedirect(
-				JRoute::_('index.php?option=com_newsletter&view=subscribe&layuout=unsubscribe', false),
-				JText::_('COM_NEWSLETTER_PARAMETERS_NOT_FOUND'),
-				'error');
-			return;
-		}
-
-		// Insert into db
-		// TODO: Add santiy checks, use model instead
-		$db->setQuery( "SELECT * FROM #__newsletter_subscribers WHERE subscription_key = " . $db->quote(addslashes($uid)) );
-		$subscriber = $db->loadObject();
-		if (empty($subscriber->subscriber_id)) {
-			$this->setRedirect(
-				JRoute::_('index.php?option=com_newsletter&view=subscribe&layuout=unsubscribe', false),
-				JText::_('COM_NEWSLETTER_USER_NOT_FOUND'),
-				'error');
-			return;
-		}
-
-		// Check the newsletter if nid is present
-		if (!empty($nid)) {
-			$db->setQuery( "SELECT newsletter_id FROM #__newsletter_newsletters WHERE newsletter_id = " . $db->quote(addslashes($nid)));
-			$newsletter = $db->loadObject();
-			if (empty($newsletter->newsletter_id)) {
-				$this->setRedirect(
-					JRoute::_('index.php?option=com_newsletter&view=subscribe&layuout=unsubscribe', false),
-					JText::_('COM_NEWSLETTER_NEWSLETTER_NOT_FOUND'));
-				return;
+		try {
+			// If we parameters are not enough...
+			if (empty($uid) || empty($lists)) {
+				throw new Exception ('COM_NEWSLETTER_UNSUBSCRIPTION_FAILED_PARAMETERS_NOT_FOUND');
 			}
-		}	
-		$app->triggerEvent(
-			'onMigurNewsletterBeforeUnsubscribe', 
-			array(
-				'subscriber' => $subscriber,
-				'lists' => $lists
-		));
-		
-		foreach ($lists as $list) {
 
-			// Delete subscriptions from list
-			$db->setQuery(
-				"DELETE FROM #__newsletter_sub_list ".
-				"WHERE subscriber_id = " . $db->quote((int)$subscriber->subscriber_id) . " AND list_id = " . $db->quote((int)$list)
-			);
-			$db->query();
+			// Insert into db
+			// TODO: Add santiy checks, use model instead
+			$db->setQuery( "SELECT * FROM #__newsletter_subscribers WHERE subscription_key = " . $db->quote(addslashes($uid)) );
+			$subscriber = $db->loadObject();
+			if (empty($subscriber->subscriber_id)) {
+				throw new Exception('COM_NEWSLETTER_UNSUBSCRIPTION_FAILED_SUBSCRIBER_NOT_FOUND');
+			}
+
+			// Check the newsletter if nid is present
+			if (!empty($nid)) {
+				$db->setQuery( "SELECT newsletter_id FROM #__newsletter_newsletters WHERE newsletter_id = " . $db->quote(addslashes($nid)));
+				$newsletter = $db->loadObject();
+				if (empty($newsletter->newsletter_id)) {
+					throw new Exception('COM_NEWSLETTER_UNSUBSCRIPTION_FAILED_NEWSLETTER_NOT_FOUND');
+				}
+			}	
 			
-			// Add to history
-			$db->setQuery(
-				"INSERT IGNORE INTO #__newsletter_sub_history SET ".
-				" newsletter_id=" . $db->quote((int)$nid) . ", ".
-				" subscriber_id=" . $db->quote((int)$subscriber->subscriber_id) . ", ".
-				" list_id=" . $db->quote((int)$list) . ", ".
-				" date=" . $db->quote(date('Y-m-d H:i:s')) . ", ".
-				" action=" . $db->quote(NewsletterTableHistory::ACTION_UNSUBSCRIBED) . ", ".
-				" text=''"
-			);
-			$res = $db->query();
-		}
+			$app->triggerEvent(
+				'onMigurNewsletterBeforeUnsubscribe', 
+				array(
+					'subscriber' => $subscriber,
+					'lists' => $lists
+			));
 
-		// Process automailing unsubscription
-		$amManager = new NewsletterAutomailingManager();
-		$amManager->processUnsubscription();
-		
-		$app->triggerEvent(
-			'onMigurNewsletterAfterUnsubscribe', 
+			foreach ($lists as $list) {
+
+				// Delete subscriptions from list
+				$db->setQuery(
+					"DELETE FROM #__newsletter_sub_list ".
+					"WHERE subscriber_id = " . $db->quote((int)$subscriber->subscriber_id) . " AND list_id = " . $db->quote((int)$list)
+				);
+				$db->query();
+				
+				// Add to history
+				$db->setQuery(
+					"INSERT IGNORE INTO #__newsletter_sub_history SET ".
+					" newsletter_id=" . $db->quote((int)$nid) . ", ".
+					" subscriber_id=" . $db->quote((int)$subscriber->subscriber_id) . ", ".
+					" list_id=" . $db->quote((int)$list) . ", ".
+					" date=" . $db->quote(date('Y-m-d H:i:s')) . ", ".
+					" action=" . $db->quote(NewsletterTableHistory::ACTION_UNSUBSCRIBED) . ", ".
+					" text=''"
+				);
+				$res = $db->query();
+			}
+
+			// Process automailing unsubscription
+			$amManager = new NewsletterAutomailingManager();
+			$amManager->processUnsubscription(array(
+				'subscriberId' => (int)$subscriber->subscriber_id));
+
+			$app->triggerEvent(
+				'onMigurNewsletterAfterUnsubscribe', 
+				array(
+					'subscriber' => $subscriber,
+					'lists' => $lists,
+					'result' => $res
+			));
+			
+		} catch (Exception $e){
+			
+			// Log about this incedent
+			$msg = $e->getMessage();
+			
+			LogHelper::addError(
+				$msg,
+				LogHelper::CAT_SUBSCRIPTION,
+				array(
+					'Newsletter id' => $nid,
+					'Subscriber id' => $uid,
+					'Lists ids' => $lists));
+
+			$this->setRedirect(
+				JRoute::_('index.php?option=com_newsletter&view=subscribe&layout=unsubscribe&uid='.$uid.'&nid='.$nid, false),
+				JText::_($msg),
+				'error');
+			
+			return;
+		}	
+
+
+		// Logging for debug
+		LogHelper::addDebug(
+			'Unsubscription complete.',
+			LogHelper::CAT_SUBSCRIPTION,
 			array(
-				'subscriber' => $subscriber,
-				'lists' => $lists,
-				'result' => $res
-		));
+				'Newsletter id' => $nid,
+				'Subscriber id' => $uid,
+				'Lists ids' => $lists));
+		
 		
 		// Redirect to page
 		$this->setRedirect(
-			JRoute::_('index.php?option=com_newsletter&view=subscribe&layuout=unsubscribe', false),
+			JRoute::_('index.php?option=com_newsletter&view=subscribe&layout=unsubscribe&uid='.$uid.'&nid='.$nid, false),
 			JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_USING_SERVICE', $subscriber->name),
 			'message');
 	}

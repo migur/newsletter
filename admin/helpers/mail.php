@@ -32,7 +32,8 @@ class MailHelper
 	
 	/**
 	 * Load letter from DB, load SMTP settings
-	 *
+	 * TODO: Move this to NewsletterModel or NewsletterModelEntity
+	 * 	
 	 * @param <string> $name - id of a letter
 	 *
 	 * @return object - letter
@@ -50,6 +51,9 @@ class MailHelper
 		
 		$letter = (object) $letter->getProperties();
 		$letter->params = (array) json_decode($letter->params);
+		if (empty($letter->params['encoding'])) {
+			$letter->params['encoding'] = 'utf-8';
+		}
 		PlaceholderHelper::setPlaceholders($letter->params);
 
 		$profileEntity = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');

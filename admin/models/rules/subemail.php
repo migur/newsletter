@@ -85,6 +85,29 @@ class JFormRuleSubemail extends JFormRule
 			if ($duplicate) {
 				return false;
 			}
+			
+			
+			// Build the query.
+			$query = $db->getQuery(true);
+			$query->select('COUNT(*)');
+			$query->from('#__users AS u');
+			$query->join('left', '#__newsletter_subscribers AS s ON u.id = s.user_id');
+			$query->where('u.email = ' . $db->quote($value));
+			$query->where('(subscriber_id <> ' . (int) $userId . ' OR subscriber_id IS NULL)');
+
+			// Set and query the database.
+			$db->setQuery($query);
+			$duplicate = (bool) $db->loadResult();
+
+			// Check for a database error.
+			if ($db->getErrorNum()) {
+				JError::raiseWarning(500, $db->getErrorMsg());
+			}
+
+			if ($duplicate) {
+				return false;
+			}
+			
 		}
 
 		return true;

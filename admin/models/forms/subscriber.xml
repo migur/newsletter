@@ -20,8 +20,8 @@
 			size="30"
 			default=""
 			required="true"
-                        validate="subemail"
-                        unique="true"
+			validate="subemail"
+			unique="true"
 		 />
 		<field
             name="html"

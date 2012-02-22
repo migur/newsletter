@@ -40,7 +40,7 @@ class NewsletterAutomailingManager
 	{
 		// Check required parameters
 		if (empty($options['subscriberId'])) {
-			LogHelper::addDebug('AutomailingManager.processSubscription: subscriberId absent', 'automailing');
+			LogHelper::addError('COM_NEWSLETTER_AUTOMAILING_SUBSCRIPTION_SUBSCRIBER_ID_ABSENT', LogHelper::CAT_AUTOMAILING);
 			return false;
 		}
 	
@@ -67,7 +67,7 @@ class NewsletterAutomailingManager
 		} catch (Exception $e) {
 			
 			$this->setError($e->getMessage());
-			LogHelper::addDebug('AutomailingManager.processSubscription error:', 'automailing', array('message' => $e->getMessage()));
+			LogHelper::addError('COM_NEWSLETTER_AUTOMAILING_ERROR', LogHelper::CAT_AUTOMAILING, array('Message' => $e->getMessage()));
 			return false;
 		}
 		
@@ -84,7 +84,7 @@ class NewsletterAutomailingManager
 	{
 		// Check required parameters
 		if (empty($options['subscriberId'])) {
-			LogHelper::addDebug('AutomailingManager.processSubscription: subscriberId absent', 'automailing');
+			LogHelper::addError('COM_NEWSLETTER_AUTOMAILING_UNSUBSCRIPTION_SUBSCRIBER_ID_ABSENT', LogHelper::CAT_AUTOMAILING);
 			return false;
 		}
 	}
