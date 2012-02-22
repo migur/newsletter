@@ -30,6 +30,14 @@ class LogHelper
 {
 	
 	const CAT_BOUNCES = 'bounces';
+
+	const CAT_MAILER = 'mailer';
+
+	const CAT_SUBSCRIPTION = 'subscription';
+	
+	const CAT_AUTOMAILING = 'automailing';
+	
+	public static $langIsLoaded = false;
 	
 	/**
 	 * Set db logger. Since all JErrors E_ERROR will be added to log.
@@ -149,6 +157,10 @@ class LogHelper
 	{
 		try {
 
+			if (!self::$langIsLoaded) {
+				self::$langIsLoaded = self::loadTranslations();
+			}
+			
 			// Cant use it because or we cant log WARNINGS AND NOTICES 
 			// or we wil log ALL WARNINGS AND NOTICES even J! deprecated messages..Baad.
 
@@ -166,7 +178,7 @@ class LogHelper
 			$table = new NewsletterTableLog(JFactory::getDbo());
 			
 			$table->save(array(
-				'message'  => $msg,
+				'message'  => JText::_($msg),
 				'priority' => $priority,
 				'category' => $category,
 				'date'     => date('Y-m-d H:i:s'),
@@ -221,5 +233,11 @@ class LogHelper
 		}
 		
 		return $backtracel;
+	}
+	
+	static function loadTranslations() 
+	{
+		$lang = JFactory::getLanguage();
+		return $lang->load('com_newsletter_log', JPATH_ADMINISTRATOR);
 	}
 }

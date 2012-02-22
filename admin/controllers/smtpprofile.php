@@ -107,12 +107,11 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 
 	public function checkConnection()
 	{
-		$smtpId = JRequest::getVar('smtp_profile_id');
-	
-		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
-		$model->load($smtpId);
-		
-		$smtpSettings = $model->toObject();
+//		$smtpId = JRequest::getVar('smtp_profile_id');
+//		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+//		$model->load($smtpId);
+
+		$smtpSettings = (object)JRequest::getVar('jform');
 		
 		$sender = new MigurMailerSender();
 		$res = $sender->checkConnection($smtpSettings);

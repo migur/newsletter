@@ -278,7 +278,7 @@ class MigurMailer extends JObject
 	 *
 	 * @param  array $params newsletter_id, subscriber(object), type ('html'|'plain'), tracking(bool)
 	 *
-	 * @return boolean
+	 * @return object
 	 * @since  1.0
 	 */
 	public function send($params = null)
@@ -331,7 +331,6 @@ class MigurMailer extends JObject
 		$letter->subject = $this->renderSubject($letter->subject);
 
 		$letter->encoding = $letter->params['encoding'];
-
 		SubscriberHelper::restoreRealUser();
 
 		// Result object
@@ -372,7 +371,6 @@ class MigurMailer extends JObject
 					'type' => $type,
 					'tracking' => $params['tracking']
 				));
-			
 			// If sending failed
 			if (!$sendRes && !empty($sender->ErrorInfo)) {
 				throw new Exception ($sender->ErrorInfo);
@@ -386,8 +384,20 @@ class MigurMailer extends JObject
 				$this->setError($msg);
 				$res->errors[] = $msg;
 			}
+			
 			$res->errors[] = $e->getMessage();
-			LogHelper::addError('COM_NEWSLETTER_MAILER_SUND_ERROR', 'mailer', array('error' => $e->getMessage()));
+			
+			LogHelper::addError(
+				'COM_NEWSLETTER_MAILER_SEND_ERROR', 
+				LogHelper::CAT_MAILER, 
+				array(
+					'Error'        => $e->getMessage(),
+					'Email'        => $subscriber->email,
+					'Mail type'    => $type,
+					'SMTP profile' => $letter->smtp_profile->smtp_profile_name,
+					'Newsletter'   => $letter->newsletter_id
+					));
+			
 			return $res;
 		}	
 		

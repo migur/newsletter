@@ -126,27 +126,48 @@ class NewsletterControllerMailboxprofile extends JControllerForm
 
 	public function checkConnection()
 	{
+
 		$options = JRequest::getVar('jform');
 		
 		$mailbox = new MigurMailerMailbox($options);
 		
-		$res = $mailbox->connect();
-
-		if ($res) {
-			$mailbox->close();
-		}
-
-		$err = $mailbox->getLastError();
+		$errors = array();
 		
-		if (empty($err)) {
-			$err = 'Unknown error';
-		}
+		if($mailbox->connect()) {
+			$mailbox->close();
+		} else {
+			
+			$errors[] = JText::_('COM_NEWSLETTER_UNABLE_TO_CONNECT');
+			$errors[] = $mailbox->getLastError();
+			
+			if (!$mailbox->protocol->getOption('noValidateCert')) {
+				$mailbox->protocol->setOption('noValidateCert', true);
+
+				$errors[] = JText::_('COM_NEWSLETTER_TRYING_TO_CONNECT_WITHOUT_CERT');
+				
+				if ($mailbox->connect()) {
+					$mailbox->close();
+					$errors[] = JText::_('COM_NEWSLETTER_OK_CHECK_YOUR_CERT');
+				} else {
+					$errors[] = JText::_('COM_NEWSLETTER_FAILED') . '. ' . $mailbox->getLastError();
+				}
+			}
+		}	
+
+		if (count($errors) == 0) {
+			$status = 'ok';
+		} else {
+			$status = '';
+			foreach($errors as $error) {
+				$status .= "\n" . $error;
+			}
+		}	
 		
 		imap_errors(); 
 		imap_alerts();
 
 		echo json_encode(array(
-			'status' => $res? 'ok' : $err
+			'status' => $status
 		));
 
 		jexit();
