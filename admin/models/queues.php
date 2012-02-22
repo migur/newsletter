@@ -63,6 +63,7 @@ class NewsletterModelQueues extends JModelList
 			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
 			FROM #__newsletter_subscribers AS s
 			LEFT JOIN #__users AS u ON (s.user_id = u.id)
+			WHERE s.user_id = 0 OR u.id IS NOT NULL OR s.email != ""
 
 			UNION
 

@@ -65,7 +65,7 @@ class JavascriptHelper
 		
 		$data = $lang->fileToArray('com_newsletter_js');
 		
-		JFactory::getLanguage()->load('com_newsletter_js');
+		JFactory::getLanguage()->load('com_newsletter_js', JPATH_ADMINISTRATOR);
 
 		if(!empty($data)) {
 			foreach($data as $key => $item) {

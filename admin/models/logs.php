@@ -113,7 +113,7 @@ class NewsletterModelLogs extends JModelList
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
-		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
+		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn) . ', log_id '.$orderDirn);
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		return $query;

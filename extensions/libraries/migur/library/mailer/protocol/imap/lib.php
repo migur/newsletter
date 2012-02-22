@@ -32,6 +32,7 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
 		$this->service            = $options['mailbox_server_type']; // the service to use (imap or pop3), default is 'imap'
 		$this->service_option     = $options['is_ssl']; // the service options (none, tls, notls, ssl, etc.), default is 'notls'
 		$this->boxname            = 'INBOX'; // the mailbox to access, default is 'INBOX'
+		$this->noValidateCert     = !empty($options['novalidate-cert']); // do not validate certificates from TLS/SSL server, needed if server uses self-signed certificates
 		//$this->moveHard           = true; // default is false
 		//$this->hardMailbox        = 'INBOX.hardtest'; // default is 'INBOX.hard' - NOTE: must start with 'INBOX.'
 		//$this->moveSoft           = true; // default is false
@@ -249,7 +250,11 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
       $this->moveSoft = false;
       $this->moveHard = false;
     }
-    $port = $this->port . '/' . $this->service . '/' . $this->service_option;
+    $port = 
+		$this->port . '/' . 
+		$this->service . 
+		(($this->service_option != 'none')? '/' . $this->service_option : '') . 
+		(($this->noValidateCert)? '/novalidate-cert' : '');
 	
 	$met = ini_get('max_execution_time');
 	if ($met < 30 && $met != 0) { set_time_limit(30); }	
@@ -315,7 +320,7 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
       //echo "TIP: the mailbox you want to move the message to must include 'INBOX.' at the start.<br />\n";
       return false;
     }
-    $port = $this->port . '/' . $this->service . '/' . $this->service_option;
+    $port = $this->port . '/' . $this->service . (($this->service_option != 'none')? '/' . $this->service_option : '');
     $mbox = imap_open('{'.$this->mailhost.":".$port.'}',$this->mailbox_username,$this->mailbox_password,OP_HALFOPEN);
     $list = imap_getmailboxes($mbox,'{'.$this->mailhost.":".$port.'}',"*");
     $mailboxFound = false;
@@ -356,5 +361,23 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
       }
     }
   }
+  
+  
+  
+  /**
+   * Set an option
+   */
+  public function setOption($name, $value) {
+	  $this->{$name} = $value;
+  }
+  
 
+  
+  /**
+   * Get an option
+   */
+  public function getOption($name) {
+	  return $this->{$name};
+  }
+  
 }
