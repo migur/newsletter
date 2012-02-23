@@ -257,7 +257,6 @@ textarea.invalid {
 }
 
 .preloader {
-/*	background: url('../../system/images/mootree_loader.gif') left top no-repeat;*/
 	background: url('../images/preloader.gif') left top no-repeat;
 	padding-left: 22px;
 	line-height: 18px;
@@ -265,6 +264,17 @@ textarea.invalid {
 	min-height: 18px;
 	min-width: 18px;
 	display: block;
+}
+
+.preloader-right {
+	background: url('../images/preloader.gif') left top no-repeat;
+	padding-left: 22px;
+	line-height: 18px;
+	color: #888;
+	min-height: 18px;
+	min-width: 18px;
+	display: block;
+	float: right;
 }
 
 .icon-32-messaging {

@@ -551,12 +551,17 @@ window.addEvent('domready', function() {
 						tagsRenderMode: 'htmlconstructor'
                     },
                     onSuccess: function(res){
+						
+						$($this.domEl).removeClass('preloader');
+						
                         $this.data.template = res.data.content;
 						this.initialised = false;
                         $this._render();
                     }
                 }).send();
-
+				
+				this.domEl.addClass('preloader');
+				
                 return true;
             },
 
@@ -1111,6 +1116,9 @@ window.addEvent('domready', function() {
                 type: 'plain'
             },
             onComplete: function(res){
+				
+				$('tab-preview-plain-container').removeClass('preloader');
+				
                 if (res) {
                     $('tab-preview-plain-container')
                     .set('value', res);
@@ -1119,6 +1127,9 @@ window.addEvent('domready', function() {
                 }
             }
         }).send();
+		
+		$('tab-preview-plain-container').addClass('preloader');
+		
     });
 
     $$('.tab-preview').addEvent('click', function(){
