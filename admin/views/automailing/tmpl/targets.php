@@ -8,7 +8,6 @@
 		<select name="list_to_subscribe" class="inputbox">
 			<option value=""><?php echo '- ' . JText::_('COM_NEWSLETTER_SELECT_LIST') . ' -'; ?></option>
 			<?php
-				//var_dump($this->unusedLists); die;
 				foreach($this->unusedLists as $i => $item) { ?>
 					<option value="<?php echo $this->escape($item->list_id); ?>">
 						<?php echo $this->escape($item->name); ?>
