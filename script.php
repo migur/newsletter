@@ -43,6 +43,18 @@ class com_newsletterInstallerScript
 	 */
 	function uninstall($parent)
 	{
+		// Let's notice about extensions that may need to be uninstalled too
+		$extensions = $this->_getComponentDependentExtensions();
+
+		if (count($extensions) > 0) {
+			
+			$app = JFactory::getApplication();
+			$app->enqueueMessage(JText::_('COM_NEWSLETTER_EXTENSION_TO_UNINSTALL_FOUND'));
+
+			foreach($extensions as $ext) {
+				$app->enqueueMessage(ucfirst($ext->type) . ' '. $ext->name . '(' . $ext->element . ')');
+			}
+		}
 		return true;
 	}
 
@@ -479,5 +491,21 @@ class com_newsletterInstallerScript
 	
 	
 	
+	protected function _getComponentDependentExtensions()
+	{
+		$installer  = $this->parent;
+		
+		$dbo = JFactory::getDbo();
+		$query = $dbo->getQuery(true);
+		$query->select('*')
+			  ->from('#__extensions')
+			  ->where(
+				  '(type="plugin" AND folder="migur") '.
+				  'OR element="mod_newsletter_subscribe" '.
+				  'OR (type="plugin" AND element="migurusersync") ');
+		 	
+		$dbo->setQuery($query);
+		return $dbo->loadObjectList();
+	}
 }
 

@@ -157,7 +157,6 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 			$this->save();
 		}
 
-		//var_dump($this->toArray()); die;
 		return true;
 	}
 
