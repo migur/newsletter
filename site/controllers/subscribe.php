@@ -156,7 +156,6 @@ class NewsletterControllerSubscribe extends JController
 					$newsletter->loadAsWelcoming($list->send_at_reg);
 					
 					PlaceholderHelper::setPlaceholder('listname', $list->name);
-
 					$res = $mailer->send(array(
 						'type'          => $newsletter->isFallback()? 'plain' : $subscriber->getType(),
 						'subscriber'    => $subscriber->toObject(),
@@ -164,8 +163,14 @@ class NewsletterControllerSubscribe extends JController
 						'tracking'      => true));
 					if($res->state) {
 						$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
+
+						LogHelper::addMessage(
+							'COM_NEWSLETTER_WELLCOMING_NEWSLETTER_SENT_SUCCESSFULLY', 
+							LogHelper::CAT_SUBSCRIPTION, 
+							array('Email' => $subscriber->email, 'Newsletter' => $newsletter->name));
+						
 					} else {
-						throw new Exception(json_encode($mailer->getErrors()));
+						throw new Exception(json_encode($res->errors));
 					}
 
 				} catch(Exception $e) {

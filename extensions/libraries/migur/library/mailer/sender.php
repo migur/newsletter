@@ -57,7 +57,11 @@ class MigurMailerSender extends PHPMailer
 	{
 		$this->emails = !empty($params['emails']) ? $params['emails'] : null;
 		$this->letter = !empty($params['letter']) ? $params['letter'] : null;
-		$this->attach = !empty($params['letter']) ? $params['attach'] : null;
+		$this->fromName  = !empty($params['fromName']) ? $params['fromName'] : null;
+		$this->fromEmail = !empty($params['fromEmail']) ? $params['fromEmail'] : null;
+		$this->toName  = !empty($params['toName']) ? $params['toName'] : null;
+		$this->toEmail = !empty($params['toEmail']) ? $params['toEmail'] : null;
+		$this->attach = !empty($params['attach']) ? $params['attach'] : array();
 		$this->type = !empty($params['type']) ? $params['type'] : null;
 
 		if (!empty($params['smtpProfile'])) {
@@ -130,13 +134,13 @@ class MigurMailerSender extends PHPMailer
 		$this->ClearAddresses();
 		
 		$this->AddReplyTo(
-			JMailHelper::cleanAddress($this->smtpProfile->reply_to_email),
-			JMailHelper::cleanText($this->smtpProfile->reply_to_name)
+			JMailHelper::cleanAddress($this->toEmail),
+			JMailHelper::cleanText($this->toName)
 		);
 		
 		$this->SetFrom(
-			JMailHelper::cleanAddress($this->smtpProfile->from_email),
-			JMailHelper::cleanText($this->smtpProfile->from_name)
+			JMailHelper::cleanAddress($this->fromEmail),
+			JMailHelper::cleanText($this->fromName)
 		);
 		
 		$this->Subject = JMailHelper::cleanText($this->letter->subject);

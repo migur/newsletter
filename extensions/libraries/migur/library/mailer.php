@@ -154,7 +154,10 @@ class MigurMailer extends JObject
 	/**
 	 * The main send of one letter to one or mode recipients.
 	 * The mail content generates for each user
-	 *
+	 * 
+	 * TODO: Need to combine it with send(). Actualy the same functionaluty 
+	 * in exeption of some headers and tracking.
+	 * 
 	 * @param  array $params the [smtpProfile], [letter], [emails]
 	 *
 	 * @return boolean
@@ -163,10 +166,36 @@ class MigurMailer extends JObject
 	public function sendToList($params = null)
 	{
 		// load letter to send....
-		$letter = MailHelper::loadLetter($params['newsletter_id']);
-		if (empty($letter->newsletter_id)) {
-			$this->setError('Loading letter error or newsletter_id is not defined. Id:'.$params['newsletter_id']);
-			return false;
+		if(empty($params['newsletter_id'])) {
+			$msg = 'Newsletter id is absent. There is nothing to send.';
+			$this->setError($msg);
+			throw new Exception($msg);
+		}
+
+		if(empty($params['subscribers'])) {
+			$msg = 'Subscribers is absent. There is no one to send.';
+			$this->setError($msg);
+			throw new Exception($msg);
+		}
+		
+		if(empty($params['tracking'])) {
+			$params['tracking'] = false;
+		}
+
+		// Load newsletter...
+		$letter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		if (!$letter->load($params['newsletter_id'])) {
+			$msg = 'Loading letter error or newsletter_id is not defined. Id:'.$params['newsletter_id'];
+			$this->setError($msg);
+			throw new Exception($msg);
+		}
+		
+		// Load newsletter's SMTP profile...
+		$smtpProfile = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		if (!$smtpProfile->load($letter->smtp_profile_id)) {
+			$msg = 'Cant load SMTP profile with id: ' . $letter->smtp_profile_id;
+			$this->setError($msg);
+			throw new Exception($msg);
 		}
 
 		$sender = new MigurMailerSender();
@@ -208,7 +237,7 @@ class MigurMailer extends JObject
 			$letter->content = $this->render(array(
 					'type' => $type,
 					'newsletter_id' => $letter->newsletter_id,
-					'tracking' => true
+					'tracking' => $params['tracking']
 				));
 
 			$letter->subject = $this->renderSubject($letter->subject);
@@ -226,18 +255,35 @@ class MigurMailer extends JObject
 				$sender->AddCustomHeader('Subscriber-ID:' . $item->subscriber_id);
 			}	
 
-			$letter->encoding = $letter->params['encoding'];
+			$letter->encoding = $letter->params->encoding;
 
-			// send the unique letter to each recipient
+			if (!$smtpProfile->isJoomlaProfile()) {
+				$fromName  = $smtpProfile->from_name;
+				$fromEmail = $smtpProfile->from_email;
+				$toName    = $smtpProfile->reply_to_name;
+				$toEmail   = $smtpProfile->reply_to_email;
+			} else {
+				$jConfig = new JConfig;
+				$fromName  = isset($letter->params->from_name)? $letter->params->from_name : $jConfig->fromname;
+				$fromEmail = isset($letter->params->from_email)? $letter->params->from_email : $jConfig->mailfrom;
+				$toName    = isset($letter->params->to_name)? $letter->params->to_name : $jConfig->fromname;
+				$toEmail   = isset($letter->params->to_email)? $letter->params->to_email : $jConfig->mailfrom;
+			}	
+			
 			try {
+				
+				// send the unique letter to each recipient
 				$bounced = $sender->send(array(
-						'letter' => $letter,
-						'attach' => $atts,
-						'emails' => array($item),
-						'smtpProfile' => $letter->smtp_profile,
-						'type' => $type,
-						'tracking' => $params['tracking']
-					));
+					'letter' => $letter->toObject(),
+					'attach' => $atts,
+					'emails' => array($item),
+					'smtpProfile' => $smtpProfile->toObject(),
+					'fromName' => $fromName,
+					'fromEmail' => $fromEmail,
+					'toName' => $toName,
+					'toEmail' => $toEmail,
+					'type' => $type,
+					'tracking' => $params['tracking']));
 
 				// If sending failed
 				if(!$bounced) {
@@ -276,6 +322,11 @@ class MigurMailer extends JObject
 	 * The main send of one letter to one or mode recipients.
 	 * The mail content generates for each user
 	 *
+	 * TODO: Need to refactor it all to:
+	 * sendNewsletterToSubscriber($nid, $sid, $options)
+	 * sentNewsletterToEmail($nid, array $emailAndName, $options)
+	 * sentLetterToEmail(array $letterData, array $emailAndName, $options)
+	 * 
 	 * @param  array $params newsletter_id, subscriber(object), type ('html'|'plain'), tracking(bool)
 	 *
 	 * @return object
@@ -283,20 +334,56 @@ class MigurMailer extends JObject
 	 */
 	public function send($params = null)
 	{
-		if (empty($params['tracking'])) {
-			$params['tracking'] = false;
+		// load letter to send....
+		if(empty($params['newsletter_id'])) {
+			$msg = 'Newsletter id is absent. There is nothing to send.';
+			$this->setError($msg);
+			throw new Exception($msg);
+		}
+
+		if(empty($params['subscriber'])) {
+			$msg = 'Subscriber is absent. There is no one to send.';
+			$this->setError($msg);
+			throw new Exception($msg);
 		}
 		
-		// load letter to send....
-		$letter = MailHelper::loadLetter($params['newsletter_id']);
-		if (empty($letter->newsletter_id)) {
+		if(empty($params['tracking'])) {
+			$params['tracking'] = false;
+		}
+
+		// Load newsletter...
+		$letter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		if (!$letter->load($params['newsletter_id'])) {
 			$msg = 'Loading letter error or newsletter_id is not defined. Id:'.$params['newsletter_id'];
 			$this->setError($msg);
 			throw new Exception($msg);
 		}
 
-		// Retrieve the email for bounced letters
-		$profiles = NewsletterHelper::getMailProfiles($params['newsletter_id']);
+		// Load newsletter's SMTP profile...
+		$smtpProfile = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		if (!$smtpProfile->load($letter->smtp_profile_id)) {
+			$msg = 'Cant load SMTP profile with id: ' . $letter->smtp_profile_id;
+			$this->setError($msg);
+			throw new Exception($msg);
+		}
+
+		// Load mailbox profile bound to loaded SMTP profile...
+		$mailboxProfile = JModel::getInstance('Mailboxprofile', 'NewsletterModelEntity');
+		if (!$mailboxProfile->load($smtpProfile->mailbox_profile_id)) {
+			
+			LogHelper::addWarning(
+				'COM_NEWSLETTER_CANT_LOAD_MAILBOX_CANT_SET_SOME_HEADERS', 
+				LogHelper::CAT_MAILER,
+				array(
+					'Mailbox profile id' => $smtpProfile->mailbox_profile_id,
+					'SMTP profile' => $smtpProfile->smtp_profile_name
+				));
+		}
+		
+		
+		// Now we have newsletter, subscriber, SMTP profile and, probably, Mailbox profile.
+		// So we can start to send...
+		
 		
 		// Use the phpMailer exceptions
 		$sender = new MigurMailerSender(array('exceptions'=>true));
@@ -329,8 +416,7 @@ class MigurMailer extends JObject
 			));
 		
 		$letter->subject = $this->renderSubject($letter->subject);
-
-		$letter->encoding = $letter->params['encoding'];
+		$letter->encoding = $letter->params->encoding;
 		SubscriberHelper::restoreRealUser();
 
 		// Result object
@@ -346,10 +432,10 @@ class MigurMailer extends JObject
 		// Add custom headers
 
 		// Set the email to bounce
-		if (!empty($profiles['mailbox']['username'])) {
-			$sender->AddCustomHeader('Return-Path:' . $profiles['mailbox']['username']);
-			$sender->AddCustomHeader('Return-Receipt-To:' . $profiles['mailbox']['username']);
-			$sender->AddCustomHeader('Errors-To:' . $profiles['mailbox']['username']);
+		if (!empty($mailboxProfile->username)) {
+			$sender->AddCustomHeader('Return-Path:' .       $mailboxProfile->username);
+			$sender->AddCustomHeader('Return-Receipt-To:' . $mailboxProfile->username);
+			$sender->AddCustomHeader('Errors-To:' .         $mailboxProfile->username);
 		}	
 		
 		// Add info about newsleerter and subscriber
@@ -361,16 +447,49 @@ class MigurMailer extends JObject
 		// Get attachments
 		$atts = DownloadHelper::getByNewsletterId($params['newsletter_id']);
 		
+		if (!$smtpProfile->isJoomlaProfile()) {
+			$fromName  = $smtpProfile->from_name;
+			$fromEmail = $smtpProfile->from_email;
+			$toName    = $smtpProfile->reply_to_name;
+			$toEmail   = $smtpProfile->reply_to_email;
+		} else {
+			$jConfig = new JConfig;
+			$fromName  = isset($letter->params->from_name)? $letter->params->from_name : $jConfig->fromname;
+			$fromEmail = isset($letter->params->from_email)? $letter->params->from_email : $jConfig->mailfrom;
+			$toName    = isset($letter->params->to_name)? $letter->params->to_name : $jConfig->fromname;
+			$toEmail   = isset($letter->params->to_email)? $letter->params->to_email : $jConfig->mailfrom;
+		}	
+
+		
+		// Check if we dan determine all parameters...
+		if (empty($fromName) || empty($fromEmail) || empty($toName) || empty($toEmail)) {
+
+			LogHelper::addWarning(
+				'COM_NEWSLETTER_MAILER_CANT_DETERMINE SOME FROMTO', 
+				LogHelper::CAT_MAILER, 
+				array(
+					'From name'      => $fromName,
+					'From email'     => $fromEmail,
+					'Reply to name'  => $toName,
+					'Reply to email' => $toEmail,					
+					'SMTP profile'   => $smtpProfile->smtp_profile_name,
+					'Newsletter'     => $letter->name));
+		}
+		
 		try {
 			// send the unique letter to each recipient
 			$sendRes = $sender->send(array(
-					'letter' => $letter,
+					'letter' => $letter->toObject(),
 					'attach' => $atts,
 					'emails' => array($subscriber),
-					'smtpProfile' => $letter->smtp_profile,
+					'smtpProfile' => $smtpProfile->toObject(),
+					'fromName' => $fromName,
+					'fromEmail' => $fromEmail,
+					'toName' => $toName,
+					'toEmail' => $toEmail,
 					'type' => $type,
-					'tracking' => $params['tracking']
-				));
+					'tracking' => $params['tracking']));
+			
 			// If sending failed
 			if (!$sendRes && !empty($sender->ErrorInfo)) {
 				throw new Exception ($sender->ErrorInfo);
@@ -394,8 +513,8 @@ class MigurMailer extends JObject
 					'Error'        => $e->getMessage(),
 					'Email'        => $subscriber->email,
 					'Mail type'    => $type,
-					'SMTP profile' => $letter->smtp_profile->smtp_profile_name,
-					'Newsletter'   => $letter->newsletter_id
+					'SMTP profile' => $smtpProfile->smtp_profile_name,
+					'Newsletter'   => $letter->name
 					));
 			
 			return $res;

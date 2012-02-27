@@ -179,8 +179,22 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		$mailer = new MigurMailer();
 		if(!$mailer->sendToList($data)) {
-			NewsletterHelper::jsonError($mailer->getErrors(), $emails);
+
+			$errors = $mailer->getErrors();
+			
+			LogHelper::addDebug('Sending of preview was failed.', 
+				LogHelper::CAT_MAILER,
+				array(
+					'Errors' => $errors,
+					'Emails' => $emails));
+			
+			NewsletterHelper::jsonError($errors, $emails);
 		}
+		
+		
+		LogHelper::addDebug('Preview was sent successfully.', 
+			LogHelper::CAT_MAILER,
+			array('Emails' => $emails));
 		
 		NewsletterHelper::jsonMessage('ok', $emails);
 	}

@@ -10,6 +10,8 @@
 // no direct access
 defined('_JEXEC') or die;
 
+JLoader::import('models.entities.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
+
 /**
  * Class of SMTPprofile model of the component.
  *
@@ -28,17 +30,14 @@ class NewsletterModelEntityNewsletter extends MigurModel
 	public function loadAsWelcoming($data)
 	{
 		if (!$this->load($data)) {
-
 			$params = JComponentHelper::getParams('com_newsletter');
-			$data = (string)$params->get('subscription_newsletter_id');
-
+			$data = (int)$params->get('subscription_newsletter_id');
 			// Let's try to load default subscription newsletter
 			if (!$this->load($data)) {
 				// Default subscription newsletter absent. Get fallback newsltter
 				return $this->loadFallBackNewsletter();
 			}	
 		}
-		
 	}
 	
 	
@@ -63,13 +62,15 @@ class NewsletterModelEntityNewsletter extends MigurModel
 	
 	public function loadFallBackNewsletter()
 	{
+		$defId = NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID;
+		
 		if (!$this->load(array('category' => self::CATEGORY_FALLBACK))) {
 
 			if(!$this->save(array(
 				'name'    => 'Fallback newsletter',
 				'subject' => 'You have subscribed for [listname] at [sitename]',
 				'alias'   => 'fallbacknewsletter',
-				'smtp_profile_id' => 0,
+				'smtp_profile_id' => $defId,
 				't_style_id' => null,
 				'plain'    =>
 					"Hello!\n".
@@ -78,18 +79,20 @@ class NewsletterModelEntityNewsletter extends MigurModel
 					"[confirmation link]",
 
 				'type' => 1,
-				'category' => self::CATEGORY_FALLBACK))
+				'category' => self::CATEGORY_FALLBACK,
+				'params' => (object)array(
+					'encoding' => 'utf-8'
+				)))
 			) {
 				return false;
 			}
 
-			$comNewsletter = JTable::getInstance('Extension');
-			$comNewsletter->load(array('element' => 'com_newsletter'));
-			$params = (object)json_decode($comNewsletter->params);
-			$params->subscription_fallback_newsletter_id = $this->newsletter_id;
-			$comNewsletter->params = json_encode($params);
-			return $comNewsletter->store();
 		}
+		
+		if ($this->_data->smtp_profile_id != $defId) {
+			$this->_data->smtp_profile_id = $defId;
+			return $this->save();
+		}	
 		
 		return true;
 	}
@@ -113,4 +116,5 @@ class NewsletterModelEntityNewsletter extends MigurModel
 	{
 		return JTable::getInstance($type, $prefix);
 	}
+	
 }

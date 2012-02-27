@@ -126,22 +126,32 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 			
 			if (
 				!is_numeric($data) ||
-				($data != NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID &&
-				 $data != NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID)
+				($data != self::DEFAULT_SMTP_ID &&
+				 $data != self::JOOMLA_SMTP_ID)
 			) {
 				return false;
 			}
 
 			// If user wants to load DEFAULT SMTPP then determine it.
-			if ($data == NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID) {
+			if ($data == self::DEFAULT_SMTP_ID) {
 				$data = $this->getDefaultSmtpId();
 			}
 
 			// If we determine that need to load J! SMTPP
 			// then change filter to load it.
-			if ($data == NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID) {
-				if (!$this->load(array('is_joomla' => 1))) {
-					$this->save((array)$this->_getJoomlaProfile());
+			if ($data == self::JOOMLA_SMTP_ID) {
+				$data = array('is_joomla' => 1);
+				$isJoomla = true;
+			}
+			
+			if (!parent::load($data)) {
+				
+				if (empty($isJoomla)) {
+					return false;
+				}
+				
+				if(!$this->save((array)$this->_getJoomlaProfile())) {
+					return false;
 				}
 			}
 		}	
@@ -168,7 +178,7 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 	 */
 	public function loadJoomla()
 	{
-		return $this->load(NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID);
+		return $this->load(self::JOOMLA_SMTP_ID);
 	}
 	
 	
@@ -179,7 +189,7 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 	 */
 	public function loadDefault()
 	{
-		return $this->load(NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID);
+		return $this->load(self::DEFAULT_SMTP_ID);
 	}
 	
 	

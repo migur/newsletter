@@ -65,7 +65,8 @@ window.addEvent('domready', function() { try {
 
 	if (migurIsJoomlaProfile == true) {
 		Array.each($$('.element-standard') , function(el){
-			el.setProperty('disabled', 'disabled');
+			el.setProperty('readonly', 'readonly');
+			el.setStyle('color', '#ccc');
 		});
 	}
 

@@ -83,6 +83,7 @@
 							echo '<span style="color:red">'.$item->message.'</span>'; break; 
 						
 						case 16: 
+							echo '<span style="color:#888800">'.$item->message.'</span>'; break; 
 						case 32: 
 						case 64: 
 							echo '<span style="color:black">'.$item->message.'</span>'; break;

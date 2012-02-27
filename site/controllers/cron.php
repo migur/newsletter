@@ -199,7 +199,8 @@ class NewsletterControllerCron extends JControllerForm
 									$letter = $mailer->send(array(
 										'subscriber'    => $subscriber->toObject(),
 										'newsletter_id' => $queueItem->newsletter_id,
-										'type'          => $subscriber->getType()
+										'type'          => $subscriber->getType(),
+										'tracking'      => true
 									));
 
 									// Now all good and we can update informtion 

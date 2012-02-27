@@ -241,7 +241,7 @@ abstract class JHtmlMultigrid
 				
 				if (!is_numeric($key)) {
 					
-					switch($key){
+					switch(strtolower($key)) {
 						
 						case 'error':
 						case 'errors':
