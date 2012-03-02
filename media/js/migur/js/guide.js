@@ -23,6 +23,8 @@ Migur.widgets.guide = new Class({
 
 	Implements: Migur.widget,
 
+	coords: [],
+
     initialize: function(element, config){
 
         this.steps = config.steps;
@@ -207,21 +209,18 @@ Migur.widgets.guide = new Class({
 	
 	bounceIt: function(){
 
+		this.coords = this.domEl.getCoordinates($$('body')[0]);
+		var wdgt = this;
+
 		if (!this._fx) {
 			this._fx = new Fx.Morph(this.domEl, {
-				duration: 300, 
+				duration: 400, 
 				transition: Fx.Transitions.Sine.easeOut,
 				link: 'chain',
 				onChainComplete: function() { 
-					var coords = this.element.getCoordinates($$('body')[0]);
 					this
-						.start({
-							duration: '1000',
-							top: coords.top - 5
-						}).start({
-							duration: '1000',
-							top: coords.top
-						});
+						.start({top: wdgt.coords.top + 10 })
+						.start({top: wdgt.coords.top + 5});
 				 }
 			});
 		}
