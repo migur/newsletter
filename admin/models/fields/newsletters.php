@@ -37,8 +37,34 @@ class JFormFieldNewsletters extends JFormFieldList
 	 */
 	public function getOptions()
 	{
+		$params = array(
+			'scope' => isset($this->element['scope'])? $this->element['scope'] : null
+		);
+		
+		$options = $this->getData($params);
+
+		// Merge any additional options in the XML definition.
+
+		if (empty($options)) {
+			$options = array();
+		}
+		
+		array_unshift($options, JHtml::_('select.option', '0', JText::_('COM_NEWSLETTER_SELECT_NEWSLETTER')));
+
+		return $options;
+	}
+
+	
+	
+	/**
+	 * Method to get the field options.
+	 *
+	 * @return	array	The field option objects (list of available SMTP profiles).
+	 * @since	1.0
+	 */
+	public function getData($options)
+	{
 		// Initialize variables.
-		$options = array();
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
@@ -47,45 +73,33 @@ class JFormFieldNewsletters extends JFormFieldList
 			->from('#__newsletter_newsletters AS ns')
 			->join('LEFT', '#__newsletter_lists AS l ON (ns.newsletter_id = l.send_at_reg OR ns.newsletter_id = l.send_at_unsubscribe)')
 			->where('(category = 0 OR category IS NULL)');
-		// Via the SCOPE attribute you can set the scope: all, all static, static_unused, all ordinary or ordinary_unused newsletters
-		if (!empty($this->element['scope'])) {
+		// Via the SCOPE attribute you can set the scope: all, all static, all ordinary or ordinary_unsent newsletters
+		if (!empty($options['scope'])) {
 
-			if ($this->element['scope'] == 'ordinary') {
-				$query->where('type=0');
+			$scope = explode(' ', $options['scope']);
+			
+			$where = array();
+			
+			if (in_array('ordinary', $scope)) {
+				$where[] = 'type=0';
 			}
 
-			if ($this->element['scope'] == 'ordinary_unused') {
-				$query->where('type=0 AND sent_started="0000-00-00 00:00:00"');
+			if (in_array('ordinary_unsent', $scope)) {
+				$where[] = '(type=0 AND sent_started="0000-00-00 00:00:00")';
 			}
 			
-			if ($this->element['scope'] == 'static') {
-				$query->where('type=1');
+			if (in_array('static', $scope)) {
+				$where[] = 'type=1';
 			}
 
-			if ($this->element['scope'] == 'static_unused') {
-				$query->where('type=1 AND used_as_static=0');
+			if (!empty($where)) {
+				$query->where('(' . implode(' OR ', $where) . ')');
 			}
 		}
 		$query->order('ns.name');
 
 		// Get the options.
 		$db->setQuery($query);
-
-		$options = $db->loadObjectList();
-
-		// Check for a database error.
-		if ($db->getErrorNum()) {
-			JError::raiseWarning(500, $db->getErrorMsg());
-		}
-
-		// Merge any additional options in the XML definition.
-		//$options = array_merge(parent::getOptions(), $options);
-
-		if (empty($options))
-			$options = array();
-		array_unshift($options, JHtml::_('select.option', '0', JText::_('COM_NEWSLETTER_SELECT_NEWSLETTER')));
-
-		return $options;
+		return $db->loadObjectList();
 	}
-
 }
