@@ -171,7 +171,10 @@ class NewsletterControllerCron extends JControllerForm
 
 						// Get mails that we need to send
 						$queueItems = $queueManager->getUnsentSidNidBySmtp($smtpProfile->smtp_profile_id, $smtpProfile->needToSendCount());
+						
 						$ret = array();
+						$sent = 0;
+						
 						if (!empty($queueItems)) {
 
 							$mailer = new MigurMailer();
@@ -258,6 +261,12 @@ class NewsletterControllerCron extends JControllerForm
 									}
 
 									$smtpProfile->updateSentsPerPeriodCount();
+									
+									$sent++;
+									
+									if(!$letter->state) {
+										throw new Exception($letter->errors);
+									}
 
 								} catch(Exception $e) {
 									$ret[] = array(
@@ -277,12 +286,13 @@ class NewsletterControllerCron extends JControllerForm
 								$responseItem['processed']++;
 								$responseItem['success'] += !empty($letter->state)? 1 : 0;
 							}
+							
+							LogHelper::addMessage('COM_NEWSLETTER_SENT_MAILS_BY_CRON', LogHelper::CAT_MAILER, array(
+								'SMTP profile' => $smtpProfile->smtp_profile_name,
+								'Letters sent' => $sent,
+								'Sent errors'  => $ret));
 						}
 
-						LogHelper::addMessage(
-							'COM_NEWSLETTER_SENT_MAILS_BY_CRON', 
-							'cron',
-							$ret);
 						
 						$responseItem['data'] = $ret;
 					}

@@ -12,6 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 
 
 JLoader::import('helpers.mail', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('models.fields.newsletters', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 // import Joomla view library
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
@@ -66,9 +67,6 @@ class NewsletterViewSender extends MigurView
 			JError::raiseError(500, implode("\n", $errors));
 			return false;
 		}
-
-		$model = $this->getModel('newsletters');
-		$this->newsletters = $model->getSendable();
 
 		$modelLists = $this->getModel('lists');
 
