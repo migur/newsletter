@@ -152,7 +152,8 @@ class NewsletterControllerList extends JControllerForm
 		$sess = JFactory::getSession();
 		$sess->set('list.' . $listId . '.file.uploaded', $data);
 
-		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $this->view_item . $this->getRedirectToItemAppend($listId, 'list_id') . '&subtask=' . $subtask, false));
+		
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($listId, 'list_id') . '&subtask=' . $subtask, false));
 		return;
 	}
 
