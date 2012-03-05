@@ -1,0 +1,45 @@
+.status .ok {
+	color: green;
+}
+
+.status .error {
+	color: red;
+}
+
+.check-pane {
+	border: 1px solid #eee;
+	margin: 10px;
+	padding: 10px;
+	overflow: hidden;
+}
+
+.check-pane .status {
+	overflow: hidden;
+}
+
+.preloader-container {
+	display: inline-block;
+}
+
+.check {
+	padding: 5px;
+	margin:0 5px;
+	border: 1px solid transparent;
+}
+
+.check:hover {
+	background-color: #E8F6FE;
+	border: 1px solid #A8B6BE
+}
+
+.check-message {
+	color: green;
+}
+
+.check-error {
+	color: red;
+}
+
+.notifiacation-status {
+	float: right;
+}

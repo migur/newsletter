@@ -145,6 +145,7 @@ Migur.widget = new Class({
  * @since  1.0
  */
 Migur.createWidget = function(el, obj, wdgt) {
+	
     if (!$(el)) {
         console.log('Migur.createWidget("' + el + '", obj). El is not a DOM element');
         return false;

@@ -11,14 +11,8 @@
 // no direct access
 defined('_JEXEC') or die;
 
-class EnvironmentHelper {
-
-	static public $warnings = array(
-		'checkJoomla' => 'You have old version of Joomla. Please update.',
-		'checkImap' => 'Imap library is unavailable. Please install.',
-		'checkLogs' => 'The component debuging is turned on but system cant write into /logs'
-	);
-
+class EnvironmentHelper 
+{
 	/**
 	 * Perform checks. Returns verbal messages.
 	 * 
@@ -28,21 +22,10 @@ class EnvironmentHelper {
 	 * 
 	 * @since 1.0.3
 	 */
-	public static function getWarnings($checkList = array()) {
-
-		$ref = new ReflectionClass('EnvironmentHelper');
-		$methods = $ref->getMethods();
-
-		// Sanitize $methods
-		$res = array();
-		foreach ($methods as &$m) {
-
-			if (substr($m->getName(), 0, 5) == 'check') {
-				array_push($res, $m->getName());
-			}
-		}
-		$methods = $res;
-
+	public static function getWarnings($checkList = array()) 
+	{
+		$methods = self::getAvailableChecks();
+		
 		// Get only requested and available
 		if (!empty($checkList)) {
 			$checkList = (array) $checkList;
@@ -64,6 +47,28 @@ class EnvironmentHelper {
 		return $res;
 	}
 
+	
+	/**
+	 * Gets all available checks
+	 * 
+	 * @return array 
+	 */
+	public function getAvailableChecks()
+	{
+		$ref = new ReflectionClass('EnvironmentHelper');
+		$methods = $ref->getMethods();
+
+		// Sanitize $methods
+		$res = array();
+		foreach ($methods as &$m) {
+
+			if (substr($m->getName(), 0, 5) == 'check') {
+				array_push($res, $m->getName());
+			}
+		}
+		return $res;
+	}
+	
 	/**
 	 * Add warnings to the application
 	 * 
@@ -87,7 +92,7 @@ class EnvironmentHelper {
 	 * @since 1.0.3
 	 */
 	public static function checkJoomla() {
-		return (version_compare(JVERSION, '1.7') > 0);
+		return (version_compare(JVERSION, '1.7') >= 0);
 	}
 
 	/**
@@ -114,6 +119,7 @@ class EnvironmentHelper {
 			function_exists('imap_utf7_decode') &&
 			function_exists('imap_getmailboxes');
 	}
+
 	
 	
 	/**
@@ -128,17 +134,10 @@ class EnvironmentHelper {
 	}
 
 	
-	public static function checkUserConflicts(&$data)
+	
+	public static function checkUserConflicts(&$data = array())
 	{
-		$dbo = JFactory::getDbo();
-		$dbo->setQuery(
-			'SELECT COUNT(*) AS cnt '.
-			'FROM #__users AS u '.
-			'JOIN #__newsletter_subscribers AS s ON u.email = s.email '.
-			'WHERE u.id != s.user_id');
-		$res = $dbo->loadAssoc();
-		$conflictsCount = $res['cnt'];
-		
+		$conflictsCount = self::getConflictsCount();
 		$data[0] = $conflictsCount;
 		$data[1] = 
 			'<a id="conflict-resolver-link" '.
@@ -147,10 +146,43 @@ class EnvironmentHelper {
 			'</a>';
 		return $conflictsCount == 0;
 	}
+
+
 	
 	public static function checkAcl()
 	{
 		$asset = JTable::getInstance('asset');
 		return $asset->loadByName('com_newsletter');
+	}
+	
+	
+	
+	public static function getConflictsCount()
+	{
+		$dbo = JFactory::getDbo();
+		$dbo->setQuery(
+			'SELECT COUNT(*) AS cnt '.
+			'FROM #__users AS u '.
+			'JOIN #__newsletter_subscribers AS s ON u.email = s.email '.
+			'WHERE u.id != s.user_id');
+		$res = $dbo->loadAssoc();
+		return $res['cnt'];
+	}
+	
+	
+	
+	public static function getLastSchema()
+	{
+		$dbo = JFactory::getDbo();
+		$query = $dbo->getQuery(true);
+		$query
+			->select('version_id')
+			->from('#__schemas AS s')
+			->join('','#__extensions AS e ON s.extension_id=e.extension_id')
+			->where('e.element="com_newsletter"');
+		
+		$dbo->setQuery($query);
+		$res = $dbo->loadAssoc();
+		return $res['version_id'];
 	}
 }
