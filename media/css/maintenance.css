@@ -9,12 +9,13 @@
 .check-pane {
 	border: 1px solid #eee;
 	margin: 10px;
-	padding: 10px;
+	padding: 0 10px 10px;
 	overflow: hidden;
 }
 
 .check-pane .status {
 	overflow: hidden;
+	border-bottom: 1px solid #eee;
 }
 
 .preloader-container {
@@ -29,7 +30,7 @@
 
 .check:hover {
 	background-color: #E8F6FE;
-	border: 1px solid #A8B6BE
+	border: 1px solid #D8E6EE;
 }
 
 .check-message {
@@ -42,4 +43,12 @@
 
 .notifiacation-status {
 	float: right;
+}
+
+.refresh-control {
+	margin-top: 0;
+}
+
+.status-verbal {
+	line-height: 20px;
 }

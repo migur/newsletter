@@ -33,6 +33,14 @@ class NewsletterModelMailboxprofiles extends MigurModelList
 		$query->from('#__newsletter_mailbox_profiles');
 		$db->setQuery($query);
 		
-		return $db->loadObjectList();
+		$arr = $db->loadObjectList();
+		
+		foreach($arr as &$item){
+			if (!empty($item->password)) {
+				$item->password = base64_decode($item->password);
+			}
+		}
+		
+		return $arr;
 	}
 }

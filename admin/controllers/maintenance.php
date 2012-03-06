@@ -124,11 +124,15 @@ class NewsletterControllerMaintenance extends JControllerForm
 			
 			jimport('migur.library.mailer.sender');
 			$sender = new MigurMailerSender();
-
-			foreach($smtpps as $smtpp) {
+			$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+			
+			foreach($smtpps as $smtpp){
+				
+				$model->load($smtpp->smtp_profile_id);
+				
 				$res[] = array(
-					'text' => JText::sprintf('COM_NEWSLETTER_MAINTENANCE_CHECKSMTP', $smtpp->smtp_profile_name),
-					'type'  => $sender->checkConnection($smtpp));
+					'text' => JText::sprintf('COM_NEWSLETTER_MAINTENANCE_CHECKSMTP', $model->smtp_profile_name),
+					'type'  => $sender->checkConnection($model->toObject()));
 			}
 		}
 		
@@ -156,8 +160,8 @@ class NewsletterControllerMaintenance extends JControllerForm
 			foreach($mailboxes as $mailboxSettings) {
 				
 				$text = JText::sprintf('COM_NEWSLETTER_MAINTENANCE_CHECKMAILBOX', $mailboxSettings->mailbox_profile_name).'...';
-				$mailboxSettings = (array)$mailboxSettings;
 				
+				$mailboxSettings = (array)$mailboxSettings;
 				$mailbox = new MigurMailerMailbox($mailboxSettings);
 
 				$errors = array();
