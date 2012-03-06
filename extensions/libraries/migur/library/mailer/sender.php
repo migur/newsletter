@@ -71,6 +71,7 @@ class MigurMailerSender extends PHPMailer
 	}
 
 	/**
+	 * TODO: Bad naming. Uses not only for SMTP.
 	 * Method to setup the SMTP settings.
 	 *
 	 * @param object $profile - the SMTP settings
@@ -80,41 +81,50 @@ class MigurMailerSender extends PHPMailer
 	 */
 	public function setSMTP($profile)
 	{
-		$auth = empty($profile->username) ? null : 'auth';
-
-		switch($profile->is_ssl) {
-			
-			case 1: 
-				$secure = 'ssl'; break;
-			
-			case 2: 
-				$secure = 'tls'; break;
-			
-			default: 
-				$secure = false;
-		}
+		$mailer = !empty($profile->mailer)? $profile->mailer : 'smtp';
 		
-		$this->SMTPAuth = $auth;
-		$this->Host		= $profile->smtp_server;
-		$this->Username = $profile->username;
-		$this->Password = $profile->password;
-		$this->Port		= $profile->smtp_port;
+		switch($mailer) {
+		
+			case 'mail':
+				$this->IsMail();
+				return true;
+				
+			case 'sendmail':	
+				$this->IsSendmail();
+				return true;
+				
+			default:
+			case 'smtp':
+				$auth = empty($profile->username) ? null : 'auth';
+				switch($profile->is_ssl) {
 
-		if ($secure == 'ssl' || $secure == 'tls') {
-			$this->SMTPSecure = $secure;
-		}
+					case 1: 
+						$secure = 'ssl'; break;
 
-		if (($this->SMTPAuth !== null && $this->Host !== null && $this->Username !== null && $this->Password !== null)
-			|| ($this->SMTPAuth === null && $this->Host !== null)) {
-			$this->IsSMTP();
+					case 2: 
+						$secure = 'tls'; break;
 
-			return true;
-		}
-		else {
-			$this->IsMail();
+					default: 
+						$secure = false;
+				}
 
-			return false;
-		}
+				$this->SMTPAuth = $auth;
+				$this->Host		= $profile->smtp_server;
+				$this->Username = $profile->username;
+				$this->Password = $profile->password;
+				$this->Port		= $profile->smtp_port;
+
+				if ($secure == 'ssl' || $secure == 'tls') {
+					$this->SMTPSecure = $secure;
+				}
+
+				if (($this->SMTPAuth !== null && $this->Host !== null && $this->Username !== null && $this->Password !== null)
+					|| ($this->SMTPAuth === null && $this->Host !== null)) {
+					$this->IsSMTP();
+
+					return true;
+				}
+		}		
 	}
 
 	/**

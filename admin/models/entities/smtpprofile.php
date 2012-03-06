@@ -233,6 +233,7 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 		$res->password = $data['smtppass'];
 		$res->mailbox_profile_id = NewsletterTableMailboxprofile::MAILBOX_DEFAULT;
 		$res->is_joomla = 1;
+		$res->mailer = $data['mailer'];
 
 		return $res;
 	}
