@@ -70,6 +70,11 @@ class NewsletterControllerMaintainance extends JControllerForm
 
 		
 		// 2. Check if all tables are present
+		$res[] = array(
+			'text' => JText::_('COM_NEWSLETTER_MAINTAINANCE_CHECKSCHEMA').': '.$schema,
+			'type' => $sc);
+		
+		
 		$installFile = file_get_contents(JPATH_COMPONENT_ADMINISTRATOR.DS.'install'.DS.'install.sql');
 		
 		// explode whole script to table alter scripts
@@ -180,6 +185,10 @@ class NewsletterControllerMaintainance extends JControllerForm
 					'text' => JText::sprintf('COM_NEWSLETTER_MAINTAINANCE_CHECKSMTP', $model->smtp_profile_name),
 					'type'  => $sender->checkConnection($model->toObject()));
 			}
+		} else {
+			$res[] = array(
+				'text' => JText::sprintf('COM_NEWSLETTER_MAINTAINANCE_NO_SMTPPROFILES'),
+				'type'  => false);
 		}
 		
 		// Return data
@@ -244,6 +253,10 @@ class NewsletterControllerMaintainance extends JControllerForm
 					'text' => $text,
 					'type'  => count($errors) == 0);
 			}
+		} else {
+			$res[] = array(
+				'text' => JText::sprintf('COM_NEWSLETTER_MAINTAINANCE_NO_MAILBOXES'),
+				'type'  => false);
 		}	
 
 		// Return data
@@ -285,6 +298,11 @@ class NewsletterControllerMaintainance extends JControllerForm
 			$res .= "\n";
 			
 		} else {
+			
+			if (is_bool($data)) {
+				$data = ($data)? 'true' : 'false';
+			}
+			
 			$res .= substr($spaces, 0, $level*2) . $data . "\n";
 		}
 		
