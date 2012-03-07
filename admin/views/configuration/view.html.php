@@ -15,6 +15,7 @@ jimport('joomla.application.component.view');
 jimport('migur.library.toolbar');
 JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
+JHTML::_('behavior.modal');
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JLoader::import('helpers.module', JPATH_COMPONENT_ADMINISTRATOR, '');

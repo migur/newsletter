@@ -758,3 +758,31 @@ Migur.jsonResponseParser = function() {
 		return this.response.data;
 	}
 }
+
+Migur.addNotifications = function(messages, type, container, place) {
+	
+	if (place === undefined) {
+		place = 'bottom';
+	}
+
+	if (type === undefined) {
+		type = 'message';
+	}
+
+	var el = new Element('div', {
+		'class' : 'joomla-style',
+		'html'  : '<ul></ul>'
+		
+	});
+
+	$(container).grab(el, place);
+
+	var ul = el.getElements('ul')[0];
+	ul.addClass(type);
+
+	Array.each(messages, function(msg){
+		ul.grab(new Element('li', {
+			html: Joomla.JText._(msg, msg)
+		}));
+	});
+}
