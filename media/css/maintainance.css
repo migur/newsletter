@@ -1,0 +1,61 @@
+.status .ok {
+	color: green;
+}
+
+.status .error {
+	color: red;
+}
+
+.check-pane {
+	border: 1px solid #eee;
+	margin: 10px;
+	padding: 0 10px 10px;
+	overflow: hidden;
+	display: none;
+}
+
+.check-pane .status {
+	overflow: hidden;
+	border-bottom: 1px solid #eee;
+}
+
+.preloader-container {
+	display: inline-block;
+}
+
+.check {
+	padding: 5px;
+	margin:0 5px;
+	border: 1px solid transparent;
+}
+
+.check:hover {
+	background-color: #E8F6FE;
+	border: 1px solid #D8E6EE;
+}
+
+.check-message {
+	color: green;
+}
+
+.check-error {
+	color: red;
+}
+
+.notifiacation-status {
+	float: right;
+}
+
+.refresh-control {
+	margin-top: 0;
+}
+
+.status-verbal {
+	line-height: 20px;
+}
+
+#maintainance-pane-checks {
+    height: 560px;
+    margin: 0;
+    overflow: auto;
+}	

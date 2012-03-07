@@ -290,5 +290,4 @@ class NewsletterModelSubscribers extends MigurModelList
 		
 		return $db->loadObjectList();
 	}
-
 }
