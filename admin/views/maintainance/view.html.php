@@ -20,7 +20,7 @@ JHtml::_('behavior.tooltip');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterViewMaintenance extends MigurView
+class NewsletterViewMaintainance extends MigurView
 {
 
 	/**
@@ -56,14 +56,14 @@ class NewsletterViewMaintenance extends MigurView
 		
 		$document = JFactory::getDocument();
 		
-		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_AUTOMAILING_CREATING') : JText::_('COM_NEWSLETTER_AUTOMAILING_EDITING'));
+		$document->setTitle(JText::_('COM_NEWSLETTER_MAINTAINANCE'));
 		
 		$document->addstylesheet(JURI::root().'/media/com_newsletter/css/admin.css');
-		$document->addstylesheet(JURI::root().'/media/com_newsletter/css/maintenance.css');
+		$document->addstylesheet(JURI::root().'/media/com_newsletter/css/maintainance.css');
 		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/core.js');
 		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/widgets.js');
 		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/widgets/ajaxchecker.js');
-		$document->addScript(JURI::root()."/administrator/components/com_newsletter/views/maintenance/maintenance.js");
+		$document->addScript(JURI::root()."/administrator/components/com_newsletter/views/maintainance/maintainance.js");
 
 		JText::script('COM_NEWSLETTER_AUTOMAILING_ERROR_UNACCEPTABLE');
 	}

@@ -15,7 +15,7 @@ jimport('joomla.application.component.controllerform');
 
 JLoader::import('helpers.environment', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-class NewsletterControllerMaintenance extends JControllerForm
+class NewsletterControllerMaintainance extends JControllerForm
 {
 
 	/**
@@ -37,7 +37,7 @@ class NewsletterControllerMaintenance extends JControllerForm
 			$rs = EnvironmentHelper::$check();
 			
 			$res[] = array(
-				'text' => JText::_('COM_NEWSLETTER_MAINTENANCE_'.strtoupper($check)),
+				'text' => JText::_('COM_NEWSLETTER_MAINTAINANCE_'.strtoupper($check)),
 				'type' => $rs);
 		}
 		
@@ -64,22 +64,68 @@ class NewsletterControllerMaintenance extends JControllerForm
 		$sc = (version_compare($schema, $version) <= 0);
 		
 		$res[] = array(
-			'text' => JText::_('COM_NEWSLETTER_MAINTENANCE_CHECKSCHEMA').': '.$schema,
+			'text' => JText::_('COM_NEWSLETTER_MAINTAINANCE_CHECKSCHEMA').': '.$schema,
 			'type' => $sc);
 
+
+		
+		// 2. Check if all tables are present
+		$installFile = file_get_contents(JPATH_COMPONENT_ADMINISTRATOR.DS.'install'.DS.'install.sql');
+		
+		// explode whole script to table alter scripts
+		$tableAlters = array();
+		preg_match_all("/create\s*table\s*[\`\"\']?([\#\_a-zA-Z0-9]+)[\`\"\']?[^;]*/is", $installFile, $tableAlters);
+
+		$dbo = JFactory::getDbo();
+		for($i=0; $i < count($tableAlters[0]); $i++) {
+			
+			// Process each table...
+			$tableName = $tableAlters[1][$i];
+			$alterScript = $tableAlters[0][$i];
+			
+			// Get fields of table from alter script
+			$matches = array();
+			preg_match_all("/^\s*(?:\`|\"|\')([a-z0-9_]+)/m", $alterScript, $matches);
+			$fields = $matches[1];
+
+			// Get destription of a table from DB
+			$dbo->setQuery('DESCRIBE '.$tableName);
+			$data = $dbo->loadAssocList();
+			
+			// Check if table absent at all
+			if ($data === null) {
+				$res[] = array(
+					'text' => JText::sprintf('COM_NEWSLETTER_MAINTAINANCE_TABLE_ABSENT', $tableName),
+					'type' => false);
+			} else {
+				
+				// Check if some fields of a table absent
+				$fieldsPresent = array();
+				foreach($data as $item) { $fieldsPresent[] = $item['Field']; }
+				
+				foreach($fields as $field) {
+					if(!in_array($field, $fieldsPresent)) {
+						$res[] = array(
+							'text' => JText::sprintf('COM_NEWSLETTER_MAINTAINANCE_TABLE_FIELD_ABSENT', $field, $tableName),
+							'type' => false);
+					}
+				}
+			}
+		}
 		
 		
-		// 2. Check conflicts
+		
+		// 3. Check conflicts
 		$count = EnvironmentHelper::getConflictsCount();
 		
 		$res[] = array(
-			'text' => JText::_('COM_NEWSLETTER_MAINTENANCE_CHECKUSERCONFLICTS').' '.
+			'text' => JText::_('COM_NEWSLETTER_MAINTAINANCE_CHECKUSERCONFLICTS').' '.
 					  JText::sprintf('COM_NEWSLETTER_CONFLICTS_FOUND', $count),
 			'type' => ($count == 0) );
 
 		
 		
-		// 3. Remove all died rows
+		// 4. Remove all died rows
 		$dbo = JFactory::getDbo();
 		$dbo->setQuery(
 			'DELETE FROM #__newsletter_subscribers '.
@@ -91,17 +137,17 @@ class NewsletterControllerMaintenance extends JControllerForm
 			$diedCnt = $dbo->getAffectedRows();
 
 			$res[] = array(
-				'text' => JText::_('COM_NEWSLETTER_MAINTENANCE_CHECKDIEDROWS').':'.$diedCnt,
+				'text' => JText::_('COM_NEWSLETTER_MAINTAINANCE_CHECKDIEDROWS').':'.$diedCnt,
 				'type' => true);
 		} else {
 			$res[] = array(
-				'text' => JText::_('COM_NEWSLETTER_MAINTENANCE_CHECKDIEDROWS'),
+				'text' => JText::_('COM_NEWSLETTER_MAINTAINANCE_CHECKDIEDROWS'),
 				'type' => false);
 		}
 
 		
 		
-		// 3. Return data
+		// Return data
 		NewsletterHelper::jsonMessage('checkDb', $res);
 	}
 
@@ -131,7 +177,7 @@ class NewsletterControllerMaintenance extends JControllerForm
 				$model->load($smtpp->smtp_profile_id);
 				
 				$res[] = array(
-					'text' => JText::sprintf('COM_NEWSLETTER_MAINTENANCE_CHECKSMTP', $model->smtp_profile_name),
+					'text' => JText::sprintf('COM_NEWSLETTER_MAINTAINANCE_CHECKSMTP', $model->smtp_profile_name),
 					'type'  => $sender->checkConnection($model->toObject()));
 			}
 		}
@@ -159,7 +205,7 @@ class NewsletterControllerMaintenance extends JControllerForm
 
 			foreach($mailboxes as $mailboxSettings) {
 				
-				$text = JText::sprintf('COM_NEWSLETTER_MAINTENANCE_CHECKMAILBOX', $mailboxSettings->mailbox_profile_name).'...';
+				$text = JText::sprintf('COM_NEWSLETTER_MAINTAINANCE_CHECKMAILBOX', $mailboxSettings->mailbox_profile_name).'...';
 				
 				$mailboxSettings = (array)$mailboxSettings;
 				$mailbox = new MigurMailerMailbox($mailboxSettings);
@@ -202,6 +248,47 @@ class NewsletterControllerMaintenance extends JControllerForm
 
 		// Return data
 		NewsletterHelper::jsonMessage('checkMailboxes', $res);
+	}
+	
+	
+	public function getReport() 
+	{
+		$form = JRequest::getVar('jform');
+		$data = json_decode($form['data']);
+		$document = $this->renderObject($data);
+
+		header("Content-Type: application/octet-stream");
+		header("Accept-Ranges: bytes");
+		header("Content-Length: " . strlen($document));
+		header("Content-Disposition: attachment; filename=newslettter-check-report-" . date('Y-m-d-H-i-s') . '.txt');
+		echo $document;
+		die;
+	}
+	
+	
+	public function renderObject($data, $level = 0) 
+	{
+		$spaces = "                                                ";
+		$res = '';
+
+		if (is_array($data) || is_object($data)) {
+			
+			foreach($data as $key => $value) {
+				
+				if (!is_numeric($key)) {
+					$res .= substr($spaces, 0, $level*2) . $key . ':';
+					$res .= (is_array($value) || is_object($value))? "\n" : '';
+				}
+				$res .= $this->renderObject($value, $level+1);
+			}
+			
+			$res .= "\n";
+			
+		} else {
+			$res .= substr($spaces, 0, $level*2) . $data . "\n";
+		}
+		
+		return $res;
 	}
 }
 

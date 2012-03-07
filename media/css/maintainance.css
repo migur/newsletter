@@ -11,6 +11,7 @@
 	margin: 10px;
 	padding: 0 10px 10px;
 	overflow: hidden;
+	display: none;
 }
 
 .check-pane .status {
@@ -52,3 +53,9 @@
 .status-verbal {
 	line-height: 20px;
 }
+
+#maintainance-pane-checks {
+    height: 560px;
+    margin: 0;
+    overflow: auto;
+}	

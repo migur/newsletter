@@ -17,12 +17,16 @@ Migur.widget.ajaxChecker = new Class({
 					widget.refresh();
 				});
 		}
+		
+		this.data.title = this.options.title;
 	},	
 
 
 
 	refresh: function(onCompleteCallback)
 	{
+		$(this.domEl).setStyle('display', 'block');
+
 		if (typeof onCompleteCallback == 'function') {
 			this.onCompleteCallback = onCompleteCallback;
 		}	
@@ -100,8 +104,13 @@ Migur.widget.ajaxChecker = new Class({
 		
 		if(parser.isError()) {
 			this.setStatus(Joomla.JText._('CHECK_FAILED', 'Check failed'), 'error');
+			this.data.status = false;
+			this.data.data = [];
 			return;
 		}	
+		
+		this.data.status = true;
+		this.data.data = parser.getData();
 		
 		this.setStatus(Joomla.JText._('CHECK_COMPLETED', 'Check completed'), 'ok');
 	},
@@ -166,6 +175,16 @@ Migur.widget.ajaxChecker = new Class({
 		var cont = $(this.domEl).getElements('.notifications')[0];
 		cont.set('html', '');
 		return true;
+	},
+	
+	
+	getState: function() 
+	{
+		return {
+			'check':  this.data.title,
+			'status': this.data.status,
+			'data':   this.data.data
+		};
 	}
 
 });

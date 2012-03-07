@@ -19,7 +19,6 @@ DROP TABLE IF EXISTS `#__newsletter_automailings`;
 DROP TABLE IF EXISTS `#__newsletter_automailing_items`;
 DROP TABLE IF EXISTS `#__newsletter_automailing_targets`;
 DROP TABLE IF EXISTS `#__newsletter_threads`;
-DROP TABLE IF EXISTS `#__newsletter_log_users`;
 DROP TABLE IF EXISTS `#__newsletter_logs`;
 
 SET foreign_key_checks = 1;
