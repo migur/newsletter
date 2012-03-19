@@ -67,7 +67,7 @@ try {
 									'html':
 										'<td>'+res.data.filename+'</td><td>'+res.data.size+'</td><td>'+res.data.type+'</td>'+
 										'<td class="center">'+
-										'<a rel="'+res.data.newsletter_id+'" class="remove-link" href="#">' +
+										'<a rel="'+res.data.downloads_id+'" class="remove-link" href="#">' +
 										'<img border="0" src="' + migurSiteRoot + 'media/media/images/remove.png" alt="'+Joomla.JText._('REMOVE', 'Remove')+'" style="margin:0;">'+
 										'</a>'+
 										'</td>' }
@@ -96,15 +96,18 @@ try {
 		}
 
 
-		var href = migurSiteRoot + "administrator/index.php?option=com_media&view=images&tmpl=component&asset=&author=&fieldid=fileattach&folder=";
+		var href = migurSiteRoot + "administrator/index.php?option=com_newsletter&view=media&tmpl=component&asset=&author=&fieldid=fileattach&folder=";
+
+		window.migurFieldId = 'fileattach'
 
 		SqueezeBox.open(href, {
 			handler: 'iframe',
 			size: {
 				x: 700,
-				y: 445
+				y: 720
 			}
 		});
+
 
 		return true;
 	});
