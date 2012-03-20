@@ -38,7 +38,7 @@ class NewsletterControllerNewsletters extends JControllerAdmin
 		
 		$cids = JRequest::getVar('cid', array());
 		
-		$unset = 0;
+		$unsets = array();
 		
 		if (!empty($cids)) {
 			
@@ -46,18 +46,46 @@ class NewsletterControllerNewsletters extends JControllerAdmin
 			foreach($cids as $idx => $cid) {
 				$newsletter = NewsletterHelper::get($cid);
 				if ($newsletter['used_as_static'] == 1 || !$newsletter['saveable']) {
+					$unsets[] = $cids[$idx];
 					unset($cids[$idx]);
-					$unset++;
-					
 				}
 			}
 			JRequest::setVar('cid', $cids);
 		}
 		
-		if ($unset > 0) {
-			JFactory::getApplication()->enqueueMessage(sprintf(JText::_('COM_NEWSLETTER_SOME_COULDNOT_DELETE'), $unset), 'message');
+		if (count($unsets) > 0) {
+			
+			$deleteLink = '<a class="micro-button" href="'.JRoute::_('index.php?option=com_newsletter&task=newsletters.deletehard&'.JSession::getFormToken().'=1&cid='.implode(',', $unsets)).'">&nbsp;X&nbsp;</a>';
+			
+			JFactory::getApplication()->enqueueMessage(sprintf(
+				JText::_('COM_NEWSLETTER_SOME_COULDNOT_DELETE'), 
+				count($unsets),
+				$deleteLink), 'message');
 		}
 		
-		parent::delete();
+		if (count($cids) > 0) {
+			parent::delete();
+		}	
+		
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
+	}
+
+	
+	public function deletehard() {
+		
+		$cid = JRequest::getString('cid', '');
+		$cid = explode(',', $cid);
+		
+		if (count($cid)) {
+			
+			JRequest::setVar('cid', $cid, 'post');
+			
+			$token = JRequest::getVar(JSession::getFormToken());
+			JRequest::setVar(JSession::getFormToken(), $token, 'post');
+			
+			parent::delete();
+		}	
+		
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
 	}
 }

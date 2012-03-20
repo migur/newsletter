@@ -338,3 +338,18 @@ textarea.invalid {
 	border-bottom: 3px solid #DE7A7B;
     border-top: 3px solid #DE7A7B;
 }
+
+.micro-button {
+	display: inline-block;
+	border: 1px solid #bbbbbb;
+	text-indent: 0px;
+	padding: 0 2px 1px;
+	margin: 0 2px;
+	background-color: #eeeeee;
+	text-decoration: none;
+}
+
+.micro-button:hover {
+	background-color: #cccccc;
+	text-decoration: none;
+}
