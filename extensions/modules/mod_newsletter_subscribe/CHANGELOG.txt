@@ -1,0 +1,2 @@
+12.03b1
+ Add option to show/hide link to terms and conditions page
