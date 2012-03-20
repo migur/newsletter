@@ -53,6 +53,8 @@ defined('_JEXEC') or die; ?>
 				<input name="newsletter-lists[]" type="hidden" value="<?php echo $list[0]->value; ?>" />
 			<?php } ?>
 		</div>
+		
+		<?php if ($params->get('showtermslink', false)) { ?>
 		<div>
 			<fieldset id="newsletter-terms" class="required checkboxes">
 				<div id="newsletter-terms-container"><input id="newsletter-terms0" class="validate-newsletter-terms" name="newsletter-terms" type="checkbox" /></div>
@@ -64,6 +66,8 @@ defined('_JEXEC') or die; ?>
 				</a>
 			</fieldset>
 		</div>
+		<?php } ?>
+		
 		<div id="newsletter-submit-container">
 			<input
 				type="button"
