@@ -474,3 +474,7 @@ textarea.focused {
 #send-preview-preloader {
 	float:left;
 }
+
+.autocompleter-item span {
+	line-height: 18px;
+}
