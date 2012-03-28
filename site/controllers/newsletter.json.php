@@ -26,12 +26,16 @@ class NewsletterControllerNewsletter extends JControllerForm
 {
 	public function track() {
 
+        // Required data
 		$subkey       = JRequest::getString('uid', '');
 		$newsletterId = JRequest::getInt('nid', 0);
-		$listId       = JRequest::getInt('lid', 0);
 		$action       = JRequest::getString('action', '');
 		$link         = base64_decode(urldecode(JRequest::getVar('link', '')));
 
+        // Optional data
+		$listId = JRequest::getInt('lid', 0);
+        $listId = !empty($listId)? $listId : null;
+        
 		try {
 			// Check the uid
 			$subscriber = SubscriberHelper::getBySubkey($subkey);
@@ -55,7 +59,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 			// should be only one in the DB for sid-nid
 			if ($actionCode == NewsletterTableHistory::ACTION_OPENED) {
 
-				$table->load(array(
+				$res = $table->load(array(
 					'subscriber_id' => (int)$subscriber->subscriber_id,
 					'newsletter_id' => (int)$newsletterId,
 					'action'        => $actionCode
@@ -66,22 +70,48 @@ class NewsletterControllerNewsletter extends JControllerForm
 				} 
 			}
 
-			$table->save(array(
+			$res = $table->save(array(
 				'subscriber_id' => (int)$subscriber->subscriber_id,
-				'list_id'       => (int)$listId,
+				'list_id'       => $listId, // May be null (need for FK)!
 				'newsletter_id' => (int)$newsletterId,
 				'date'          => date('Y-m-d H:i:s'),
 				'action'        => $actionCode,
 				'text'          => addslashes($link)
 			));
+            
+            if (!$res) {
+                $err = $table->getError();
+                $err = ($err instanceof Exception)? $err->getMessage() : $err;
+                throw new Exception('Error saving data: '.$err);
+            }
 				
 		} catch(Exception $e) {
+            
 			if ($e->getMessage() != 'no need to track') {
+                
 				// For debug
-				//echo $e->getMessage();
-			}
+                LogHelper::addDebug('Tracking failed', LogHelper::CAT_TRACKING,  
+                    array(
+                        'Message' => $e->getMessage(),
+                        'Data' => JRequest::get())
+                );
+                
+                jexit();
+                
+			} else {
+
+				// For debug
+                LogHelper::addDebug('Tracking', LogHelper::CAT_TRACKING,  
+                    array(
+                        'Message' => 'No need to track',
+                        'data' => JRequest::get())
+                );
+                
+            }
 		}
 		
+        LogHelper::addDebug('Tracking', LogHelper::CAT_TRACKING, JRequest::get());
+        
 		// Redirect it!
 		if (!empty($link)) {
 			$this->setRedirect($link);

@@ -124,14 +124,38 @@ class NewsletterControllerSubscribe extends JController
 
 		
 		// Add subscribers to lists, ignore if already in db
+        
+        
 		$assignedListsIds = array();
 		foreach ($listsIds as $list) {
 			if (!$subscriber->isInList($list)) {
+                
 				$subscriber->assignToList($list);
 				$assignedListsIds[] = $list;
 			}
 		}
 
+        // Get lists we assigned
+        $listManager = JModel::getInstance('Lists', 'NewsletterModel');
+        $lists = $listManager->getItemsByIds($assignedListsIds);
+
+        
+        // Add to history all subscriptions
+        foreach($lists as $list) {
+            
+            $history = JTable::getInstance('history', 'NewsletterTable');
+            $history->save(array(
+                'subscriber_id' => $subscriber->getId(),
+                'list_id'       => $list->list_id,
+                'newsletter_id' => NULL,
+                'action'        => NewsletterTableHistory::ACTION_SIGNEDUP,
+                'date'          => date('Y-m-d H:i:s'),
+                'text'          => addslashes($list->name)
+            ));
+            unset($history);
+        }    
+        
+        
 		// Triggering the automailing process.
 		$amManager = new NewsletterAutomailingManager();
 		$amManager->processSubscription(array(
@@ -144,10 +168,6 @@ class NewsletterControllerSubscribe extends JController
 		
 		if (!$subscriber->isConfirmed()) {
 			
-			// Get lists we assigned
-			$listManager = JModel::getInstance('Lists', 'NewsletterModel');
-			$lists = $listManager->getItemsByIds($assignedListsIds);
-
 			// Let's send newsletters
 			$mailer = new MigurMailer();
 			foreach($lists as $list) {
