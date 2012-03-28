@@ -36,6 +36,8 @@ class LogHelper
 	const CAT_SUBSCRIPTION = 'subscription';
 	
 	const CAT_AUTOMAILING = 'automailing';
+    
+    const CAT_TRACKING = 'tracking';
 	
 	public static $langIsLoaded = false;
 	

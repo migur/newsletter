@@ -121,4 +121,29 @@ class NewsletterTableHistory extends JTable
 			'date' => date('Y-m-d H:i:s')
 		));
 	}
+
+    /**
+     * Prestore data modifications
+     * 
+     * @param type $updateNulls 
+     */
+    public function store($updateNulls = false)
+	{
+        // Latest modification before ALL ways of data storing 
+        
+        // Need to set it to NULL if it is empty (need for FKs)
+        if (isset($this->newsletter_id) && empty($this->newsletter_id)) {
+            $src->newsletter_id = null;
+        }
+
+        if (isset($this->subscriber_id) && empty($this->subscriber_id)) {
+            $src->subscriber_id = null;
+        }
+
+        if (isset($this->list_id) && empty($this->list_id)) {
+            $src->list_id = null;
+        }
+        
+        return parent::store($updateNulls);
+    }
 }
