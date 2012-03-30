@@ -21,13 +21,40 @@ defined('_JEXEC') or die; ?>
 <?php } ?>
 
 <div class="newsletter<?php echo $moduleclass_sfx; ?>">
+
+    <?php if ($params->get('textprepend', '') != '') { ?>
+    <div class="newsletter-prepend-text">
+        <?php echo $params->get('textprepend', ''); ?>
+    </div>
+    <?php } ?>
+    
 	<form class="mod-newsletter" action="?option=com_newsletter" method="POST" name="subscribe-form">
-		<div>
+        
+        <?php if ($params->get('textabovename', '') != '') { ?>
+        <div class="newsletter-text-name">
+            <?php echo $params->get('textabovename', ''); ?>
+        </div>
+        <?php } ?>
+
+        <div>
 			<input class="required validate-newsletter-name inputbox newsletter-name" name="newsletter-name" type="text" size="20" value="<?php echo $userName; ?>" />
 		</div>
+        
+        <?php if ($params->get('textaboveemail', '') != '') { ?>
+        <div class="newsletter-text-email-above">
+            <?php echo $params->get('textaboveemail', ''); ?>
+        </div>
+        <?php } ?>
+        
 		<div>
 			<input class="required validate-newsletter-email inputbox newsletter-email" name="newsletter-email" type="text" size="20" value="<?php echo $userEmail; ?>" />
 		</div>
+
+        <?php if ($params->get('textunderemail', '') != '') { ?>
+        <div class="ewsletter-text-email-under">
+            <?php echo $params->get('textunderemail', ''); ?>
+        </div>
+        <?php } ?>
 
 		<?php if($showFb) { ?>
 		<div>
@@ -35,10 +62,15 @@ defined('_JEXEC') or die; ?>
 		</div>
 		<?php } ?>
 			
+        <?php if ($params->get('showmailtype', 1) == 1) { ?>
 		<fieldset>
 			<label for="newsletter-html"><?php echo JText::_('MOD_NEWSLETTER_RECIEVE'); ?></label>
-			<?php echo JHTML::_('select.radiolist', $radios, 'newsletter-html', array('class' => 'required'), 'value', 'text', '1'); ?>
+			<?php echo JHTML::_('select.radiolist', $radios, 'newsletter-html', array('class' => 'required'), 'value', 'text', $params->get('defaultmailtype', 1)); ?>
 		</fieldset>
+        <?php } else { ?>
+            <input type="hidden" name="newsletter-html" value="<?php echo $params->get('defaultmailtype', 1); ?>" />
+        <?php } ?>
+        
 		<div>
 			<?php if (count($list) > 1) { ?>
 			<label for="newsletter-lists"><?php echo JText::_('MOD_NEWSLETTER_SELECT_LIST_TO_SUBSCRIBE'); ?></label>
@@ -76,6 +108,12 @@ defined('_JEXEC') or die; ?>
 			/>
 		</div>
 
+        <?php if ($params->get('textappend', '') != '') { ?>
+        <div class="newsletter-append-text">
+            <?php echo $params->get('textappend', ''); ?>
+        </div>
+        <?php } ?>
+            
 		<input type="hidden" name="fbenabled" value="<?php echo $params->get('fbenabled'); ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</form>

@@ -31,27 +31,55 @@
 			<fieldset 
                 name="basic"
                 addfieldpath="/administrator/components/com_newsletter/models/fields">
-					
+
 				<field
-					name="showtermslink"
+					name="textprepend"
+					type="textarea"
+					default=""
+					label="MOD_NEWSLETTER_TEXTPREPEND"
+					description="MOD_NEWSLETTER_TEXTPREPEND_DESC" />
+                
+				<field
+					name="textabovename"
+					type="textarea"
+					default=""
+					label="MOD_NEWSLETTER_TEXTABOVENAME"
+					description="MOD_NEWSLETTER_TEXTABOVENAME_DESC" />
+                    
+				<field
+					name="textaboveemail"
+					type="textarea"
+					default=""
+					label="MOD_NEWSLETTER_TEXTABOVEEMAIL"
+					description="MOD_NEWSLETTER_TEXTABOVEEMAIL_DESC" />
+
+				<field
+					name="textunderemail"
+					type="textarea"
+					default=""
+					label="MOD_NEWSLETTER_TEXTUNDEREMAIL"
+					description="MOD_NEWSLETTER_TEXTUNDEREMAIL_DESC" />
+
+				<field
+					name="showmailtype"
 					type="radio"
-					default="0"
-					size="50"
-					label="MOD_NEWSLETTER_SHOWTERMSLINK"
-					description="MOD_NEWSLETTER_SHOWTERMSLINK_DESC" >
+					default="1"
+					label="MOD_NEWSLETTER_SHOWMAILTYPE"
+					description="MOD_NEWSLETTER_SHOWMAILTYPE_DESC" >
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
 
 				<field
-					name="termslink"
-					type="text"
-					default=""
-					size="50"
-					label="MOD_NEWSLETTER_TERMSLINK"
-					description="MOD_NEWSLETTER_TERMSLINK_DESC" >
+					name="defaultmailtype"
+					type="radio"
+					default="1"
+					label="MOD_NEWSLETTER_DEFAULT_MAILTYPE"
+					description="MOD_NEWSLETTER_DEFAULT_MAILTYPE_DESC" >
+					<option value="0">MOD_NEWSLETTER_TEXT</option>
+					<option value="1">MOD_NEWSLETTER_HTML</option>
 				</field>
-
+                    
 				<field
 					name="listselector"
 					type="radio"
@@ -76,8 +104,40 @@
 					default="0"
                     multiple="true"
 					label="MOD_NEWSLETTER_MULTILIST"
-					description="MOD_NEWSLETTER_MULTILIST_DESC">
+					description="MOD_NEWSLETTER_MULTILIST_DESC" />
+
+				<field
+					name="showtermslink"
+					type="radio"
+					default="0"
+					size="50"
+					label="MOD_NEWSLETTER_SHOWTERMSLINK"
+					description="MOD_NEWSLETTER_SHOWTERMSLINK_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
 				</field>
+
+				<field
+					name="termslink"
+					type="text"
+					default=""
+					size="50"
+					label="MOD_NEWSLETTER_TERMSLINK"
+					description="MOD_NEWSLETTER_TERMSLINK_DESC" />
+
+				<field
+					name="textappend"
+					type="textarea"
+					default=""
+					label="MOD_NEWSLETTER_TEXTAPPEND"
+					description="MOD_NEWSLETTER_TEXTAPPEND_DESC" />
+
+                <field
+                    name="fbsecret"
+                    type="text"
+                    default=""
+                    size="50"
+                    label="MOD_NEWSLETTER_FACEBOOK_SECRET" />
 
                 <field
                     name="fbenabled"
@@ -90,20 +150,21 @@
                     <option
                         value="0">JNO</option>
                 </field>
+                
                 <field
                     name="fbappid"
                     type="text"
                     default=""
                     size="50"
-                    label="MOD_NEWSLETTER_FACEBOOK_APID">
-                </field>
+                    label="MOD_NEWSLETTER_FACEBOOK_APID" />
+                    
                 <field
                     name="fbsecret"
                     type="text"
                     default=""
                     size="50"
-                    label="MOD_NEWSLETTER_FACEBOOK_SECRET">
-                </field>
+                    label="MOD_NEWSLETTER_FACEBOOK_SECRET" />
+                    
 			</fieldset>
 
 			<fieldset name="advanced">
