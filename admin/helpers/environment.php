@@ -13,6 +13,8 @@ defined('_JEXEC') or die;
 
 class EnvironmentHelper 
 {
+    static $data = array();
+    
 	/**
 	 * Perform checks. Returns verbal messages.
 	 * 
@@ -35,14 +37,15 @@ class EnvironmentHelper
 		// Do checks
 		$res = array();
 		foreach ($methods as $m) {
-			$data = array();
-			if (!self::$m(&$data)) {
+            self::$data = array();
+			if (!self::$m()) {
 				array_push($res, JText::sprintf(
 					'COM_NEWSLETTER_ENVIRONMENT_'.strtoupper($m), 
-					isset($data[0])? $data[0] : '', 
-					isset($data[1])? $data[1] : ''));
+					isset(self::$data[0])? self::$data[0] : '', 
+					isset(self::$data[1])? self::$data[1] : ''));
 			}
 		}
+        self::$data = array();
 
 		return $res;
 	}
@@ -135,11 +138,11 @@ class EnvironmentHelper
 
 	
 	
-	public static function checkUserConflicts(&$data = array())
+	public static function checkUserConflicts()
 	{
 		$conflictsCount = self::getConflictsCount();
-		$data[0] = $conflictsCount;
-		$data[1] = 
+		self::$data[0] = $conflictsCount;
+		self::$data[1] = 
 			'<a id="conflict-resolver-link" '.
 			'href="'.JRoute::_('index.php?option=com_newsletter&view=conflicts', false).'">'.
 			JText::_('COM_NEWSLETTER_HERE').
