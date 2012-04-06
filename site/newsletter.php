@@ -47,7 +47,7 @@ $controller = JController::getInstance('Newsletter');
 			if(!JFactory::getUser()->id && !JRequest::getString('uid', NULL)) {
 				
 				JFactory::getApplication()->redirect(
-					JRoute::_('index.php?option=com_users&view=login'), 
+					JRoute::_('index.php?option=com_users&view=login&returnurl=' . base64_encode(JRoute::_('index.php?option=com_newsletter&view=subscribe&layout=unsubscribe', false))), 
 					JText::_('COM_NEWSLETTER_LOGIN_FIRST'), 
 					'message');
 			}	
