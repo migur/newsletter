@@ -40,7 +40,7 @@ class NewsletterModelEntitySubscriber extends MigurModel
 			}
 		}
 		
-		if (is_null($this->_data->params)) {
+		if (!isset($this->_data->params) || is_null($this->_data->params)) {
 			$this->_data->params = new stdClass;
 		}
 		

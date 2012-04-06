@@ -29,22 +29,22 @@ class NewsletterViewSubscribe extends JView
 
 		$user = JFactory::getUser();
 		
-		$subscriber = JTable::getInstance('Subscriber', 'NewsletterTable');
+		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
 		if (!empty($uid)) {
 			$subscriber->load(array('subscription_key' => $uid));
 			
 		} elseif(!empty($user->id)) {	
-			$subscriber->load(array('user_id' => $user->id));
+			$subscriber->load('-'.$user->id);
 		}
 		
 		$lists = SubscriberHelper::getLists($subscriber->subscription_key);
 
 		$this->assignRef('user', $user);
-		$this->assignRef('subscriber', $subscriber);
+		$this->assignRef('subscriber', $subscriber->toObject());
 		$this->assignRef('lists', $lists);
-		$this->assignRef('uid',   $subscriber->subscription_key);
-		$this->assignRef('nid',   $nid);
+		$this->assign('uid',   $subscriber->subscription_key);
+		$this->assign('nid',   $nid);
 
 		$this->setDocument();
 

@@ -198,12 +198,11 @@ class NewsletterControllerList extends JControllerForm
 		$currentList = JRequest::getInt('list_id', '0');
 		
 		if ($currentList < 1) {
-			echo json_encode(array('status' => '0', 'error' => 'No list Id'));
-			return false;
+            NewsletterHelper::jsonError('No list Id');
 		}
 
 		if (!$settings = $this->_getSettings()) {
-			return;
+            NewsletterHelper::jsonError('No settings');
 		}
 
 		if ($subtask == 'parse') {
@@ -213,123 +212,113 @@ class NewsletterControllerList extends JControllerForm
 			$sess = JFactory::getSession();
 			$file = $sess->get('list.' . $currentList . '.file.uploaded', array());
 
-			if (($handle = fopen($file['file']['filepath'], "r")) !== FALSE) {
-
-				$res = array();
-				$total = 0;
-				$skipped = 0;
-
-				//get the header
-				fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
-
-				while (($data = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure)) !== FALSE) {
-					if ($mapping->html->mapped === null || !isset($data[$mapping->html->mapped])) {
-						$htmlVal = $mapping->html->default;
-					} else {
-						$htmlVal = $data[$mapping->html->mapped];
-					}
-
-					if (!empty($data[$mapping->username->mapped]) && !empty($data[$mapping->email->mapped])) {
-						$res[] = array(
-							'name' => $data[$mapping->username->mapped],
-							'email' => $data[$mapping->email->mapped],
-							'html' => $htmlVal
-						);
-					} else {
-						$skipped++;
-					}
-
-					$total++;
-				}
-				fclose($handle);
-
-				$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
-				
-				$errors    = 0;
-				$added     = 0;
-				$updated   = 0;
-				$assigned  = 0;
-				foreach ($res as $row) {
-					
-					$success = true;
-					
-					// Try to load a man
-					$isExists = $subscriber->load(array('email' => $row['email']));
-					
-					// Set confirmed is it's empty
-					if (!$subscriber->confirmed == 0) {
-						$subscriber->confirmed = 1;
-					}
-					
-					if (!$isExists) {
-						// If user is not exists then add it!
-						$success = $subscriber->save($row, $type == 'juser');
-						$added++;
-						
-					} else {
-						
-						if ($settings->overwrite) {
-							// If user is present and we can update it...
-							$success = $subscriber->save($row);
-							$updated++;
-							
-						}	
-					}
-					 
-					if ($subscriber->getId() && $success) {
-
-						// Assign the man only if he is not in list already
-						if(!$subscriber->isInList($currentList)) {
-							if($subscriber->assignToList($currentList)) {
-
-								$assigned++;
-
-							} else {
-
-								$errors++;
-							}
-						}	
-						
-					} else {
-						
-						$errors++;
-					}
-				}
-
-				if (!empty($errors)) {
-					
-					$result = json_encode(array(
-						'status'  => 0,
-						'error'   => 'Import failed!',
-						'total'   => $total,
-						'skipped' => $skipped,
-						'errors'  => $errors,
-						'added'   => $added,
-						'updated' => $updated,
-						'assigned'=> $assigned));
-					
-				} else {
-				
-					unlink($file['file']['filepath']);
-					$sess->clear('list.' . $currentList . '.file.uploaded');
-
-					$result = json_encode(array(
-						'status'  => '1',
-						'error'   => 'Import complete!',
-						'total'   => $total,
-						'skipped' => $skipped,
-						'errors'  => $errors,
-						'added'   => $added,
-						'updated' => $updated,
-						'assigned'=> $assigned));
-				}
-				
-			} else {
-				$result = json_encode(array('status' => '0', 'error' => 'Cannot open file'));
+			if (($handle = fopen($file['file']['filepath'], "r")) === FALSE) {
+                
+                NewsletterHelper::jsonError('Cannot open file');
+                
 			}
-			
-			echo $result;
-			return;
+
+            $res = array();
+            $total = 0;
+            $skipped = 0;
+
+            //get the header
+            fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
+
+            while (($data = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure)) !== FALSE) {
+                if ($mapping->html->mapped === null || !isset($data[$mapping->html->mapped])) {
+                    $htmlVal = $mapping->html->default;
+                } else {
+                    $htmlVal = $data[$mapping->html->mapped];
+                }
+
+                if (!empty($data[$mapping->username->mapped]) && !empty($data[$mapping->email->mapped])) {
+                    $res[] = array(
+                        'name' => $data[$mapping->username->mapped],
+                        'email' => $data[$mapping->email->mapped],
+                        'html' => $htmlVal
+                    );
+                } else {
+                    $skipped++;
+                }
+
+                $total++;
+            }
+            fclose($handle);
+
+            $subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+
+            $errors    = 0;
+            $added     = 0;
+            $updated   = 0;
+            $assigned  = 0;
+            foreach ($res as $row) {
+
+                $success = true;
+
+                // Try to load a man
+                $isExists = $subscriber->load(array('email' => $row['email']));
+
+                // Set confirmed is it's empty
+                if (!$subscriber->confirmed == 0) {
+                    $subscriber->confirmed = 1;
+                }
+
+                if (!$isExists) {
+                    // If user is not exists then add it!
+                    $success = $subscriber->save($row, $type == 'juser');
+                    $added++;
+
+                } else {
+
+                    if ($settings->overwrite) {
+                        // If user is present and we can update it...
+                        $success = $subscriber->save($row);
+                        $updated++;
+
+                    }	
+                }
+
+                if ($subscriber->getId() && $success) {
+
+                    // Assign the man only if he is not in list already
+                    if(!$subscriber->isInList($currentList)) {
+                        if($subscriber->assignToList($currentList)) {
+
+                            $assigned++;
+
+                        } else {
+
+                            $errors++;
+                        }
+                    }	
+
+                } else {
+
+                    $errors++;
+                }
+            }
+
+            if (!empty($errors)) {
+                NewsletterHelper::jsonError('Import failed!', array(
+                    'total'   => $total,
+                    'skipped' => $skipped,
+                    'errors'  => $errors,
+                    'added'   => $added,
+                    'updated' => $updated,
+                    'assigned'=> $assigned));
+            }
+            
+            unlink($file['file']['filepath']);
+            $sess->clear('list.' . $currentList . '.file.uploaded');
+
+            NewsletterHelper::jsonMessage('Import complete!', array(
+                'total'   => $total,
+                'skipped' => $skipped,
+                'errors'  => $errors,
+                'added'   => $added,
+                'updated' => $updated,
+                'assigned'=> $assigned));
 		}
 	}
 

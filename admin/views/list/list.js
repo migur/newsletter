@@ -361,14 +361,19 @@ try {
                         return;
                     }
 
+                    if (res.state === false) {
+                        alert(res.messages[0]);
+                        return;
+                    }
+
                     alert(
-						res.error + "\n\n"+
-						Joomla.JText._('TOTAL','Total')+": " + res.total + "\n"+
-						Joomla.JText._('SKIPPED','Skipped')+": " + res.skipped + "\n"+
-						Joomla.JText._('ERRORS', 'Errors')+": " + res.errors + "\n"+
-						Joomla.JText._('ADDED', 'Added')+": " + res.added + "\n"+
-						Joomla.JText._('UPDATED', 'Updated')+": " + res.updated + "\n"+
-						Joomla.JText._('ASSIGNED', 'Assigned')+": " + res.assigned + "\n"
+						res.messages[0] + "\n\n"+
+						Joomla.JText._('TOTAL','Total')+": " + res.data.total + "\n"+
+						Joomla.JText._('SKIPPED','Skipped')+": " + res.data.skipped + "\n"+
+						Joomla.JText._('ERRORS', 'Errors')+": " + res.data.errors + "\n"+
+						Joomla.JText._('ADDED', 'Added')+": " + res.data.added + "\n"+
+						Joomla.JText._('UPDATED', 'Updated')+": " + res.data.updated + "\n"+
+						Joomla.JText._('ASSIGNED', 'Assigned')+": " + res.data.assigned + "\n"
 					);
 						
                     document.location.reload();
