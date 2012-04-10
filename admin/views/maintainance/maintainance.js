@@ -79,6 +79,13 @@ window.addEvent('domready', function() {try {
 			title: 'Mailbox profiles checks'
 		}}, Migur.widget.ajaxChecker);
 
+// License widget
+	Migur.createWidget('license-check-pane', { 
+		options: { 
+			url: '?option=com_newsletter&task=maintainance.checklicense',
+			usePreloader: true,
+			title: 'License checks'
+		}}, Migur.widget.ajaxChecker);
 
 	Migur.maintainanceManager
 	
@@ -96,6 +103,10 @@ window.addEvent('domready', function() {try {
 		
 		.add(function(callback, type){
 			var w = Migur.getWidget('mailbox-check-pane');
+			return w[type](callback);})
+
+		.add(function(callback, type){
+			var w = Migur.getWidget('license-check-pane');
 			return w[type](callback);})
 
 		.add(function(){

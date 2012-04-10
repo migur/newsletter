@@ -83,6 +83,19 @@ defined('_JEXEC') or die;
 			<div class="notifications"></div>
 			<div class="suggestions"></div>
 		</fieldset>
+        
+		<fieldset id="license-check-pane" class="check-pane">
+			<legend><?php echo JText::_('COM_NEWSLETTER_LICENSE_CHECK'); ?></legend>
+			<div class="status">
+				<span class="status-verbal"></span>		
+				<span class="preloader-container"></span>
+				<button class="refresh-control" style="float:right;">
+					<?php echo JText::_('COM_NEWSLETTER_REFRESH'); ?>
+				</button>
+			</div>
+			<div class="notifications"></div>
+			<div class="suggestions"></div>
+		</fieldset>
 	</div>	
-		
+	
 </fieldset>

@@ -263,7 +263,39 @@ class NewsletterControllerMaintainance extends JControllerForm
 		NewsletterHelper::jsonMessage('checkMailboxes', $res);
 	}
 	
+    
+    public function checkLicense() 
+    {
+        $info = NewsletterHelper::getCommonInfo('without cache');
+        
+        $type = ($info->is_valid == "JYES");
+        
+        $res = array();
+        $res[] = array(
+            'text' => JText::sprintf('MOD_UPDATER_SUPPORTED_VERSION').': '.JText::sprintf($info->is_valid), 
+            'type' => $type);
+        
+        $res[] = array(
+            'text' => JText::sprintf('MOD_UPDATER_VERSION').': '.$info->current_version, 
+            'type' => $type);
+        $res[] = array(
+            'text' => JText::sprintf('MOD_UPDATER_LATEST').': '.$info->latest_version, 
+            'type' => $type);
+        $res[] = array(
+            'text' => JText::sprintf('MOD_UPDATER_COPYRIGHT').': '.$info->copyright, 
+            'type' => $type);
+        $res[] = array(
+            'text' => JText::sprintf('MOD_UPDATER_LICENSE').': '.$info->license_key, 
+            'type' => $type);
+        $res[] = array(
+            'text' => JText::sprintf('MOD_UPDATER_DOMAINCODE').': '.$info->domain, 
+            'type' => $type);
+		// Return data
+		NewsletterHelper::jsonMessage('checkLicense', $res);
+    }
 	
+    
+    
 	public function getReport() 
 	{
 		$form = JRequest::getVar('jform');
