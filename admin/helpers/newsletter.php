@@ -76,7 +76,7 @@ class NewsletterHelper
 	 * @return	void
 	 * @since	1.0
 	 */
-	public static function getCommonInfo()
+	public static function getCommonInfo($noCache = false)
 	{
 		// TODO: Move it to the ComponentHelper
 		$params = JComponentHelper::getParams('com_newsletter');
@@ -86,7 +86,6 @@ class NewsletterHelper
 		$product = $obj->monsterName;
 
 		$domain = $_SERVER['SERVER_NAME'];
-		
 		$monster_url = $params->get('monster_url');
 
 		$url = $monster_url . '/service/check/license/license_key/' . urlencode($lkey) . '/product/' . urlencode($product) . '/domain/' . urlencode($domain);
@@ -95,9 +94,13 @@ class NewsletterHelper
 			$url = 'http://' . $url;
 		}
 
-                //$res = self::_getCommonInfo($url, $domain, $lkey);
-		$cache = JFactory::getCache('com_newsletter');
-		$res = $cache->call(array('NewsletterHelper', '_getCommonInfo'), $url, $domain, $lkey);
+        if (!$noCache) {
+            //$res = self::_getCommonInfo($url, $domain, $lkey);
+            $cache = JFactory::getCache('com_newsletter');
+            $res = $cache->call(array('NewsletterHelper', '_getCommonInfo'), $url, $domain, $lkey);
+        } else {
+            $res = NewsletterHelper::_getCommonInfo($url, $domain, $lkey);
+        }    
 		$res->current_version = (string) $obj->version;
 		$res->copyright = (string) $obj->copyright;
 		return $res;
@@ -117,7 +120,6 @@ class NewsletterHelper
 	public static function _getCommonInfo($url, $domain, $lkey)
 	{
 		$monster = @simplexml_load_file($url);
-
 		if (!$monster) {
 			$monster = new stdClass();
 			$monster->is_valid = null;
