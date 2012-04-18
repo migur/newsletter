@@ -353,3 +353,9 @@ textarea.invalid {
 	background-color: #cccccc;
 	text-decoration: none;
 }
+
+.nofloat {
+    clear: both;
+    float: none;
+    overflow: hidden;
+}

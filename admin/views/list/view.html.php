@@ -13,6 +13,8 @@ defined('_JEXEC') or die('Restricted access');
 
 // import view library
 JLoader::import('helpers.statistics', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR, '');
+
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
@@ -185,6 +187,16 @@ class NewsletterViewList extends MigurView
 
 		$this->setStatisticsData();
 
+        // Handle import plugins
+        $plgManager = NewsletterPluginManager::factory('import');
+        
+        $res = $plgManager->trigger(array(
+            'group' => 'migur',
+            'event' => 'onMigurImportShowIcon'
+        ));
+        
+        $this->assignRef('importPlugins', $res);
+        
 		// Set the document
 		$this->setDocument();
 		
@@ -248,6 +260,7 @@ class NewsletterViewList extends MigurView
 		$document->addScript(JURI::root() . 'media/system/js/uploader.js');
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/list.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/submitbutton.js");
+		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/plugins.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/models/forms/list.js", true);
 
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-min.js');

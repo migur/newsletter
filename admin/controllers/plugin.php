@@ -14,6 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer');
 
+
 class NewsletterControllerPlugin extends JControllerForm
 {
 	public function trigger()
@@ -22,25 +23,23 @@ class NewsletterControllerPlugin extends JControllerForm
 		$pGroup = JRequest::getString('triggergroup', null);
 		$pEvent = JRequest::getString('triggerevent', null);
 
-		if (!empty($pGroup) && !empty($pEvent)) {
+        if (!empty($pGroup) && !empty($pEvent)) {       
+        
+            JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-			$dsp = new JDispatcher();
-			JPluginHelper::importPlugin($pGroup, $pName, true, $dsp);
-			JPlugin::loadLanguage('plg_' . $pGroup . '_' . $pName);
-			
-			// Clear previous data and stop bufering
-			//ob_end_clean();
-			
-			// Trigger and finish with it
-			$dsp->trigger($pEvent, JRequest::get());
+            $manager = NewsletterPluginManager::factory($pGroup);
 
-			
+            $manager->trigger(array(
+                'name'  => $pName,
+                'group' => $pGroup,
+                'event' => $pEvent),
+                JRequest::get()
+            );
+
 		} else {
-			
-			header ("HTTP/1.0 505 Internal server error");			
-			
-		}
-		
-		die;
+			header ("HTTP/1.0 505 Internal server error");
+        }
+
+        jexit();
 	}
 }

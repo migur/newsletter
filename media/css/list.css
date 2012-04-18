@@ -125,9 +125,7 @@
 
 /* Import tab */
 #import-toolbar {
-    margin: 10px;
     float: left;
-    width: 700px;
 }
 
 #import-toolbar li {
@@ -316,4 +314,31 @@
 
 #usertype-selector div {
 	margin-right: 20px;
+}
+
+.button img {
+    width: 32px;
+    height: 32px;
+    margin: 0;
+}
+
+.tabs .import .toolbar-list {
+    float: left;
+}
+
+.tabs .import .toolbar-list li {
+    margin: 10px;
+}
+
+.plugin-pane {
+    float: none;
+    clear: both;
+}
+
+.plugin-pane > fieldset {
+    border: 1px solid #CCCCCC !important;
+}
+
+.plugin-pane .plugin-description {
+    clear:both;
 }
