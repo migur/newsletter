@@ -94,5 +94,111 @@ class NewsletterModelList extends JModelAdmin
 		$db->setQuery($query);
 		return $db->loadObjectList();
 	}
+    
+    /**
+     * Import subscribers into list.
+     * Creates Migur or Joomla user if necessary
+     *
+     * TODO: Better to place it in something like NewsletterManagerList...
+     * 
+     * @param type $collection List of objects
+     * @param type $options Lsit of options
+     * @return type Result data array
+     */
+    public function importCollection($listId, $collection, $options)
+    {
+        $subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
+        $errors    = 0;
+        $added     = 0;
+        $updated   = 0;
+        $assigned  = 0;
+        $skipped   = 0;
+        
+        $errorOnFail = isset($options['errorOnFail'])? (bool)$options['errorOnFail'] : false;
+        
+        foreach ($collection as $row) {
+            
+            $row = (array)$row;
+            
+            $success = true;
+            $isExists = false;
+
+            // Try to load J! user first if id is provided
+            if (!empty($row['id'])) {
+                $isExists = $subscriber->load('-'.$row['id']);
+            }
+            
+            // If fail then Try to load a man by email
+            if (!$isExists) {
+                
+                // No email. Skip this record or throw an error
+                if(empty($row['email'])) {
+                    if ($errorOnFail) {
+                        throw new Exception('Import of a subscriber failed! No email. Name:'.$row['name']);
+                    }    
+                    else {
+                        $skipped++;
+                        continue;
+                    }    
+                }
+                
+                $isExists = $subscriber->load(array('email' => $row['email']));
+            }    
+
+            // Set confirmed if it's empty
+            if (!$subscriber->confirmed == 0) {
+                $subscriber->confirmed = 1;
+            }
+
+            if (!$isExists) {
+                
+                // If user is not exists then add it!
+                // Can create ONLY subscribers, NOT J!USERS.
+                if ($success = $subscriber->save($row)) {
+                    $added++; 
+                }
+
+            } else {
+                
+                // If user is present and we can update it
+                // Then do it but not for J! Users
+                if ($options['overwrite'] && 
+                    !$subscriber->isJoomlaUserType() && 
+                    $success = $subscriber->save($row)
+                ) {
+                    $updated++;
+                }	
+                
+            }
+
+            if ($subscriber->getId() && $success) {
+
+                // Assign the man only if he is not in list already
+                if(!$subscriber->isInList($listId)) {
+                    if($subscriber->assignToList($listId)) {
+
+                        $assigned++;
+
+                    } else {
+
+                        $errors++;
+                    }
+                }	
+
+            } else {
+
+                $errors++;
+            }
+        }
+
+
+        return array(
+            'errors'   => $errors,
+            'added'    => $added,
+            'updated'  => $updated,
+            'assigned' => $assigned,
+            'skipped'  => $skipped
+        );
+    }
 }

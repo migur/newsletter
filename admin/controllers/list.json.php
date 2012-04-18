@@ -193,7 +193,7 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function import()
 	{
-		$type        = JRequest::getString('subscriber_type', '');
+		$type        = JRequest::getString('subscriber_type', 'migur');
 		$subtask     = JRequest::getString('subtask', '');
 		$currentList = JRequest::getInt('list_id', '0');
 		
@@ -218,7 +218,7 @@ class NewsletterControllerList extends JControllerForm
                 
 			}
 
-            $res = array();
+            $collection = array();
             $total = 0;
             $skipped = 0;
 
@@ -233,7 +233,7 @@ class NewsletterControllerList extends JControllerForm
                 }
 
                 if (!empty($data[$mapping->username->mapped]) && !empty($data[$mapping->email->mapped])) {
-                    $res[] = array(
+                    $collection[] = (object)array(
                         'name' => $data[$mapping->username->mapped],
                         'email' => $data[$mapping->email->mapped],
                         'html' => $htmlVal
@@ -246,67 +246,24 @@ class NewsletterControllerList extends JControllerForm
             }
             fclose($handle);
 
-            $subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
-
-            $errors    = 0;
-            $added     = 0;
-            $updated   = 0;
-            $assigned  = 0;
-            foreach ($res as $row) {
-
-                $success = true;
-
-                // Try to load a man
-                $isExists = $subscriber->load(array('email' => $row['email']));
-
-                // Set confirmed is it's empty
-                if (!$subscriber->confirmed == 0) {
-                    $subscriber->confirmed = 1;
-                }
-
-                if (!$isExists) {
-                    // If user is not exists then add it!
-                    $success = $subscriber->save($row, $type == 'juser');
-                    $added++;
-
-                } else {
-
-                    if ($settings->overwrite) {
-                        // If user is present and we can update it...
-                        $success = $subscriber->save($row);
-                        $updated++;
-
-                    }	
-                }
-
-                if ($subscriber->getId() && $success) {
-
-                    // Assign the man only if he is not in list already
-                    if(!$subscriber->isInList($currentList)) {
-                        if($subscriber->assignToList($currentList)) {
-
-                            $assigned++;
-
-                        } else {
-
-                            $errors++;
-                        }
-                    }	
-
-                } else {
-
-                    $errors++;
-                }
-            }
-
-            if (!empty($errors)) {
+            // Let's import it all!
+            $list = JModel::getInstance('List', 'NewsletterModel');
+            $res = $list->importCollection(
+                $currentList,
+                $collection, 
+                array(
+                    'overwrite'      => $settings->overwrite,
+                    'subscriberType' => $type
+                ));
+            
+            if (!empty($res['errors'])) {
                 NewsletterHelper::jsonError('Import failed!', array(
                     'total'   => $total,
                     'skipped' => $skipped,
-                    'errors'  => $errors,
-                    'added'   => $added,
-                    'updated' => $updated,
-                    'assigned'=> $assigned));
+                    'errors'  => $res['errors'],
+                    'added'   => $res['added'],
+                    'updated' => $res['updated'],
+                    'assigned'=> $res['assigned']));
             }
             
             unlink($file['file']['filepath']);
@@ -315,10 +272,10 @@ class NewsletterControllerList extends JControllerForm
             NewsletterHelper::jsonMessage('Import complete!', array(
                 'total'   => $total,
                 'skipped' => $skipped,
-                'errors'  => $errors,
-                'added'   => $added,
-                'updated' => $updated,
-                'assigned'=> $assigned));
+                'errors'  => $res['errors'],
+                'added'   => $res['added'],
+                'updated' => $res['updated'],
+                'assigned'=> $res['assigned']));
 		}
 	}
 

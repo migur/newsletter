@@ -69,7 +69,9 @@ try {
 	$cache->setLifeTime(900); // cache to 5 min
 
 	// Get an instance of the controller
-	// Here we get full task 
+	// Here we get full task and preserve it from exploding
+    JRequest::setVar('completetask', JRequest::getCmd('task'));
+    
 	$controller = JController::getInstance('Newsletter');
 
 	// Perform the Request task
