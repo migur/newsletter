@@ -447,7 +447,7 @@ try {
     
         $('import-toolbar-export').addEvent('click', function(){
             $('import-file').toggleClass('hide');
-
+            $$('.plugin-pane')[0].addClass('hide');
         });
 
         $('exclude-toolbar-lists').addEvent('click', function(){

@@ -25,6 +25,9 @@ window.addEvent('domready', function() { try {
                 listId = $$('[name="list_id"]')[0].getProperty('value');
             }
 
+			var pane = $$('.plugin-pane')[0];
+
+			$$('.plugin-preloader')[0].addClass('preloader');
 
             new Request.HTML({
                 method: 'get',
@@ -35,12 +38,14 @@ window.addEvent('domready', function() { try {
                     'task':        'list.importPluginTrigger',
                     'list_id':     listId
                 },
-                
+
                 onComplete: function(res, res2, html) {
-                    
-                    var pane = $$('.plugin-pane')[0];
+
+					$$('.plugin-preloader')[0].removeClass('preloader');
                     
                     pane.set('html', html);
+					pane.removeClass('hide');
+					pane.removeClass('preloader');
                     pane.removeEvents('click');
                     pane.addEvent('click', PluginImportManager.onClickPluginForm);
                 }
@@ -50,10 +55,23 @@ window.addEvent('domready', function() { try {
         onClickPluginForm: function(ev) {
 
             var role = $(ev.target).getProperty('role');
+			
             switch(role) {
                     
                 case 'formSubmit' :
-                    new Form.Request('plugin-form', $$('.plugin-pane')[0]).send();
+
+					$$('.plugin-preloader')[0].addClass('preloader');
+					$$('.plugin-pane')[0].addClass('hide');
+
+                    new Form.Request(
+						'plugin-form', 
+						$$('.plugin-pane')[0], {
+							onComplete: function(){
+								$$('.plugin-preloader')[0].removeClass('preloader');
+								$$('.plugin-pane')[0].removeClass('hide');
+							}}
+					).send();
+						
                     break;    
             
                 case 'formCancel' :
