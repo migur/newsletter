@@ -359,3 +359,14 @@ textarea.invalid {
     float: none;
     overflow: hidden;
 }
+
+.inline-hint-small {
+	color: #666;
+}
+
+.inputtext-replacer {
+	display: inline-block;
+	width: 100%;
+	text-align: left;
+	margin-left:5px;
+}

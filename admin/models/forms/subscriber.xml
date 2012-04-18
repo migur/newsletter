@@ -9,7 +9,6 @@
 			size="30"
 			default=""
 			required="true"
-            validate="username"
 		/>
 
 		<field name="email"
@@ -21,7 +20,6 @@
 			default=""
 			required="true"
 			validate="subemail"
-			unique="true"
 		 />
 		<field
             name="html"
@@ -33,18 +31,11 @@
 			size="30"
 			required="true"
 		 >
-                    <option value="1">JYES</option>
-                    <option value="0">JNO</option>
-		 </field>
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 
-		<field
-            name="type"
-			type="subscriberTypes"
-			label="COM_NEWSLETTER_SUBSCRIBER_TYPE"
-			description="COM_NEWSLETTER_SUBSCRIBER_TYPE"
-			class="inputbox"
-			required="true"
-		/>
+		<field name="user_id" type="hidden" />
 
 		<field name="subscriber_id" type="hidden" />
 		

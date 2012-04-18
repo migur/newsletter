@@ -64,15 +64,9 @@ class NewsletterModelSubscriber extends JModelAdmin
 			return false;
 		}
 
-		// User is exsit. 
-		// No need to work with its type
-		if (!empty($data['subscriber_id'])) {
-			$form->removeField('type');
-			unset($data['type']);
-		}
-		
-		if (!empty($data)) {
-			$form->bind($data);
+		if($form->getValue('user_id') > 0) {
+			$form->setFieldAttribute('name', 'readonly', 'true');
+			$form->setFieldAttribute('email', 'readonly', 'true');
 		}
 		return $form;
 	}

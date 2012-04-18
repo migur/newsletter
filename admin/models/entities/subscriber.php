@@ -33,28 +33,28 @@ class NewsletterModelEntitySubscriber extends MigurModel
 
 			// If the J! user is being requested
 			if ((is_numeric($data) && $data < 0) || !empty($data['email'])) {
-				
+
 				if (!$this->_checkOnTheFly($data)) {
 					return false;
 				}
 			}
 		}
-		
+
 		if (!isset($this->_data->params) || is_null($this->_data->params)) {
 			$this->_data->params = new stdClass;
 		}
-		
+
 		// If we have the user_id then we must ensure 
 		// that this user exists
 		if (!empty($this->_data->user_id)) {
-			
+
 			$jUser = JTable::getInstance('user');
-			
+
 			// If user absent let's decide what to do with subscriber row...
 			if (!$jUser->load($this->_data->user_id)) {
-				
+
 				$this->_data->user_id = 0;
-				
+
 				// If required data is present....
 				if (!empty($this->_data->email)) {
 					// Convert it to Migur subscriber
@@ -64,49 +64,61 @@ class NewsletterModelEntitySubscriber extends MigurModel
 					// Delete it!
 					$this->delete();
 					return false;
-				}	
+				}
 			}
-			
+
 			$this->_data->name = $jUser->name;
 			$this->_data->email = $jUser->email;
 			$this->_data->state = !$jUser->block;
 			$this->_data->created_on = $jUser->registerDate;
 		}
-		
+
 		return true;
 	}
 
-	
+	/**
+	 * Performs search of J!user with $data creteria.
+	 * Creates SUBSCRIBER row for him if it does not exist.
+	 * 
+	 * @param type $data
+	 * @return type 
+	 */
 	protected function _checkOnTheFly($data)
 	{
 		if (empty($data)) {
 			return false;
 		}
-		
-		// If not then load J! user and create row in subscribers for it
+
+
+		// Tryin to load J! user with $data criteria
 		$dbo = JFactory::getDbo();
 		$query = $dbo->getQuery(true);
 		$query->select('*')
-			  ->from('#__users');
+			->from('#__users');
 
 		if (is_numeric($data)) {
-			$query->where('id = '.abs((int)$data));
+			$query->where('id = ' . abs((int) $data));
 		} else {
-			foreach($data as $name => $item) {
-				$query->where($name.'='.$dbo->quote($item));
+			foreach ($data as $name => $item) {
+				$query->where($name . '=' . $dbo->quote($item));
 			}
-		}	
+		}
 		$dbo->setQuery($query);
 		$user = $dbo->loadAssoc();
 
+		// Nothing to do if absent.
 		if (empty($user['id'])) {
 			return false;
 		}
 
+
+		// If we already has SUBSCRIBER row for this J! user 
+		// then there is nothing to do.
 		if (parent::load(array('user_id' => $user['id']))) {
 			return true;
 		}
-		
+
+		// In other case create row
 		$data = array();
 		$data['user_id'] = $user['id'];
 		$data['created_on'] = date('Y-m-d H:i:s');
@@ -120,19 +132,20 @@ class NewsletterModelEntitySubscriber extends MigurModel
 			return false;
 		}
 
+		// Create subscription key. 
+		// Activation depends on activation of J!user.
 		$this->_createSubscriptionKey();
-		$this->_data->confirmed = empty($table->activation)? 1 : $this->_data->subscription_key;
+		$this->_data->confirmed = empty($table->activation) ? 1 : $this->_data->subscription_key;
 		return parent::save();
 	}
-	
+
 	/**
 	 * Get type of newsletter user prefer to recieve
 	 */
-	public function getType() 
+	public function getType()
 	{
 		return ($this->html == 1) ? 'html' : 'plain';
 	}
-	
 
 	/**
 	 * Returns a reference to the a Table object, always creating it.
@@ -146,8 +159,7 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	{
 		return JTable::getInstance($type, $prefix);
 	}
-	
-	
+
 	/**
 	 * Creates the subscription key. Use user id and random number
 	 * Length of subscription key is 15 characters
@@ -162,29 +174,28 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		if (!empty($this->_data->subscription_key)) {
 			return;
 		}
-		
+
 		$sid = $this->_data->subscriber_id;
 		// to get the constant length
 		$mask = '000000000';
 		$id = substr($mask, 0, strlen($mask) - strlen($sid)) . $sid;
 		$this->_data->subscription_key = rand(100000, 999999) . $id . time();
 	}
-	
-	
+
 	/**
 	 * Shorthand for creation of free Migur subscriber (not bound to J! user).
 	 * 
 	 * @param type $data
 	 * @return type 
 	 */
-	public function create($data) 
+	public function create($data)
 	{
-		$data = (array)$data;
-		
+		$data = (array) $data;
+
 		if (empty($data['user_id'])) {
 			$data['user_id'] = 0;
-		}	
-		
+		}
+
 		$data['created_on'] = date('Y-m-d H:i:s');
 		$data['created_by'] = JFactory::getUser()->id;
 		$data['modified_on'] = 0;
@@ -193,70 +204,47 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		$data['locked_by'] = 0;
 
 		if ($this->save($data)) {
-			
-			$this->_data->confirmed = (empty($data['confirmed']) || $data['confirmed'] != 1)?
+
+			$this->_data->confirmed = (empty($data['confirmed']) || $data['confirmed'] != 1) ?
 				$this->_data->subscription_key : 1;
 			return parent::save();
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Save user and check if it has a subscription key
 	 * 
 	 * @param array|object $data
 	 * @return boolean 
 	 */
-	public function save($data = array(), $isJUser = false) 
+	public function save($data = array(), $isJUser = false)
 	{
 		// Load state if data not loaded yet and $data has sid but does NOT have uid. 
 		// Need to determine if this is a J! user
 		if (!$this->getId() && !empty($data['subscriber_id']) && !isset($data['user_id'])) {
-			if (!$this->load($data['subscriber_id'])){
+			if (!$this->load($data['subscriber_id'])) {
 				return false;
 			}
 		}
 
-		// Check if this should be a J! user entity.
+		// Check if this row relies or should rely to J!user.
 		if (!empty($data['user_id'])) {
 			$uid = $data['user_id'];
 		} else {
-			$uid = !empty($this->_data->user_id)? $this->_data->user_id : null;
+			$uid = !empty($this->_data->user_id) ? $this->_data->user_id : null;
 		}
 
-		// If this is a J! user or need to create it
-		if (!empty($uid) || $isJUser) {
-
-			$jUser = JTable::getInstance('user');
-			
-			if (!$jUser->load($uid)) {
-				$data['username'] = $data['name'];
-				$data['password'] = '';
-				$data['sendEmail'] = '1';
-				$data['block'] = '0';
-				$data['groups'] = array('2');
-				$data['params'] = array();
-				
-			} else {
-				// Dont touch the nick and pass!!!
-				unset($data['username']);
-				unset($data['password']);
-			}
-			
-			$jUser->bind($data);
-			if (!$jUser->store()) {
-				return false;
-			}
-		
+		// If this row relates to J! user...
+		if (!empty($uid)) {
 			// Sanitize model
 			$data['name'] = '';
 			$data['email'] = '';
 			$data['created_on'] = 0;
 			$data['modified_on'] = date('Y-m-d H:i:s');
 			$data['modified_by'] = JFactory::getUser()->id;
-			$data['user_id'] = $jUser->id;
-		}	
+		}
 
 		// Check if this is a new record 
 		if (!$this->getId()) {
@@ -266,18 +254,18 @@ class NewsletterModelEntitySubscriber extends MigurModel
 			$data['locked_on'] = 0;
 			$data['locked_by'] = 0;
 		}
-		
+
 		// Save the rest or all
 		if (!parent::save($data)) {
 			return false;
 		}
-		
+
 		$this->_createSubscriptionKey();
 		return parent::save();
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Method to check if user is already binded to the list.
 	 *
@@ -289,22 +277,21 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	public function isInList($lid)
 	{
 		return $this->getTable('sublist')
-			->load(array(
-				'subscriber_id' => (int)$this->_data->subscriber_id,
-				'list_id' => (int)$lid));
+				->load(array(
+					'subscriber_id' => (int) $this->_data->subscriber_id,
+					'list_id' => (int) $lid));
 	}
 
-	
 	/**
 	 * Get confirmed status
 	 * 
 	 * @return boolean
 	 */
-	public function isConfirmed() 
+	public function isConfirmed()
 	{
 		return $this->_data->confirmed == 1;
 	}
-	
+
 	/**
 	 * Bind current subscriber to list.
 	 *
@@ -318,7 +305,7 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		if (empty($lid)) {
 			return false;
 		}
-		
+
 		// Load the row. If it exists then nothing to do
 		if ($this->isInList($lid)) {
 			return true;
@@ -326,13 +313,12 @@ class NewsletterModelEntitySubscriber extends MigurModel
 
 		// Save and finish.
 		return $this->getTable('sublist')
-			->save(array(
-				'subscriber_id'    => (int)$this->_data->subscriber_id,
-				'list_id'          => (int)$lid,
-				'confirmed'        => $this->_data->confirmed));
+				->save(array(
+					'subscriber_id' => (int) $this->_data->subscriber_id,
+					'list_id' => (int) $lid,
+					'confirmed' => $this->_data->confirmed));
 	}
-	
-	
+
 	/**
 	 * Bind current subscriber to list.
 	 *
@@ -346,7 +332,7 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		if (empty($lid)) {
 			return false;
 		}
-		
+
 		// Load the row. If it exists then nothing to do
 		if (!$this->isInList($lid)) {
 			return true;
@@ -355,35 +341,33 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		// Delete and finish.
 		$table = $this->getTable('sublist');
 		if (!$table->load(array(
-				'subscriber_id' => (int)$this->_data->subscriber_id,
-				'list_id' => (int)$lid))
-		) { 
+				'subscriber_id' => (int) $this->_data->subscriber_id,
+				'list_id' => (int) $lid))
+		) {
 			return false;
 		}
-		
+
 		return $table->delete();
 	}
-	
-	
+
 	/**
 	 * Confirm subscriber and all its subscriptions to lists
 	 * 
 	 * @return boolean true on success
 	 */
-	public function confirm() 
+	public function confirm()
 	{
 		$this->_data->confirmed = 1;
-		
+
 		if (!$this->save()) {
 			return false;
 		}
-		
+
 		$db = JFactory::getDbo();
 		$db->setQuery("UPDATE #__newsletter_sub_list set confirmed=1 WHERE confirmed=" . $db->quote($this->_data->subscription_key));
 		return $subscriber = $db->query();
 	}
 
-	
 	/**
 	 * Used to get id for juser/subscriber.
 	 * Return subscriber_id if this is a subscriber
@@ -391,30 +375,27 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	 * 
 	 * @return string
 	 */
-	public function getExtendedId() 
+	public function getExtendedId()
 	{
 		$id = $this->getId();
-		if(!empty($id)) {
+		if (!empty($id)) {
 			return $id;
 		}
 
-		return '-'.$this->_data->user_id;
+		return '-' . $this->_data->user_id;
 	}
 
-	
 	/**
 	 * Check if this entity is the wrapper for J! user type
 	 * Covers with TRUE all unbound yet J! users and bound ones to subscriber's table
 	 * 
 	 * @return boolean 
 	 */
-	public function isJoomlaUserType() 
+	public function isJoomlaUserType()
 	{
 		return !empty($this->_data->user_id);
 	}
 
-	
-	
 	/**
 	 * Deletes subscriber's and/or user's row
 	 * 
@@ -425,11 +406,12 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		if ($this->isJoomlaUserType()) {
 			throw Exception('The deleting of Joomla users is not allowed');
 		}
-			
+
 		if (!$this->getId() || !parent::delete($this->getId())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 }

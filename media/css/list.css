@@ -191,7 +191,6 @@
 #import-file,
 #exclude-file {
     border: 1px solid #cccccc;
-    width:100%;
     height: 355px;
 }
 
@@ -320,6 +319,11 @@
     width: 32px;
     height: 32px;
     margin: 0;
+}
+
+.tabs .import {
+	max-height:450px;
+	overflow: auto;
 }
 
 .tabs .import .toolbar-list {
