@@ -167,10 +167,15 @@ class NewsletterControllerCron extends JControllerForm
 
 					// Process mails of this SMTP profile only if we need it
 					if ($smtpProfile->needToSendCount() > 0) {
-						echo "{$smtpProfile->needToSendCount()}\n";
+						//echo "{$smtpProfile->needToSendCount()}\n";
 
 						// Get mails that we need to send
-						$queueItems = $queueManager->getUnsentSidNidBySmtp($smtpProfile->smtp_profile_id, $smtpProfile->needToSendCount());
+						// skip unconfirmed users
+						$queueItems = $queueManager->getListToSend(array(
+							'smtpProfileId' => $smtpProfile->smtp_profile_id, 
+							'limit' => $smtpProfile->needToSendCount(),
+							'skipUnconfirmed' => true
+						));
 						
 						$ret = array();
 						$sent = 0;
