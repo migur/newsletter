@@ -16,29 +16,39 @@ jimport('joomla.application.component.controllerform');
 class NewsletterControllerTest extends JControllerForm
 {
 	/**
-	 * Save the configuration
+	 * Used only for development.
 	 *
 	 * @return void
 	 * @since 1.0
 	 */
 	function addFakeUsers()
 	{
-		$count = JRequest::getInt('count', 100);
+		$count = JRequest::getInt('count', 10000);
 
 		$start = JRequest::getInt('start', 0);
 
-		$dbo = JFactory::getDbo();
-		for($i=$start; $i < $start + $count; $i++) {
-			$dbo->setQuery('INSERT INTO #__users (name,username,email,password,userType,block,sendEmail,registerDate,lastVisitDate,activation,params) values("zFake User '.$i.'", "zfakeuser'.$i.'", "zfakeuser'.$i.'@gmail.com", "", "", "", 1, "'.date('Y-m-d H:i:s').'", 0, "", "{}")');
-			//echo $dbo->getQuery();
-			$dbo->query();
-		}
+		$prefix = JRequest::getString('prefix', 'ZZ Test user');
 		
-		die('ok');
+		$dbo = JFactory::getDbo();
+		
+		$dbo->setQuery('SET foreign_key_checks=0');
+		$dbo->query();
+		
+		for($i=$start; $i < $start + $count; $i++) {
+			$name = $prefix.$i;
+			$dbo->setQuery('INSERT INTO #__users (name,username,email,password,userType,block,sendEmail,registerDate,lastVisitDate,activation,params) values("zFake User '.$i.'", "'.$name.'", "'.$name.'@gmail.com", "", "", "", 1, "'.date('Y-m-d H:i:s').'", 0, "", "{}")');
+			//echo $dbo->getQuery();
+			$res = $dbo->query();
+			echo "\n".$name.' - '.($res?'ok':'fail');
+		}
+		$dbo->setQuery('SET foreign_key_checks=1');
+		$dbo->query();
+		
+		die("\n Complete");
 	}
 	
 	/**
-	 * Save the configuration
+	 * Used only for development.
 	 *
 	 * @return void
 	 * @since 1.0
@@ -49,14 +59,25 @@ class NewsletterControllerTest extends JControllerForm
 
 		$start = JRequest::getInt('start', 0);
 
-		$dbo = JFactory::getDbo();
-		for($i=$start; $i < $start + $count; $i++) {
-			$dbo->setQuery('INSERT INTO #__newsletter_subscribers (name,email,state,html,user_id,created_on,created_by,modified_on,modified_by,locked_on,locked_by,confirmed,subscription_key,extra) values("zFake Subscriber '.$i.'", "zfakesubscriber'.$i.'@gmail.com", "1", "1", "0", "'.date('Y-m-d H:i:s').'", "0", "0", "0", "0", "0", "1", "0", "{}")');
-			//echo $dbo->getQuery();
-			$dbo->query();
-		}
+		$prefix = JRequest::getString('prefix', 'ZZ Test subscriber');
 		
-		die('ok');
+		$dbo = JFactory::getDbo();
+		
+		$dbo->setQuery('SET foreign_key_checks=0;');
+		$dbo->query();
+		
+		for($i=$start; $i < $start + $count; $i++) {
+			$name = $prefix.$i;
+			$dbo->setQuery('INSERT INTO #__newsletter_subscribers (name,email,state,html,user_id,created_on,created_by,modified_on,modified_by,locked_on,locked_by,confirmed,subscription_key,extra) values("'.$name.'", "'.$name.'@gmail.com", "1", "1", "0", "'.date('Y-m-d H:i:s').'", "0", "0", "0", "0", "0", "1", "0", "{}")');
+			//echo $dbo->getQuery();
+			$res = $dbo->query();
+			echo "\n".$name.' - '.($res?'ok':'fail');
+		}
+
+		$dbo->setQuery('SET foreign_key_checks=1;');
+		$dbo->query();
+		
+		die("\n Complete");
 	}
 	
 	/**
@@ -74,7 +95,7 @@ class NewsletterControllerTest extends JControllerForm
 			$dbo->query();
 		}
 		
-		die('ok');
+		die("\n Complete");
 	}
 	
 }
