@@ -64,6 +64,20 @@ defined('_JEXEC') or die;
 			<td><input class="test-params" value="" size="80" /></td>
 			<td><input class="test-other" value="" size="60" /></td>
 		</tr>
+		<tr class="row0">
+			<td><a class="test-title" href="#">Add users</a></td>
+			<td><select class="test-method"><option selected value="get">GET</option><option value="post">POST</option></td>
+			<td><input class="test-url" value="<?php echo 'administrator/index.php?option=com_newsletter&task=test.addFakeUsers'; ?>" size="60"/></td>
+			<td><input class="test-params" value="count=10000&start=1&prefix=ZZ Test user" size="80" /></td>
+			<td><input class="test-other" value="" size="60" /></td>
+		</tr>
+		<tr class="row1">
+			<td><a class="test-title" href="#">Add subscribers</a></td>
+			<td><select class="test-method"><option selected value="get">GET</option><option value="post">POST</option></td>
+			<td><input class="test-url" value="<?php echo 'administrator/index.php?option=com_newsletter&task=test.addFakeSubscribers'; ?>" size="60"/></td>
+			<td><input class="test-params" value="count=10000&start=1&prefix=ZZ Test Subscriber" size="80" /></td>
+			<td><input class="test-other" value="" size="60" /></td>
+		</tr>
 	</tbody>
 </table>
 
