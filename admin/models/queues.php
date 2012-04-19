@@ -169,9 +169,11 @@ class NewsletterModelQueues extends JModelList
 	 * @param type $id
 	 * @return type 
 	 */
-	public function getUnsentSidNidBySmtp($id, $limit = 0) 
+	public function getListToSend($options) 
 	{
-
+		$id = $options['smtpProfileId'];
+		$limit = $options['limit'];
+		
 		$smtpModel = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$smtpModel->load($id);
 		
@@ -181,7 +183,14 @@ class NewsletterModelQueues extends JModelList
 		$query->select('DISTINCT q.newsletter_id, q.subscriber_id');
 		$query->from('`#__newsletter_queue` AS q');
 		$query->join('left', '`#__newsletter_newsletters` AS n ON n.newsletter_id = q.newsletter_id');
-
+		
+		//  Add filter to cut off unconfirmed users. (subscribers.confirm)
+		if ($options['skipUnconfirmed']) {
+			$query->join('left', '`#__newsletter_subscribers` AS s ON s.subscriber_id = q.newsletter_id');
+			$query->join('left', '`#__users` AS u ON u.id = s.user_id');
+			$query->where('((u.activation IS NOT NULL AND u.activation == "") OR (u.activation IS NULL AND s.confirmed == 1))');
+		}	
+			
 		$and = 'n.smtp_profile_id='.(int)$id;
 		
 		if ($smtpModel->isDefaultProfile()) {
