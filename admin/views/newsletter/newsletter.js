@@ -716,7 +716,7 @@ window.addEvent('domready', function() {
         /* Type of letter */
         if (dataStorage.newsletter.type_changeable !== undefined && !dataStorage.newsletter.type_changeable) {
             $$('[name=jform[type]]').each(function(el){
-                el.onclick = function(){ return false; }
+                el.onclick = function(){return false;}
             });
         }
 
@@ -833,17 +833,19 @@ window.addEvent('domready', function() {
                 if (res.state == 'ok') {
                     if (res.newsletter_id > 0) {
 						
+						// Update value
                         $$('[name=newsletter_id]').set('value', res.newsletter_id);
-						$('jform_alias').set('value', res.alias);
-						delete(dataStorage.aliasIsEmpty);
-						$('jform_subject').fireEvent('keyup');
+						
+						// Update alias and newsletter link 
+						Migur.getWidget('jform_alias').update(res.alias);
 						
                         Migur.getWidget('autosaver-switch').render();
                         autosaver.options.observState = autosaver.getter();
                     }
                 } else {
 					
-					if (autosaver.messageCannotsave === undefined) {
+					var switcher = Migur.getWidget('autosaver-switch');
+					if (autosaver.messageCannotsave === undefined || switcher.data == 'off') {
 						alert(res.state);
 						autosaver.messageCannotsave = true;
 					}	
@@ -1010,45 +1012,48 @@ window.addEvent('domready', function() {
         });
 
         /* "Subject" input -> keyup-handler */
-        $('jform_subject').addEvent('keyup', function (event) {
-			
-			// Set the alias only if the newsletter is not saved yet
-			var nid = parseInt($$('[name=newsletter_id]')[0].getProperty('value'));
-			var alias = $('jform_alias').getProperty('value');
-            var link = $('link-website');
+		 Migur.createWidget('jform_alias', {
 
-			if (dataStorage.aliasIsEmpty === undefined) {
-				dataStorage.aliasIsEmpty = (alias == '');
-			}
-
-			if (nid < 1 || dataStorage.aliasIsEmpty === true) {
-				$('link-website-msg').setStyles({'display': 'block'});
-				var value = $(this).get('value');
-				alias = value.replace(/[^a-zA-Z-0-9_-]+/g, '').toLowerCase();
-				Migur.getWidget('autosaver-switch').update('unsaved');
-				autosaver.forceIsChanged = true;
+			setup: function(){
 				
-			} else {	
-				$('link-website-msg').setStyles({'display': 'none'});
-			}	
+				// Adding handler to a DOM element
+				this.domEl.addEvent('keyup', function(){
+					var wdgt = Migur.getWidget('jform_alias');
+					wdgt.update();
+				});
+				
+				this.update();
+			},
 			
-			$('jform_alias').setProperty('value', alias);
-			
-            var val = migurSiteRoot + link.getProperty('rel').replace('%s', alias);
-            if (val == '') {
-                link.addClass('hide');
-                $('link-website-prompt').removeClass('hide');
-            } else {
-                link.removeClass('hide');
-                $('link-website-prompt').addClass('hide');
-            }
-            link.set('text', val);
-            link.setProperty('href', val);
-        });
+			update: function(data){
 
-        $('jform_subject').fireEvent('keyup');
+				// If we have new data then set it into control
+				if (data) {
+					this.domEl.setProperty('value', data);
+				}
 
+				// Fill DATA if not provided to refresh the link
+				if (!data) {
+					data = this.domEl.getProperty('value');
+				}
+				
+	            var link = $('link-website');
+				var linkPrompt = $('link-website-prompt');
+				
+				if (data == '') {
+					link.addClass('hide');
+					linkPrompt.removeClass('hide');
+				} else {
+					var val = migurSiteRoot + link.getProperty('rel').replace('%s', data);
+					link.removeClass('hide');
+					linkPrompt.addClass('hide');
+					link.set('text', val);
+					link.setProperty('href', val);
+				}
+			}
+		 });	
 
+		
         /* Unsaved data warning handler */
         $$('#html-area, form textarea, form input, form select').addEvent('keyup', function() {
             Migur.getWidget('autosaver-switch').update(
@@ -1169,8 +1174,8 @@ window.addEvent('domready', function() {
 				
 				$('send-preview-preloader').removeClass('preloader');
                 
-				try{ res = JSON.decode(res); }
-				catch (e) { res = null; }
+				try{res = JSON.decode(res);}
+				catch (e) {res = null;}
 				
                 var text;
                 if (res && res.state == true) {

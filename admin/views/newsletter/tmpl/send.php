@@ -5,17 +5,24 @@
 </script>
 
     <ul id="send" class="form-text">
-        <li>
-                <?php echo $this->form->getLabel('name'); ?>
-                <?php echo $this->form->getInput('name'); ?>
-		</li>
+		
+		<div class="container-top">	
+			<li>
+					<?php echo $this->form->getLabel('name'); ?>
+					<?php echo $this->form->getInput('name'); ?>
+			</li>
+			<li>
+					<?php echo $this->form->getLabel('subject'); ?>
+					<?php echo $this->form->getInput('subject'); ?>
+			</li>
+			<li>
+					<?php echo $this->form->getLabel('alias'); ?>
+					<?php echo $this->form->getInput('alias'); ?>
+			</li>
+		</div>
 		<li>
-                <?php echo $this->form->getLabel('subject'); ?>
-                <?php echo $this->form->getInput('subject'); ?>
-		</li>
-		<li>
-                <?php echo $this->form->getLabel('encoding', 'params'); ?>
-                <?php echo $this->form->getInput('encoding', 'params'); ?>
+				<?php echo $this->form->getLabel('encoding', 'params'); ?>
+				<?php echo $this->form->getInput('encoding', 'params'); ?>
 		</li>
 		<li>
                 <?php echo $this->form->getLabel('type'); ?>
@@ -59,7 +66,7 @@
 			<label><?php echo JText::_('COM_NEWSLETTER_WEBSITE'); ?></label>
             <div id="link-website-dd">
                 <a id="link-website" target="_blank" href="#" rel="index.php?option=com_newsletter&view=show&alias=%s"></a>
-                <a id="link-website-prompt" href="#">
+                <a id="link-website-prompt" href="#" onclick="return false;">
                     <?php echo JText::_('COM_NEWSLETTER_START_TO_INPUT'); ?>
                 </a>
                 <div id="link-website-msg" style="color:gray">

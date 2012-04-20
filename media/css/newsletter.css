@@ -69,13 +69,7 @@ iframe {
 	padding: 0 5px;
 }
 
-#jform_name-lbl,
-#jform_subject-lbl {
-	min-width: 80px !important;
-}
-
-#jform_name,
-#jform_subject {
+#send .container-top input {
 	float: right;
 	width: 450px;
 }

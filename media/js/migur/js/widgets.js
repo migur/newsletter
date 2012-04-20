@@ -122,7 +122,7 @@ Migur.widget = new Class({
     },
 
     /* Method to update the widget view */
-    update: function() {
+    update: function(data) {
         $(this.domEl).set({
             value: data
         });
