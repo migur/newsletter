@@ -23,8 +23,8 @@ defined('_JEXEC') or die;
                     echo JHtml::_('tabs.end');
                 ?>
                     <input type="hidden" name="newsletter_id" value="<?php echo $this->form->getValue('newsletter_id'); ?>" />
+                    <?php echo $this->form->getInput('newsletter_id'); ?>
                     <?php echo $this->form->getInput('t_style_id'); ?>
-                    <?php echo $this->form->getInput('alias'); ?>
                     <input type="hidden" name="task" value="" />
                     <input type="hidden" name="jform[htmlTpl]" value="" />
                     <input type="hidden" name="jform[plugins]" value="" />
