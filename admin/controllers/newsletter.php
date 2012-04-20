@@ -94,119 +94,8 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$task = JRequest::getString('task');
 		
 		if (!empty($task) && strpos($task, 'save2copy') !== false) {
-
-			// Actualy on this step will be performed 
-			// the checking for NEWSLETTER.ADD permission. It's ok
-			if (!$this->allowSave()) {
-				$this->setError(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
-				$this->setMessage($this->getError(), 'error');
-				$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list.$this->getRedirectToListAppend(), false));
-
-				return false;
-			}
 			
-			$nIds = JRequest::getVar('cid', array());
-			
-			if (!empty($nIds)) {
-				
-				$table = JTable::getInstance('Newsletter', 'NewsletterTable');
-				$relTable = JTable::getInstance('Newsletterext', 'NewsletterTable');
-				$downTable = JTable::getInstance('Downloads', 'NewsletterTable');
-				
-				foreach($nIds as $nId) {
-					
-					// Copying the newsletter...
-					$table->load($nId);
-					$data = $table->getProperties();
-					
-					// reset
-					$table->reset();
-					$table->set($table->getKeyName(), null);
-					unset($data['newsletter_id']);
-					$data['name'] .= '(copy)';
-					$data['sent_started'] = '';
-					$data['alias'] = NewsletterHelper::getFreeAlias($data['alias']);
-					
-					// bind
-					if (!$table->bind($data)) {
-						$this->setError($table->getError());
-						return false;
-					}
-					
-					// Store data.
-					if (!$table->store()) {
-						$this->setError($table->getError());
-						return false;
-					}
-					
-					$newNid = $table->get($table->getKeyName());
-
-					// Copy extensions...
-					$exts = $relTable->getRowsBy($nId);
-					if (!empty($exts)) {
-						foreach($exts as $ext) {
-
-							// reset
-							$relTable->reset();
-							$relTable->set($relTable->getKeyName(), null);
-							unset($ext[$relTable->getKeyName()]);
-							$ext['newsletter_id'] = $newNid;
-							
-							// bind
-							if (!$relTable->bind($ext)) {
-								$this->setError($relTable->getError());
-								return false;
-							}
-							
-							// Store data.
-							if (!$relTable->store()) {
-								$this->setError($relTable->getError());
-								return false;
-							}
-						}
-					}	
-
-					// Copy downloads...
-					$exts = $downTable->getRowsBy($nId);
-					if (!empty($exts)) {
-						foreach($exts as $ext) {
-
-							// reset
-							$downTable->reset();
-							$downTable->set($downTable->getKeyName(), null);
-							unset($ext[$downTable->getKeyName()]);
-							$ext['newsletter_id'] = $newNid;
-							
-							// bind
-							if (!$downTable->bind($ext)) {
-								$this->setError($downTable->getError());
-								return false;
-							}
-							
-							// Store data.
-							if (!$downTable->store()) {
-								$this->setError($downTable->getError());
-								return false;
-							}
-						}
-					}	
-					
-					// Clean the cache.
-					$cache = JFactory::getCache($this->option);
-					$cache->clean();
-				}
-				
-				$message = JText::_('COM_NEWSLETTER_NEWSLETTER_COPY_SUCCESS');
-				$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters', false), $message, 'message');
-				return true;
-			} else {
-				
-				$message = JText::_('COM_NEWSLETTER_SELECT_AT_LEAST_ONE_ITEM');
-				$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters', false), $message, 'error');
-				return true;
-			}
-			
-			return parent::save();
+			return $this->_copyNewsletter();
 			
 		} else {
 			
@@ -215,7 +104,6 @@ class NewsletterControllerNewsletter extends JControllerForm
 			$context = JRequest::getString('context', 'html');
 
 			// save new newsletter (create it) or autosave an existing letter
-
 			$data = JRequest::getVar('jform', array(), 'post', 'array');
 
 			// If the type is not changeable then replace type as now (for success validation).
@@ -224,9 +112,12 @@ class NewsletterControllerNewsletter extends JControllerForm
 				// Get newsletter's extended info 
 				$nl = NewsletterHelper::get($nsid);
 
+				if (empty($data['alias'])) {
+					$data['alias'] = NewsletterHelper::createAlias($data['name'], $nsid);
+				}
+				
 				if (!$nl['type_changeable']) {
 					$data['type'] = $nl['type'];
-					JRequest::setVar('jform', $data, 'post');
 				}
 
 				// Check if we can change the newsletter
@@ -251,14 +142,13 @@ class NewsletterControllerNewsletter extends JControllerForm
 			} else {
 
 				if (empty($data['alias'])) {
-					$data['alias'] = 'newsletter';
+					$data['alias'] = NewsletterHelper::createAlias($data['name']);
 				}
-
-				// Get newsletters with similar aliases
-				$data['alias'] = NewsletterHelper::getFreeAlias($data['alias']);
 			}
 
-
+			// Fix all overrades has been made above
+			JRequest::setVar('jform', $data, 'post');
+			
 			if (parent::save()) {
 
 				$nsid = $this->newsletterId;
@@ -283,7 +173,8 @@ class NewsletterControllerNewsletter extends JControllerForm
 				
 				$this->setRedirect(null);
 				if (empty($error)) {
-					$error = JFactory::getApplication()->getMessageQueue();
+					$msgs = JFactory::getApplication()->getMessageQueue();
+					$error = !empty($msgs[0]['message'])? $msgs[0]['message'] : null;
 				}
 
 				echo json_encode(array(
@@ -310,5 +201,119 @@ class NewsletterControllerNewsletter extends JControllerForm
 	protected function postSaveHook($model, $data)
 	{
 		$this->newsletterId = $model->getState($model->getName() . '.id');
+	}
+	
+	protected function _copyNewsletter()
+	{
+		// Actualy on this step will be performed 
+		// the checking for NEWSLETTER.ADD permission. It's ok
+		if (!$this->allowSave()) {
+			$this->setError(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
+			$this->setMessage($this->getError(), 'error');
+			$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list.$this->getRedirectToListAppend(), false));
+
+			return false;
+		}
+
+		$nIds = JRequest::getVar('cid', array());
+
+		if (!empty($nIds)) {
+
+			$table = JTable::getInstance('Newsletter', 'NewsletterTable');
+			$relTable = JTable::getInstance('Newsletterext', 'NewsletterTable');
+			$downTable = JTable::getInstance('Downloads', 'NewsletterTable');
+
+			foreach($nIds as $nId) {
+
+				// Copying the newsletter...
+				$table->load($nId);
+				$data = $table->getProperties();
+
+				// reset
+				$table->reset();
+				$table->set($table->getKeyName(), null);
+				unset($data['newsletter_id']);
+				$data['name'] .= '(copy)';
+				$data['sent_started'] = '';
+				$data['alias'] = NewsletterHelper::createAlias($data['alias']);
+
+				// bind
+				if (!$table->bind($data)) {
+					$this->setError($table->getError());
+					return false;
+				}
+
+				// Store data.
+				if (!$table->store()) {
+					$this->setError($table->getError());
+					return false;
+				}
+
+				$newNid = $table->get($table->getKeyName());
+
+				// Copy extensions...
+				$exts = $relTable->getRowsBy($nId);
+				if (!empty($exts)) {
+					foreach($exts as $ext) {
+
+						// reset
+						$relTable->reset();
+						$relTable->set($relTable->getKeyName(), null);
+						unset($ext[$relTable->getKeyName()]);
+						$ext['newsletter_id'] = $newNid;
+
+						// bind
+						if (!$relTable->bind($ext)) {
+							$this->setError($relTable->getError());
+							return false;
+						}
+
+						// Store data.
+						if (!$relTable->store()) {
+							$this->setError($relTable->getError());
+							return false;
+						}
+					}
+				}	
+
+				// Copy downloads...
+				$exts = $downTable->getRowsBy($nId);
+				if (!empty($exts)) {
+					foreach($exts as $ext) {
+
+						// reset
+						$downTable->reset();
+						$downTable->set($downTable->getKeyName(), null);
+						unset($ext[$downTable->getKeyName()]);
+						$ext['newsletter_id'] = $newNid;
+
+						// bind
+						if (!$downTable->bind($ext)) {
+							$this->setError($downTable->getError());
+							return false;
+						}
+
+						// Store data.
+						if (!$downTable->store()) {
+							$this->setError($downTable->getError());
+							return false;
+						}
+					}
+				}	
+
+				// Clean the cache.
+				$cache = JFactory::getCache($this->option);
+				$cache->clean();
+			}
+
+			$message = JText::_('COM_NEWSLETTER_NEWSLETTER_COPY_SUCCESS');
+			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters', false), $message, 'message');
+			return true;
+		} else {
+
+			$message = JText::_('COM_NEWSLETTER_SELECT_AT_LEAST_ONE_ITEM');
+			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters', false), $message, 'error');
+			return true;
+		}		
 	}
 }

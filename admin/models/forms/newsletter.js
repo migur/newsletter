@@ -16,6 +16,12 @@ window.addEvent('domready', function() {
             return regex.test(value);
         });
 
+    document.formvalidator.setHandler('alias',
+        function (value) {
+            regex=/^.{1,255}$/;
+            return regex.test(value);
+        });
+
     document.formvalidator.setHandler('subject',
         function (value) {
             regex=/^.{1,255}$/;
