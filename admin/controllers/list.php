@@ -164,7 +164,7 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function assignGroup()
 	{
-		if (!$this->allowEdit($data, $key)) {
+		if (!$this->allowEdit()) {
 			$this->setError(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
 			$this->setMessage($this->getError(), 'error');
 			$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=' . $this->view_list . $this->getRedirectToListAppend(), false));
@@ -176,8 +176,8 @@ class NewsletterControllerList extends JControllerForm
 
 			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
-			$subscribers = JRequest::getVar('cid', null, 'post');
-			$lists = json_decode(JRequest::getVar('list_id', null, 'post'));
+			$subscribers = JRequest::getVar('cid', array(), 'post');
+			$lists = json_decode(JRequest::getVar('list_id', array(), 'post'));
 
 			if (!empty($lists) && !empty($subscribers)) {
 				

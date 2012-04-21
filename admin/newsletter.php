@@ -103,9 +103,9 @@ try {
 } catch (Exception $e) {
 	
 	LogHelper::addDebug(
-		'COM_NEWSLETTER_UNKNOWN_ERROR',
+		'COM_NEWSLETTER_UNCAUGHT_EXCEPTION',
 		'common',
-		(array)$e);
+		$e);
 	
 	throw $e;
 }

@@ -179,12 +179,33 @@ class LogHelper
 			require_once(JPATH_COMPONENT_ADMINISTRATOR.DS.'tables'.DS.'log.php');
 			$table = new NewsletterTableLog(JFactory::getDbo());
 			
+			// Type conversion
+			if ($data instanceof Exception) {
+				$data = array(
+					'Exception' => get_class($data),
+					'message'   => $data->getMessage(),
+					'trace'     => $data->getTraceAsString(),
+					'code'      => $data->getCode(),
+					'file'      => $data->getFile(),
+					'line'      => $data->getLine()
+				);	
+			}
+			
+			if ($data instanceof JObject) {
+				$data = json_encode($data->getProperties());
+			}
+			
+			if (is_array($data) || is_object($data)) {
+				$data = json_encode($data);
+			}
+
+			// Storing
 			$table->save(array(
 				'message'  => JText::_($msg),
 				'priority' => $priority,
 				'category' => $category,
 				'date'     => date('Y-m-d H:i:s'),
-				'params'   => $data
+				'params'   => (string)$data
 			));
 			
 		} catch(Exception $e) {

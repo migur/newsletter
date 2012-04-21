@@ -266,7 +266,7 @@ class MigurMailerMailbox
 		$count = 0;
 		
 		// Fetch them all
-		foreach($bounces as &$x) {
+		foreach($bounces as $x) {
 
 			// If we've parsed $max messages then it's time to stop
 			if (!empty($this->maxMessages) && $count >= $this->maxMessages) {

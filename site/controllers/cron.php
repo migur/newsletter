@@ -106,9 +106,13 @@ class NewsletterControllerCron extends JControllerForm
 	 */
 	public function mailing($mode = 'std')
 	{
-		LogHelper::addDebug('Mailing started', 'mailing');
+		if ($mode == 'std') {
+			NewsletterHelper::jsonPrepare();
+		}
+
+		$forced = JRequest::getBool('forced', false);
 		
-		ob_start();
+		LogHelper::addDebug('Mailing started', 'mailing');
 
 		$config   = JComponentHelper::getParams('com_newsletter');
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
@@ -137,9 +141,10 @@ class NewsletterControllerCron extends JControllerForm
 					'data' => array(),
 					'error' => '');
 
-				// Need to send notice if system cannot send the requiered count of 
+				// Need to notice if system cannot send the requiered count of 
 				// letters for mailing interval.
-				if ($smtpProfile->isNeedNewPeriod() && $smtpProfile->needToSendCount() > 0) {
+				// In case if it is not FORCED.
+				if (!$forced && $smtpProfile->isNeedNewPeriod() && $smtpProfile->needToSendCount() > 0) {
 					LogHelper::addMessage(
 						JText::_('COM_NEWSLETTER_SENDING_INTERVAL_TOO_SHORT'),
 						'mailing',
@@ -245,8 +250,8 @@ class NewsletterControllerCron extends JControllerForm
 										// Add the sent letter to the sents for each list
 										if ($doSave) {
 											
-											$sent = JTable::getInstance('sent', 'NewsletterTable');
-											$sent->save(array(
+											$sentManager = JTable::getInstance('sent', 'NewsletterTable');
+											$sentManager->save(array(
 												'newsletter_id' => $groupItem->newsletter_id,
 												'subscriber_id' => $groupItem->subscriber_id,
 												'list_id'       => $groupItem->list_id,
@@ -261,7 +266,7 @@ class NewsletterControllerCron extends JControllerForm
 													'to' => $subscriber->email,
 													'error' => $letter->errors)));
 											
-											unset($sent);
+											unset($sentManager);
 										}
 									}
 
@@ -270,7 +275,7 @@ class NewsletterControllerCron extends JControllerForm
 									$sent++;
 									
 									if(!$letter->state) {
-										throw new Exception($letter->errors);
+										throw new Exception(json_encode($letter->errors));
 									}
 
 								} catch(Exception $e) {
@@ -408,7 +413,7 @@ class NewsletterControllerCron extends JControllerForm
 			try {
 
 				// Try to conect
-				$mailbox = new MigurMailerMailbox(&$mbprofile);
+				$mailbox = new MigurMailerMailbox($mbprofile);
 
 				$logData = (array)$mbprofile; 
 				unset($logData['password']);
@@ -457,8 +462,8 @@ class NewsletterControllerCron extends JControllerForm
 
 							if (!empty($mail->subscriber_id) && !empty($mail->newsletter_id) && !empty($mail->bounce_type)) 
 							{
-								$queue = JTable::getInstance('Queue', 'NewsletterTable');
-								if ($queue->setBounced($mail->subscriber_id, $mail->newsletter_id, NewsletterTableQueue::STATE_BOUNCED))
+								$queue = JModel::getInstance('Queues', 'NewsletterModel');
+								if ($queue->setBounced($mail->subscriber_id, $mail->newsletter_id))
 								{
 									$sent = JModel::getInstance('Sent', 'NewsletterModel');
 									$sent->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);

@@ -393,19 +393,33 @@ class NewsletterHelper
 	}
 
 	
+	/**
+	 * Just SILENTLY start buffering.
+	 * No matter if it will fail.
+	 */
+	static public function jsonPrepare() 
+	{
+		@ob_start();
+	}
+	
 	
 	/**
-	 * Assumes that this is complete server response.
+	 * Echoes the JSON responce to client.
+	 * Collect all output data from buffers and attaches it
+	 * to the response as a parameter "serverResponse".
 	 * 
 	 * @param boolean $status The status of a responce
 	 * @param string $message Text of returned messages
 	 * @param type $data
 	 * @param type $exit 
 	 */
-	static public function jsonResponse($status, $messages = array(), $data = null, $exit = true) {
-		
-		$serverResponse = ob_get_contents();
-		ob_end_clean();
+	static public function jsonResponse($status, $messages = array(), $data = null, $exit = true) 
+	{
+		$serverResponse = ''; $i=0;
+		do {
+			$serverResponse .= ob_get_contents();
+			$i++; // Make sure that it's not neverended cycle
+		} while(@ob_end_clean() && $i < 10);
 		
 		if (!is_array($messages) && !is_object($messages)) {
 			$messages = array($messages);
@@ -420,7 +434,6 @@ class NewsletterHelper
 			'serverResponse' => htmlentities($serverResponse)
 		));
 		
-		ob_start();
 		jexit();
 	}
 

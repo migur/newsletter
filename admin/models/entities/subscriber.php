@@ -29,6 +29,10 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	 */
 	public function load($data)
 	{
+		if (empty($data)) {
+			return false;
+		}
+
 		if ((is_numeric($data) && $data < 0) || !parent::load($data)) {
 
 			// If the J! user is being requested
@@ -282,16 +286,29 @@ class NewsletterModelEntitySubscriber extends MigurModel
 					'list_id' => (int) $lid));
 	}
 
+	
 	/**
-	 * Get confirmed status
+	 * Is subscriber finished with registration?
 	 * 
 	 * @return boolean
 	 */
 	public function isConfirmed()
 	{
-		return $this->_data->confirmed == 1;
+		return ($this->_data->confirmed == 1);
 	}
 
+	
+	/**
+	 * Is subscriber enabled?
+	 * 
+	 * @return type 
+	 */
+	public function isEnabled()
+	{
+		return ($this->_data->state == 1);
+	}
+
+	
 	/**
 	 * Bind current subscriber to list.
 	 *
@@ -393,9 +410,10 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	 */
 	public function isJoomlaUserType()
 	{
-		return !empty($this->_data->user_id);
+		return (!empty($this->_data->user_id));
 	}
 
+	
 	/**
 	 * Deletes subscriber's and/or user's row
 	 * 
