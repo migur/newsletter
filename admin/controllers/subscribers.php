@@ -71,4 +71,37 @@ class NewsletterControllerSubscribers extends JControllerAdmin
 		
 		parent::delete();
 	}
+	
+	
+	/**
+	 * Method to publish a list of items
+	 *
+	 * @return  void
+	 *
+	 * @since   11.1
+	 */
+	public function publish()
+	{
+		// Check for request forgeries
+		JRequest::checkToken() or die(JText::_('JINVALID_TOKEN'));
+
+		// Get items to publish from the request.
+		$cids = JRequest::getVar('cid', array(), '', 'array');
+		
+		// If needed create rows in SUBSCRIBERS for J! user
+		$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$newCids = array();
+		foreach($cids as $cid) {
+			$model->load($cid);
+			$newCids[] = $model->getId();
+		}	
+		
+		// Then update CIDs by new subscriber_id
+		if(!empty($newCids)) {
+			JRequest::setVar('cid', $newCids);
+			return parent::publish();
+		}	
+		
+		return false;
+	}
 }

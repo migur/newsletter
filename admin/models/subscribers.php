@@ -43,6 +43,7 @@ class NewsletterModelSubscribers extends MigurModelList
 				'list', 'sl.list_id',
 				'publish_up', 'a.publish_up',
 				'publish_down', 'a.publish_down',
+				'confirmed', 'a.confirmed'
 			);
 		}
 
@@ -130,16 +131,17 @@ class NewsletterModelSubscribers extends MigurModelList
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 
-		$query->select('*');
+		// SQL-query for gettting the users-subscibers list.
+		$query->select('a.*');
 		$query->from(
-			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
+			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, u.id AS user_id, s.confirmed
 			FROM #__newsletter_subscribers AS s
 			LEFT JOIN #__users AS u ON (s.user_id = u.id)
 			WHERE s.user_id = 0 OR u.id IS NOT NULL OR s.email != ""
 			
 			UNION
 
-			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
+			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, u.id AS user_id, s.confirmed
 			FROM #__newsletter_subscribers AS s
 			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS a');
 		
@@ -216,18 +218,19 @@ class NewsletterModelSubscribers extends MigurModelList
 		$query = $db->getQuery(true);
 
 		// Select the required fields from the table.
+		// SQL-query for gettting the users-subscibers list.
 		$query->select(
 			'DISTINCT a.subscriber_id AS id, a.name, a.email');
 
 		$query->from(
-			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
+			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, u.id AS user_id, s.confirmed
 			FROM #__newsletter_subscribers AS s
 			LEFT JOIN #__users AS u ON (s.user_id = u.id)
 			WHERE s.user_id = 0 OR u.id IS NOT NULL OR s.email != ""
 
 			UNION
 
-			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
+			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, u.id AS user_id, s.confirmed
 			FROM #__newsletter_subscribers AS s
 			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS a');
 		

@@ -156,31 +156,7 @@ class SubscriberHelper
 		return $db->query();
 	}
 
-	/**
-	 * Get user by email. If user is absent returns the empty object
-	 *
-	 * @param  $email - string. The user email.
-	 *
-	 * @return object
-	 * @since 1.0
-	 */
-	public static function getByEmail($email)
-	{
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('*');
-		$query->from('#__newsletter_subscribers');
-		$query->where('email="' . addslashes($email) . '"');
-		$db->setQuery($query);
-		$subscriber = $db->loadObject();
-
-		if (empty($subscriber)) {
-			$subscriber = new StdClass();
-			$subscriber->email = $email;
-		}
-		return $subscriber;
-	}
-
+	
 	/**
 	 * Get user by subscription key. If user is absent returns the empty object
 	 * Length of subscription key should be 15 characters.

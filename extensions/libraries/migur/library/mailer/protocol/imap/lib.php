@@ -197,7 +197,7 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
 	 */
 	public function getMessageHeaders($idx) 
 	{
-		return imap_header($this->_mailbox_link, $idx);
+		return @imap_header($this->_mailbox_link, $idx);
 	}
 	
 	public function setTimeout($secs) {
