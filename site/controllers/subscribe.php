@@ -239,6 +239,12 @@ class NewsletterControllerSubscribe extends JController
 			return;
 		}
 
+		// Check if the registration is disabled then 
+		// there is nothing to do.
+		if (NewsletterHelper::getParam('general_reg_disable') == '1') {
+			jexit(JText::_('COM_NEWSLETTER_REGISTRATION_IS_DISABLED'));
+		}
+		
 		// Insert into db
 		// TODO: Add santiy checks, use model instead
 		$db->setQuery("UPDATE #__newsletter_subscribers set confirmed=1 WHERE confirmed=" . $db->quote($subKey));
