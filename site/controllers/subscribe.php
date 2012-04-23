@@ -242,7 +242,9 @@ class NewsletterControllerSubscribe extends JController
 		// Check if the registration is disabled then 
 		// there is nothing to do.
 		if (NewsletterHelper::getParam('general_reg_disable') == '1') {
-			jexit(JText::_('COM_NEWSLETTER_REGISTRATION_IS_DISABLED'));
+			$message = JText::_('COM_NEWSLETTER_REGISTRATION_IS_DISABLED');
+			$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid=' . $subKey, $message, 'error');
+			return true;
 		}
 		
 		// Insert into db
