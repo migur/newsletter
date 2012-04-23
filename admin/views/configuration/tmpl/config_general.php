@@ -12,15 +12,15 @@
             </tr>
         </thead>
         <tbody>
-                <tr class="row<?php echo $i % 2; ?>">
+                <tr>
                     <td><?php echo current($items)->label; ?></td>
                     <td><?php echo current($items)->input; ?></td>
                 </tr>
-                <tr class="row<?php echo $i % 2; ?>">
+                <tr>
                     <td><?php next($items); echo current($items)->label; ?></td>
                     <td><?php echo current($items)->input; ?></td>
                 </tr>
-                <tr class="row<?php echo $i % 2; ?>">
+                <tr>
                     <td><?php next($items); echo current($items)->label; ?></td>
                     <td>
 					<?php 
@@ -35,7 +35,7 @@
 					?></td>
 					
                 </tr>
-                <tr class="row<?php echo $i % 2; ?>">
+                <tr>
                     <td><?php next($items); echo current($items)->label; ?></td>
                     <td>
 					<?php 
@@ -50,11 +50,11 @@
 					?></td>
 					
                 </tr>
-                <tr class="row<?php echo $i % 2; ?>">
+                <tr>
                     <td><?php next($items); echo current($items)->label; ?></td>
                     <td><?php echo current($items)->input; ?></td>
                 </tr>
-                <tr class="row<?php echo $i % 2; ?>">
+                <tr>
                     <td colspan="2">
 						<?php next($items); ?>
 						<?php echo current($items)->label; ?>

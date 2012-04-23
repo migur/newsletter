@@ -21,6 +21,13 @@ JLoader::import('models.entities.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, ''
 class NewsletterModelEntityNewsletter extends MigurModel
 {
 	const CATEGORY_FALLBACK = 1;
+	
+	protected $_defaults = array(
+		'params' => array(
+			'encoding' => 'utf-8')
+	);
+	
+	
 	/**
 	 * Load newsletter for sending by subscription
 	 * 
@@ -115,6 +122,18 @@ class NewsletterModelEntityNewsletter extends MigurModel
 	public function getTable($type = 'Newsletter', $prefix = 'NewsletterTable')
 	{
 		return JTable::getInstance($type, $prefix);
+	}
+	
+
+	/**
+	 * Get encoding 
+	 * 
+	 * @return type 
+	 */
+	public function getEncoding() 
+	{
+		return (!empty($this->_data->params->encoding)?
+			$this->_data->params->encoding : $this->_defaults['params']['encoding']);
 	}
 	
 }
