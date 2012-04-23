@@ -71,15 +71,16 @@
 
 		 <field name="is_ssl"
 				type="list"
-				label="COM_NEWSLETTER_SSL"
-				description="COM_NEWSLETTER_SSL"
+				label="COM_NEWSLETTER_ENCRYPT"
+				description="COM_NEWSLETTER_ENCRYPT"
 				class="inputbox validate-is_ssl"
 				default=""
 				required="true"
 				validate=""
 		>
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
+			<option value="0">COM_NEWSLETTER_NOTLS</option>
+			<option value="1">COM_NEWSLETTER_SSL</option>
+			<option value="2">COM_NEWSLETTER_TLS</option>
 		</field>
 
 

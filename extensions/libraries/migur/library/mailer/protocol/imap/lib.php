@@ -253,6 +253,7 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
     $port = 
 		$this->port . '/' . 
 		$this->service . 
+		// Option to use nothing but actualy better to use NOTLS instead
 		(($this->service_option != 'none')? '/' . $this->service_option : '') . 
 		(($this->noValidateCert)? '/novalidate-cert' : '');
 	
