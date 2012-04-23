@@ -139,7 +139,7 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		// Create subscription key. 
 		// Activation depends on activation of J!user.
 		$this->_createSubscriptionKey();
-		$this->_data->confirmed = empty($table->activation) ? 1 : $this->_data->subscription_key;
+		$this->_data->confirmed = empty($user->activation) ? 1 : $this->_data->subscription_key;
 		return parent::save();
 	}
 
@@ -196,10 +196,9 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	{
 		$data = (array) $data;
 
-		if (empty($data['user_id'])) {
-			$data['user_id'] = 0;
-		}
-
+		// Complement data...
+		// Sohuld not allow create J!user-type subscriber
+		$data['user_id'] = 0;
 		$data['created_on'] = date('Y-m-d H:i:s');
 		$data['created_by'] = JFactory::getUser()->id;
 		$data['modified_on'] = 0;

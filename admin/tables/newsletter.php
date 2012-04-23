@@ -36,6 +36,7 @@ class NewsletterTableNewsletter extends MigurJTable
 		);
 	}
 
+	
 	/**
 	 * Method to set the publishing state for a row or list of rows in the database
 	 * table.  The method respects checked out rows by other users and will attempt

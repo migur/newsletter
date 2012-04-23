@@ -176,4 +176,29 @@ class MigurJTable extends JTable
 		
 		return $this->params;
 	}	
+	
+	
+	/**
+	 * Fix some troubles with standard behavior
+	 * 
+	 * @param type $keys
+	 * @param type $reset
+	 * @return type 
+	 */
+	public function load($keys = null, $reset = true)
+	{
+		// Standard loading....
+		if(!parent::load($keys, $reset)) {
+			return false;
+		}
+		
+		// Fix trouble if "params" field exist but equals to NULL
+		if (array_key_exists('params', $this->getFields())) {
+			if (!isset($this->params)) {
+				$this->params = '{}';
+			}
+		}
+		
+		return true;
+	}
 }
