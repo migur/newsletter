@@ -22,12 +22,19 @@ defined('_JEXEC') or die;
 	</tfoot>
 
 	<tbody>
-		<tr class="row0">
+		<tr class="row1">
 			<td><a class="test-title" href="#">Subscription</a></td>
 			<td><select class="test-method"><option value="get">GET</option><option selected value="post">POST</option></td>
 			<td><input class="test-url" value="<?php echo 'index.php?option=com_newsletter&task=subscribe.subscribe'; ?>" size="60"/></td>
 			<td><input class="test-params" value="<?php echo 'newsletter-name=NameOfUser&newsletter-email=email@ofuser.com&newsletter-html=1&newsletter-lists=&fbenabled=0'; ?>" size="80" /></td>
 			<td><input class="test-other" value="<?php echo JUtility::getToken(); ?>=1" size="60" /></td>
+		</tr>
+		<tr class="row0">
+			<td><a class="test-title" href="#">Unsubscription</a></td>
+			<td><select class="test-method"><option value="get">GET</option><option selected value="post">POST</option></td>
+			<td><input class="test-url" value="<?php echo 'index.php?option=com_newsletter&task=subscribe.showunsubscribe'; ?>" size="60"/></td>
+			<td><input class="test-params" value="<?php echo 'uid=&nid='; ?>" size="80" /></td>
+			<td><input class="test-other" value="" size="60" /></td>
 		</tr>
 		<tr class="row1">
 			<td><a class="test-title" href="#">Cron.Automailing</a></td>

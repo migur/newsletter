@@ -69,7 +69,7 @@ class NewsletterControllerSubscribers extends JControllerAdmin
 		}
 		
 		
-		parent::delete();
+		return parent::delete();
 	}
 	
 	

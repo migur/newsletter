@@ -182,15 +182,10 @@ class NewsletterModelSubscriber extends JModelAdmin
 					return false;
 				}
 
-				// Delete J! User if it present
-				if ($model->user_id && !$jUser->delete($model->user_id)) {
-					$this->setError($jUser->getError());
-					return false;
-				}
-				
 				// Trigger the onContentAfterDelete event.
-				$dispatcher->trigger($this->event_after_delete, array($context, $table));
-
+				$dispatcher->trigger('onMigurAfterSubscriberDelete', array(
+					'subscriberId' => $pk));
+				
 			} else {
 				$this->setError($table->getError());
 				return false;

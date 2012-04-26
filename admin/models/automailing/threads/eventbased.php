@@ -51,6 +51,21 @@ class NewsletterAutomlailingThreadEventbased extends NewsletterAutomlailingThrea
 		$this->_series = $list;
 		return $this->_series;
 	}
+
 	
-	
+	/**
+	 * Get thread's targets
+	 * 
+	 * @return list of std objects
+	 */
+	public function getTargets() 
+	{
+		// Legacy support. Earlier target and its type placed in params
+		return 
+			array(
+				array(
+					'id'   => !empty($this->target)? $this->target : $this->params['targets']['ids'][0], 
+					'type' => !empty($this->target_type)? $this->target_type : $this->params['targets']['type']
+				));	
+	}
 }
