@@ -251,7 +251,7 @@ class NewsletterControllerList extends JControllerForm
                 $currentList,
                 $collection, 
                 array(
-                    'overwrite'      => $settings->overwrite,
+                    'overwrite' => $settings->overwrite,
                 ));
             
             if (!empty($res['errors'])) {

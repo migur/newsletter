@@ -178,6 +178,12 @@ class NewsletterModelList extends JModelAdmin
                 if(!$subscriber->isInList($listId)) {
                     if($subscriber->assignToList($listId)) {
 
+						// Fire event onMigurAfterSubscriberImport
+						JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberImport', array(
+							'subscriberId' => $subscriber->getId(),
+							'lists' => array($listId)
+						));
+						
                         $assigned++;
 
                     } else {

@@ -581,7 +581,11 @@ class NewsletterControllerCron extends JControllerForm
 		return false;
 	}
 	
-	public function automailing($mode = 'std'){
+	public function automailing($mode = 'std')
+	{
+		if ($mode == 'std') {
+			NewsletterHelper::jsonPrepare();
+		}	
 		
 		/** 
 		 * Has 3 phases:
@@ -614,9 +618,17 @@ class NewsletterControllerCron extends JControllerForm
 		
 		if (!empty($threads)) {
 			foreach($threads as $thread) {
+
+				// Create instance
+				$entity = NewsletterAutomlailingThreadCommon::factory($thread->subtype);
+				$entity->bind($thread);
+				$entity->paramsFromJson();
+				
 				// Execute the thread. "WakeUp" in other words.
 				// All functionality is incapsulated by thread. There is trigger only
-				$thread->run();
+				$entity->run();
+				
+				unset($entity);
 			}
 		}
 		

@@ -185,15 +185,27 @@ class NewsletterControllerList extends JControllerForm
 					// Need to load to add row  for j! user "on the fly"
 					$model->load($subscriberId);
 					
+					$assignedLists = array();
+					
 					foreach($lists as $listId) {
-						
-						if ($model->assignToList($listId)) {
-							$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_SUCCESS"));
-						} else {
-							$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_FAILED"), 'error');
-							break(2);
-						}
+						if(!$model->isInList($listId)) {
+							if ($model->assignToList($listId)) {
+
+								$assignedLists[] = $listId;
+								$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_SUCCESS"));
+								
+							} else {
+								$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_FAILED"), 'error');
+								break(2);
+							}
+						}	
 					}
+					
+					// Fire event onMigurAfterSubscriberAssign
+					JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberAssign', array(
+						'subscriberId' => $model->getId(),
+						'lists' => $assignedLists
+					));
 				}
 			}
 		}
@@ -207,7 +219,7 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function unbindGroup()
 	{
-		if (!$this->allowEdit($data, $key)) {
+		if (!$this->allowEdit()) {
 			$this->setError(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
 			$this->setMessage($this->getError(), 'error');
 			$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list.$this->getRedirectToListAppend(), false));
@@ -227,19 +239,32 @@ class NewsletterControllerList extends JControllerForm
 				foreach ($subscribers as $subscriberId) {
 					// Need to load to add row  for j! user "on the fly"
 					$model->load($subscriberId);
+
+					$unboundLists = array();
 					
 					foreach($lists as $listId) {
 
-						if ($model->unbindFromList($listId)) {
-							$this->setMessage(JText::_("COM_NEWSLETTER_UNBIND_SUCCESS"));
-						} else {
-							$this->setMessage(JText::_("COM_NEWSLETTER_UNBIND_FAILED"), 'error');
-							break(2);
-						}
+						if($model->isInList($listId)) {
+							if ($model->unbindFromList($listId)) {
+
+								$unboundLists[] = $listId;
+								$this->setMessage(JText::_("COM_NEWSLETTER_UNBIND_SUCCESS"));
+							} else {
+								$this->setMessage(JText::_("COM_NEWSLETTER_UNBIND_FAILED"), 'error');
+								break(2);
+							}
+						}	
 					}
+					
+					// Fire event onMigurAfterSubscriberUnbind
+					JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberUnbind', array(
+						'subscriberId' => $model->getId(),
+						'lists' => $unboundLists
+					));
 				}
 			}
 		}
+		
 		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view='.$this->view_list, false));
 	}
     

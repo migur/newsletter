@@ -33,6 +33,7 @@ try {
 	}
 	
 	// Add the helper
+	JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
@@ -43,9 +44,10 @@ try {
 	JavascriptHelper::requireTranslations();
 
 	// Load 'Migur' group of plugins
-	JPluginHelper::importPlugin('migur');
+	MigurPluginHelper::prepare();	
+	
 	$app = JFactory::getApplication();
-	$app->triggerEvent('onMigurNewsletterStart');
+	$app->triggerEvent('onMigurStart');
 
 	// Handle the messages from previous requests
 	$sess = JFactory::getSession();
@@ -79,7 +81,7 @@ try {
 	$controller->execute(JRequest::getCmd('task'));
 
 	// Trigger events after exacution
-	$app->triggerEvent('onMigurNewsletterEnd');
+	$app->triggerEvent('onMigurShoutdown');
 
 	// Redirect if set by the controller
 	$controller->redirect();

@@ -49,14 +49,7 @@ defined('_JEXEC') or die;
 			<fieldset>
 				<legend><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></legend>
 				<div id="lists-container">
-					<?php 
-						if ($this->automailing->automailing_type == 'scheduled') {
-							echo $this->loadTemplate('targets', ''); 
-						} else { ?>
-							<div style="padding:50px 20px; text-align: center; font-weight: bold;">
-								<?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_TARGET_'.  strtoupper($this->automailing->automailing_event)); ?>
-							</div>	
-					<?php }	?>
+					<?php echo $this->loadTemplate('targets', ''); ?>
 				</div>	
 			</fieldset>
 		</td>

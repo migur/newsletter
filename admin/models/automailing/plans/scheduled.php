@@ -47,6 +47,9 @@ class NewsletterAutomlailingPlanScheduled extends NewsletterAutomlailingPlanComm
 		
 		/** Change the status of a plan
 		 Increment the counter of executions */
+		if (empty($this->params['execsCount'])) {
+			$this->params['execsCount'] = 0;
+		}
 		$this->params['execsCount']++;
 		
 		$this->automailing_state = 1;
@@ -79,14 +82,11 @@ class NewsletterAutomlailingPlanScheduled extends NewsletterAutomlailingPlanComm
 			'type'      => 'automail',
 			'subtype'   => 'scheduled',
 			'resource'  => null,
+			'target_type' => $targets[0]->target_type,
 			'params'    => array(
 				'step'      => 0, 
-				'timeCreated' => mktime(),
-				'targets'   => array(
-					'type' => $targets[0]->target_type,
-					'ids'  => $targetIds
-				)
-		)));
+				'timeCreated' => mktime())
+		));
 		
 		return $thread;
 	}

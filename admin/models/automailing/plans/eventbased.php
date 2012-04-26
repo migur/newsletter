@@ -26,6 +26,7 @@ class NewsletterAutomlailingPlanEventbased extends NewsletterAutomlailingPlanCom
 	 */
 	public function start()
 	{
+		
 		/** Create thread and start it! */
 		$thread = $this->createThread();
 
@@ -49,20 +50,20 @@ class NewsletterAutomlailingPlanEventbased extends NewsletterAutomlailingPlanCom
 			throw new Exception('Cant create chread. Type or id is empty.');
 		} 
 
-		// Creates new thread
+		
+		
+		// Create new thread
 		$thread = new NewsletterAutomlailingThreadEventbased();
 		$thread->save(array(
 			'parent_id' => $this->automailing_id,
 			'type'      => 'automail',
 			'subtype'   => 'eventbased',
 			'resource'  => null,
+			'target'    => $options['targets']['ids'][0],
+			'target_type'=> $options['targets']['type'],
 			'params'    => array(
-				'step'      => 0,
-				'timeCreated' => mktime(),
-				'targets'   => array(
-					'type' => $options['targets']['type'],
-					'ids'  => $options['targets']['ids']
-				)
+				'step'  => 0,
+				'timeCreated' => mktime()				
 		)));
 		
 		return $thread;

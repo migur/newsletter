@@ -92,4 +92,28 @@ class NewsletterModelAutomailing extends JModelAdmin
 		
 		return parent::save($data);
 	}
+	
+	
+	/**
+	 * Method to delete one or more records.
+	 *
+	 * @param   array  &$pks  An array of record primary keys.
+	 *
+	 * @return  boolean  True if successful, false if an error occurs.
+	 *
+	 * @since   11.1
+	 */
+	public function delete(&$pks)
+	{
+		if (!parent::delete($pks)) {
+			return false;
+		}
+		
+		// Deletes all related threads as well
+		$dbo = JFactory::getDbo();
+		$dbo->setQuery(
+			'DELETE FROM #__newsletter_threads WHERE ' .
+			'type="automail" AND parent_id IN(' . implode(',', $pks) . ')');
+		return $dbo->query();
+	}
 }

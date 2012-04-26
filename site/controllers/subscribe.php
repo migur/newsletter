@@ -13,7 +13,6 @@ defined('_JEXEC') or die('Restricted access');
 JLoader::import('helpers.placeholder', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.data', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('models.automailing.manager', JPATH_COMPONENT_ADMINISTRATOR, '');
 jimport('migur.library.mailer');
 
 /*
@@ -162,13 +161,14 @@ class NewsletterControllerSubscribe extends JController
 		}
 
 
-		// Triggering the automailing process.
-		$amManager = new NewsletterAutomailingManager();
-		$amManager->processSubscription(array(
-			'subscriberId' => $subscriber->subscriber_id
-		));
-
-
+		$data = array(
+			'subscriberId' => $subscriber->subscriber_id,
+			'lists' => $assignedListsIds);
+		
+		// Triggering the subscribed plugins.
+		// Process automailing via internal plugin plgMigurAutomail
+		JFactory::getApplication()->triggerEvent('onMigurAfterSubscribe', $data);
+		
 		// If subscriber is confirmed then no need to send emails.
 		$message = JText::sprintf('Thank you %s for subscribing to our Newsletter!', $name);
 
@@ -339,6 +339,13 @@ class NewsletterControllerSubscribe extends JController
 			}
 
 			$app->triggerEvent(
+				'onMigurBeforeUnsubscribe', array(
+				'subscriber' => $subscriber,
+				'lists' => $lists
+			));
+			
+			// Legacy event
+			$app->triggerEvent(
 				'onMigurNewsletterBeforeUnsubscribe', array(
 				'subscriber' => $subscriber,
 				'lists' => $lists
@@ -366,14 +373,16 @@ class NewsletterControllerSubscribe extends JController
 				$res = $db->query();
 			}
 
-			// Process automailing unsubscription
-			$amManager = new NewsletterAutomailingManager();
-			$amManager->processUnsubscription(array(
-				'subscriberId' => (int) $subscriber->subscriber_id));
-
+			
+			// Triggering plugins.
+			// Process automailing via internal plugin plgMigurAutomail
+			JFactory::getApplication()->triggerEvent('onMigurUnsubscribe', array(
+				'subscriberId' => (int) $subscriber->subscriber_id,
+				'lists' => $lists));
+			
 			$app->triggerEvent(
-				'onMigurNewsletterAfterUnsubscribe', array(
-				'subscriber' => $subscriber,
+				'onMigurAfterUnsubscribe', array(
+				'subscriberId' => $subscriber->subscriber_id,
 				'lists' => $lists,
 				'result' => $res
 			));

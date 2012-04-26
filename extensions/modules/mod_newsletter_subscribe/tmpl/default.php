@@ -8,6 +8,8 @@
 // no direct access
 defined('_JEXEC') or die; ?>
 
+<? if (!empty($list)) { ?>
+
 <?php if ($showFb) { ?>
 	<div id="fb-root"></div>
 	<script src="http://connect.facebook.net/en_US/all.js"></script>
@@ -80,7 +82,7 @@ defined('_JEXEC') or die; ?>
 			<?php } else { ?>
 				<div>
 					<?php echo JText::_('MOD_NEWSLETTER_LIST_TO_SUBSCRIBE'); ?><br>
-					<b><?php echo $list[0]->text; ?></b>
+					<b><?php echo !empty($list[0]->text)? $list[0]->text : ''; ?></b>
 				</div>
 				<input name="newsletter-lists[]" type="hidden" value="<?php echo $list[0]->value; ?>" />
 			<?php } ?>
@@ -124,3 +126,9 @@ defined('_JEXEC') or die; ?>
 	migurName = "<?php echo $userName; ?>";
 	migurEmail = "<?php echo $userEmail; ?>";
 </script>
+
+<?php } else { ?>
+
+	<span><?php echo JText::_('MOD_NEWSLETTER_SUBSCRIBE_NO_LISTS_TO_SUBSCRIBE'); ?></span>
+	
+<?php } ?>
