@@ -12,7 +12,9 @@ try {
 				'name' : 'jform[automailing_event]'
 			}));
 
-		$("jform_automailing_event").setProperty('disabled', true);
+		if ($("jform_automailing_event")) {
+			$("jform_automailing_event").setProperty('disabled', true);
+		}	
 	}
 	
 
@@ -63,8 +65,19 @@ try {
 		return false;
 	});
 	
+	if($$('#jform_scope input').length > 0) {
 	
-	
+		$$('#jform_scope input').addEvent('click', function(){
+			var value = $(this).get('value');
+			$('scope-container').setStyle('display', (value=='all')? 'none' : 'block');
+			$('jf_scope').set('value', value);
+		});
+
+		var checked = $('jform_scope0').getProperty('checked')
+		$('scope-container').setStyle('display', checked? 'none' : 'block');
+	}
+
+
 } catch(e) {
 	console.log(e);
 }	

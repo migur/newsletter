@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterTableAutomailing extends JTable
+class NewsletterTableAutomailing extends MigurJTable
 {
 	/**
 	 * The constructor of a class.

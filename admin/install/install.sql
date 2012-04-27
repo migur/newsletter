@@ -266,6 +266,7 @@ CREATE TABLE `#__newsletter_automailings` (
   `automailing_type` ENUM('scheduled','eventbased') DEFAULT NULL,
   `automailing_event` ENUM('date','subscription') DEFAULT NULL,
   `automailing_state` INT(11) DEFAULT NULL,
+  `scope` ENUM('all','targets') DEFAULT NULL,
   `params` TEXT,
 
   PRIMARY KEY (`automailing_id`)

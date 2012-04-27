@@ -122,3 +122,11 @@ input.inputbox {
 #automailing-wrapper {
 	margin:10px 10px 0 0;
 }
+
+#jform_scope label {
+	width: 200px;
+}
+
+#jform_scope input {
+	clear: left;
+}

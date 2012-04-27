@@ -23,9 +23,13 @@
 			<td>
 				<div id="am-targets">
 					<?php
-						foreach($this->automailingTargets->items as &$list) { ?>
-							<span><?php echo $this->escape($list->name); ?></span>
-						<?php } ?>
+						if ($this->automailing->scope != 'all') {
+							foreach($this->automailingTargets->items as &$list) { ?>
+								<span><?php echo $this->escape($list->name); ?></span>
+							<?php } ?>
+						<?php } else { ?>
+							<span><?php echo JText::_('COM_NEWSLETTER_FOR_ANY_SUBSCRIBER'); ?></span>
+						<?php } ?>	
 				</div>					
 			</td>
 		</tr>	

@@ -190,9 +190,10 @@ class NewsletterAutomailingManager
 		}
 
 		if (!empty($lists)) {
-			$query->join('', '#__newsletter_automailing_targets AS t ON a.automailing_id = t.automailing_id');
-			$query->where('t.target_type = "list"');
-			$query->where('t.target_id IN ("' . implode('","', $lists) . '")');
+			$query->join('LEFT', '#__newsletter_automailing_targets AS t ON a.automailing_id = t.automailing_id');
+			$query->where('(a.scope="all" OR ' . 
+				'(t.target_type = "list" AND t.target_id IN ("' . implode('","', $lists) . '")))'
+			);
 		}
 		
 		$dbo->setQuery($query);
@@ -219,7 +220,6 @@ class NewsletterAutomailingManager
 		$query = $dbo->getQuery(true);
 		$query->select('DISTINCT t.*')
 			  ->from('#__newsletter_threads AS t')
-			  ->join('','#__newsletter_automailing_targets AS a ON a.automailing_id=t.parent_id')
 			  ->where('type="automail"');
 		$dbo->setQuery($query);
 		return $dbo->loadObjectList();
