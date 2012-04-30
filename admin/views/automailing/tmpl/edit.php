@@ -26,6 +26,8 @@ defined('_JEXEC') or die;
 						<?php echo $this->form->getInput('automailing_event'); ?>
 					</div>
 				</div>	
+				
+				<input type="hidden" id="jf_scope" name="jform[scope]" value="<?php echo  ($this->automailing->automailing_type == "scheduled")? 'targets' : $this->form->getField('scope')->value; ?>">
 					
 				<input type="hidden" name="task" value="" />
 				<?php echo $this->form->getInput('automailing_type'); ?>
@@ -41,7 +43,11 @@ defined('_JEXEC') or die;
 			<fieldset>
 				<legend><?php echo JText::_('COM_NEWSLETTER_SERIES'); ?></legend>	
 				<div id="series-container">
-					<?php echo $this->loadTemplate('series', ''); ?>
+					<?php 
+						$type = ($this->automailing->automailing_type == "scheduled")?
+							'series-scheduled' : 'series-eventbased';
+						echo $this->loadTemplate($type, ''); 
+					?>
 				</div>	
 			</fieldset>
 		</td>
@@ -50,13 +56,10 @@ defined('_JEXEC') or die;
 				<legend><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></legend>
 				<div id="lists-container">
 					<?php 
-						if ($this->automailing->automailing_type == 'scheduled') {
-							echo $this->loadTemplate('targets', ''); 
-						} else { ?>
-							<div style="padding:50px 20px; text-align: center; font-weight: bold;">
-								<?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_TARGET_'.  strtoupper($this->automailing->automailing_event)); ?>
-							</div>	
-					<?php }	?>
+						$type = ($this->automailing->automailing_type == "scheduled")?
+							'targets-scheduled' : 'targets-eventbased';
+						echo $this->loadTemplate($type, ''); 
+					?>
 				</div>	
 			</fieldset>
 		</td>

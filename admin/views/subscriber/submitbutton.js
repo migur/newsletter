@@ -40,32 +40,3 @@ Joomla.submitbutton = function(task, form)
 		}
 	}
 }
-
-/*
-window.addEvent('domready', function() {
-    var ssForm = {};
-    ssForm.jformName = {
-        initValue: $('jform_name').get('value')
-    };
-    ssForm.jformEmail = {
-        initValue: $('jform_email').get('value')
-    };
-
-    ssForm.submitManager = function () {
-        // the passed event parameter is already an instance of the Event class.
-        var name  = ($('subscriber-form').getElementById('jform_name').get('value') != ssForm.jformName.initValue);
-        var email = ($('subscriber-form').getElementById('jform_email').get('value') != ssForm.jformEmail.initValue);
-
-        if (name || email) {
-            $('subscriber-form').getElementById('subscriber-save')
-                .set('class', 'submit-changes');
-        } else {
-            $('subscriber-form').getElementById('subscriber-save')
-                .erase('class', 'submit-changes');
-        }
-    }
-
-    $('subscriber-form').getElementById('jform_name').addEvent('keyup', ssForm.submitManager);
-    $('subscriber-form').getElementById('jform_email').addEvent('keyup', ssForm.submitManager);
-});
-*/

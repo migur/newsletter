@@ -23,6 +23,7 @@ jimport('migur.migur');
 jimport('joomla.error.log');
 
 // Add the helper
+JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.log', JPATH_COMPONENT_ADMINISTRATOR, '');
@@ -56,15 +57,15 @@ $controller = JController::getInstance('Newsletter');
 // Add translations used in JavaScript
 JavascriptHelper::requireTranslations();
 
-// Load 'Migur' group of plugins
-JPluginHelper::importPlugin('migur');
+MigurPluginHelper::prepare();
+
 $app = JFactory::getApplication();
-$app->triggerEvent('onMigurNewsletterStart');
+$app->triggerEvent('onMigurStart');
 
 // Perform the Request task
 $controller->execute(JRequest::getCmd('task'));
 
-$app->triggerEvent('onMigurNewsletterEnd');
+$app->triggerEvent('onMigurShoutdown');
 
 // Redirect if set by the controller
 $controller->redirect();

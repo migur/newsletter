@@ -200,7 +200,7 @@ class NewsletterHelper
 	 * @param  string $alias assumed alias
 	 * @return string alias should been used
 	 */
-	public function getFreeAlias($alias)
+	public function getFreeAlias($alias, $ownNid = null)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -209,6 +209,9 @@ class NewsletterHelper
 		$query->select('*');
 		$query->from('#__newsletter_newsletters AS a');
 		$query->where("alias LIKE '" . addslashes($alias) . "%'");
+		if (!empty($ownNid)) {
+			$query->where("newsletter_id <> " . (int)$ownNid);
+		}
 
 		$db->setQuery($query);
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
@@ -225,12 +228,33 @@ class NewsletterHelper
 		}
 
 		// Find unused alias...
-		for ($i = 1; $i < 100000; $i++) {
-			if(!in_array($alias.$i, $aliases)) {
-				return $alias.$i;
+		for ($i = 2; $i < 100000; $i++) {
+			$supposed = $alias.'-'.$i;
+			if(!in_array($supposed, $aliases)) {
+				return $supposed;
 			}
 		}
 	}
+
+	
+	/**
+	 * Create alias for newsletter.
+	 *
+	 * @param  string $alias assumed alias
+	 * @return string alias should been used
+	 */
+	public function createAlias($name = '', $ownNid = null)
+	{
+		if (empty($name)) {
+			$alias = 'newsletter';
+		} else {
+			// Create alias by modyfiing newsletter's name
+			$alias = strtolower(preg_replace('/[^a-zA-Z0-9\-]+/', '-', $name));
+		}
+		
+		return self::getFreeAlias($alias, $ownNid);
+	}
+
 	
 	/**
 	 * Get first unused alias.
@@ -246,7 +270,7 @@ class NewsletterHelper
 		// Select the required fields from the table.
 		$query->select('*');
 		$query->from('#__newsletter_newsletters AS a');
-		$query->where("alias='" . addslashes($alias) . "'");
+		$query->where("alias=" . $db->quote($alias));
 		$db->setQuery($query);
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
  		return $db->loadAssoc();
@@ -369,19 +393,33 @@ class NewsletterHelper
 	}
 
 	
+	/**
+	 * Just SILENTLY start buffering.
+	 * No matter if it will fail.
+	 */
+	static public function jsonPrepare() 
+	{
+		@ob_start();
+	}
+	
 	
 	/**
-	 * Assumes that this is complete server response.
+	 * Echoes the JSON responce to client.
+	 * Collect all output data from buffers and attaches it
+	 * to the response as a parameter "serverResponse".
 	 * 
 	 * @param boolean $status The status of a responce
 	 * @param string $message Text of returned messages
 	 * @param type $data
 	 * @param type $exit 
 	 */
-	static public function jsonResponse($status, $messages = array(), $data = null, $exit = true) {
-		
-		$serverResponse = ob_get_contents();
-		ob_end_clean();
+	static public function jsonResponse($status, $messages = array(), $data = null, $exit = true) 
+	{
+		$serverResponse = ''; $i=0;
+		do {
+			$serverResponse .= ob_get_contents();
+			$i++; // Make sure that it's not neverended cycle
+		} while(@ob_end_clean() && $i < 10);
 		
 		if (!is_array($messages) && !is_object($messages)) {
 			$messages = array($messages);
@@ -396,7 +434,6 @@ class NewsletterHelper
 			'serverResponse' => htmlentities($serverResponse)
 		));
 		
-		ob_start();
 		jexit();
 	}
 

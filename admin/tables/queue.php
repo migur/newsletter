@@ -96,29 +96,5 @@ class NewsletterTableQueue extends JTable
 		}
 		return count($this->getErrors()) == 0;
 	}
-
-	
-	public function setBounced($sid, $nid)
-	{
-		if (empty($sid)) {
-			return false;
-		}
-
-		$this->load(array(
-			'subscriber_id' => $sid,
-			'newsletter_id' => $nid
-		));
-
-		if (empty($this->queue_id)) {
-			return false;
-		}
-
-		return $this->save(array(
-			'subscriber_id' => $sid,
-			'newsletter_id' => $nid,
-			'state' => NewsletterTableQueue::STATE_BOUNCED,
-			'date' => date('Y-m-d H:i:s')
-		));
-	}	
 }
 

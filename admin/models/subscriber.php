@@ -64,15 +64,9 @@ class NewsletterModelSubscriber extends JModelAdmin
 			return false;
 		}
 
-		// User is exsit. 
-		// No need to work with its type
-		if (!empty($data['subscriber_id'])) {
-			$form->removeField('type');
-			unset($data['type']);
-		}
-		
-		if (!empty($data)) {
-			$form->bind($data);
+		if($form->getValue('user_id') > 0) {
+			$form->setFieldAttribute('name', 'readonly', 'true');
+			$form->setFieldAttribute('email', 'readonly', 'true');
 		}
 		return $form;
 	}
@@ -188,15 +182,10 @@ class NewsletterModelSubscriber extends JModelAdmin
 					return false;
 				}
 
-				// Delete J! User if it present
-				if ($model->user_id && !$jUser->delete($model->user_id)) {
-					$this->setError($jUser->getError());
-					return false;
-				}
-				
 				// Trigger the onContentAfterDelete event.
-				$dispatcher->trigger($this->event_after_delete, array($context, $table));
-
+				$dispatcher->trigger('onMigurAfterSubscriberDelete', array(
+					'subscriberId' => $pk));
+				
 			} else {
 				$this->setError($table->getError());
 				return false;

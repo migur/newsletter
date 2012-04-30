@@ -23,12 +23,14 @@
 			<td>
 				<div id="am-targets">
 					<?php
-						if ($this->automailing->automailing_type == 'scheduled') {
+						if ($this->automailing->scope != 'all') {
 							foreach($this->automailingTargets->items as &$list) { ?>
-									<span><?php echo $this->escape($list->name); ?></span>
-						<?php } } else { ?>
-								<?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_TARGET_COMPACT_'.  strtoupper($this->automailing->automailing_event)); ?>
-					<?php }	?>
+								<span><?php echo $this->escape($list->name); ?></span>
+							<?php } ?>
+						<?php } else { ?>
+							<span><?php echo JText::_('COM_NEWSLETTER_FOR_ANY_SUBSCRIBER'); ?></span>
+						<?php } ?>	
+				</div>					
 			</td>
 		</tr>	
 	</table>	

@@ -20,6 +20,18 @@
             class="inputbox validate-automailing-name"
             required="true"
 		/>
+
+		<field
+			type="radio"
+			name="scope"
+			default="all"
+			label="COM_NEWSLETTER_SELECT_SCOPE"
+			description="COM_NEWSLETTER_SELECT_SCOPE"
+			class="inputbox validate-scope"
+		>
+			<option value="all">COM_NEWSLETTER_FOR_ALL_SUBSCRIBERS</option>
+			<option value="targets">COM_NEWSLETTER_FOR_SUBSCRIBERS_FROM_LISTS</option>
+		</field>	
 		
         <field name="automailing_type" type="hidden" />
 		

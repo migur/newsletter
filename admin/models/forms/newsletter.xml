@@ -9,8 +9,18 @@
 			size="100"
 			default=""
 			required="true"
-                        validate=""
 		 />
+		<field name="alias"
+			type="text"
+			label="COM_NEWSLETTER_ALIAS"
+			description="COM_NEWSLETTER_ALIAS"
+			class="inputbox validate-alias autosaverable"
+			size="100"
+			default=""
+			unique="true"
+			validate="alias"
+		 />
+		 
 		<field name="subject"
 			type="text"
 			label="COM_NEWSLETTER_SUBJECT"
@@ -136,7 +146,6 @@
 		 />
 
 		 <field name="t_style_id" type="hidden" required="true"/>
-		 <field name="alias" type="hidden" />
 		 <field name="newsletter_id" type="hidden" />
 	</fieldset>
 </form>

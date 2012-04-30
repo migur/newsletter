@@ -193,7 +193,6 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function import()
 	{
-		$type        = JRequest::getString('subscriber_type', 'migur');
 		$subtask     = JRequest::getString('subtask', '');
 		$currentList = JRequest::getInt('list_id', '0');
 		
@@ -252,8 +251,7 @@ class NewsletterControllerList extends JControllerForm
                 $currentList,
                 $collection, 
                 array(
-                    'overwrite'      => $settings->overwrite,
-                    'subscriberType' => $type
+                    'overwrite' => $settings->overwrite,
                 ));
             
             if (!empty($res['errors'])) {

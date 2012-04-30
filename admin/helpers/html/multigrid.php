@@ -229,6 +229,31 @@ abstract class JHtmlMultigrid
 		return $html;
 	}
 
+	/**
+	 * Builds a list of options based on lists array
+	 *
+	 * @param <type> $value
+	 * @param <type> $i 
+	 * @param <type> $img1
+	 * @param <type> $img0
+	 * @param <type> $prefix
+	 * @param <type> $form - name of form
+	 *
+	 * @return string
+	 * @since 1.0
+	 */
+	static function confirmed($value, $i, $img1 = 'tick.png', $img0 = 'publish_x.png', $prefix='', $form = null)
+	{
+		$img = ($value == 1? $img1 : $img0);
+		$alt = $value ? JText::_('COM_NEWSLETTER_CONFIRMED') : JText::_('COM_NEWSLETTER_UNCONFIRMED');
+
+		$html = 
+			'<a href="javascript:void(0);">' .
+				JHTML::_('image', 'admin/' . $img, $alt, array('border' => 0), true) . 
+			'</a>';
+
+		return $html;
+	}
 	
 	static function renderObject($data, $level = 0, $color = 'black') 
 	{

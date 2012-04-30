@@ -53,14 +53,17 @@
 				<th class="left">
 					<?php echo JHtml::_('multigrid.sort', 'JGLOBAL_EMAIL', 'a.email', $this->subscribers->listDirn, $this->subscribers->listOrder, null, null, 'subscribersForm'); ?>
 				</th>
-				<th width="15%" class="left">
-					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ACTIVATED', 'a.state', $this->subscribers->listDirn, $this->subscribers->listOrder, NULL, 'desc', 'subscribersForm'); ?>
+				<th width="8%" class="left">
+					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ENABLED', 'a.state', $this->subscribers->listDirn, $this->subscribers->listOrder, NULL, 'desc', 'subscribersForm'); ?>
+				</th>
+				<th width="8%" class="left">
+					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ACTIVATED', 'a.confirmed', $this->subscribers->listDirn, $this->subscribers->listOrder, NULL, 'desc', 'subscribersForm'); ?>
 				</th>
 			</tr>
 		</thead>
 		<tfoot>
 			<tr>
-				<td class="left" colspan="4">
+				<td class="left" colspan="5">
 					<?php echo $this->subscribers->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -89,6 +92,9 @@
 				</td>
 				<td class="center">
 					<?php echo JHtml::_('multigrid.enabled', $subscriber->state, $i, 'tick.png', 'publish_x.png', 'subscribers.', 'subscribersForm'); ?>
+				</td>
+				<td class="center">
+					<?php echo JHtml::_('multigrid.confirmed', $subscriber->confirmed, $i, 'tick.png', 'publish_x.png', 'subscribers.', 'subscribersForm'); ?>
 				</td>
 			</tr>
 			<?php endforeach; ?>

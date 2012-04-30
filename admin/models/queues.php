@@ -55,21 +55,14 @@ class NewsletterModelQueues extends JModelList
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 
+		
 		// Select the required fields from the table.
-		$query->select('q.*, n.name AS newsletter_name, s.email AS subscriber_email, s.name AS subscriber_name');
+		$query->select('q.*, n.name AS newsletter_name, COALESCE(u.email, s.email) AS subscriber_email, COALESCE(u.name, s.name) AS subscriber_name');
 		$query->from('`#__newsletter_queue` AS q');
 		$query->join('left', '`#__newsletter_newsletters` AS n ON n.newsletter_id = q.newsletter_id');
-		$query->join('left',
-			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
-			FROM #__newsletter_subscribers AS s
-			LEFT JOIN #__users AS u ON (s.user_id = u.id)
-			WHERE s.user_id = 0 OR u.id IS NOT NULL OR s.email != ""
-
-			UNION
-
-			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(IF(u.block IS NULL, NULL, 1-u.block), s.state) AS state, u.id AS user_id
-			FROM #__newsletter_subscribers AS s
-			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS s ON s.subscriber_id = q.subscriber_id');
+		// SQL-query for gettting the users-subscibers list.
+		$query->join('left', '`#__newsletter_subscribers` AS s ON s.subscriber_id = q.subscriber_id');
+		$query->join('left', '`#__users` AS u ON s.user_id = u.id');
 
 		// Filtering the data
 		if (!empty($this->filtering)) {
@@ -99,7 +92,7 @@ class NewsletterModelQueues extends JModelList
 		$orderDirn = $this->state->get('list.direction');
 		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
 
-		//echo nl2br(str_replace('#__','jos_',$query));
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		return $query;
 	}
 
@@ -169,9 +162,11 @@ class NewsletterModelQueues extends JModelList
 	 * @param type $id
 	 * @return type 
 	 */
-	public function getUnsentSidNidBySmtp($id, $limit = 0) 
+	public function getListToSend($options) 
 	{
-
+		$id = $options['smtpProfileId'];
+		$limit = $options['limit'];
+		
 		$smtpModel = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$smtpModel->load($id);
 		
@@ -181,7 +176,17 @@ class NewsletterModelQueues extends JModelList
 		$query->select('DISTINCT q.newsletter_id, q.subscriber_id');
 		$query->from('`#__newsletter_queue` AS q');
 		$query->join('left', '`#__newsletter_newsletters` AS n ON n.newsletter_id = q.newsletter_id');
-
+		$query->join('left', '`#__newsletter_lists` AS l ON l.list_id = q.list_id');
+		$query->where('(l.state IS NULL OR l.state = 1)');
+		
+		//  Add filter to cut off unconfirmed users. (subscribers.confirm)
+		if ($options['skipUnconfirmed']) {
+			$query->join('left', '`#__newsletter_subscribers` AS s ON s.subscriber_id = q.subscriber_id');
+			$query->join('left', '`#__users` AS u ON u.id = s.user_id');
+			$query->where('s.confirmed = 1');
+			$query->where('s.state = 1');
+		}	
+			
 		$and = 'n.smtp_profile_id='.(int)$id;
 		
 		if ($smtpModel->isDefaultProfile()) {
@@ -194,6 +199,7 @@ class NewsletterModelQueues extends JModelList
 		}
 		
 		$query->where('q.state=1 AND ('. $and .')');
+		//echo str_replace('#__','jos_',$query); die;
 		$db->setQuery($query, 0, $limit);
 		
 		return $db->loadObjectList();
@@ -229,4 +235,47 @@ class NewsletterModelQueues extends JModelList
 		$db->setQuery($query);
 		return $db->loadObjectList();
 	}
+	
+	
+	/**
+	 * Set bounced ALL queue items with folowing $sid, $nid
+	 * 
+	 * @param type $sid
+	 * @param type $nid
+	 * @return type 
+	 */
+	public function setBounced($sid, $nid)
+	{
+		if (empty($sid) || empty($nid)) {
+			return false;
+		}
+
+		$dbo = JFactory::getDbo();
+		$dbo->setQuery(
+			'UPDATE `#__newsletter_queue` '.
+			'SET `state` = '.NewsletterTableQueue::STATE_BOUNCED.' '.
+			'WHERE `subscriber_id` = '.(int)$sid.' '.
+			'AND `newsletter_id` = '.(int)$nid
+		);
+
+		//echo $dbo->getQuery(); die; 
+		return $dbo->query();
+	}
+	
+	
+	public function getSummary()
+	{
+		$dbo = JFactory::getDbo();
+		$query = $dbo->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('newsletter_id, SUM(CASE WHEN state=1 THEN 1 ELSE 0 END) AS to_send, SUM(CASE WHEN state=1 THEN 0 ELSE 1 END) AS sent, COUNT(*) AS total');
+		$query->from('(SELECT DISTINCT newsletter_id, subscriber_id, state FROM #__newsletter_queue) AS q');
+		$query->group('newsletter_id');
+		
+		//echo nl2br(str_replace('#__','jos_',$query->__toString())); die;
+		$data = $dbo->setQuery($query)->loadAssocList();
+		return $data;
+	}
+	
 }

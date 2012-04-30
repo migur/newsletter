@@ -19,7 +19,9 @@ defined('_JEXEC') or die;
 class NewsletterAutomlailingThreadCommon extends MigurJTable
 {
 	public $_series = null;
-	
+
+	public $_targets = null;
+
 	public function __construct($data = array()) {
 		
 		$data = (array)$data;
@@ -32,6 +34,12 @@ class NewsletterAutomlailingThreadCommon extends MigurJTable
 		}
 	}
 
+	
+	/**
+	 * Handle thread. Main entry point. All actions starts here.
+	 * 
+	 * @return type 
+	 */
 	public function run()
 	{
 		$series = $this->getSeries();
@@ -104,23 +112,26 @@ class NewsletterAutomlailingThreadCommon extends MigurJTable
 		}
 		
 		$sents = 0;
-		foreach($this->params['targets']['ids'] as $id) {
-
-			$list = $this->_getTargetItems($id);
-			foreach($list as $sid) {
+		
+		if (!$this->_targets) {
 			
-				$queue = JTable::getInstance('Queue', 'NewsletterTable');
-				$queue->save(array(
-					'newsletter_id' => $serie->newsletter_id,
-					'subscriber_id' => $sid,
-					'list_id'       => 0,
-					'created'       => date('Y-m-d H:i:s'),
-					'state'			=> 1
-				));
-				unset($queue);
-				
-				$sents++;
-			}
+		}
+		
+		$list = $this->getTargetItems();
+		
+		foreach($list as $sid) {
+			
+			$queue = JTable::getInstance('Queue', 'NewsletterTable');
+			$queue->save(array(
+				'newsletter_id' => $serie->newsletter_id,
+				'subscriber_id' => $sid,
+				'list_id'       => 0,
+				'created'       => date('Y-m-d H:i:s'),
+				'state'			=> 1
+			));
+			unset($queue);
+
+			$sents++;
 		}
 		
 		// Update the count of sent items and state of Item
@@ -136,26 +147,42 @@ class NewsletterAutomlailingThreadCommon extends MigurJTable
 	/**
 	 * Get list of subscriber ids depends on type of a target
 	 * 
-	 * @param int $id
+	 * @param array array('id' => $id, 'type' => $type)
 	 * 
 	 * @return array list of subscriber ids
 	 */
-	public function _getTargetItems($id)
+	public function getTargetItems()
 	{
-		if ($this->params['targets']['type'] == 'subscriber') {
-			return array($id);
+		if (!empty($this->_targets)) {
+			return $this->_targets;
 		}
 		
-		if ($this->params['targets']['type'] == 'list') {
-			
-			$dbo = JFactory::getDbo();
-			$query = $dbo->getQuery(true);
-			$query->select('subscriber_id')
-				  ->from('#__newsletter_sub_list')
-				  ->where('list_id = '.(int)$id);
-			$dbo->setQUery($query);
-			return $dbo->loadAssocList(null, 'subscriber_id');
-		}
+		// Let client code provide us the items
+		$targets = $this->getTargets();
+
+		$this->_targets = array();
+		
+		foreach($targets as $item) {
+		
+			if ($item['type'] == 'subscriber') {
+				$this->_targets = array_merge($this->_targets, array($item['id']));
+			}
+
+			if ($item['type'] == 'list') {
+
+				$dbo = JFactory::getDbo();
+				$query = $dbo->getQuery(true);
+				$query->select('subscriber_id')
+					  ->from('#__newsletter_sub_list')
+					  ->where('list_id = '.(int)$item['id']);
+				$dbo->setQUery($query);
+				$res = (array) $dbo->loadAssocList(null, 'subscriber_id');
+				
+				$this->_targets = array_merge($this->_targets, $res);
+			}
+		}		
+		
+		return $this->_targets;	
 	}
 	
 	

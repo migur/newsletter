@@ -25,12 +25,6 @@ defined('_JEXEC') or die;
         <dd>
             <?php echo $this->ssForm->getInput('html'); ?>
         </dd>
-        <dt style="width:140px">
-            <?php echo $this->ssForm->getLabel('type'); ?>
-        </dt>
-        <dd>
-            <?php echo $this->ssForm->getInput('type'); ?>
-        </dd>
     </dl>
 
 

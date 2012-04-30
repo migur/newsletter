@@ -24,7 +24,7 @@ class NewsletterControllerAutomailing extends JControllerForm
 	function save()
 	{
 		$aid = JRequest::getInt('automailing_id');
-		
+
 		$isNew = empty($aid);
 		JRequest::setVar('layout', (($isNew)? 'default' : 'edit'));
 

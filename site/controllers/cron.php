@@ -106,9 +106,13 @@ class NewsletterControllerCron extends JControllerForm
 	 */
 	public function mailing($mode = 'std')
 	{
-		LogHelper::addDebug('Mailing started', 'mailing');
+		if ($mode == 'std') {
+			NewsletterHelper::jsonPrepare();
+		}
+
+		$forced = JRequest::getBool('forced', false);
 		
-		ob_start();
+		LogHelper::addDebug('Mailing started', 'mailing');
 
 		$config   = JComponentHelper::getParams('com_newsletter');
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
@@ -137,9 +141,10 @@ class NewsletterControllerCron extends JControllerForm
 					'data' => array(),
 					'error' => '');
 
-				// Need to send notice if system cannot send the requiered count of 
+				// Need to notice if system cannot send the requiered count of 
 				// letters for mailing interval.
-				if ($smtpProfile->isNeedNewPeriod() && $smtpProfile->needToSendCount() > 0) {
+				// In case if it is not FORCED.
+				if (!$forced && $smtpProfile->isNeedNewPeriod() && $smtpProfile->needToSendCount() > 0) {
 					LogHelper::addMessage(
 						JText::_('COM_NEWSLETTER_SENDING_INTERVAL_TOO_SHORT'),
 						'mailing',
@@ -167,10 +172,15 @@ class NewsletterControllerCron extends JControllerForm
 
 					// Process mails of this SMTP profile only if we need it
 					if ($smtpProfile->needToSendCount() > 0) {
-						echo "{$smtpProfile->needToSendCount()}\n";
+						//echo "{$smtpProfile->needToSendCount()}\n";
 
 						// Get mails that we need to send
-						$queueItems = $queueManager->getUnsentSidNidBySmtp($smtpProfile->smtp_profile_id, $smtpProfile->needToSendCount());
+						// skip unconfirmed users
+						$queueItems = $queueManager->getListToSend(array(
+							'smtpProfileId' => $smtpProfile->smtp_profile_id, 
+							'limit' => $smtpProfile->needToSendCount(),
+							'skipUnconfirmed' => true
+						));
 						
 						$ret = array();
 						$sent = 0;
@@ -240,8 +250,8 @@ class NewsletterControllerCron extends JControllerForm
 										// Add the sent letter to the sents for each list
 										if ($doSave) {
 											
-											$sent = JTable::getInstance('sent', 'NewsletterTable');
-											$sent->save(array(
+											$sentManager = JTable::getInstance('sent', 'NewsletterTable');
+											$sentManager->save(array(
 												'newsletter_id' => $groupItem->newsletter_id,
 												'subscriber_id' => $groupItem->subscriber_id,
 												'list_id'       => $groupItem->list_id,
@@ -256,7 +266,7 @@ class NewsletterControllerCron extends JControllerForm
 													'to' => $subscriber->email,
 													'error' => $letter->errors)));
 											
-											unset($sent);
+											unset($sentManager);
 										}
 									}
 
@@ -265,7 +275,7 @@ class NewsletterControllerCron extends JControllerForm
 									$sent++;
 									
 									if(!$letter->state) {
-										throw new Exception($letter->errors);
+										throw new Exception(json_encode($letter->errors));
 									}
 
 								} catch(Exception $e) {
@@ -403,7 +413,7 @@ class NewsletterControllerCron extends JControllerForm
 			try {
 
 				// Try to conect
-				$mailbox = new MigurMailerMailbox(&$mbprofile);
+				$mailbox = new MigurMailerMailbox($mbprofile);
 
 				$logData = (array)$mbprofile; 
 				unset($logData['password']);
@@ -452,8 +462,8 @@ class NewsletterControllerCron extends JControllerForm
 
 							if (!empty($mail->subscriber_id) && !empty($mail->newsletter_id) && !empty($mail->bounce_type)) 
 							{
-								$queue = JTable::getInstance('Queue', 'NewsletterTable');
-								if ($queue->setBounced($mail->subscriber_id, $mail->newsletter_id, NewsletterTableQueue::STATE_BOUNCED))
+								$queue = JModel::getInstance('Queues', 'NewsletterModel');
+								if ($queue->setBounced($mail->subscriber_id, $mail->newsletter_id))
 								{
 									$sent = JModel::getInstance('Sent', 'NewsletterModel');
 									$sent->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
@@ -571,7 +581,11 @@ class NewsletterControllerCron extends JControllerForm
 		return false;
 	}
 	
-	public function automailing($mode = 'std'){
+	public function automailing($mode = 'std')
+	{
+		if ($mode == 'std') {
+			NewsletterHelper::jsonPrepare();
+		}	
 		
 		/** 
 		 * Has 3 phases:
@@ -604,9 +618,17 @@ class NewsletterControllerCron extends JControllerForm
 		
 		if (!empty($threads)) {
 			foreach($threads as $thread) {
+
+				// Create instance
+				$entity = NewsletterAutomlailingThreadCommon::factory($thread->subtype);
+				$entity->bind($thread);
+				$entity->paramsFromJson();
+				
 				// Execute the thread. "WakeUp" in other words.
 				// All functionality is incapsulated by thread. There is trigger only
-				$thread->run();
+				$entity->run();
+				
+				unset($entity);
 			}
 		}
 		

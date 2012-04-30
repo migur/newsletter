@@ -104,11 +104,14 @@
 				</td>
 				
 				<td>
-				<?php if(!empty($item->params)) { ?>
+				<?php if(!empty($item->params)) { 
+					
+					$data = json_decode(str_replace('\u0000', '', $item->params)); 
+				?>
 					<label 
 						class="search icon-16-search hasTip" 
 						style="width:16px;height:16px" 
-						title="<?php echo $this->escape(JHtml::_('multigrid.renderObject', json_decode($item->params))); ?>">
+						title="<?php echo $this->escape(JHtml::_('multigrid.renderObject', $data)); ?>">
 					</label>	
 				<?php }	?>
 				</td>

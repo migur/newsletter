@@ -155,6 +155,8 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 */
 	public function sendPreview()
 	{
+		NewsletterHelper::jsonPrepare();
+		
 		$emails = JRequest::getVar('emails', array());
 		$newsletterId = JRequest::getVar('newsletter_id');
 		$type = JRequest::getVar('type');
@@ -172,11 +174,40 @@ class NewsletterControllerNewsletter extends JControllerForm
 			'type' => $type,
 			'tracking' => true
 		);
+
 		
+		// Process list of emails....
+		$messagesSkipped = array();
+		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		foreach ($emails as $email) {
-			$data['subscribers'][] = SubscriberHelper::getByEmail($email[1]);
+			
+			// Trying to find subscriber or J!user
+			if ($subscriber->load(array('email' => $email[1]))) {
+				
+				// If subscriber is allowed to send to then add him to list.
+				if ($subscriber->isConfirmed()) {
+					$data['subscribers'][] = $subscriber->toObject();
+				} else {
+					$messagesSkipped[] = JText::sprintf('COM_NEWSLETTER_EMAIL_IS_DISABLED', $email[1]);
+				}
+				
+			} else {
+
+				// If this is unknown email then add it to list.
+				// All we know is email only.
+				$data['subscribers'][] = (object)array('email' => $email[1]);
+			}
 		}
 
+		// If list is empty then finish with it.
+		if(empty($data['subscribers'])) {
+			NewsletterHelper::jsonError(array_merge(
+				array(JText::_('COM_NEWSLETTER_NO_EMAILS_TO_SEND')), 
+				$messagesSkipped
+			));
+		}
+		
+		// Send mails.....
 		$mailer = new MigurMailer();
 		if(!$mailer->sendToList($data)) {
 
@@ -191,12 +222,13 @@ class NewsletterControllerNewsletter extends JControllerForm
 			NewsletterHelper::jsonError($errors, $emails);
 		}
 		
-		
+		// Some debugging
 		LogHelper::addDebug('Preview was sent successfully.', 
 			LogHelper::CAT_MAILER,
 			array('Emails' => $emails));
 		
-		NewsletterHelper::jsonMessage('ok', $emails);
+		
+		NewsletterHelper::jsonMessage($messagesSkipped, $emails);
 	}
 }
 

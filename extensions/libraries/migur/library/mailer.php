@@ -416,7 +416,8 @@ class MigurMailer extends JObject
 			));
 		
 		$letter->subject = $this->renderSubject($letter->subject);
-		$letter->encoding = $letter->params->encoding;
+		
+		$letter->encoding = $letter->getEncoding();
 		SubscriberHelper::restoreRealUser();
 
 		// Result object

@@ -197,7 +197,7 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
 	 */
 	public function getMessageHeaders($idx) 
 	{
-		return imap_header($this->_mailbox_link, $idx);
+		return @imap_header($this->_mailbox_link, $idx);
 	}
 	
 	public function setTimeout($secs) {
@@ -253,6 +253,7 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
     $port = 
 		$this->port . '/' . 
 		$this->service . 
+		// Option to use nothing but actualy better to use NOTLS instead
 		(($this->service_option != 'none')? '/' . $this->service_option : '') . 
 		(($this->noValidateCert)? '/novalidate-cert' : '');
 	

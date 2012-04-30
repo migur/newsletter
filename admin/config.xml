@@ -22,12 +22,12 @@
             name="general_reg_disable"
             type="radio"
             default="0"
-            label="COM_NEWSLETTER_REG_DISABLE"
-            description="COM_NEWSLETTER_REG_DISABLE">
+            label="COM_NEWSLETTER_REG_ENABLED"
+            description="COM_NEWSLETTER_REG_ENABLED">
             <option
-                value="1">JYES</option>
+                value="0">JYES</option>
             <option
-                value="0">JNO</option>
+                value="1">JNO</option>
         </field>
 
         <field

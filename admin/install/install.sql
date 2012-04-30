@@ -266,6 +266,7 @@ CREATE TABLE `#__newsletter_automailings` (
   `automailing_type` ENUM('scheduled','eventbased') DEFAULT NULL,
   `automailing_event` ENUM('date','subscription') DEFAULT NULL,
   `automailing_state` INT(11) DEFAULT NULL,
+  `scope` ENUM('all','targets') DEFAULT NULL,
   `params` TEXT,
 
   PRIMARY KEY (`automailing_id`)
@@ -294,9 +295,13 @@ CREATE TABLE `#__newsletter_threads` (
   `subtype` VARCHAR (255),
   `resource` VARCHAR (255) NOT NULL COMMENT "The target point of a process. email for 'send' and 'read'",
   `params` TEXT,
+  `target` VARCHAR (255),
+  `target_type` VARCHAR (255),
 
   PRIMARY KEY (`thread_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE INDEX `target_fk` ON `#__newsletter_threads`(`target`, `target_type`);
 
 
 CREATE TABLE `#__newsletter_automailing_targets` (

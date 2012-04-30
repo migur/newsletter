@@ -78,9 +78,17 @@ class NewsletterViewAutomailing extends MigurView
 				'listDirn' => $itemsModel->getState('list.direction'),
 				'pagination' => $itemsModel->getPagination()
 		);
-		$this->assignRef('automailingItems', $amList);
 		
+		$this->assignRef('automailingItems', $amList);
 
+		// Check if this automailing finished
+		if (count($amList->items) > 0) {
+			$last = $amList->items[count($amList->items)-1];
+			$automailing->finished = ($last->status != 0 && $automailing->automailing_type == 'scheduled');
+		} else {
+			$automailing->finished = false;
+		}
+		
 		// Get targets list
 		$targetsModel = JModel::getInstance('AutomailingTargets', 'NewsletterModel');
 		$targetsModel->automailingId = $aid;

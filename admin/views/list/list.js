@@ -343,8 +343,6 @@ try {
 
         });
 
-		var st = $$('input[name=subscriber_type]:checked')[0].getProperty('value');
-
         if (notEnough == true) {
             alert(Joomla.JText._('PLEASE_FILL_ALL_REQUIRED_FIELDS','Please fill all required fields'));
         } else {
@@ -378,7 +376,7 @@ try {
 						
                     document.location.reload();
                 }
-            }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res) + '&subscriber_type=' +  st);
+            }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res));
         }
     });
 
@@ -447,7 +445,7 @@ try {
     
         $('import-toolbar-export').addEvent('click', function(){
             $('import-file').toggleClass('hide');
-
+            $$('.plugin-pane')[0].addClass('hide');
         });
 
         $('exclude-toolbar-lists').addEvent('click', function(){
