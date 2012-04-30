@@ -290,7 +290,7 @@ class NewsletterControllerList extends JControllerForm
                 'event' => $pEvent),
             array(
                 $listId,
-                JRequest::getVar('jform')
+                (array) JRequest::getVar('jform')
         ));
 
         // In this case we trigger only one plugin then his data is in first element
@@ -314,9 +314,9 @@ class NewsletterControllerList extends JControllerForm
         // Get all view need...
         $plg = $manager->getPlugin($pName, $pGroup);
         $plugin = new stdClass();
-        $plugin->data = $res;
-        $plugin->name = $pName;
-        $plugin->group = $pGroup;
+        $plugin->data = (array) $res;
+        $plugin->name = (string) $pName;
+        $plugin->group = (string) $pGroup;
         $plugin->title = $plg->getTitle();
         
         // Complement data

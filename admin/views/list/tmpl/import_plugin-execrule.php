@@ -1,5 +1,6 @@
 <fieldset>
     <legend><?php echo JText::_($this->plugin->title); ?></legend>
+	
     <table class="adminlist">
         <tbody>
             <tr>
@@ -25,12 +26,15 @@
         </tbody>    
     </table>    
     <form id="plugin-form" action="<?php echo JUri::current(); ?>">
-        <input 
-            type="button" 
-            class="button plugin-icon" 
-            role="formCancel" 
-            value="<?php echo JText::_('COM_NEWSLETTER_CLOSE'); ?>" />
-
+		
+		<div class="form-actions">
+			<input 
+				type="button" 
+				class="button plugin-icon" 
+				role="formCancel" 
+				value="<?php echo JText::_('COM_NEWSLETTER_CLOSE'); ?>" />
+		</div>
+			
         <input type="hidden" name="pluginevent" value="onMigurImportExecRule" />
         <input type="hidden" name="pluginname" value="<?php echo $this->plugin->name; ?>" />
         <input type="hidden" name="option" value="com_newsletter" />

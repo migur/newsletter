@@ -188,8 +188,9 @@ class NewsletterViewList extends MigurView
 		$this->setStatisticsData();
 
         // Handle import plugins
+	
         $plgManager = NewsletterPluginManager::factory('import');
-        
+		
         $res = $plgManager->trigger(array(
             'group' => 'migur',
             'event' => 'onMigurImportShowIcon'
