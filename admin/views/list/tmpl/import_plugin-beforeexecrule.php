@@ -1,12 +1,20 @@
 <fieldset>
     <legend><?php echo JText::_($this->plugin->title); ?></legend>
+	
+	<?php if (!empty($this->plugin->data['helpText'])) { ?>
+		<span class="helptext">
+			<?php echo JText::_($this->plugin->data['helpText']); ?>
+		</span>
+	<?php } ?>
+
+	
     <form id="plugin-form" action="<?php echo JUri::current(); ?>">
         <table class="adminlist">
             <thead>
                 <tr>
                 <?php 
                     $visibleCols = array();
-                    foreach($this->plugin->data->head as $key => $item) { 
+                    foreach($this->plugin->data['head'] as $key => $item) { 
                         if (!empty($item)) { ?>
                         <th>
                             <?php array_push($visibleCols, $key); echo JText::_($item); ?>
@@ -18,8 +26,8 @@
             </tfoot>
             <tbody>
                 <?php 
-                $visibleCols = array_keys((array)$this->plugin->data->head); $i=0;
-                foreach($this->plugin->data->list as $row) { ?>
+                $visibleCols = array_keys((array)$this->plugin->data['head']); $i=0;
+                foreach($this->plugin->data['list'] as $row) { ?>
                 <tr class="row<?php echo $i % 2; ?>">
                     <?php 
                     foreach($row as $key => $item) { 
@@ -40,7 +48,7 @@
             <div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_IMPORT_OVERWRITE'); ?></div>
         </div>
         
-        <div class="nofloat">
+        <div class="form-actions">
             <div class="fltrt">
                 <input 
                     type="button" 

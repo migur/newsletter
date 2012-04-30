@@ -4,11 +4,12 @@
 
     <div class="toolbar-list">
         <ul>
-        <?php foreach($this->importPlugins as $plg) { ?>
-          <li class="button plugin-icon" rel="<?php echo $plg->name; ?>" role="pluginButton">  
+        <?php foreach($this->importPlugins as $plg) { 
+			$plg = (object) $plg; ?>
+          <li class="button plugin-icon" rel="<?php echo !empty($plg->name)? $plg->name : ''; ?>" role="pluginButton">  
               <a href="#">
-                  <span><img src="<?php echo $plg->icon; ?>" /></span>
-                  <?php echo $plg->title; ?>
+                  <span><img src="<?php echo !empty($plg->icon)? $plg->icon : ''; ?>" /></span>
+                  <?php echo !empty($plg->title)? $plg->title : ''; ?>
               </a>    
           </li>
         <?php } ?>

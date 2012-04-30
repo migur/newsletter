@@ -21,6 +21,29 @@ abstract class MigurPluginHelper
 	static $_plugins;
 
 	/**
+	 * Import all needed plugins. Add all needed handlers
+	 * 
+	 */
+	public static function prepare()
+	{
+		// Load 'Migur' group of plugins
+		JLoader::import('plugins.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
+
+		JPluginHelper::importPlugin('migur');
+
+		// Bind automailing to several events
+		JLoader::import('plugins.plugins.automail', JPATH_COMPONENT_ADMINISTRATOR, '');
+		JFactory::getApplication()->registerEvent('onMigurAfterSubscribe', 'plgMigurAutomail');
+		JFactory::getApplication()->registerEvent('onMigurAfterSubscriberImport', 'plgMigurAutomail');
+		JFactory::getApplication()->registerEvent('onMigurAfterSubscriberAssign', 'plgMigurAutomail');
+		JFactory::getApplication()->registerEvent('onMigurAfterUnsubscribe', 'plgMigurAutomail');
+		JFactory::getApplication()->registerEvent('onMigurAfterSubscriberUnbind', 'plgMigurAutomail');
+		JFactory::getApplication()->registerEvent('onMigurAfterSubscriberDelete', 'plgMigurAutomail');
+		
+	}
+
+	
+	/**
 	 * Gets the data from module config file
 	 *
 	 * @param <type> $plugin - module identificator (mod_*)

@@ -12,16 +12,23 @@
         if (!empty($this->plugin->data['options'])) { 
             foreach($this->plugin->data['options'] as $name => $options) { ?>
                 <div class="nofloat">
-                    <?php echo JHtml::_('select.genericlist', $options, "jform[$name]"); ?>
+					<?php if (!empty($options['label'])) { ?>
+						<label>
+							<?php echo JText::_($options['label']); ?>
+						</label>
+					<?php } ?>
+                    <?php echo JHtml::_('select.genericlist', $options['list'], "jform[$name]", null, 'value', 'text', !empty($options['selected'])? $options['selected'] : null); ?>
                 </div>    
         <?php } } ?>    
 
-        <input 
-            type="button" 
-            class="button plugin-icon" 
-            role="formSubmit" 
-            value="<?php echo JText::_('JSELECT'); ?>" />
-
+		<div class="form-actions">
+			<input 
+				type="button" 
+				class="button plugin-icon" 
+				role="formSubmit" 
+				value="<?php echo JText::_('JSELECT'); ?>" />
+		</div>
+		
         <input type="hidden" name="pluginevent" value="onMigurImportShowRule" />
         <input type="hidden" name="pluginname" value="<?php echo $this->plugin->name; ?>" />
 
