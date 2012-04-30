@@ -27,11 +27,8 @@ abstract class MigurPluginHelper
 	public static function prepare()
 	{
 		// Load 'Migur' group of plugins
-<<<<<<< HEAD
 		JLoader::import('plugins.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-=======
->>>>>>> development
 		JPluginHelper::importPlugin('migur');
 
 		// Bind automailing to several events
@@ -42,7 +39,6 @@ abstract class MigurPluginHelper
 		JFactory::getApplication()->registerEvent('onMigurAfterUnsubscribe', 'plgMigurAutomail');
 		JFactory::getApplication()->registerEvent('onMigurAfterSubscriberUnbind', 'plgMigurAutomail');
 		JFactory::getApplication()->registerEvent('onMigurAfterSubscriberDelete', 'plgMigurAutomail');
-		
 	}
 
 	
