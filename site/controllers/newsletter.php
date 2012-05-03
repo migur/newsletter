@@ -98,6 +98,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$res = $mailer->render(array(
 			'type' => $type,
 			'newsletter_id' => $newsletterId,
+			'useRawUrls' => NewsletterHelper::getParam('rawurls') == '1'
 		));
 
 		SubscriberHelper::restoreRealUser();
