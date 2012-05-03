@@ -39,6 +39,10 @@
 				</a>	
 			</td>
 		</tr>
+		<tr class="row0">
+			<td><?php echo $this->form->getLabel('rawurls'); ?></td>
+			<td><?php echo $this->form->getInput('rawurls'); ?></td>
+		</tr>
 	</tbody>
 </table>
 
