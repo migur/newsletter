@@ -100,7 +100,8 @@ class NewsletterHelper
             $res = $cache->call(array('NewsletterHelper', '_getCommonInfo'), $url, $domain, $lkey);
         } else {
             $res = NewsletterHelper::_getCommonInfo($url, $domain, $lkey);
-        }    
+        }   
+		
 		$res->current_version = (string) $obj->version;
 		$res->copyright = (string) $obj->copyright;
 		return $res;
