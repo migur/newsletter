@@ -58,11 +58,11 @@ class NewsletterControllerSubscribe extends JController
 		$fbenabled = JRequest::getInt('fbenabled', array());
 		//$sendto = JRequest::getVar('sendto');
 		// Check token, d_i_e on error.
-		JRequest::checkToken() or jexit('Invalid Token');
+		//JRequest::checkToken() or jexit('Invalid Token');
 
 		if (empty($name) || empty($email) || !in_array($html, array(0, 1)) || empty($listsIds)) {
 
-			$msg = 'One or more parameters is missing';
+			$msg = JText::_('COM_NEWSLETTER_PARAMETERS_NOT_FOUND');
 
 			LogHelper::addDebug(
 				$msg, LogHelper::CAT_SUBSCRIPTION, array(
@@ -170,7 +170,7 @@ class NewsletterControllerSubscribe extends JController
 		JFactory::getApplication()->triggerEvent('onMigurAfterSubscribe', $data);
 		
 		// If subscriber is confirmed then no need to send emails.
-		$message = JText::sprintf('Thank you %s for subscribing to our Newsletter!', $name);
+		$message = JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name);
 
 		if (!$subscriber->isConfirmed()) {
 
@@ -188,7 +188,10 @@ class NewsletterControllerSubscribe extends JController
 						'newsletter_id' => $newsletter->newsletter_id,
 						'tracking' => true));
 					if ($res->state) {
-						$message = JText::sprintf('Thank you %s for subscribing to our Newsletter! You will need to confirm your subscription. There should be an email in your inbox in a few minutes!', $name);
+						
+						$message =
+							JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name) . ' ' .
+							JText::_('COM_NEWSLETTER_YOU_WILL_NEED_CONFIRM_SUBSCRIPTION');
 
 						LogHelper::addMessage(
 							'COM_NEWSLETTER_WELLCOMING_NEWSLETTER_SENT_SUCCESSFULLY', LogHelper::CAT_SUBSCRIPTION, array('Email' => $subscriber->email, 'Newsletter' => $newsletter->name));
@@ -226,7 +229,7 @@ class NewsletterControllerSubscribe extends JController
 
 		if (empty($subKey)) {
 			// Redirect to page
-			$message = JText::_("The error has occured. Please try again later");
+			$message = JText::_("COM_NEWSLETTER_AN_ERROR_OCCURED");
 			$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid=' . $subKey, $message, 'error');
 			return;
 		}
@@ -234,7 +237,7 @@ class NewsletterControllerSubscribe extends JController
 		$subscriber = $db->loadObject();
 		if (count($subscriber) < 1) {
 			// Redirect to page
-			$message = JText::_("The error has occured. Please try again later");
+			$message = JText::_("COM_NEWSLETTER_AN_ERROR_OCCURED");
 			$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid=' . $subKey, $message, 'error');
 			return;
 		}
@@ -256,7 +259,7 @@ class NewsletterControllerSubscribe extends JController
 		$subscriber = $db->query();
 
 		// Redirect to page
-		$message = JText::_("Your subscription has confirmed successfully. Thanks!");
+		$message = JText::_("COM_NEWSLETTER_YOUR_SUBSCRIPTION_CONFIRMED");
 		$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid=' . $subKey, $message, 'message');
 
 		return true;
