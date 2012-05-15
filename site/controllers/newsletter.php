@@ -173,7 +173,8 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$data = array(
 			'newsletter_id' => $newsletterId,
 			'type' => $type,
-			'tracking' => true
+			'tracking' => true,
+			'useRawUrls' => NewsletterHelper::getParam('rawurls') == '1'
 		);
 
 		

@@ -213,7 +213,8 @@ class NewsletterControllerCron extends JControllerForm
 										'subscriber'    => $subscriber->toObject(),
 										'newsletter_id' => $queueItem->newsletter_id,
 										'type'          => $subscriber->getType(),
-										'tracking'      => true
+										'tracking'      => true,
+										'useRawUrls'    => NewsletterHelper::getParam('rawurls') == '1'
 									));
 
 									// Now all good and we can update informtion 

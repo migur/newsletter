@@ -494,7 +494,8 @@ class MigurMailerDocument extends JDocument
 		
 		$withs = array();
 		for($i=0; $i < count($matches[0]); $i++) {
-                        $item = $matches[1][$i];
+			
+			$item = $matches[1][$i];
 						
 			// if this link is relative then repair it!
 			if (!empty($item) && substr($item, 0, 4) != 'http') {

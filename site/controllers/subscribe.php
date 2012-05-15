@@ -183,10 +183,12 @@ class NewsletterControllerSubscribe extends JController
 
 					PlaceholderHelper::setPlaceholder('listname', $list->name);
 					$res = $mailer->send(array(
-						'type' => $newsletter->isFallback() ? 'plain' : $subscriber->getType(),
-						'subscriber' => $subscriber->toObject(),
+						'type'          => $newsletter->isFallback() ? 'plain' : $subscriber->getType(),
+						'subscriber'    => $subscriber->toObject(),
 						'newsletter_id' => $newsletter->newsletter_id,
-						'tracking' => true));
+						'tracking'      => true,
+						'useRawUrls'    => NewsletterHelper::getParam('rawurls') == '1'
+						));
 					if ($res->state) {
 						
 						$message =
