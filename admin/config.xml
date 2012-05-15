@@ -257,7 +257,7 @@
         <field
             name="monster_url"
             type="hidden"
-            default="monster.migur.com"
+            default="migur.com/monster"
             size="50"
             label="COM_NEWSLETTER_MONSTER_URL">
         </field>
