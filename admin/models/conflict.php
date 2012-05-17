@@ -147,9 +147,13 @@ class NewsletterModelConflict extends JModelAdmin
 			if (!empty($lists)) {
 				
 				foreach($lists as $lid) {
-					if (!$user->assignToList($lid)) {
-						return false;
-					}
+					if (!$user->isInList($lid)) {
+						if (!$user->assignToList($lid)) {
+							// Dont send subscription emails because it is not 
+							// REAL subscription. Just resolving of conflicts.
+							return false;
+						}
+					}	
 				}	
 			}
 			
@@ -192,8 +196,6 @@ class NewsletterModelConflict extends JModelAdmin
 		
 		$sub = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
-		echo $query;
-		
 		foreach($res as $row) {
 			
 			// Load user
@@ -240,9 +242,13 @@ class NewsletterModelConflict extends JModelAdmin
 			if (!empty($lists)) {
 				
 				foreach($lists as $lid) {
-					if (!$user->assignToList($lid)) {
-						return false;
-					}
+					if (!$user->isInList($lid)) {
+						if (!$user->assignToList($lid)) {
+							// Dont send subscription emails because it is not 
+							// REAL subscription. Just resolving of conflicts.
+							return false;
+						}
+					}	
 				}	
 			}
 			

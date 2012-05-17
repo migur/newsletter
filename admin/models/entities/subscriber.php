@@ -322,11 +322,6 @@ class NewsletterModelEntitySubscriber extends MigurModel
 			return false;
 		}
 
-		// Load the row. If it exists then nothing to do
-		if ($this->isInList($lid)) {
-			return true;
-		}
-
 		// Save and finish.
 		return $this->getTable('sublist')
 				->save(array(

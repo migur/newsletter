@@ -174,36 +174,64 @@ class NewsletterControllerList extends JControllerForm
 		
 		if (JRequest::getMethod() == "POST") {
 
-			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
-
+			$subscriber  = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$newsletter  = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+			$listManager = JModel::getInstance('List', 'NewsletterModel');
+			
 			$subscribers = JRequest::getVar('cid', array(), 'post');
 			$lists = json_decode(JRequest::getVar('list_id', array(), 'post'));
 
 			if (!empty($lists) && !empty($subscribers)) {
 				
 				foreach ($subscribers as $subscriberId) {
-					// Need to load to add row  for j! user "on the fly"
-					$model->load($subscriberId);
 					
+					// Need to load to add row  for j! user "on the fly"
+					$subscriber->load($subscriberId);
+
 					$assignedLists = array();
 					
+					$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_SUCCESS"));
+
 					foreach($lists as $listId) {
-						if(!$model->isInList($listId)) {
-							if ($model->assignToList($listId)) {
+						
+						if(!$subscriber->isInList($listId)) {
+							
+							try {
+
+								if (!$listManager->sendSubscriptionMail(
+									$subscriber,
+									$listId, 
+									array(
+										'addToQueue'       => true,
+										'ignoreDuplicates' => true))
+								){	
+									throw new Exception();
+								}
+								
+								if(!$subscriber->assignToList($listId)){
+									throw new Exception();
+								}	
 
 								$assignedLists[] = $listId;
-								$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_SUCCESS"));
 								
-							} else {
+							} catch (Exception $e) {
+								
 								$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_FAILED"), 'error');
-								break(2);
-							}
+
+								LogHelper::addError(
+									'COM_NEWSLETTER_WELCOMING_SEND_FAILED', LogHelper::CAT_SUBSCRIPTION, array(
+									'Error' => $e->getMessage(),
+									'Email' => $subscriber->email,
+									'Newsletter' => $newsletter->name));
+								
+								return false;
+							}	
 						}	
 					}
 					
 					// Fire event onMigurAfterSubscriberAssign
 					JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberAssign', array(
-						'subscriberId' => $model->getId(),
+						'subscriberId' => $subscriber->getId(),
 						'lists' => $assignedLists
 					));
 				}

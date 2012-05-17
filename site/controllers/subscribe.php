@@ -134,20 +134,23 @@ class NewsletterControllerSubscribe extends JController
 		$assignedListsIds = array();
 		foreach ($listsIds as $list) {
 			if (!$subscriber->isInList($list)) {
-
 				$subscriber->assignToList($list);
 				$assignedListsIds[] = $list;
 			}
 		}
 
 		// Get lists we assigned
+		$listModel   = JModel::getInstance('List',  'NewsletterModel');
 		$listManager = JModel::getInstance('Lists', 'NewsletterModel');
 		$lists = $listManager->getItemsByIds($assignedListsIds);
 
 
-		// Add to history all subscriptions
+		$message = JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name);
+		
+		// Process each new list
 		foreach ($lists as $list) {
 
+			// Add to history all subscriptions
 			$history = JTable::getInstance('history', 'NewsletterTable');
 			$history->save(array(
 				'subscriber_id' => $subscriber->getId(),
@@ -158,58 +161,36 @@ class NewsletterControllerSubscribe extends JController
 				'text' => addslashes($list->name)
 			));
 			unset($history);
-		}
 
+			// If subscriber is confirmed then no need to send emails.
+			if (!$subscriber->isConfirmed()) {
 
-		$data = array(
-			'subscriberId' => $subscriber->subscriber_id,
-			'lists' => $assignedListsIds);
-		
-		// Triggering the subscribed plugins.
-		// Process automailing via internal plugin plgMigurAutomail
-		JFactory::getApplication()->triggerEvent('onMigurAfterSubscribe', $data);
-		
-		// If subscriber is confirmed then no need to send emails.
-		$message = JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name);
+				// Immediately mail subscription letter
+				$res = $listModel->sendSubscriptionMail(
+					$subscriber, 
+					$list->list_id,
+					array(
+						'ignoreDuplicates' => true
+					));
 
-		if (!$subscriber->isConfirmed()) {
-
-			// Let's send newsletters
-			$mailer = new MigurMailer();
-			foreach ($lists as $list) {
-				try {
-					$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
-					$newsletter->loadAsWelcoming($list->send_at_reg);
-
-					PlaceholderHelper::setPlaceholder('listname', $list->name);
-					$res = $mailer->send(array(
-						'type'          => $newsletter->isFallback() ? 'plain' : $subscriber->getType(),
-						'subscriber'    => $subscriber->toObject(),
-						'newsletter_id' => $newsletter->newsletter_id,
-						'tracking'      => true,
-						'useRawUrls'    => NewsletterHelper::getParam('rawurls') == '1'
-						));
-					if ($res->state) {
-						
-						$message =
-							JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name) . ' ' .
-							JText::_('COM_NEWSLETTER_YOU_WILL_NEED_CONFIRM_SUBSCRIPTION');
-
-						LogHelper::addMessage(
-							'COM_NEWSLETTER_WELLCOMING_NEWSLETTER_SENT_SUCCESSFULLY', LogHelper::CAT_SUBSCRIPTION, array('Email' => $subscriber->email, 'Newsletter' => $newsletter->name));
-					} else {
-						throw new Exception(json_encode($res->errors));
-					}
-				} catch (Exception $e) {
-					LogHelper::addError(
-						'COM_NEWSLETTER_WELCOMING_SEND_FAILED', LogHelper::CAT_SUBSCRIPTION, array(
-						'Error' => $e->getMessage(),
-						'Email' => $subscriber->email,
-						'Newsletter' => $newsletter->name));
+				// Set message and add some logs
+				if($res) {
+					$message =
+						JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name) . ' ' .
+						JText::_('COM_NEWSLETTER_YOU_WILL_NEED_CONFIRM_SUBSCRIPTION');
 				}
 			}
 		}
 
+		// Triggering the subscribed plugins.
+		// Process automailing via internal plugin plgMigurAutomail
+		JFactory::getApplication()->triggerEvent(
+			'onMigurAfterSubscribe', 
+			array(
+				'subscriberId' => $subscriber->subscriber_id,
+				'lists' => $assignedListsIds)
+		);
+		
 		jexit($message);
 	}
 
