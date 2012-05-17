@@ -11,7 +11,7 @@
         <copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
         <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
         <!--  The version string is recorded in the components table -->
-        <version>12.03b1</version>
+        <version>12.04b1</version>
         <!-- The description is optional and defaults to the name -->
         <description>COM_NEWSLETTER_DESCRIPTION</description>
  
