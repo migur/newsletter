@@ -370,3 +370,7 @@ textarea.invalid {
 	text-align: left;
 	margin-left:5px;
 }
+
+.form-actions {
+	overflow: hidden;
+}

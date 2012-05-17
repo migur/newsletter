@@ -344,5 +344,17 @@
 }
 
 .plugin-pane .plugin-description {
+	margin-top: 10px;
     clear:both;
+	padding: 10px;
+	background-color: #ddd;
+}
+
+#plugin-form label {
+	font: inherit;
+}
+
+#plugin-form .helptext {
+	display:inline-block;
+	margin-bottom: 10px; 
 }

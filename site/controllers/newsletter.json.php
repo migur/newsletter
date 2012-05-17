@@ -90,13 +90,11 @@ class NewsletterControllerNewsletter extends JControllerForm
 			if ($e->getMessage() != 'no need to track') {
                 
 				// For debug
-                LogHelper::addDebug('Tracking failed', LogHelper::CAT_TRACKING,  
+                LogHelper::addError('COM_NEWSLETTER_TRACKING_FAILED', LogHelper::CAT_TRACKING,  
                     array(
                         'Message' => $e->getMessage(),
                         'Data' => JRequest::get())
                 );
-                
-                jexit();
                 
 			} else {
 

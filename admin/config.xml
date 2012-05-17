@@ -257,7 +257,7 @@
         <field
             name="monster_url"
             type="hidden"
-            default="monster.migur.com"
+            default="migur.com/monster"
             size="50"
             label="COM_NEWSLETTER_MONSTER_URL">
         </field>
@@ -280,6 +280,16 @@
             type="radio"
             default="0"
             label="COM_NEWSLETTER_DEBUG_COMPONENT">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field
+            name="rawurls"
+            type="radio"
+            default="0"
+            label="COM_NEWSLETTER_USE_RAW_URLS"
+			description="COM_NEWSLETTER_USE_RAW_URLS_DESC"
+		>
             <option value="1">JYES</option>
             <option value="0">JNO</option>
         </field>

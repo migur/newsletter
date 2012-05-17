@@ -237,7 +237,8 @@ class MigurMailer extends JObject
 			$letter->content = $this->render(array(
 					'type' => $type,
 					'newsletter_id' => $letter->newsletter_id,
-					'tracking' => $params['tracking']
+					'tracking'      => $params['tracking'],
+					'useRawUrls'    => $params['useRawUrls']
 				));
 
 			$letter->subject = $this->renderSubject($letter->subject);
@@ -410,9 +411,11 @@ class MigurMailer extends JObject
 
 		// render the content of letter for each user
 		$letter->content = $this->render(array(
-				'type' => $type,
+				'type'          => $type,
 				'newsletter_id' => $letter->newsletter_id,
-				'tracking' => true
+				'tracking'      => true,
+				'useRawUrls'    => $params['useRawUrls']
+
 			));
 		
 		$letter->subject = $this->renderSubject($letter->subject);
