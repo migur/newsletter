@@ -32,6 +32,7 @@ JHtml::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR.DS.'helpers'.DS.'html');
 JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'rules');
 JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'tables');
 JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models');
+JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models', 'NewsletterModel');
 JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'entities', 'NewsletterModelEntity');
 
 

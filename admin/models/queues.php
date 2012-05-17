@@ -278,4 +278,25 @@ class NewsletterModelQueues extends JModelList
 		return $data;
 	}
 	
+	public function addMail($sid, $nid, $lid = null) 
+	{
+		if (empty($sid) || empty($nid)) {
+			return false;
+		}
+		
+		return $this->getTable()->save(array(
+			'newsletter_id' => $nid,
+			'subscriber_id' => $sid,
+			'list_id'       => $lid,
+			'created' => date('Y-m-d H:i:s'),
+			'state'   => 1)); 
+	}
+	
+	public function isMailExist() 
+	{
+		return 
+			$this->getTable()->load(array(
+				'newsletter_id' => $newsletterId,
+				'subscriber_id' => $item['subscriber_id']));
+	}
 }

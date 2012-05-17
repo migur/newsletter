@@ -59,6 +59,7 @@ try {
 
 	JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'rules');
 	JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'tables');
+	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models', 'NewsletterModel');
 	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'entities', 'NewsletterModelEntity');
 
 	// Add the site root and user's ACL to JS

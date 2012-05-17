@@ -53,10 +53,36 @@ class NewsletterControllerSubscriber extends JControllerForm
 					throw new Exception();
 				}
 				
-				if (!$model->assignToList($lid)) {
-					throw new Exception();
-				} 
-
+				if (!$model->IsInList($lid)) {
+					
+					if (!$model->assignToList($lid)) {
+						throw new Exception();
+					}
+					
+					// Add letter to queue.
+					// Cant send immediatelty because we are in ADMIN side
+					// and some j! native modules cause fail when 
+					// JOOMLA_BASE = '/administrator/' (mod_latest_articles)
+					$listModel = JModel::getInstance('List', 'NewsletterModel');
+					$res = $listModel->sendSubscriptionMail(
+						$model, 
+						$lid,
+						array(
+							'addToQueue'	   => true,
+							'ignoreDuplicates' => true)
+					);
+					
+					if (!$res) {
+						throw new Exception();
+					}
+					
+					// Fire event onMigurAfterSubscriberAssign
+					JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberAssign', array(
+						'subscriberId' => $model->getId(),
+						'lists' => array($lid)
+					));
+					
+				}
 				$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_SUCCESS"));
 				
 			} catch (Exception $e) {
