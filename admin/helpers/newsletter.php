@@ -151,7 +151,7 @@ class NewsletterHelper
 	static public function getManifest()
 	{
 		if (!self::$_manifest) {
-			$file = JPATH_COMPONENT_ADMINISTRATOR . DS . 'newsletter.xml';
+			$file = JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'newsletter.xml';
 			$path = JPath::clean($file);
 			if (file_exists($path)) {
 				self::$_manifest = simplexml_load_file($path);

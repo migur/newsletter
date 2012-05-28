@@ -146,14 +146,14 @@ class com_newsletterInstallerScript
 	function postflight($type, $parent)
 	{
             // In both cases check if the tables/extension.php is not exists!
-		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'tables'.DS.'extension.php');
-//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3.sql');
-//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3b.sql');
-//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3b2.sql');
-//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3b3.sql');
-//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3c.sql');
-//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3d.sql');
-//		@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.4a.sql');
+		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'tables'. DIRECTORY_SEPARATOR .'extension.php');
+//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3.sql');
+//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3b.sql');
+//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3b2.sql');
+//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3b3.sql');
+//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3c.sql');
+//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3d.sql');
+//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.4a.sql');
 			
             //error_reporting(E_ALL);
             //ini_set('display_errors', 1);
@@ -406,7 +406,7 @@ class com_newsletterInstallerScript
 		$res = $this->_getLastUsedSchema();
 		if (!empty($res['version_id']) && $res['version_id'] == '1.0.3') {
 		
-			@unlink(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_newsletter'.DS.'install'.DS.'updates'.DS.'1.0.3.sql');
+			@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3.sql');
 		
 			$dbo = JFactory::getDbo();
 

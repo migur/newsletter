@@ -22,12 +22,12 @@ class MigurMailerProtocolPop3 {
 			
 			// The Phpmailer_BMH can handle both imap and pop. 
 			// No need to implement MigurMailerProtocolPOPLib
-			require_once 'imap'.DS.'lib.php';
+			require_once 'imap'. DIRECTORY_SEPARATOR .'lib.php';
 			return $this->implementation = new MigurMailerProtocolImapLib($options);
 		}
 			
 		// Use this as falback
-		require_once 'pop3'.DS.'php.php';
+		require_once 'pop3'. DIRECTORY_SEPARATOR .'php.php';
 		return $this->implementation = new MigurMailerProtocolPop3Php($options);
 	}
 	

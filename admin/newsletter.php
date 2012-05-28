@@ -38,7 +38,7 @@ try {
 	JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.log', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JHtml::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR.DS.'helpers'.DS.'html');
+	JHtml::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'helpers'. DIRECTORY_SEPARATOR .'html');
 
 	// Add translations used in JavaScript
 	JavascriptHelper::requireTranslations();
@@ -57,10 +57,10 @@ try {
 		$sess->set('migur.queue', null);
 	}
 
-	JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'rules');
-	JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'tables');
-	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models', 'NewsletterModel');
-	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'entities', 'NewsletterModelEntity');
+	JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'rules');
+	JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'tables');
+	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models', 'NewsletterModel');
+	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'entities', 'NewsletterModelEntity');
 
 	// Add the site root and user's ACL to JS
 	JavascriptHelper::addStringVar('migurSiteRoot', JUri::root());

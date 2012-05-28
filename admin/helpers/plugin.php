@@ -53,8 +53,8 @@ abstract class MigurPluginHelper
 	 */
 	public static function getInfo($plugin, $native = false, $group = 'migur')
 	{
-		$root = (!$native) ? JPATH_COMPONENT_ADMINISTRATOR . DS . 'extensions' . DS . 'plugins' : JPATH_SITE . DS . 'plugins' . DS . $group;
-		$path = JPath::clean($root . DS . $plugin . DS . $plugin . '.xml');
+		$root = (!$native) ? JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'plugins' : JPATH_SITE . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . $group;
+		$path = JPath::clean($root . DIRECTORY_SEPARATOR . $plugin . DIRECTORY_SEPARATOR . $plugin . '.xml');
 
 		if (file_exists($path)) {
 			$xml = simplexml_load_file($path);
@@ -251,7 +251,7 @@ abstract class MigurPluginHelper
 	{
 		if (empty(self::$_plugins[$pluginName])) {
 
-			require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'extensions' . DS . 'plugins' . DS . $pluginName . DS . $pluginName . '.php';
+			require_once JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . $pluginName . '.php';
 			self::$_plugins[$plugin] = new $pluginName;
 			return self::$_plugins[$plugin];
 		}

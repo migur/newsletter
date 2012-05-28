@@ -136,15 +136,15 @@ class NewsletterModelExtension extends JModelAdmin
 
 		// Load the core and/or local language file(s).
 			$lang->load($module, $client->path, null, false, false)
-		||	$lang->load($module, $client->path.DS.$type.DS.$module, null, false, false)
+		||	$lang->load($module, $client->path. DIRECTORY_SEPARATOR .$type. DIRECTORY_SEPARATOR .$module, null, false, false)
 		||	$lang->load($module, $client->path, $lang->getDefault(), false, false)
-		||	$lang->load($module, $client->path.DS.$type.DS.$module, $lang->getDefault(), false, false);
+		||	$lang->load($module, $client->path. DIRECTORY_SEPARATOR .$type. DIRECTORY_SEPARATOR .$module, $lang->getDefault(), false, false);
 
 		$lang->load('com_modules', JPATH_ADMINISTRATOR, $lang->getDefault(), false, true);
 
 		$formFile = (!$native)?
-			JPath::clean(JPATH_COMPONENT_ADMINISTRATOR.DS.'extensions'.DS.$type.DS.$module.DS.$module.'.xml') :
-			JPath::clean(JPATH_SITE.DS.$type.DS.$module.DS.$module.'.xml');
+			JPath::clean(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'extensions'. DIRECTORY_SEPARATOR .$type. DIRECTORY_SEPARATOR .$module. DIRECTORY_SEPARATOR .$module.'.xml') :
+			JPath::clean(JPATH_SITE. DIRECTORY_SEPARATOR .$type. DIRECTORY_SEPARATOR .$module. DIRECTORY_SEPARATOR .$module.'.xml');
 
 		if (file_exists($formFile)) {
 			// Get the module form.

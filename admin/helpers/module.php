@@ -41,8 +41,8 @@ abstract class MigurModuleHelper extends JModuleHelper
 	 */
 	public static function getInfo($module, $native = false)
 	{
-		$root = (!$native) ? JPATH_COMPONENT_ADMINISTRATOR . DS . 'extensions' . DS . 'modules' : JPATH_SITE . DS . 'modules';
-		$path = JPath::clean($root . DS . $module . DS . $module . '.xml');
+		$root = (!$native) ? JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'modules' : JPATH_SITE . DIRECTORY_SEPARATOR . 'modules';
+		$path = JPath::clean($root . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR . $module . '.xml');
 		if (file_exists($path)) {
 			$xml = simplexml_load_file($path);
 		} else {
@@ -479,7 +479,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 	 */
 	public static function getNativeSupportedNames()
 	{
-		$file = realpath(JPATH_COMPONENT_ADMINISTRATOR) . DS . 'modules.xml';
+		$file = realpath(JPATH_COMPONENT_ADMINISTRATOR) . DIRECTORY_SEPARATOR . 'modules.xml';
 
 		// Attempt to load the xml file.
 		if (file_exists($file)) {

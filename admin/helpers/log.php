@@ -176,7 +176,7 @@ class LogHelper
 			//@JLog::add($logEntry);
 			
 			// To avoid infinit looping if something wrong with JTable::getInstance()
-			require_once(JPATH_COMPONENT_ADMINISTRATOR.DS.'tables'.DS.'log.php');
+			require_once(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'tables'. DIRECTORY_SEPARATOR .'log.php');
 			$table = new NewsletterTableLog(JFactory::getDbo());
 			
 			// Type conversion

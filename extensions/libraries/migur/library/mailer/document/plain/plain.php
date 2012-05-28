@@ -12,8 +12,8 @@ defined('JPATH_BASE') or die;
 jimport('joomla.application.module.helper');
 jimport('joomla.language.language');
 jimport('joomla.utilities.simplexml');
-JLoader::register('MigurDocumentRenderer', dirname(__FILE__) . DS . 'renderer.php');
-JLoader::register('JDocumentHTML', JPATH_LIBRARIES . DS . 'joomla' . DS . 'document' . DS . 'html' . DS . 'html.php');
+JLoader::register('MigurDocumentRenderer', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'renderer.php');
+JLoader::register('JDocumentHTML', JPATH_LIBRARIES . DIRECTORY_SEPARATOR . 'joomla' . DIRECTORY_SEPARATOR . 'document' . DIRECTORY_SEPARATOR . 'html' . DIRECTORY_SEPARATOR . 'html.php');
 
 
 jimport('joomla.document.document');
@@ -81,7 +81,7 @@ class MigurMailerDocumentPlain extends MigurMailerDocument
 		$class = 'MigurDocumentPlainRenderer' . $type;
 
 		if (!class_exists($class)) {
-			$path = dirname(__FILE__) . DS . 'renderer' . DS . $type . '.php';
+			$path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'renderer' . DIRECTORY_SEPARATOR . $type . '.php';
 			if (file_exists($path)) {
 				require_once $path;
 			} else {

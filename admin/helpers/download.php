@@ -51,7 +51,7 @@ class DownloadHelper
 	static function getAttributes($item)
 	{
 		$prefix = JPATH_ROOT;
-		$file = $prefix . DS . $item->filename;
+		$file = $prefix . DIRECTORY_SEPARATOR . $item->filename;
 		if (!file_exists($file)) {
 			$item->size = null;
 			$item->type = null;

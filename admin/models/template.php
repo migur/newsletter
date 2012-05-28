@@ -139,7 +139,7 @@ class NewsletterModelTemplate extends JModelAdmin
 			$filename = $id;
 		}
 
-		$fullfile = JPATH_COMPONENT_ADMINISTRATOR . DS . 'extensions' . DS . 'templates' . DS . $filename;
+		$fullfile = JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $filename;
 		if (JFile::exists($fullfile) === false) {
 			$this->setError("File $fullfile not found");
 			return false;
