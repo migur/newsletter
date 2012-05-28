@@ -90,6 +90,8 @@
                         <folder>install</folder>
                         <!-- models files section -->
                         <folder>models</folder>
+                        <!-- plugins files section -->
+                        <folder>plugins</folder>
                         <!-- tables files section -->
                         <folder>tables</folder>
                         <!-- views files section -->
