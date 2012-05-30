@@ -86,7 +86,7 @@ class NewsletterModelSents extends JModelList
 			if (stripos($search, 'id:') === 0) {
 				$query->where('s.sent_id = ' . (int) substr($search, 3));
 			} else {
-				$search = $db->Quote('%' . $db->getEscaped($search, true) . '%');
+				$search = $db->Quote('%' . $db->escape($search, true) . '%');
 				$query->where('(n.name LIKE ' . $search . ' OR n.alias LIKE ' . $search . ')');
 			}
 		}
@@ -94,7 +94,7 @@ class NewsletterModelSents extends JModelList
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
-		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
+		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		return $query;

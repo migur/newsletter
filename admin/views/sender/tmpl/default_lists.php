@@ -3,7 +3,7 @@
 
     <form id="lists-form" name="listsForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=sender&tmpl=component'); ?>" method="post">
         <div id="sender-container">
-            <table class="sslist adminlist" width="100%">
+            <table class="sslist adminlist  table table-striped" width="100%">
                 <thead>
                     <tr>
                         <th class="left" width="1%">

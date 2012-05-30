@@ -21,7 +21,7 @@ if (!defined('MIGUR')) {
  * @subpackage  HTML
  * @since       11.1
  */
-class JButtonMigurHelp extends JButton
+class JToolbarButtonMigurHelp extends JButton
 {
 	/**
 	 * @var    string	Button type

@@ -3,7 +3,7 @@
 defined('_JEXEC') or die;
 ?>
 
-<table class="templateslist adminlist" width="100%">
+<table class="templateslist adminlist  table table-striped" width="100%">
 	<thead>
 		<tr>
 			<th>Action</th>

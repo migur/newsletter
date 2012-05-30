@@ -493,8 +493,6 @@ class com_newsletterInstallerScript
 	
 	protected function _getComponentDependentExtensions()
 	{
-		$installer  = $this->parent;
-		
 		$dbo = JFactory::getDbo();
 		$query = $dbo->getQuery(true);
 		$query->select('*')

@@ -4,7 +4,7 @@ $listOrder = 'desc';
 ?>
 
 <div id="nllist-container">
-<table class="ssnewsletters adminlist" width="100%">
+<table class="ssnewsletters adminlist  table table-striped" width="100%">
     <thead>
         <tr>
             <th width="10%" class="left">

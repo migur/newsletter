@@ -57,7 +57,7 @@ class NewsletterTableNewsletterext extends MigurJTable
 		$query->join('', '#__newsletter_extensions AS e ON a.extension_id = e.extension_id');
 		$query->where('newsletter_id=' . intval($id));
 		$query->where('native = 0');
-		$query->order($db->getEscaped('ordering asc'));
+		$query->order($db->escape('ordering asc'));
 
 		$db->setQuery($query);
 		$modulesCom = $db->loadAssocList();

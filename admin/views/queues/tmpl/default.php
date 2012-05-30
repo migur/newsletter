@@ -15,7 +15,7 @@
 	</fieldset>
 
 	<div class="queueslist-container">
-        <table class="queueslist adminlist" width="100%">
+        <table class="queueslist adminlist  table table-striped" width="100%">
 		<thead>
 			<tr>
 				<th width="1%">

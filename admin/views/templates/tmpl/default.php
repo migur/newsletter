@@ -23,7 +23,7 @@ defined('_JEXEC') or die;
 						</div>
                     </div>
                 </fieldset>
-                <table class="templateslist adminlist" width="100%">
+                <table class="templateslist adminlist  table table-striped" width="100%">
                         <thead>
                                 <tr>
                                         <th width="1%">
