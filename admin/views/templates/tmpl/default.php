@@ -80,6 +80,7 @@ defined('_JEXEC') or die;
         <td width="1%"></td>
 
         <td style="vertical-align: top;">
+			<ul class="nav nav-tab">
             <?php echo JHtml::_('tabs.start', 'prewiew'); ?>
             <?php echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PREVIEW'), 'tab-preview'); ?>
                 <div><b><span id="tpl-title"></span></b></div>

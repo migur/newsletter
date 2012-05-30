@@ -51,7 +51,7 @@ class MigurPagination extends JPagination
 		$limits[] = JHtml::_('select.option', '100', JText::_('J100'));
 		$limits[] = JHtml::_('select.option', '0', JText::_('JALL'));
 
-		$selected = $this->_viewall ? 0 : $this->limit;
+		$selected = $this->getViewAll()? 0 : $this->limit;
 
 		// Get model name
 		$formName = $this->model->getName() . 'Form';
@@ -65,6 +65,17 @@ class MigurPagination extends JPagination
 		return $html;
 	}
 
+	/**
+	 * Need for legacy support 
+	 */
+	public function getViewAll() 
+	{
+		return 
+			isset($this->_viewall)? 
+				$this->_viewall : 
+				isset($this->viewall)? $this->viewall : null;
+	}	
+	
 	protected function _item_active(&$item)
 	{
 		$formName = $this->model->getName() . 'Form';
@@ -99,7 +110,7 @@ class MigurPagination extends JPagination
 			}
 		}
 		$data->all = new JPaginationObject(JText::_('JLIB_HTML_VIEW_ALL'), $this->prefix);
-		if (!$this->_viewall) {
+		if (!$this->getViewAll()) {
 			$data->all->base = '0';
 			$data->all->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=');
 		}
@@ -141,7 +152,7 @@ class MigurPagination extends JPagination
 			//$offset = $offset == 0 ? '' : $offset;  //set the empty for removal from route
 
 			$data->pages[$i] = new JPaginationObject($i, $this->prefix);
-			if ($i != $this->get('pages.current') || $this->_viewall) {
+			if ($i != $this->get('pages.current') || $this->getViewAll()) {
 				$data->pages[$i]->base = $offset;
 				$data->pages[$i]->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=' . $offset);
 			}
