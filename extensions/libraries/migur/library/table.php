@@ -70,6 +70,7 @@ class MigurJTable extends JTable
 
 		// Check for a database error.
 		if (!$this->_db->query()) {
+			// TODO getErrorMsg() deprecated since 12.1
 			$e = new JException(JText::_('JLIB_DATABASE_ERROR_DELETE_FAILED', get_class($this), $this->_db->getErrorMsg()));
 			$this->setError($e);
 			return false;

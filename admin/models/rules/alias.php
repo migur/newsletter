@@ -71,7 +71,7 @@ class JFormRuleAlias extends JFormRule
 
 			// Get the extra field check attribute.
 			$nid = ($input instanceof JRegistry) ? $input->get('newsletter_id') : '';
-			$query->where($db->nameQuote('newsletter_id') . ' <> ' . (int) $nid);
+			$query->where($db->quoteName('newsletter_id') . ' <> ' . (int) $nid);
 
 			// Set and query the database.
 			$db->setQuery($query);

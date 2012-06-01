@@ -71,7 +71,7 @@ class JFormRuleSubemail extends JFormRule
 
 			// Get the extra field check attribute.
 			$userId = ($form instanceof JForm) ? $form->getValue('subscriber_id') : '';
-			$query->where($db->nameQuote('subscriber_id') . ' <> ' . (int) $userId);
+			$query->where($db->quoteName('subscriber_id') . ' <> ' . (int) $userId);
 
 			// Set and query the database.
 			$db->setQuery($query);
