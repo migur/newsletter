@@ -29,18 +29,11 @@ defined('_JEXEC') or die;
 	 */
 	public static function loadFeed($params)
 	{
-
 		// module params
 		$filter = JFilterInput::getInstance();
 
 		//  get RSS parsed object
-		$options = array();
-		$options['rssUrl'] = $params->rssurl;
-		$options['cache_time'] = 0;
-
-		return false;
-		
-		$parser = @JFactory::getXMLparser('RSS', $options);
+		$parser = JFactory::getFeedParser($params->rssurl, 0);
 		if ($parser) {
 
 			return RssfeedHelper::_parse($parser, $params);
