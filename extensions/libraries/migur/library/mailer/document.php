@@ -137,6 +137,7 @@ class MigurMailerDocument extends JDocument
 				if (file_exists($path)) {
 					require_once $path;
 				} else {
+					// TODO deprecated since 12.1 Use PHP Exception
 					JError::raiseError(500, JText::_('JLIB_DOCUMENT_ERROR_UNABLE_LOAD_DOC_CLASS'));
 				}
 			}
@@ -173,6 +174,7 @@ class MigurMailerDocument extends JDocument
 			if (file_exists($path)) {
 				require_once $path;
 			} else {
+				// TODO deprecated since 12.1 Use PHP Exception
 				JError::raiseError(500, JText::_('JLIB_DOCUMENT_ERROR_UNABLE_LOAD_DOC_CLASS'));
 			}
 		}

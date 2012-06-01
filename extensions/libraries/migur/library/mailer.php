@@ -300,6 +300,7 @@ class MigurMailer extends JObject
 			} catch(Exception $e) {
 				
 				// Check if there exception occured
+				// TODO deprecated since 12.1 Use PHP Exception
 				$error = JError::getError('unset');
 				if (!empty($error)){
 					$this->setError($error->get('message'));
@@ -501,6 +502,7 @@ class MigurMailer extends JObject
 			
 		} catch (Exception $e) {
 			
+			// TODO deprecated since 12.1 Use PHP Exception
 			$error = JError::getError('unset');
 			if (!empty($error)){
 				$msg = $error->get('message');

@@ -58,6 +58,7 @@ class JFormFieldMailboxprofiles extends JFormFieldList
 		// Check for a database error.
 		// TODO: deprecated since 12.1
 		if ($db->getErrorNum()) {
+			// TODO deprecated since 12.1 Use PHP Exception
 			JError::raiseWarning(500, $db->getErrorMsg());
 		}
 

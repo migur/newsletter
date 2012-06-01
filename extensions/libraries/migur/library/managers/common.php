@@ -156,7 +156,8 @@ class commonManager
 	 */
 	public function isValid()
 	{
-		JError::throwError('isValid should be implemented (' . $this->getName() . ')');
+			// TODO deprecated since 12.1 Use PHP Exception
+			JError::throwError('isValid should be implemented (' . $this->getName() . ')');
 	}
 
 	public function validateTable($name, $needed)

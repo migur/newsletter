@@ -71,6 +71,7 @@ class NewsletterControllerConfiguration extends JController
 
 			// Push up to three validation messages out to the user.
 			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
+				// TODO deprecated since 12.1 Use PHP Exception
 				if (JError::isError($errors[$i])) {
 					$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
 				} else {
