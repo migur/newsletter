@@ -8,8 +8,8 @@
 
 window.addEvent('domready', function() {
 try {
-
-	$$('#automailings-edit .toolbar, #automailings-trash .toolbar').each(function(el) { el.removeProperty('onclick'); });
+	
+	$$('#automailings-edit a, #automailings-trash a').each(function(el) { el.removeProperty('onclick'); });
 	
 	$$('.automailingslist [type=checkbox]').addEvent('click', function(){
 
@@ -19,18 +19,18 @@ try {
 
        if( active ) {
             $$('#automailings-edit, #automailings-trash').each(function(el){
-	            el.getElements('span')[0].removeClass('toolbar-inactive');
+	            el.getElements('span, i')[0].removeClass('toolbar-inactive');
 			});
 			
         } else {
             $$('#automailings-edit, #automailings-trash').each(function(el){
-                el.getElements('span')[0].addClass('toolbar-inactive');
+                el.getElements('span, i')[0].addClass('toolbar-inactive');
 			});
        }
    });
 
 /* Expand the functionality of the delete button */
-$$('#automailings-trash .toolbar')[0].addEvent('click', function(el){
+$$('#automailings-trash a')[0].addEvent('click', function(el){
 	if ($(this).getElements('span')[0].hasClass('toolbar-inactive')) return false;
 	
 	if( confirm(Joomla.JText._('COM_NEWSLETTER_ARE_YOU_SURE_QM', 'Are you sure?')) ) {
@@ -55,7 +55,6 @@ $$('#automailings-edit a')[0].addEvent('click', function(ev){
 
 
 $$('.automailingslist [type=checkbox]')[0].fireEvent('click');
-
 if ($$('.automailingslist .search').length > 0) {
 	
 	$$('.automailingslist .search').addEvent('click', function(ev){

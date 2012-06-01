@@ -8,6 +8,7 @@
 
 iframe {
     overflow: hidden;
+	border: 0;
 }
 
 div.toolbar-list li a span {
@@ -53,8 +54,8 @@ tr th img {
 }
 
 button {
-    height: 18px;
-    font-size: 0.909em;
+/*3.0    height: 18px;
+    font-size: 0.909em;*/
 }
 
 .button {
@@ -67,9 +68,9 @@ fieldset {
 }
 
 fieldset.filter-bar {
-    border-color: -moz-use-text-color -moz-use-text-color #D5D5D5;
+/*3.0    border-color: -moz-use-text-color -moz-use-text-color #D5D5D5;
     border-style: none none solid;
-    border-width: 0 0 1px;
+    border-width: 0 0 1px;*/
 }
 
 #form-subscribers .filter-search .btn,

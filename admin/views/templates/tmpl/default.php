@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
                 <legend><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></legend>
 
                 <fieldset class="filter-bar" >
-                    <?php echo JToolBar::getInstance('templates')->render(); ?>
+						<?php echo JToolBar::getInstance('templates')->render(); ?>
                     <div id="templates-filter-panel-control" class="filter-panel-control"></div>
                     <div class="clr"></div>
                     <div id="templates-filter-panel" class="filter-panel">
