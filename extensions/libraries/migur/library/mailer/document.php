@@ -489,7 +489,6 @@ class MigurMailerDocument extends JDocument
 	{
 		// Gets all links (href and src attributes has been parsed)
 		preg_match_all("/(?:href[\s\=\"\']+|src[\s\=\"\']+)([^\"\']+)/", $content, $matches);
-
 		$router = JFactory::getApplication()->getRouter();
 		
 		$withs = array();
