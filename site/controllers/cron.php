@@ -112,7 +112,8 @@ class NewsletterControllerCron extends JControllerForm
 
 		$forced = JRequest::getBool('forced', false);
 		
-		LogHelper::addDebug('Mailing started', 'mailing');
+		LogHelper::addDebug('Mailing started', LogHelper::CAT_MAILER);
+		$timeSpent = microtime(true);
 
 		$config   = JComponentHelper::getParams('com_newsletter');
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
@@ -128,6 +129,12 @@ class NewsletterControllerCron extends JControllerForm
 			$queueItem    = JModel::getInstance('Queue',      'NewsletterModelEntity');
 			$subscriber   = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 			$newsletter   = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+
+			$mailer = new MigurMailer();
+
+			// For time estimation purposes. Only for debug
+			global $fullSentStart;
+			$fullSentStart = microtime(true);
 			
 			foreach($smtpProfiles as $smtpProfile) {
 
@@ -187,14 +194,18 @@ class NewsletterControllerCron extends JControllerForm
 						
 						if (!empty($queueItems)) {
 
-							$mailer = new MigurMailer();
-
 							// Let's process these mails
-							foreach ($queueItems as $qi) {
+							$keepAlive = count($queueItems) > 1;
+							
+							for ($i=0; $i < count($queueItems); $i++) {
+
+								// For time estimation purposes. Only for debug
+								global $newsletterSentStart;
+								$newsletterSentStart = microtime(true);
 
 								$letter = new stdClass();
 
-								$queueItem->setFromArray($qi);
+								$queueItem->setFromArray($queueItems[$i]);
 								
 								try {
 
@@ -208,12 +219,15 @@ class NewsletterControllerCron extends JControllerForm
 										throw new Exception(JText::_('COM_NEWSLETTER_NEWSLETTER_NOT_FOUND'));
 									}
 
+									$doClose = $keepAlive && (count($queueItems)-1 == $i);
 									// Send mail. Exception from mailer on fail.
 									$letter = $mailer->send(array(
 										'subscriber'    => $subscriber->toObject(),
 										'newsletter_id' => $queueItem->newsletter_id,
 										'type'          => $subscriber->getType(),
 										'tracking'      => true,
+										'keepAlive'     => $keepAlive,
+										'doClose'		=> $doClose,
 										'useRawUrls'    => NewsletterHelper::getParam('rawurls') == '1'
 									));
 
@@ -238,7 +252,7 @@ class NewsletterControllerCron extends JControllerForm
 										$history->save(array(
 											'newsletter_id' => $groupItem->newsletter_id,
 											'subscriber_id' => $groupItem->subscriber_id,
-											'list_id'       => $groupItem->list_id,
+											'list_id'       => ($groupItem->list_id > 0)? $groupItem->list_id : null,
 											'date'			=> date('Y-m-d H:i:s'),
 											'action'		=> $letter->state?
 												NewsletterTableHistory::ACTION_SENT :
@@ -296,6 +310,9 @@ class NewsletterControllerCron extends JControllerForm
 								
 								$responseItem['processed']++;
 								$responseItem['success'] += !empty($letter->state)? 1 : 0;
+
+								//JLog::add('SMTP NewsletterMailcomplete. +'. (microtime(true) - $newsletterSentStart) . 's, total:+' . (microtime(true) - $fullSentStart) . 's', JLog::WARNING, 'mailing');
+
 							}
 							
 							LogHelper::addMessage('COM_NEWSLETTER_SENT_MAILS_BY_CRON', LogHelper::CAT_MAILER, array(
@@ -319,6 +336,13 @@ class NewsletterControllerCron extends JControllerForm
 			}
 		}
 
+		
+		// Let's log some statistics info
+		LogHelper::addDebug('Mailing finished', LogHelper::CAT_MAILER, array(
+			'Time spent' => floor((microtime(true) - $timeSpent) * 1000)
+		));
+	
+		
 		if ($mode == 'std') {
 			// Send and exit
 			NewsletterHelper::jsonMessage('ok', $response);

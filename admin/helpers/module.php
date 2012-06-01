@@ -84,7 +84,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 		// Get module parameters
 		$params = new JRegistry;
 		if (is_string($module->params)) {
-			$params->loadJSON($module->params);
+			$params->loadString($module->params, 'JSON');
 		} else {
 			$params->loadObject((object) $module->params);
 		}
