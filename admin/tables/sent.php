@@ -68,8 +68,9 @@ class NewsletterTableSent extends JTable
 		$this->_db->setQuery($query);
 
 		if (!$this->_db->query()) {
-			// TODO getErrorMsg() deprecated in 12.1
-			$e = new JException(JText::_('JLIB_DATABASE_ERROR_DELETE_FAILED', get_class($this), $this->_db->getErrorMsg()));
+			
+			$e = new Exception(JText::_('JLIB_DATABASE_ERROR_DELETE_FAILED'));
+			
 			$this->setError($e);
 			return false;
 		}

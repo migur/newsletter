@@ -299,7 +299,7 @@ class MigurMailer extends JObject
 				
 			} catch(Exception $e) {
 				
-				// Check if there JException occured
+				// Check if there exception occured
 				$error = JError::getError('unset');
 				if (!empty($error)){
 					$this->setError($error->get('message'));
