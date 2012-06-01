@@ -102,7 +102,7 @@ class NewsletterModelAutomailings extends MigurModelList
 		// Filter by search in title.
 		$search = $this->getState('filter.search');
 		if (!empty($search)) {
-			$search = $db->Quote('%' . $db->getEscaped($search, true) . '%');
+			$search = $db->Quote('%' . $db->escape($search, true) . '%');
 			$query->where('(a.automailing_name LIKE ' . $search . ')');
 		}
 
@@ -110,7 +110,7 @@ class NewsletterModelAutomailings extends MigurModelList
 		// Need to be setted in populateState
 		$orderCol = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
-		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
+		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		return $query;

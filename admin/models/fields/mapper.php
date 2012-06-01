@@ -43,7 +43,7 @@ class JFormFieldMapper extends JFormField
 
 			// Only add <option /> elements.
 			if ($option->getName() == 'option') {
-				$opts[$option->getAttribute('value')] = $option->data();
+				$opts[(string)$option->attributes()->value] = (string)$option;
 			}
 		}
 

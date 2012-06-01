@@ -183,10 +183,10 @@ class NewsletterModelSubscribers extends MigurModelList
 			if (stripos($search, 'id:') === 0) {
 				$query->where('a.id = ' . (int) substr($search, 3));
 			} else if (stripos($search, 'name:') === 0) {
-				$search = $db->Quote('%' . $db->getEscaped(substr($search, 7), true) . '%');
+				$search = $db->Quote('%' . $db->escape(substr($search, 7), true) . '%');
 				$query->where('(a.name LIKE ' . $search . ')');
 			} else {
-				$search = $db->Quote('%' . $db->getEscaped($search, true) . '%');
+				$search = $db->Quote('%' . $db->escape($search, true) . '%');
 				$query->where('(a.name LIKE ' . $search . ' OR a.email LIKE ' . $search . ')');
 			}
 		}
@@ -199,7 +199,7 @@ class NewsletterModelSubscribers extends MigurModelList
 		if ($orderCol == 'a.ordering' || $orderCol == 'a.name') {
 			$orderCol = 'name';
 		}
-		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
+		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$this->query = $query;
@@ -248,7 +248,7 @@ class NewsletterModelSubscribers extends MigurModelList
 		if ($orderCol == 'a.ordering' || $orderCol == 'a.name') {
 			$orderCol = 'name ' . $orderDirn . ', a.subscriber_id';
 		}
-		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
+		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$db->setQuery($query);
@@ -286,7 +286,7 @@ class NewsletterModelSubscribers extends MigurModelList
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.unsubscribed.ordering');
 		$orderDirn = $this->state->get('list.unsubscribed.direction');
-		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
+		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		$db->setQuery($query);

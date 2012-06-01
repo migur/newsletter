@@ -20,7 +20,8 @@ jimport('joomla.application.component.modeladmin');
  */
 class NewsletterModelList extends JModelAdmin
 {
-
+	protected $_mailer;
+	
 	protected $_context;
 
 	/**
@@ -178,13 +179,30 @@ class NewsletterModelList extends JModelAdmin
                 if(!$subscriber->isInList($listId)) {
                     if($subscriber->assignToList($listId)) {
 
-						// Fire event onMigurAfterSubscriberImport
-						JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberImport', array(
-							'subscriberId' => $subscriber->getId(),
-							'lists' => array($listId)
-						));
+						// Send subscription letter. But not immediately.
+						// Just add in queue
+						$res = $this->sendSubscriptionMail(
+							$subscriber, 
+							$listId,
+							array(
+								'addToQueue'       => true,
+								'ignoreDuplicates' => true)
+						);
 						
-                        $assigned++;
+						if ($res) {
+							
+							// Fire event onMigurAfterSubscriberImport
+							JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberImport', array(
+								'subscriberId' => $subscriber->getId(),
+								'lists' => array($listId)
+							));
+
+							$assigned++;
+							
+						} else {
+							
+	                        $errors++;
+						}	
 
                     } else {
 
@@ -207,4 +225,92 @@ class NewsletterModelList extends JModelAdmin
             'skipped'  => $skipped
         );
     }
+	
+	function sendSubscriptionMail($subscriber, $listId, $options = array()) 
+	{		
+		JLoader::import('helpers.placeholder', JPATH_COMPONENT_ADMINISTRATOR);
+		jimport('migur.library.mailer');
+		
+		// Get list
+		$table = $this->getTable();
+		$table->load($listId);
+		$list = (object) $table->getProperties();
+		
+		// Check if we need to use fallback newsletter if 
+		// newsletter on subscription is not defined
+		if (!empty($options['noFallback']) && empty($list->send_at_reg)) {
+			// True means no errors...
+			return true;
+		}
+
+		// Get subscriber
+		if (!empty($subscriber) && is_numeric($subscriber)) {
+			$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$subscriber->load($subscriber);
+		}
+		
+		// Get newsletter to send
+		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$newsletter->loadAsWelcoming($list->send_at_reg);
+		
+		if (!$subscriber->getId() || !$newsletter->getId() || empty($list->list_id)) {
+			throw new Exception('Missing required options');
+		}
+
+		$queueManager = JModel::getInstance('Queues', 'NewsletterModel');
+		// Return if no need to send duplicaded mails
+		if (
+			empty($options['ignoreDuplicates']) &&
+			$queueManager->isMailExist($subscriber->getId(), $newsletter->getId())
+		) {
+			return true;
+		}	
+		
+		// Check if we need to send it immediately or just store it in queue
+		if (!empty($options['addToQueue'])) {
+			
+			return $queueManager->addMail(
+				$subscriber->getId(),
+				$newsletter->getId(),
+				$list->list_id);
+			
+		}
+		
+		
+		// Let's send wellcoming letter
+		try {
+			
+			PlaceholderHelper::setPlaceholder('listname', $list->name);
+			
+			if (!$this->_mailer) {
+				$this->_mailer = new MigurMailer();
+			}	
+			
+			$res = $this->_mailer->send(array(
+				'type'          => $newsletter->isFallback() ? 'plain' : $subscriber->getType(),
+				'subscriber'    => $subscriber->toObject(),
+				'newsletter_id' => $newsletter->newsletter_id,
+				'tracking'      => isset($options['tracking'])? $options['tracking'] : true,
+				'useRawUrls'    => isset($options['useRawUrls'])? $options['useRawUrls'] : NewsletterHelper::getParam('rawurls') == '1'
+			));
+
+			if (!$res->state) {
+				throw new Exception(json_encode($res->errors));
+			}
+			
+			LogHelper::addMessage(
+				'COM_NEWSLETTER_WELLCOMING_NEWSLETTER_SENT_SUCCESSFULLY', LogHelper::CAT_SUBSCRIPTION, array('Email' => $subscriber->email, 'Newsletter' => $newsletter->name));
+
+		} catch (Exception $e) {
+			LogHelper::addError(
+				'COM_NEWSLETTER_WELCOMING_SEND_FAILED', LogHelper::CAT_SUBSCRIPTION, array(
+				'Error' => $e->getMessage(),
+				'Email' => $subscriber->email,
+				'Newsletter' => $newsletter->name));
+			return false;
+		}
+		
+		return true;
+	}
+	
 }

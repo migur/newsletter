@@ -37,7 +37,7 @@
 	</fieldset>
 
 	<div class="logslist-container">
-        <table class="logslist adminlist" width="100%">
+        <table class="logslist adminlist  table table-striped" width="100%">
 		<thead>
 			<tr>
 				<th width="1%">

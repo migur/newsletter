@@ -124,7 +124,7 @@ class DataHelper
 		if (!empty(self::$managers[$com]) && is_object(self::$managers[$com])) {
 			return self::$managers[$com];
 		}
-		if (!@include_once JPATH_LIBRARIES . DS . 'migur' . DS . 'library' . DS . 'managers' . DS . strtolower($com) . '.php') {
+		if (!@include_once JPATH_LIBRARIES . DIRECTORY_SEPARATOR . 'migur' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'managers' . DIRECTORY_SEPARATOR . strtolower($com) . '.php') {
 			return false;
 		}
 

@@ -71,13 +71,14 @@ class JFormRuleSubemail extends JFormRule
 
 			// Get the extra field check attribute.
 			$userId = ($form instanceof JForm) ? $form->getValue('subscriber_id') : '';
-			$query->where($db->nameQuote('subscriber_id') . ' <> ' . (int) $userId);
+			$query->where($db->quoteName('subscriber_id') . ' <> ' . (int) $userId);
 
 			// Set and query the database.
 			$db->setQuery($query);
 			$duplicate = (bool) $db->loadResult();
 
 			// Check for a database error.
+			// TODO: deprecated since 12.1
 			if ($db->getErrorNum()) {
 				JError::raiseWarning(500, $db->getErrorMsg());
 			}
@@ -100,6 +101,7 @@ class JFormRuleSubemail extends JFormRule
 			$duplicate = (bool) $db->loadResult();
 
 			// Check for a database error.
+			// TODO: deprecated since 12.1
 			if ($db->getErrorNum()) {
 				JError::raiseWarning(500, $db->getErrorMsg());
 			}

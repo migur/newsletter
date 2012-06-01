@@ -139,16 +139,16 @@ class NewsletterModelTemplate extends JModelAdmin
 			$filename = $id;
 		}
 
-		$fullfile = JPATH_COMPONENT_ADMINISTRATOR . DS . 'extensions' . DS . 'templates' . DS . $filename;
+		$fullfile = JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $filename;
 		if (JFile::exists($fullfile) === false) {
 			$this->setError("File $fullfile not found");
 			return false;
 		}
 
 		try {
-			$xml = new JSimpleXML;
-			$xml->loadFile($fullfile);
-			$str = trim($xml->document->template[0]->_data);
+			
+			$xml = simplexml_load_file($fullfile, 'SimpleXMLElement' ,LIBXML_NOCDATA);
+			$str = trim((string)$xml->template);
 			if (!$preserve) {
 				$str = str_replace('<position', '<div class="drop container-draggables"', $str);
 			}
@@ -157,15 +157,15 @@ class NewsletterModelTemplate extends JModelAdmin
 			$item->content = $str;
 
 			$item->information = array(
-				'name' => $xml->document->information[0]->name[0]->_data,
-				'author' => $xml->document->information[0]->author[0]->_data,
-				'creationDate' => $xml->document->information[0]->creationDate[0]->_data,
-				'copyright' => $xml->document->information[0]->copyright[0]->_data,
-				'license' => $xml->document->information[0]->license[0]->_data,
-				'authorEmail' => $xml->document->information[0]->authorEmail[0]->_data,
-				'authorUrl' => $xml->document->information[0]->authorUrl[0]->_data,
-				'version' => $xml->document->information[0]->version[0]->_data,
-				'description' => $xml->document->information[0]->description[0]->_data
+				'name' => (string)$xml->information->name,
+				'author' => (string)$xml->information->author,
+				'creationDate' => (string)$xml->information->creationDate,
+				'copyright' => (string)$xml->information->copyright,
+				'license' => (string)$xml->information->license,
+				'authorEmail' => (string)$xml->information->authorEmail,
+				'authorUrl' => (string)$xml->information->authorUrl,
+				'version' => (string)$xml->information->version,
+				'description' => (string)$xml->information->description
 			);
 			unset($xml);
 		} catch (Exception $e) {

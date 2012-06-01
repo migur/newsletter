@@ -173,7 +173,7 @@ class MigurMailerSender extends PHPMailer
 		$this->Body = JMailHelper::cleanText($this->letter->content);
 		foreach($this->attach as $item) {
 			$parts = explode(DS, $item->filename);
-			$full  = JPATH_ROOT.DS.$item->filename;
+			$full  = JPATH_ROOT. DIRECTORY_SEPARATOR .$item->filename;
 			if(function_exists('mime_content_type')) {
 				$mime = mime_content_type($full);
 			} elseif (function_exists('finfo_open')) {

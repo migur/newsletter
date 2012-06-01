@@ -152,7 +152,7 @@ class NewsletterHelper
 	static public function getManifest()
 	{
 		if (!self::$_manifest) {
-			$file = JPATH_COMPONENT_ADMINISTRATOR . DS . 'newsletter.xml';
+			$file = JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'newsletter.xml';
 			$path = JPath::clean($file);
 			if (file_exists($path)) {
 				self::$_manifest = simplexml_load_file($path);
@@ -438,10 +438,29 @@ class NewsletterHelper
 		jexit();
 	}
 
+	
+	/**
+	 * Echoes the JSON error massages to client.
+	 * Collect all output data from buffers and attaches it
+	 * to the response as a parameter "serverResponse".
+	 * 
+	 * @param string|array $message Text of returned messages
+	 * @param mixed $data
+	 * @param bool $exit 
+	 */
 	static public function jsonError($messages = array(), $data = array(), $exit = true) {
 		self::jsonResponse(false, $messages, $data, $exit);
 	}	
 	
+	/**
+	 * Echoes the JSON success messages to client.
+	 * Collect all output data from buffers and attaches it
+	 * to the response as a parameter "serverResponse".
+	 * 
+	 * @param string|array $message Text of returned messages
+	 * @param mixed $data
+	 * @param bool $exit 
+	 */
 	static public function jsonMessage($messages = array(), $data = array(), $exit = true) {
 		self::jsonResponse(true, $messages, $data, $exit);
 	}	

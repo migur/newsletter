@@ -64,7 +64,7 @@ echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_EXTENSION_SETTINGS'), 'tab-
 echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_EXTENSION_INFORMATION'), 'tab-'); ?>
 
     <div id="ext-info">
-	<table class="sslist adminlist">
+	<table class="sslist adminlist  table table-striped">
             <tbody>
 		<?php $idx = 0; foreach ($this->info as $i => $item) : ?>
                     <tr class="row<?php echo $idx % 2; ?>">

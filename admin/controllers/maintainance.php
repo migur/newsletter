@@ -75,7 +75,7 @@ class NewsletterControllerMaintainance extends JControllerForm
 			'type' => $sc);
 		
 		
-		$installFile = file_get_contents(JPATH_COMPONENT_ADMINISTRATOR.DS.'install'.DS.'install.sql');
+		$installFile = file_get_contents(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'install.sql');
 		
 		// explode whole script to table alter scripts
 		$tableAlters = array();

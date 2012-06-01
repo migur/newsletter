@@ -19,9 +19,6 @@ if (!defined('MIGUR')) {
 	die(JError::raiseWarning(0, JText::_("MIGUR library wasn't found.")));
 }
 
-//Register the session storage class with the loader
-JLoader::register('JButton', dirname(__FILE__) . DS . 'toolbar' . DS . 'button.php');
-
 /**
  * Class that implements the multiform toolbar
  *
@@ -51,7 +48,7 @@ class MigurToolBar extends JToolBar
 
 		$this->_formName = ($form) ? $form : $name . 'Form';
 		
-		$this->addButtonPath(JPATH_LIBRARIES.DS.'migur'.DS.'library'.DS.'button');
+		$this->addButtonPath(JPATH_LIBRARIES. DIRECTORY_SEPARATOR .'migur'. DIRECTORY_SEPARATOR .'library'. DIRECTORY_SEPARATOR .'button');
 		
 		$this->_actionPrefix = $actionPrefix;
 		

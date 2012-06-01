@@ -17,8 +17,8 @@ jimport('migur.library.mailer.document');
 
 JLoader::import('helpers.placeholder', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-//JLoader::register('JDocumentHTML', JPATH_LIBRARIES . DS . 'joomla' . DS . 'document' . DS . 'html' . DS . 'html.php');
-//JLoader::register('MigurDocumentRenderer', dirname(__FILE__) . DS . 'renderer.php');
+//JLoader::register('JDocumentHTML', JPATH_LIBRARIES . DIRECTORY_SEPARATOR . 'joomla' . DIRECTORY_SEPARATOR . 'document' . DIRECTORY_SEPARATOR . 'html' . DIRECTORY_SEPARATOR . 'html.php');
+//JLoader::register('MigurDocumentRenderer', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'renderer.php');
 /**
  * Class for HTML document type
  *
@@ -204,15 +204,17 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 		$class = 'MigurDocumentHtmlRenderer' . $type;
 
 		if (!class_exists($class)) {
-			$path = dirname(__FILE__) . DS . 'renderer' . DS . $type . '.php';
+			$path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'renderer' . DIRECTORY_SEPARATOR . $type . '.php';
 			if (file_exists($path)) {
 				require_once $path;
 			} else {
+				// TODO deprecated since 12.1 Use PHP Exception
 				JError::raiseError(500, JText::_('Unable to load renderer class'));
 			}
 		}
 
 		if (!class_exists($class)) {
+			// TODO deprecated since 12.1 Use PHP Exception
 			JError::raiseError(500, JText::_('Unable to find the class'));
 			return null;
 		}

@@ -46,6 +46,7 @@ class NewsletterControllerConflicts extends JControllerAdmin
 		$cid	= JRequest::getVar('cid', array(), '', 'array');
 
 		if (!is_array($cid) || count($cid) < 1) {
+			// TODO deprecated since 12.1 Use PHP Exception
 			JError::raiseWarning(500, JText::_($this->text_prefix.'_NO_ITEM_SELECTED'));
 		} else {
 			// Get the model.
@@ -82,6 +83,7 @@ class NewsletterControllerConflicts extends JControllerAdmin
 		$cid	= JRequest::getVar('cid', array(), '', 'array');
 
 		if (!is_array($cid) || count($cid) < 1) {
+			// TODO deprecated since 12.1 Use PHP Exception
 			JError::raiseWarning(500, JText::_($this->text_prefix.'_NO_ITEM_SELECTED'));
 		} else {
 			// Get the model.
@@ -119,6 +121,7 @@ class NewsletterControllerConflicts extends JControllerAdmin
 		$cid	= JRequest::getVar('cid', array(), '', 'array');
 
 		if (!is_array($cid) || count($cid) < 1) {
+			// TODO deprecated since 12.1 Use PHP Exception
 			JError::raiseWarning(500, JText::_($this->text_prefix.'_NO_ITEM_SELECTED'));
 		} else {
 			// Get the model.

@@ -74,7 +74,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		if (empty($newsletterId)) {
 			echo json_encode(array(
 				'state' => '0',
-				'error' => 'The newsletter id is absent',
+				'error' => JText::_('COM_NEWSLETTER_NEWSLETTER_ID_NOT_FOUND'),
 			));
 			return;
 		}
@@ -82,7 +82,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		if (empty($type)) {
 			echo json_encode(array(
 				'state' => '0',
-				'error' => "The type is absent",
+				'error' => JText::_('COM_NEWSLETTER_TYPE_NOT_FOUND'),
 			));
 			return;
 		}
@@ -173,7 +173,8 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$data = array(
 			'newsletter_id' => $newsletterId,
 			'type' => $type,
-			'tracking' => true
+			'tracking' => true,
+			'useRawUrls' => NewsletterHelper::getParam('rawurls') == '1'
 		);
 
 		

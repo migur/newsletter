@@ -14,7 +14,7 @@
             </div>
 	</fieldset>
 
-	<table class="sslist adminlist" width="100%">
+	<table class="sslist adminlist  table table-striped" width="100%">
 		<thead>
 			<tr>
 				<th width="1%">

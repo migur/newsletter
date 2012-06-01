@@ -1,6 +1,6 @@
 <fieldset>
 	<legend><?php echo JText::_('MOD_UPDATER_INFORMATION'); ?></legend>
-    <table class="adminlist">
+    <table class="adminlist  table table-striped">
         <tbody>
             <tr class="row0">
                 <td><?php echo JText::_('MOD_UPDATER_SUPPORTED_VERSION'); ?></td>

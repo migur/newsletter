@@ -9,7 +9,7 @@
 
 	
     <form id="plugin-form" action="<?php echo JUri::current(); ?>">
-        <table class="adminlist">
+        <table class="adminlist  table table-striped">
             <thead>
                 <tr>
                 <?php 

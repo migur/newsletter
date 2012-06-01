@@ -63,8 +63,8 @@ class PlaceholderHelper
 			return self::$_instances[$namespace][$class];
 		}
 
-		$path = 'migur' . DS . 'library' . DS . 'mailer' . DS . 'document' . DS .
-			$namespace . DS . 'renderer' . DS . 'placeholder' . DS;
+		$path = 'migur' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'mailer' . DIRECTORY_SEPARATOR . 'document' . DIRECTORY_SEPARATOR .
+			$namespace . DIRECTORY_SEPARATOR . 'renderer' . DIRECTORY_SEPARATOR . 'placeholder' . DIRECTORY_SEPARATOR;
 
 		if (!JLoader::import($path . $class, JPATH_LIBRARIES)) {
 
@@ -128,13 +128,13 @@ class PlaceholderHelper
 
 			self::$placeholders['unsubscription link'] = array(
 				'data' => null,
-				'default' => JUri::getInstance()->toString(array('host', 'scheme')) . JRoute::_('index.php?option=com_newsletter&task=subscribe.showunsubscribe', false) . '&uid=[subscription key]&nid=[newsletter id]',
+				'default' => 'index.php?option=com_newsletter&task=subscribe.showunsubscribe&uid=[subscription key]&nid=[newsletter id]',
 				'class' => 'link'
 			);
 
 			self::$placeholders['confirmation link'] = array(
 				'data' => null,
-				'default' => JUri::getInstance()->toString(array('host', 'scheme')) . JRoute::_('index.php?option=com_newsletter&task=subscribe.confirm', false) . '&id=[subscription key]',
+				'default' => 'index.php?option=com_newsletter&task=subscribe.confirm&id=[subscription key]',
 				'class' => 'link'
 			);
 

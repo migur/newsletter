@@ -23,7 +23,7 @@
             </div>
 	</fieldset>
 
-	<table class="sslist adminlist">
+	<table class="sslist adminlist  table table-striped">
 		<thead>
 			<tr>
 				<th class="left" width="1%">

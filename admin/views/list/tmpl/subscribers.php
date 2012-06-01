@@ -1,5 +1,5 @@
 <div id="subscribers-list">
-	<table class="sslist adminlist" id="table-subs">
+	<table class="sslist adminlist  table table-striped" id="table-subs">
 		<thead>
 			<tr>
 				<th class="left">

@@ -238,7 +238,8 @@ class MigurMailer extends JObject
 			$letter->content = $this->render(array(
 					'type' => $type,
 					'newsletter_id' => $letter->newsletter_id,
-					'tracking' => $params['tracking']
+					'tracking'      => $params['tracking'],
+					'useRawUrls'    => $params['useRawUrls']
 				));
 
 			$letter->subject = $this->renderSubject($letter->subject);
@@ -299,7 +300,8 @@ class MigurMailer extends JObject
 				
 			} catch(Exception $e) {
 				
-				// Check if there JException occured
+				// Check if there exception occured
+				// TODO deprecated since 12.1 Use PHP Exception
 				$error = JError::getError('unset');
 				if (!empty($error)){
 					$this->setError($error->get('message'));
@@ -423,9 +425,11 @@ class MigurMailer extends JObject
 
 		// render the content of letter for each user
 		$letter->content = $this->render(array(
-				'type' => $type,
+				'type'          => $type,
 				'newsletter_id' => $letter->newsletter_id,
-				'tracking' => true
+				'tracking'      => true,
+				'useRawUrls'    => $params['useRawUrls']
+
 			));
 		
 		$letter->subject = $this->renderSubject($letter->subject);
@@ -515,6 +519,7 @@ class MigurMailer extends JObject
 			
 		} catch (Exception $e) {
 			
+			// TODO deprecated since 12.1 Use PHP Exception
 			$error = JError::getError('unset');
 			if (!empty($error)){
 				$msg = $error->get('message');

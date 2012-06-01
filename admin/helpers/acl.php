@@ -104,7 +104,7 @@ class AclHelper
 			
 			if (
 				(!in_array($customRule, array_keys($customRules)) &&
-				!self::$resultForAbsentAction) || !$customRules[$customRule]
+				!self::$resultForAbsentAction) || empty($customRules[$customRule])
 			) {
 				return false;
 			}
@@ -147,6 +147,7 @@ class AclHelper
 	public static function redirectToAccessDenied($warning = true)
 	{
 		if ($warning) {
+			// TODO deprecated since 12.1 Use PHP Exception
 			JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 		}	
 		

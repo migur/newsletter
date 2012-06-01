@@ -24,7 +24,7 @@
 
 <div id="exclude-lists" class="hide">
     <div id="exclude-tab-scroller">
-        <table class="sslist adminlist" id="table-exclude">
+        <table class="sslist adminlist  table table-striped" id="table-exclude">
             <thead>
                 <tr>
                     <th class="left" width="1%">
