@@ -104,7 +104,7 @@ class AclHelper
 			
 			if (
 				(!in_array($customRule, array_keys($customRules)) &&
-				!self::$resultForAbsentAction) || !$customRules[$customRule]
+				!self::$resultForAbsentAction) || empty($customRules[$customRule])
 			) {
 				return false;
 			}

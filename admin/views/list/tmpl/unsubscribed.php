@@ -4,7 +4,7 @@
             <input type="text" name="filter_search" id="unsubscribed_filter_search" value="<?php //echo $this->escape($this->lists->state->get('filter.search')); ?>" title="<?php echo JText::_('com_newsletter_FILTER_SEARCH_DESC'); ?>" />
         </div>
 
-        <table class="sslist adminlist" id="table-unsubscribed">
+        <table class="sslist adminlist  table table-striped" id="table-unsubscribed">
 		<thead>
 			<tr>
 				<th width="30%" class="left">

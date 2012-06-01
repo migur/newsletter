@@ -78,6 +78,8 @@ class JFormRuleAlias extends JFormRule
 			$duplicate = (bool)$db->loadResult();
 
 			// Check for a database error.
+			
+			// TODO: deprecated since 12.1
 			if ($db->getErrorNum()) {
 				JError::raiseWarning(500, $db->getErrorMsg());
 			}

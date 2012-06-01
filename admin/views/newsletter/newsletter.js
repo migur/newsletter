@@ -544,7 +544,7 @@ window.addEvent('domready', function() {
 
                 var $this = this;
                 new Request.JSON({
-                    url: '?option=com_newsletter&task=template.getparsed&format=json',
+                    url: '?option=com_newsletter&task=template.getparsed',
                     data: {
                         t_style_id: data.t_style_id,
                         type: 'html',

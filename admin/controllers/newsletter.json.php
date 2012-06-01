@@ -99,7 +99,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		}
 
 		$mediaParams = JComponentHelper::getParams('com_media');
-		$filename = $mediaParams->get('file_path') . DS . $filename;
+		$filename = $mediaParams->get('file_path') . DIRECTORY_SEPARATOR . $filename;
 		$filename = str_replace('/', DS, $filename);
 		
 		$table = JTable::getInstance('downloads', 'NewsletterTable');

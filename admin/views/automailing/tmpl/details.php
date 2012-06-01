@@ -37,7 +37,7 @@
 		
 	<form id="form-automailing" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=automailing&layuot=details');?>" method="post" name="automailingForm" >
 		
-		<table class="automailingitems adminlist" width="100%">
+		<table class="automailingitems adminlist  table table-striped" width="100%">
 			<thead>
 				<tr>
 					<th class="left" width="35%">

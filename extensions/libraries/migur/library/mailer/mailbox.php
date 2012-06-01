@@ -10,7 +10,7 @@
 // No direct access
 defined('JPATH_BASE') or die;
 
-define('_PATH_BMH', JPATH_LIBRARIES . DS . 'migur' . DS . 'library' . DS . 'mailer' . DS . 'phpmailer' . DS);
+define('_PATH_BMH', JPATH_LIBRARIES . DIRECTORY_SEPARATOR . 'migur' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'mailer' . DIRECTORY_SEPARATOR . 'phpmailer' . DIRECTORY_SEPARATOR);
 include_once(_PATH_BMH . 'class.phpmailer-bmh.php');
 
 /**
@@ -121,7 +121,7 @@ class MigurMailerMailbox
 
 			$name = 'MigurMailerProtocol' . ucfirst($options['mailbox_server_type']);
 
-			require_once 'protocol' . DS . strtolower($options['mailbox_server_type']) . '.php';
+			require_once 'protocol' . DIRECTORY_SEPARATOR . strtolower($options['mailbox_server_type']) . '.php';
 
 			$this->protocol = new $name($options);
 		}

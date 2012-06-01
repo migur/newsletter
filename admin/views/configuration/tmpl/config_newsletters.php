@@ -1,6 +1,6 @@
 <?php $items = $this->form->getFieldset('newsletters'); ?>
 
-<table class="adminlist" width="100%">
+<table class="adminlist  table table-striped" width="100%">
         <thead>
             <tr>
                 <th width="40%" class="left">

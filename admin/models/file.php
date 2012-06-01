@@ -66,7 +66,7 @@ class NewsletterModelFile extends JModel
 			// The request is valid
 			$err = null;
 
-			$filepath = JPath::clean(JPATH_COMPONENT . DS . $folder . DS . strtolower($file['name']));
+			$filepath = JPath::clean(JPATH_COMPONENT . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . strtolower($file['name']));
 
 			if (!MediaHelper::canUpload($file, $err)) {
 				$log->addEntry(array('comment' => 'Invalid: ' . $filepath . ': ' . $err));

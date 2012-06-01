@@ -38,6 +38,8 @@ defined('_JEXEC') or die;
 		$options['rssUrl'] = $params->rssurl;
 		$options['cache_time'] = 0;
 
+		return false;
+		
 		$parser = @JFactory::getXMLparser('RSS', $options);
 		if ($parser) {
 

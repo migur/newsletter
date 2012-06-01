@@ -4,7 +4,7 @@ $listOrder = 'desc';
 ?>
 
 <div id="history-container">
-    <table class="sshistory adminlist" width="100%">
+    <table class="sshistory adminlist  table table-striped" width="100%">
         <thead>
             <tr>
                 <th width="30px" class="left">

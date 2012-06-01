@@ -4,7 +4,7 @@
     <fieldset id="wrapper">
         <legend><?php echo JText::_('COM_NEWSLETTER_CONFLICT_TITLE'); ?></legend>
 		<?php //echo JToolbar::getInstance()->render(); ?>
-	<table class="sslist adminlist">
+	<table class="sslist adminlist  table table-striped">
 		<thead>
 			<tr>
 				<th class="left" width="1%">

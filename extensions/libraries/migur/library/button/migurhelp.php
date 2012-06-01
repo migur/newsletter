@@ -21,6 +21,12 @@ if (!defined('MIGUR')) {
  * @subpackage  HTML
  * @since       11.1
  */
+
+/*
+ * Legacy support
+ */
+JToolbar::getInstance()->loadButtonType('help');
+
 class JButtonMigurHelp extends JButton
 {
 	/**
@@ -38,15 +44,14 @@ class JButtonMigurHelp extends JButton
 	 * @return  string
 	 * @since   11.1
 	 */
-	public function fetchButton($type = 'MigurHelp', $ref = '', $com = false, $override = null, $component = null, $target = '_blank', $width='0', $height='0')
+	public function fetchButton($type = 'MigurHelp', $ref = '', $com = false, $override = null, $component = null, $target = '_blank', $width='980', $height='600')
 	{
 		$text	= JText::_('JTOOLBAR_HELP');
 		$class	= $this->fetchIconClass('help');
 		$doTask	= $this->_getCommand($ref, $com, $override, $component, $width, $height);
 
-		$html = "<a href=\"#\" onclick=\"$doTask\" rel=\"help\" class=\"toolbar\">\n";
-		$html .= "<span class=\"$class\">\n";
-		$html .= "</span>\n";
+		$html = "<a href=\"#\" onclick=\"$doTask\" rel=\"help\" class=\"toolbar btn\">\n";
+		$html .= "<span class=\"$class\"><i class=\"icon-question-sign\"></i></span>\n";
 		$html .= "$text\n";
 		$html .= "</a>\n";
 
@@ -88,3 +93,10 @@ class JButtonMigurHelp extends JButton
 		return $cmd;
 	}
 }
+
+
+/*
+ * Legacy support
+ */
+class JToolbarButtonMigurHelp extends JButtonMigurHelp 
+{}

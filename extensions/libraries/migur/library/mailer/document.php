@@ -67,7 +67,7 @@ class MigurMailerDocument extends JDocument
 		$this->trackingGa = isset($params['trackingGa'])? (bool)$params['trackingGa'] : true;
 		
 		$this->directory = !empty($params['directory']) ?
-			$params['directory'] : JPATH_COMPONENT_ADMINISTRATOR . DS . 'extensions' . DS . 'templates';
+			$params['directory'] : JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'templates';
 
 		$this->renderMode = !empty($params['renderMode']) ?
 			$params['renderMode'] : 'full';
@@ -120,7 +120,7 @@ class MigurMailerDocument extends JDocument
 		$signature = serialize(array($type, $attributes));
 		if (empty($instances[$signature])) {
 			$type = preg_replace('/[^A-Z0-9_\.-]/i', '', $type);
-			$path = dirname(__FILE__) . DS . 'document' . DS . $type . DS . $type . '.php';
+			$path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'document' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $type . '.php';
 			$ntype = null;
 
 			// Check if the document type exists
@@ -133,7 +133,7 @@ class MigurMailerDocument extends JDocument
 			// Determine the path and class
 			$class = 'MigurMailerDocument' . $type;
 			if (!class_exists($class)) {
-				$path = dirname(__FILE__) . DS . 'document' . DS . $type . DS . $type . '.php';
+				$path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'document' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $type . '.php';
 				if (file_exists($path)) {
 					require_once $path;
 				} else {
@@ -169,7 +169,7 @@ class MigurMailerDocument extends JDocument
 		// Determine the path and class
 		$class = 'MigurMailerDocument' . $type;
 		if (!class_exists($class)) {
-			$path = dirname(__FILE__) . DS . 'document' . DS . $type . DS . $type . '.php';
+			$path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'document' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $type . '.php';
 			if (file_exists($path)) {
 				require_once $path;
 			} else {

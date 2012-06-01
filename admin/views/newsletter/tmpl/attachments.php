@@ -14,7 +14,7 @@
         </dl>
 
         <div id="attlist-container">
-        <table class="attlist adminlist" width="100%">
+        <table class="attlist adminlist  table table-striped" width="100%">
             <thead>
                 <tr>
                     <th width="50%" class="left">

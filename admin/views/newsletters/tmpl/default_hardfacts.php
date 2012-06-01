@@ -1,4 +1,4 @@
-<table width="100%" class="sslist adminlist">
+<table width="100%" class="sslist adminlist  table table-striped">
 		<thead>
 			<tr class="row0">
 				<th width="40%">&nbsp;</th>

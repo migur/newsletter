@@ -131,7 +131,7 @@ class NewsletterModelHistory extends MigurModelList
 
 			$orderCol = 'date ' . $orderDirn;
 		}
-		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
+		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		return $query;

@@ -61,6 +61,7 @@ class JFormFieldSmtpprofiles extends JFormFieldList
 		$options = $db->loadObjectList();
 
 		// Check for a database error.
+		// TODO: deprecated since 12.1
 		if ($db->getErrorNum()) {
 			JError::raiseWarning(500, $db->getErrorMsg());
 		}

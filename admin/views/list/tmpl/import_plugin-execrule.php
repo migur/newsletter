@@ -1,7 +1,7 @@
 <fieldset>
     <legend><?php echo JText::_($this->plugin->title); ?></legend>
 	
-    <table class="adminlist">
+    <table class="adminlist  table table-striped">
         <tbody>
             <tr>
                 <td width="50%"><?php echo JText::_("COM_NEWSLETTER_SUBSCRIBERS_ADDED"); ?></td>

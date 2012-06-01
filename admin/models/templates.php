@@ -133,10 +133,10 @@ class NewsletterModelTemplates extends MigurModelList
 		$search = $this->getState('filter.search');
 		if (!empty($search)) {
 			if (stripos($search, 'template:') === 0) {
-				$search = $db->Quote('%' . $db->getEscaped(substr($search, 9), true) . '%');
+				$search = $db->Quote('%' . $db->escape(substr($search, 9), true) . '%');
 				$query->where('(a.template LIKE ' . $search . ')');
 			} else {
-				$search = $db->Quote('%' . $db->getEscaped($search, true) . '%');
+				$search = $db->Quote('%' . $db->escape($search, true) . '%');
 				$query->where('(a.template LIKE ' . $search . ' OR a.title LIKE ' . $search . ')');
 			}
 		}
@@ -149,7 +149,7 @@ class NewsletterModelTemplates extends MigurModelList
 		if ($orderCol == 'a.ordering' || $orderCol == 'a.name') {
 			$orderCol = 'title ' . $orderDirn;
 		}
-		$query->order($db->getEscaped($orderCol . ' ' . $orderDirn));
+		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		return $query;
@@ -217,9 +217,9 @@ class NewsletterModelTemplates extends MigurModelList
 		}
 
 		foreach ($filenames as $item) {
-			$xml = new JSimpleXML;
-			$xml->loadFile($path . $item);
-			$title = trim($xml->document->information[0]->name[0]->_data);
+			
+			$xml = simplexml_load_file($path . $item, 'SimpleXMLElement' ,LIBXML_NOCDATA);
+			$title = trim((string)$xml->information->name);
 			$standards[] = (object) array(
 					't_style_id' => 'standard',
 					'template' => $item,

@@ -5,7 +5,7 @@ defined('_JEXEC') or die;
 
 <fieldset class="template-new">
 <legend><?php echo JText::_('COM_NEWSLETTER_SELECT_STANDARD_TEMPLATE'); ?></legend>	
-<table class="nl-templates" style="width:100%">
+<table class="nl-templates  table table-striped" style="width:100%">
     <tr>
         <td width="45%" style="vertical-align: top;">
 
@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
                 <fieldset class="standard-fieldset">
                 <legend><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></legend>
 
-                <table class="templateslist adminlist" width="100%">
+                <table class="templateslist adminlist  table table-striped" width="100%">
                         <thead>
                                 <tr>
 									<th width="40%" class="left">

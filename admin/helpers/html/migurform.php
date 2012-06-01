@@ -21,7 +21,7 @@ abstract class JHtmlMigurform
 		$options = (array)$options;
 		
 		// Load the JFormField object for the field.
-		JFormHelper::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'fields');
+		JFormHelper::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'fields');
 		$field = JFormHelper::loadFieldType($type, true);
 		
 		// If the object could not be loaded, get a text field object.

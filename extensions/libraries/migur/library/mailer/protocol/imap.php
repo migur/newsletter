@@ -20,13 +20,13 @@ class MigurMailerProtocolImap {
 		
 		if (function_exists('imap_open')) {
 
-			require_once 'imap'.DS.'lib.php';
+			require_once 'imap'. DIRECTORY_SEPARATOR .'lib.php';
 			return $this->implementation = new MigurMailerProtocolImapLib($options);
 			
 		}
 			
 		// Use this as falback
-		require_once 'imap'.DS.'php.php';
+		require_once 'imap'. DIRECTORY_SEPARATOR .'php.php';
 		return $this->implementation = new MigurMailerProtocolImapPhp($options);
 	}
 	
