@@ -14,7 +14,6 @@ jimport('joomla.application.component.controller');
 
 class NewsletterController extends JController
 {
-
 	/**
 	 * display task
 	 *

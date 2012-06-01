@@ -59,20 +59,27 @@ try {
 
 				var count = 0;
 				var data = parser.getData();
-				Array.each(data, function(el){
-					count += el.processed;
-				});
-
-                if (count == 0) {
-                    text = Joomla.JText._('THERE_ARE_NO_EMAILS_TO_SEND','There are no emails to send');
-	                alert(text); 
-					return;
-                }
 				
-                if (count > 0) {
-                    text = ""+count+" "+Joomla.JText._('NEWSLETTERS_HAS_BEEN_SENT_SUCESSFULLY', 'newsletters has been sent sucessfully');
-					alert(text);
-					window.location.reload();
+				if (data.length > 0) {
+				
+					Array.each(data, function(el){
+						count += el.processed;
+					});
+
+					if (count == 0) {
+						text = Joomla.JText._('THERE_ARE_NO_EMAILS_TO_SEND','There are no emails to send');
+						alert(text); 
+						return;
+					}
+
+					if (count > 0) {
+						text = ""+count+" "+Joomla.JText._('NEWSLETTERS_HAS_BEEN_SENT_SUCESSFULLY', 'newsletters has been sent sucessfully');
+						alert(text);
+						window.location.reload();
+					}	
+					
+				} else {
+					alert(parser.getMessagesAsList());
 				}	
             }
         }).send();

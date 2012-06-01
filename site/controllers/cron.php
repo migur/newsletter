@@ -109,13 +109,24 @@ class NewsletterControllerCron extends JControllerForm
 		if ($mode == 'std') {
 			NewsletterHelper::jsonPrepare();
 		}
+		
+		$config = JComponentHelper::getParams('com_newsletter');
 
+		// Let's check if general send is disabled
+		if ($config->get('general_send_disable') == true) {
+			
+			if ($mode == 'std') {
+				NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_GENERAL_SENDING_DISABLED'));
+			} else {
+				return array('error' => JText::_('COM_NEWSLETTER_GENERAL_SENDING_DISABLED'));
+			}	
+		}
+		
 		$forced = JRequest::getBool('forced', false);
 		
 		LogHelper::addDebug('Mailing started', LogHelper::CAT_MAILER);
 		$timeSpent = microtime(true);
 
-		$config   = JComponentHelper::getParams('com_newsletter');
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
 
 		// 1. Get all SMTP profiles for which are data in queue.
