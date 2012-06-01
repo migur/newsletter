@@ -76,10 +76,11 @@ try {
     JRequest::setVar('completetask', JRequest::getCmd('task'));
     
 	$controller = JController::getInstance('Newsletter');
-
+	
 	// Perform the Request task
 	// Here we get only tail of a task 
-	$controller->execute(JRequest::getCmd('task'));
+	$taskMethod = JFactory::getApplication()->input->get('task');
+	$controller->execute($taskMethod);
 
 	// Trigger events after exacution
 	$app->triggerEvent('onMigurShoutdown');

@@ -437,10 +437,29 @@ class NewsletterHelper
 		jexit();
 	}
 
+	
+	/**
+	 * Echoes the JSON error massages to client.
+	 * Collect all output data from buffers and attaches it
+	 * to the response as a parameter "serverResponse".
+	 * 
+	 * @param string|array $message Text of returned messages
+	 * @param mixed $data
+	 * @param bool $exit 
+	 */
 	static public function jsonError($messages = array(), $data = array(), $exit = true) {
 		self::jsonResponse(false, $messages, $data, $exit);
 	}	
 	
+	/**
+	 * Echoes the JSON success messages to client.
+	 * Collect all output data from buffers and attaches it
+	 * to the response as a parameter "serverResponse".
+	 * 
+	 * @param string|array $message Text of returned messages
+	 * @param mixed $data
+	 * @param bool $exit 
+	 */
 	static public function jsonMessage($messages = array(), $data = array(), $exit = true) {
 		self::jsonResponse(true, $messages, $data, $exit);
 	}	

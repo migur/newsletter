@@ -232,6 +232,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 
 		self::$clean = array();
 
+		// TODO: deprecated since 12.1
 		if ($db->getErrorNum()) {
 			JError::raiseWarning(500, JText::sprintf('JLIB_APPLICATION_ERROR_MODULE_LOAD', $db->getErrorMsg()));
 			return self::$clean;
