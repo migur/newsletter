@@ -231,6 +231,10 @@ class NewsletterModelList extends JModelAdmin
 		JLoader::import('helpers.placeholder', JPATH_COMPONENT_ADMINISTRATOR);
 		jimport('migur.library.mailer');
 		
+		if (empty($subscriber) || empty($listId)) {
+			throw new Exception('Missing required parameters');
+		}
+		
 		// Get list
 		$table = $this->getTable();
 		$table->load($listId);
@@ -244,16 +248,25 @@ class NewsletterModelList extends JModelAdmin
 		}
 
 		// Get subscriber
-		if (!empty($subscriber) && is_numeric($subscriber)) {
-			$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
-			$subscriber->load($subscriber);
+		$subManager = JModel::getInstance('Subscriber', 'NewsletterModel');
+		
+		if (is_numeric($subscriber)) {
+			$subscriber = $subManager->getItem($subscriber);
+		} 
+		
+		if ($subscriber instanceof NewsletterModelEntitySubscriber) {
+			$subscriber = $subscriber->toArray();
+		}
+		
+		if (!is_array($subscriber)) {
+			$subscriber = (array)$subscriber;
 		}
 		
 		// Get newsletter to send
 		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
 		$newsletter->loadAsWelcoming($list->send_at_reg);
 		
-		if (!$subscriber->getId() || !$newsletter->getId() || empty($list->list_id)) {
+		if (!$subscriber['subscriber_id'] || !$newsletter->getId() || empty($list->list_id)) {
 			throw new Exception('Missing required options');
 		}
 
@@ -261,7 +274,7 @@ class NewsletterModelList extends JModelAdmin
 		// Return if no need to send duplicaded mails
 		if (
 			empty($options['ignoreDuplicates']) &&
-			$queueManager->isMailExist($subscriber->getId(), $newsletter->getId())
+			$queueManager->isMailExist($subscriber['subscriber_id'], $newsletter->getId())
 		) {
 			return true;
 		}	
@@ -270,12 +283,11 @@ class NewsletterModelList extends JModelAdmin
 		if (!empty($options['addToQueue'])) {
 			
 			return $queueManager->addMail(
-				$subscriber->getId(),
+				$subscriber['subscriber_id'],
 				$newsletter->getId(),
 				$list->list_id);
 			
 		}
-		
 		
 		// Let's send wellcoming letter
 		try {
@@ -287,8 +299,8 @@ class NewsletterModelList extends JModelAdmin
 			}	
 			
 			$res = $this->_mailer->send(array(
-				'type'          => $newsletter->isFallback() ? 'plain' : $subscriber->getType(),
-				'subscriber'    => $subscriber->toObject(),
+				'type'          => $newsletter->isFallback() ? 'plain' : $subManager->getType($subscriber),
+				'subscriber'    => (object)$subscriber,
 				'newsletter_id' => $newsletter->newsletter_id,
 				'tracking'      => isset($options['tracking'])? $options['tracking'] : true,
 				'useRawUrls'    => isset($options['useRawUrls'])? $options['useRawUrls'] : NewsletterHelper::getParam('rawurls') == '1'
@@ -299,13 +311,13 @@ class NewsletterModelList extends JModelAdmin
 			}
 			
 			LogHelper::addMessage(
-				'COM_NEWSLETTER_WELLCOMING_NEWSLETTER_SENT_SUCCESSFULLY', LogHelper::CAT_SUBSCRIPTION, array('Email' => $subscriber->email, 'Newsletter' => $newsletter->name));
+				'COM_NEWSLETTER_WELLCOMING_NEWSLETTER_SENT_SUCCESSFULLY', LogHelper::CAT_SUBSCRIPTION, array('Email' => $subscriber['email'], 'Newsletter' => $newsletter->name));
 
 		} catch (Exception $e) {
 			LogHelper::addError(
 				'COM_NEWSLETTER_WELCOMING_SEND_FAILED', LogHelper::CAT_SUBSCRIPTION, array(
 				'Error' => $e->getMessage(),
-				'Email' => $subscriber->email,
+				'Email' => $subscriber['email'],
 				'Newsletter' => $newsletter->name));
 			return false;
 		}
@@ -313,4 +325,87 @@ class NewsletterModelList extends JModelAdmin
 		return true;
 	}
 	
+	/**
+	 * Bind subscriber to list.
+	 * Can himself determine the confirmed value.
+	 *
+	 * @param	numeric	             $lid	The form data.
+	 * @param	numeric|array|object $subscriber Subscriber entity/ID.
+	 * @param	array                $options [confirmed:true|false].
+	 *
+	 * @return	boolean	True on success.
+	 * @since	12.05
+	 */
+	public function assignSubscriber($lid, $subscriber,  $options = array())
+	{
+		if (empty($lid) || empty($subscriber)) {
+			return false;
+		}
+
+		// Determine the confirmed value
+		if (!isset($options['confirmed'])) {
+			$options['confirmed'] = DataHelper::getDefault('confirmed', 'sublist');
+		}
+		
+		// If passed or default is false then 
+		// try to determine from subscriber entity or from DB.
+		if (empty($options['confirmed'])) {
+			
+			if (!is_numeric($subscriber)) {
+				
+				$sub = (array)$subscriber;
+				$confirmed = $sub['subscription_key'];
+				$subscriber = $sub['subscriber_id'];
+				
+			} else {
+			
+				$subTable = $this->getTable('Subscriber', 'NewsletterTable');
+
+				if (!$subTable->load($sid)) {
+					return false;
+				}
+
+				$confirmed = $subTable->subscription_key;
+			}	
+			
+		} else {
+			
+			$confirmed = 1;
+			
+		}
+		
+		// Save and finish.
+		return $this->getTable('sublist')
+				->save(array(
+					'subscriber_id' => (int) $subscriber,
+					'list_id' => (int) $lid,
+					'confirmed' => $confirmed));
+	}
+	
+	/**
+	 * Method to check if user is already binded to the list.
+	 *
+	 * @param	int|string $data The id a list.
+	 * @param	numeric|array $data The id a list.
+	 *
+	 * @return	object on success, false or null on fail
+	 * @since	1.0
+	 */
+	public function hasSubscriber($lid, $sid)
+	{
+		if (empty($lid) || empty($sid)) {
+			throw new Exception('Required parameter is missing');
+		}
+		
+		if (!is_numeric($sid)) {
+			$sid = $sid['subscriber_id'];
+		}
+
+		return 
+			$this->getTable('sublist')
+				->load(array(
+					'subscriber_id' => (int) $sid,
+					'list_id' => (int) $lid
+			));
+	}
 }

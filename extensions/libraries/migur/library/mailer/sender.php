@@ -37,9 +37,8 @@ class MigurMailerSender extends PHPMailer
 	 */
 	public function __construct($params = null)
 	{
-
 		if ($params) {
-			$this->_setData($params);
+			$this->setOptions($params);
 		}
 
 		parent::__construct(!empty($params['exceptions']));
@@ -53,7 +52,7 @@ class MigurMailerSender extends PHPMailer
 	 * @return void
 	 * @since  1.0
 	 */
-	public function _setData($params)
+	public function setOptions($params)
 	{
 		$this->emails = !empty($params['emails']) ? $params['emails'] : null;
 		$this->letter = !empty($params['letter']) ? $params['letter'] : null;
@@ -63,7 +62,19 @@ class MigurMailerSender extends PHPMailer
 		$this->toEmail = !empty($params['toEmail']) ? $params['toEmail'] : null;
 		$this->attach = !empty($params['attach']) ? $params['attach'] : array();
 		$this->type = !empty($params['type']) ? $params['type'] : null;
-
+		
+		// keepAlive option is used only by SMTP.
+		// No effect for sendmail, and php mail
+		if (isset($params['keepAlive'])) {
+			$this->SMTPKeepAlive = (bool)$params['keepAlive'];
+		}
+		
+		// doClose option is used only by SMTP.
+		// No effect for sendmail, and php mail
+		if (isset($params['keepAlive'])) {
+			$this->doClose = (bool)$params['doClose'];
+		}
+		
 		if (!empty($params['smtpProfile'])) {
 			$this->smtpProfile = $params['smtpProfile'];
 			$this->setSMTP($params['smtpProfile']);
@@ -95,6 +106,7 @@ class MigurMailerSender extends PHPMailer
 				
 			default:
 			case 'smtp':
+				$this->IsSMTP();
 				$auth = empty($profile->username) ? null : 'auth';
 				switch($profile->is_ssl) {
 
@@ -120,7 +132,6 @@ class MigurMailerSender extends PHPMailer
 
 				if (($this->SMTPAuth !== null && $this->Host !== null && $this->Username !== null && $this->Password !== null)
 					|| ($this->SMTPAuth === null && $this->Host !== null)) {
-					$this->IsSMTP();
 
 					return true;
 				}
@@ -138,7 +149,7 @@ class MigurMailerSender extends PHPMailer
 	public function send($params = null)
 	{
 		if ($params) {
-			$this->_setData($params);
+			$this->setOptions($params);
 		}
 
 		$this->ClearAddresses();
@@ -187,7 +198,15 @@ class MigurMailerSender extends PHPMailer
 			if (!parent::Send()) {
 				throw new Exception();
 			}
-		} catch(Exception $e) {	
+			
+			// If we send queue in KEEPALIVE mode 
+			// and transport is SMTP 
+			// and this is the last mail then need to close the connection
+			if ($this->Mailer == 'smtp' && $this->doClose && $this->SMTPKeepAlive) {
+				$this->SmtpClose();
+			}
+			
+		} catch(Exception $e) {
 
 			$msg = $e->getMessage();
 			if (!empty($msg)) {

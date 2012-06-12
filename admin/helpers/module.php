@@ -84,7 +84,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 		// Get module parameters
 		$params = new JRegistry;
 		if (is_string($module->params)) {
-			$params->loadJSON($module->params);
+			$params->loadString($module->params, 'JSON');
 		} else {
 			$params->loadObject((object) $module->params);
 		}
@@ -234,6 +234,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 
 		// TODO: deprecated since 12.1
 		if ($db->getErrorNum()) {
+			// TODO deprecated since 12.1 Use PHP Exception
 			JError::raiseWarning(500, JText::sprintf('JLIB_APPLICATION_ERROR_MODULE_LOAD', $db->getErrorMsg()));
 			return self::$clean;
 		}

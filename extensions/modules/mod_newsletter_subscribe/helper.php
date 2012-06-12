@@ -39,8 +39,8 @@ abstract class modNewsletterSubscribeHelper
 			return JRoute::_("index.php");
 		} else {
 			// Use SEF link, if sef
-			if ($config->getValue('config.sef')) {
-				return JRoute::_(JURI::base() . (!$config->getValue('config.sef_rewrite') ? "index.php/" : "") . $item->route);
+			if ($config->get('config.sef')) {
+				return JRoute::_(JURI::base() . (!$config->get('config.sef_rewrite') ? "index.php/" : "") . $item->route);
 			} else {
 				return JRoute::_(JURI::base() . $item->link);
 			}

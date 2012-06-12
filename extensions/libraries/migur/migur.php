@@ -11,6 +11,7 @@ define('MIGUR', 1);
 
 // Check if Koowa is active
 if (!defined('MIGUR')) {
+	// TODO deprecated since 12.1 Use PHP Exception
 	JError::raiseWarning(0, JText::_("MIGUR library wasn't found."));
 	return;
 }

@@ -7,9 +7,10 @@
  * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
-jimport('migur.library.managers.common');
 
-class ccNewsletterManager extends commonManager
+JLoader::import('models.import.common', JPATH_COMPONENT_ADMINISTRATOR);
+
+class NewsletterModelImportCcnewsletter extends NewsletterModelImportCommon
 {
 
 	public $name = 'ccNewsletter';
@@ -20,7 +21,7 @@ class ccNewsletterManager extends commonManager
 	 * @return array - array of objects
 	 * @since  1.0
 	 */
-	public function exportLists()
+	public function exportLists($offset = 0, $limit = 0)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -28,8 +29,8 @@ class ccNewsletterManager extends commonManager
 		$query->from('#__ccnewsletter_subscribers AS s');
 		$query->order('s.email');
 		// Set the query
-		$db->setQuery($query);
-		$objs = $db->loadObjectList();
+		$db->setQuery($query, $offset, $limit);
+		$objs = $db->loadAssocList();
 
 		return (array) $objs;
 	}

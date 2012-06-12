@@ -76,6 +76,7 @@
                         <filename>modules.xml</filename>
                         <filename>controller.php</filename>
                         <filename>newsletter.php</filename>
+                        <filename>constants.php</filename>
                         <filename>index.html</filename>
 
                         <!-- controllers files section -->

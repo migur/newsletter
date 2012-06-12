@@ -2,7 +2,7 @@
 <fieldset class="radio inputbox required" id="jform-comps">
 	<legend for="jform_html"><?php echo JText::_('COM_NEWSLETTER_IMPORT_FROM_COMPONENTS'); ?></legend>
 
-	<form name="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&task=configuration.import'); ?>" method="POST">
+	<form id="importForm" name="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&task=configuration.import'); ?>" method="POST">
 
 		<label><?php echo JText::_('COM_NEWSLETTER_SELECT_IMPORT_TYPE'); ?></label>
 		<select name="jform-import-type">
@@ -37,10 +37,17 @@
 
 		<div class="clr"></div>
 		<div class="fltrt">
-			<input type="submit" value="<?php echo JText::_('COM_NEWSLETTER_IMPORT'); ?>" />
+			<div id="status">
+				<span id="import-message"></span>&nbsp;&nbsp;&nbsp;
+				<div id="import-preloader" class="fltrt"></div>
+			</div>
+			<input name="submit" type="button" value="<?php echo JText::_('COM_NEWSLETTER_IMPORT'); ?>" />
 		</div>
 
         <input type="hidden" name="subtask" value="" />
+        <input type="hidden" name="limit" value="" />
+        <input type="hidden" name="offset" value="" />
+        <input type="hidden" name="iterative" value="1" />
         <?php echo JHtml::_('form.token'); ?>
 
 	</form>

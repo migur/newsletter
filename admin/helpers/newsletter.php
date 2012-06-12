@@ -100,7 +100,8 @@ class NewsletterHelper
             $res = $cache->call(array('NewsletterHelper', '_getCommonInfo'), $url, $domain, $lkey);
         } else {
             $res = NewsletterHelper::_getCommonInfo($url, $domain, $lkey);
-        }    
+        }   
+		
 		$res->current_version = (string) $obj->version;
 		$res->copyright = (string) $obj->copyright;
 		return $res;
@@ -483,9 +484,9 @@ class NewsletterHelper
 		$params = (object)json_decode($table->params);
 		return isset($params->{$name})? $params->{$name} : null;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Sets the param of component directly into extensions table
 	 * 
@@ -505,4 +506,35 @@ class NewsletterHelper
 		$table->params = json_encode($params);
 		return $table->store();
 	}
+
+
+
+	/**
+	 * Set the new time limit
+	 * 
+	 * @param numeric $time Time in seconds
+	 * 
+	 * @return boolean
+	 */
+	static public function setTimeLimit($time)
+	{
+		@set_time_limit($time);
+		return ini_get('max_execution_time') == $time;
+	}
+
+
+
+	/**
+	 * Check if memory is about to overflow.
+	 * Can be used to prevent FATAL ERROR
+	 * Experimental.
+	 */
+	static public function memoryOverflow()
+	{
+		$usedMemory = memory_get_usage(true);
+		$maxMemory  = ini_get('memory_limit');
+		
+		return (($usedMemory / $maxMemory) * 100) < 99;
+	}
+	
 }

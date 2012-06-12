@@ -14,18 +14,6 @@ JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 class DataHelper
 {
-
-	static $importables = array(
-		'jusers', // Available since 1.0.4
-		'acymailing',
-		'ccnewsletter',
-		'rsmail',
-		'jnews',
-		'acajoom',
-		'communicator'
-	);
-	static $managers = array();
-
 	/**
 	 * Fetch all data about subscribers and lists from com_newsletter and
 	 * converts it to the CSV
@@ -61,6 +49,7 @@ class DataHelper
 		return implode("\n", $res);
 	}
 
+	
 	/**
 	 * Fetch all data about subscribers and lists from com_newsletter
 	 *
@@ -84,57 +73,6 @@ class DataHelper
 	}
 
 
-
-	/**
-	 * Get all supported components and check if they are valid to import
-	 *
-	 * @return array - array of objects (info about component)
-	 */
-	public function getSupportedComponents()
-	{
-		// Fetch all supported component managers
-		$res = array();
-		foreach (self::$importables as $com) {
-
-			$item = new stdClass();
-			$item->type = $com;
-			$item->valid = false;
-			$item->name = null;
-
-			$man = self::getComponentInstance($com);
-			if (is_object($man)) {
-				$item->valid = $man->isValid();
-				$item->name = $man->getName();
-			}
-			$res[] = $item;
-		}
-		return $res;
-	}
-
-	/**
-	 * Get the component manager instance
-	 *
-	 * @param  string - the type of a component
-	 *
-	 * @return object  - an instance of a mananger
-	 * @since  1.0
-	 */
-	public static function getComponentInstance($com)
-	{
-		if (!empty(self::$managers[$com]) && is_object(self::$managers[$com])) {
-			return self::$managers[$com];
-		}
-		if (!@include_once JPATH_LIBRARIES . DIRECTORY_SEPARATOR . 'migur' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'managers' . DIRECTORY_SEPARATOR . strtolower($com) . '.php') {
-			return false;
-		}
-
-		$class = $com . 'manager';
-		$man = new $class;
-		self::$managers[$com] = $man;
-		return self::$managers[$com];
-	}
-	
-	
 	/**
 	 * Converts each element of array to int
 	 */
@@ -150,9 +88,6 @@ class DataHelper
 	}
 	
 	
-	/**
-	 * 
-	 */
 	public static function timeIntervaltoVerbal($seconds, $items = array()) 
 	{
 		if (empty($items)) {
@@ -218,7 +153,8 @@ class DataHelper
 	}
 	
 	/**
-	 *
+	 * 
+	 * 
 	 * @param integer $seconds Interval in seconds to explode
 	 * @return array (weeks, days, hours, minutes, seconds) 
 	 */
@@ -276,5 +212,13 @@ class DataHelper
 		}
 		
 		return $res;
+	}
+	
+	public static function getDefault($value, $category = '')
+	{
+		require_once JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'constants.php';
+		$name = strtoupper($category) . '_' . strtoupper($value) . '_DEFAULT';
+		
+		return defined($name)? constant($name) : null;
 	}
 }

@@ -13,6 +13,7 @@ defined('JPATH_BASE') or die;
 
 // Check if Migur is active
 if (!defined('MIGUR')) {
+	// TODO deprecated since 12.1 Use PHP Exception
 	die(JError::raiseWarning(0, JText::_("MIGUR library wasn't found.")));
 }
 

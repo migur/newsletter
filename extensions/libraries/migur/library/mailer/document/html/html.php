@@ -208,11 +208,13 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 			if (file_exists($path)) {
 				require_once $path;
 			} else {
+				// TODO deprecated since 12.1 Use PHP Exception
 				JError::raiseError(500, JText::_('Unable to load renderer class'));
 			}
 		}
 
 		if (!class_exists($class)) {
+			// TODO deprecated since 12.1 Use PHP Exception
 			JError::raiseError(500, JText::_('Unable to find the class'));
 			return null;
 		}

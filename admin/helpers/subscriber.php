@@ -143,20 +143,6 @@ class SubscriberHelper
 		return $key;
 	}
 
-	public static function setSubscriptionKey($userId) {
-
-		$subKey = self::createSubscriptionKey($userId);
-
-		$db = JFactory::getDbo();
-		$query = $db->setQuery(
-			'UPDATE #__newsletter_subscribers '.
-			'SET subscription_key="'.$subKey.'" ' .
-			'WHERE subscriber_id = "'.$userId.'" LIMIT 1');
-
-		return $db->query();
-	}
-
-	
 	/**
 	 * Get user by subscription key. If user is absent returns the empty object
 	 * Length of subscription key should be 15 characters.
