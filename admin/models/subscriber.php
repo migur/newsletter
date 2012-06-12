@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modeladmin');
+
 JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
@@ -23,30 +24,20 @@ class NewsletterModelSubscriber extends JModelAdmin
 {
 
 	protected $_context;
-	protected $_tableInstance = array();
 
 	/**
 	 * Returns a reference to the a Table object, always creating it.
 	 *
 	 * @param	type	The table type to instantiate
-	 * @param	string	A prefix for the table class name. Optional.
-	 * @param	array	Configuration array for model. Optional.
 	 *
 	 * @return	JTable	A database object
-	 * @since	1.0
+	 * @since	1.0.4
 	 */
-	public function getTable($type = 'Subscriber', $prefix = 'NewsletterTable', $config = array(), $isNew = false)
+	public function getTable($type = 'Subscriber', $prefix = 'NewsletterTable')
 	{
-		if ($isNew) {
-			return JTable::getInstance($type, $prefix, $config);
-		} else {
-			if (empty($this->_tableInstance[$type]) || !is_object($this->_tableInstance[$type])) {
-				$this->_tableInstance[$type] = JTable::getInstance($type, $prefix, $config);
-			}
-			return $this->_tableInstance[$type];
-		}
+		return parent::getTable($type, $prefix);
 	}
-
+	
 	/**
 	 * Method to get the record form.
 	 *
@@ -100,23 +91,228 @@ class NewsletterModelSubscriber extends JModelAdmin
 		return 'administrator/components/com_newsletter/models/forms/subscriber.js';
 	}
 
-	
+
 	/**
-	 * Override this to add ability to save info about J! user too.
+	 * Save user and check if it has a subscription key
 	 * 
-	 * @param int $data
-	 * 
-	 * @return object
+	 * @param array|object $data
+	 * @return boolean 
 	 */
-	public function save($data)
+	public function save($data, $fastStore = false, $tableInstance = null)
 	{
-		$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		// In some cases we need to store data in fastest way.
+		// Without triggering of events and checking some cases
+		// So use $fastStore to do it.
+
+		$table = ($tableInstance instanceof JTable)? $tableInstance : $this->getTable();
+		$table->subscriber_id = null;
 		
-		$isJUser = (!empty($data['type']) && $data['type'] == 2);
+		$isNew = empty($data['subscriber_id']);
 		
-		return $model->save($data, $isJUser);
+		if ($fastStore) {
+			
+			if (!$table->save($data)) {
+				return false;
+			}	
+			
+		} else {
+			
+			if (!parent::save($data)) {
+				return false;
+			}
+		}
+		
+		
+		// If this will be the new record then let's set default values
+		if ($isNew) {
+			
+			$data['user_id'] = 0;
+			$data['modified_on'] = 0;
+			$data['modified_by'] = 0;
+			$data['locked_on'] = 0;
+			$data['locked_by'] = 0;
+
+			if (!isset($data['created_by'])) {
+				$data['created_by'] = JFactory::getUser()->id;
+			}
+			
+			if (!isset($data['html'])) {
+				$data['html'] = (int) DataHelper::getDefault('html', 'subscriber');
+			}
+			
+			if (!isset($data['state'])) {
+				$data['state'] = (int) DataHelper::getDefault('state', 'subscriber');
+			}
+			
+			if (!isset($data['created_on'])) {
+				$data['created_on'] = date('Y-m-d H:i:s');
+			}
+		}	
+		
+		
+		if ($isNew || empty($data['subscription_key'])) {
+			
+			$data['subscriber_id'] = $table->subscriber_id;
+			$data['subscription_key'] = $this->_createSubscriptionKey($data['subscriber_id']);
+			$data['confirmed'] = $data['subscription_key'];
+			$table->save($data);	
+		}	
+		
+		return true;
 	}
 	
+	
+	/**
+	 * Override this to add ability to get info about J! user too.
+	 * 
+	 * @param numeric|array $
+	 * 
+	 * @return array
+	 */
+	public function getItem($data = null, $tableInstance = null)
+	{
+		if (is_numeric($data)) {
+			$data = array('subscriber_id' => (int)$data);
+		}
+
+		// There may be some cases...
+		$juserData = null;
+		$subData = null;
+	
+		$dbo = $this->getDbo();
+
+		$table = ($tableInstance instanceof JTable)? $tableInstance : $this->getTable();
+		$table->subscriber_id = null;
+		
+		// Try to find
+		$query = $dbo->getQuery(true);
+		$query->select(
+				"u.id as juser_id, " . 
+				"u.name as juser_name, " . 
+				"u.username as juser_username, " . 
+				"u.email as juser_email, " .
+				"u.password as juser_password, " . 
+				"u.usertype as juser_usertype, " . 
+				"u.block as juser_block, " . 
+				"u.sendEmail as juser_sendEmail, " . 
+				"u.registerDate as juser_registerDate, " . 
+				"u.lastvisitDate as juser_lastvisitDate, " . 
+				"u.activation as juser_activation, " . 
+				"u.params as juser_params, " . 
+				"s.* ");
+		
+		$query->from('#__newsletter_subscribers AS s');
+		$query->join('LEFT', '#__users AS u ON s.user_id = u.id');
+		foreach($data as $name => $val) {
+			$query->where("s.$name=".$dbo->quote($val));
+		}
+		
+		// Do the request
+		$dbo->setQuery($query);
+		$row = $dbo->loadAssoc();
+		
+		
+		// If we cannot find subscriber then try to find j!user
+		if (empty($row)) {
+			$query = $dbo->getQuery(true);
+			$query->select(
+					"u.id as juser_id, " . 
+					"u.name as juser_name, " . 
+					"u.username as juser_username, " . 
+					"u.email as juser_email, " .
+					"u.password as juser_password, " . 
+					"u.usertype as juser_usertype, " . 
+					"u.block as juser_block, " . 
+					"u.sendEmail as juser_sendEmail, " . 
+					"u.registerDate as juser_registerDate, " . 
+					"u.lastvisitDate as juser_lastvisitDate, " . 
+					"u.activation as juser_activation, " . 
+					"u.params as juser_params, " . 
+					"s.* ");
+
+			$query->from('#__newsletter_subscribers AS s');
+			$query->join('RIGHT', '#__users AS u ON s.user_id = u.id');
+			foreach($data as $name => $val) {
+				$query->where("u.$name=".$dbo->quote($val));
+			}
+
+			// Do the request
+			$dbo->setQuery($query);
+			$row = $dbo->loadAssoc();
+		}
+
+		// If we cant find nothing then return false.
+		if (empty($row)) {
+			return false;
+		}	
+
+		// Ok. Found something. If this was a J!user and 
+		// he does not have subscriber row then create it!
+		if (!empty($row['juser_id']) && empty($row['subscriber_id'])) {
+
+			// Prepare for new record
+			$table->subscriber_id = null;
+			
+			// Fill...
+			$row['name'] = '';
+			$row['email'] = '';
+			$row['user_id'] = $row['juser_id'];
+			$row['created_by'] = JFactory::getUser()->id;
+			$row['html'] = (int) DataHelper::getDefault('html', 'subscriber');
+			$row['state'] = (int) DataHelper::getDefault('state', 'subscriber');
+			$row['created_on'] = 0;
+			$row['modified_on'] = 0;
+			$row['modified_by'] = 0;
+			$row['locked_on'] = 0;
+			$row['locked_by'] = 0;
+			
+			//..and save
+			$table->save($row);
+			$row['subscriber_id'] = $table->subscriber_id;
+		}
+
+		// Fix problem with 'subscription_key' if it is there
+		if(empty($row['subscription_key'])) {
+			$row['subscription_key'] = $this->_createSubscriptionKey($row['subscriber_id']);
+			$willSave = true;
+		}
+
+		// Fix problems with 'confirmed' if it is there
+		if(empty($row['confirmed'])) {
+			$row['confirmed'] = $row['subscription_key'];
+			$willSave = true;
+		}
+
+		// Save fixes if needed
+		if (!empty($willSave)) {
+			$table->save($row);	
+			$row = array_merge($row, $table->getProperties(true));
+		}	
+		
+		// Make available J!user's data as subscriber's data
+		if (!empty($row['juser_name'])) {
+			$row['name'] = $row['juser_name'];
+		}
+		
+		if (!empty($row['juser_email'])) {
+			$row['email'] = $row['juser_email'];
+		}
+
+		if (!empty($row['juser_registerDate'])) {
+			$row['created_on'] = $row['juser_registerDate'];
+		}
+
+		// Process params
+		if (array_key_exists('params', $row) && is_string($row['params']))
+		{
+			$registry = new JRegistry;
+			$registry->loadString($row['params']);
+			$row['params'] = $registry->toArray();
+		}
+
+		return $row;
+	}
+
 	
 	/**
 	 * Override this to add ability to get info about J! user too.
@@ -125,17 +321,9 @@ class NewsletterModelSubscriber extends JModelAdmin
 	 * 
 	 * @return object
 	 */
-	public function getItem($pk = null)
+	public function getJItem($data)
 	{
-		$pk	= (!empty($pk)) ? $pk : (int) $this->getState($this->getName().'.id');
-		
-		$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
-		
-		if(!$model->load($pk)) {
-			return false;
-		}
-
-		return JArrayHelper::toObject($model->toArray(), 'JObject');
+		return $this->getTable('Users', 'JTable')->load($data);
 	}
 	
 	
@@ -196,4 +384,26 @@ class NewsletterModelSubscriber extends JModelAdmin
 		$this->cleanCache();
 		return true;
 	}
+	
+	/**
+	 * Creates the subscription key. Use user id and random number
+	 * Length of subscription key is 15 characters
+	 *
+	 * @param  $userId - integer. The user ID.
+	 *
+	 * @return string
+	 * @since 1.0
+	 */
+	protected function _createSubscriptionKey($sid)
+	{
+		if (empty($sid)) {
+			return false;
+		}
+
+		// to get the constant length
+		$mask = '000000000';
+		$id = substr($mask, 0, strlen($mask) - strlen($sid)) . $sid;
+		return rand(100000, 999999) . $id . time();
+	}
+	
 }

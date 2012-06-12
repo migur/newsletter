@@ -18,6 +18,7 @@ JHtml::_('behavior.tooltip');
 JHTML::_('behavior.modal');
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
+
 JLoader::import('helpers.module', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.environment', JPATH_COMPONENT_ADMINISTRATOR, '');

@@ -5,6 +5,7 @@
  * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
@@ -13,6 +14,8 @@ defined('_JEXEC') or die('Restricted access');
 //  ini_set('display_errors', '1');
 //  ini_set("log_errors" , "0");
 //  ini_set("error_log" , "/var/log/php-error.log");
+
+JLog::addLogger(array());
 
 try {
 

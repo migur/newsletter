@@ -14,12 +14,13 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 JLoader::import('helpers.data', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('models.import.common', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 JHtml::_('behavior.tooltip');
+JHtml::_('behavior.framework', true);
 jimport('joomla.application.component.view');
 jimport('joomla.html.pagination');
 jimport('migur.library.toolbar');
-JHtml::_('behavior.framework', true);
 
 /**
  * Class of the import view.
@@ -49,8 +50,9 @@ class NewsletterViewImport extends MigurView
 		JHTML::stylesheet('media/com_newsletter/css/import.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
 		JHTML::script('media/com_newsletter/js/migur/js/message.js');
+		JHTML::script(JURI::root() . "/administrator/components/com_newsletter/views/import/import.js");
 
-		$this->assignRef('components', DataHelper::getSupportedComponents());
+		$this->assignRef('components', NewsletterModelImportCommon::getSupported());
 
 		$this->addToolbar();
 
