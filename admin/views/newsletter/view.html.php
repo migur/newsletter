@@ -143,9 +143,8 @@ class NewsletterViewNewsletter extends MigurView
 
 		foreach ($templs as $item) {
 
-			$xml = new JSimpleXML;
-			$xml->loadFile($path . $item->template);
-			$str = trim($xml->document->template[0]->_data);
+			$xml = simplexml_load_file($path . $item->template, 'SimpleXMLElement', LIBXML_NOCDATA);
+			$str = trim((string)$xml->template);
 			$str = preg_replace('/<style.*>.*<\/style>/s', '', $str);
 			$str = str_replace('<position', '<div class="drop container-draggables"', $str);
 

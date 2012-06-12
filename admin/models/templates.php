@@ -217,9 +217,9 @@ class NewsletterModelTemplates extends MigurModelList
 		}
 
 		foreach ($filenames as $item) {
-			$xml = new JSimpleXML;
-			$xml->loadFile($path . $item);
-			$title = trim($xml->document->information[0]->name[0]->_data);
+			
+			$xml = simplexml_load_file($path . $item, 'SimpleXMLElement' ,LIBXML_NOCDATA);
+			$title = trim((string)$xml->information->name);
 			$standards[] = (object) array(
 					't_style_id' => 'standard',
 					'template' => $item,

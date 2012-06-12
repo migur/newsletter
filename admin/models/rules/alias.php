@@ -71,14 +71,17 @@ class JFormRuleAlias extends JFormRule
 
 			// Get the extra field check attribute.
 			$nid = ($input instanceof JRegistry) ? $input->get('newsletter_id') : '';
-			$query->where($db->nameQuote('newsletter_id') . ' <> ' . (int) $nid);
+			$query->where($db->quoteName('newsletter_id') . ' <> ' . (int) $nid);
 
 			// Set and query the database.
 			$db->setQuery($query);
 			$duplicate = (bool)$db->loadResult();
 
 			// Check for a database error.
+			
+			// TODO: deprecated since 12.1
 			if ($db->getErrorNum()) {
+				// TODO deprecated since 12.1 Use PHP Exception
 				JError::raiseWarning(500, $db->getErrorMsg());
 			}
 

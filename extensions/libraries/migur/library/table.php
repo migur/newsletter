@@ -44,7 +44,7 @@ class MigurJTable extends JTable
 
 		// If no primary key is given, return false.
 		if (empty($params)) {
-			$e = new JException(JText::_('MIGUR_PARAMS_IS_ABSENT'));
+			$e = new Exception(JText::_('MIGUR_PARAMS_IS_ABSENT'));
 			$this->setError($e);
 			return false;
 		}
@@ -60,7 +60,7 @@ class MigurJTable extends JTable
 			if (in_array($name, $fields)) {
 				$query->where($name . ' = ' . $this->_db->quote($val));
 			} else {
-				$e = new JException(JText::_('MIGUR_THE_FIELD_NOT_IN_THE_TABLE'));
+				$e = new Exception(JText::_('MIGUR_THE_FIELD_NOT_IN_THE_TABLE'));
 				$this->setError($e);
 				return false;
 			}
@@ -70,7 +70,7 @@ class MigurJTable extends JTable
 
 		// Check for a database error.
 		if (!$this->_db->query()) {
-			$e = new JException(JText::_('JLIB_DATABASE_ERROR_DELETE_FAILED', get_class($this), $this->_db->getErrorMsg()));
+			$e = new Exception(JText::_('JLIB_DATABASE_ERROR_DELETE_FAILED'));
 			$this->setError($e);
 			return false;
 		}

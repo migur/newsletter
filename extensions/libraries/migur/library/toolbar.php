@@ -19,9 +19,6 @@ if (!defined('MIGUR')) {
 	die(JError::raiseWarning(0, JText::_("MIGUR library wasn't found.")));
 }
 
-//Register the session storage class with the loader
-JLoader::register('JButton', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button.php');
-
 /**
  * Class that implements the multiform toolbar
  *

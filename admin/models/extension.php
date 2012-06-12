@@ -149,11 +149,13 @@ class NewsletterModelExtension extends JModelAdmin
 		if (file_exists($formFile)) {
 			// Get the module form.
 			if (!$form->loadFile($formFile, false, '//config')) {
+				// TODO deprecated since 12.1 Use PHP Exception
 				throw new Exception(JText::_('JERROR_LOADFILE_FAILED'));
 			}
 
 			// Attempt to load the xml file.
 			if (!$xml = simplexml_load_file($formFile)) {
+				// TODO deprecated since 12.1 Use PHP Exception
 				throw new Exception(JText::_('JERROR_LOADFILE_FAILED'));
 			}
 

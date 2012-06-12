@@ -100,7 +100,8 @@ class NewsletterHelper
             $res = $cache->call(array('NewsletterHelper', '_getCommonInfo'), $url, $domain, $lkey);
         } else {
             $res = NewsletterHelper::_getCommonInfo($url, $domain, $lkey);
-        }    
+        }   
+		
 		$res->current_version = (string) $obj->version;
 		$res->copyright = (string) $obj->copyright;
 		return $res;
@@ -437,10 +438,29 @@ class NewsletterHelper
 		jexit();
 	}
 
+	
+	/**
+	 * Echoes the JSON error massages to client.
+	 * Collect all output data from buffers and attaches it
+	 * to the response as a parameter "serverResponse".
+	 * 
+	 * @param string|array $message Text of returned messages
+	 * @param mixed $data
+	 * @param bool $exit 
+	 */
 	static public function jsonError($messages = array(), $data = array(), $exit = true) {
 		self::jsonResponse(false, $messages, $data, $exit);
 	}	
 	
+	/**
+	 * Echoes the JSON success messages to client.
+	 * Collect all output data from buffers and attaches it
+	 * to the response as a parameter "serverResponse".
+	 * 
+	 * @param string|array $message Text of returned messages
+	 * @param mixed $data
+	 * @param bool $exit 
+	 */
 	static public function jsonMessage($messages = array(), $data = array(), $exit = true) {
 		self::jsonResponse(true, $messages, $data, $exit);
 	}	
@@ -464,9 +484,9 @@ class NewsletterHelper
 		$params = (object)json_decode($table->params);
 		return isset($params->{$name})? $params->{$name} : null;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Sets the param of component directly into extensions table
 	 * 
@@ -486,4 +506,35 @@ class NewsletterHelper
 		$table->params = json_encode($params);
 		return $table->store();
 	}
+
+
+
+	/**
+	 * Set the new time limit
+	 * 
+	 * @param numeric $time Time in seconds
+	 * 
+	 * @return boolean
+	 */
+	static public function setTimeLimit($time)
+	{
+		@set_time_limit($time);
+		return ini_get('max_execution_time') == $time;
+	}
+
+
+
+	/**
+	 * Check if memory is about to overflow.
+	 * Can be used to prevent FATAL ERROR
+	 * Experimental.
+	 */
+	static public function memoryOverflow()
+	{
+		$usedMemory = memory_get_usage(true);
+		$maxMemory  = ini_get('memory_limit');
+		
+		return (($usedMemory / $maxMemory) * 100) < 99;
+	}
+	
 }

@@ -1,0 +1,4 @@
+DEPRECATED IN J!2.5.4 METHODS USED IN IT:
+
+JDatabaseInterface::getErrorNum
+

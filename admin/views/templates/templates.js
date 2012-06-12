@@ -65,7 +65,7 @@ if ($$('.templateslist .search').length > 0) {
 
 		delete tplTransport;
 		tplTransport = new Request.JSON({
-			url: '?option=com_newsletter&task=template.getparsed&format=json&shownames=1',
+			url: '?option=com_newsletter&task=template.getparsed&shownames=1',
 			data: {
 				t_style_id: id,
 				tagsRenderMode: 'schematic',

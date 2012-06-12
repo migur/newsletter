@@ -31,7 +31,7 @@ class MigurDocumentHtmlRendererModule extends JDocumentRenderer
 	{
 		// add the environment data to attributes of module
 		$registry = JRegistry::getInstance('document.environment');
-		$env = $registry->getValue('params', array());
+		$env = $registry->get('params', array());
 		$attribs = array_merge($env, $attribs);
 
 		if (!is_object($module)) {
@@ -67,12 +67,12 @@ class MigurDocumentHtmlRendererModule extends JDocumentRenderer
 
 		//get module parameters
 		$params = new JRegistry;
-		$params->loadJSON($module->params);
+		$params->loadString($module->params, 'JSON');
 
 		// use parameters from template
 		if (isset($attribs['params'])) {
 			$template_params = new JRegistry;
-			$template_params->loadJSON(html_entity_decode($attribs['params'], ENT_COMPAT, 'UTF-8'));
+			$template_params->loadString(html_entity_decode($attribs['params'], ENT_COMPAT, 'UTF-8'), 'JSON');
 			$params->merge($template_params);
 			$module = clone $module;
 			$module->params = (string) $params;

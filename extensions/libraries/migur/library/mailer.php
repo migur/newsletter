@@ -29,7 +29,10 @@ jimport('joomla.error.log');
  */
 class MigurMailer extends JObject
 {
-
+	
+	protected $_transport;
+	
+	
 	/**
 	 * Create the result mail content.
 	 * Can parse the newsletter or the template
@@ -73,8 +76,6 @@ class MigurMailer extends JObject
 	 */
 	public function renderModules($params)
 	{
-
-
 		MigurModuleHelper::renderModule($module);
 
 		// If can't determine the type of doc...
@@ -299,7 +300,8 @@ class MigurMailer extends JObject
 				
 			} catch(Exception $e) {
 				
-				// Check if there JException occured
+				// Check if there exception occured
+				// TODO deprecated since 12.1 Use PHP Exception
 				$error = JError::getError('unset');
 				if (!empty($error)){
 					$this->setError($error->get('message'));
@@ -335,6 +337,9 @@ class MigurMailer extends JObject
 	 */
 	public function send($params = null)
 	{
+		// Let's estimate how long we send a newsletter
+		$timeComplete = microtime(true);
+		
 		// load letter to send....
 		if(empty($params['newsletter_id'])) {
 			$msg = 'Newsletter id is absent. There is nothing to send.';
@@ -387,7 +392,16 @@ class MigurMailer extends JObject
 		
 		
 		// Use the phpMailer exceptions
-		$sender = new MigurMailerSender(array('exceptions'=>true));
+		if (!$this->_transport) {
+			$this->_transport = new MigurMailerSender(array('exceptions' => true));
+		}	
+		
+		$sender = $this->_transport;
+		
+		$sender->setOptions(array(
+			'keepAlive' => !empty($params['keepAlive']),
+			'doClose'   => !empty($params['doClose'])
+		));
 
 		$subscriber = $params['subscriber'];
 		$type = MailHelper::filterType(!empty($params['type']) ? $params['type'] : null);
@@ -481,7 +495,9 @@ class MigurMailer extends JObject
 		}
 		
 		try {
-			// send the unique letter to each recipient
+			
+			$timeSending = microtime(true);
+			// send the unique letter to ONE recipient
 			$sendRes = $sender->send(array(
 					'letter' => $letter->toObject(),
 					'attach' => $atts,
@@ -494,6 +510,8 @@ class MigurMailer extends JObject
 					'type' => $type,
 					'tracking' => $params['tracking']));
 			
+			$timeSending = floor((microtime(true) - $timeSending)*1000);
+			
 			// If sending failed
 			if (!$sendRes && !empty($sender->ErrorInfo)) {
 				throw new Exception ($sender->ErrorInfo);
@@ -501,6 +519,7 @@ class MigurMailer extends JObject
 			
 		} catch (Exception $e) {
 			
+			// TODO deprecated since 12.1 Use PHP Exception
 			$error = JError::getError('unset');
 			if (!empty($error)){
 				$msg = $error->get('message');
@@ -522,7 +541,20 @@ class MigurMailer extends JObject
 					));
 			
 			return $res;
-		}	
+		}
+		
+		LogHelper::addDebug(
+			'Newsletter successfully sent', 
+			LogHelper::CAT_MAILER, 
+			array(
+				'Spent time'   => floor((microtime(true) - $timeComplete) * 1000).'ms',
+				'Sending time' => $timeSending,
+				'Email'        => $subscriber->email,
+				'Mail type'    => $type,
+				'SMTP profile' => $smtpProfile->smtp_profile_name,
+				'Newsletter'   => $letter->name
+			));
+		
 		
 		$res->state = true;
 		return $res;

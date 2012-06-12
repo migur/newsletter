@@ -12,6 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // import Joomla controllerform library
 jimport('joomla.application.component.controllerform');
+jimport('migur.library.mailer');
 
 class NewsletterControllerTemplate extends JControllerForm
 {
@@ -89,6 +90,41 @@ class NewsletterControllerTemplate extends JControllerForm
 		));
 		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
 	}
+	
+	
+	/**
+	 * 
+	 */
+	public function getparsed()
+	{
+		NewsletterHelper::jsonPrepare();
 
+		$mailer = new MigurMailer();
+		$data = $mailer->getTemplate(array(
+			'type' => JRequest::getString('type'),
+			't_style_id' => JRequest::getString('t_style_id'),
+			'showNames'  => (bool)JRequest::getString('shownames'),
+			'tracking'   => false,
+			'trackingGa' => false,
+			'renderMode' => JRequest::getString('tagsRenderMode')
+		));
+
+		//TODO: Need to remove this
+		// Remove the <style> section
+		$data->content = preg_replace('/<style.*>.*<\/style>/s', '', $data->content);
+
+
+		$state = (bool) $data;
+		$error = (array) $mailer->getErrors();
+		echo json_encode(
+			array(
+				'state' => $state,
+				'error' => $error,
+				'data' => $data,
+			)
+		);
+		
+		NewsletterHelper::jsonResponse((bool) $data, $error, $data);
+	}
 }
 
