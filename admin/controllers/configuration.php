@@ -163,46 +163,111 @@ class NewsletterControllerConfiguration extends JController
 	 */
 	public function import()
 	{
+		$iterative = JRequest::getBool('iterative', false);
+		$limit = JRequest::getInt('limit', 1000);
+		$offset = JRequest::getVar('offset', '');
+		
 		$com = JRequest::getString('jform-com', null);
 		$type = JRequest::getString('jform-import-type', null);
-		if (empty($com) || empty($type)) {
-			$app = JFactory::getApplication()->enqueueMessage(
-				JText::_('COM_NEWSLETTER_RUQUIRED_MISSING', 'error'
-				));
-			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import', false));
-			return;
-		}
 
-		$component = DataHelper::getComponentInstance($com);
+		JLoader::import('models.import.common', JPATH_COMPONENT_ADMINISTRATOR);
 		
-		if ($type == 'lists') {
-			$arr = $component->exportLists();
-		}
-		
-		
-		if ($arr === false) {
-			$app = JFactory::getApplication()->enqueueMessage(
-				JText::_('COM_NEWSLETTER_IMPORT_ERROR', 'error'
-				));
-			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import', false));
-			return;
-		}
-		
-		$res = $component->importLists($arr);
+		if ($iterative) {
 
-		if ($res === false) {
+			NewsletterHelper::jsonPrepare();
+			
+			if (empty($com) || empty($type)) {
+				NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_RUQUIRED_MISSING'));
+			}
+
+			$component = NewsletterModelImportCommon::getInstance($com);
+			
+
+			if ($type == 'lists') {
+
+				// If there is no extarnal offset thern use internal from session
+				if (!is_numeric($offset)) {
+					$offset = JFactory::getApplication()->getUserState(
+						'com_newsletter.import.'.strtolower(get_class($component)).'.lists.offset', 0
+					);
+				}	
+				
+				$arr = $component->exportLists($offset, $limit);
+			}	
+			
+			if ($arr === false) {
+				NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_IMPORT_ERROR'));
+			}
+
+			$res = $component->importLists($arr);
+
+			if ($res === false) {
+				NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_IMPORT_ERROR'));
+			}
+
+			// Part imported ok. Let's save pointer for future.
+			$fetched = count($arr);
+
+			JFactory::getApplication()->setUserState(
+				'com_newsletter.import.'.strtolower(get_class($component)).'.lists.offset', $offset + $fetched
+			);
+
+			// Send responce and finish
+			NewsletterHelper::jsonMessage(
+				JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL'), array(
+					'limit'   => $limit,
+					'offset'  => $offset,
+					'fetched' => $fetched,
+					'total'   => $offset + $fetched
+			));
+			
+		} else {
+			
+			if (empty($com) || empty($type)) {
+				$app = JFactory::getApplication()->enqueueMessage(
+					JText::_('COM_NEWSLETTER_RUQUIRED_MISSING', 'error'
+					));
+				$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import', false));
+				return;
+			}
+
+			$component = NewsletterModelImportCommon::getInstance($com);
+
+			
+			if ($type == 'lists') {
+
+				// Prevent non-consequent importing...
+				JFactory::getApplication()->setUserState(
+					'com_newsletter.import.'.strtolower(get_class($component)).'.lists.offset', 0
+				);
+				
+				$arr = $component->exportLists();
+			}
+
+			if ($arr === false) {
+				$app = JFactory::getApplication()->enqueueMessage(
+					JText::_('COM_NEWSLETTER_IMPORT_ERROR', 'error'
+					));
+				$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import', false));
+				return;
+			}
+
+			$res = $component->importLists($arr);
+
+			if ($res === false) {
+				$app = JFactory::getApplication()->enqueueMessage(
+					JText::_('COM_NEWSLETTER_IMPORT_ERROR', 'error'
+					));
+				$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import', false));
+				return;
+			}
+
 			$app = JFactory::getApplication()->enqueueMessage(
-				JText::_('COM_NEWSLETTER_IMPORT_ERROR', 'error'
-				));
-			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import', false));
-			return;
-		}
-		
-		$app = JFactory::getApplication()->enqueueMessage(
-			JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL') . '. ' . 
-			JText::sprintf('COM_NEWSLETTER_N_SUBSCRIBERS_IMPORTED', $res), 'message');
-		
-		$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=close', false));
+				JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL') . '. ' . 
+				JText::sprintf('COM_NEWSLETTER_N_SUBSCRIBERS_IMPORTED', $res['added'], $res['assigned'], $res['errors']), 'message');
+
+			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=close', false));
+		}	
 	}
 
 	/**

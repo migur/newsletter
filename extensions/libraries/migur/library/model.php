@@ -23,6 +23,8 @@ jimport('joomla.application.component.modellist');
  *
  * @since   1.0
  * @package Migur.Newsletter
+ * 
+ * @deprecated since 12.05
  */
 class MigurModel extends JModel
 {
@@ -33,7 +35,6 @@ class MigurModel extends JModel
 
 	protected $_keyName = null;
 	
-	
 	public function __construct($config = array())
 	{
 		$res = parent::__construct($config);
@@ -41,8 +42,6 @@ class MigurModel extends JModel
 		return $res;
 	}
 
-	
-	
 	/**
 	 * Return data as array
 	 * 

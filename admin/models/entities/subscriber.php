@@ -11,10 +11,11 @@
 defined('_JEXEC') or die;
 
 /**
- * Class of SMTPprofile model of the component.
+ * Class of Subscriber model of the component.
  *
  * @since   1.0
  * @package Migur.Newsletter
+ * @deprecated 12.05 
  */
 class NewsletterModelEntitySubscriber extends MigurModel
 {
@@ -145,6 +146,7 @@ class NewsletterModelEntitySubscriber extends MigurModel
 
 	/**
 	 * Get type of newsletter user prefer to recieve
+	 * @deprecated 12.05 Moved to subscriber model
 	 */
 	public function getType()
 	{
@@ -276,6 +278,7 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	 *
 	 * @return	object on success, false or null on fail
 	 * @since	1.0
+	 * @deprecated 12.05 Moved to list model
 	 */
 	public function isInList($lid)
 	{
@@ -315,6 +318,7 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	 *
 	 * @return	boolean	True on success.
 	 * @since	1.0
+	 * @deprecated 12.05 Moved to list model
 	 */
 	public function assignToList($lid)
 	{
