@@ -222,7 +222,14 @@ class NewsletterModelImportCommon
 	public function validateTable($name, $needed)
 	{
 		$db = JFactory::getDbo();
-		$fields = @$db->getTableColumns($name);
+		
+		try {
+			
+			$fields = @$db->getTableColumns($name);
+			
+		} catch (Exception $e) {
+			return false;
+		}
 
 		if (empty($fields)) {
 			return false;
