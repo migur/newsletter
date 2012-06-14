@@ -6,6 +6,43 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+migurUpdater = {
+
+	fillOnError: function(data) {
+	},
+
+	fillOnSuccess: function(data) {
+		if (data.version) {
+			$('updater-latestversion').set('html', data.version);
+		}
+	},
+	
+	get: function() {
+
+		var $this = this; 
+	
+		new Request({
+
+			url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=updater.getupdates',
+
+			onComplete: function(response){
+
+				console.log(response);
+				var parser = new Migur.jsonResponseParser();
+				parser.setResponse(response);
+				
+				if (parser.isError()) {
+					return $this.fillOnError();
+				}
+
+				return $this.fillOnSuccess(parser.getData());
+			}
+
+		}).send();
+	}
+}	
+
+
 window.addEvent('domready', function() {
 try {
 
@@ -139,7 +176,11 @@ try {
     var width = (emailsSent / emailsTotal) * $$('.progress-bar')[0].getWidth();
 
     $$('.progress-line')[0].setStyle('width', width + 'px');
-
+	
+	
+	// Updater request
+	migurUpdater.get();
+	
 } catch(e){
     if (console && console.log) console.log(e);
 }

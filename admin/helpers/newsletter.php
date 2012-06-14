@@ -95,7 +95,7 @@ class NewsletterHelper
 		}
 
         if (!$noCache) {
-            //$res = self::_getCommonInfo($url, $domain, $lkey);
+            $res = self::_getCommonInfo($url, $domain, $lkey);
             $cache = JFactory::getCache('com_newsletter');
             $res = $cache->call(array('NewsletterHelper', '_getCommonInfo'), $url, $domain, $lkey);
         } else {
@@ -105,6 +105,19 @@ class NewsletterHelper
 		$res->current_version = (string) $obj->version;
 		$res->copyright = (string) $obj->copyright;
 		return $res;
+	}
+	
+	public static function findUpdate($eid)
+	{
+		$updater = JUpdater::getInstance();
+		$results = $updater->findUpdates($eid, 0);
+		
+		$db		= JFactory::getDbo();
+		$query	= $db->getQuery(true);
+		// grab updates ignoring new installs
+		$query->select('*')->from('#__updates')->where('extension_id = ' . (int)$eid);
+		$db->setQuery($query);
+		return $db->loadAssoc();
 	}
 
 	/**
