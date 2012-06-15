@@ -5,7 +5,8 @@
  */
 
 .current {
-    height: 450px;
+    min-height: 450px;
+	overflow: hidden;
 }
 
 /* comomn for overview */
@@ -68,7 +69,7 @@
 #overview2 {
     width: 450px;
     float: left;
-    height: 450px;
+    height: 500px;
     overflow: auto;
 }
 
@@ -191,7 +192,8 @@
 #import-file,
 #exclude-file {
     border: 1px solid #cccccc;
-    height: 355px;
+    padding-bottom: 10px;
+	overflow: hidden;
 }
 
 #import-founded-fields,
@@ -322,7 +324,7 @@
 }
 
 .tabs .import {
-	max-height:450px;
+	max-height:505px;
 	overflow: auto;
 }
 
@@ -357,4 +359,17 @@
 #plugin-form .helptext {
 	display:inline-block;
 	margin-bottom: 10px; 
+}
+
+#import-message {
+	line-height: 24px;
+}
+
+#import-preloader {
+	margin-top: 2px;
+}
+
+.upload-queue {
+	padding:0 !important;
+	margin:0 !important;
 }

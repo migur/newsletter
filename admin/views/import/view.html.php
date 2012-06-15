@@ -46,11 +46,13 @@ class NewsletterViewImport extends MigurView
 	public function display($tpl = null)
 	{
 		JHTML::_('behavior.modal');
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/import.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script('media/com_newsletter/js/migur/js/message.js');
-		JHTML::script(JURI::root() . "/administrator/components/com_newsletter/views/import/import.js");
+		
+		JHTML::stylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
+		JHTML::stylesheet(JURI::root() . 'media/com_newsletter/css/import.css');
+		JHTML::script(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
+		JHTML::script(JURI::root() . 'media/com_newsletter/js/migur/js/message.js');
+		JHTML::script(JURI::root() . 'media/com_newsletter/js/migur/js/iterativeajax.js');
+		JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/import/import.js");
 
 		$this->assignRef('components', NewsletterModelImportCommon::getSupported());
 

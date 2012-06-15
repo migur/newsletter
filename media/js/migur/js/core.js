@@ -11,7 +11,7 @@
  * @since 1.0
  */
 if (typeof(Migur) === 'undefined') {
-    var Migur = {};
+    Migur = {};
 }
 
 
@@ -688,7 +688,11 @@ Migur.jsonResponseParser = function() {
 	this.setResponse = function(response) 
 	{
 		try { 
-			this.response = JSON.decode(response);
+			if (typeof response == 'string') {
+				this.response = JSON.decode(response);
+			} else {
+				this.response = response;
+			}	
 			
 			if (
 				this.response.state === undefined ||
@@ -735,9 +739,14 @@ Migur.jsonResponseParser = function() {
 	}
 	
 
-	this.getMessagesAsList = function(delimiter) 
+	this.getMessagesAsList = function(defaultMessage, delimiter) 
 	{
-		if (this.response === null) return false;
+		if (this.response === null) {
+			if (defaultMessage) {
+				return defaultMessage;
+			}
+			return '';
+		}
 		
 		if (!delimiter) {
 			delimiter = "\n";
@@ -747,7 +756,13 @@ Migur.jsonResponseParser = function() {
 		Array.each(this.getMessages(), function(item){
 			result += (item + delimiter);
 		});
-		
+
+		if (result == '') {
+			if (defaultMessage) {
+				return defaultMessage;
+			}
+		}
+
 		return result;
 	}
 	

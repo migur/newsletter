@@ -85,6 +85,14 @@ defined('_JEXEC') or die;
 			<td><input class="test-params" value="count=10000&start=1&prefix=ZZ Test Subscriber" size="80" /></td>
 			<td><input class="test-other" value="" size="60" /></td>
 		</tr>
+		<tr class="row0">
+			<td><a class="test-title new-window" href="#" onClick="">Generate CSV for import</a></td>
+			<td><select class="test-method"><option selected value="get">GET</option><option value="post">POST</option></td>
+			<td><input class="test-url" value="<?php echo 'administrator/index.php?option=com_newsletter&task=test.createImportCSV'; ?>" size="60"/></td>
+			<td><input class="test-params" value='count=10000&start=1&quote="&separator=,' size="80" /></td>
+			<td><input class="test-other" value="" size="60" /></td>
+		</tr>
+		
 	</tbody>
 </table>
 
