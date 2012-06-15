@@ -118,8 +118,16 @@ class NewsletterModelList extends JModelAdmin
         
         $errorOnFail = isset($options['errorOnFail'])? (bool)$options['errorOnFail'] : false;
         
+		// Let's Speeeeeed up this script in at least 50 times!
+		$db = JFactory::getDbo();
+		$transactionItemsCount = 0;
+		$db->setQuery('SET AUTOCOMMIT=0;');
+		$db->query();
+		
         foreach ($collection as $row) {
             
+			NewsletterHelper::setTimeLimit(30);
+			
             $row = (array)$row;
             
             $success = true;
@@ -214,9 +222,25 @@ class NewsletterModelList extends JModelAdmin
 
                 $errors++;
             }
+			
+			// Handle the transaction
+			// Commit each 100 items
+			$transactionItemsCount++;
+			
+			if ($transactionItemsCount > 500) {
+				$db->setQuery('COMMIT;');
+				$db->query();
+				$transactionItemsCount = 0;
+			}	
         }
 
+		// Commit it all!
+		$db->setQuery('COMMIT;');
+		$db->query();
 
+		$db->setQuery('SET AUTOCOMMIT=0;');
+		$db->query();
+		
         return array(
             'errors'   => $errors,
             'added'    => $added,

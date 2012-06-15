@@ -46,6 +46,8 @@ class NewsletterControllerList extends JControllerForm
 		return true;
 	}
 
+	
+	
 	/**
 	 * Save the configuration
 	 * 
@@ -70,6 +72,8 @@ class NewsletterControllerList extends JControllerForm
 		return false;
 	}
 
+	
+	
 	/**
 	 * Gets the URL arguments to append to an item redirect.
 	 *
@@ -101,6 +105,8 @@ class NewsletterControllerList extends JControllerForm
 		return $append;
 	}
 
+	
+	
 	/**
 	 * Handles the uploading of list (exclude/include)
 	 * @since 1.0
@@ -124,36 +130,8 @@ class NewsletterControllerList extends JControllerForm
 		echo json_encode($data);
 	}
 
-	/**
-	 * Retrieves only first row(names of columns) of the list
-	 * @since 1.0
-	 * @return void
-	 */
-	public function gethead()
-	{
-		$listId = JRequest::getInt('list_id', 0);
-
-		if (!$settings = $this->_getSettings()) {
-			return;
-		}
-
-		$sess = JFactory::getSession();
-		$data = $sess->get('list.' . $listId . '.file.uploaded', array());
-		if (!empty($data['file']['filepath'])) {
-			if (($handle = fopen($data['file']['filepath'], "r")) !== FALSE) {
-				$data['fields'] = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
-			} else {
-				echo json_encode(array('status' => '0', 'error' => 'Cannot open file'));
-				return false;
-			}
-		} else {
-			echo json_encode(array('status' => '0', 'error' => 'No data about file'));
-			return false;
-		}
-
-		echo json_encode($data);
-	}
-
+	
+	
 	/**
 	 * Retrieves the settings from the request data
 	 * @return object - data
@@ -186,97 +164,7 @@ class NewsletterControllerList extends JControllerForm
 		return $json;
 	}
 
-	/**
-	 * Fetches and adds the data to DB from the file uploaded before
-	 * @return void
-	 * @since 1.0
-	 */
-	public function import()
-	{
-		$subtask     = JRequest::getString('subtask', '');
-		$currentList = JRequest::getInt('list_id', '0');
-		
-		if ($currentList < 1) {
-            NewsletterHelper::jsonError('No list Id');
-		}
-
-		if (!$settings = $this->_getSettings()) {
-            NewsletterHelper::jsonError('No settings');
-		}
-
-		if ($subtask == 'parse') {
-
-			$mapping = $settings->fields;
-
-			$sess = JFactory::getSession();
-			$file = $sess->get('list.' . $currentList . '.file.uploaded', array());
-
-			if (($handle = fopen($file['file']['filepath'], "r")) === FALSE) {
-                
-                NewsletterHelper::jsonError('Cannot open file');
-                
-			}
-
-            $collection = array();
-            $total = 0;
-            $skipped = 0;
-
-            //get the header
-            fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
-
-            while (($data = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure)) !== FALSE) {
-                if ($mapping->html->mapped === null || !isset($data[$mapping->html->mapped])) {
-                    $htmlVal = $mapping->html->default;
-                } else {
-                    $htmlVal = $data[$mapping->html->mapped];
-                }
-
-                if (!empty($data[$mapping->username->mapped]) && !empty($data[$mapping->email->mapped])) {
-                    $collection[] = (object)array(
-                        'name' => $data[$mapping->username->mapped],
-                        'email' => $data[$mapping->email->mapped],
-                        'html' => $htmlVal
-                    );
-                } else {
-                    $skipped++;
-                }
-
-                $total++;
-            }
-            fclose($handle);
-
-            // Let's import it all!
-            $list = JModel::getInstance('List', 'NewsletterModel');
-            $res = $list->importCollection(
-                $currentList,
-                $collection, 
-                array(
-                    'overwrite' => $settings->overwrite,
-                ));
-            
-            if (!empty($res['errors'])) {
-                NewsletterHelper::jsonError('Import failed!', array(
-                    'total'   => $total,
-                    'skipped' => $skipped,
-                    'errors'  => $res['errors'],
-                    'added'   => $res['added'],
-                    'updated' => $res['updated'],
-                    'assigned'=> $res['assigned']));
-            }
-            
-            unlink($file['file']['filepath']);
-            $sess->clear('list.' . $currentList . '.file.uploaded');
-
-            NewsletterHelper::jsonMessage('Import complete!', array(
-                'total'   => $total,
-                'skipped' => $skipped,
-                'errors'  => $res['errors'],
-                'added'   => $res['added'],
-                'updated' => $res['updated'],
-                'assigned'=> $res['assigned']));
-		}
-	}
-
+	
 	
 	/**
 	 * Unbind the users from list. The users are in the file uploaded before

@@ -81,6 +81,7 @@ Migur.dnd.makeDND = function(el, droppables){
         return avatar;
     }
 
+
 window.addEvent('domready', function() {
 try {
 
@@ -91,7 +92,7 @@ try {
         Uploader.uploadControl = target;
         var id = $$('[name=list_id]')[0].get('value');
         new Request.JSON({
-            url: '?option=com_newsletter&task=list.gethead&format=json',
+            url: '?option=com_newsletter&task=list.gethead',
             onComplete: Uploader.headParser
         }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(settings) );
     }
@@ -99,13 +100,20 @@ try {
 
     Uploader.headParser = function(req) {
 
-        if (typeof (req.fields) == 'undefined' || req.fields.length == 0) {
-            alert('No fields founded!');
-            return;
-        }
+		var parser = new Migur.jsonResponseParser();
+		parser.setResponse(req);
 
-        if (typeof (req) == 'undefined') {
-            alert(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured!'));
+		var data = parser.getData();
+
+		if (parser.isError()) {
+			alert(
+				parser.getMessagesAsList(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured!'))
+			);
+			return;	
+		}
+		
+         if(!data || !data.fields || data.fields.length == 0) {
+            alert(Joomla.JText._('NO_FIELDS_FOUND', 'No fields found!'));
             return;
         }
 
@@ -116,11 +124,11 @@ try {
             $('import-file').removeClass('hide');
             $$('#import-file .drag').destroy();
 
-            for(var i=0; i < req.fields.length; i++) {
+            for(var i=0; i < data.fields.length; i++) {
                 var newEl = new Element(
                         'div',
                         {
-                            'html'    : req.fields[i],
+                            'html'    : data.fields[i],
                             'class'   : 'drag',
                             'position': 'relative',
                             'rel'     : i
@@ -137,11 +145,11 @@ try {
             $('exclude-file').removeClass('hide');
             ctr.getElements('.drag').destroy();
 
-            for(var i=0; i < req.fields.length; i++) {
+            for(var i=0; i < data.fields.length; i++) {
                 var newEl = new Element(
                         'div',
                         {
-                            'html'    : req.fields[i],
+                            'html'    : data.fields[i],
                             'class'   : 'drag',
                             'position': 'relative',
                             'rel'     : i
@@ -346,37 +354,43 @@ try {
         if (notEnough == true) {
             alert(Joomla.JText._('PLEASE_FILL_ALL_REQUIRED_FIELDS','Please fill all required fields'));
         } else {
+
             $$('[name=subtask]').set('value', 'import-file-apply');
-            var id = $$('[name=list_id]').get('value');
+            var id = $$('[name=list_id]')[0].get('value');
 
-            //$$('#import-del-cont .active')
-
-            new Request.JSON({
-                url: '?option=com_newsletter&task=list.import&subtask=parse&format=json',
-                onComplete: function(res){
-                    if (!res) {
-                        alert(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED','An unknown error occured!'));
-                        return;
-                    }
-
-                    if (res.state === false) {
-                        alert(res.messages[0]);
-                        return;
-                    }
-
-                    alert(
-						res.messages[0] + "\n\n"+
-						Joomla.JText._('TOTAL','Total')+": " + res.data.total + "\n"+
-						Joomla.JText._('SKIPPED','Skipped')+": " + res.data.skipped + "\n"+
-						Joomla.JText._('ERRORS', 'Errors')+": " + res.data.errors + "\n"+
-						Joomla.JText._('ADDED', 'Added')+": " + res.data.added + "\n"+
-						Joomla.JText._('UPDATED', 'Updated')+": " + res.data.updated + "\n"+
-						Joomla.JText._('ASSIGNED', 'Assigned')+": " + res.data.assigned + "\n"
+			var importMan = new Migur.iterativeAjax({
+				
+                url: '?option=com_newsletter&task=list.import',
+				
+				data: {
+					jsondata: JSON.encode(res),
+					list_id: id
+				},
+				
+				limit: 1000,
+				
+				messagePath: '#import-file #import-message',
+				preloaderPath: '#import-file #import-preloader',
+				
+                onComplete: function(messages, data){
+					
+                    this.showAlert(
+					
+						messages,
+						
+						Joomla.JText._('TOTAL','Total')+": " + data.total + "\n"+
+						Joomla.JText._('SKIPPED','Skipped')+": " + data.skipped + "\n"+
+						Joomla.JText._('ERRORS', 'Errors')+": " + data.errors + "\n"+
+						Joomla.JText._('ADDED', 'Added')+": " + data.added + "\n"+
+						Joomla.JText._('UPDATED', 'Updated')+": " + data.updated + "\n"+
+						Joomla.JText._('ASSIGNED', 'Assigned')+": " + data.assigned + "\n"
 					);
 						
                     document.location.reload();
                 }
-            }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res));
+            });
+				
+			importMan.start();
         }
     });
 

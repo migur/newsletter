@@ -26,6 +26,11 @@
 
 		<div class="clr"></div>
 		<div id="import-file" class="file-form hide">
+			
+			<div class="block-notice">
+				<?php echo JText::_('COM_NEWSLETTER_STANDARD_IMPORT_HELPTEXT'); ?>
+			</div>
+			
 			<div id="import-file-upload">
 				<fieldset id="import-uploadform">
 						<legend><?php echo $this->config->get('upload_maxsize')=='0' ? JText::_('COM_MEDIA_UPLOAD_FILES_NOLIMIT') : JText::sprintf('COM_MEDIA_UPLOAD_FILES', $this->config->get('upload_maxsize')); ?></legend>
@@ -126,15 +131,20 @@
 				value="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_FILE_REFRESH'); ?>"
 			/>
 
+			<div class="fltrt submit-control">
+				<div class="fltlft">
+					<span id="import-message"></span>&nbsp;&nbsp;&nbsp;
+					<div id="import-preloader" class="fltrt"></div>
+				</div>
 
-			<input
-				type="button"
-				name="newsletter_upload"
-				onclick=""
-				id="import-file-apply"
-				value="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_FILE_APPLY'); ?>"
-			/>
-
+				<input
+					type="button"
+					name="newsletter_upload"
+					onclick=""
+					id="import-file-apply"
+					value="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_FILE_APPLY'); ?>"
+				/>
+			</div>	
 		</div>
 	</div>	
 </div>

@@ -34,7 +34,7 @@ class NewsletterPluginManagerImport extends NewsletterPluginManager
         
         if ($result['errors'] == 0) {
             JFactory::getApplication()->enqueueMessage(
-                JText::sprintf('COM_NEWSLETTER_N_SUBSCRIBERS_IMPORTED', count($collection))
+                JText::sprintf('COM_NEWSLETTER_N_SUBSCRIBERS_IMPORTED_SUCCESSFULLY', count($collection))
             );
         } else {
             JFactory::getApplication()->enqueueMessage(
