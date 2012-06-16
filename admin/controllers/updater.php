@@ -22,10 +22,26 @@ class NewsletterControllerUpdater extends JControllerForm
 	{
 		NewsletterHelper::jsonPrepare();
 		
-		NewsletterHelper::jsonMessage(
-			'',
-			NewsletterHelper::findUpdate(10003)
-		);	
+		$scope = (array) JRequest::getVar('scope', array('com_newsletter'));
+		
+		$cache = JFactory::getCache('com_newsletter');
+
+		$ext = JTable::getInstance('Extension', 'JTable');
+
+		$data = array();
+		
+		foreach($scope as $element) {
+		
+			if ($ext->load(array('element' => $element))) {
+				
+				$data[$element] = $cache->call(
+					array('NewsletterHelper', 'findUpdate'),
+					$ext->extension_id
+				);
+			}	
+		}
+		
+		NewsletterHelper::jsonMessage('', $data);	
 	}
 }
 

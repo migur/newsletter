@@ -8,12 +8,19 @@
 
 migurUpdater = {
 
-	fillOnError: function(data) {
+	latestVersionPath: '#updater-latestversion',
+	
+	scope: ['com_newsletter'],
+
+	fillOnError: function() {
+		
+		$$(this.latestVersionPath).set('html', Joomla.JText._('UNKNOWN', 'Unknown'));
 	},
 
 	fillOnSuccess: function(data) {
-		if (data.version) {
-			$('updater-latestversion').set('html', data.version);
+		
+		if (data['com_newsletter'].version) {
+			$$(this.latestVersionPath).set('html', data['com_newsletter'].version);
 		}
 	},
 	
@@ -21,14 +28,18 @@ migurUpdater = {
 
 		var $this = this; 
 	
+		$$(this.latestVersionPath).set('html', '...');
+	
 		new Request({
 
 			url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=updater.getupdates',
 
+			data: { scope: this.scope },
+
 			onComplete: function(response){
 
-				console.log(response);
 				var parser = new Migur.jsonResponseParser();
+				
 				parser.setResponse(response);
 				
 				if (parser.isError()) {
