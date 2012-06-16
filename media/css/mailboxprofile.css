@@ -29,7 +29,13 @@
     width: 350px;
 }
 
+#mailboxprofile-form [type="checkbox"] {
+	width: auto;
+}
+
 .buttons-container {
     float: right;
-    margin: 20px 0;
+    margin: 5px 0 15px;
 }
+
+
