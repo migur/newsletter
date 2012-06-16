@@ -9,7 +9,7 @@
 			size="100"
 			default=""
 			required="true"
-                        validate=""
+			validate=""
 		 />
 
 		<field name="mailbox_server"
@@ -82,6 +82,15 @@
 			<option value="1">COM_NEWSLETTER_SSL</option>
 			<option value="2">COM_NEWSLETTER_TLS</option>
 		</field>
+
+		 <field name="validate_cert"
+				type="checkbox"
+				label="COM_NEWSLETTER_VALIDATE_CERTIFICATE"
+				description="COM_NEWSLETTER_VALIDATE_CERTIFICATE"
+				class="inputbox"
+				default="1"
+				value="1"
+		/>
 
 
 		<field name="mailbox_profile_id" type="hidden"></field>

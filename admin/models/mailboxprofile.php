@@ -84,4 +84,16 @@ class NewsletterModelMailboxprofile extends JModelAdmin
 		return 'administrator/components/com_newsletter/models/forms/mailboxprofile.js';
 	}
 
+	/**
+	 * Fix the data from checkbox
+	 * 
+	 * @param array $data
+	 * @return type 
+	 */
+	public function save($data) 
+	{
+		$data['validate_cert'] = !empty($data['validate_cert'])? '1' : '0';
+		return parent::save($data);
+	}
+
 }

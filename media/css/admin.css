@@ -375,3 +375,10 @@ textarea.invalid {
 .form-actions {
 	overflow: hidden;
 }
+
+.block-notice {
+	margin: 10px;
+    clear:both;
+	padding: 10px;
+	background-color: #ddd;
+}

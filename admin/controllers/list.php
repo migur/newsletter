@@ -356,5 +356,236 @@ class NewsletterControllerList extends JControllerForm
         
         return $this->display();
     }
+	
+	
+	
+	/**
+	 * Retrieves only first row(names of columns) of the list
+	 * @since 1.0
+	 * @return void
+	 */
+	public function gethead()
+	{
+		NewsletterHelper::jsonPrepare();
+		
+		$listId = JRequest::getInt('list_id', 0);
+
+		if (!$settings = $this->_getSettings()) {
+			return;
+		}
+
+		$sess = JFactory::getSession();
+		$data = $sess->get('list.' . $listId . '.file.uploaded', array());
+		if (!empty($data['file']['filepath'])) {
+			if (($handle = fopen($data['file']['filepath'], "r")) !== FALSE) {
+				$data['fields'] = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
+			} else {
+				NewsletterHelper::jsonError('Cannot open file', $data);
+			}
+		} else {
+			NewsletterHelper::jsonError('No data about file', $data);
+		}
+
+		NewsletterHelper::jsonMessage('', $data);
+	}
+
+
+	
+	/**
+	 * Fetches and adds the data to DB from the file uploaded before
+	 * @return void
+	 * @since 1.0
+	 */
+	public function import()
+	{
+		NewsletterHelper::jsonPrepare();
+		
+		$app = JFactory::getApplication();
+		
+		$currentList = JRequest::getInt('list_id', '0');
+	
+		$limit = JRequest::getInt('limit', 1000);
+		$offset = JRequest::getVar('offset', '');
+		
+		if ($currentList < 1) {
+            NewsletterHelper::jsonError('No list Id');
+		}
+
+		if (!$settings = $this->_getSettings()) {
+            NewsletterHelper::jsonError('No settings');
+		}
+
+		$mapping = $settings->fields;
+
+		$sess = JFactory::getSession();
+		$file = $sess->get('list.' . $currentList . '.file.uploaded', array());
+
+		$filename = $file['file']['filepath'];
+		$statePath = 'com_newsletter.list.'.$currentList.'import.file.'.$filename;
+		
+		// If there is no extarnal offset then use internal from session
+		if (!is_numeric($offset)) {
+			$offset = $app->getUserState($statePath.'.offset', 0);
+		}	
+
+		// If this is a start then init session variables
+		if ($offset == 0) {
+			$app->setUserState($statePath.'.seek', 0);
+			$app->setUserState($statePath.'.skipped', 0);
+			$app->setUserState($statePath.'.errors', 0);
+			$app->setUserState($statePath.'.added', 0);
+			$app->setUserState($statePath.'.updated', 0);
+			$app->setUserState($statePath.'.assigned', 0);
+		}
+		
+		// Restore previous state
+		$seek     = $app->getUserState($statePath.'.seek', 0);
+		$skipped  = $app->getUserState($statePath.'.skipped', 0);
+		$errors   = $app->getUserState($statePath.'.errors', 0);
+		$added	  = $app->getUserState($statePath.'.added', 0);
+		$updated  =	$app->getUserState($statePath.'.updated', 0);
+		$assigned =	$app->getUserState($statePath.'.assigned', 0);
+		
+		
+		// Try to open file
+		if (($handle = fopen($filename, "r")) === FALSE) {
+			NewsletterHelper::jsonError('Cannot open file');
+		}
+
+		//get the header and seek to previous position
+		fgetcsv($handle, 0, $settings->delimiter, $settings->enclosure);
+		
+		// Seek only if SEEK is not on the start to prevent inserting the HEADER into DB
+		if ($seek > 0) {
+			fseek($handle, $seek);
+		}	
+		
+		$collection = array();
+		$total = 0;
+
+		while (
+			($limit == 0 || $total < $limit) &&
+			($data = fgetcsv($handle, 0, $settings->delimiter, $settings->enclosure)) !== FALSE
+		) {
+			if ($mapping->html->mapped === null || !isset($data[$mapping->html->mapped])) {
+				$htmlVal = $mapping->html->default;
+			} else {
+				$htmlVal = $data[$mapping->html->mapped];
+			}
+
+			if (!empty($data[$mapping->username->mapped]) && !empty($data[$mapping->email->mapped])) {
+				$collection[] = (object)array(
+					'name' => $data[$mapping->username->mapped],
+					'email' => $data[$mapping->email->mapped],
+					'html' => $htmlVal
+				);
+			} else {
+				$skipped++;
+			}
+
+			$total++;
+		}
+		
+		// Store seek for further requests and close file
+		$app->setUserState($statePath.'.seek', ftell($handle));
+		fclose($handle);
+
+		// Let's import it all!
+		$list = JModel::getInstance('List', 'NewsletterModel');
+		$res = $list->importCollection(
+			$currentList,
+			$collection, 
+			array(
+				'overwrite' => $settings->overwrite,
+			));
+
+		if (!empty($res['errors'])) {
+			NewsletterHelper::jsonError('Import failed!', array(
+				'fetched'   => $total,
+				'total'     => $offset   + $total,
+				'skipped'   => $skipped,
+				'errors'    => $errors   + $res['errors'],
+				'added'     => $added    + $res['added'],
+				'updated'   => $updated  + $res['updated'],
+				'assigned'  => $assigned + $res['assigned']));
+		}
+
+		// Check if this is not the end
+		if ($total > 0) {
+			
+			// Store offsets and stats
+			$app->setUserState($statePath.'.offset', $offset + $total);
+			$app->setUserState($statePath.'.skipped', $skipped);
+			$app->setUserState($statePath.'.errors', $errors + $res['errors']);
+			$app->setUserState($statePath.'.added', $added + $res['added']);
+			$app->setUserState($statePath.'.updated', $updated + $res['updated']);
+			$app->setUserState($statePath.'.assigned', $assigned + $res['assigned']);
+
+			NewsletterHelper::jsonMessage('ok', array(
+				'fetched'   => $total,
+				'total'     => $offset   + $total,
+				'skipped'   => $skipped,
+				'errors'    => $errors   + $res['errors'],
+				'added'     => $added    + $res['added'],
+				'updated'   => $updated  + $res['updated'],
+				'assigned'  => $assigned + $res['assigned']));
+		}
+
+		// This is the end
+		$app->setUserState($statePath.'.seek', 0);
+		$app->setUserState($statePath.'.offset', 0);
+		$app->setUserState($statePath.'.skipped', 0);
+		$app->setUserState($statePath.'.errors', 0);
+		$app->setUserState($statePath.'.added', 0);
+		$app->setUserState($statePath.'.updated', 0);
+		$app->setUserState($statePath.'.assigned', 0);
+
+		unlink($file['file']['filepath']);
+		$sess->clear('list.' . $currentList . '.file.uploaded');
+
+		NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL'), array(
+			'fetched'   => $total,
+			'total'     => $offset + $total,
+			'skipped'   => $skipped,
+			'total'     => $offset   + $total,
+			'errors'    => $errors   + $res['errors'],
+			'added'     => $added    + $res['added'],
+			'updated'   => $updated  + $res['updated'],
+			'assigned'  => $assigned + $res['assigned']));
+	}
+
+	
+	
+	/**
+	 * Retrieves the settings from the request data
+	 * @return object - data
+	 * @since 1.0
+	 */
+	protected function _getSettings()
+	{
+
+		$json = json_decode(JRequest::getString('jsondata', ''));
+
+		if (empty($json->enclosure) || $json->enclosure == 'no') {
+			$json->enclosure = "\0";
+		}
+
+
+		if (empty($json->delimiter)) {
+			echo json_encode(array('status' => '0', 'error' => 'Some settings are absent'));
+			return false;
+		}
+
+		switch ($json->delimiter) {
+			case 'tab':
+				$json->delimiter = "\t";
+				break;
+			case 'space':
+				$json->delimiter = " ";
+				break;
+		}
+
+		return $json;
+	}
 }
 
