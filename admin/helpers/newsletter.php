@@ -86,6 +86,7 @@ class NewsletterHelper
 		$product = $obj->monsterName;
 
 		$domain = $_SERVER['SERVER_NAME'];
+		
 		$monster_url = $params->get('monster_url');
 
 		$url = $monster_url . '/service/check/license/license_key/' . urlencode($lkey) . '/product/' . urlencode($product) . '/domain/' . urlencode($domain);
@@ -95,7 +96,7 @@ class NewsletterHelper
 		}
 
         if (!$noCache) {
-            $res = self::_getCommonInfo($url, $domain, $lkey);
+            //$res = self::_getCommonInfo($url, $domain, $lkey);
             $cache = JFactory::getCache('com_newsletter');
             $res = $cache->call(array('NewsletterHelper', '_getCommonInfo'), $url, $domain, $lkey);
         } else {
@@ -111,7 +112,6 @@ class NewsletterHelper
 	{
 		$updater = JUpdater::getInstance();
 		$results = $updater->findUpdates($eid, 0);
-		
 		$db		= JFactory::getDbo();
 		$query	= $db->getQuery(true);
 		// grab updates ignoring new installs
@@ -134,6 +134,7 @@ class NewsletterHelper
 	public static function _getCommonInfo($url, $domain, $lkey)
 	{
 		$monster = @simplexml_load_file($url);
+		
 		if (!$monster) {
 			$monster = new stdClass();
 			$monster->is_valid = null;
