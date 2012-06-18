@@ -74,7 +74,7 @@ CREATE TABLE `#__newsletter_subscribers`
 `subscription_key` VARCHAR(40) NOT NULL,
 `extra` text,
 
-PRIMARY KEY (`subscriber_id`,`user_id`)
+PRIMARY KEY (`subscriber_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 CREATE INDEX email_idx ON #__newsletter_subscribers(email);
