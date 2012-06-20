@@ -26,6 +26,10 @@ try {
 
         event.stop();
 
+		if ($(this).hasClass('disabled')) {
+			return false;
+		}
+
         var newsletterId = $$('select')[0].get('value');
 
         if ( !newsletterId ) {
@@ -51,28 +55,41 @@ try {
 			"Do you realy want to send this newsletter?"
 		)) ) {
 
-            new Request.JSON({
-            url: '?option=com_newsletter&task=sender.addtoqueue&format=json',
-            data: {
-                lists: lists,
-                newsletter_id: newsletterId
-            },
-                onComplete: function(res){
-                    if (res && res.state) {
-                        alert(Joomla.JText._(
+			new Migur.iterativeAjax({
+
+				url: '?option=com_newsletter&task=sender.addtoqueue&format=json',
+
+				data: {
+					lists: lists,
+					newsletter_id: newsletterId
+				},
+
+				messagePath: '#send-message',
+				preloaderPath: '#send-preloader',
+
+				method: 'get',
+
+				// all in one step
+				onComplete: function(messages, data){
+
+					$$('#sender-export a')[0].removeClass('disabled');
+
+					this.showAlert(
+
+						Joomla.JText._(
 							'THE_NEWSLETTER_HAS_BEEN_QUEUED_SUCCESFULLY', 
-							'The newsletter has been queued succesfully'
-						));
-                        window.parent.location.reload();
-                        window.parent.SqueezeBox.close();
-                    } else {
-                        alert(Joomla.JText._(
-							'AN_UNKNOWN_ERROR_OCCURED', 
-							'An unknown error occured!'
-						));
-                    }
-                }
-            }).send();
+							'The newsletter(s) has been queued succesfully'
+						) + "\n" +
+						Joomla.JText._('TOTAL','Total') + ": " + data.total + "\n" +
+						Joomla.JText._('ERRORS', 'Errors') + ": " + data.errors + "\n"
+					);
+
+					document.location.reload();
+				}
+				
+            }).start();
+			
+			$$('#sender-export a')[0].addClass('disabled');
         }
     });
 

@@ -107,6 +107,7 @@ class MigurMailerMailbox
 				$options['is_ssl'] = '0';
 			}
 
+			// Convert integer is_ssl to transport's option
 			switch ($options['is_ssl']) {
 
 				case '1': $options['is_ssl'] = 'ssl';
@@ -119,6 +120,10 @@ class MigurMailerMailbox
 					break;
 			}
 
+			// Invert external value
+			$options['novalidate-cert'] = empty($options['validate_cert']);
+			unset($options['validate_cert']);
+			
 			$name = 'MigurMailerProtocol' . ucfirst($options['mailbox_server_type']);
 
 			require_once 'protocol' . DIRECTORY_SEPARATOR . strtolower($options['mailbox_server_type']) . '.php';

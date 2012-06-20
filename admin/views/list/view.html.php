@@ -272,6 +272,7 @@ class NewsletterViewList extends MigurView
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-line.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-pie.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/message.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/iterativeajax.js');
 
 		$document->addScriptDeclaration('var urlRoot = "' . JURI::root(true) . '";');
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');

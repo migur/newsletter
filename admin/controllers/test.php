@@ -79,6 +79,47 @@ class NewsletterControllerTest extends JControllerForm
 		
 		die("\n Complete");
 	}
+
+	/**
+	 * Used only for development.
+	 *
+	 * @return void
+	 * @since 1.0
+	 */
+	function createImportCSV()
+	{
+		$count = JRequest::getInt('count', 10000);
+		$start = JRequest::getInt('start', 0);
+
+		$prefix = JRequest::getString('prefix', 'ZZ Test imported');
+		$q = JRequest::getString('quote', '"');
+		$s = JRequest::getString('separator', ',');
+		
+		$csv = '';
+		
+		$csv .= 
+			$q.'Email'.$q .$s. 
+			$q.'Name'.$q  .$s.
+			$q.'Html'.$q  ."\n";
+			
+			
+		for($i=$start; $i < $start + $count; $i++) {
+			$name = $prefix.$i;
+			$csv .= 
+				$q.$name.$q .$s.
+				$q.$name.'@gmail.com'.$q .$s.
+				$q.rand(0,1).$q
+				."\n";
+		}
+
+		header("Content-Type: application/octet-stream");
+		header("Accept-Ranges: bytes");
+		header("Content-Length: " . strlen($csv));
+		header("Content-Disposition: attachment; filename=test-import-list-" . date('Y-m-d-H-i-s') . '.csv');
+		echo $csv;
+		die;
+	}
+	
 	
 	/**
 	 * Save the configuration

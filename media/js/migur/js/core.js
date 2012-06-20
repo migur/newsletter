@@ -11,7 +11,7 @@
  * @since 1.0
  */
 if (typeof(Migur) === 'undefined') {
-    var Migur = {};
+    Migur = {};
 }
 
 
@@ -688,7 +688,11 @@ Migur.jsonResponseParser = function() {
 	this.setResponse = function(response) 
 	{
 		try { 
-			this.response = JSON.decode(response);
+			if (typeof response == 'string') {
+				this.response = JSON.decode(response);
+			} else {
+				this.response = response;
+			}	
 			
 			if (
 				this.response.state === undefined ||
@@ -716,7 +720,11 @@ Migur.jsonResponseParser = function() {
 
 	this.getState = function() 
 	{
-		if (this.response === null) {
+		if (
+			typeof this.response == 'undefined' || 
+			this.response === null || 
+			typeof this.response.state == 'undefined'
+		) {
 			return 'unknown error';
 		}
 
@@ -730,14 +738,24 @@ Migur.jsonResponseParser = function() {
 
 	this.getMessages = function() 
 	{
-		if (this.response === null) return false;
+		if (
+			typeof this.response == 'undefined' ||
+			typeof this.response.messages == 'undefined'
+		
+		) return false;
+			
 		return this.response.messages;
 	}
 	
 
-	this.getMessagesAsList = function(delimiter) 
+	this.getMessagesAsList = function(defaultMessage, delimiter) 
 	{
-		if (this.response === null) return false;
+		if (this.response === null) {
+			if (defaultMessage) {
+				return defaultMessage;
+			}
+			return '';
+		}
 		
 		if (!delimiter) {
 			delimiter = "\n";
@@ -747,7 +765,13 @@ Migur.jsonResponseParser = function() {
 		Array.each(this.getMessages(), function(item){
 			result += (item + delimiter);
 		});
-		
+
+		if (result == '') {
+			if (defaultMessage) {
+				return defaultMessage;
+			}
+		}
+
 		return result;
 	}
 	
