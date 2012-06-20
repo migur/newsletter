@@ -34,10 +34,13 @@ class NewsletterControllerUpdater extends JControllerForm
 		
 			if ($ext->load(array('element' => $element))) {
 				
-				$data[$element] = $cache->call(
-					array('NewsletterHelper', 'findUpdate'),
-					$ext->extension_id
-				);
+				
+//				$data[$element] = $cache->call(
+//					array('NewsletterHelper', 'findUpdate'),
+//					$ext->extension_id
+//				);
+				
+				$data[$element] = NewsletterHelper::findUpdate($ext->extension_id);
 			}	
 		}
 		
