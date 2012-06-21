@@ -720,7 +720,11 @@ Migur.jsonResponseParser = function() {
 
 	this.getState = function() 
 	{
-		if (this.response === null) {
+		if (
+			typeof this.response == 'undefined' || 
+			this.response === null || 
+			typeof this.response.state == 'undefined'
+		) {
 			return 'unknown error';
 		}
 
@@ -734,7 +738,12 @@ Migur.jsonResponseParser = function() {
 
 	this.getMessages = function() 
 	{
-		if (this.response === null) return false;
+		if (
+			typeof this.response == 'undefined' ||
+			typeof this.response.messages == 'undefined'
+		
+		) return false;
+			
 		return this.response.messages;
 	}
 	

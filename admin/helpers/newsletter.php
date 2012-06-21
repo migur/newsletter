@@ -86,6 +86,7 @@ class NewsletterHelper
 		$product = $obj->monsterName;
 
 		$domain = $_SERVER['SERVER_NAME'];
+		
 		$monster_url = $params->get('monster_url');
 
 		$url = $monster_url . '/service/check/license/license_key/' . urlencode($lkey) . '/product/' . urlencode($product) . '/domain/' . urlencode($domain);
@@ -107,6 +108,44 @@ class NewsletterHelper
 		return $res;
 	}
 
+	
+	/**
+	 *
+	 * @param type $eid - extension id
+	 * @return type array
+	 */
+	public static function findUpdate($eid)
+	{
+		$dbo = JFactory::getDbo();
+		
+		$query = 
+			'SELECT DISTINCT us.* FROM #__update_sites AS us' .
+			' JOIN #__update_sites_extensions AS ue ON us.update_site_id = ue.update_site_id'.
+			' WHERE extension_id = '.(int)$eid;
+		
+		$dbo->setQuery($query);
+		$results = $dbo->loadAssoc();
+		
+		if (empty($results)) {
+			return false;
+		}
+		
+		$updater = JUpdater::getInstance();
+		$adapter = $updater->getAdapter('extension');
+		$updates = $adapter->findUpdate($results);
+		
+		// Process updates
+		if (!empty($updates['updates'][0])) {
+			$latest = $updates['updates'][0];
+			
+			if ($latest instanceof JTable) {
+				$latest = $latest->getProperties();
+			}
+		}
+		
+		return $latest;
+	}
+
 	/**
  	 * Gets latest info about component from server.
 	 * Used in cjaching
@@ -121,6 +160,7 @@ class NewsletterHelper
 	public static function _getCommonInfo($url, $domain, $lkey)
 	{
 		$monster = @simplexml_load_file($url);
+		
 		if (!$monster) {
 			$monster = new stdClass();
 			$monster->is_valid = null;

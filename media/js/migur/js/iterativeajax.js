@@ -3,14 +3,12 @@ if (typeof Migur == 'undefined') Migur = {};
 Migur.iterativeAjax = function(options) {
 	
 	this.url = null;
-	
 	this.form = null;
-	
 	this.data = {};
-
-	this.messagePath = null;
-	
+	this.method = 'post';
+	this.messagePath   = null;
 	this.preloaderPath = null;
+	this.isIterative = true;
 
 	this.init = function(options){
 		
@@ -28,7 +26,7 @@ Migur.iterativeAjax = function(options) {
 		
 		this.hidePreloader();
 		
-		this.showMessage(Joomla.JText._('IMPORTING', 'Importing') + '...');
+		this.showMessage(Joomla.JText._('PLEASE_WAIT', 'Please wait') + '...');
 
 		this.step();
 	};
@@ -41,6 +39,7 @@ Migur.iterativeAjax = function(options) {
 
 		new Request({
 			url: this.url,
+			method: this.method,
 			data: this.data,
 			onComplete: function(){
 				$this.onStepComplete.apply($this, arguments);
@@ -67,7 +66,7 @@ Migur.iterativeAjax = function(options) {
 		
 		this.showMessage(data.total + ' ' + Joomla.JText._('ITEMS_PROCESSED', 'items processed') + '...');
 		
-		if (data.fetched > 0) {
+		if (data.fetched > 0 && this.isIterative) {
 			// Let server decide about offset 
 			this.data.offset = null;
 			return this.step();

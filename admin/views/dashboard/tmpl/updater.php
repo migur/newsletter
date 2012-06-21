@@ -12,7 +12,7 @@
             </tr>
             <tr class="row0">
                 <td><?php echo JText::_('MOD_UPDATER_LATEST'); ?></td>
-                <td><?php echo JText::_($this->info->latest_version); ?></td>
+                <td id="updater-latestversion"><?php echo JText::_($this->info->latest_version); ?></td>
             </tr>
             <tr class="row1">
                 <td><?php echo JText::_('MOD_UPDATER_COPYRIGHT'); ?></td>

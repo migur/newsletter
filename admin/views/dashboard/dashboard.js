@@ -6,6 +6,54 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+migurUpdater = {
+
+	latestVersionPath: '#updater-latestversion',
+	
+	scope: ['com_newsletter'],
+
+	fillOnError: function() {
+		
+		$$(this.latestVersionPath).set('html', Joomla.JText._('UNKNOWN', 'Unknown'));
+	},
+
+	fillOnSuccess: function(data) {
+		
+		if (data['com_newsletter'].version) {
+			$$(this.latestVersionPath).set('html', data['com_newsletter'].version);
+		}
+	},
+	
+	get: function() {
+
+		var $this = this; 
+	
+		$$(this.latestVersionPath).set('html', '...');
+	
+		new Request({
+
+			url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=updater.getupdates',
+
+			data: { scope: this.scope },
+
+			onComplete: function(response){
+
+				var parser = new Migur.jsonResponseParser();
+				
+				parser.setResponse(response);
+				
+				if (parser.isError()) {
+					return $this.fillOnError();
+				}
+
+				return $this.fillOnSuccess(parser.getData());
+			}
+
+		}).send();
+	}
+}	
+
+
 window.addEvent('domready', function() {
 try {
 
@@ -139,7 +187,11 @@ try {
     var width = (emailsSent / emailsTotal) * $$('.progress-bar')[0].getWidth();
 
     $$('.progress-line')[0].setStyle('width', width + 'px');
-
+	
+	
+	// Updater request
+	migurUpdater.get();
+	
 } catch(e){
     if (console && console.log) console.log(e);
 }
