@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Id: config.xml 19439 2010-11-10 15:42:23Z chdemko $ -->
 <config>
-	
+
 	<fieldset name="general"
 		label="COM_NEWSLETTER_CONFIG_GENERAL"
 		description="COM_NEWSLETTER_CONFIG_GENERAL">
@@ -306,7 +305,15 @@
 			label="JCONFIG_PERMISSIONS_LABEL" 
 			filter="rules" 
 			component="com_newsletter" 
-			section="component" />
+			section="component" >
+				
+			<action name="core.admin" title="JACTION_ADMIN" description="JACTION_ADMIN_COMPONENT_DESC" />
+			<action name="core.manage" title="JACTION_MANAGE" description="JACTION_MANAGE_COMPONENT_DESC" />
+			<action name="com_newsletter.newsletter.create" title="COM_NEWSLETTER_CREATE_NEWSLETTER" description="COM_NEWSLETTER_CREATE_NEWSLETTER" />
+			<action name="com_newsletter.newsletter.edit" title="COM_NEWSLETTER_EDIT_NEWSLETTER" description="COM_NEWSLETTER_EDIT_NEWSLETTER" />
+			<action name="com_newsletter.list.create" title="COM_NEWSLETTER_CREATE_LIST" description="COM_NEWSLETTER_CREATE_LIST" />
+			<action name="com_newsletter.list.edit" title="COM_NEWSLETTER_EDIT_LIST" description="COM_NEWSLETTER_EDIT_LIST" />
+		</field>	
 	</fieldset>	
 	
 </config>
