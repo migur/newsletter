@@ -61,6 +61,9 @@
         <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset file="${cfg.comDir}/manifest.xml" />
         </copy>
+        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
+            <fileset file="${cfg.comDir}/script.php" />
+        </copy>
 
         <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>
 
@@ -136,6 +139,9 @@
         <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset file="${cfg.comDir}/manifest.xml" />
         </copy>
+        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
+            <fileset file="${cfg.comDir}/script.php" />
+        </copy>
 
         <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>
 
@@ -210,6 +216,9 @@
         </copy>
         <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset file="${cfg.comDir}/manifest.xml" />
+        </copy>
+        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
+            <fileset file="${cfg.comDir}/script.php" />
         </copy>
 
         <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>

@@ -43,12 +43,34 @@ class com_newsletterInstallerScript
 	 */
 	function uninstall($parent)
 	{
+		// Lets check if we need to display uninstall page
+		$doInstall = JRequest::getBool('com_newsletter_uninstall', false);
+		$dbRemove  = JRequest::getBool('com_newsletter_dbremove',  false);
+		
+		$app = JFactory::getApplication();
+
+		
+		
+		// If we proceed NOT from our uninstall page then redirect to it!
+		if (!$doInstall) {
+			$app->redirect(JRoute::_('index.php?option=com_newsletter&view=uninstall', false));
+		}
+
+		
+		
+		// Remove uninstall section from manifest if user do not want to delete data from DB.
+		$manifest = $parent->getParent()->getManifest();
+		if (!$dbRemove) {
+			unset($manifest->uninstall);
+		}	
+
+		
+		
 		// Let's notice about extensions that may need to be uninstalled too
 		$extensions = $this->_getComponentDependentExtensions();
 
 		if (count($extensions) > 0) {
 			
-			$app = JFactory::getApplication();
 			$app->enqueueMessage(JText::_('COM_NEWSLETTER_EXTENSION_TO_UNINSTALL_FOUND'));
 
 			foreach($extensions as $ext) {
