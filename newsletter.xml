@@ -68,10 +68,7 @@
                         in this section are copied from /admin/ in the package -->
                 <files folder="admin">
                         <!-- Admin Main File Copy Section -->
-<!--
-                        <filename>script.php</filename>
--->
-                        <filename>access.xml</filename>
+						
                         <filename>config.xml</filename>
                         <filename>modules.xml</filename>
                         <filename>controller.php</filename>
