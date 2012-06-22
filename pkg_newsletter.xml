@@ -11,10 +11,9 @@
 <copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
 <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 <files folder="packages">
-
     <!-- Don't change the direction! The component should be the last in line -->
-    <file type="library" id="migur">migur.zip</file>
     <file type="module" id="mod_newsletter_subscribe" client="site">mod_newsletter_subscribe.zip</file>
     <file type="component" id="com_newsletter">com_newsletter.zip</file>
+    <file type="library" id="migur">migur.zip</file>
 </files>
 </extension>
