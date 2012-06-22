@@ -74,7 +74,7 @@ CREATE TABLE `#__newsletter_subscribers`
 `subscription_key` VARCHAR(40) NOT NULL,
 `extra` text,
 
-PRIMARY KEY (`subscriber_id`,`user_id`)
+PRIMARY KEY (`subscriber_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 CREATE INDEX email_idx ON #__newsletter_subscribers(email);
@@ -251,7 +251,8 @@ CREATE TABLE `#__newsletter_mailbox_profiles`
 `mailbox_server` VARCHAR(255) DEFAULT NULL,
 `mailbox_server_type` VARCHAR(255) DEFAULT NULL,
 `mailbox_port` INT(11) DEFAULT NULL,
-`is_ssl` ENUM('1','0') DEFAULT '0',
+`is_ssl` ENUM('0', '1', '2') DEFAULT '0',
+`validate_cert` ENUM('0', '1') DEFAULT '1',
 `username` VARCHAR(255) DEFAULT NULL,
 `password` VARCHAR(255) DEFAULT NULL,
 `data` LONGBLOB,

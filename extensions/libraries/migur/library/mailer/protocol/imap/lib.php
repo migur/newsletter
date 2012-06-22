@@ -255,7 +255,7 @@ class MigurMailerProtocolImapLib extends BounceMailHandler
 		$this->service . 
 		// Option to use nothing but actualy better to use NOTLS instead
 		(($this->service_option != 'none')? '/' . $this->service_option : '') . 
-		(($this->noValidateCert)? '/novalidate-cert' : '');
+		(($this->noValidateCert)? '/novalidate-cert' : '/validate-cert');
 	
 	$met = ini_get('max_execution_time');
 	if ($met < 30 && $met != 0) { set_time_limit(30); }	

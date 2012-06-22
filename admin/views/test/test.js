@@ -9,11 +9,17 @@ window.addEvent('domready', function() {
 			var params = row.getElements('.test-params')[0].getProperty('value');
 			var other = row.getElements('.test-other')[0].getProperty('value');
 			
-			var data = params + ((other != '')? '&'+other : '');
+			var dataStr = params + ((other != '')? '&'+other : '');
 			
-			data = (data != '')? data.parseQueryString() : {};
+			data = (dataStr != '')? dataStr.parseQueryString() : {};
 
 			$$('.test-result')[0].addClass('preloader');
+
+
+			if ($(this).hasClass('new-window')) {
+				window.location.href = migurSiteRoot + url + '&' + dataStr;
+				return;
+			}
 
 			new Request({
 				url: migurSiteRoot + url,
