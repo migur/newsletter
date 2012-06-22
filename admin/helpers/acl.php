@@ -46,9 +46,12 @@ class AclHelper
 	{	
 		jimport('joomla.access.access');
 		$result	= array();
- 
-		$actions = JAccess::getActions('com_newsletter', 'component');
- 
+
+		// Get the actions for the asset.
+		$actions = JAccess::getActionsFromFile(
+			JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'config.xml', 
+			'//fieldset[@name="permissions"]/field[@name="rules"]/');
+		
 		foreach ($actions as $action) {
 			$result[] = $action->name;
 		}
