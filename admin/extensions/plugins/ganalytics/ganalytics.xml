@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension
-	type="module"
+	type="plugin"
 	version="1.6.0"
 	client="administrator">
 	<name>Google Analytics Plugin</name>
@@ -12,13 +12,17 @@
 	<authorUrl>http://migur.com/</authorUrl>
 	<version>1.6.0</version>
 	<description></description>
+	<componentVersion>12.06</componentVersion>
 	<namespace>com_newsletter.newsletter</namespace>
+	
 	<files>
 		<filename
 			module="ganalytics">ganalytics.php</filename>
 		<filename>index.html</filename>
 	</files>
+	
 	<help key="JHELP_EXTENSIONS_PLUGIN_MANAGER_ADMIN_ARTICLE" />
+	
 	<config>
 		<fields name="params">
 			<fieldset name="basic">

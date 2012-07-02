@@ -156,14 +156,16 @@ class AclHelper
 		}	
 	}
 	
-	public static function toArray()
+	public static function toArray($user = null)
 	{
 		if(self::$_toArrayCache !== null) {
 			return self::$_toArrayCache;
 		}
 		
-		$user = JFactory::getUser();
-		
+		if (!$user instanceof JUser) {
+			$user = JFactory::getUser();
+		}	
+
 		$result = array();
 		$actions = self::getActions();
 		foreach($actions as $action) {
