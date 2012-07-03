@@ -126,6 +126,10 @@ class NewsletterModelList extends JModelAdmin
 		
         foreach ($collection as $row) {
             
+			foreach($row as &$value) {
+				$value = trim($value);
+			}
+			
 			NewsletterHelper::setTimeLimit(30);
 			
             $row = (array)$row;
@@ -156,7 +160,7 @@ class NewsletterModelList extends JModelAdmin
             }    
 
             // Set confirmed if it's empty
-            if (!$subscriber->confirmed == 0) {
+            if ($subscriber->confirmed != 0) {
                 $subscriber->confirmed = 1;
             }
 
@@ -432,4 +436,37 @@ class NewsletterModelList extends JModelAdmin
 					'list_id' => (int) $lid
 			));
 	}
+	
+	/**
+	 * Bind current subscriber to list.
+	 *
+	 * @param	array	$data	The form data.
+	 *
+	 * @return	boolean	True on success.
+	 * @since	1.0
+	 */
+	public function unbindSubscriber($lid, $subscriber,  $options = array())
+	{
+		if (empty($lid) || empty($subscriber)) {
+			return false;
+		}
+
+		if (is_numeric($subscriber)) {
+			$sid = $subscriber;
+		}
+
+		if (is_object($subscriber)) {
+			$sid = $subscriber->subscriber_id;
+		}
+		
+		// Delete and finish.
+		$dbo = JFactory::getDbo();
+		$dbo->setQuery(
+			'DELETE FROM #__newsletter_sub_list WHERE'.
+			' `subscriber_id` = ' . (int) $sid.
+			' AND `list_id` = ' . (int) $lid
+		);
+		
+		return $dbo->query();
+	}	
 }

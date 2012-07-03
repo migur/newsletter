@@ -453,7 +453,9 @@ class NewsletterControllerList extends JControllerForm
 		}
 
 		//get the header and seek to previous position
-		fgetcsv($handle, 0, $settings->delimiter, $settings->enclosure);
+		if ($settings->skipHeader) {
+			fgetcsv($handle, 0, $settings->delimiter, $settings->enclosure);
+		}	
 		
 		// Seek only if SEEK is not on the start to prevent inserting the HEADER into DB
 		if ($seek > 0) {
@@ -552,6 +554,129 @@ class NewsletterControllerList extends JControllerForm
 			'added'     => $added    + $res['added'],
 			'updated'   => $updated  + $res['updated'],
 			'assigned'  => $assigned + $res['assigned']));
+	}
+
+	
+	/**
+	 * Unbind the users from list. The users are in the file uploaded before
+	 * @return void
+	 * @since 1.0
+	 */
+	public function exclude()
+	{
+
+		$subtask = JRequest::getString('subtask', '');
+		$currentList = JRequest::getInt('list_id', 0);
+
+		if ($currentList < 1) {
+			echo json_encode(array('status' => '0', 'error' => 'No list Id'));
+			return false;
+		}
+
+		if ($subtask == 'lists') {
+
+			$data = json_decode(JRequest::getString('jsondata', ''));
+
+			$list = JModel::getInstance('list', 'newsletterModel');
+
+			$subscribers = array();
+
+			foreach ($data->lists as $listId) {
+				$res = array();
+				$subs = $list->getSubscribers($listId);
+				foreach ($subs as $item) {
+					if (!in_array($item->subscriber_id, $subscribers))
+						$subscribers[] = $item->subscriber_id;
+				}
+			}
+
+			$mList = JModel::getInstance('List', 'NewsletterModel');
+			$total = count($subscribers);
+			
+			foreach ($subscribers as $item) {
+				$res = $mList->unbindSubscriber($currentList, $item);
+
+				if (!$res) {
+
+					NewsletterHelper::jsonError('COM_NEWSLETTER_EXCLUSION_FAILED', array(
+						'total' => $total
+					));
+					return;
+				}
+			}
+
+			NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), array(
+				'total' => $total
+			));
+			return;
+		}
+
+		if ($subtask == 'parse') {
+
+			if (!$settings = $this->_getSettings()) {
+				return;
+			}
+			
+			$mapping = $settings->fields;
+
+			$sess = JFactory::getSession();
+			$file = $sess->get('list.' . $currentList . '.file.uploaded', array());
+
+
+			
+			if (($handle = fopen($file['file']['filepath'], "r")) !== FALSE) {
+
+				//get the header
+				if ($settings->skipHeader) {
+					fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
+				}	
+
+				while (($data = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure)) !== FALSE) {
+					$res[] = array(
+						'email' => $data[$mapping->email->mapped],
+					);
+				}
+				fclose($handle);
+
+				$subscriber = JModel::getInstance('subscriber', 'newsletterModel');
+				$mList = JModel::getInstance('List', 'NewsletterModel');
+
+				$total = count($res);
+				$absent = 0;
+				$processed = 0;
+				foreach ($res as $row) {
+
+					$user = $subscriber->getItem(array('email' => $row['email']));
+
+					if ($user) {
+						$res = $mList->unbindSubscriber($currentList, $user['subscriber_id']);
+
+						if (!$res) {
+							NewsletterHelper::jsonError('COM_NEWSLETTER_EXCLUSION_FAILED', array(
+								'processed' => $processed,
+								'absent' => $absent,
+								'total' => $total
+							));
+							return;
+						} else {
+							$processed++;
+						}
+					} else {
+						$absent++;
+					}
+				}
+
+				unlink($file['file']['filepath']);
+				$sess->clear('list.' . $currentList . '.file.uploaded');
+
+				NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), array(
+					'processed' => $processed,
+					'absent' => $absent,
+					'total' => $total
+				));
+				return;
+			}
+		}
 	}
 
 	

@@ -27,7 +27,7 @@ class JavascriptHelper
 	 * @return void
 	 * @since 1.0
 	 */
-	public static function addObject($name, $obj, $isGlobal = false)
+	public static function addObject($name, $obj, $isGlobal = true)
 	{
 		$doc = JFactory::getDocument();
 		$doc->addScriptDeclaration(($isGlobal? '' : 'var ') . $name . ' = ' . json_encode((object)$obj) . ';');

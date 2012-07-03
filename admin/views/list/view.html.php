@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // import view library
 JLoader::import('helpers.statistics', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.support', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
@@ -198,6 +199,8 @@ class NewsletterViewList extends MigurView
         
         $this->assignRef('importPlugins', $res);
         
+		$this->supportInit();
+		
 		// Set the document
 		$this->setDocument();
 		
@@ -325,5 +328,17 @@ class NewsletterViewList extends MigurView
 			)
 		);
 	}
+	
+	public function supportInit()
+	{
+		$document = JFactory::getDocument();
 
+		// Add JS and create namespace for data
+		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/support.js");
+		JavascriptHelper::addObject(
+			'Migur.app.support', 
+			array(
+				'resources' => new stdClass
+		));
+	}
 }
