@@ -1,3 +1,10 @@
+<?php 
+	JavascriptHelper::addObject(
+		'Migur.app.support.resources["list"]', 
+		SupportHelper::getCategoryItems('list')
+	); 
+?>
+
 <div class="import">
     
     <?php echo MigurToolBar::getInstance('import-toolbar')->render(); ?>
@@ -29,6 +36,7 @@
 			
 			<div class="block-notice">
 				<?php echo JText::_('COM_NEWSLETTER_STANDARD_IMPORT_HELPTEXT'); ?>
+				<a href="#" role="support" rel="list.import">(?)</a>
 			</div>
 			
 			<div id="import-file-upload">
@@ -56,15 +64,20 @@
 
 			<fieldset id="import-fields">
 				<legend><?php echo JText::_('COM_NEWSLETTER_IMPORT_DND_FIELDS'); ?></legend>
-					<div style="float:left"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?></div><div class="drop" style="float:left" rel="username"></div><div style="float:left"><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('COM_NEWSLETTER_SUBSCRIBER_NAME'); ?></div>
+					<div class="drop fltlft" rel="username"></div>
+					<div class="fltlft"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('COM_NEWSLETTER_SUBSCRIBER_NAME'); ?></div>
 					<div class="clr"></div>
-					<div style="float:left"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?></div><div class="drop" style="float:left" rel="email"></div><div style="float:left"><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('JGLOBAL_EMAIL'); ?></div>
+					<div class="drop fltlft" rel="email"></div>
+					<div class="fltlft"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('JGLOBAL_EMAIL'); ?></div>
 					<div class="clr"></div>
-					<div style="float:left"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?></div><div class="drop" style="float:left" rel="html"></div><div style="float:left"><?php echo JText::_('COM_NEWSLETTER_AS') . ' HTML. ' . JText::_('COM_NEWSLETTER_DEFAULT'); ?></div>
-					<select id="import-file-html-default" style="float:left">
-						<option value="0">No</option>
-						<option value="1">Yes</option>
-					</select>
+					<div class="drop fltlft" rel="html"></div>
+					<div class="fltlft"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD') . ' ' . JText::_('COM_NEWSLETTER_AS') . ' HTML.'?><br/>
+						<?php echo JText::_('COM_NEWSLETTER_DEFAULT'); ?>
+						<select id="import-file-html-default">
+							<option value="0">No</option>
+							<option value="1">Yes</option>
+						</select>
+					</div>	
 			</fieldset>
 
 			<fieldset id="import-settings">
@@ -115,9 +128,15 @@
 
 					<div class="clr"></div>
 
-					<div style="margin-top:10px;">
+					<div style="margin-top:10px; overflow:hidden">
 						<input type="checkbox" id="import-overwrite" name="import_overwrite" value="yes">
 						<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_IMPORT_OVERWRITE'); ?></div>
+					</div>
+					<div style="margin-top:10px; overflow:hidden">
+						<input type="checkbox" id="import-skip-header" name="import_skip_header" value="yes">
+						<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
+							<a href="#" role="support" rel="list.import">(?)</a>
+						</div>
 					</div>
 				</div>
 			</fieldset>
