@@ -292,7 +292,7 @@ class NewsletterModelImportCommon
 	public static function getSupported()
 	{
 		// Get a list of files
-		$files = glob(__DIR__ . '/*.php');
+		$files = glob(dirname(__FILE__) . '/*.php');
 		
 		// Fetch all supported component managers
 		$res = array();
