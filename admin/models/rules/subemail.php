@@ -47,6 +47,7 @@ class JFormRuleSubemail extends JFormRule
 	{
 		// If the field is empty and not required, the field is valid.
 		$required = ((string) $element['required'] == 'true' || (string) $element['required'] == 'required');
+		
 		if (!$required && empty($value)) {
 			return true;
 		}
@@ -58,24 +59,26 @@ class JFormRuleSubemail extends JFormRule
 
 		// Check if we should test for uniqueness.
 		$unique = ((string) $element['unique'] == 'true' || (string) $element['unique'] == 'unique');
+
 		if ($unique) {
 
+			$sid = ($form instanceof JForm) ? $form->getValue('subscriber_id') : null;
+			
+			if (empty($sid)) {
+				$sid = JRequest::getInt('subscriber_id', null);
+			}
+			
 			// Get the database object and a new query object.
 			$db = JFactory::getDBO();
 			$query = $db->getQuery(true);
-
-			// Build the query.
-			$query->select('COUNT(*)');
-			$query->from('#__newsletter_subscribers');
-			$query->where('email = ' . $db->quote($value));
-
-			// Get the extra field check attribute.
-			$userId = ($form instanceof JForm) ? $form->getValue('subscriber_id') : '';
-			$query->where($db->quoteName('subscriber_id') . ' <> ' . (int) $userId);
+			$query->select("s.*");
+			$query->from('#__newsletter_subscribers AS s');
+			$query->join('LEFT', '#__users AS u ON s.user_id = u.id');
+			$query->where('s.email = ' . $db->quote($value));
 
 			// Set and query the database.
 			$db->setQuery($query);
-			$duplicate = (bool) $db->loadResult();
+			$res = $db->loadAssocList();
 
 			// Check for a database error.
 			// TODO: deprecated since 12.1
@@ -83,33 +86,33 @@ class JFormRuleSubemail extends JFormRule
 				JError::raiseWarning(500, $db->getErrorMsg());
 			}
 
-			if ($duplicate) {
-				return false;
+			foreach($res as $row) {
+				if ($row['subscriber_id'] != $sid || empty($sid)) {
+					return false;
+				}
 			}
 			
-			
-			// Build the query.
 			$query = $db->getQuery(true);
-			$query->select('COUNT(*)');
+			$query->select("s.*");
 			$query->from('#__users AS u');
-			$query->join('left', '#__newsletter_subscribers AS s ON u.id = s.user_id');
+			$query->join('LEFT', '#__newsletter_subscribers AS s ON s.user_id = u.id');
 			$query->where('u.email = ' . $db->quote($value));
-			$query->where('(subscriber_id <> ' . (int) $userId . ' OR subscriber_id IS NULL)');
 
 			// Set and query the database.
 			$db->setQuery($query);
-			$duplicate = (bool) $db->loadResult();
+			$res = $db->loadAssocList();
 
 			// Check for a database error.
 			// TODO: deprecated since 12.1
 			if ($db->getErrorNum()) {
 				JError::raiseWarning(500, $db->getErrorMsg());
 			}
-
-			if ($duplicate) {
-				return false;
-			}
 			
+			foreach($res as $row) {
+				if ($row['subscriber_id'] != $sid || empty($sid)) {
+					return false;
+				}
+			}
 		}
 
 		return true;

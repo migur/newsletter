@@ -201,12 +201,24 @@ class NewsletterControllerSubscriber extends JControllerForm
 	 */
 	public function edit($key = null, $urlVar = null)
 	{
-		$sid = JRequest::getInt('subscriber_id');
-		if ($sid < 0) {
-			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
-			$model->load($sid);
-			JRequest::setVar('subscriber_id', $model->getId());
-			unset($model);
+		$sid = JRequest::getInt('subscriber_id', null);
+		
+		if (empty($sid)) {
+
+			$uid = JRequest::getInt('user_id', null);
+
+			if (empty($uid)) {
+				return false;
+			}	
+			
+			$model = $this->getModel();
+			$sub = $model->getItem(array('user_id' => $uid));
+
+			if (empty($sub)) {
+				return false;
+			}
+			
+			JRequest::setVar('subscriber_id', $sub['subscriber_id']);
 		}	
 		
 		return parent::edit($key, $urlVar);

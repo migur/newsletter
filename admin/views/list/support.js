@@ -9,7 +9,6 @@ window.addEvent('domready', function() {
 			var id = $(this).getProperty('rel');
 			var parts = id.split('.');
 			var data = Migur.app.support.resources[parts[0]][parts[1]];
-			console.log(data);
 
 			// Set defaults for absent options
 			if (!data.options) data.options = {};

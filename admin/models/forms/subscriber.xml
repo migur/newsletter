@@ -19,6 +19,7 @@
 			size="30"
 			default=""
 			required="true"
+			unique="true"
 			validate="subemail"
 		 />
 		<field

@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.modeladmin');
 
 JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('helpers.data', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 /**
  * Class of subscriber model of the component.
@@ -108,20 +109,11 @@ class NewsletterModelSubscriber extends JModelAdmin
 		$table->subscriber_id = null;
 		
 		$isNew = empty($data['subscriber_id']);
-		
-		if ($fastStore) {
-			
-			if (!$table->save($data)) {
-				return false;
-			}	
-			
-		} else {
-			
-			if (!parent::save($data)) {
-				return false;
-			}
+
+		if (!empty($data['user_id'])) {
+			unset($data['name']);
+			unset($data['email']);
 		}
-		
 		
 		// If this will be the new record then let's set default values
 		if ($isNew) {
@@ -148,31 +140,65 @@ class NewsletterModelSubscriber extends JModelAdmin
 				$data['created_on'] = date('Y-m-d H:i:s');
 			}
 		}	
-		
-		
-		if ($isNew || empty($data['subscription_key'])) {
+
+		if ($fastStore) {
 			
-			$data['subscriber_id'] = $table->subscriber_id;
+			if (!$table->save($data)) {
+				return false;
+			}
+			$sid = $table->subscriber_id;
+			
+		} else {
+			
+			if (!parent::save($data)) {
+				return false;
+			}
+			$sid = $this->getState($this->getName() . '.id');
+		}
+		
+		if ($isNew) {
+			
+			$data['subscriber_id'] = $sid;
 			$data['subscription_key'] = $this->_createSubscriptionKey($data['subscriber_id']);
 			$data['confirmed'] = $data['subscription_key'];
-			$table->save($data);	
+			
+			return $table->save($data);
 		}	
 		
 		return true;
 	}
 	
-	
 	/**
 	 * Override this to add ability to get info about J! user too.
 	 * 
-	 * @param numeric|array $
+	 * Can find by 
+	 *	- NUMERIC - assumes that it is subscriber_id
+	 *  - subscriber_id - in subscribers table only
+	 *  - name - first in subscribers. if fail then in jusers
+	 *  - email - first in subscribers. if fail then in jusers
+	 *  - subscription_key - in subscribers table only
+	 *  - user_id - in juser's table only
+	 *
+	 * If J!user found but the relational subscriber row is absent then 
+	 * automaticaly create a subscriber row.
 	 * 
+	 * @param numeric|array
+	 *  
 	 * @return array
 	 */
 	public function getItem($data = null, $tableInstance = null)
 	{
+		
 		if (is_numeric($data)) {
 			$data = array('subscriber_id' => (int)$data);
+		}
+
+		if (empty($data) && $this->getState($this->getName() . '.id')) {
+			$data = array('subscriber_id' => (int) $this->getState($this->getName() . '.id'));
+		}
+		
+		if (empty($data)) {
+			return false;
 		}
 
 		// There may be some cases...
@@ -181,39 +207,19 @@ class NewsletterModelSubscriber extends JModelAdmin
 	
 		$dbo = $this->getDbo();
 
-		$table = ($tableInstance instanceof JTable)? $tableInstance : $this->getTable();
-		$table->subscriber_id = null;
+		// Try to find in subscribers table...
+		$row = array();
 		
-		// Try to find
-		$query = $dbo->getQuery(true);
-		$query->select(
-				"u.id as juser_id, " . 
-				"u.name as juser_name, " . 
-				"u.username as juser_username, " . 
-				"u.email as juser_email, " .
-				"u.password as juser_password, " . 
-				"u.usertype as juser_usertype, " . 
-				"u.block as juser_block, " . 
-				"u.sendEmail as juser_sendEmail, " . 
-				"u.registerDate as juser_registerDate, " . 
-				"u.lastvisitDate as juser_lastvisitDate, " . 
-				"u.activation as juser_activation, " . 
-				"u.params as juser_params, " . 
-				"s.* ");
-		
-		$query->from('#__newsletter_subscribers AS s');
-		$query->join('LEFT', '#__users AS u ON s.user_id = u.id');
+		// Remain only fields for SUBSCRIBERS table
+		$fieldsAvailable = array('subscriber_id', 'name', 'email', 'subscription_key');
+		$filter = array();
 		foreach($data as $name => $val) {
-			$query->where("s.$name=".$dbo->quote($val));
+			if (in_array($name, $fieldsAvailable)) $filter[$name] = $val;
 		}
 		
-		// Do the request
-		$dbo->setQuery($query);
-		$row = $dbo->loadAssoc();
+		// If there are some fields then try to find
+		if (!empty($filter)) {
 		
-		
-		// If we cannot find subscriber then try to find j!user
-		if (empty($row)) {
 			$query = $dbo->getQuery(true);
 			$query->select(
 					"u.id as juser_id, " . 
@@ -231,14 +237,61 @@ class NewsletterModelSubscriber extends JModelAdmin
 					"s.* ");
 
 			$query->from('#__newsletter_subscribers AS s');
-			$query->join('RIGHT', '#__users AS u ON s.user_id = u.id');
-			foreach($data as $name => $val) {
-				$query->where("u.$name=".$dbo->quote($val));
+			$query->join('LEFT', '#__users AS u ON s.user_id = u.id');
+		
+			foreach($filter as $name => $val) {
+				$query->where("s.$name=".$dbo->quote($val));
 			}
-
+		
+			//echo $query; die;
+			
 			// Do the request
 			$dbo->setQuery($query);
 			$row = $dbo->loadAssoc();
+		}	
+		
+		
+		// If we cannot find subscriber then try to find j!user
+		if (empty($row)) {
+			
+			// Remain only fields for SUBSCRIBERS table
+			$fieldsAvailable = array('user_id', 'name', 'email');
+			$filter = array();
+			foreach($data as $name => $val) {
+				if (in_array($name, $fieldsAvailable)) $filter[$name] = $val;
+			}
+
+			// If there are some fields then try to find
+			if (!empty($filter)) {
+			
+				$query = $dbo->getQuery(true);
+				$query->select(
+						"u.id as juser_id, " . 
+						"u.name as juser_name, " . 
+						"u.username as juser_username, " . 
+						"u.email as juser_email, " .
+						"u.password as juser_password, " . 
+						"u.usertype as juser_usertype, " . 
+						"u.block as juser_block, " . 
+						"u.sendEmail as juser_sendEmail, " . 
+						"u.registerDate as juser_registerDate, " . 
+						"u.lastvisitDate as juser_lastvisitDate, " . 
+						"u.activation as juser_activation, " . 
+						"u.params as juser_params, " . 
+						"s.* ");
+
+				$query->from('#__newsletter_subscribers AS s');
+				$query->join('RIGHT', '#__users AS u ON s.user_id = u.id');
+				foreach($filter as $name => $val) {
+					if ($name == 'user_id') $name = 'id';
+					$query->where("u.$name=".$dbo->quote($val));
+				}
+
+				//echo $query; die;
+				// Do the request
+				$dbo->setQuery($query);
+				$row = $dbo->loadAssoc();
+			}	
 		}
 
 		// If we cant find nothing then return false.
@@ -246,6 +299,10 @@ class NewsletterModelSubscriber extends JModelAdmin
 			return false;
 		}	
 
+		
+		$table = ($tableInstance instanceof JTable)? $tableInstance : $this->getTable();
+		$table->subscriber_id = null;
+		
 		// Ok. Found something. If this was a J!user and 
 		// he does not have subscriber row then create it!
 		if (!empty($row['juser_id']) && empty($row['subscriber_id'])) {

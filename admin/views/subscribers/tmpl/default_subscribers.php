@@ -80,7 +80,14 @@
 					<?php echo JHtml::_('multigrid.id', $i, $subscriber->getExtendedId(), false, 'cid', 'subscribersForm'); ?>
 				</td>
 				<td>
-					<a href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&subscriber_id='.$subscriber->getExtendedId()); ?>"
+					<?php 
+						if (!$subscriber->subscriber_id) { 
+							$href = JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&user_id='.$subscriber->user_id, false);
+						} else {
+							$href = JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&subscriber_id='.$subscriber->subscriber_id, false);
+						}
+					?>
+					<a href="<?php echo $href; ?>"
 					   rel="{handler: 'iframe', size: {x: 965, y: 540}}"
 					   class="modal" >
 						<?php echo $this->escape($item->name); ?>

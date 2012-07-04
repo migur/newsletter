@@ -15,8 +15,6 @@ defined('_JEXEC') or die('Restricted access');
 //  ini_set("log_errors" , "0");
 //  ini_set("error_log" , "/var/log/php-error.log");
 
-JLog::addLogger(array());
-
 try {
 
 	// import joomla controller library
