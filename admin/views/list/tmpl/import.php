@@ -128,14 +128,19 @@
 
 					<div class="clr"></div>
 
-					<div style="margin-top:10px; overflow:hidden">
-						<input type="checkbox" id="import-overwrite" name="import_overwrite" value="yes">
+					<div style="margin-top:5px; overflow:hidden">
+						<input type="checkbox" id="import-overwrite" name="import_overwrite" />
 						<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_IMPORT_OVERWRITE'); ?></div>
 					</div>
-					<div style="margin-top:10px; overflow:hidden">
-						<input type="checkbox" id="import-skip-header" name="import_skip_header" value="yes">
+					<div style="overflow:hidden">
+						<input type="checkbox" id="import-skip-header" name="import_skip_header" />
 						<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
 							<a href="#" role="support" rel="list.import">(?)</a>
+						</div>
+					</div>
+					<div style="overflow:hidden">
+						<input type="checkbox" id="import-autoconfirm" name="import_autoconfirm" checked="checked"/>
+						<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_ADD_AS_CONFIRMED'); ?>
 						</div>
 					</div>
 				</div>

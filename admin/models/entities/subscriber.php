@@ -116,7 +116,6 @@ class NewsletterModelEntitySubscriber extends MigurModel
 			return false;
 		}
 
-
 		// If we already has SUBSCRIBER row for this J! user 
 		// then there is nothing to do.
 		if (parent::load(array('user_id' => $user['id']))) {
@@ -266,9 +265,11 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		}
 
 		$this->_createSubscriptionKey();
+		if (empty($this->_data->confirmed) && empty($data['confirmed'])) {
+			$this->_data->confirmed = $this->_data->subscription_key;
+		}
+		
 		return parent::save();
-
-		return true;
 	}
 
 	/**
