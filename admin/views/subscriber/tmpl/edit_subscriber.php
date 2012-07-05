@@ -62,7 +62,6 @@ defined('_JEXEC') or die;
             <?php echo $this->ssForm->getInput('subscriber_id'); ?>
             <?php echo $this->ssForm->getInput('user_id'); ?>
             <?php echo $this->ssForm->getInput('confirmed'); ?>
-		
             <input type="hidden" name="subscriber_id" value="<?php echo $this->ssForm->getValue('subscriber_id'); ?>" />
             <input type="hidden" name="task" value="" />
             <?php echo JHtml::_('form.token'); ?>

@@ -17,8 +17,12 @@ abstract class JHtmlMigurform
 	 */
 	public static function element()
 	{
-		list($type, $domId, $value, $options) = func_get_args();
-		$options = (array)$options;
+		$args = func_get_args();
+		
+		$type =    isset($args[0])? $args[0] : null;
+		$domId =   isset($args[1])? $args[1] : null;
+		$value =   isset($args[2])? $args[2] : null;
+		$options = isset($args[3])? (array) $args[3] : array();
 		
 		// Load the JFormField object for the field.
 		JFormHelper::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'fields');

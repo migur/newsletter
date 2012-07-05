@@ -160,7 +160,11 @@ class NewsletterModelSubscriber extends JModelAdmin
 			
 			$data['subscriber_id'] = $sid;
 			$data['subscription_key'] = $this->_createSubscriptionKey($data['subscriber_id']);
-			$data['confirmed'] = $data['subscription_key'];
+			
+			if (empty($data['confirmed'])) {
+				$data['confirmed'] = $data['subscription_key'];
+			}
+			
 			return $table->save($data);
 		}	
 		
