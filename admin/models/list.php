@@ -103,7 +103,7 @@ class NewsletterModelList extends JModelAdmin
      * TODO: Better to place it in something like NewsletterManagerList...
      * 
      * @param type $collection List of objects
-     * @param type $options Lsit of options
+     * @param type $options Lsit of options (errorOnFail, overwrite, autoconfirm)
      * @return type Result data array
      */
     public function importCollection($listId, $collection, $options)
@@ -159,13 +159,16 @@ class NewsletterModelList extends JModelAdmin
                 $isExists = $subscriber->load(array('email' => $row['email']));
             }    
 
-            // Set confirmed if it's empty
-            if ($subscriber->confirmed != 0) {
-                $subscriber->confirmed = 1;
-            }
-
+			
+			if(!empty($options['autoconfirm'])) {
+				$row['confirmed'] = 1;
+			}
+			
             if (!$isExists) {
                 
+				// If this is a new subscriber then check if autoconfirm
+				// TODO: In future need to add the sending of a confirmation mail here
+				
                 // If user is not exists then add it!
                 // Can create ONLY subscribers, NOT J!USERS.
                 if ($success = $subscriber->save($row)) {
@@ -176,7 +179,7 @@ class NewsletterModelList extends JModelAdmin
                 
                 // If user is present and we can update it
                 // Then do it but not for J! Users
-                if ($options['overwrite'] && 
+                if (!empty($options['overwrite']) && 
                     !$subscriber->isJoomlaUserType() && 
                     $success = $subscriber->save($row)
                 ) {

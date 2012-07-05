@@ -499,6 +499,7 @@ class NewsletterControllerList extends JControllerForm
 			$collection, 
 			array(
 				'overwrite' => $settings->overwrite,
+				'autoconfirm' => $settings->autoconfirm
 			));
 
 		if (!empty($res['errors'])) {
