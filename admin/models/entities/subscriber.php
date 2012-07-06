@@ -321,18 +321,20 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	 * @since	1.0
 	 * @deprecated 12.05 Moved to list model
 	 */
-	public function assignToList($lid)
+	public function assignToList($lid, $options = array())
 	{
 		if (empty($lid)) {
 			return false;
 		}
 
+		$confirmed = !empty($options['confirmed'])? (int) $options['confirmed'] : (int) $this->_data->confirmed;
+		
 		// Save and finish.
 		return $this->getTable('sublist')
 				->save(array(
 					'subscriber_id' => (int) $this->_data->subscriber_id,
 					'list_id' => (int) $lid,
-					'confirmed' => $this->_data->confirmed));
+					'confirmed' => $confirmed));
 	}
 
 	/**
@@ -375,13 +377,11 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	{
 		$this->_data->confirmed = 1;
 
-		if (!$this->save()) {
-			return false;
-		}
+		return $this->save();
 
-		$db = JFactory::getDbo();
-		$db->setQuery("UPDATE #__newsletter_sub_list set confirmed=1 WHERE confirmed=" . $db->quote($this->_data->subscription_key));
-		return $subscriber = $db->query();
+//		$db = JFactory::getDbo();
+//		$db->setQuery("UPDATE #__newsletter_sub_list set confirmed=1 WHERE confirmed=" . $db->quote($this->_data->subscription_key));
+//		return $subscriber = $db->query();
 	}
 
 	/**

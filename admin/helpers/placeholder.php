@@ -134,7 +134,7 @@ class PlaceholderHelper
 
 			self::$placeholders['confirmation link'] = array(
 				'data' => null,
-				'default' => 'index.php?option=com_newsletter&task=subscribe.confirm&id=[subscription key]',
+				'default' => 'index.php?option=com_newsletter&task=subscribe.confirm&id=[subscription key]&lid=[list id]',
 				'class' => 'link'
 			);
 

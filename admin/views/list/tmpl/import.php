@@ -1,10 +1,3 @@
-<?php 
-	JavascriptHelper::addObject(
-		'Migur.app.support.resources["list"]', 
-		SupportHelper::getCategoryItems('list')
-	); 
-?>
-
 <div class="import">
     
     <?php echo MigurToolBar::getInstance('import-toolbar')->render(); ?>
@@ -36,7 +29,10 @@
 			
 			<div class="block-notice">
 				<?php echo JText::_('COM_NEWSLETTER_STANDARD_IMPORT_HELPTEXT'); ?>
-				<a href="#" role="support" rel="list.import">(?)</a>
+				<a href="#" role="support" resource="<?php echo SupportHelper::getResourceUrl('list', 'import'); ?>">
+					(?)
+				</a>
+
 			</div>
 			
 			<div id="import-file-upload">
@@ -135,7 +131,9 @@
 					<div style="overflow:hidden">
 						<input type="checkbox" id="import-skip-header" name="import_skip_header" />
 						<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
-							<a href="#" role="support" rel="list.import">(?)</a>
+							<a href="#" role="support" resource="<?php echo SupportHelper::getResourceUrl('list', 'import'); ?>">
+								(?)
+							</a>
 						</div>
 					</div>
 					<div style="overflow:hidden">

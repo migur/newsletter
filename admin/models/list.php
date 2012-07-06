@@ -271,13 +271,6 @@ class NewsletterModelList extends JModelAdmin
 		$table->load($listId);
 		$list = (object) $table->getProperties();
 		
-		// Check if we need to use fallback newsletter if 
-		// newsletter on subscription is not defined
-		if (!empty($options['noFallback']) && empty($list->send_at_reg)) {
-			// True means no errors...
-			return true;
-		}
-
 		// Get subscriber
 		$subManager = JModel::getInstance('Subscriber', 'NewsletterModel');
 		
@@ -324,6 +317,7 @@ class NewsletterModelList extends JModelAdmin
 		try {
 			
 			PlaceholderHelper::setPlaceholder('listname', $list->name);
+			PlaceholderHelper::setPlaceholder('list id', $list->list_id);
 			
 			if (!$this->_mailer) {
 				$this->_mailer = new MigurMailer();
@@ -373,6 +367,17 @@ class NewsletterModelList extends JModelAdmin
 			return false;
 		}
 
+		if (!is_numeric($subscriber)) {
+			
+			$sub = (array)$subscriber;
+			$sid = $subscriber['subscriber_id'];
+			
+		} else {
+			
+			$sid = (int) $subscriber;
+		}
+		
+		
 		// Determine the confirmed value
 		if (!isset($options['confirmed'])) {
 			$options['confirmed'] = DataHelper::getDefault('confirmed', 'sublist');
@@ -408,9 +413,29 @@ class NewsletterModelList extends JModelAdmin
 		// Save and finish.
 		return $this->getTable('sublist')
 				->save(array(
-					'subscriber_id' => (int) $subscriber,
+					'subscriber_id' => (int) $sid,
 					'list_id' => (int) $lid,
 					'confirmed' => $confirmed));
+	}
+
+	
+	
+	/**
+	 * @return	boolean	True on success.
+	 * @since	12.05
+	 */
+	public function confirmSubscriber($lid, $sid)
+	{
+		if (empty($lid) || empty($sid)) {
+			return false;
+		}
+
+		$db = JFactory::getDbo();
+		$db->setQuery(
+			"UPDATE #__newsletter_sub_list set confirmed=1 WHERE ".
+			" subscriber_id=" . $db->quote($sid) .
+			" AND list_id=" . $db->quote($lid));
+		return $db->query();
 	}
 	
 	/**
@@ -471,5 +496,26 @@ class NewsletterModelList extends JModelAdmin
 		);
 		
 		return $dbo->query();
-	}	
+	}
+	
+	
+	public function isConfirmed($lid, $sid)
+	{
+		if (empty($lid) || empty($sid)) {
+			throw new Exception('Missing required data');
+		}
+		
+		if (!is_numeric($sid)) {
+			$sid = $sid['subscriber_id'];
+		}
+		
+		$table = $this->getTable('sublist');
+		$res = $table->load(array('list_id' => $lid, 'subscriber_id' => $sid));
+		
+		$res = ($res && $table->confirmed == 1);
+		
+		unset($table);
+		
+		return $res;
+	}
 }

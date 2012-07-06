@@ -154,7 +154,9 @@
 			<div style="margin-top:10px; overflow:hidden">
 				<input type="checkbox" id="exclude-skip-header" name="exclude_skip_header" value="yes">
 				<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
-					<a href="#" role="support" rel="list.exclude">(?)</a>
+					<a href="#" role="support" resource="<?php echo SupportHelper::getResourceUrl('list', 'exclude'); ?>">
+						(?)
+					</a>
 				</div>
 			</div>
         </div>

@@ -39,6 +39,7 @@ try {
 	JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.log', JPATH_COMPONENT_ADMINISTRATOR, '');
+	JLoader::import('helpers.support', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JHtml::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'helpers'. DIRECTORY_SEPARATOR .'html');
 
 	// Add translations used in JavaScript
