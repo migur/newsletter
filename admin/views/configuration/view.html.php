@@ -51,6 +51,10 @@ class NewsletterViewConfiguration extends MigurView
 		JHTML::stylesheet('media/com_newsletter/css/configuration.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
 		JHTML::script('administrator/components/com_newsletter/views/configuration/configuration.js');
+		
+		$document = JFactory::getDocument();
+		// Add JS and create namespace for data
+		$document->addScript(JURI::root() . "media/com_newsletter/js/migur/js/support.js");
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {

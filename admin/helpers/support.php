@@ -26,7 +26,7 @@ class SupportHelper
 {
 	static public $resourceUrl = 'administrator/index.php?option=com_newsletter&view=support';
 	
-	public static function getHelpUrl($category, $name, $version = null, $options = array())
+	public static function getResourceUrl($category, $name = null, $anchor = null, $version = null, $options = array())
 	{
 		$resourceUrl = '';
 		
@@ -37,7 +37,7 @@ class SupportHelper
 		if (!empty($name)) {
 			$resourceUrl .= '&name='.$name;
 		}	
-		
+
 		if (!empty($version)) {
 			$resourceUrl .= '&version='.$category;
 		}	
@@ -53,27 +53,10 @@ class SupportHelper
 			$resourceUrl .= '&'.$name.'='.$val;
 		}
 		
+		if (!empty($anchor)) {
+			$resourceUrl .= '#'.$anchor;
+		}	
 		
 		return JUri::root(). self::$resourceUrl . $resourceUrl;
 	}	
-	
-	
-	public static function getCategoryItems($category)
-	{
-		switch($category) {
-			case 'list':
-				return array(
-					'import' => array(
-						'url' => self::getHelpUrl('list', 'import'),
-						'title'       => 'Importing into list - Help page'),
-					
-					'exclude' => array(
-						'url' => self::getHelpUrl('list', 'exclude'),
-						'title'       => 'Excluding from list - Help page')
-
-				);
-				
-			default: return array();	
-		}
-	}
 }

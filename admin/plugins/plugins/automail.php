@@ -103,4 +103,19 @@ class plgMigurAutomail extends JPlugin
 		
 		return $this->_automailer;
 	}
+	
+	/**
+	 * Set an instance of automailer manager
+	 * @return type 
+	 */
+	public function setAutomailer($instance = null)
+	{
+		if (!$instance) {
+			$instance = new NewsletterAutomailingManager();
+		}
+		
+		$this->_automailer = $instance;
+		return $this->_automailer;
+	}
+	
 }

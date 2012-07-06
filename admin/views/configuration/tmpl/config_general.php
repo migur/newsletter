@@ -58,12 +58,15 @@
                     <td colspan="2">
 						<?php next($items); ?>
 						<?php echo current($items)->label; ?>
+						<a class="fltlft" href="#" role="support" resource="<?php echo SupportHelper::getResourceUrl('subscriber', 'subscription'); ?>">(?)</a>
 						<?php echo current($items)->input; ?>
 						<?php next($items); ?>
 						<?php echo current($items)->label; ?>
+						<a class="fltlft" href="#" role="support" resource="<?php echo SupportHelper::getResourceUrl('subscriber', 'subscription'); ?>">(?)</a>
 						<?php echo current($items)->input; ?>
 						<?php next($items); ?>
 						<?php echo current($items)->label; ?>
+						<a class="fltlft" href="#" role="support" resource="<?php echo SupportHelper::getResourceUrl('subscriber', 'subscription'); ?>">(?)</a>
 						<?php echo current($items)->input; ?>
 					</td>
                 </tr>

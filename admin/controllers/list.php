@@ -198,19 +198,21 @@ class NewsletterControllerList extends JControllerForm
 							
 							try {
 
-								if (!$listManager->sendSubscriptionMail(
-									$subscriber,
-									$listId, 
-									array(
-										'addToQueue'       => true,
-										'ignoreDuplicates' => true))
-								){	
-									throw new Exception();
-								}
+								// No need to send the subscription newsleter when assigning with admin
 								
-								if(!$subscriber->assignToList($listId)){
-									throw new Exception();
-								}	
+//								if (!$listManager->sendSubscriptionMail(
+//									$subscriber,
+//									$listId, 
+//									array(
+//										'addToQueue'       => true,
+//										'ignoreDuplicates' => true))
+//								){	
+//									throw new Exception();
+//								}
+//								
+//								if(!$subscriber->assignToList($listId, array('confirmed' => true))){
+//									throw new Exception();
+//								}	
 
 								$assignedLists[] = $listId;
 								
