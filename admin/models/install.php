@@ -152,7 +152,7 @@ class NewsletterModelInstall extends MigurModelList
 
 			// Get an installer object for the extension type
 			$installer = $this->getInstaller();
-			$row = JTable::getInstance('Extension', 'NewsletterTable');
+			$row = JTable::getInstance('NExtension', 'NewsletterTable');
 
 			// Uninstall the chosen extensions
 			foreach($eid as $id) {
@@ -340,7 +340,7 @@ class NewsletterModelInstall extends MigurModelList
 		
 		$extensions = (array) $installer->discover();
 		
-		$table = JTable::getInstance('Extension', 'NewsletterTable');
+		$table = JTable::getInstance('NExtension', 'NewsletterTable');
 		
 		foreach ($extensions as $item) {
 			

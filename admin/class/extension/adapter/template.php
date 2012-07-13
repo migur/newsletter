@@ -208,7 +208,7 @@ class NewsletterClassExtensionAdapterTemplate extends JAdapterInstance
 
 
 		// Database Processing Section
-		$row = JTable::getInstance('Extension', 'NewsletterTable');
+		$row = JTable::getInstance('NExtension', 'NewsletterTable');
 
 		// Was there a module already installed with the same name?
 		if ($id)
@@ -337,7 +337,7 @@ class NewsletterClassExtensionAdapterTemplate extends JAdapterInstance
 
 		// First order of business will be to load the module object table from the database.
 		// This should give us the necessary information to proceed.
-		$row = JTable::getInstance('Extension', 'NewsletterTable');
+		$row = JTable::getInstance('NExtension', 'NewsletterTable');
 
 		if (!$row->load((int) $id) || !strlen($row->extension))
 		{
@@ -415,7 +415,7 @@ class NewsletterClassExtensionAdapterTemplate extends JAdapterInstance
 			var_dump("$path/$tpl");
 			if ($xml = $this->parent->isManifest("$path/$tpl")) {
 				
-				$extension = JTable::getInstance('Extension', 'NewsletterTable');
+				$extension = JTable::getInstance('NExtension', 'NewsletterTable');
 				$extension->set('title', (string) $xml->information->name);
 				$extension->set('extension', str_replace('.xml', '', $tpl));
 				$extension->set('params', '{}');
