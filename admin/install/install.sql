@@ -360,6 +360,8 @@ ALTER TABLE #__newsletter_sub_list ADD FOREIGN KEY (subscriber_id) REFERENCES #_
 
 CREATE INDEX newsletter_idxfk ON #__newsletter_newsletters_ext(newsletter_id);
 ALTER TABLE #__newsletter_newsletters_ext ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE ON UPDATE RESTRICT;
+# Do not add it. It prevents to assign the NATIVE modules to a letter;
+# ALTER TABLE #__newsletter_newsletters_ext ADD FOREIGN KEY (extension_id) REFERENCES #__newsletter_extensions (extension_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE INDEX extension_id_idxfk ON #__newsletter_newsletters_ext(extension_id);
 # Do not use this index because it prevent to bind the Joomla native modules to newsletter;
