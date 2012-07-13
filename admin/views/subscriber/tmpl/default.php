@@ -13,12 +13,14 @@ defined('_JEXEC') or die;
         <dd> 
             <?php echo $this->ssForm->getInput('name'); ?>
         </dd>
+		<div class="cls"></div>
         <dt> 
             <?php echo $this->ssForm->getLabel('email'); ?>
         </dt>
         <dd> 
             <?php echo $this->ssForm->getInput('email'); ?>
         </dd>
+		<div class="cls"></div>
         <dt>
             <?php echo $this->ssForm->getLabel('html'); ?>
         </dt>
