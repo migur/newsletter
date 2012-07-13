@@ -50,8 +50,9 @@
 
         <media destination="com_newsletter" folder="media">
                 <filename>index.html</filename>
-                <folder>images</folder>
                 <folder>css</folder>
+                <folder>images</folder>
+                <folder>examples</folder>
                 <folder>js</folder>
         </media>
 
