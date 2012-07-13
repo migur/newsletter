@@ -79,7 +79,7 @@
 				<td>
 					<?php echo JHtml::_('multigrid.id', $i, $subscriber->getExtendedId(), false, 'cid', 'subscribersForm'); ?>
 				</td>
-				<td>
+				<td class="subscriber-name">
 					<?php 
 						if (!$subscriber->subscriber_id) { 
 							$href = JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&user_id='.$subscriber->user_id, false);
@@ -94,7 +94,7 @@
 					</a>
 					<div class="<?php echo $subscriber->isJoomlaUserType()? 'juser-type-icon' : 'subscriber-type-icon'; ?>"></div>
 				</td>
-				<td>
+				<td class="subscriber-email">
                                         <?php echo $this->escape($subscriber->email); ?>
 				</td>
 				<td class="center">
