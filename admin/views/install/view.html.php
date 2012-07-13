@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * The list view file.
+ *
+ * @version	   $Id:  $
+ * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
+ * @license	   GNU General Public License version 2 or later; see LICENSE.txt
+ */
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
+
+
+// import view library
+JHtml::_('behavior.framework', true);
+JHtml::_('behavior.tooltip');
+JHtml::_('behavior.formvalidation');
+jimport('migur.library.toolbar');
+
+/**
+ * Class of the list view. Displays the model data.
+ *
+ * @since   1.0
+ * @package Migur.Newsletter
+ */
+class NewsletterViewInstall extends MigurView
+{
+	public function display($tpl = null)
+	{
+		$model = $this->getModel();
+		$this->assignRef('items', $model->getItems());
+		$this->assignRef('listOrder', $model->getState('list.ordering'));
+		$this->assignRef('listDirn', $model->getState('list.direction'));
+		$this->assignRef('pagination', $model->getPagination());
+
+		$this->addToolbar();
+		
+		$document = JFactory::getDocument();
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
+		$document->addScript(JURI::root() . 'administrator/components/com_newsletter/views/install/submitbutton.js');
+		
+		parent::display($tpl);
+	}
+
+	
+	/**
+	 * Add the page title and toolbar.
+	 *
+	 * @return void
+	 * @since	1.0
+	 */
+	protected function addToolbar()
+	{
+		JToolBarHelper::title(JText::_('COM_NEWSLETTER_EXTENSION_MANAGER'), 'article.png');
+
+		$bar = MigurToolBar::getInstance('install', null, '', false, array('useDefaultCallback' => true));
+		
+		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'install.remove', false);
+		$bar->appendButton('Standard', 'restore', 'COM_NEWSLETTER_RESTORE', 'install.restore', false);
+//		$bar->appendButton('Standard', 'unpublish', 'JTOOLBAR_DISABLE', 'install.unpublish', false);
+//		$bar->appendButton('Standard', 'publish', 'JTOOLBAR_ENABLE', 'install.publish', false);
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', SupportHelper::getResourceUrl('extension', 'manager'));
+
+		// Load the submenu.
+		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+	}
+	
+}

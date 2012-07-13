@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<root>
+<extension type="newsletter_template">
     <information>
         <name>Standard singlecolumn template</name>
+		<template>singlecolumn1</template>
         <author>Migur</author>
         <creationDate>May 2011</creationDate>
         <copyright>Copyright (C) 2010 - Migur Ltd.</copyright>
@@ -85,4 +86,4 @@ table td {
 </table>
 ]]>
     </template>
-</root>
+</extension>
