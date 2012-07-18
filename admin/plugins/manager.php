@@ -26,7 +26,7 @@ class NewsletterPluginManager extends JDispatcher
 
         $this->pluginName = !empty($options['name'])? $options['name'] : null;
         $this->pluginGroup = $options['group'];
-		$this->pluginEvent = $options['event'];
+        $this->pluginEvent = $options['event'];
         
         $this->import($this->pluginGroup, $this->pluginName);
 
@@ -102,6 +102,6 @@ class NewsletterPluginManager extends JDispatcher
     
     public function import($pluginGroup, $pluginName)
     {
-        JPluginHelper::importPlugin($pluginGroup, $pluginName, true, $this);
+        MigurPluginHelper::importPlugin($pluginGroup, $pluginName, true, $this);
     }
 }

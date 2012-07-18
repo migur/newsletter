@@ -17,7 +17,10 @@ defined('_JEXEC') or die;
 	   <?php echo $this->loadTemplate('newsletters'); ?>
 	</fieldset>
 	<fieldset class="adminform" id="subscriber-edit-history">
-	   <legend><?php echo JText::_('COM_NEWSLETTER_HISTORY'); ?></legend>
+	   <legend>
+			<?php echo JText::_('COM_NEWSLETTER_HISTORY'); ?>
+			<a target="_blank" href="<?php echo SupportHelper::getResourceUrl('subscriber', 'history'); ?>">(?)</a>
+	   </legend>
 	   <?php echo $this->loadTemplate('history'); ?>
 	</fieldset>
 </div>

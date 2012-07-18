@@ -193,7 +193,7 @@ class NewsletterViewList extends MigurView
         $plgManager = NewsletterPluginManager::factory('import');
 		
         $res = $plgManager->trigger(array(
-            'group' => 'migur',
+            'group' => 'list.import',
             'event' => 'onMigurImportShowIcon'
         ));
         

@@ -85,8 +85,7 @@ class NewsletterClassExtensionAdapterPlugin extends JAdapterInstance
 		
 		$namespace = (string) $this->manifest->namespace;
 		if (empty($namespace)) { 
-                    $this->parent->abort(JText::sprintf('COM_NEWSLETTER_INSTALLER_ABORT_PLG_INSTALL_NONAMESPACE'));
-                    return false;
+			$namespace = 'general'; 
 		}
 		
 		$folder = explode('.', $namespace);
@@ -508,8 +507,7 @@ class NewsletterClassExtensionAdapterPlugin extends JAdapterInstance
 		$namespace = $row->namespace;
 		
 		if (empty($namespace)) { 
-                    $this->parent->abort(JText::sprintf('COM_NEWSLETTER_INSTALLER_ABORT_PLG_INSTALL_NONAMESPACE'));
-                    return false;
+			$namespace = 'general'; 
 		}
 		
 		$folder = explode('.', $namespace);
@@ -702,7 +700,7 @@ class NewsletterClassExtensionAdapterPlugin extends JAdapterInstance
 				$extension->set('extension',  $plugin);
 				$extension->set('params', '{}');
 				$extension->set('type', '2');
-				$extension->set('namespace', (string) $xml->namespace);
+				$extension->set('namespace', $xml->namespace);
 				$results[] = clone $extension;
 			}	
 		}

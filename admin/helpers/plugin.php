@@ -10,6 +10,8 @@
 // No direct access
 defined('JPATH_BASE') or die;
 
+JLoader::import('tables.nextension', JPATH_COMPONENT_ADMINISTRATOR);
+
 /**
  * Plugin helper class
  *
@@ -20,6 +22,7 @@ abstract class MigurPluginHelper
 {
 	static $_plugins;
 
+        static $_lang;
 	/**
 	 * Import all needed plugins. Add all needed handlers
 	 * 
@@ -53,7 +56,8 @@ abstract class MigurPluginHelper
 	 */
 	public static function getInfo($plugin, $native = false, $group = 'migur')
 	{
-		$root = (!$native) ? JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'plugins' : JPATH_SITE . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . $group;
+		@list($group) = explode('.', $group);
+		$root = (!$native) ? JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . $group : JPATH_SITE . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . $group;
 		$path = JPath::clean($root . DIRECTORY_SEPARATOR . $plugin . DIRECTORY_SEPARATOR . $plugin . '.xml');
 
 		if (file_exists($path)) {
@@ -79,18 +83,20 @@ abstract class MigurPluginHelper
 	public function getSupported($params = array(), $namespace = '')
 	{
 		$extensions = array_merge(
-				self::getNativeSupported(),
+				array(),//self::getNativeSupported(),
 				self::getLocallySupported()
 		);
 
+		$items = array();
 		for($i = 0; $i < count($extensions); $i++) {
 
 			$item = $extensions[$i];
 			// Add the info about module
-			$xml = self::getInfo($item->extension, $item->native);
+			$xml = self::getInfo($item->extension, $item->native, $item->namespace);
 			
-			if (!self::namespaceCheckOccurence($namespace, (string)$xml->namespace)) {
-				unset($extensions[$i]);
+			$extNamespace = !empty($xml->namespace)? (string)$xml->namespace : '';
+
+			if (!self::namespaceCheckOccurence($namespace, $extNamespace)) {
 				continue;
 			}
 			
@@ -103,21 +109,7 @@ abstract class MigurPluginHelper
 			}
 			$item->params = (object) json_decode($item->params, true);
 
-			//HOTFIX: To match the properties with the result object of &_load. Need to implement the MODULE object.
-			$item->module = $item->extension;
-//			$result->id = 0;
-//			$result->title = '';
-//			$result->module = $name;
-//			$result->position = '';
-//			$result->content = '';
-//			$result->showtitle = 0;
-//			$result->control = '';
-//			$result->params = '';
-//			$result->user = 0;
-			// Try to find only one module
-			if (isset($params['extension_id']) && isset($params['native']) && $params['extension_id'] == $item->extension_id && $params['native'] == $item->native) {
-				return array($item);
-			}
+			$items[] = $item;
 		}
 
 		// If we are here then the necessary module could not found
@@ -125,9 +117,38 @@ abstract class MigurPluginHelper
 			JError::raiseError(E_ERROR, "The module " . $params['extension_id'] . " could not found in the list of supported modules (native = " . $params['native'] . ")");
 		}
 		
-		return $extensions;
+		return $items;
 	}
 
+	
+	/**
+	 * Gets the list of ALL supported plugins
+	 * 
+	 * @return array - the list of supported modules 
+	 */
+	public function getItem($pid, $native = false)
+	{
+		if ($native) {
+			$item = self::getNativeSupported($pid);
+		} else {
+			$item = self::getLocallySupported($pid);
+		}
+
+		$item = $item[0];
+		$xml = self::getInfo($item->extension, $item->native, $item->namespace);
+
+		if (!isset($params['withoutInfo'])) {
+			$item->xml = $xml;
+		}
+
+		if (empty($item->params)) {
+			$item->params = "{}";
+		}
+		$item->params = (object) json_decode($item->params, true);
+
+		return $item;
+	}
+	
 	/**
 	 * Gets the list of supported local plugins.
 	 * Gets the full info about each one.
@@ -135,7 +156,7 @@ abstract class MigurPluginHelper
 	 * @return array - list of supported modules
 	 * @since  1.0
 	 */
-	public function getLocallySupported()
+	public function getLocallySupported($pid = null)
 	{
 		// Fetch it
 		$db = JFactory::getDbo();
@@ -143,7 +164,7 @@ abstract class MigurPluginHelper
 
 		// Select the required fields from the table.
 		$query->select(
-			'extension_id, title, extension, params, '
+			'extension_id, title, extension, params, namespace, '
 			. $db->Quote(NewsletterTableNExtension::TYPE_PLUGIN) . ' AS type, '
 			. '\'0\' AS native'
 		);
@@ -151,6 +172,11 @@ abstract class MigurPluginHelper
 
 		// Filter by module
 		$query->where('a.type = ' . $db->Quote(NewsletterTableNExtension::TYPE_PLUGIN));
+		
+		if ($pid > 0) {
+			$query->where('a.extension_id = ' . (int) $pid);
+		} 
+		
 		$query->order('a.title ASC');
 
 		//echo nl2br(str_replace('#__','jos_',$query));
@@ -164,7 +190,7 @@ abstract class MigurPluginHelper
 	 * @return array - list of supported modules
 	 * @since  1.0
 	 */
-	public function getNativeSupported()
+	public function getNativeSupported($pid)
 	{
 		// Fetch it
 		$db = JFactory::getDbo();
@@ -172,7 +198,7 @@ abstract class MigurPluginHelper
 
 		// Select the required fields from the table.
 		$query->select(
-			"extension_id, `name` as title, element as extension, params, type, ".
+			"extension_id, `name` as title, element as extension, params, type, 'migur' AS namespace, ".
 			"'1' AS native"
 		);
 		$query->from('`#__extensions` AS a');
@@ -180,114 +206,54 @@ abstract class MigurPluginHelper
 		// Filter by module
 		$query->where("a.type = 'plugin'");
 		$query->where("a.folder = 'migur'");
+		
+		if ($pid > 0) {
+			$query->where('a.extension_id = ' . (int) $pid);
+		} 
+		
 		$query->order('a.name ASC');
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		return $db->setQuery($query)->loadObjectList();
 	}
 
-	/**
-	 * Gets the list of plugins used in newsletter
-	 *
-	 * @param  integer $uid
-	 *
-	 * @return array
-	 * @since  1.0
-	 */
-	static public function getUsedInNewsletter($uid)
-	{
-		if (empty($uid)) {
-			return array();
-		}	
-		
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('*');
-		$query->from('#__newsletter_extensions AS e');
-		$query->join('', '#__newsletter_newsletters_ext AS ne ON e.extension_id = ne.extension_id');
-		$query->where('ne.newsletter_id='.$db->quote((int)$uid));
-		$query->where('type = "2"');
-
-		// Set the query
-		$db->setQuery($query);
-		$objs = $db->loadObjectList();
-
-		// Remove inactive plugins
-		foreach($objs as $idx => $obj) {
-			$obj->params = (object)json_decode($obj->params);
-			if (empty($obj->params->active)) {
-				unset($objs[$idx]);
-			}
-		}
-		return $objs;
-	}
-
-	/**
-	 * Trigger the action of a plugin.
-	 *
-	 * @param	object	A module object.
-	 * @param	array	An array of attributes for the module (probably from the XML).
-	 *
-	 * @return	strign	The HTML content of the module output.
-	 * @since   1.0
-	 */
-	public static function trigger($pluginName, $action, $params, $document)
-	{
-		self::getInstance($pluginName);
-		return self::$_plugins[$plugin]->$action($params, $document);
-	}
-	
-	
-	/**
-	 * Trigger the action of a plugin.
-	 *
-	 * @param	object	A module object.
-	 * @param	array	An array of attributes for the module (probably from the XML).
-	 *
-	 * @return	strign	The HTML content of the module output.
-	 * @since   1.0
-	 */
-	public static function getInstance($pluginName)
-	{
-		if (empty(self::$_plugins[$pluginName])) {
-
-			require_once JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . $pluginName . '.php';
-			self::$_plugins[$plugin] = new $pluginName;
-			return self::$_plugins[$plugin];
-		}
-		
-		return null;
-	}
-
-/* Unused
-        public static function triggerBefore() {
-            
-            list($controller, $action) = explode(JRequest('task', ''));
-            
-            if (empty($controller)){
-                $controller = 'default';
-            }
-            
-            if (empty($action)){
-                $action = 'default';
-            }
-            
-            self::$controller = strtolower($controller);
-            self::$action = strtolower($action);
-
-            $app = JFactory::getApplication();
-            $app->triggerEvent('onMigurNewsletterBefore'.ucwords(self::$controller).ucwords(self::$action), array());
-            
-        }
-        
-        
-        public static function triggerAfter() {
-            
-            $app = JFactory::getApplication();
-            $app->triggerEvent('onMigurNewsletterAfter'.ucwords(self::$controller).ucwords(self::$action), array());
-        }
- */
-	
+//	/**
+//	 * Trigger the action of a plugin.
+//	 *
+//	 * @param	object	A module object.
+//	 * @param	array	An array of attributes for the module (probably from the XML).
+//	 *
+//	 * @return	strign	The HTML content of the module output.
+//	 * @since   1.0
+//	 */
+//	public static function trigger($pluginName, $group, $action, $params, $document)
+//	{
+//		self::getInstance($pluginName, $group);
+//		return self::$_plugins[$group.'.'.$pluginName]->$action($params, $document);
+//	}
+//	
+//	
+//	/**
+//	 * Trigger the action of a plugin.
+//	 *
+//	 * @param	object	A module object.
+//	 * @param	array	An array of attributes for the module (probably from the XML).
+//	 *
+//	 * @return	strign	The HTML content of the module output.
+//	 * @since   1.0
+//	 */
+//	public static function getInstance($pluginName, $group)
+//	{
+//		if (empty(self::$_plugins[$group.'.'.$pluginName])) {
+//
+//			require_once JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . $pluginName, DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . $pluginName . '.php';
+//			self::$_plugins[$group.'.'.$pluginName] = new $pluginName;
+//			return self::$_plugins[$group.'.'.$pluginName];
+//		}
+//		
+//		return null;
+//	}
+//
 	public static function namespaceCheckOccurence($requestedNamespace = '', $extNamespace = '')
 	{
 		// If $requestedNamespace is empty then allow for all
@@ -304,11 +270,160 @@ abstract class MigurPluginHelper
 		$ext = explode('.', $extNamespace);
 		
 		for($i=0; $i < count($req); $i++) {
-			if ($req[$i] != $ext[$i]) {
+			if (empty($ext[$i]) || $req[$i] != $ext[$i]) {
 				return false;
 			}
 		}
 		
 		return true;
 	}
+	
+	
+	/**
+	 * Loads all the plugin files for a particular type if no specific plugin is specified
+	 * otherwise only the specific plugin is loaded.
+	 *
+	 * @param   string       $type        The plugin type, relates to the sub-directory in the plugins directory.
+	 * @param   string       $plugin      The plugin name.
+	 * @param   boolean      $autocreate  Autocreate the plugin.
+	 * @param   JDispatcher  $dispatcher  Optionally allows the plugin to use a different dispatcher.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   11.1
+	 */
+	public static function importPlugin($type, $plugin = null, $autocreate = true, $dispatcher = null)
+	{
+		static $loaded = array();
+
+		// check for the default args, if so we can optimise cheaply
+		$defaults = false;
+		if (is_null($plugin) && $autocreate == true && is_null($dispatcher))
+		{
+			$defaults = true;
+		}
+
+		if (!isset($loaded[$type]) || !$defaults)
+		{
+			$results = null;
+
+			// Load the plugins from the database.
+			$plugins = self::getLocallySupported();
+
+			// Get the specified plugin(s).
+			for ($i = 0, $t = count($plugins); $i < $t; $i++)
+			{
+				
+				if (
+					$plugins[$i]->type == 2 && 
+					self::namespaceCheckOccurence($type, $plugins[$i]->namespace) && 
+					($plugin == $plugins[$i]->extension || $plugin == null)
+				) {
+					self::_import($plugins[$i], $autocreate, $dispatcher);
+					$results = true;
+				}
+			}
+
+			// Bail out early if we're not using default args
+			if (!$defaults)
+			{
+				return $results;
+			}
+			$loaded[$type] = $results;
+		}
+
+		return $loaded[$type];
+	}
+
+
+	/**
+	 * Loads the plugin file.
+	 *
+	 * @param   JPlugin      &$plugin     The plugin.
+	 * @param   boolean      $autocreate  True to autocreate.
+	 * @param   JDispatcher  $dispatcher  Optionally allows the plugin to use a different dispatcher.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   11.1
+	 */
+	protected static function _import(&$plugin, $autocreate = true, $dispatcher = null)
+	{
+		static $paths = array();
+
+		@list($group) = explode('.', $plugin->namespace);
+		
+		$plugin->extension = preg_replace('/[^A-Z0-9_\.-]/i', '', $plugin->extension);
+
+		$path = 
+			JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 
+			'extensions' . DIRECTORY_SEPARATOR . 
+			'plugins' . DIRECTORY_SEPARATOR . 
+			$group . DIRECTORY_SEPARATOR . 
+			$plugin->extension . DIRECTORY_SEPARATOR . 
+			$plugin->extension . '.php';
+
+		if (!isset($paths[$path]))
+		{
+			$pathExists = file_exists($path);
+			if ($pathExists)
+			{
+				if (!isset($paths[$path]))
+				{
+					require_once $path;
+				}
+				$paths[$path] = true;
+
+				if ($autocreate)
+				{
+					// Makes sure we have an event dispatcher
+					if (!is_object($dispatcher))
+					{
+						$dispatcher = NewsletterPluginManager::getInstance();
+					}
+
+					$className = 'plg' . ucfirst($group) . ucfirst($plugin->extension);
+					if (class_exists($className))
+					{
+                                            
+                        self::_loadLang($plugin->extension, $group);
+                                            
+                                                
+						// Load the plugin from the database.
+						if (!isset($plugin->params))
+						{
+							// Seems like this could just go bye bye completely
+							$plugin = self::getPlugin($group, $plugin->extension);
+						}
+
+						// Instantiate and register the plugin.
+						$plugin->name = $plugin->extension;
+						$plugin->type = $group;
+						$inst = new $className($dispatcher, (array) ($plugin));
+					}
+				}
+			}
+			else
+			{
+				$paths[$path] = false;
+			}
+		}
+	}
+        
+        static function _loadLang($name, $group)
+        {
+            if (!self::$_lang instanceof JLanguage) {
+                self::$_lang = JFactory::getLanguage();
+            }
+
+            $path = 
+                JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR .
+                'extensions' . DIRECTORY_SEPARATOR .
+                'plugins' . DIRECTORY_SEPARATOR .
+                $group . DIRECTORY_SEPARATOR .
+                $name;
+
+            
+            self::$_lang->load($name, $path);
+        }        
 }

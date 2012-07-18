@@ -23,6 +23,9 @@
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_TYPE', 'a.type', $this->listDirn, $this->listOrder, null, null, 'installForm'); ?>
 				</th>
 				<th class="nowrap center">
+					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_NAMESPACE', 'a.namespace', $this->listDirn, $this->listOrder, null, null, 'installForm'); ?>
+				</th>
+				<th class="nowrap center">
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_ID', 'a.extension_id', $this->listDirn, $this->listOrder, null, null, 'installForm'); ?>
 				</th>
 			</tr>
@@ -48,6 +51,9 @@
 				</td>
 				<td class="center">
 					<?php echo JText::_('COM_NEWSLETTER_EXTENSION_TYPE_' . $item->type); ?>
+				</td>
+				<td>
+						<?php echo $this->escape($item->namespace); ?>
 				</td>
 				<td>
 					<?php echo $item->extension_id ?>

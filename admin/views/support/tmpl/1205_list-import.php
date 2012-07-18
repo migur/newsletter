@@ -29,6 +29,10 @@ then probably you need to play with <b>Settings</b> setting the proper delimiter
 <p>Also here you can specify if your file contain usefull data in the first row 
 or it just header with column names. Use <b>"Skip the header"</b> setting to do it.
 <br/>
+<p>If you want to sent the registration mail to these subscribers you need to check 
+ the <b>Send registration mail</b> option in <b>Settings</b> on Import panel before starting of importing.
+See <a href="<?php echo SupportHelper::getResourceUrl('subscriber', 'subscription', 'regmail'); ?>">Subscription</a> for additional info.
+ 
 <h3>Examples of CSVs for import:</h3>
 <ul>
 	<li><a href="<?php echo JUri::root() . 'media/com_newsletter/examples/list/import/example1.csv'?>">Example 1</a><br/>

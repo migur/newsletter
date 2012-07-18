@@ -51,10 +51,7 @@ class NewsletterViewExtension extends MigurView
 		$extensionId = JRequest::getInt('extension_id', 0);
 
 		if ($type == 'plugin') {
-			$exts = MigurPluginHelper::getSupported(array(
-				'extension_id' => $extensionId,
-				'native'       => $native
-			));
+			$exts = array(MigurPluginHelper::getItem($extensionId, $native));
 		} else {
 			$exts = MigurModuleHelper::getSupported(array(
 				'extension_id' => $extensionId,
@@ -70,10 +67,13 @@ class NewsletterViewExtension extends MigurView
 		if (JRequest::getString('layout') == 'edit') {
 			$model = $this->getModel();
 			$this->form = $model->getForm(array(
-				'module' => $ext->extension,
-				'native' => $ext->native,
-				'type'   => $ext->type
+				'module'    => $ext->extension,
+				'native'    => $ext->native,
+				'type'      => $ext->type,
+				'namespace' => !empty($ext->namespace)? $ext->namespace : '',
+				
 			));
+			//var_dump($ext); die;
 		}
 
 		parent::display($tpl);

@@ -210,9 +210,9 @@ class NewsletterControllerList extends JControllerForm
 //									throw new Exception();
 //								}
 //								
-//								if(!$subscriber->assignToList($listId, array('confirmed' => true))){
-//									throw new Exception();
-//								}	
+								if(!$subscriber->assignToList($listId, array('confirmed' => true))){
+									throw new Exception();
+								}	
 
 								$assignedLists[] = $listId;
 								
@@ -301,7 +301,7 @@ class NewsletterControllerList extends JControllerForm
     
     public function importPluginTrigger()
     {
-		$pGroup = 'migur';
+        $pGroup = 'list';
         $pName = JRequest::getString('pluginname', null);
 		$pEvent = JRequest::getString('pluginevent', null);
 
@@ -312,7 +312,7 @@ class NewsletterControllerList extends JControllerForm
         // Trigger event for plugin
         $context = $this->option.'.edit.'.$this->context;
         $listId = JRequest::getInt('list_id'); 
-
+        //var_dump($pName, $pGroup, $pEvent);
         $res = $manager->trigger(
             array(
                 'name'  => $pName,
@@ -501,7 +501,8 @@ class NewsletterControllerList extends JControllerForm
 			$collection, 
 			array(
 				'overwrite' => $settings->overwrite,
-				'autoconfirm' => $settings->autoconfirm
+				'autoconfirm' => $settings->autoconfirm/*,
+                                'sendRegmail' => $settings->sendRegmail*/
 			));
 
 		if (!empty($res['errors'])) {

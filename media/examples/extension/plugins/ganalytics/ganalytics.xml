@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="newsletter_plugin">
+	<name>Google Analytics Plugin</name>
+	<author>Migur</author>
+	<creationDate>June 2011</creationDate>
+    <copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>info@migur.com</authorEmail>
+	<authorUrl>http://migur.com/</authorUrl>
+	<version>1.6.0</version>
+	<description></description>
+	<componentVersion>12.06</componentVersion>
+	<namespace>newsletter.html</namespace>
+	
+	<files>
+		<filename
+			plugin="ganalytics">ganalytics.php</filename>
+		<filename>index.html</filename>
+	</files>
+	
+	<help key="JHELP_EXTENSIONS_PLUGIN_MANAGER_ADMIN_ARTICLE" />
+	
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+
+                <field 
+                    name="goal"
+                    type="text"
+                    label="COM_NEWSLETTER_GOAL"
+                    required="true"
+                    description="COM_NEWSLETTER_GOAL"
+                    size="50"
+                />
+                
+			</fieldset>
+		</fields>
+	</config>
+</extension>
