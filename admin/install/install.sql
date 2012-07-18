@@ -145,6 +145,7 @@ CREATE TABLE `#__newsletter_lists`
 `internal` TINYINT(3) DEFAULT '0' NOT NULL,
 send_at_reg INT(11) DEFAULT '0' NOT NULL,
 send_at_unsubscribe INT(11) DEFAULT '0' NOT NULL,
+autoconfirm SMALLINT,
 `extra` text,
 
 PRIMARY KEY (`list_id`)

@@ -124,29 +124,16 @@
 
 					<div class="clr"></div>
 
-					<div style="overflow:hidden">
+					<div style="margin-top:10px;overflow:hidden">
 						<input type="checkbox" id="import-overwrite" name="import_overwrite" />
-						<div style="margin:2px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_IMPORT_OVERWRITE'); ?></div>
+						<div style="margin:5px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_IMPORT_OVERWRITE'); ?></div>
 					</div>
 					<div style="overflow:hidden">
 						<input type="checkbox" id="import-skip-header" name="import_skip_header" />
-						<div style="margin:2px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
+						<div style="margin:5px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
 							<a href="#" role="support" resource="<?php echo SupportHelper::getResourceUrl('list', 'import'); ?>">
 								(?)
 							</a>
-						</div>
-					</div>
-					<div style="overflow:hidden">
-						<input type="checkbox" id="import-send-regmail" name="import_send_regmail" />
-						<div style="margin:2px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SEND_REGMAIL'); ?>
-							<a href="#" role="support" resource="<?php echo SupportHelper::getResourceUrl('subscriber', 'subscription', 'regmail'); ?>">
-								(?)
-							</a>
-						</div>
-					</div>
-					<div style="overflow:hidden">
-						<input type="checkbox" id="import-autoconfirm" name="import_autoconfirm" checked="checked"/>
-						<div style="margin:2px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_ADD_AS_CONFIRMED'); ?>
 						</div>
 					</div>
 				</div>

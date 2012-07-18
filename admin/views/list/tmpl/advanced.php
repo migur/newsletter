@@ -1,6 +1,12 @@
     <div id="tab-container-advanced" class="form-text">
         <dl>
             <dt>
+                <?php echo $this->listForm->getLabel('autoconfirm'); ?>
+            </dt>
+            <dd>
+                <?php echo $this->listForm->getInput('autoconfirm'); ?>
+            </dd>
+            <dt>
                 <?php echo $this->listForm->getLabel('send_at_reg'); ?>
             </dt>
             <dd>

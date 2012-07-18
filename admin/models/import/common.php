@@ -144,13 +144,13 @@ class NewsletterModelImportCommon
 
 				try {
 					// Send message
-					$listManager->sendSubscriptionMail(
-						$subscriber,
-						$lid, 
-						array(
-							'addToQueue'       => true,
-							'ignoreDuplicates' => true
-					));
+//					$listManager->sendSubscriptionMail(
+//						$subscriber,
+//						$lid, 
+//						array(
+//							'addToQueue'       => true,
+//							'ignoreDuplicates' => true
+//					));
 
 					// Assign to list
 					$listManager->assignSubscriber($lid, $subscriber);
