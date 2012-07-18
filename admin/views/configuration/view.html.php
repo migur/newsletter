@@ -68,15 +68,17 @@ class NewsletterViewConfiguration extends MigurView
 			'checkLogs',
 			'checkAcl'));
 		
-		$this->general = JComponentHelper::getParams('com_newsletter');
+		$this->assignRef('general', JComponentHelper::getParams('com_newsletter'));
 
 		//$model = JModel::getInstance('extensions', 'NewsletterModel');
 		//$this->modules = $model->getModules();
 		//$this->plugins = $model->getPlugins();
-		$this->modules = MigurModuleHelper::getSupported();
-		$this->plugins = MigurPluginHelper::getSupported();
+		$this->assignRef('modules', MigurModuleHelper::getSupported());
+		$this->assignRef('plugins', MigurPluginHelper::getSupported());
 
-		$this->form = $this->get('Form');
+		$this->assignRef('templates', JModel::getInstance('Templates', 'NewsletterModel')->getAllInstalledItems());
+		
+		$this->assignRef('form', $this->get('Form'));
 		$this->addToolbar();
 		parent::display($tpl);
 	}
