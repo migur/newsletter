@@ -155,6 +155,26 @@ class NewsletterModelTemplates extends MigurModelList
 		return $query;
 	}
 
+	
+	/**
+	 * Get standard templates.
+	 *
+	 * @return	array list of the templates
+	 * @since	1.0
+	 */
+	public function getAllInstalledItems()
+	{
+		// Create a new query object.
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from('#__newsletter_extensions');
+		$query->where('type=3');
+		
+		$db->setQuery($query);
+		return $db->loadObjectList();
+	}
+	
 	/**
 	 * Get all (standard and custom) templates
 	 *
@@ -210,26 +230,26 @@ class NewsletterModelTemplates extends MigurModelList
 	{
 		$standards = array();
 
-		$path = JPATH_COMPONENT . '/extensions/templates/';
-		$filenames = JFolder::files($path, '^.*\.xml$');
-		if ($filenames === false) {
-			JError::raiseError(500, implode("\n", array("Path $path not found")));
-		}
+		// Create a new query object.
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from('#__newsletter_extensions');
+		$query->where('type=3');
+		
+		$db->setQuery($query);
+		$installed = $db->loadAssocList();
+		
+		foreach ($installed as $item) {
 
-		foreach ($filenames as $item) {
-			
-			$xml = simplexml_load_file($path . $item, 'SimpleXMLElement' ,LIBXML_NOCDATA);
-			$title = trim((string)$xml->information->name);
 			$standards[] = (object) array(
 					't_style_id' => 'standard',
-					'template' => $item,
-					'title' => $title,
+					'template' => $item['extension'].'.xml',
+					'title' => $item['title'],
 					'params' => '{}'
 			);
-			unset($xml);
 		}
-
+		
 		return $standards;
 	}
-
 }
