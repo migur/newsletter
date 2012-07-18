@@ -10,7 +10,7 @@
 	<version>1.6.0</version>
 	<description></description>
 	<componentVersion>12.06</componentVersion>
-	<namespace>com_newsletter.newsletter</namespace>
+	<namespace>newsletter.html</namespace>
 	
 	<files>
 		<filename

@@ -192,36 +192,37 @@ class NewsletterModelList extends JModelAdmin
 
                 // Assign the man only if he is not in list already
                 if(!$subscriber->isInList($listId)) {
-                    if($subscriber->assignToList($listId)) {
+                    
+                    try {
+                        
+                        if(!$subscriber->assignToList($listId)) throw new Exception;
 
-						// Send subscription letter. But not immediately.
-						// Just add in queue
-						$res = $this->sendSubscriptionMail(
-							$subscriber, 
-							$listId,
-							array(
-								'addToQueue'       => true,
-								'ignoreDuplicates' => true)
-						);
-						
-						if ($res) {
-							
-							// Fire event onMigurAfterSubscriberImport
-							JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberImport', array(
+                        if ($options['sendRegmail']) {
+                            // Send subscription letter. But not immediately.
+                            // Just add in queue
+                            $res = $this->sendSubscriptionMail(
+								$subscriber, 
+								$listId,
+								array(
+									'addToQueue'       => true,
+									'ignoreDuplicates' => true)
+                            );
+
+                            if (!$res) throw new Exception;
+						}	
+                                                    
+						// Fire event onMigurAfterSubscriberImport
+						JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberImport', array(
 								'subscriberId' => $subscriber->getId(),
 								'lists' => array($listId)
-							));
+						));
 
-							$assigned++;
-							
-						} else {
-							
-	                        $errors++;
-						}	
-
-                    } else {
-
-                        $errors++;
+						// Finaly all ok!
+						$assigned++;
+						
+					} catch(Exception $e) {
+						
+						$errors++;
                     }
                 }	
 

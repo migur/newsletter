@@ -14,11 +14,13 @@ There are several ways to add the subscriber into component.
 </ul>
 <p>To subscribe user have to provide name, email and type of letters to receive.
 
+<a name="regmail"></a>
 <h3>SUBSCRIPTION NEWSLETTER</h3>
 <p>To be able to get newsletters of certain list subscriber should be subscribed to this list and his subscription will be confirmed. The purpose of a Subscription newsletter is to provide information about a list and confirmation link to confirm the subscription to it.
 However if option "Autoconfirm users" (Configuration -> Global -> General) is set then user will be created as confirmed and without confirmation.
 User receives confirmation letter selected in options of a list (List -> Advanced -> Send newsletter at registration).
 If no confirmation letter selected in list then user will get default subscription letter(see Configuration -> Global -> Newsletters -> The subscription newsletter). If this letter does not specified too then the fallback newsletter will be used (Configuration -> Global -> General -> “Subject of confirmation letter” and “Body of confirmation letter”).
+<p>Admin also can send this letter to each subscriber he imports into list (<a href="<?php echo SupportHelper::getResourceUrl('list', 'import'); ?>">List -> Import</a> section). Admin just need to check the <b>Send registration mail</b> option in <b>Settings</b> on Import panel before starting of importing.
 
 <h3>SUBSCRIPTION VIA MODULE</h3>
 <p>There are several cases:

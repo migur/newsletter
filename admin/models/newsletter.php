@@ -74,4 +74,40 @@ class NewsletterModelNewsletter extends JModelAdmin
 		}
 		return $data;
 	}
+	
+	/**
+	 * Gets the list of plugins used in newsletter
+	 *
+	 * @param  integer $nid
+	 *
+	 * @return array
+	 * @since  1.0
+	 */
+	static public function getUsedPlugins($nid)
+	{
+		if (empty($nid)) {
+			return array();
+		}	
+		
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('ne.*');
+		$query->from('#__newsletter_extensions AS e');
+		$query->join('', '#__newsletter_newsletters_ext AS ne ON e.extension_id = ne.extension_id');
+		$query->where('ne.newsletter_id='.$db->quote((int)$nid));
+		$query->where('type = "2"');
+
+		// Set the query
+		$db->setQuery($query);
+		$objs = $db->loadObjectList();
+
+		// Remove inactive plugins
+		foreach($objs as $idx => $obj) {
+			$obj->params = (object)json_decode($obj->params);
+			if (empty($obj->params->active)) {
+				unset($objs[$idx]);
+			}
+		}
+		return $objs;
+	}
 }

@@ -305,10 +305,13 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 	function triggerEvent($event)
 	{
 
-		$plugins = MigurPluginHelper::getUsedInNewsletter($this->getNewsletterId());
-
+		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModel');
+		$plugins = $newsletter->getUsedPlugins($this->getNewsletterId());
+		
 		foreach ($plugins as $plugin) {
-			MigurPluginHelper::trigger($plugin->extension, $event, $plugin->params, $this);
+			
+			@list($group) = explode('.', $plugin->namespace);
+			MigurPluginHelper::trigger($plugin->extension, $group, $event, $plugin->params, $this);
 		}
 		
 		return true;

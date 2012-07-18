@@ -217,6 +217,7 @@ CREATE TABLE `#__newsletter_extensions`
 `extension` VARCHAR(255) DEFAULT '' NOT NULL,
 `params` TEXT,
 `type` int(11) NOT NULL,
+`namespace` VARCHAR(255) DEFAULT '',
 
 PRIMARY KEY (`extension_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

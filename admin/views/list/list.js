@@ -187,6 +187,7 @@ try {
 
             res.overwrite = $('import-overwrite').getProperty('checked');
             res.skipHeader = $('import-skip-header').getProperty('checked');
+            res.sendRegmail = $('import-send-regmail').getProperty('checked');
             res.autoconfirm = $('import-autoconfirm').getProperty('checked');
         }
 

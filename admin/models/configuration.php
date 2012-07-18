@@ -113,7 +113,7 @@ class NewsletterModelConfiguration extends JModelForm
 	 */
 	public function save($data)
 	{
-		$table = JTable::getInstance('extension');
+		$table = JTable::getInstance('JExtension', 'NewsletterTable');
 		// Save the rules.
 		if (isset($data['params']) && isset($data['params']['rules'])) {
 			jimport('joomla.access.rules');

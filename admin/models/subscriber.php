@@ -386,6 +386,20 @@ class NewsletterModelSubscriber extends JModelAdmin
 		return $this->getTable('Users', 'JTable')->load($data);
 	}
 	
+	public function isExist($options)
+	{
+		$res = array();
+		$table = $this->getTable('Users', 'JTable');
+		$table->load($data);
+		$res['juser_id'] = $table->id;
+		
+		$table = $this->getTable('Subscriber', 'NewsletterTable');
+		$table->load($data);
+		$res['subscriber_id'] = $table->subscriber_id;
+		
+		return $res;
+	}
+	
 	
 	/**
 	 * Override this to add ability to delete JUsers user too.
@@ -465,5 +479,7 @@ class NewsletterModelSubscriber extends JModelAdmin
 		$id = substr($mask, 0, strlen($mask) - strlen($sid)) . $sid;
 		return rand(100000, 999999) . $id . time();
 	}
+	
+	
 	
 }
