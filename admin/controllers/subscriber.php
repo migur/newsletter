@@ -63,18 +63,18 @@ class NewsletterControllerSubscriber extends JControllerForm
 					// Cant send immediatelty because we are in ADMIN side
 					// and some j! native modules cause fail when 
 					// JOOMLA_BASE = '/administrator/' (mod_latest_articles)
-					$listModel = JModel::getInstance('List', 'NewsletterModel');
-					$res = $listModel->sendSubscriptionMail(
-						$model, 
-						$lid,
-						array(
-							'addToQueue'	   => true,
-							'ignoreDuplicates' => true)
-					);
-					
-					if (!$res) {
-						throw new Exception();
-					}
+//					$listModel = JModel::getInstance('List', 'NewsletterModel');
+//					$res = $listModel->sendSubscriptionMail(
+//						$model, 
+//						$lid,
+//						array(
+//							'addToQueue'	   => true,
+//							'ignoreDuplicates' => true)
+//					);
+//					
+//					if (!$res) {
+//						throw new Exception();
+//					}
 					
 					// Fire event onMigurAfterSubscriberAssign
 					JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberAssign', array(

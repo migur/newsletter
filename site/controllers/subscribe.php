@@ -77,11 +77,6 @@ class NewsletterControllerSubscribe extends JController
 
 		$comParams = JComponentHelper::getComponent('com_newsletter')->params;
 
-		$isNew = false;
-
-		// Let's check if we can create user as confirmed
-		$autoconfirm = ($comParams->get('users_autoconfirm') == '1');
-
 		$trusted = false;
 		
 		// try to get user data from FB
@@ -102,6 +97,7 @@ class NewsletterControllerSubscribe extends JController
 
 
 		// Trying to find subscriber or J!user with provided email.
+		// TODO Need to replace this 'NewsletterModelEntity' to 'NewsletterModel'
 		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		$subscriber->load(array('email' => $email));
 
@@ -126,13 +122,13 @@ class NewsletterControllerSubscribe extends JController
 		// Confirm subscriber if provided email is the email of current J!user
 		// or email is email of user that currently logged in FACEBOOK.
 		// Confirm all its assignings to lists as well
-		if ($autoconfirm || $trusted) {
+		if ($trusted) {
 			$subscriber->confirm();
 		}
 
 		$message = JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name);
 		
-		$listModel    = JModel::getInstance('List',  'NewsletterModel');
+		$listModel = JModel::getInstance('List',  'NewsletterModel');
 
 		$assignedListsIds = array();
 		
@@ -147,7 +143,7 @@ class NewsletterControllerSubscribe extends JController
 				
 				$listModel->assignSubscriber(
 					$lid, $subscriber->toArray(), 
-					array('confirmed' => ($autoconfirm || $trusted))
+					array('confirmed' => ($list->autoconfirm || $trusted))
 				);
 
 				// Add to history all subscriptions
@@ -166,7 +162,7 @@ class NewsletterControllerSubscribe extends JController
 				
 			} else {
 				
-				if (($autoconfirm || $trusted)) {
+				if (($list->autoconfirm || $trusted)) {
 					$listModel->confirmSubscriber($lid, $sid);
 				}	
 			}

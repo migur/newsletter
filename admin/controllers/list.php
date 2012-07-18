@@ -501,8 +501,8 @@ class NewsletterControllerList extends JControllerForm
 			$collection, 
 			array(
 				'overwrite' => $settings->overwrite,
-				'autoconfirm' => $settings->autoconfirm/*,
-                                'sendRegmail' => $settings->sendRegmail*/
+				'autoconfirm' => true,
+				'sendRegmail' => false
 			));
 
 		if (!empty($res['errors'])) {

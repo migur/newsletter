@@ -378,10 +378,6 @@ class NewsletterModelEntitySubscriber extends MigurModel
 		$this->_data->confirmed = 1;
 
 		return $this->save();
-
-//		$db = JFactory::getDbo();
-//		$db->setQuery("UPDATE #__newsletter_sub_list set confirmed=1 WHERE confirmed=" . $db->quote($this->_data->subscription_key));
-//		return $subscriber = $db->query();
 	}
 
 	/**
