@@ -562,8 +562,6 @@ class NewsletterHelper
 		return ini_get('max_execution_time') == $time;
 	}
 
-
-
 	/**
 	 * Check if memory is about to overflow.
 	 * Can be used to prevent FATAL ERROR

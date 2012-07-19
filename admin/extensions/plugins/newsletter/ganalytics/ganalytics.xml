@@ -31,6 +31,7 @@
                     required="true"
                     description="COM_NEWSLETTER_GOAL"
                     size="50"
+					default=""
                 />
                 
 			</fieldset>

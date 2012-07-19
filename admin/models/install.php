@@ -208,7 +208,7 @@ class NewsletterModelInstall extends MigurModelList
 	{
 		
 		if (!$this->installer) {
-			JLoader::import('class.extension.installer', JPATH_COMPONENT_ADMINISTRATOR);
+			JLoader::import('class.extension.installer', JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_newsletter');
 			$this->installer = new NewslettterClassExtensionInstaller();
 			$this->installer->loadAllAdapters();
 		}
@@ -340,17 +340,42 @@ class NewsletterModelInstall extends MigurModelList
 		
 		$extensions = (array) $installer->discover();
 		
-		$table = JTable::getInstance('NExtension', 'NewsletterTable');
+		// Load all registered extensions first
+		$db = JFactory::getDbo();
+		$db->setQuery('SELECT * FROM #__newsletter_extensions');
+		$dbExts = $db->loadObjectList();
+		
+		$processed = array();
 		
 		foreach ($extensions as $item) {
 			
-			if(
-				!$table->load(array(
+			// Trying to load record...
+			$table = JTable::getInstance('NExtension', 'NewsletterTable');
+			$table->load(array(
 					'extension' => $item->extension,
-					'type' => $item->type))
-			) {
-				$item->store();
-			}	
+					'type' => $item->type,
+					'namespace' => $item->namespace
+			));
+			
+			// ...and then refresh anyway!
+			$table->save((array) $item);
+			
+			// At least mark this extension as processed.
+			$processed[] = (int) $table->extension_id;
+			
+			unset($table);
+		}
+
+		// Now let's remove all unprocessed (absent) extensions...
+		foreach($dbExts as $item) {
+			
+			if (!in_array($item->extension_id, $processed)) {
+				
+				// This trash need to remove
+				$table = JTable::getInstance('NExtension', 'NewsletterTable');
+				$table->delete($item->extension_id);
+				unset($table);
+			}
 		}
 	}
 }

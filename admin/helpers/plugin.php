@@ -254,6 +254,19 @@ abstract class MigurPluginHelper
 //		return null;
 //	}
 //
+	
+	/**
+	 * Check if $requestedNamespace contain $extNamespace namespace.
+	 * '',                     'newsletter.html' -> true
+	 * 'newsletter',           'newsletter.html' -> true
+	 * 'newsletter.html',      'newsletter.html' -> true
+	 * 'newsletter.html.some', 'newsletter.html' -> false
+	 * 'newsletter.plain',     'newsletter.html' -> false
+	 * 
+	 * @param type $requestedNamespace The namespace to check
+	 * @param type $extNamespace The namespace that plugin have
+	 * @return type 
+	 */
 	public static function namespaceCheckOccurence($requestedNamespace = '', $extNamespace = '')
 	{
 		// If $requestedNamespace is empty then allow for all
@@ -337,6 +350,41 @@ abstract class MigurPluginHelper
 
 
 	/**
+	 * Add into dispatcher the collection of a plugins. 
+	 * Collection item contain DB data of a plugin.
+	 *
+	 * @param   string       $plugins     List of objects
+	 * @param   JDispatcher  $dispatcher  Optionally allows the plugin to use a different dispatcher.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   11.1
+	 */
+	public static function importPluginCollection($plugins, $dispatcher = null)
+	{
+		static $loaded = array();
+
+		if (!is_array($plugins)) {
+			throw new Exception('Collection of plugins is not array');
+		}
+		
+		// Get the specified plugin(s).
+		for ($i = 0, $t = count($plugins); $i < $t; $i++)
+		{
+			$pid = $plugins[$i]->namespace . '.' . $plugins[$i]->extension;
+
+			if (!isset($loaded[$pid]))
+			{
+				self::_import($plugins[$i], true, $dispatcher);
+				$loaded[$pid] = true;
+			}	
+		}
+
+		return $loaded;
+	}
+	
+	
+	/**
 	 * Loads the plugin file.
 	 *
 	 * @param   JPlugin      &$plugin     The plugin.
@@ -355,13 +403,7 @@ abstract class MigurPluginHelper
 		
 		$plugin->extension = preg_replace('/[^A-Z0-9_\.-]/i', '', $plugin->extension);
 
-		$path = 
-			JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 
-			'extensions' . DIRECTORY_SEPARATOR . 
-			'plugins' . DIRECTORY_SEPARATOR . 
-			$group . DIRECTORY_SEPARATOR . 
-			$plugin->extension . DIRECTORY_SEPARATOR . 
-			$plugin->extension . '.php';
+		$path = MigurPluginHelper::getFolder($plugin->extension, $group) . DIRECTORY_SEPARATOR . $plugin->extension . '.php';
 
 		if (!isset($paths[$path]))
 		{
@@ -388,7 +430,6 @@ abstract class MigurPluginHelper
                                             
                         self::_loadLang($plugin->extension, $group);
                                             
-                                                
 						// Load the plugin from the database.
 						if (!isset($plugin->params))
 						{
@@ -399,6 +440,7 @@ abstract class MigurPluginHelper
 						// Instantiate and register the plugin.
 						$plugin->name = $plugin->extension;
 						$plugin->type = $group;
+						$plugin->params = new JRegistry($plugin->params);
 						$inst = new $className($dispatcher, (array) ($plugin));
 					}
 				}
@@ -425,5 +467,19 @@ abstract class MigurPluginHelper
 
             
             self::$_lang->load($name, $path);
-        }        
+        }
+		
+		
+		static function getFolder($extension, $namespace)
+		{
+			@list($group) = explode('.', $namespace);
+			
+			return JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 
+			'components' . DIRECTORY_SEPARATOR . 
+			'com_newsletter' . DIRECTORY_SEPARATOR . 
+			'extensions' . DIRECTORY_SEPARATOR . 
+			'plugins' . DIRECTORY_SEPARATOR . 
+			$group . DIRECTORY_SEPARATOR . 
+			$extension;
+		}	
 }

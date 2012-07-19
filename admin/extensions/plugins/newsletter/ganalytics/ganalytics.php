@@ -9,27 +9,25 @@
  *
  * @author woody
  */
-class plgNewsletterGanalytics
+class plgNewsletterGanalytics extends JPlugin
 {
 	/**
 	 * Track each link by Google Analytics
 	 *
-	 * @param string $content - the content of a letter
-	 * @param string $uid     - the user subscription key
-	 * @param string $newsletterId  - newsletter id
+	 * @param object $caller The object which trigger this event.
+	 * @param string $content The content of a letter. Use it as pointer.
+	 * @param object $newsletter Newsletter object.
 	 *
-	 * @return boolean
-	 * @since  1.0
+	 * @return void
+	 * @since  12.06
 	 */
-	function onafterrender($params, $document)
+	function onMigurAfterNewsletterRender(&$content)
 	{
-		die('ololo');
-		if (!$document->trackingGa) {
-			return;
-		}
-
-		$content = $document->getContent();
-
+		die;
+		$content='ololo';
+		return;
+		$params = $this->params->toArray();
+		
 		// Find all href='*' or href="*"
 		preg_match_all("/((?:href[\s\=\"]+)([^\"]+))|((?:href[\s\=\']+)([^\']+))/", $content, $matches);
 		$search = array_unique($matches[1]);
@@ -37,13 +35,10 @@ class plgNewsletterGanalytics
 
 		foreach ($search as $item) {
 			$sep = (strpos($item, '?') === false)? '?' : '&';
-			$withs[] = $item.$sep.$params->goal;
+			$withs[] = $item.$sep.$params['goal'];
 		}
 
 		$content = str_replace($search, $withs, $content);
-		$document->setContent($content);
-
-		return true;
 	}
 }
 ?>
