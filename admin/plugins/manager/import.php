@@ -29,7 +29,9 @@ class NewsletterPluginManagerImport extends NewsletterPluginManager
             $collection, 
             array(
                 'overwrite'      => JRequest::getBool('import_overwrite',false),
-                'subscriberType' => JRequest::getString('subscriber_type', 'migur')
+                'subscriberType' => JRequest::getString('subscriber_type', 'migur'),
+				'autoconfirm'    => true,
+				'sendRegmail'    => false
         ));
         
         if ($result['errors'] == 0) {

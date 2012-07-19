@@ -62,67 +62,23 @@ class NewsletterClassExtensionAdapterTemplate extends JAdapterInstance
 	 */
 	protected $scriptElement = null;
 
+	protected $_extPath = '';
 	
-	/**
-	 * Custom loadLanguage method
-	 *
-	 * @param   string  $path  The path where we find language files
-	 *
-	 * @return  void
-	 *
-	 * @since   11.1
-	 */
-//	public function loadLanguage($path = null)
-//	{
-//		$source = $this->parent->getPath('source');
-//
-//		if (!$source)
-//		{
-//			$this->parent
-//				->setPath(
-//				'source',
-//				JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $this->parent->extension->extension
-//			);
-//		}
-//
-//		$this->manifest = $this->parent->getManifest();
-//
-//		if ($this->manifest->files)
-//		{
-//			$element = $this->manifest->files;
-//			$extension = '';
-//
-//			if (count($element->children()))
-//			{
-//				foreach ($element->children() as $file)
-//				{
-//					if ((string) $file->attributes()->module)
-//					{
-//						$extension = strtolower((string) $file->attributes()->module);
-//						break;
-//					}
-//				}
-//			}
-//
-//			if ($extension)
-//			{
-//				$lang = JFactory::getLanguage();
-//				$source = $path ? $path : JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $extension;
-//				$folder = (string) $element->attributes()->folder;
-//
-//				if ($folder && file_exists("$path/$folder"))
-//				{
-//					$source = "$path/$folder";
-//				}
-//
-//				$client = (string) $this->manifest->attributes()->client;
-//				$lang->load($extension . '.sys', $source, null, false, false)
-//					|| $lang->load($extension . '.sys', constant('JPATH_' . strtoupper($client)), null, false, false)
-//					|| $lang->load($extension . '.sys', $source, $lang->getDefault(), false, false)
-//					|| $lang->load($extension . '.sys', constant('JPATH_' . strtoupper($client)), $lang->getDefault(), false, false);
-//			}
-//		}
-//	}
+	
+	public function __construct(&$parent, &$db, $options = array()) {
+		
+		parent::__construct($parent, $db, $options);
+		
+		$this->_extPath = 
+			!empty($options['extPath'])? $options['extPath'] : 
+			
+			JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 
+			'components' . DIRECTORY_SEPARATOR . 
+			'com_newsletter' . DIRECTORY_SEPARATOR . 
+			'extensions' . DIRECTORY_SEPARATOR . 
+			'templates';
+	}
+	
 
 	/**
 	 * Custom install method
@@ -159,7 +115,6 @@ class NewsletterClassExtensionAdapterTemplate extends JAdapterInstance
 
 		// No client attribute was found so we assume the site as the client
 		$cname = 'admin';
-		$basePath = JPATH_COMPONENT_ADMINISTRATOR;
 		$clientId = 1;
 
 		$element = (string) $this->manifest->information->template;
@@ -167,7 +122,7 @@ class NewsletterClassExtensionAdapterTemplate extends JAdapterInstance
 		
 		if (!empty($element))
 		{
-			$this->parent->setPath('extension_root', $basePath  . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'templates');
+			$this->parent->setPath('extension_root', $this->_extPath);
 		}
 		else
 		{
@@ -349,13 +304,7 @@ class NewsletterClassExtensionAdapterTemplate extends JAdapterInstance
 		$element = $row->extension;
 		$client = 1;
 
-		$this->parent->setPath(
-			'extension_root', 
-			JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 
-			'extensions' . DIRECTORY_SEPARATOR . 
-			'templates' .  DIRECTORY_SEPARATOR .
-			$row->extension . ".xml"
-		);
+		$this->parent->setPath('extension_root', $this->_extPath . DIRECTORY_SEPARATOR . $row->extension . ".xml");
 
 		// Wipe out any instances in the modules table
 		$query = 'DELETE' . ' FROM #__newsletter_template_styles' . ' WHERE template=' . $db->Quote($row->extension.'.xml');
@@ -406,20 +355,19 @@ class NewsletterClassExtensionAdapterTemplate extends JAdapterInstance
 	public function discover()
 	{
 		$results = array();
-		$path = JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'templates';
-		$admin_list = JFolder::files($path, '\.xml');
+		$admin_list = JFolder::files($this->_extPath, '\.xml');
 		$admin_info = JApplicationHelper::getClientInfo('administrator', true);
 
 		foreach ($admin_list as $tpl)
 		{
-			var_dump("$path/$tpl");
-			if ($xml = $this->parent->isManifest("$path/$tpl")) {
+			if ($xml = $this->parent->isManifest("$this->_extPath/$tpl")) {
 				
 				$extension = JTable::getInstance('NExtension', 'NewsletterTable');
 				$extension->set('title', (string) $xml->information->name);
 				$extension->set('extension', str_replace('.xml', '', $tpl));
 				$extension->set('params', '{}');
 				$extension->set('type', '3');
+				$extension->set('namespace', '');
 				$results[] = clone $extension;
 			}	
 		}

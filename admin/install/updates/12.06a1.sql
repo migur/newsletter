@@ -4,6 +4,7 @@
 
 SET foreign_key_checks = 0;
 
-ALTER TABLE `#__newsletter_extensions` ADD COLUMN  `namespace` VARCHAR(255) DEFAULT '';
+ALTER TABLE `#__newsletter_extensions` ADD COLUMN `namespace` VARCHAR(255) DEFAULT '';
+ALTER TABLE `#__newsletter_lists` ADD COLUMN `autoconfirm` SMALLINT;
 
 SET foreign_key_checks = 1;

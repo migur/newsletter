@@ -479,7 +479,19 @@ class NewsletterModelSubscriber extends JModelAdmin
 		$id = substr($mask, 0, strlen($mask) - strlen($sid)) . $sid;
 		return rand(100000, 999999) . $id . time();
 	}
+
 	
-	
-	
+	/**
+	 * Get type of newsletter user prefer to recieve
+	 */
+	public function getType($subscriber)
+	{
+		if (is_numeric($subscriber)) {
+			$subscriber = $this->getTable()->load($subscriber);
+		}
+		
+		$subscriber = (array) $subscriber;
+		
+		return ($subscriber['html'] == 1) ? 'html' : 'plain';
+	}
 }
