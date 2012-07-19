@@ -78,7 +78,7 @@ class NewsletterControllerSender extends JControllerForm
 		$dbo = JFactory::getDbo();
 		$query = $dbo->getQuery(true);
 		$query
-			->select('distinct s.subscriber_id')
+			->select('distinct s.subscriber_id, sl.list_id')
 			->from('#__newsletter_sub_list AS sl')
 			->join('', '#__newsletter_subscribers AS s ON s.subscriber_id = sl.subscriber_id')
 			->where('list_id IN (' . implode(',', $lists) . ')');
@@ -111,6 +111,7 @@ class NewsletterControllerSender extends JControllerForm
 					if ($table->save(array(
 						'newsletter_id' => $newsletterId,
 						'subscriber_id' => $item['subscriber_id'],
+						'list_id' => $item['list_id'],
 						'created' => date('Y-m-d H:i:s'),
 						'state' => 1))) {
 
