@@ -63,6 +63,22 @@ class NewsletterClassExtensionAdapterModule extends JAdapterInstance
 	 */
 	protected $scriptElement = null;
 
+	protected $_extPath = '';
+	
+	
+	public function __construct(&$parent, &$db, $options = array()) {
+		
+		parent::__construct($parent, $db, $options);
+		
+		$this->_extPath = 
+			!empty($options['extPath'])? $options['extPath'] : 
+			
+			JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 
+			'components' . DIRECTORY_SEPARATOR . 
+			'com_newsletter' . DIRECTORY_SEPARATOR . 
+			'extensions' . DIRECTORY_SEPARATOR . 
+			'modules';
+	}
 	
 	/**
 	 * Custom loadLanguage method
@@ -79,10 +95,7 @@ class NewsletterClassExtensionAdapterModule extends JAdapterInstance
 
 		if (!$source)
 		{
-			$this->parent
-				->setPath(
-				'source',
-				JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $this->parent->extension->extension
+			$this->parent->setPath('source', $this->_extPath . DIRECTORY_SEPARATOR . $this->parent->extension->extension
 			);
 		}
 
@@ -108,7 +121,7 @@ class NewsletterClassExtensionAdapterModule extends JAdapterInstance
 			if ($extension)
 			{
 				$lang = JFactory::getLanguage();
-				$source = $path ? $path : JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $extension;
+				$source = $path ? $path : $this->_extPath . DIRECTORY_SEPARATOR . $extension;
 				$folder = (string) $element->attributes()->folder;
 
 				if ($folder && file_exists("$path/$folder"))
@@ -491,35 +504,6 @@ class NewsletterClassExtensionAdapterModule extends JAdapterInstance
 
 
 	/**
-	 * Refreshes the extension table cache
-	 *
-	 * @return  boolean  Result of operation, true if updated, false on failure.
-	 *
-	 * @since   11.1
-	 */
-	public function refreshManifestCache()
-	{
-		$client = JApplicationHelper::getClientInfo($this->parent->extension->client_id);
-		$manifestPath = $client->path . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $this->parent->extension->extension . '/' . $this->parent->extension->extension . '.xml';
-		$this->parent->manifest = $this->parent->isManifest($manifestPath);
-		$this->parent->setPath('manifest', $manifestPath);
-		$manifest_details = JApplicationHelper::parseXMLInstallFile($this->parent->getPath('manifest'));
-		$this->parent->extension->manifest_cache = json_encode($manifest_details);
-		$this->parent->extension->name = $manifest_details['name'];
-
-		if ($this->parent->extension->store())
-		{
-			return true;
-		}
-		else
-		{
-			JError::raiseWarning(101, JText::_('JLIB_INSTALLER_ERROR_MOD_REFRESH_MANIFEST_CACHE'));
-
-			return false;
-		}
-	}
-
-	/**
 	 * Custom uninstall method
 	 *
 	 * @param   integer  $id  The id of the module to uninstall
@@ -557,12 +541,7 @@ class NewsletterClassExtensionAdapterModule extends JAdapterInstance
 		$element = $row->extension;
 		$client = 1;
 
-		$this->parent->setPath(
-			'extension_root', 
-			JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 
-			'extensions' . DIRECTORY_SEPARATOR . 
-			'modules' . DIRECTORY_SEPARATOR . $element
-		);
+		$this->parent->setPath('extension_root', $this->_extPath . DIRECTORY_SEPARATOR . $element);
 
 		$this->parent->setPath('source', $this->parent->getPath('extension_root'));
 
@@ -685,19 +664,22 @@ class NewsletterClassExtensionAdapterModule extends JAdapterInstance
 	public function discover()
 	{
 		$results = array();
-		$path = JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'modules';
-		$admin_list = JFolder::folders($path);
+		$admin_list = JFolder::folders($this->_extPath);
 		$admin_info = JApplicationHelper::getClientInfo('administrator', true);
 
 		foreach ($admin_list as $module)
 		{
-			if ($xml = $this->parent->isManifest("$path/$module/$module.xml")) {
+			if ($xml = $this->parent->isManifest("$this->_extPath/$module/$module.xml")) {
 			
+				$this->parent->setPath('source', "$this->_extPath/$module");
+				$this->parent->findManifest();
+				
 				$extension = JTable::getInstance('NExtension', 'NewsletterTable');
 				$extension->set('title', (string) $xml->name);
 				$extension->set('extension', $module);
-				$extension->set('params', '{}');
+				$extension->set('params', $this->parent->getParams());
 				$extension->set('type', '1');
+				$extension->set('namespace', '');
 				$results[] = clone $extension;
 			}	
 		}
