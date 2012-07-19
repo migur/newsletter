@@ -175,16 +175,17 @@ class NewsletterModelQueues extends JModelList
 		$query = $db->getQuery(true);
 		$query->select('DISTINCT q.newsletter_id, q.subscriber_id');
 		$query->from('`#__newsletter_queue` AS q');
-		$query->join('left', '`#__newsletter_newsletters` AS n ON n.newsletter_id = q.newsletter_id');
+		$query->join('', '`#__newsletter_newsletters` AS n ON n.newsletter_id = q.newsletter_id');
+		$query->join('', '`#__newsletter_subscribers` AS s ON s.subscriber_id = q.subscriber_id');
 		$query->join('left', '`#__newsletter_lists` AS l ON l.list_id = q.list_id');
-		$query->where('(l.state IS NULL OR l.state = 1)');
+		$query->where('(l.state = 1 OR l.list_id IS NULL)');
+		$query->where('s.state = 1');
+		$query->where('(l.state = 1 OR l.list_id IS NULL)');
 		
 		//  Add filter to cut off unconfirmed users. (subscribers.confirm)
 		if ($options['skipUnconfirmed']) {
-			$query->join('left', '`#__newsletter_subscribers` AS s ON s.subscriber_id = q.subscriber_id');
-			$query->join('left', '`#__users` AS u ON u.id = s.user_id');
-			$query->where('s.confirmed = 1');
-			$query->where('s.state = 1');
+			$query->join('left', '`#__newsletter_sub_list` AS sl ON s.subscriber_id = sl.subscriber_id AND l.list_id = sl.list_id');
+			$query->where('(sl.confirmed = 1 OR sl.sublist_id IS NULL)');
 		}	
 			
 		$and = 'n.smtp_profile_id='.(int)$id;
@@ -199,7 +200,7 @@ class NewsletterModelQueues extends JModelList
 		}
 		
 		$query->where('q.state=1 AND ('. $and .')');
-		//echo str_replace('#__','jos_',$query); die;
+		//le(str_replace('#__','jos_',$query)); die;
 		$db->setQuery($query, 0, $limit);
 		
 		return $db->loadObjectList();
