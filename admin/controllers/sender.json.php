@@ -105,13 +105,15 @@ class NewsletterControllerSender extends JControllerForm
 
 				if (!$table->load(array(
 						'newsletter_id' => $newsletterId,
-						'subscriber_id' => $item['subscriber_id']))) {
+						'subscriber_id' => $item['subscriber_id'],
+						'list_id'       => $item['list_id']))
+				) {
 
 					// add new row only if it does not exist...
 					if ($table->save(array(
 						'newsletter_id' => $newsletterId,
 						'subscriber_id' => $item['subscriber_id'],
-						'list_id' => $item['list_id'],
+						'list_id'       => $item['list_id'],
 						'created' => date('Y-m-d H:i:s'),
 						'state' => 1))) {
 

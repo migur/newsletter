@@ -185,7 +185,7 @@ class NewsletterModelQueues extends JModelList
 		//  Add filter to cut off unconfirmed users. (subscribers.confirm)
 		if ($options['skipUnconfirmed']) {
 			$query->join('left', '`#__newsletter_sub_list` AS sl ON s.subscriber_id = sl.subscriber_id AND l.list_id = sl.list_id');
-			$query->where('(sl.confirmed = 1 OR sl.sublist_id IS NULL)');
+			$query->where('(sl.confirmed = 1 OR (sl.sublist_id IS NULL AND s.confirmed = 1))');
 		}	
 			
 		$and = 'n.smtp_profile_id='.(int)$id;
@@ -271,7 +271,8 @@ class NewsletterModelQueues extends JModelList
 
 		// Select the required fields from the table.
 		$query->select('newsletter_id, SUM(CASE WHEN state=1 THEN 1 ELSE 0 END) AS to_send, SUM(CASE WHEN state=1 THEN 0 ELSE 1 END) AS sent, COUNT(*) AS total');
-		$query->from('(SELECT DISTINCT newsletter_id, subscriber_id, state FROM #__newsletter_queue) AS q');
+		//$query->from('(SELECT DISTINCT newsletter_id, subscriber_id, state FROM #__newsletter_queue) AS q');
+		$query->from('#__newsletter_queue AS q');
 		$query->group('newsletter_id');
 		
 		//echo nl2br(str_replace('#__','jos_',$query->__toString())); die;

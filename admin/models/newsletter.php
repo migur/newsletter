@@ -105,13 +105,14 @@ class NewsletterModelNewsletter extends JModelAdmin
 		$res = array();
 		foreach($objs as $obj) {
 			
-			// Check if plugin is included into NAMESPACE
+			// Check if plugin is included into NAMESPACE and anabled for this letter
 			if (MigurPluginHelper::namespaceCheckOccurence($namespace, $obj->namespace)) {
 				$obj->params = (object) json_decode($obj->params);
-				$res[] = $obj;
+				if (!empty($obj->params->active)) {
+					$res[] = $obj;
+				}	
 			}	
 		}
-		
 		return $res;
 	}
 }

@@ -362,12 +362,12 @@ abstract class MigurPluginHelper
 	 */
 	public static function importPluginCollection($plugins, $dispatcher = null)
 	{
-		static $loaded = array();
-
+		/*static*/ $loaded = array();
+		
 		if (!is_array($plugins)) {
 			throw new Exception('Collection of plugins is not array');
 		}
-		
+
 		// Get the specified plugin(s).
 		for ($i = 0, $t = count($plugins); $i < $t; $i++)
 		{
@@ -397,7 +397,7 @@ abstract class MigurPluginHelper
 	 */
 	protected static function _import(&$plugin, $autocreate = true, $dispatcher = null)
 	{
-		static $paths = array();
+		/*static*/ $paths = array();
 
 		@list($group) = explode('.', $plugin->namespace);
 		
@@ -427,7 +427,6 @@ abstract class MigurPluginHelper
 					$className = 'plg' . ucfirst($group) . ucfirst($plugin->extension);
 					if (class_exists($className))
 					{
-                                            
                         self::_loadLang($plugin->extension, $group);
                                             
 						// Load the plugin from the database.
@@ -441,7 +440,7 @@ abstract class MigurPluginHelper
 						$plugin->name = $plugin->extension;
 						$plugin->type = $group;
 						$plugin->params = new JRegistry($plugin->params);
-						$inst = new $className($dispatcher, (array) ($plugin));
+						new $className($dispatcher, (array) ($plugin));
 					}
 				}
 			}

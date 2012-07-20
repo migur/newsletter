@@ -103,18 +103,9 @@ class NewsletterControllerNewsletter extends JControllerForm
 		SubscriberHelper::saveRealUser();
 		SubscriberHelper::emulateUser(array('email' => $email));
 
-		// Let's process all plugins used in this newsletter
-		$dispatcher = new JDispatcher();
-		$plugins = $model->getUsedPlugins($newsletterId, 'newsletter.'.$type);
-		
-		MigurPluginHelper::importPluginCollection($plugins, $dispatcher);
-
-		// Trigger before
-		$html = '';
-		$dispatcher->trigger('onMigurBeforeNewsletterRender', array(&$html, $newsletter));
 		
 		// render the content of letter for each user
-		$html .= $mailer->render(array(
+		$html = $mailer->render(array(
 			'type' => $type,
 			'newsletter_id' => $newsletterId,
 			'useRawUrls' => NewsletterHelper::getParam('rawurls') == '1'

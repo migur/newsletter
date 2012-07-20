@@ -3,7 +3,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  * Description of ganalytics
  *
@@ -23,11 +22,6 @@ class plgNewsletterGanalytics extends JPlugin
 	 */
 	function onMigurAfterNewsletterRender(&$content)
 	{
-		die;
-		$content='ololo';
-		return;
-		$params = $this->params->toArray();
-		
 		// Find all href='*' or href="*"
 		preg_match_all("/((?:href[\s\=\"]+)([^\"]+))|((?:href[\s\=\']+)([^\']+))/", $content, $matches);
 		$search = array_unique($matches[1]);
@@ -35,7 +29,7 @@ class plgNewsletterGanalytics extends JPlugin
 
 		foreach ($search as $item) {
 			$sep = (strpos($item, '?') === false)? '?' : '&';
-			$withs[] = $item.$sep.$params['goal'];
+			$withs[] = $item.$sep.$this->params->get('goal');
 		}
 
 		$content = str_replace($search, $withs, $content);

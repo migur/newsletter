@@ -36,15 +36,6 @@ class MigurMailer extends JObject
 	// Instance of dispatcher
 	public $dispatcher;
 	
-	public function __construct($options = array())
-	{
-		parent::__construct($options);
-
-		$options = (array) $options;
-		$this->dispatcher = JArrayHelper::getValue($options, 'dispatcher', JDispatcher::getInstance());
-	
-	}
-
 	/**
 	 * Create the result mail content.
 	 * Can parse the newsletter or the template
@@ -69,15 +60,24 @@ class MigurMailer extends JObject
 		}
 
 		// Let's process all plugins used in this newsletter
+		
+		// First let's create brand new dispatcher...
+		unset($this->dispatcher); 
+		$this->dispatcher = new JDispatcher();
 		$plugins = JModel::getInstance('Newsletter', 'NewsletterModel')
 				->getUsedPlugins($params['newsletter_id'], 'newsletter.'.$params['type']);
 		MigurPluginHelper::importPluginCollection($plugins, $this->dispatcher);
-		
+
 		// Create ALWAYS NEW instance
 		$params['dispatcher'] = $this->dispatcher;
 		$document = MigurMailerDocument::factory($params['type'], $params);
-		//$this->triggerEvent('onMailerBeforeRender');
-		$data = $document->render(false, $params);
+		
+		// Trigger before
+		$data = '';
+		$this->dispatcher->trigger('onMigurBeforeNewsletterRender', array(&$data, $params['newsletter_id']));
+		
+		$data .= $document->render(false, $params);
+		// trigger AFTER is inside of render ^^
 		
 		// Finish with it. Destroy.
 		unset($document);
@@ -157,10 +157,8 @@ class MigurMailer extends JObject
 			$params['renderMode'] = 'schematic';
 		}	
 		$document = MigurMailerDocument::factory($params['type'], $params);
-		//$this->triggerEvent('onMailerBeforeRender');
 		$document->render(false, $params);
 		$tpl = $document->getTemplate();
-		//$this->triggerEvent('onMailerAfterRender');
 		unset($document);
 
 		return $tpl;
@@ -249,12 +247,8 @@ class MigurMailer extends JObject
 			
 			PlaceholderHelper::setPlaceholder('newsletter id', $letter->newsletter_id);
 			
-			// Trigger before
-			$letter->content = '';
-			$this->dispatcher->trigger('onMigurBeforeNewsletterRender', array(&$letter->content, $letter->toObject()));
-			
 			// render the content of letter for each user
-			$letter->content .= $this->render(array(
+			$letter->content = $this->render(array(
 					'type' => $type,
 					'newsletter_id' => $letter->newsletter_id,
 					'tracking'      => $params['tracking'],
@@ -447,12 +441,8 @@ class MigurMailer extends JObject
 		PlaceholderHelper::setPlaceholder('newsletter id', $letter->newsletter_id);
 
 		
-		// Trigger before
-		$letter->content = '';
-		$dispatcher->trigger('onMigurBeforeNewsletterRender', array(&$letter->content, $letter->toObject()));
-		
 		// render the content of letter for each user
-		$letter->content .= $this->render(array(
+		$letter->content = $this->render(array(
 				'type'          => $type,
 				'newsletter_id' => $letter->newsletter_id,
 				'tracking'      => true,
