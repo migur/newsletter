@@ -160,8 +160,6 @@ class NewsletterModelExtension extends JModelAdmin
 				JPath::clean(JPATH_SITE. DIRECTORY_SEPARATOR .$type. DIRECTORY_SEPARATOR .$module. DIRECTORY_SEPARATOR .$module.'.xml');
 		}
 		
-		//var_dump($formFile); die;
-		
 		// Get the config part from manifest
 		if (file_exists($formFile)) {
 			// Get the module form.

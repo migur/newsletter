@@ -312,7 +312,6 @@ class NewsletterControllerList extends JControllerForm
         // Trigger event for plugin
         $context = $this->option.'.edit.'.$this->context;
         $listId = JRequest::getInt('list_id'); 
-        //var_dump($pName, $pGroup, $pEvent);
         $res = $manager->trigger(
             array(
                 'name'  => $pName,
