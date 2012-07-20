@@ -173,7 +173,8 @@ class NewsletterModelQueues extends JModelList
 		// Initialise variables.
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
-		$query->select('DISTINCT q.newsletter_id, q.subscriber_id');
+		// Let's add is_sent=0 for this mail if it was sent earlier(q.status IN (0,2)) and 1 otherwise
+		$query->select('DISTINCT q.newsletter_id, q.subscriber_id, CASE WHEN q.state=1 THEN 0 ELSE 1 END AS is_sent'); 
 		$query->from('`#__newsletter_queue` AS q');
 		$query->join('', '`#__newsletter_newsletters` AS n ON n.newsletter_id = q.newsletter_id');
 		$query->join('', '`#__newsletter_subscribers` AS s ON s.subscriber_id = q.subscriber_id');
@@ -199,8 +200,16 @@ class NewsletterModelQueues extends JModelList
 			$and .= ' OR n.smtp_profile_id='.(int)NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID;
 		}
 		
-		$query->where('q.state=1 AND ('. $and .')');
-		//le(str_replace('#__','jos_',$query)); die;
+		$query->where($and);
+		
+		// Group all letters by nid-sid and
+		// eliminate sid-nid pair if this pair has been sent earlier
+		$query->group('q.newsletter_id, q.subscriber_id');
+		// If at least one letter from group was sent earlier then MIN(is_sent) > 0.
+		// We need groups (nid-sid) that contain only non-sent letters (all DUPLICATE in group should be = 1).
+		// So we use MIN(duplicate) = 1
+		$query->having('MIN(is_sent) = 0');
+		
 		$db->setQuery($query, 0, $limit);
 		
 		return $db->loadObjectList();
@@ -270,12 +279,10 @@ class NewsletterModelQueues extends JModelList
 		$query = $dbo->getQuery(true);
 
 		// Select the required fields from the table.
-		$query->select('newsletter_id, SUM(CASE WHEN state=1 THEN 1 ELSE 0 END) AS to_send, SUM(CASE WHEN state=1 THEN 0 ELSE 1 END) AS sent, COUNT(*) AS total');
-		//$query->from('(SELECT DISTINCT newsletter_id, subscriber_id, state FROM #__newsletter_queue) AS q');
-		$query->from('#__newsletter_queue AS q');
+		$query->select('newsletter_id, SUM(sent) AS sent, COUNT(*) AS total');
+		$query->from('(SELECT newsletter_id, subscriber_id, MAX(CASE WHEN state=1 THEN 0 ELSE 1 END) AS sent FROM jos_newsletter_queue AS q GROUP BY newsletter_id, subscriber_id) AS q');
 		$query->group('newsletter_id');
 		
-		//echo nl2br(str_replace('#__','jos_',$query->__toString())); die;
 		$data = $dbo->setQuery($query)->loadAssocList();
 		return $data;
 	}

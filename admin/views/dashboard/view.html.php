@@ -78,13 +78,12 @@ class NewsletterViewDashboard extends MigurView
 		$total = 0;
 		foreach ($stat as $row) {
 			$sent += $row['sent'];
-			$toSend += $row['to_send'];
 			$total += $row['total'];
 		}
 
-		JavascriptHelper::addStringVar('emailsSent', $sent);
-		JavascriptHelper::addStringVar('emailsToSend', $toSend);
-		JavascriptHelper::addStringVar('emailsTotal', $total);
+		JavascriptHelper::addStringVar('mailsSent', $sent);
+		JavascriptHelper::addStringVar('mailsToSend', $total - $sent);
+		JavascriptHelper::addStringVar('mailsTotal', $total);
 		JavascriptHelper::addStringVar('newslettersSent', count($stat));
 
 		$cache = JFactory::getCache('com_newsletter');
