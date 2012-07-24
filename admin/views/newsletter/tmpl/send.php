@@ -30,6 +30,7 @@
 		</li>
 		<li>
                 <?php echo $this->form->getLabel('smtp_profile_id'); ?>
+				&nbsp;&nbsp;<?php echo JHtml::_('migurhelp.link', 'smtpp', 'general'); ?>
 
 		
                 <?php echo $this->form->getInput('smtp_profile_id'); ?>

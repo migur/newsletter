@@ -23,7 +23,7 @@ if (!defined('MIGUR')) {
  * @since       11.1
  */
 
-/*
+/**
  * Legacy support
  */
 JToolbar::getInstance()->loadButtonType('help');

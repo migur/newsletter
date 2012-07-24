@@ -21,7 +21,10 @@
                     <td><?php echo current($items)->input; ?></td>
                 </tr>
                 <tr>
-                    <td><?php next($items); echo current($items)->label; ?></td>
+                    <td>
+						<?php next($items); echo current($items)->label; ?>
+						<?php echo JHtml::_('migurhelp.link', 'smtpp', 'general', 'smtpp-default'); ?>
+					</td>
                     <td>
 					<?php 
 						echo current($items)->input;

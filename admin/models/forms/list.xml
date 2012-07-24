@@ -25,7 +25,7 @@
         <field
             type="smtpprofiles"
             name="smtp_profile_id"
-            default=""
+            default="-1"
             label="COM_NEWSLETTER_PROFILE"
             description="COM_NEWSLETTER_PROFILE"
             class="selectbox validate-smtp_profile"
