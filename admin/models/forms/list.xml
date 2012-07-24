@@ -24,7 +24,7 @@
 		/>
         <field
             type="smtpprofiles"
-            name="smtp_profile"
+            name="smtp_profile_id"
             default=""
             label="COM_NEWSLETTER_PROFILE"
             description="COM_NEWSLETTER_PROFILE"

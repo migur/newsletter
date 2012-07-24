@@ -169,6 +169,27 @@ class NewsletterModelQueues extends JModelList
 		
 		$smtpModel = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$smtpModel->load($id);
+
+		// This SMTP profile ($id) may be used by NEWSLETTER or LIST
+		// To fetch these all data we need to do several steps.
+		// Priority:
+		// 1.Use SMTP profile of LSIT if it is setted. 
+		// 2.If not then use SMTP pofile of NEWSLETTER.
+		$smtpList = array($id);
+
+		// 1. First check if this profile is default ($id = -1)
+		// and add to smptList the actual id of default profile
+		if($smtpModel->isDefaultProfile()) {
+			$smtpList[] = (int)NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID;
+		}
+		
+		// 1. In addition check if this profile is Joomla ($id = -1)
+		// and add to smptList the actual id of JOOMLA profile.
+		if ($smtpModel->isJoomlaProfile()) {
+			$smtpList[] = (int)NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID;
+		}
+
+		// Now we can use this list to check occurences.
 		
 		// Initialise variables.
 		$db = $this->getDbo();
@@ -179,28 +200,31 @@ class NewsletterModelQueues extends JModelList
 		$query->join('', '`#__newsletter_newsletters` AS n ON n.newsletter_id = q.newsletter_id');
 		$query->join('', '`#__newsletter_subscribers` AS s ON s.subscriber_id = q.subscriber_id');
 		$query->join('left', '`#__newsletter_lists` AS l ON l.list_id = q.list_id');
+		
+		// Add filter to select only ACTIVE lists and subscribers
 		$query->where('(l.state = 1 OR l.list_id IS NULL)');
 		$query->where('s.state = 1');
-		$query->where('(l.state = 1 OR l.list_id IS NULL)');
 		
-		//  Add filter to cut off unconfirmed users. (subscribers.confirm)
+		//  Add filter to cut off unconfirmed subscribers-in-lists or 
+		//  unconfirmed subscribers if there is no information about list for this row.
 		if ($options['skipUnconfirmed']) {
 			$query->join('left', '`#__newsletter_sub_list` AS sl ON s.subscriber_id = sl.subscriber_id AND l.list_id = sl.list_id');
 			$query->where('(sl.confirmed = 1 OR (sl.sublist_id IS NULL AND s.confirmed = 1))');
 		}	
-			
-		$and = 'n.smtp_profile_id='.(int)$id;
-		
-		if ($smtpModel->isDefaultProfile()) {
-			$and .= ' OR n.smtp_profile_id='.(int)NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID;
-		}
-		
-		// Back compatibility
-		if ($smtpModel->isJoomlaProfile()) {
-			$and .= ' OR n.smtp_profile_id='.(int)NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID;
-		}
-		
-		$query->where($and);
+
+		// Let's create filter by SMTP id.
+		// First add the check for newsletter (rule acts if newsletter has non-default SMTPp).
+		$and = 
+			' (n.smtp_profile_id != '.(int) NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID.
+			' AND n.smtp_profile_id IN ('.implode(',', $smtpList).'))';
+
+		// then add the check for LIST if newsletter has DEFAULT SMTPp (override newsletter's SMTPp). 
+		$and .= 
+			' OR (n.smtp_profile_id = '.(int) NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID.' AND '.
+				' (l.smtp_profile_id IN ('.implode(',', $smtpList).')'.
+				' OR (l.list_id IS NULL AND n.smtp_profile_id IN ('.implode(',', $smtpList).'))))';
+
+		$query->where('('.$and.')');
 		
 		// Group all letters by nid-sid and
 		// eliminate sid-nid pair if this pair has been sent earlier

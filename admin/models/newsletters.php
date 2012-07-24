@@ -211,8 +211,8 @@ class NewsletterModelNewsletters extends JModelList
 
 		// Select the required fields from the table.
 		$query->select('DISTINCT n.smtp_profile_id');
-		$query->from('#__newsletter_newsletters AS n');
-		$query->join('', '#__newsletter_queue AS q ON q.newsletter_id = n.newsletter_id');
+		$query->from('#__newsletter_queue AS q');
+		$query->join('', '#__newsletter_newsletters AS n ON q.newsletter_id = n.newsletter_id');
 		$query->where('q.state = 1');
 		$query->order('n.smtp_profile_id');
 		$db->setQuery($query);

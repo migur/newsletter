@@ -236,6 +236,8 @@ CREATE TABLE `#__newsletter_queue`
 PRIMARY KEY (`queue_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+CREATE INDEX `nid_sid_lid_state_idx` ON `#__newsletter_queue`(`newsletter_id`, `subscriber_id`, `list_id`, `state`);
+
 CREATE TABLE `#__newsletter_downloads`
 (
 `downloads_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
