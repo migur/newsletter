@@ -19,7 +19,7 @@ defined('_JEXEC') or die;
 	<fieldset class="adminform" id="subscriber-edit-history">
 	   <legend>
 			<?php echo JText::_('COM_NEWSLETTER_HISTORY'); ?>
-			<a target="_blank" href="<?php echo SupportHelper::getResourceUrl('subscriber', 'history'); ?>">(?)</a>
+			<?php echo JHtml::_('migurhelp.link', 'subscriber', 'history'); ?>
 	   </legend>
 	   <?php echo $this->loadTemplate('history'); ?>
 	</fieldset>
