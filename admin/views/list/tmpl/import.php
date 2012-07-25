@@ -29,10 +29,7 @@
 			
 			<div class="block-notice">
 				<?php echo JText::_('COM_NEWSLETTER_STANDARD_IMPORT_HELPTEXT'); ?>
-				<a href="#" role="support" resource="<?php echo SupportHelper::getResourceUrl('list', 'import'); ?>">
-					(?)
-				</a>
-
+				<?php echo JHtml::_('migurhelp.link', 'list', 'import'); ?>
 			</div>
 			
 			<div id="import-file-upload">
@@ -130,10 +127,9 @@
 					</div>
 					<div style="overflow:hidden">
 						<input type="checkbox" id="import-skip-header" name="import_skip_header" />
-						<div style="margin:5px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
-							<a href="#" role="support" resource="<?php echo SupportHelper::getResourceUrl('list', 'import'); ?>">
-								(?)
-							</a>
+						<div style="margin:5px; float: left;">
+							<?php echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
+							<?php echo JHtml::_('migurhelp.link', 'list', 'import'); ?>
 						</div>
 					</div>
 				</div>
