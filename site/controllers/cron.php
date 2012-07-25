@@ -129,9 +129,9 @@ class NewsletterControllerCron extends JControllerForm
 
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
 
-		// 1. Get all SMTP profiles for which are data in queue.
-		$model = JModel::getInstance('Newsletters', 'NewsletterModel');
-		$smtpProfiles = $model->getUsedInQueue();
+		// 1. Get all SMTP profiles.
+		$smtpManager = JModel::getInstance('Smtpprofiles', 'NewsletterModel');
+		$smtpProfiles = $smtpManager->getAllItems();
 		$response = array();
 		// 2. Get process it in cycle
 		if (!empty($smtpProfiles)) {
@@ -147,8 +147,12 @@ class NewsletterControllerCron extends JControllerForm
 			global $fullSentStart;
 			$fullSentStart = microtime(true);
 			
-			foreach($smtpProfiles as $smtpProfile) {
+			foreach($smtpProfiles as $smtpp) {
 
+				$smtpProfile = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+				$smtpProfile->load($smtpp->smtp_profile_id);
+
+				
 				$responseItem = array(
 					'profile' => array(
 						'id'    => $smtpProfile->smtp_profile_id,
@@ -344,6 +348,8 @@ class NewsletterControllerCron extends JControllerForm
 				}
 				
 				$response[] = $responseItem;
+				
+				unset($smtpProfile);
 			}
 		}
 

@@ -187,7 +187,6 @@ try {
 
             res.overwrite = $('import-overwrite').getProperty('checked');
             res.skipHeader = $('import-skip-header').getProperty('checked');
-            res.autoconfirm = $('import-autoconfirm').getProperty('checked');
         }
 
         if (type == 'exclude') {
@@ -576,7 +575,17 @@ try {
 			'.invalid'
 		);
 	});
-		
+	
+	var handler = function(){
+		var checked = $(this).getProperty('checked');
+		$('jform_send_at_reg').setProperty('disabled', checked);
+		$('jform_send_at_reg').setProperty('readonly', checked);
+	};
+	
+	$('jform_autoconfirm').addEvent('click', handler);
+	handler.apply($('jform_autoconfirm'));
+	delete handler;
+	
 
 } catch(e){
     if (console && console.log) console.log(e);

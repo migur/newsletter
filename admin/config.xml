@@ -114,7 +114,7 @@
                 value="0">JNO</option>
         </field>
 
-		<field
+<!--		<field
             name="users_autoconfirm"
             type="radio"
             default="0"
@@ -124,7 +124,7 @@
                 value="1">JYES</option>
             <option
                 value="0">JNO</option>
-        </field>
+        </field>-->
 		
 		<field
             name="confirm_mail_subject"

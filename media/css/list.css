@@ -16,7 +16,6 @@
 
 /* overview1 */
 #overview1 {
-    width: 400px;
     height: 400px;
     float: left;
 }
@@ -67,8 +66,8 @@
 /* overview2 */
 
 #overview2 {
-    width: 450px;
-    float: left;
+    width: 400px;
+    float: right;
     height: 500px;
     overflow: auto;
 }

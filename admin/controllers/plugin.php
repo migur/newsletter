@@ -27,7 +27,7 @@ class NewsletterControllerPlugin extends JControllerForm
         
             JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-            $manager = NewsletterPluginManager::factory($pGroup);
+            $manager = NewsletterDispatcher::factory($pGroup);
 
             $manager->trigger(array(
                 'name'  => $pName,

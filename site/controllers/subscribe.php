@@ -77,29 +77,27 @@ class NewsletterControllerSubscribe extends JController
 
 		$comParams = JComponentHelper::getComponent('com_newsletter')->params;
 
-		$isNew = false;
-
-		// Let's check if we can create user as confirmed
-		$confirmed = ($comParams->get('users_autoconfirm') == '1');
-
+		$trusted = false;
+		
 		// try to get user data from FB
 		$fbAppId = $comParams->get('fbappid');
 		$fbSecret = $comParams->get('fbsecret');
 		if (!empty($fbAppId) && !empty($fbSecret) && !empty($fbenabled)) {
 			$me = SubscriberHelper::getFbMe($fbAppId, $fbSecret);
 			if (!empty($me->email) && $me->email == $email) {
-				$confirmed = true;
+				$trusted = true;
 			}
 		}
 
 		// If this is a current user's email
-		// then this user is confirmed
+		// then this user is trusted
 		if (!empty($user->id) && $user->email == $email) {
-			$confirmed = true;
+			$trusted = true;
 		}
 
 
 		// Trying to find subscriber or J!user with provided email.
+		// TODO Need to replace this 'NewsletterModelEntity' to 'NewsletterModel'
 		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		$subscriber->load(array('email' => $email));
 
@@ -121,50 +119,57 @@ class NewsletterControllerSubscribe extends JController
 				'html' => $html));
 		}
 
-		
 		// Confirm subscriber if provided email is the email of current J!user
 		// or email is email of user that currently logged in FACEBOOK.
 		// Confirm all its assignings to lists as well
-		if ($confirmed == true) {
+		if ($trusted) {
 			$subscriber->confirm();
 		}
 
-		
-		// Add subscribers to lists, ignore if already in db
-		$assignedListsIds = array();
-		foreach ($listsIds as $list) {
-			if (!$subscriber->isInList($list)) {
-				$subscriber->assignToList($list);
-				$assignedListsIds[] = $list;
-			}
-		}
-
-		// Get lists we assigned
-		$listModel   = JModel::getInstance('List',  'NewsletterModel');
-		$listManager = JModel::getInstance('Lists', 'NewsletterModel');
-		$lists = $listManager->getItemsByIds($assignedListsIds);
-
-
 		$message = JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name);
 		
-		// Process each new list
-		foreach ($lists as $list) {
+		$listModel = JModel::getInstance('List',  'NewsletterModel');
 
-			// Add to history all subscriptions
-			$history = JTable::getInstance('history', 'NewsletterTable');
-			$history->save(array(
-				'subscriber_id' => $subscriber->getId(),
-				'list_id' => $list->list_id,
-				'newsletter_id' => NULL,
-				'action' => NewsletterTableHistory::ACTION_SIGNEDUP,
-				'date' => date('Y-m-d H:i:s'),
-				'text' => addslashes($list->name)
-			));
-			unset($history);
+		$assignedListsIds = array();
+		
+		$sid = $subscriber->getId();
 
-			// If subscriber is confirmed then no need to send emails.
-			if (!$subscriber->isConfirmed()) {
+		// Process each list
+		foreach ($listsIds as $lid) {
+			
+			$list = $listModel->getItem($lid);
+			
+			if (!$listModel->hasSubscriber($lid, $sid)) {
+				
+				$listModel->assignSubscriber(
+					$lid, $subscriber->toArray(), 
+					array('confirmed' => ($list->autoconfirm || $trusted))
+				);
 
+				// Add to history all subscriptions
+				$history = JTable::getInstance('history', 'NewsletterTable');
+				$history->save(array(
+					'subscriber_id' => $sid,
+					'list_id' => $list->list_id,
+					'newsletter_id' => NULL,
+					'action' => NewsletterTableHistory::ACTION_SIGNEDUP,
+					'date' => date('Y-m-d H:i:s'),
+					'text' => addslashes($list->name)
+				));
+				unset($history);
+				
+				$assignedListsIds[] = $lid;
+				
+			} else {
+				
+				if (($list->autoconfirm || $trusted)) {
+					$listModel->confirmSubscriber($lid, $sid);
+				}	
+			}
+
+			// If list is not confirmed then send the newsletter
+			if(!$listModel->isConfirmed($lid, $sid)) {
+			
 				// Immediately mail subscription letter
 				$res = $listModel->sendSubscriptionMail(
 					$subscriber, 
@@ -187,7 +192,7 @@ class NewsletterControllerSubscribe extends JController
 		JFactory::getApplication()->triggerEvent(
 			'onMigurAfterSubscribe', 
 			array(
-				'subscriberId' => $subscriber->subscriber_id,
+				'subscriberId' => $sid,
 				'lists' => $assignedListsIds)
 		);
 		
@@ -209,6 +214,7 @@ class NewsletterControllerSubscribe extends JController
 
 		// Get variables from request
 		$subKey = JRequest::getString('id', null);
+		$lid = JRequest::getString('lid', null);
 
 		if (empty($subKey)) {
 			// Redirect to page
@@ -238,8 +244,13 @@ class NewsletterControllerSubscribe extends JController
 		$db->setQuery("UPDATE #__newsletter_subscribers set confirmed=1 WHERE confirmed=" . $db->quote($subKey));
 		$subscriber = $db->query();
 
-		$db->setQuery("UPDATE #__newsletter_sub_list set confirmed=1 WHERE confirmed=" . $db->quote($subKey));
-		$subscriber = $db->query();
+		if (!empty($lid)) {
+			$db->setQuery(
+				"UPDATE #__newsletter_sub_list set confirmed=1 WHERE ".
+				" confirmed=" . $db->quote($subKey) .
+				" AND list_id=" . $db->quote($lid));
+			$subscriber = $db->query();
+		}	
 
 		// Redirect to page
 		$message = JText::_("COM_NEWSLETTER_YOUR_SUBSCRIPTION_CONFIRMED");

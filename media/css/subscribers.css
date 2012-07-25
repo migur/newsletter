@@ -10,3 +10,17 @@
 /*	width: 100px;*/
 }
 
+.subscriber-name {
+	max-width: 120px;
+	overflow: hidden;
+}
+
+.subscriber-email {
+	max-width: 120px;
+	overflow: hidden;
+}
+
+.list-name {
+	max-width: 120px;
+	overflow: hidden;
+}

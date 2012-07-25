@@ -198,17 +198,19 @@ class NewsletterControllerList extends JControllerForm
 							
 							try {
 
-								if (!$listManager->sendSubscriptionMail(
-									$subscriber,
-									$listId, 
-									array(
-										'addToQueue'       => true,
-										'ignoreDuplicates' => true))
-								){	
-									throw new Exception();
-								}
+								// No need to send the subscription newsleter when assigning with admin
 								
-								if(!$subscriber->assignToList($listId)){
+//								if (!$listManager->sendSubscriptionMail(
+//									$subscriber,
+//									$listId, 
+//									array(
+//										'addToQueue'       => true,
+//										'ignoreDuplicates' => true))
+//								){	
+//									throw new Exception();
+//								}
+//								
+								if(!$subscriber->assignToList($listId, array('confirmed' => true))){
 									throw new Exception();
 								}	
 
@@ -299,7 +301,7 @@ class NewsletterControllerList extends JControllerForm
     
     public function importPluginTrigger()
     {
-		$pGroup = 'migur';
+        $pGroup = 'list';
         $pName = JRequest::getString('pluginname', null);
 		$pEvent = JRequest::getString('pluginevent', null);
 
@@ -310,7 +312,6 @@ class NewsletterControllerList extends JControllerForm
         // Trigger event for plugin
         $context = $this->option.'.edit.'.$this->context;
         $listId = JRequest::getInt('list_id'); 
-
         $res = $manager->trigger(
             array(
                 'name'  => $pName,
@@ -499,7 +500,8 @@ class NewsletterControllerList extends JControllerForm
 			$collection, 
 			array(
 				'overwrite' => $settings->overwrite,
-				'autoconfirm' => $settings->autoconfirm
+				'autoconfirm' => true,
+				'sendRegmail' => false
 			));
 
 		if (!empty($res['errors'])) {

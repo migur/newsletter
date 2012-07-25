@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension
-	type="plugin"
-	version="1.6.0"
-	client="administrator">
+<extension type="newsletter_plugin">
 	<name>Google Analytics Plugin</name>
 	<author>Migur</author>
 	<creationDate>June 2011</creationDate>
@@ -13,11 +10,11 @@
 	<version>1.6.0</version>
 	<description></description>
 	<componentVersion>12.06</componentVersion>
-	<namespace>com_newsletter.newsletter</namespace>
+	<namespace>newsletter.html</namespace>
 	
 	<files>
 		<filename
-			module="ganalytics">ganalytics.php</filename>
+			plugin="ganalytics">ganalytics.php</filename>
 		<filename>index.html</filename>
 	</files>
 	
@@ -34,6 +31,7 @@
                     required="true"
                     description="COM_NEWSLETTER_GOAL"
                     size="50"
+					default=""
                 />
                 
 			</fieldset>

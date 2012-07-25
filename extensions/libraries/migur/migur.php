@@ -9,6 +9,8 @@
  */
 define('MIGUR', 1);
 
+define('MIGURPATH_LIBRARY', JPATH_LIBRARIES . DIRECTORY_SEPARATOR . 'migur' . DIRECTORY_SEPARATOR . 'library');
+
 // Check if Koowa is active
 if (!defined('MIGUR')) {
 	// TODO deprecated since 12.1 Use PHP Exception

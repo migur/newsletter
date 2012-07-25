@@ -81,33 +81,4 @@ class NewsletterModelSublists extends MigurModelList
 		// echo nl2br(str_replace('#__','jos_',$query));
 		$this->query = $query;
 	}
-
-	/**
-	 * Assign subscriber ($userId) to list ($listId).
-	 *
-	 * @param int $userId user id
-	 * @param int $listId list id
-	 *
-	 * @return boolean
-	 * @since  1.0
-	 */
-	public function asignUserTo($userId, $listId)
-	{
-		$table = $this->getTable();
-
-		$data = array(
-			'user_id' => $userId,
-			'list_id' => $listId
-		);
-
-		if (!$table->load($data)) {
-			$table->reset();
-			$table->set($table->getKeyName(), null);
-			$table->bind($data);
-			return $table->store();
-		}
-
-		return true;
-	}
-
 }

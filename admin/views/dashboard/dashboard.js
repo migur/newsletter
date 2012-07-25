@@ -61,7 +61,7 @@ try {
         html:
 			'<div style="float:left">' +
 				'<div class="progress-info">' +
-	                emailsSent + ' of ' + emailsTotal + ' emails sent in ' + newslettersSent + ' newsletters' +
+	                mailsSent + ' of ' + mailsTotal + ' mails sent in ' + newslettersSent + ' newsletters' +
 		        '</div>' +
 				'<div style="float:right; min-width:0;" id="process-preloader"></div>' +
 			'</div>' +	
@@ -184,7 +184,7 @@ try {
     });
 
 
-    var width = (emailsSent / emailsTotal) * $$('.progress-bar')[0].getWidth();
+    var width = (mailsSent / mailsTotal) * $$('.progress-bar')[0].getWidth();
 
     $$('.progress-line')[0].setStyle('width', width + 'px');
 	

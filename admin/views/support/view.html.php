@@ -25,7 +25,9 @@ class NewsletterViewSupport extends MigurView
 {
 	public $tmplPath = null;
 
-	public $defaultName = 'common';
+	public $defaultName = 'general';
+
+	public $defaultCategory = 'general';
 	
 	public function display($tpl = null)
 	{
@@ -43,8 +45,16 @@ class NewsletterViewSupport extends MigurView
 		return parent::display($tpl);
 	}
 	
-	public function getLayoutFileName($category, $name, $version = null)
+	public function getLayoutFileName($category = null, $name = null, $version = null)
 	{
+		if (!$name) {
+			$name = $this->defaultName;
+		}
+
+		if (!$category) {
+			$category = $this->category;
+		}
+		
 		if (empty($this->tmplPath)) {
 			$this->tmplPath = JPATH_COMPONENT_ADMINISTRATOR . '/views/support/tmpl';
 		}

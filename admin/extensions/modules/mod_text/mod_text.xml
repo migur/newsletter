@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension
-	type="module"
-	version="1.6.0"
-	client="administrator">
+<extension type="newsletter_module">
 	<name>Text module</name>
 	<author>Migur</author>
 	<creationDate>April 2011</creationDate>
@@ -16,7 +13,6 @@
 		<filename
 			module="mod_text">mod_text.php</filename>
 		<filename>index.html</filename>
-		<folder>tmpl</folder>
 	</files>
 	<help key="JHELP_EXTENSIONS_MODULE_MANAGER_ADMIN_TEXT" />
 	<config>

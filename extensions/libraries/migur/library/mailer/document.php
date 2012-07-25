@@ -33,10 +33,15 @@ class MigurMailerDocument extends JDocument
 	public $parsedTags;
 	public $_caching;
 	public $useRawUrls;
+	
+	// Hotfix. Need to remove when we remove tracking from here.
+	public $dispatcher;
 
 	public function __construct($params = array())
 	{
-		return $this->init($params);
+		// Hotfix. Need to remove when we remove tracking from here.
+		$this->dispatcher = !empty($params['dispatcher'])? $params['dispatcher'] : JDispatcher::getInstance();
+		$this->init($params);
 	}
 
 	/**
@@ -57,14 +62,12 @@ class MigurMailerDocument extends JDocument
 		$this->parsedTags = null;
 		$this->renderMode = null;
 		$this->tracking   = null;
-		$this->trackingGa = null;
 		$this->useRawUrls = false;
 
 		// reset all previous rendererd data for modules or placeholders
 		parent::$_buffer = array();
 
 		$this->tracking   = isset($params['tracking'])? (bool)$params['tracking'] : true;
-		$this->trackingGa = isset($params['trackingGa'])? (bool)$params['trackingGa'] : true;
 		
 		$this->directory = !empty($params['directory']) ?
 			$params['directory'] : JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'templates';
@@ -283,13 +286,17 @@ class MigurMailerDocument extends JDocument
 			$this->_parseTemplate();
 			$this->_template->content = $this->_renderTemplate();
 
+			$this->dispatcher->trigger('onMigurAfterNewsletterRender', array(
+				&$this->_template->content, 
+				array('newsletter_id' => $params['newsletter_id'])
+			));
+
 			// Set absolute links
+			// TODO: Need to move it in mailer. Because this is a scope of letter creation not template.
 			$this->repairLinks($this->_template->content);
 
-			// Trigger plugins (GA and so on)
-			$this->triggerEvent('onafterrender');
-
 			// Add tracking by com_newsletter
+			// TODO: Need to move it in mailer. Because this is a scope of letter creation not template.
 			if (!empty($this->tracking)) {
 				$this->track(
 					$this->_template->content,

@@ -18,6 +18,9 @@ defined('_JEXEC') or die;
  */
 class NewsletterTableNExtension extends MigurJTable
 {
+	/**
+	 * The meaning of values in "type" table field.
+	 */
 	const TYPE_MODULE = '1';
 	const TYPE_PLUGIN = '2';
 

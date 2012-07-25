@@ -293,25 +293,4 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 		$content .= '<img src="' . $lnk . '" style="height:1px;width:1px;" width="1" height="1" />';
 		return true;
 	}
-
-	/**
-	 * Method to trigger the events of Com_newsletter component's plugins
-	 * 
-	 * @param string $event - name of the event
-	 * 
-	 * @return boolean
-	 * @since  1.0
-	 */
-	function triggerEvent($event)
-	{
-
-		$plugins = MigurPluginHelper::getUsedInNewsletter($this->getNewsletterId());
-
-		foreach ($plugins as $plugin) {
-			MigurPluginHelper::trigger($plugin->extension, $event, $plugin->params, $this);
-		}
-		
-		return true;
-	}
-
 }

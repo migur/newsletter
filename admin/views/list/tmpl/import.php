@@ -1,10 +1,3 @@
-<?php 
-	JavascriptHelper::addObject(
-		'Migur.app.support.resources["list"]', 
-		SupportHelper::getCategoryItems('list')
-	); 
-?>
-
 <div class="import">
     
     <?php echo MigurToolBar::getInstance('import-toolbar')->render(); ?>
@@ -36,7 +29,10 @@
 			
 			<div class="block-notice">
 				<?php echo JText::_('COM_NEWSLETTER_STANDARD_IMPORT_HELPTEXT'); ?>
-				<a href="#" role="support" rel="list.import">(?)</a>
+				<a href="#" role="support" resource="<?php echo SupportHelper::getResourceUrl('list', 'import'); ?>">
+					(?)
+				</a>
+
 			</div>
 			
 			<div id="import-file-upload">
@@ -128,19 +124,16 @@
 
 					<div class="clr"></div>
 
-					<div style="margin-top:5px; overflow:hidden">
+					<div style="margin-top:10px;overflow:hidden">
 						<input type="checkbox" id="import-overwrite" name="import_overwrite" />
-						<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_IMPORT_OVERWRITE'); ?></div>
+						<div style="margin:5px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_IMPORT_OVERWRITE'); ?></div>
 					</div>
 					<div style="overflow:hidden">
 						<input type="checkbox" id="import-skip-header" name="import_skip_header" />
-						<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
-							<a href="#" role="support" rel="list.import">(?)</a>
-						</div>
-					</div>
-					<div style="overflow:hidden">
-						<input type="checkbox" id="import-autoconfirm" name="import_autoconfirm" checked="checked"/>
-						<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_ADD_AS_CONFIRMED'); ?>
+						<div style="margin:5px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
+							<a href="#" role="support" resource="<?php echo SupportHelper::getResourceUrl('list', 'import'); ?>">
+								(?)
+							</a>
 						</div>
 					</div>
 				</div>

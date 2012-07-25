@@ -193,14 +193,12 @@ class NewsletterViewList extends MigurView
         $plgManager = NewsletterPluginManager::factory('import');
 		
         $res = $plgManager->trigger(array(
-            'group' => 'migur',
+            'group' => 'list.import',
             'event' => 'onMigurImportShowIcon'
         ));
         
         $this->assignRef('importPlugins', $res);
         
-		$this->supportInit();
-		
 		// Set the document
 		$this->setDocument();
 		
@@ -276,6 +274,8 @@ class NewsletterViewList extends MigurView
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-pie.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/message.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/iterativeajax.js');
+		// Add JS and create namespace for data
+		$document->addScript(JURI::root() . "media/com_newsletter/js/migur/js/support.js");
 
 		$document->addScriptDeclaration('var urlRoot = "' . JURI::root(true) . '";');
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
@@ -327,18 +327,5 @@ class NewsletterViewList extends MigurView
 				$previousDay
 			)
 		);
-	}
-	
-	public function supportInit()
-	{
-		$document = JFactory::getDocument();
-
-		// Add JS and create namespace for data
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/support.js");
-		JavascriptHelper::addObject(
-			'Migur.app.support', 
-			array(
-				'resources' => new stdClass
-		));
 	}
 }

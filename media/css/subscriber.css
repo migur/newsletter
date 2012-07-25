@@ -6,8 +6,8 @@
 
 
 #subscriber-form dt {
+	min-width: 100px;
     text-align: left;
-    width: 130px;
     float: left;
 }
 
@@ -92,6 +92,7 @@
 #subscriber-form dt, 
 #subscriber-form dd {
 	margin-bottom: 5px;
+	
 } 
 
 #sslist-container {
@@ -113,3 +114,12 @@
 	text-align: left;
 	width:170px;
 }
+
+#listForm [name="list_to_subscribe"] {
+	max-width:130px;
+}
+
+#listForm .sslist-submit {
+	margin-right:0px;
+}
+
