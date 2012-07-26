@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <extension type="package" version="1.6.0">
-<name>Migur Newsletter</name>
-<packagename>newsletter</packagename>
-<version>12.05</version>
-<url>http://migur.com</url>
-<packager>Migur</packager>
-<packagerurl>http://migur.com</packagerurl>
-<description>Migur newsletter full package of a component.</description>
-<update>http://monster.migur.com</update>
-<copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
-<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-<files folder="packages">
-    <!-- Don't change the direction! The component should be the last in line -->
-    <file type="module" id="mod_newsletter_subscribe" client="site">mod_newsletter_subscribe.zip</file>
-    <file type="component" id="com_newsletter">com_newsletter.zip</file>
-    <file type="library" id="migur">migur.zip</file>
-</files>
+	<name>Migur Newsletter</name>
+	<packagename>newsletter</packagename>
+	<version>12.05</version>
+	<url>http://migur.com</url>
+	<packager>Migur</packager>
+	<packagerurl>http://migur.com</packagerurl>
+	<description>Migur newsletter full package of a component.</description>
+	<update>http://monster.migur.com</update>
+	<copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<scriptfile>pkg_newsletter_script.php</scriptfile>
+	<files folder="packages">
+	<!-- 
+		Don't change the direction! The component should be in line before LIBRARY.
+		Component has pages that requires the library in both install and uninstall flows . 
+		So library should be installed BEFORE the component and removed AFTER the component.
+		pkg_newslette_script will reverse the order of these extensions on installation/updating the package. 
+	-->
+		<file type="component" id="com_newsletter">com_newsletter.zip</file>
+		<file type="library" id="migur">migur.zip</file>
+		<file type="module" id="mod_newsletter_subscribe" client="site">mod_newsletter_subscribe.zip</file>
+	</files>
 </extension>

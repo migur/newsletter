@@ -65,7 +65,7 @@
             <fileset file="${cfg.comDir}/script.php" />
         </copy>
 
-        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>
+        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="0777"/>
 
         <copy todir="${destdir}/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.siteFilesDir}" />
@@ -143,7 +143,7 @@
             <fileset file="${cfg.comDir}/script.php" />
         </copy>
 
-        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>
+        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="0777"/>
 
         <copy todir="${destdir}/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.siteFilesDir}" />
@@ -221,7 +221,7 @@
             <fileset file="${cfg.comDir}/script.php" />
         </copy>
 
-        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>
+        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="0777"/>
 
         <copy todir="${destdir}/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.siteFilesDir}" />
@@ -330,8 +330,12 @@
         <copy todir="${cfg.buildVersionDir}" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/pkg_newsletter.xml" />
         </copy>
+        <copy todir="${cfg.buildVersionDir}" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/pkg_newsletter_script.php" />
+        </copy>
         <delete  file="${cfg.buildVersionDir}/pkg_newsletter.zip" />
         <zip destfile="${cfg.buildVersionDir}/pkg_newsletter.zip" basedir="${cfg.buildVersionDir}" />
+		<chmod file="${cfg.buildVersionDir}/pkg_newsletter.zip" perm="ugo+rwx" />
 
     </target>
 

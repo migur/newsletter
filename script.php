@@ -53,7 +53,9 @@ class com_newsletterInstallerScript
 		
 		// If we proceed NOT from our uninstall page then redirect to it!
 		if (!$doInstall) {
-			$app->redirect(JRoute::_('index.php?option=com_newsletter&view=uninstall', false));
+			$cid = (array) JRequest::getVar('cid', array());
+			$element = strtolower(str_replace('JInstaller', '', get_class($parent->getParent())));
+			$app->redirect(JRoute::_('index.php?option=com_newsletter&view=uninstall&cid='.implode(',',$cid), false));
 		}
 
 		
