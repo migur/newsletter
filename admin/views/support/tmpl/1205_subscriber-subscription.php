@@ -13,35 +13,38 @@ There are several ways to add the subscriber into component.
     <li>User can perform the subcription via Migur Subscription module (mod_newsletter_subscribe).</li>
 </ul>
 <p>To subscribe user have to provide name, email and type of letters to receive.
+<br/>
+
+<h3>Subscription to a list</h3>
+<p>Users have an ability to subscribe to one or several lists themselves. They can do it with help of Migur Subscription module. Since user performed a subscription to a list he will get newsletters.
+To subscribe a user have to provide name, email and type of letters to receive in coresponding fields of a module. After submitting this data the subscription process begins. Component supports 2 modes of subscription.
+<ul>
+    <li>Subscription via newsletter</li>
+    <li>Autoconfirmation</li>
+</ul>
+<p>Administrator can select a mode for each list. The “Subscription via newsletter” is the default behavior. To select “Autoconfirmation” administrator need to check “Autoconfrim users, do not send confirmation email” in List -> Advanced.
+<br/>
 
 <a name="regmail"></a>
-<h3>SUBSCRIPTION NEWSLETTER</h3>
-<p>To be able to get newsletters of certain list subscriber should be subscribed to this list and his subscription will be confirmed. The purpose of a Subscription newsletter is to provide information about a list and confirmation link to confirm the subscription to it.
-However if option "Autoconfirm users" (Configuration -> Global -> General) is set then user will be created as confirmed and without confirmation.
-User receives confirmation letter selected in options of a list (List -> Advanced -> Send newsletter at registration).
-If no confirmation letter selected in list then user will get default subscription letter(see Configuration -> Global -> Newsletters -> The subscription newsletter). If this letter does not specified too then the fallback newsletter will be used (Configuration -> Global -> General -> “Subject of confirmation letter” and “Body of confirmation letter”).
-<p>Admin also can send this letter to each subscriber he imports into list (<a href="<?php echo SupportHelper::getResourceUrl('list', 'import'); ?>">List -> Import</a> section). Admin just need to check the <b>Send registration mail</b> option in <b>Settings</b> on Import panel before starting of importing.
-
-<h3>SUBSCRIPTION VIA MODULE</h3>
-<p>There are several cases:
-<ul>	
-<li>1. If user is logged in as J! user and provided email matches with his J! email
-  then subscriber created/updated as confirmed.
-  In addition all assigns to lists created/updated as confirmed.
-  Mails will not be sent.</li>
- 
-<li>2. If user is logged in Facebook an provided email matches with his Facebook email
-  then see 1.</li>
-
-<li>3. In other cases subscriber will be created as unconfirmed.
-  He will recieve mail to email provided in module's form with confirmation link.
-  He will receive so many letters as lists he subscribed. The letters will be sent immediately.</li>
+<h4>Subscription via newsletter</h4>
+Subscription newsletter is used to:
+<ul>
+    <li>Provide information about a list.</li>
+    <li>Provide confirmation link to confirm the subscription to this list.</li>
 </ul>
+<p>User will receive confirmation letter selected in options of a list (List -> Advanced -> Send newsletter at registration). If no confirmation letter selected in list then user will get default subscription letter(see Configuration -> Global -> Newsletters -> The subscription newsletter). If this letter does not specified then the fallback newsletter will be used (Configuration -> Global -> General -> “Subject of confirmation letter” and “Body of confirmation letter”).
+If user is logged in as J! user and provided email matches with his J! email or user is logged in Facebook and provide email matches with his Facebook email then subscriber created/updated as confirmed. In addition all assigns to lists created/updated as confirmed. Mails will not be sent. In other cases subscriber will be created as unconfirmed. He will recieve mail to email provided in module's form with confirmation link. He will receive so many letters as lists he subscribed and which are not in “autoconfirm” mode. The letters will be sent immediately. Letter will be sent repeatedly if user already did subscription to these lists.
+<br/>
 
-<h3>REGISTRATION DISABLING</h3>
-<p>If "Enable Registration" admin option is set to NO then registration is not posible. 
-<br/>	
-<h3>AUTOMAILING</h3>
+<a name="autoconfirm"></a>
+<h4>Autoconfirmation</h4>
+<p>When user perform a subscription to a list that is in “autoconfirm” mode then user is just added to system and assigned to a list as confirmed and activated. No mails will be sent. No additional user actions needed to approve his subscription.
+<br/>
+
+<h3>Registration disabling</h3>
+If "Enable Registration" admin option is set to NO then registration via Subscription Module is not posible.
+Automailing
+The automailing will be executed on subscription of a user if there is one for list to which user subscribed. To send automailing newsletters you need CRON. See CRON section.<h3>AUTOMAILING</h3>
 <p>
 	<a href="<?php echo SupportHelper::getResourceUrl('automailing'); ?>">Automailing</a> will be performed on subscription of a user if there is one for list to which user subscribed. 
 	To send automailing newsletters you need CRON. See the <a href="<?php echo SupportHelper::getResourceUrl('cron'); ?>">CRON section</a>.	

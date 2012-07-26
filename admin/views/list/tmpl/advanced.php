@@ -1,7 +1,10 @@
     <div id="tab-container-advanced" class="form-text">
         <dl>
             <dt>
-                <?php echo $this->listForm->getLabel('autoconfirm'); ?>
+				<label>
+                <?php echo JText::_('COM_NEWSLETTER_AUTOCONFIRM_USERS')//echo $this->listForm->getLabel('autoconfirm'); ?>
+				<?php echo JHtml::_('migurhelp.link', 'subscriber', 'subscription', 'autoconfirm'); ?>
+				</label>	
             </dt>
             <dd>
                 <?php echo $this->listForm->getInput('autoconfirm'); ?>
