@@ -378,3 +378,7 @@
 #import-file-html-default {
 	float: none !important;
 }
+
+div.form-text dl dt {
+	width: auto !important;
+}

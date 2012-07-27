@@ -466,8 +466,9 @@ class MigurMailer extends JObject
 		}
 
 		// Finish with content
-		$this->dispatcher->trigger('onMigurNewsletterMailContentComplete', array(&$letter->content, $letter->toObject()));
-		
+		$cntnt = $letter->content;
+		$this->dispatcher->trigger('onMigurNewsletterMailContentComplete', array(&$cntnt, $letter->toObject()));
+		$letter->content = $cntnt;
 		
 		// Add custom headers
 
