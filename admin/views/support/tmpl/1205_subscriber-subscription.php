@@ -33,19 +33,5 @@ Subscription newsletter is used to:
     <li>Provide confirmation link to confirm the subscription to this list.</li>
 </ul>
 <p>User will receive confirmation letter selected in options of a list (List -> Advanced -> Send newsletter at registration). If no confirmation letter selected in list then user will get default subscription letter(see Configuration -> Global -> Newsletters -> The subscription newsletter). If this letter does not specified then the fallback newsletter will be used (Configuration -> Global -> General -> “Subject of confirmation letter” and “Body of confirmation letter”).
-If user is logged in as J! user and provided email matches with his J! email or user is logged in Facebook and provide email matches with his Facebook email then subscriber created/updated as confirmed. In addition all assigns to lists created/updated as confirmed. Mails will not be sent. In other cases subscriber will be created as unconfirmed. He will recieve mail to email provided in module's form with confirmation link. He will receive so many letters as lists he subscribed and which are not in “autoconfirm” mode. The letters will be sent immediately. Letter will be sent repeatedly if user already did subscription to these lists.
-<br/>
-
-<a name="autoconfirm"></a>
-<h4>Autoconfirmation</h4>
-<p>When user perform a subscription to a list that is in “autoconfirm” mode then user is just added to system and assigned to a list as confirmed and activated. No mails will be sent. No additional user actions needed to approve his subscription.
-<br/>
-
-<h3>Registration disabling</h3>
-If "Enable Registration" admin option is set to NO then registration via Subscription Module is not posible.
-Automailing
-The automailing will be executed on subscription of a user if there is one for list to which user subscribed. To send automailing newsletters you need CRON. See CRON section.<h3>AUTOMAILING</h3>
-<p>
-	<a href="<?php echo SupportHelper::getResourceUrl('automailing'); ?>">Automailing</a> will be performed on subscription of a user if there is one for list to which user subscribed. 
-	To send automailing newsletters you need CRON. See the <a href="<?php echo SupportHelper::getResourceUrl('cron'); ?>">CRON section</a>.	
-</div>
+<p>If user is logged in as J! user and provided email matches with his J! email or user is logged in Facebook and provide email matches with his Facebook email then subscriber will be created/updated as confirmed. Mails will not be sent. 
+<p>In other cases subscriber will be created as unconfirmed. A subscription mail will be sent to provided email for approving his subscription. He will receive so many letters 
