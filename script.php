@@ -52,19 +52,20 @@ class com_newsletterInstallerScript
 		
 		
 		// If we proceed NOT from our uninstall page then redirect to it!
-		if (!$doInstall) {
-			$cid = (array) JRequest::getVar('cid', array());
-			$element = strtolower(str_replace('JInstaller', '', get_class($parent->getParent())));
-			$app->redirect(JRoute::_('index.php?option=com_newsletter&view=uninstall&cid='.implode(',',$cid), false));
-		}
-
-		
-		
-		// Remove uninstall section from manifest if user do not want to delete data from DB.
-		$manifest = $parent->getParent()->getManifest();
-		if (!$dbRemove) {
-			unset($manifest->uninstall);
-		}	
+// Disabled for 12.06-free 
+//		if (!$doInstall) {
+//			$cid = (array) JRequest::getVar('cid', array());
+//			$element = strtolower(str_replace('JInstaller', '', get_class($parent->getParent())));
+//			$app->redirect(JRoute::_('index.php?option=com_newsletter&view=uninstall&cid='.implode(',',$cid), false));
+//		}
+//
+//		
+//		
+//		// Remove uninstall section from manifest if user do not want to delete data from DB.
+//		$manifest = $parent->getParent()->getManifest();
+//		if (!$dbRemove) {
+//			unset($manifest->uninstall);
+//		}	
 
 		
 		

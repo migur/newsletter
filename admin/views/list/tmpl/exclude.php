@@ -154,7 +154,6 @@
 			<div style="margin-top:10px; overflow:hidden">
 				<input type="checkbox" id="exclude-skip-header" name="exclude_skip_header" value="yes">
 				<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
-					<?php echo JHtml::_('migurhelp.link', 'list', 'exclude'); ?>
 				</div>
 			</div>
         </div>

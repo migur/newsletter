@@ -3,7 +3,6 @@
             <dt>
 				<label>
                 <?php echo JText::_('COM_NEWSLETTER_AUTOCONFIRM_USERS')//echo $this->listForm->getLabel('autoconfirm'); ?>
-				<?php echo JHtml::_('migurhelp.link', 'subscriber', 'subscription', 'autoconfirm'); ?>
 				</label>	
             </dt>
             <dd>
