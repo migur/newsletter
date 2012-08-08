@@ -7,7 +7,7 @@
  * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
-abstract class MediaHelper
+abstract class NewsletterHelperMedia
 {
 
 	/**
@@ -179,3 +179,9 @@ abstract class MediaHelper
 	}
 
 }
+
+/**
+ * Legacy support for class name
+ */
+abstract class MediaHelper extends NewsletterHelperMedia
+{}
