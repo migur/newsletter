@@ -312,7 +312,7 @@
 
         <delete  dir="${cfg.buildVersionDir}" />
 
-    	<!-- MAIN COMPONENT -->
+<!-- MAIN COMPONENT -->
         <copy todir="${cfg.buildVersionDir}/packages/com_${cfg.comName}/admin" preservelastmodified="true" overwrite="true">
             <fileset dir="${basedir}/admin" />
         </copy>
@@ -331,18 +331,28 @@
         <zip destfile="${cfg.buildVersionDir}/packages/com_${cfg.comName}.zip" basedir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" />
         <delete dir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" />
 
+<!-- Module -->
         <copy todir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" preservelastmodified="true" overwrite="true">
             <fileset dir="${basedir}/extensions/modules/mod_newsletter_subscribe" />
         </copy>
         <zip destfile="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe.zip" basedir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" />
         <delete dir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" />
 
+<!-- Library -->
         <copy todir="${cfg.buildVersionDir}/packages/migur" preservelastmodified="true" overwrite="true">
             <fileset dir="${basedir}/extensions/libraries/migur" />
         </copy>
         <zip destfile="${cfg.buildVersionDir}/packages/migur.zip" basedir="${cfg.buildVersionDir}/packages/migur" />
         <delete dir="${cfg.buildVersionDir}/packages/migur" />
 
+<!-- Plugin -->
+        <copy todir="${cfg.buildVersionDir}/packages/plg_migurlistsync" preservelastmodified="true" overwrite="true">
+            <fileset dir="${basedir}/extensions/plugins/plg_migurlistsync" />
+        </copy>
+        <zip destfile="${cfg.buildVersionDir}/packages/plg_migurlistsync.zip" basedir="${cfg.buildVersionDir}/packages/plg_migurlistsync" />
+        <delete dir="${cfg.buildVersionDir}/packages/plg_migurlistsync" />
+
+<!-- Last preparations -->
         <copy todir="${cfg.buildVersionDir}" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/pkg_newsletter.xml" />
         </copy>
