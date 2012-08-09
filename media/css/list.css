@@ -102,10 +102,6 @@
     padding: 0px;
 }
 
-#tab-container-advanced {
-    width: 500px;
-}
-
 #tab-container-advanced select {
     width: 200px;
 }
@@ -381,4 +377,13 @@
 
 div.form-text dl dt {
 	width: auto !important;
+}
+
+#listevents-toolbar-popup-new a {
+	width: 150px;
+}
+
+#jgroups-pane {
+	max-height: 270px;
+	overflow: auto;
 }

@@ -291,7 +291,7 @@ try {
 				}
 
                 alert(parser.getMessagesAsList() + "\n\n"+Joomla.JText._('TOTAL_PROCESSED', 'Total processed')+": " + data.total);
-				Cookie.write('jpanetabs_tabs-list', 3);
+				//Cookie.write('jpanetabs_tabs-list', 3);
 				window.location.reload();
             }
         }).send('&list_id=' + id + '&jsondata='+JSON.encode(data));

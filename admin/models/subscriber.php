@@ -129,11 +129,11 @@ class NewsletterModelSubscriber extends JModelAdmin
 			}
 			
 			if (!isset($data['html'])) {
-				$data['html'] = (int) DataHelper::getDefault('html', 'subscriber');
+				$data['html'] = (int) NewsletterHelperData::getDefault('html', 'subscriber');
 			}
 			
 			if (!isset($data['state'])) {
-				$data['state'] = (int) DataHelper::getDefault('state', 'subscriber');
+				$data['state'] = (int) NewsletterHelperData::getDefault('state', 'subscriber');
 			}
 			
 			if (!isset($data['created_on'])) {
@@ -318,8 +318,8 @@ class NewsletterModelSubscriber extends JModelAdmin
 			$row['email'] = '';
 			$row['user_id'] = $row['juser_id'];
 			$row['created_by'] = JFactory::getUser()->id;
-			$row['html'] = (int) DataHelper::getDefault('html', 'subscriber');
-			$row['state'] = (int) DataHelper::getDefault('state', 'subscriber');
+			$row['html'] = (int) NewsletterHelperData::getDefault('html', 'subscriber');
+			$row['state'] = (int) NewsletterHelperData::getDefault('state', 'subscriber');
 			$row['created_on'] = 0;
 			$row['modified_on'] = 0;
 			$row['modified_by'] = 0;
