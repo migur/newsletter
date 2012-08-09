@@ -15,6 +15,14 @@ defined('_JEXEC') or die('Restricted access');
 //  ini_set("log_errors" , "0");
 //  ini_set("error_log" , "/var/log/php-error.log");
 
+if (!defined('COM_NEWSLETTER_PATH_ADMIN')) {
+	define('COM_NEWSLETTER_PATH_ADMIN', JPATH_COMPONENT_ADMINISTRATOR);
+}	
+
+if (!defined('COM_NEWSLETTER_PATH_SITE')) {
+	define('COM_NEWSLETTER_PATH_SITE', JPATH_COMPONENT_SITE);
+}	
+
 // import joomla controller library
 jimport('joomla.application.component.controller');
 jimport('joomla.application.component.view');
