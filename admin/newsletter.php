@@ -15,7 +15,19 @@ defined('_JEXEC') or die('Restricted access');
 //  ini_set("log_errors" , "0");
 //  ini_set("error_log" , "/var/log/php-error.log");
 
+if (!defined('COM_NEWSLETTER_PATH_ADMIN')) {
+	define('COM_NEWSLETTER_PATH_ADMIN', JPATH_COMPONENT_ADMINISTRATOR);
+}	
+
+if (!defined('COM_NEWSLETTER_PATH_SITE')) {
+	define('COM_NEWSLETTER_PATH_SITE', JPATH_COMPONENT_SITE);
+}	
+
 try {
+
+	// Run autoloader
+	JLoader::import('helpers.autoload', COM_NEWSLETTER_PATH_ADMIN, '');
+	NewsletterHelperAutoload::setup();
 
 	// import joomla controller library
 	jimport('joomla.application.component.controller');
@@ -23,6 +35,7 @@ try {
 	jimport('joomla.form.helper');
 	jimport('migur.migur');
 
+	
 	JLoader::import('helpers.acl', JPATH_COMPONENT_ADMINISTRATOR, '');
 	
 	// First check if user has access to the component.
@@ -34,6 +47,7 @@ try {
 	}
 	
 	// Add the helper
+	JLoader::import('helpers.autoload', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
