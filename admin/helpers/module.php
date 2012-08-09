@@ -20,7 +20,7 @@ JLoader::import('tables.nextension', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @static
  * @since		1.0
  */
-abstract class MigurModuleHelper extends JModuleHelper
+abstract class NewsletterHelperModule extends JModuleHelper
 {
 
 	public static $clean;
@@ -526,3 +526,9 @@ function modChrome_newsletterDefault($module, &$params, &$attribs)
 		echo '</div>';
 	}
 }
+
+/**
+ * Legacy support for class name
+ */
+abstract class MigurModuleHelper extends NewsletterHelperModule
+{}

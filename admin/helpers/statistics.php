@@ -18,7 +18,7 @@ JLoader::import('tables.history', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class StatisticsHelper
+class NewsletterHelperStatistics
 {
 
 	/**
@@ -685,3 +685,9 @@ class StatisticsHelper
 		$res = $assoc;
 	}
 }
+
+/**
+ * Legacy support for class name
+ */
+class StatisticsHelper extends NewsletterHelperStatistics
+{}

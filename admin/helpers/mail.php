@@ -10,10 +10,10 @@
 // no direct access
 defined('_JEXEC') or die;
 
-JLoader::import('tables.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('helpers.placeholder', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('tables.subscriber', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('helpers.placeholder', COM_NEWSLETTER_PATH_ADMIN);
 
-class MailHelper
+class NewsletterHelperMail
 {
 	const APPLICATION_HEADER = 'X-Application: Migur Newsletter';
 	
@@ -233,3 +233,9 @@ class MailHelper
 		return $db->loadObject();
 	}
 }
+
+/**
+ * Legacy support for class name
+ */
+class MailHelper extends NewsletterHelperMail
+{}

@@ -10,8 +10,8 @@
 // No direct access
 defined('_JEXEC') or die;
 
-JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('tables.mailboxprofile', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('tables.smtpprofile', COM_NEWSLETTER_PATH_ADMIN);
 
 
 /**
@@ -26,7 +26,7 @@ JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
  *
  * @since		1.0
  */
-class LogHelper
+class NewsletterHelperLog
 {
 	
 	const CAT_BOUNCES = 'bounces';
@@ -176,7 +176,7 @@ class LogHelper
 			//@JLog::add($logEntry);
 			
 			// To avoid infinit looping if something wrong with JTable::getInstance()
-			require_once(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'tables'. DIRECTORY_SEPARATOR .'log.php');
+			require_once(COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR .'tables'. DIRECTORY_SEPARATOR .'log.php');
 			$table = new NewsletterTableLog(JFactory::getDbo());
 			
 			// Type conversion
@@ -264,3 +264,9 @@ class LogHelper
 		return $lang->load('com_newsletter_log', JPATH_ADMINISTRATOR);
 	}
 }
+
+/**
+ * Legacy support for class name
+ */
+class LogHelper extends NewsletterHelperLog
+{}
