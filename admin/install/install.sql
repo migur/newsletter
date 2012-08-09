@@ -43,6 +43,7 @@ DROP TABLE IF EXISTS `#__newsletter_automailing_items`;
 DROP TABLE IF EXISTS `#__newsletter_automailing_targets`;
 DROP TABLE IF EXISTS `#__newsletter_threads`;
 DROP TABLE IF EXISTS `#__newsletter_logs`;
+DROP TABLE IF EXISTS `#__newsletter_list_events`;
 
 
 CREATE TABLE `#__newsletter_template_styles`
@@ -334,6 +335,18 @@ CREATE TABLE `#__newsletter_logs` (
 CREATE INDEX `date_idfk` ON `#__newsletter_logs`(`date`);
 CREATE INDEX `category_idfk` ON `#__newsletter_logs`(`category`);
 
+CREATE TABLE `#__newsletter_list_events` (
+  `le_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `list_id` BIGINT(20) NOT NULL,
+  `jgroup_id` INT(10) UNSIGNED,
+  `event` VARCHAR(255),
+  `action` VARCHAR(255),
+
+  PRIMARY KEY (`le_id`)
+) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE INDEX `lid_jgid_idfk` ON `#__newsletter_list_events`(`list_id`, `jgroup_id`);
+
 
 
 CREATE INDEX `smtp_profile_id_idxfk` ON `#__newsletter_newsletters`(`smtp_profile_id`);
@@ -388,6 +401,7 @@ ALTER TABLE #__newsletter_queue ADD FOREIGN KEY (newsletter_id) REFERENCES #__ne
 CREATE INDEX subscriber_ids_idxfk ON #__newsletter_queue(subscriber_id);
 ALTER TABLE #__newsletter_queue ADD FOREIGN KEY (subscriber_id) REFERENCES #__newsletter_subscribers (subscriber_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
+ALTER TABLE `#__newsletter_list_events` ADD FOREIGN KEY (`list_id`) REFERENCES `#__newsletter_lists`(`list_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 # Data for the table `#__newsletter_extensions`;
 insert  into `#__newsletter_extensions`(`extension_id`,`title`,`extension`,`params`,`type`) values (1,'Article Module','mod_article','{}',1);
