@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 
 JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-class DataHelper
+class NewsletterHelperData
 {
 	/**
 	 * Fetch all data about subscribers and lists from com_newsletter and
@@ -216,9 +216,15 @@ class DataHelper
 	
 	public static function getDefault($value, $category = '')
 	{
-		require_once JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'constants.php';
+		require_once COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'constants.php';
 		$name = strtoupper($category) . '_' . strtoupper($value) . '_DEFAULT';
 		
 		return defined($name)? constant($name) : null;
 	}
 }
+
+/**
+ * Legacy support for class name
+ */
+class DataHelper extends NewsletterHelperData
+{}
