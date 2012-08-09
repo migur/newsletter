@@ -22,7 +22,7 @@ defined('_JEXEC') or die;
  *
  * @since		1.0
  */
-class SupportHelper
+class NewsletterHelperSupport
 {
 	static public $resourceUrl = 'administrator/index.php?option=com_newsletter&view=support';
 	
@@ -60,3 +60,9 @@ class SupportHelper
 		return JUri::root(). self::$resourceUrl . $resourceUrl;
 	}	
 }
+
+/**
+ * Legacy support for class name
+ */
+class SupportHelper extends NewsletterHelperSupport
+{}
