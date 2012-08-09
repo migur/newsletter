@@ -32,6 +32,10 @@
 					</select>
 				</div>
 				<div class="fltlft">
+					<div class="label"><?php echo JText::_('COM_NEWSLETTER_JUSERGROUP'); ?></div>
+					<?php echo JHtml::_('access.usergroup', 'filter_jusergroup', $this->subscribers->state->get('filter.jusergroup'), "onchange=\"document.subscribersForm.filter_type.value='2';this.form.submit();\"", true); ?>
+				</div>	
+				<div class="fltlft">
 					<div class="label"><?php echo JText::_('COM_NEWSLETTER_FILTER'); ?></div>
 					<input type="text" name="filter_search" id="ss_filter_search" class="migur-search" value="<?php echo $this->escape($this->subscribers->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
 
@@ -53,6 +57,9 @@
 				<th class="left">
 					<?php echo JHtml::_('multigrid.sort', 'JGLOBAL_EMAIL', 'a.email', $this->subscribers->listDirn, $this->subscribers->listOrder, null, null, 'subscribersForm'); ?>
 				</th>
+				<th class="left" width="120px">
+					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_REGISTRATION_DATE', 'a.registerDate', $this->subscribers->listDirn, $this->subscribers->listOrder, null, null, 'subscribersForm'); ?>
+				</th>
 				<th width="8%" class="left">
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ENABLED', 'a.state', $this->subscribers->listDirn, $this->subscribers->listOrder, NULL, 'desc', 'subscribersForm'); ?>
 				</th>
@@ -63,7 +70,7 @@
 		</thead>
 		<tfoot>
 			<tr>
-				<td class="left" colspan="5">
+				<td class="left" colspan="6">
 					<?php echo $this->subscribers->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -95,7 +102,10 @@
 					<div class="<?php echo $subscriber->isJoomlaUserType()? 'juser-type-icon' : 'subscriber-type-icon'; ?>"></div>
 				</td>
 				<td class="subscriber-email">
-                                        <?php echo $this->escape($subscriber->email); ?>
+					<?php echo $this->escape($subscriber->email); ?>
+				</td>
+				<td class="subscriber-registerDate">
+					<?php echo $this->escape($subscriber->registerDate); ?>
 				</td>
 				<td class="center">
 					<?php echo JHtml::_('multigrid.enabled', $subscriber->state, $i, 'tick.png', 'publish_x.png', 'subscribers.', 'subscribersForm'); ?>
