@@ -20,35 +20,6 @@
 	</languages>
 
 	<config>
-		<fields name="params">
-			<fieldset 
-				name="basic"
-				label="PLG_MIGURLISTSYNC_JTOCOM_SYNC_LABEL">
-					
-				<field 
-					name="jtocomadd" 
-					type="list"
-					description="PLG_MIGURLISTSYNC_JTOCOM_SYNC_ONADDUSER_DESC"
-					label="PLG_MIGURLISTSYNC_JTOCOM_SYNC_ONADDUSER_LABEL" 
-					default="1" >
-					
-					<option value="1">JYES</option>
-					<option value="0">JNO</option>
-				</field>
-				
-				<field 
-					name="jtocomdelete" 
-					type="list"
-					description="PLG_MIGURLISTSYNC_JTOCOM_SYNC_ONDELETEUSER_DESC"
-					label="PLG_MIGURLISTSYNC_JTOCOM_SYNC_ONDELETEUSER_LABEL" 
-					default="1" >
-					
-					<option value="1">JYES</option>
-					<option value="0">JNO</option>
-				</field>		
-				
-			</fieldset>
-		</fields>
 	</config>
 		
 	<updateservers>
