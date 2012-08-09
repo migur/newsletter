@@ -16,7 +16,8 @@
 		Don't change the direction! The component should be in line before LIBRARY.
 		Component has pages that requires the library in both install and uninstall flows . 
 		So library should be installed BEFORE the component and removed AFTER the component.
-		pkg_newslette_script will reverse the order of these extensions on installation/updating the package. 
+		pkg_newslette_script will reverse the order of these extensions on installation/updating the package.
+		Component should be installed AFTER plugins to be able to manage (enable) these plugins.
 	-->
 		<file type="component" id="com_newsletter">com_newsletter.zip</file>
 		<file type="library" id="migur">migur.zip</file>

@@ -212,6 +212,8 @@ class com_newsletterInstallerScript
 			// Refresh extensions table with extensions present in filesystem
 			$this->_syncExtensions();
 			
+			$this->_enableJplugin('migurlistsync', 'system');
+			
             /* Redirect after installation. Make sure the component was installed the last if
                there is package */
             JInstaller::getInstance()->setRedirectURL('index.php?option=com_newsletter&view=wellcome');
@@ -538,5 +540,23 @@ class com_newsletterInstallerScript
 		
 		} catch(Extension $e) {}	
 	}		
+	
+	protected function _enableJplugin($name, $folder)
+	{
+		// Enable migurlistsync plugin!
+		$row = JTable::getInstance('extension');
+		$row->load(array(
+			'type'    => 'plugin',
+			'element' => $name,
+			'folder'  => $folder
+		));
+		
+		if (!empty($row->extension_id)) {
+			$row->enabled = '1';
+			$row->store();
+		}
+		
+		return $row->extension_id;
+	}
 }
 
