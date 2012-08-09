@@ -123,6 +123,22 @@
             <fileset dir="${cfg.comDir}/newsletter_plugin_bug_report" />
         </copy>
     -->
+	
+<!-- plg_migurlistsync -->	
+        <copy todir="${destdir}/plugins/system/migurlistsync/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/migurlistsync.xml" />
+        </copy>
+        <copy todir="${destdir}/plugins/system/migurlistsync/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/migurlistsync.php" />
+        </copy>
+        <copy todir="${destdir}/plugins/system/migurlistsync/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/index.html" />
+        </copy>
+    	<!-- LANGUAGE FILES -->
+		
+        <copy todir="${destdir}/administrator/language/en-GB/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/en-GB.plg_system_migurlistsync.ini" />
+        </copy>
     </target>
 
     <target name="up30a" description="attemps to update files on localhost server with files from working directory">
