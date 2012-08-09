@@ -69,7 +69,7 @@
 				<td>
 				<?php 
 					if (intval($item->subscribers) > 0) {
-						echo '<a href="#" onclick="document.subscribersForm.filter_published.value=\'\';document.subscribersForm.filter_type.value=\'\';document.subscribersForm.filter_search.value=\'\';document.subscribersForm.filter_list.value=\'' . $item->list_id . '\';document.subscribersForm.submit();">' . $this->escape(intval($item->subscribers)) . '</a>';
+						echo '<a href="#" onclick="document.subscribersForm.filter_published.value=\'\';document.subscribersForm.filter_jusergroup.value=\'\';document.subscribersForm.filter_type.value=\'\';document.subscribersForm.filter_search.value=\'\';document.subscribersForm.filter_list.value=\'' . $item->list_id . '\';document.subscribersForm.submit();">' . $this->escape(intval($item->subscribers)) . '</a>';
 					} else {
 						echo '<span style="color:#cccccc">0</span>';
 					}
