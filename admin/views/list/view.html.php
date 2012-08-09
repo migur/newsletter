@@ -19,6 +19,7 @@ JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR, '');
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
+JHtml::_('behavior.modal');
 JHtml::_('behavior.formvalidation');
 jimport('migur.library.toolbar');
 
@@ -45,7 +46,17 @@ class NewsletterViewList extends MigurView
 	 */
 	public function display($tpl = null)
 	{
+		$app = JFactory::getApplication();
+		
 		$isNew = (!JRequest::getInt('list_id', false) );
+		
+		$model =            JModel::getInstance('lists', 'NewsletterModel');
+		$listModel =        JModel::getInstance('List', 'NewsletterModel');
+		$subscribersModel = JModel::getInstance('subscribers', 'NewsletterModel');
+		
+		$this->setModel($subscribersModel);
+		
+		$this->assign('list', $listModel->getItem());
 		
 		if (
 			( $isNew && !AclHelper::actionIsAllowed('list.add')) ||
@@ -63,18 +74,26 @@ class NewsletterViewList extends MigurView
 		//TODO: Bulk-code. Need to refactor
 
 		$listId = JRequest::getInt('list_id', 0);
-
+		
+		$activeTab = JRequest::getInt('activetab', 0);
+		
+		$subtask = 0;
 		switch(JRequest::getString('subtask', '')) {
 			case 'import':
-				$this->subtask = 1;
+				$subtask = 1;
+				$activeTab = 1;
 				break;
 			case 'exclude':
-				$this->subtask = 2;
+				$subtask = 2;
+				$activeTab = 2;
 				break;
 			default:
-				$this->subtask = 0;
+				$subtask = 0;
 		}
-		JavaScriptHelper::addStringVar('subtask', $this->subtask);
+		
+		$this->assign('activeTab', $activeTab);
+		
+		JavaScriptHelper::addStringVar('subtask', $subtask);
 
 
 		$script = $this->get('Script');
@@ -82,9 +101,6 @@ class NewsletterViewList extends MigurView
 
 		$this->listForm = $this->get('Form', 'list');
 
-		$this->setModel(
-			JModel::getInstance('subscribers', 'NewsletterModel')
-		);
 
 		$sess = JFactory::getSession();
 		$data = $sess->get('list.' . $listId . '.file.uploaded');
@@ -118,7 +134,6 @@ class NewsletterViewList extends MigurView
 
 
 		// get data for "excluded"
-		$model = JModel::getInstance('lists', 'NewsletterModel');
 		// get only active lists
 		$model->setState('filter.fields', array(
 			'a.state="1"',
@@ -173,6 +188,11 @@ class NewsletterViewList extends MigurView
 			$typeString = '{ \'' . JText::_('COM_MEDIA_FILES', 'true') . ' (' . $displayTypes . ')\': \'' . $filterTypes . '\' }';
 		}
 
+		
+		if(!empty($listId)) {
+			$this->assignRef('events', $listModel->getEventsCollection($listId));
+		}	
+		
 		/*
 		 * Display form for FTP credentials?
 		 * Don't set them here, as there are other functions called before this one if there is any file write operation
@@ -214,7 +234,8 @@ class NewsletterViewList extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$isNew = !JRequest::getInt('list_id', false);
+		$lid = JRequest::getInt('list_id', false);
+		$isNew = !$lid;
 		
 		$bar = JToolBar::getInstance('multitab-toolbar');
 		if (
@@ -250,7 +271,7 @@ class NewsletterViewList extends MigurView
 		$document->addScript(JURI::root() . $this->script);
 		
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
-		$document->addScript('/joomla/media/system/js/tabs.js');
+		$document->addScript(JURI::root() . 'media/system/js/tabs.js');
 
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-min.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.raphael-min.js');
@@ -263,8 +284,10 @@ class NewsletterViewList extends MigurView
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/list.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/submitbutton.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/plugins.js");
+		//$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/eventwidget.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/models/forms/list.js", true);
 
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/storage.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-min.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.raphael.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.line.js');

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+        <field
+            name="le_id"
+            type="hidden"
+		/>
+        <field
+            name="list_id"
+            type="hidden"
+		/>
+        <field
+            name="event"
+            type="juserevents"
+            default=""
+            label="COM_NEWSLETTER_LIST_USEREVENT"
+            description="COM_NEWSLETTER_LIST_USEREVENT"
+            class="inputbox validate-event"
+            required="true"
+		/>
+        <field
+            name="jgroup_id"
+            type="usergroup"
+            default=""
+            label="COM_NEWSLETTER_USERGROUP"
+            description="COM_NEWSLETTER_USERGROUP"
+            class="inputbox validate-jusergroup"
+            required="false"
+		/>
+        <field
+            name="action"
+            type="listactions"
+            default=""
+            label="COM_NEWSLETTER_LIST_ACTION"
+            description="COM_NEWSLETTER_LIST_ACTION"
+            class="inputbox validate-action"
+            required="true"
+		/>
+</form>
