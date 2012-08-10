@@ -42,6 +42,11 @@
 	color: red;
 }
 
+.check-warning {
+	color:#EB8207;
+}
+
+
 .notifiacation-status {
 	float: right;
 }
@@ -55,7 +60,7 @@
 }
 
 #maintainance-pane-checks {
-    height: 560px;
+    height: 620px;
     margin: 0;
     overflow: auto;
 }	
