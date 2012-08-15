@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla view library
 JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
+JHTML::_('behavior.modal');
 
 /**
  * Class of the logs list view. Displays the model data.

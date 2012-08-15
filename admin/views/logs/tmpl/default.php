@@ -67,7 +67,7 @@
 		<tbody>
 		<?php if(count($this->items) > 0) foreach ($this->items as $i => $item) : ?>
 			
-			<tr class="row<?php echo $i % 2; ?>">
+			<tr class="item row<?php echo $i % 2; ?>">
 				
 				<td class="center">
 					<?php echo JHtml::_('grid.id', $i, $item->log_id); ?>
@@ -110,8 +110,8 @@
 				?>
 					<label 
 						class="search icon-16-search hasTip" 
-						style="width:16px;height:16px" 
-						title="<?php echo $this->escape(JHtml::_('multigrid.renderObject', $data)); ?>">
+						style="width:16px;height:16px;cursor:pointer" 
+						title="<?php echo $this->escape(JHtml::_('multigrid.renderObject', $data, 0, 'black', array('maxLength' => 100, 'maxLengthMessage' => 'See full log...'))); ?>">
 					</label>	
 				<?php }	?>
 				</td>
