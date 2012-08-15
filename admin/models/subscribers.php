@@ -138,14 +138,14 @@ class NewsletterModelSubscribers extends MigurModelList
 		// SQL-query for gettting the users-subscibers list.
 		$query->select('a.*');
 		$query->from(
-			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id, s.confirmed
+			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id, COALESCE(s.confirmed, u.activation = "") AS confirmed
 			FROM #__newsletter_subscribers AS s
 			LEFT JOIN #__users AS u ON (s.user_id = u.id)
 			WHERE s.user_id = 0 OR u.id IS NOT NULL OR s.email != ""
 			
 			UNION
 
-			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id, s.confirmed
+			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id, COALESCE(s.confirmed, u.activation = "") AS confirmed
 			FROM #__newsletter_subscribers AS s
 			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS a');
 		
