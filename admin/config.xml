@@ -284,6 +284,11 @@
             <option value="0">JNO</option>
         </field>
         <field
+            name="dryrun_mailing"
+            type="hidden"
+            default="0">
+        </field>
+        <field
             name="rawurls"
             type="radio"
             default="0"

@@ -195,16 +195,37 @@ class MigurMailerSender extends PHPMailer
 		}
 		
 		try {
-			if (!parent::Send()) {
-				throw new Exception();
+			
+			if(class_exists('JComponentHelper')) {
+				$config = JComponentHelper::getParams('com_newsletter');
 			}
 			
-			// If we send queue in KEEPALIVE mode 
-			// and transport is SMTP 
-			// and this is the last mail then need to close the connection
-			if ($this->Mailer == 'smtp' && $this->doClose && $this->SMTPKeepAlive) {
-				$this->SmtpClose();
-			}
+			if(!$config->get('dryrun_mailing', false)) {
+			
+				if (!parent::Send()) {
+					throw new Exception();
+				}
+
+				// If we send queue in KEEPALIVE mode 
+				// and transport is SMTP 
+				// and this is the last mail then need to close the connection
+				if ($this->Mailer == 'smtp' && !empty($this->doClose) && !empty($this->SMTPKeepAlive)) {
+					$this->SmtpClose();
+				}
+				
+			} else {
+				
+				// Do full debug of all properties of this class
+				$ref = new ReflectionClass('PhpMailer');
+				$props = $ref->getProperties();
+				
+				$debugArray = array();
+				foreach($props as $prop) {
+					$debugArray[$prop->name] = $this->{$prop->name};
+				}
+				
+				NewsletterHelperLog::addDebug('Dryrun mail sending', LogHelper::CAT_MAILER, $debugArray);
+			}	
 			
 		} catch(Exception $e) {
 
