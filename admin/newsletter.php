@@ -47,7 +47,6 @@ try {
 	}
 	
 	// Add the helper
-	JLoader::import('helpers.autoload', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
@@ -122,7 +121,7 @@ try {
 	
 } catch (Exception $e) {
 	
-	LogHelper::addDebug(
+	NewsletterHelperLog::addDebug(
 		'COM_NEWSLETTER_UNCAUGHT_EXCEPTION',
 		'common',
 		$e);
