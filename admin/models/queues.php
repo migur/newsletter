@@ -304,7 +304,7 @@ class NewsletterModelQueues extends JModelList
 
 		// Select the required fields from the table.
 		$query->select('newsletter_id, SUM(sent) AS sent, COUNT(*) AS total');
-		$query->from('(SELECT newsletter_id, subscriber_id, MAX(CASE WHEN state=1 THEN 0 ELSE 1 END) AS sent FROM jos_newsletter_queue AS q GROUP BY newsletter_id, subscriber_id) AS q');
+		$query->from('(SELECT newsletter_id, subscriber_id, MAX(CASE WHEN state=1 THEN 0 ELSE 1 END) AS sent FROM #__newsletter_queue AS q GROUP BY newsletter_id, subscriber_id) AS q');
 		$query->group('newsletter_id');
 		
 		$data = $dbo->setQuery($query)->loadAssocList();
