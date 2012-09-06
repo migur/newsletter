@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit 
+	bootstrap="bootstrap.php" 
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    stopOnFailure="false"
+    syntaxCheck="true"
+    processIsolation="false"
+>
+	<php>
+		<const name="JTEST_DATABASE_MYSQL_DSN" value="host=10.10.1.113;dbname=migur.joomla.unittests;user=p_migur;pass=vbueh" />
+		<const name="JTEST_DATABASE_PREFIX" value="test_" />
+		<const name="JTEST_DB_MIGRATION" value="true" />
+		<const name="JTEST_HTTP_STUB" value="http://localhost/joomla-platform/tests/suites/unit/stubs/jhttp_stub.php" />
+
+	</php>
+	<testsuites>
+		<testsuite name="com_newsletter">
+			<file>suites/com_newsletter/NewsletterTestSuite.php</file>
+		</testsuite>
+	</testsuites>	
+    <listeners>
+      <listener class="TestListener" file="TestListener.php"/>
+    </listeners>
+	
+<!--	<logging>
+		<log type="coverage-html" target="build/coverage" title="Joomla-Platform" charset="UTF-8" yui="true" highlight="true"
+			lowUpperBound="35" highLowerBound="70" />
+		<log type="coverage-clover" target="build/logs/clover.xml" />
+		<log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false" />
+	</logging> -->
+	
+<!--	<filter>
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">libraries/joomla</directory>
+			<file>libraries/import.php</file>
+			<file>libraries/loader.php</file>
+			<file>libraries/platform.php</file>
+		</whitelist>
+	</filter>-->
+</phpunit>

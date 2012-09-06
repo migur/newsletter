@@ -1,0 +1,88 @@
+CREATE TABLE `#__newsletter_template_styles`
+CREATE TABLE `#__newsletter_subscribers`
+CREATE INDEX email_idx ON #__newsletter_subscribers(email);
+CREATE INDEX user_id_idx ON #__newsletter_subscribers(user_id);
+CREATE TABLE `#__newsletter_smtp_profiles`
+CREATE TABLE `#__newsletter_newsletters`
+CREATE TABLE `#__newsletter_lists`
+CREATE TABLE `#__newsletter_sent`
+CREATE TABLE `#__newsletter_sub_history`
+CREATE TABLE `#__newsletter_sub_list`
+CREATE TABLE `#__newsletter_newsletters_ext`
+CREATE TABLE `#__newsletter_extensions`
+CREATE TABLE `#__newsletter_queue`
+CREATE INDEX `nid_sid_lid_state_idx` ON `#__newsletter_queue`(`newsletter_id`, `subscriber_id`, `list_id`, `state`);
+CREATE TABLE `#__newsletter_downloads`
+CREATE TABLE `#__newsletter_mailbox_profiles` 
+CREATE TABLE `#__newsletter_automailings` (
+  `automailing_id` INT(11) NOT NULL ,
+  `automailing_name` VARCHAR(255) DEFAULT NULL,
+  `automailing_type` text  DEFAULT NULL,
+  `automailing_event` text  DEFAULT NULL,
+  `automailing_state` INT(11) DEFAULT NULL,
+  `scope` text  DEFAULT NULL,
+  `params` TEXT,
+CREATE TABLE `#__newsletter_automailing_items` (
+  PRIMARY KEY (`automailing_id`),
+  `series_id` INT(11) NOT NULL ,
+  `automailing_id` INT(11) DEFAULT NULL,
+  `newsletter_id` BIGINT(11) DEFAULT NULL,
+  `time_start` TIMESTAMP NULL DEFAULT NULL,
+  `time_offset` INT(11) DEFAULT NULL,
+  `parent_id` INT(11) DEFAULT '0',
+  `status` INT(11),
+  `sent` INT(11),
+  `params` TEXT,
+CREATE TABLE `#__newsletter_threads` (
+  PRIMARY KEY (`series_id`),
+  `thread_id` INT(11) NOT NULL ,
+  `parent_id` INT(11) DEFAULT NULL,
+  `type` text  NOT NULL,
+  `subtype` VARCHAR (255),
+  `resource` VARCHAR (255) NOT NULL ,
+  `params` TEXT,
+  `target` VARCHAR (255),
+  `target_type` VARCHAR (255),
+CREATE INDEX `target_fk` ON `#__newsletter_threads`(`target`, `target_type`);
+CREATE TABLE `#__newsletter_automailing_targets` (
+  PRIMARY KEY (`thread_id`),
+  `am_target_id` INT(11) NOT NULL ,
+  `automailing_id` INT(11) DEFAULT NULL,
+  `target_id` INT(11) DEFAULT NULL,
+  `target_type` VARCHAR (255) DEFAULT NULL,
+CREATE TABLE `#__newsletter_logs` (
+  PRIMARY KEY (`am_target_id`),
+  `log_id` INT(11) NOT NULL ,
+  `message` TEXT(255),
+  `date` DATETIME,
+  `priority` INT(11),
+  `category` VARCHAR(255) NOT NULL DEFAULT 'common',
+  `params` TEXT,
+CREATE INDEX `date_idfk` ON `#__newsletter_logs`(`date`);
+CREATE INDEX `category_idfk` ON `#__newsletter_logs`(`category`);
+CREATE TABLE `#__newsletter_list_events` (
+  PRIMARY KEY (`log_id`),
+  `le_id` BIGINT(20) NOT NULL ,
+  `list_id` BIGINT(20) NOT NULL,
+  `jgroup_id` INT(10) ,
+  `event` VARCHAR(255),
+  `action` VARCHAR(255),
+CREATE INDEX `lid_jgid_idfk` ON `#__newsletter_list_events`(`list_id`, `jgroup_id`);
+CREATE INDEX `smtp_profile_id_idxfk` ON `#__newsletter_newsletters`(`smtp_profile_id`);
+CREATE INDEX t_style_id_idxfk ON #__newsletter_newsletters(t_style_id);
+CREATE INDEX smtp_profile_id_idxfk ON #__newsletter_lists(smtp_profile_id);
+CREATE INDEX list_id_idxfk ON #__newsletter_sent(list_id);
+CREATE INDEX list_id_idxfk ON #__newsletter_sub_history(list_id);
+CREATE INDEX newsletter_id_idxfk ON #__newsletter_sub_history(newsletter_id);
+CREATE INDEX list_id_idxfk ON #__newsletter_sub_list(list_id);
+CREATE INDEX newsletter_idxfk ON #__newsletter_newsletters_ext(newsletter_id);
+CREATE INDEX extension_id_idxfk ON #__newsletter_newsletters_ext(extension_id);
+CREATE INDEX newsletter_queue_state ON #__newsletter_queue(state);
+CREATE INDEX automailing_ids_idxfk ON #__newsletter_automailing_targets(automailing_id);
+CREATE INDEX automailing_ids_idxfk ON #__newsletter_automailing_items(automailing_id);
+CREATE INDEX newsletter_ids_idxfk ON #__newsletter_automailing_items(newsletter_id);
+CREATE INDEX newsletter_ids_idxfk ON #__newsletter_queue(newsletter_id);
+CREATE INDEX subscriber_ids_idxfk ON #__newsletter_queue(subscriber_id);
+INSERT  INTO `#__newsletter_template_styles`(`t_style_id`,`template`,`title`,`params`) VALUES (5,'doublecolumn1.xml','Standard doublecolumn template (custom)','{\"width_column1\":\"50%\",\"height_column1\":\"50%\",\"width_column2\":\"50%\",\"height_column2\":\"50%\",\"image_top\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/top_image.png\",\"image_top_alt\":\"The top image\",\"image_top_width\":\"600px\",\"image_top_height\":\"100px\",\"image_bottom\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/bottom_image.png\",\"image_bottom_alt\":\"The bottom image\",\"image_bottom_width\":\"600px\",\"image_bottom_height\":\"100px\",\"table_background\":\"#FFFFFF\",\"text_color\":\"#888888\",\"t_style_id\":\"5\"}');
+INSERT  INTO `#__newsletter_template_styles`(`t_style_id`,`template`,`title`,`params`) VALUES (6,'singlecolumn1.xml','Standard singlecolumn template (custom)','{\"width_column1\":\"50%\",\"height_column1\":\"50%\",\"width_column2\":\"50%\",\"height_column2\":\"50%\",\"image_top\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/top_image.png\",\"image_top_alt\":\"The top image\",\"image_top_width\":\"600px\",\"image_top_height\":\"100px\",\"image_bottom\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/bottom_image.png\",\"image_bottom_alt\":\"The bottom image\",\"image_bottom_width\":\"600px\",\"image_bottom_height\":\"100px\",\"table_background\":\"#FFFFFF\",\"text_color\":\"#888888\",\"t_style_id\":\"6\"}');
+INSERT  INTO `#__newsletter_template_styles`(`t_style_id`,`template`,`title`,`params`) VALUES (8,'threecolumn1.xml','Standard threecolumn template (custom)','{\"width_column1\":\"50%\",\"height_column1\":\"50%\",\"width_column2\":\"50%\",\"height_column2\":\"50%\",\"image_top\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/top_image.png\",\"image_top_alt\":\"The top image\",\"image_top_width\":\"600px\",\"image_top_height\":\"100px\",\"image_bottom\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/bottom_image.png\",\"image_bottom_alt\":\"The bottom image\",\"image_bottom_width\":\"600px\",\"image_bottom_height\":\"100px\",\"table_background\":\"#FFFFFF\",\"text_color\":\"#888888\",\"t_style_id\":\"8\"}');
