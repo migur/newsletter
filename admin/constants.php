@@ -1,11 +1,22 @@
 <?php
+if (!defined('MIGUR_COM_NEWSLETTER')) {
+	
+	// Environment constants
+	define('COM_NEWSLETTER_PATH_ADMIN', JPATH_ROOT
+		.DIRECTORY_SEPARATOR.'administrator'
+		.DIRECTORY_SEPARATOR.'components'
+		.DIRECTORY_SEPARATOR.'com_newsletter'
+	);
 
-if (!defined('MIGUR')) {
-	// TODO deprecated since 12.1 Use PHP Exception
-	JError::raiseWarning(0, JText::_("MIGUR library wasn't found."));
-	return;
+	define('COM_NEWSLETTER_PATH_SITE', JPATH_ROOT
+		.DIRECTORY_SEPARATOR.'components'
+		.DIRECTORY_SEPARATOR.'com_newsletter'
+	);
+
+	// Defaults section
+	define('SUBSCRIBER_HTML_DEFAULT', true);
+	define('SUBSCRIBER_STATE_DEFAULT', true);
+	
+	// At last define the flag for com_newsletter component
+	define('MIGUR_COM_NEWSLETTER', true);
 }
-
-// Defaults section
-define('SUBSCRIBER_HTML_DEFAULT', true);
-define('SUBSCRIBER_STATE_DEFAULT', true);
