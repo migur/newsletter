@@ -1,8 +1,6 @@
 Requirements:
 - Joomla 2.5.6+
-- Joomla platform's test folder
-- Component's sources
-
+- Component's source files
 
 
 The folders structure:
@@ -10,12 +8,6 @@ The folders structure:
 project
 |
 +-joomla
-|
-+-joomlatests
-| |	
-| +-tests
-|   |
-|	+-core
 |
 +-newsletter
 
@@ -41,3 +33,14 @@ Test listener class:
 Bootstrap:
 	bootstrap.php
 	import.php
+
+
+
+Flow:
+1. Create valid 2.5.6+ joomla DB (migur.joomla.unittests as example).
+2. Configure phpunit.xml with DB access and other.
+3. Deploy the component over joomla with help of ANT newsletter/build.xml because
+component's autoloading, classes' dependencies and files' paths are intended to work inside of joomla site.
+4. Go to "newsletter/tests" folder and run PHPUNIT.
+5. Do some changes, ANT, PHPUNIT. Changes, ANT, PHPUNIT...
+5. Have fun!

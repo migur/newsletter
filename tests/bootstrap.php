@@ -26,7 +26,6 @@ ini_set('display_errors', 1);
  * if you chose to create a custom version of that file.
  */
 define('JOOMLA_PATH', dirname(dirname(dirname(__FILE__))) . '/joomla');
-define('JOOMLATEST_PATH', dirname(dirname(dirname(__FILE__))) . '/joomlatests');
 define('JPATH_ADMINISTRATOR', JOOMLA_PATH . '/administrator');
 define('JPATH_COMPONENT_ADMINISTRATOR', JPATH_ADMINISTRATOR . '/components/com_newsletter');
 
@@ -34,17 +33,13 @@ define('NEWSLETTER_SRC', dirname(dirname(__FILE__)));
 define('NEWSLETTER_TESTS', dirname(__FILE__));
 define('JPATH_NEWSLETTER_MOCKS', NEWSLETTER_TESTS . '/core/mock/com_newsletter');
 
-if (!defined('JPATH_TESTS'))
-{
-	define('JPATH_TESTS', JOOMLATEST_PATH . '/tests');
-}
 if (!defined('JPATH_PLATFORM'))
 {
 	define('JPATH_PLATFORM', JOOMLA_PATH . '/libraries');
 }
 if (!defined('JPATH_BASE'))
 {
-	define('JPATH_BASE', JPATH_TESTS . '/tmp');
+	define('JPATH_BASE', NEWSLETTER_TESTS . '/tmp');
 }
 if (!defined('JPATH_ROOT'))
 {
@@ -73,12 +68,12 @@ if (!defined('JPATH_THEMES'))
 
 if (!defined('JPATH_MOCKS'))
 {
-	define('JPATH_MOCKS', JPATH_TESTS . '/core/mock');
+	define('JPATH_MOCKS', NEWSLETTER_TESTS . '/core/mock');
 }
 
 if (!defined('JPATH_COMPONENT_MOCKS'))
 {
-	define('JPATH_COMPONENT_MOCKS', JPATH_TESTS . '/core/mock/com_newsletter');
+	define('JPATH_COMPONENT_MOCKS', NEWSLETTER_TESTS . '/core/mock/com_newsletter');
 }
 
 if (!defined('JPATH_LIBRARIES'))
@@ -91,9 +86,7 @@ require_once 'import.php';
 
 
 // Register the core Joomla test classes.
-JLoader::registerPrefix('Test', JPATH_TESTS . '/core');
+JLoader::registerPrefix('Test', NEWSLETTER_TESTS . '/core');
 JLoader::registerPrefix('NewsletterTest', NEWSLETTER_TESTS . '/core');
 
-require_once NEWSLETTER_TESTS. '/core/case/database/mysql.php';
-
-require_once 'PHPUnit/Extensions/Database/Autoload.php';
+//require_once 'PHPUnit/Extensions/Database/Autoload.php';
