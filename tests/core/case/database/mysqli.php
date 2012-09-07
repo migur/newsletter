@@ -7,12 +7,12 @@
  */
 
 /**
- * Abstract test case class for MySQL database testing.
+ * Abstract test case class for MySQLi database testing.
  *
  * @package  Joomla.Test
  * @since    12.1
  */
-abstract class TestCaseDatabaseMysql extends TestCaseDatabase
+abstract class TestCaseDatabaseMysqli extends TestCaseDatabase
 {
 	/**
 	 * @var    JDatabaseDriver  The active database driver being used for the tests.
@@ -24,7 +24,7 @@ abstract class TestCaseDatabaseMysql extends TestCaseDatabase
 	 * @var    array  The JDatabaseDriver options for the connection.
 	 * @since  12.1
 	 */
-	private static $_options = array('driver' => 'mysql');
+	private static $_options = array('driver' => 'mysqli');
 
 	/**
 	 * @var    JDatabaseDriver  The saved database driver to be restored after these tests.
@@ -44,9 +44,9 @@ abstract class TestCaseDatabaseMysql extends TestCaseDatabase
 	public static function setUpBeforeClass()
 	{
 		// First let's look to see if we have a DSN defined or in the environment variables.
-		if (defined('JTEST_DATABASE_MYSQL_DSN') || getenv('JTEST_DATABASE_MYSQL_DSN'))
+		if (defined('JTEST_DATABASE_MYSQLI_DSN') || getenv('JTEST_DATABASE_MYSQLI_DSN'))
 		{
-			$dsn = defined('JTEST_DATABASE_MYSQL_DSN') ? JTEST_DATABASE_MYSQL_DSN : getenv('JTEST_DATABASE_MYSQL_DSN');
+			$dsn = defined('JTEST_DATABASE_MYSQLI_DSN') ? JTEST_DATABASE_MYSQLI_DSN : getenv('JTEST_DATABASE_MYSQLI_DSN');
 		}
 		else
 		{
@@ -84,14 +84,10 @@ abstract class TestCaseDatabaseMysql extends TestCaseDatabase
 			}
 		}
 
-		if (defined('JTEST_DATABASE_PREFIX')) {
-			self::$_options['prefix'] = JTEST_DATABASE_PREFIX;
-		}	
-
 		try
 		{
 			// Attempt to instantiate the driver.
-			self::$driver = JDatabase::getInstance(self::$_options);
+			self::$driver = JDatabaseDriver::getInstance(self::$_options);
 		}
 		catch (RuntimeException $e)
 		{
@@ -138,26 +134,5 @@ abstract class TestCaseDatabaseMysql extends TestCaseDatabase
 		$pdo = new PDO($dsn, self::$_options['user'], self::$_options['password']);
 
 		return $this->createDefaultDBConnection($pdo, self::$_options['database']);
-	}
-	
-	
-	protected function getDataSet()
-	{
-		$dataset = parent::getDataSet();
-		
-		if ( ! $dataset instanceof PHPUnit_Extensions_Database_DataSet) {
-			$dataSet = new PHPUnit_Extensions_Database_DataSet_CsvDataSet(',', "'", '\\');
-		}	
-
-		//$this->getConnection()->getConnection()->exec('SET foreign_key_checks = 0;');
-		
-		$dataSet->addTable(JTEST_DATABASE_PREFIX.'newsletter_template_styles',	NEWSLETTER_TESTS.'/suites/stubs/#__newsletter_template_styles.csv');
-		$dataSet->addTable(JTEST_DATABASE_PREFIX.'newsletter_subscribers',		NEWSLETTER_TESTS.'/suites/stubs/#__newsletter_subscribers.csv');
-		$dataSet->addTable(JTEST_DATABASE_PREFIX.'users',						NEWSLETTER_TESTS.'/suites/stubs/#__users.csv');
-		$dataSet->addTable(JTEST_DATABASE_PREFIX.'newsletter_newsletters',		NEWSLETTER_TESTS.'/suites/stubs/#__newsletter_newsletters.csv');
-
-		//$this->getConnection()->getConnection()->exec('SET foreign_key_checks = 1;');
-		
-		return $dataSet;
 	}
 }

@@ -8,7 +8,7 @@ class NewsletterTestSuite extends PHPUnit_Framework_TestSuite
     {
         $suite = new NewsletterTestSuite('com_newsletter');
 		
-		$path[] = 'suites/com_newsletter';
+		$path[] = 'suites';
 		$tests = array();
 		while(count($path) != 0)
 		{
@@ -30,10 +30,10 @@ class NewsletterTestSuite extends PHPUnit_Framework_TestSuite
     protected function setUp()
     {
 		// Constants
-		require_once NEWSLETTER_SRC . '/admin/constants.php';
+		require_once JPATH_COMPONENT_ADMINISTRATOR . '/constants.php';
 
 		// Autoloader
-		require_once NEWSLETTER_SRC . '/admin/helpers/autoload.php';
+		require_once JPATH_COMPONENT_ADMINISTRATOR . '/helpers/autoload.php';
 		NewsletterHelperAutoload::setup();
 		
 		// Db upgrade
@@ -74,7 +74,7 @@ class NewsletterTestSuite extends PHPUnit_Framework_TestSuite
 			// Create a new PDO instance for an SQLite memory database and load the test schema into it.
 			$dsn = 'mysql:host=' . $options['host'] . ';dbname=' . $options['database'];
 			$pdo = new PDO($dsn, $options['user'], $options['password']);
-			$ddl = file_get_contents(NEWSLETTER_SRC . '/admin/install/install.sql');
+			$ddl = file_get_contents(JPATH_COMPONENT_ADMINISTRATOR . '/install/install.sql');
 			$ddl = str_replace('#__', JTEST_DATABASE_PREFIX, $ddl);
 			$res = $pdo->exec($ddl);
 			
@@ -106,7 +106,7 @@ class NewsletterTestSuite extends PHPUnit_Framework_TestSuite
 		$pdo = TestReflection::getValue(JFactory::$database, 'connection');
 		
 		// Set the PDO instance to the driver using reflection whizbangery.
-		$ddl = file_get_contents(NEWSLETTER_SRC . '/admin/install/uninstall.sql');
+		$ddl = file_get_contents(JPATH_COMPONENT_ADMINISTRATOR . '/install/uninstall.sql');
 		$ddl = str_replace('#__', JTEST_DATABASE_PREFIX, $ddl);
 		$res = $pdo->exec($ddl);
 		if ($res !== 0) throw new RuntimeException('Cannot degrade DB');

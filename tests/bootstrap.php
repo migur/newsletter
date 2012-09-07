@@ -25,75 +25,42 @@ ini_set('display_errors', 1);
  * Ensure that required path constants are defined.  These can be overridden within the phpunit.xml file
  * if you chose to create a custom version of that file.
  */
+
 define('JOOMLA_PATH', dirname(dirname(dirname(__FILE__))) . '/joomla');
-define('JOOMLATEST_PATH', dirname(dirname(dirname(__FILE__))) . '/joomlatests');
-define('JPATH_ADMINISTRATOR', JOOMLA_PATH . '/administrator');
-define('JPATH_COMPONENT_ADMINISTRATOR', JPATH_ADMINISTRATOR . '/components/com_newsletter');
+
 
 define('NEWSLETTER_SRC', dirname(dirname(__FILE__)));
 define('NEWSLETTER_TESTS', dirname(__FILE__));
 define('JPATH_NEWSLETTER_MOCKS', NEWSLETTER_TESTS . '/core/mock/com_newsletter');
 
-if (!defined('JPATH_TESTS'))
-{
-	define('JPATH_TESTS', JOOMLATEST_PATH . '/tests');
-}
-if (!defined('JPATH_PLATFORM'))
-{
-	define('JPATH_PLATFORM', JOOMLA_PATH . '/libraries');
-}
-if (!defined('JPATH_BASE'))
-{
-	define('JPATH_BASE', JPATH_TESTS . '/tmp');
-}
-if (!defined('JPATH_ROOT'))
-{
-	define('JPATH_ROOT', /*JPATH_BASE*/ JOOMLA_PATH);
-}
-if (!defined('JPATH_CACHE'))
-{
-	define('JPATH_CACHE', JPATH_BASE . '/cache');
-}
-if (!defined('JPATH_CONFIGURATION'))
-{
-	define('JPATH_CONFIGURATION', JPATH_BASE);
-}
-if (!defined('JPATH_MANIFESTS'))
-{
-	define('JPATH_MANIFESTS', JPATH_BASE . '/manifests');
-}
-if (!defined('JPATH_PLUGINS'))
-{
-	define('JPATH_PLUGINS', JPATH_BASE . '/plugins');
-}
-if (!defined('JPATH_THEMES'))
-{
-	define('JPATH_THEMES', JPATH_BASE . '/themes');
-}
+if (!defined('JPATH_ROOT'))				define('JPATH_ROOT', JOOMLA_PATH);
+if (!defined('JPATH_BASE'))				define('JPATH_BASE', NEWSLETTER_TESTS . '/tmp');
 
-if (!defined('JPATH_MOCKS'))
-{
-	define('JPATH_MOCKS', JPATH_TESTS . '/core/mock');
-}
 
-if (!defined('JPATH_COMPONENT_MOCKS'))
-{
-	define('JPATH_COMPONENT_MOCKS', JPATH_TESTS . '/core/mock/com_newsletter');
-}
+/* From defines.php */
+if (!defined('JPATH_SITE'))				define('JPATH_SITE', JOOMLA_PATH);
+if (!defined('JPATH_ADMINISTRATOR'))	define('JPATH_ADMINISTRATOR', JOOMLA_PATH . '/administrator');
+if (!defined('JPATH_CONFIGURATION'))	define('JPATH_CONFIGURATION', JOOMLA_PATH);
+if (!defined('JPATH_LIBRARIES'))		define('JPATH_LIBRARIES', JOOMLA_PATH . '/libraries');
+if (!defined('JPATH_PLUGINS'))			define('JPATH_PLUGINS', JOOMLA_PATH . '/plugins');
+if (!defined('JPATH_INSTALLATION'))		define('JPATH_INSTALLATION',	JPATH_ROOT . '/installation');
+if (!defined('JPATH_THEMES'))			define('JPATH_THEMES', JOOMLA_PATH . '/themes');
+if (!defined('JPATH_CACHE'))			define('JPATH_CACHE', JOOMLA_PATH . '/cache');
+if (!defined('JPATH_MANIFESTS'))		define('JPATH_MANIFESTS', JOOMLA_PATH . '/manifests');
+/* From defines.php */
 
-if (!defined('JPATH_LIBRARIES'))
-{
-	define('JPATH_LIBRARIES', JOOMLA_PATH . '/libraries');
-}
+define('JPATH_COMPONENT_ADMINISTRATOR', JPATH_ADMINISTRATOR . '/components/com_newsletter');
+
+if (!defined('JPATH_PLATFORM'))			define('JPATH_PLATFORM', JOOMLA_PATH . '/libraries');
+
 
 // Import the platform.
 require_once 'import.php';
 
+require_once JOOMLA_PATH . '/configuration.php';
 
 // Register the core Joomla test classes.
-JLoader::registerPrefix('Test', JPATH_TESTS . '/core');
+JLoader::registerPrefix('Test', NEWSLETTER_TESTS . '/core');
 JLoader::registerPrefix('NewsletterTest', NEWSLETTER_TESTS . '/core');
 
-require_once NEWSLETTER_TESTS. '/core/case/database/mysql.php';
-
-require_once 'PHPUnit/Extensions/Database/Autoload.php';
+//require_once 'PHPUnit/Extensions/Database/Autoload.php';

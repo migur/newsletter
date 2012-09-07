@@ -1,0 +1,16 @@
+'2','Fallback newsletter','You have subscribed for [listname] at [sitename]','fallbacknewsletter','-1',\N,'Hello!\
+Thank you for subscribing to our newsletter.\
+Please confirm your subscription by clicking this link:\
+[confirmation link]','{"encoding":"utf-8"}','0','','0','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00','1','1'
+'4','Default letter','Default letter','birthdayofbabydoe-2-2','0','6','Meet the Baby Doe!\
+Congratulations for [username]! \
+\
+To unsubscribe: [unsubscription link]','{"newsletter_from_name":"John Doe","newsletter_from_email":"johndoe@example.com","newsletter_to_name":"John Doe","newsletter_to_email":"johndoe@example.com","encoding":"utf-8"}','0','','0','0000-00-00 00:00:00','0000-00-00 00:00:00','2012-08-15 11:14:41','1',\N
+'5','GMAIL letter','GMAIL letter','default-letter-copy-','2','6','Meet the Baby Doe!\
+Congratulations for [username]! \
+\
+To unsubscribe: [unsubscription link]','{"newsletter_from_name":"Andrey","newsletter_from_email":"andreyalek@gmail.com","newsletter_to_name":"Andrey","newsletter_to_email":"andreyalek@gmail.com","encoding":"utf-8"}','0','','0','0000-00-00 00:00:00','0000-00-00 00:00:00','2012-08-15 11:14:49','1',\N
+'6','NIX letter','NIX letter','nix-letter','3','6','Meet the Baby Doe!\
+Congratulations for [username]! \
+\
+To unsubscribe: [unsubscription link]','{"newsletter_from_name":"woody","newsletter_from_email":"woody@nixsolutions.com","newsletter_to_name":"woody","newsletter_to_email":"woody@nixsolutions.com","encoding":"utf-8"}','0','','0','0000-00-00 00:00:00','0000-00-00 00:00:00','2012-08-15 11:15:00','1',\N

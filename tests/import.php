@@ -58,7 +58,9 @@ JLoader::register('JRoute', JPATH_LIBRARIES . '/joomla/methods.php');
 JLoader::register('JText', JPATH_LIBRARIES . '/joomla/methods.php');
 JLoader::register('JRoute', JPATH_LIBRARIES . '/joomla/application/route.php');
 JLoader::register('JError', JPATH_LIBRARIES . '/legacy/error/error.php');
-JLoader::register('JException', JPATH_LIBRARIES . '/legacy/exception/exception.php');
+JLoader::register('JException', JPATH_LIBRARIES . '/joomla/error/exception.php');
 JLoader::register('JRequest', JPATH_LIBRARIES . '/joomla/environment/request.php');
+JLoader::register('JDispatcher', JPATH_LIBRARIES . '/joomla/event/dispatcher.php');
+JLoader::register('JDispatcher', JPATH_LIBRARIES . '/joomla/event/dispatcher.php');
 
 JLoader::import('migur.migur');
