@@ -8,7 +8,7 @@ class NewsletterTestSuite extends PHPUnit_Framework_TestSuite
     {
         $suite = new NewsletterTestSuite('com_newsletter');
 		
-		$path[] = 'suites/com_newsletter';
+		$path[] = 'suites';
 		$tests = array();
 		while(count($path) != 0)
 		{

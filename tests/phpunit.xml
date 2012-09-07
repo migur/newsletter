@@ -18,7 +18,7 @@
 	</php>
 	<testsuites>
 		<testsuite name="com_newsletter">
-			<file>suites/com_newsletter/NewsletterTestSuite.php</file>
+			<file>core/suite/NewsletterTestSuite.php</file>
 		</testsuite>
 	</testsuites>	
     <listeners>

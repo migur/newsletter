@@ -139,4 +139,25 @@ abstract class TestCaseDatabaseMysql extends TestCaseDatabase
 
 		return $this->createDefaultDBConnection($pdo, self::$_options['database']);
 	}
+	
+	
+	protected function getDataSet()
+	{
+		$dataset = parent::getDataSet();
+		
+		if ( ! $dataset instanceof PHPUnit_Extensions_Database_DataSet) {
+			$dataSet = new PHPUnit_Extensions_Database_DataSet_CsvDataSet(',', "'", '\\');
+		}	
+
+		//$this->getConnection()->getConnection()->exec('SET foreign_key_checks = 0;');
+		
+		$dataSet->addTable(JTEST_DATABASE_PREFIX.'newsletter_template_styles',	NEWSLETTER_TESTS.'/suites/stubs/#__newsletter_template_styles.csv');
+		$dataSet->addTable(JTEST_DATABASE_PREFIX.'newsletter_subscribers',		NEWSLETTER_TESTS.'/suites/stubs/#__newsletter_subscribers.csv');
+		$dataSet->addTable(JTEST_DATABASE_PREFIX.'users',						NEWSLETTER_TESTS.'/suites/stubs/#__users.csv');
+		$dataSet->addTable(JTEST_DATABASE_PREFIX.'newsletter_newsletters',		NEWSLETTER_TESTS.'/suites/stubs/#__newsletter_newsletters.csv');
+
+		//$this->getConnection()->getConnection()->exec('SET foreign_key_checks = 1;');
+		
+		return $dataSet;
+	}
 }

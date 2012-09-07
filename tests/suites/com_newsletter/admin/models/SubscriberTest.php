@@ -16,20 +16,6 @@ class SubscriberTest extends TestCaseDatabaseMysql
 		JFactory::$session = $this->getMock('JSession', array('get'), array(), '', false);
 	}
 	
-	/**
-	 * @var  JTableLanguage
-	 */
-	protected $object;
-
-	protected function getDataSet()
-	{
-		$dataSet = new PHPUnit_Extensions_Database_DataSet_CsvDataSet(',', "'", '\\');
-
-		$dataSet->addTable(JTEST_DATABASE_PREFIX.'users', dirname(__FILE__) . '/stubs/#__users.csv');
-		$dataSet->addTable(JTEST_DATABASE_PREFIX.'newsletter_subscribers', dirname(__FILE__) . '/stubs/#__newsletter_subscribers.csv');
-		return $dataSet;
-	}
-	
 	public function testGetItem()
 	{
 		$model = new NewsletterModelSubscriber;

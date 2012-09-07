@@ -324,9 +324,7 @@ abstract class TestCaseDatabase extends PHPUnit_Extensions_Database_TestCase
 	 * @since   11.1
 	 */
 	protected function getDataSet()
-	{
-		return $this->createXMLDataSet(JPATH_TESTS . '/suites/unit/stubs/empty.xml');
-	}
+	{}
 
 	/**
 	 * Returns the database operation executed in test setup.
