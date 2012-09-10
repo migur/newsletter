@@ -22,7 +22,7 @@
 		</testsuite>
 	</testsuites>	
     <listeners>
-      <listener class="TestListener" file="TestListener.php"/>
+      <listener class="TestListener" file="core/TestListener.php"/>
     </listeners>
 	
 <!--	<logging>
