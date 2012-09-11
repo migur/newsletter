@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="plugin" group="system">
+	<name>Migur - User registration plugin</name>
+	<author>Henrik Hussfelt</author>
+	<creationDate>September 2012</creationDate>
+	<copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>henrik@migur.com</authorEmail>
+	<authorUrl>www.migur.com</authorUrl>
+	<version>12.07</version>
+	<description>Plugin to synchronise users during registration</description>
+
+	<files>
+		<filename plugin="miguruserreg">miguruserreg.php</filename>
+		<filename>index.html</filename>
+	</files>
+	
+	<languages>
+		<language tag="en-GB">en-GB.plg_system_miguruserreg.ini</language>
+	</languages>
+
+	<config>
+	</config>
+		
+	<updateservers>
+		<server type="extension" priority="1" name="Migur Update Site">http://update.migur.com/plg-miguruserreg.xml</server>
+	</updateservers>
+</extension>
