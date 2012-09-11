@@ -34,3 +34,7 @@ td fieldset {
 #jform_confirm_mail_subject {
 	width: 99%;
 }
+
+label {
+	min-width: 0px !important;
+}

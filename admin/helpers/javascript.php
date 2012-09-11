@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 
 jimport('migur.library.language');
 
-class JavascriptHelper
+class NewsletterHelperJavascript
 {
 
 	public static $extension = 'com_newsletter';
@@ -27,7 +27,7 @@ class JavascriptHelper
 	 * @return void
 	 * @since 1.0
 	 */
-	public static function addObject($name, $obj, $isGlobal = false)
+	public static function addObject($name, $obj, $isGlobal = true)
 	{
 		$doc = JFactory::getDocument();
 		$doc->addScriptDeclaration(($isGlobal? '' : 'var ') . $name . ' = ' . json_encode((object)$obj) . ';');
@@ -74,3 +74,9 @@ class JavascriptHelper
 		}	
 	}
 }
+
+/**
+ * Legacy support for class name
+ */
+class JavascriptHelper extends NewsletterHelperJavascript
+{}

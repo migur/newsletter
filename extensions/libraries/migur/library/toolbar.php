@@ -33,6 +33,8 @@ class MigurToolBar extends JToolBar
 	protected $_actionPrefix = '';
 	
 	protected $_useAcl = false;
+	
+	protected $_options = array();
 
 	/**
 	 * The constructor of a class
@@ -42,7 +44,7 @@ class MigurToolBar extends JToolBar
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function __construct($name = 'toolbar', $form = null, $actionPrefix = '', $useAcl = false)
+	public function __construct($name = 'toolbar', $form = null, $actionPrefix = '', $useAcl = false, $options = array())
 	{
 		parent::__construct($name);
 
@@ -53,6 +55,8 @@ class MigurToolBar extends JToolBar
 		$this->_actionPrefix = $actionPrefix;
 		
 		$this->_useAcl = $useAcl;
+		
+		$this->_options = (array) $options;
 	}
 
 	/**
@@ -64,7 +68,7 @@ class MigurToolBar extends JToolBar
 	 * @return	JToolBar	The MigurToolBar object.
 	 * @since   1.0
 	 */
-	public static function getInstance($name = 'toolbar', $form = null, $actionPrefix = '', $useAcl = false)
+	public static function getInstance($name = 'toolbar', $form = null, $actionPrefix = '', $useAcl = false, $options = array())
 	{
 		static $instances;
 
@@ -72,7 +76,7 @@ class MigurToolBar extends JToolBar
 			$instances = array();
 		}
 		if (empty($instances[$name])) {
-			$instances[$name] = new MigurToolBar($name, $form);
+			$instances[$name] = new MigurToolBar($name, $form, $actionPrefix, $useAcl, $options);
 		}
 
 		return $instances[$name];
@@ -91,13 +95,28 @@ class MigurToolBar extends JToolBar
 	{
 		$html = parent::renderButton($node);
 		$formName = $this->_formName;
+		
+		if (!empty($this->_options['useDefaultCallback'])) {
+			return preg_replace(
+				array(
+					"/Joomla\.submitbutton\(([^)]*)\)/",
+					"/adminForm/"
+				),
+				array(
+					"Joomla.submitbutton($1, document.{$formName}, this)",
+					$formName
+				),
+				$html
+			);
+		}
+		
 		return preg_replace(
 			array(
 				"/Joomla\.submitbutton\(([^)]*)\)/",
 				"/adminForm/"
 			),
 			array(
-				"Joomla.submitform($1, document.{$formName})",
+				"Joomla.submitform($1, document.{$formName}, this)",
 				$formName
 			),
 			$html

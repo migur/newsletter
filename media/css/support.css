@@ -1,0 +1,10 @@
+.content {
+	margin: 20px;
+	padding: 20px;
+	font-size:18px;
+	line-height: 32px;
+}
+
+.content p {
+	text-indent: 20px;
+}

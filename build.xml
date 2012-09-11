@@ -65,7 +65,7 @@
             <fileset file="${cfg.comDir}/script.php" />
         </copy>
 
-        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>
+        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="0777"/>
 
         <copy todir="${destdir}/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.siteFilesDir}" />
@@ -123,6 +123,22 @@
             <fileset dir="${cfg.comDir}/newsletter_plugin_bug_report" />
         </copy>
     -->
+	
+<!-- plg_migurlistsync -->	
+        <copy todir="${destdir}/plugins/system/migurlistsync/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/migurlistsync.xml" />
+        </copy>
+        <copy todir="${destdir}/plugins/system/migurlistsync/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/migurlistsync.php" />
+        </copy>
+        <copy todir="${destdir}/plugins/system/migurlistsync/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/index.html" />
+        </copy>
+    	<!-- LANGUAGE FILES -->
+		
+        <copy todir="${destdir}/administrator/language/en-GB/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/en-GB.plg_system_migurlistsync.ini" />
+        </copy>
     </target>
 
     <target name="up30a" description="attemps to update files on localhost server with files from working directory">
@@ -143,7 +159,7 @@
             <fileset file="${cfg.comDir}/script.php" />
         </copy>
 
-        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>
+        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="0777"/>
 
         <copy todir="${destdir}/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.siteFilesDir}" />
@@ -221,7 +237,7 @@
             <fileset file="${cfg.comDir}/script.php" />
         </copy>
 
-        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>
+        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="0777"/>
 
         <copy todir="${destdir}/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.siteFilesDir}" />
@@ -296,7 +312,7 @@
 
         <delete  dir="${cfg.buildVersionDir}" />
 
-    	<!-- MAIN COMPONENT -->
+<!-- MAIN COMPONENT -->
         <copy todir="${cfg.buildVersionDir}/packages/com_${cfg.comName}/admin" preservelastmodified="true" overwrite="true">
             <fileset dir="${basedir}/admin" />
         </copy>
@@ -315,23 +331,37 @@
         <zip destfile="${cfg.buildVersionDir}/packages/com_${cfg.comName}.zip" basedir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" />
         <delete dir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" />
 
+<!-- Module -->
         <copy todir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" preservelastmodified="true" overwrite="true">
             <fileset dir="${basedir}/extensions/modules/mod_newsletter_subscribe" />
         </copy>
         <zip destfile="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe.zip" basedir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" />
         <delete dir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" />
 
+<!-- Library -->
         <copy todir="${cfg.buildVersionDir}/packages/migur" preservelastmodified="true" overwrite="true">
             <fileset dir="${basedir}/extensions/libraries/migur" />
         </copy>
         <zip destfile="${cfg.buildVersionDir}/packages/migur.zip" basedir="${cfg.buildVersionDir}/packages/migur" />
         <delete dir="${cfg.buildVersionDir}/packages/migur" />
 
+<!-- Plugin -->
+        <copy todir="${cfg.buildVersionDir}/packages/plg_migurlistsync" preservelastmodified="true" overwrite="true">
+            <fileset dir="${basedir}/extensions/plugins/plg_migurlistsync" />
+        </copy>
+        <zip destfile="${cfg.buildVersionDir}/packages/plg_migurlistsync.zip" basedir="${cfg.buildVersionDir}/packages/plg_migurlistsync" />
+        <delete dir="${cfg.buildVersionDir}/packages/plg_migurlistsync" />
+
+<!-- Last preparations -->
         <copy todir="${cfg.buildVersionDir}" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/pkg_newsletter.xml" />
         </copy>
+        <copy todir="${cfg.buildVersionDir}" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/pkg_newsletter_script.php" />
+        </copy>
         <delete  file="${cfg.buildVersionDir}/pkg_newsletter.zip" />
         <zip destfile="${cfg.buildVersionDir}/pkg_newsletter.zip" basedir="${cfg.buildVersionDir}" />
+		<chmod file="${cfg.buildVersionDir}/pkg_newsletter.zip" perm="ugo+rwx" />
 
     </target>
 

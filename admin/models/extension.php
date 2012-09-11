@@ -54,16 +54,18 @@ class NewsletterModelExtension extends JModelAdmin
 	{
 		// The folder and element vars are passed when saving the form.
 		if (!empty($data)) {
-			$clientId = JArrayHelper::getValue($data, 'client_id', '0'); // 0 - means administrator side
-			$module = JArrayHelper::getValue($data, 'module');
-			$native = JArrayHelper::getValue($data, 'native', 0);
-			$type = (JArrayHelper::getValue($data, 'type', 0) == 2)? 'plugin' : 'module';
+			$clientId  = JArrayHelper::getValue($data, 'client_id', '0'); // 0 - means administrator side
+			$module    = JArrayHelper::getValue($data, 'module');
+			$native    = JArrayHelper::getValue($data, 'native', 0);
+			$type      = (JArrayHelper::getValue($data, 'type', 0) == 2)? 'plugin' : 'module';
+			$namespace = JArrayHelper::getValue($data, 'namespace', null);
 		}
 
 		// These variables are used to add data from the plugin XML files.
 		$this->setState('item.client_id', $clientId);
 		$this->setState('item.module', $module);
 		$this->setState('item.module.native', $native);
+		$this->setState('item.module.namespace', $namespace);
 		$this->setState('item.nextension.type', $type);
 
 		// Get the form.
@@ -87,7 +89,6 @@ class NewsletterModelExtension extends JModelAdmin
 		if (empty($data)) {
 
 			$form = JRequest::getVar('jform');
-			
 			if (!empty($form)) {
 				$data = $form;
 			} else {	
@@ -122,6 +123,7 @@ class NewsletterModelExtension extends JModelAdmin
 	 */
 	protected function preprocessForm(JForm $form, $data, $group = '')
 	{
+		
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 
@@ -131,6 +133,9 @@ class NewsletterModelExtension extends JModelAdmin
 		$clientId = $this->getState('item.client_id', 0);
 		$native   = $this->getState('item.module.native', 0);
 		$type     = $this->getState('item.nextension.type', 0).'s';
+		
+		@list($folder) = explode('.', $this->getState('item.module.namespace', null));
+		
 		$lang		= JFactory::getLanguage();
 		$client		= JApplicationHelper::getClientInfo($clientId);
 
@@ -142,10 +147,20 @@ class NewsletterModelExtension extends JModelAdmin
 
 		$lang->load('com_modules', JPATH_ADMINISTRATOR, $lang->getDefault(), false, true);
 
-		$formFile = (!$native)?
-			JPath::clean(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'extensions'. DIRECTORY_SEPARATOR .$type. DIRECTORY_SEPARATOR .$module. DIRECTORY_SEPARATOR .$module.'.xml') :
-			JPath::clean(JPATH_SITE. DIRECTORY_SEPARATOR .$type. DIRECTORY_SEPARATOR .$module. DIRECTORY_SEPARATOR .$module.'.xml');
+		// Create the path to extension's XML manifest
+		if ($type == 'modules') {
+			$formFile = (!$native)?
+				JPath::clean(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'extensions'. DIRECTORY_SEPARATOR .$type. DIRECTORY_SEPARATOR .$module. DIRECTORY_SEPARATOR .$module.'.xml') :
+				JPath::clean(JPATH_SITE. DIRECTORY_SEPARATOR .$type. DIRECTORY_SEPARATOR .$module. DIRECTORY_SEPARATOR .$module.'.xml');
+		}
 
+		if ($type == 'plugins') {
+			$formFile = (!$native)?
+				JPath::clean(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'extensions'. DIRECTORY_SEPARATOR .$type. DIRECTORY_SEPARATOR .$folder. DIRECTORY_SEPARATOR .$module. DIRECTORY_SEPARATOR .$module.'.xml') :
+				JPath::clean(JPATH_SITE. DIRECTORY_SEPARATOR .$type. DIRECTORY_SEPARATOR .$module. DIRECTORY_SEPARATOR .$module.'.xml');
+		}
+		
+		// Get the config part from manifest
 		if (file_exists($formFile)) {
 			// Get the module form.
 			if (!$form->loadFile($formFile, false, '//config')) {

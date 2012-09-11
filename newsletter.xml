@@ -11,7 +11,7 @@
         <copyright>Copyright (C) 2011 Migur Ltd. All rights reserved.</copyright>
         <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
         <!--  The version string is recorded in the components table -->
-        <version>12.05</version>
+        <version>12.07</version>
         <!-- The description is optional and defaults to the name -->
         <description>COM_NEWSLETTER_DESCRIPTION</description>
  
@@ -50,8 +50,9 @@
 
         <media destination="com_newsletter" folder="media">
                 <filename>index.html</filename>
-                <folder>images</folder>
                 <folder>css</folder>
+                <folder>images</folder>
+                <folder>examples</folder>
                 <folder>js</folder>
         </media>
 
@@ -76,6 +77,8 @@
                         <filename>constants.php</filename>
                         <filename>index.html</filename>
 
+                        <!-- class files section -->
+                        <folder>class</folder>
                         <!-- controllers files section -->
                         <folder>controllers</folder>
                         <!-- data files section -->

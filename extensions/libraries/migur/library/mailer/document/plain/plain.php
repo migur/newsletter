@@ -107,15 +107,4 @@ class MigurMailerDocumentPlain extends MigurMailerDocument
 	public function track() {
 		return true;
 	}
-	
-	
-	/**
-	 * The plugins are not used for PLAIN type
-	 *
-	 * @return	object
-	 * @since   1.0
-	 */
-	public function triggerEvent() {
-		return true;
-	}
 }

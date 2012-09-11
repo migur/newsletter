@@ -19,6 +19,8 @@ JLoader::import('helpers.mail', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.download', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('tables.history', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR);
+JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR);
 jimport('joomla.error.log');
 
 /**
@@ -29,9 +31,10 @@ jimport('joomla.error.log');
  */
 class MigurMailer extends JObject
 {
-	
 	protected $_transport;
 	
+	// Instance of dispatcher
+	public $dispatcher;
 	
 	/**
 	 * Create the result mail content.
@@ -56,11 +59,25 @@ class MigurMailer extends JObject
 			return false;
 		}
 
+		// Let's process all plugins used in this newsletter
+		
+		// First let's create brand new dispatcher...
+		unset($this->dispatcher); 
+		$this->dispatcher = new JDispatcher();
+		$plugins = JModel::getInstance('Newsletter', 'NewsletterModel')
+				->getUsedPlugins($params['newsletter_id'], 'newsletter.'.$params['type']);
+		MigurPluginHelper::importPluginCollection($plugins, $this->dispatcher);
+
 		// Create ALWAYS NEW instance
+		$params['dispatcher'] = $this->dispatcher;
 		$document = MigurMailerDocument::factory($params['type'], $params);
-		//$this->triggerEvent('onMailerBeforeRender');
-		$data = $document->render(false, $params);
-		//$this->triggerEvent('onMailerAfterRender');
+		
+		// Trigger before
+		$data = '';
+		$this->dispatcher->trigger('onMigurBeforeNewsletterRender', array(&$data, $params['newsletter_id']));
+		
+		$data .= $document->render(false, $params);
+		// trigger AFTER is inside of render ^^
 		
 		// Finish with it. Destroy.
 		unset($document);
@@ -85,9 +102,7 @@ class MigurMailer extends JObject
 		}
 
 		$document = MigurMailerDocument::factory($params['type'], $params);
-		//$this->triggerEvent('onMailerBeforeRender');
 		$data = $document->render(false, $params);
-		//$this->triggerEvent('onMailerAfterRender');
 		unset($document);
 
 		return $data;
@@ -112,7 +127,6 @@ class MigurMailer extends JObject
 		
 		// Create ALWAYS NEW instance
 		$document = MigurMailerDocument::factory('plain', $params);
-		//$this->triggerEvent('onMailerBeforeRender');
 		return $document->render();
 	}
 	
@@ -143,10 +157,8 @@ class MigurMailer extends JObject
 			$params['renderMode'] = 'schematic';
 		}	
 		$document = MigurMailerDocument::factory($params['type'], $params);
-		//$this->triggerEvent('onMailerBeforeRender');
 		$document->render(false, $params);
 		$tpl = $document->getTemplate();
-		//$this->triggerEvent('onMailerAfterRender');
 		unset($document);
 
 		return $tpl;
@@ -185,6 +197,7 @@ class MigurMailer extends JObject
 
 		// Load newsletter...
 		$letter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		
 		if (!$letter->load($params['newsletter_id'])) {
 			$msg = 'Loading letter error or newsletter_id is not defined. Id:'.$params['newsletter_id'];
 			$this->setError($msg);
@@ -242,6 +255,7 @@ class MigurMailer extends JObject
 					'useRawUrls'    => $params['useRawUrls']
 				));
 
+			
 			$letter->subject = $this->renderSubject($letter->subject);
 			
 			if ($letter->content === false) {
@@ -249,6 +263,11 @@ class MigurMailer extends JObject
 				break;
 			}
 
+			// Finish with content
+			$letterContent = $letter->content;
+			$this->dispatcher->trigger('onMigurNewsletterMailContentComplete', array(&$letterContent, $letter->toObject()));
+			$letter->content = $letterContent;
+			
 			if (!empty($letter->name)) {
 				$sender->AddCustomHeader('Email-Name:' . $letter->name);
 			}	
@@ -257,7 +276,7 @@ class MigurMailer extends JObject
 				$sender->AddCustomHeader('Subscriber-ID:' . $item->subscriber_id);
 			}	
 
-			$letter->encoding = $letter->params->encoding;
+			$letter->encoding = !empty($letter->params->encoding)? $letter->params->encoding : null;
 
 			if (!$smtpProfile->isJoomlaProfile()) {
 				$fromName  = $smtpProfile->from_name;
@@ -423,6 +442,7 @@ class MigurMailer extends JObject
 
 		PlaceholderHelper::setPlaceholder('newsletter id', $letter->newsletter_id);
 
+		
 		// render the content of letter for each user
 		$letter->content = $this->render(array(
 				'type'          => $type,
@@ -431,10 +451,10 @@ class MigurMailer extends JObject
 				'useRawUrls'    => $params['useRawUrls']
 
 			));
-		
+
 		$letter->subject = $this->renderSubject($letter->subject);
-		
 		$letter->encoding = $letter->getEncoding();
+		
 		SubscriberHelper::restoreRealUser();
 
 		// Result object
@@ -446,6 +466,11 @@ class MigurMailer extends JObject
 		if ($letter->content === false) {
 			return $res;
 		}
+
+		// Finish with content
+		$cntnt = $letter->content;
+		$this->dispatcher->trigger('onMigurNewsletterMailContentComplete', array(&$cntnt, $letter->toObject()));
+		$letter->content = $cntnt;
 		
 		// Add custom headers
 
@@ -499,16 +524,17 @@ class MigurMailer extends JObject
 			$timeSending = microtime(true);
 			// send the unique letter to ONE recipient
 			$sendRes = $sender->send(array(
-					'letter' => $letter->toObject(),
-					'attach' => $atts,
-					'emails' => array($subscriber),
-					'smtpProfile' => $smtpProfile->toObject(),
-					'fromName' => $fromName,
-					'fromEmail' => $fromEmail,
-					'toName' => $toName,
-					'toEmail' => $toEmail,
-					'type' => $type,
-					'tracking' => $params['tracking']));
+				'letter' => $letter->toObject(),
+				'attach' => $atts,
+				'emails' => array($subscriber),
+				'smtpProfile' => $smtpProfile->toObject(),
+				'fromName' => $fromName,
+				'fromEmail' => $fromEmail,
+				'toName' => $toName,
+				'toEmail' => $toEmail,
+				'type' => $type,
+				'tracking' => $params['tracking']
+			));
 			
 			$timeSending = floor((microtime(true) - $timeSending)*1000);
 			

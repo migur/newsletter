@@ -20,8 +20,9 @@ jimport('joomla.application.component.modeladmin');
  */
 class NewsletterModelList extends JModelAdmin
 {
+
 	protected $_mailer;
-	
+
 	protected $_context;
 
 	/**
@@ -95,144 +96,146 @@ class NewsletterModelList extends JModelAdmin
 		$db->setQuery($query);
 		return $db->loadObjectList();
 	}
-    
-    /**
-     * Import subscribers into list.
-     * Creates Migur or Joomla user if necessary
-     *
-     * TODO: Better to place it in something like NewsletterManagerList...
-     * 
-     * @param type $collection List of objects
-     * @param type $options Lsit of options
-     * @return type Result data array
-     */
-    public function importCollection($listId, $collection, $options)
-    {
-        $subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
-        $errors    = 0;
-        $added     = 0;
-        $updated   = 0;
-        $assigned  = 0;
-        $skipped   = 0;
-        
-        $errorOnFail = isset($options['errorOnFail'])? (bool)$options['errorOnFail'] : false;
-        
+	/**
+	 * Import subscribers into list.
+	 * Creates Migur or Joomla user if necessary
+	 *
+	 * TODO: Better to place it in something like NewsletterManagerList...
+	 * 
+	 * @param type $collection List of objects
+	 * @param type $options Lsit of options (errorOnFail, overwrite, autoconfirm)
+	 * @return type Result data array
+	 */
+	public function importCollection($listId, $collection, $options)
+	{
+		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+
+		$errors = 0;
+		$added = 0;
+		$updated = 0;
+		$assigned = 0;
+		$skipped = 0;
+
+		$errorOnFail = isset($options['errorOnFail']) ? (bool) $options['errorOnFail'] : false;
+
 		// Let's Speeeeeed up this script in at least 50 times!
 		$db = JFactory::getDbo();
 		$transactionItemsCount = 0;
 		$db->setQuery('SET AUTOCOMMIT=0;');
 		$db->query();
-		
-        foreach ($collection as $row) {
-            
+
+		foreach ($collection as $row) {
+
+			foreach ($row as &$value) {
+				$value = trim($value);
+			}
+
 			NewsletterHelper::setTimeLimit(30);
-			
-            $row = (array)$row;
-            
-            $success = true;
-            $isExists = false;
 
-            // Try to load J! user first if id is provided
-            if (!empty($row['id'])) {
-                $isExists = $subscriber->load('-'.$row['id']);
-            }
-            
-            // If fail then Try to load a man by email
-            if (!$isExists) {
-                
-                // No email. Skip this record or throw an error
-                if(empty($row['email'])) {
-                    if ($errorOnFail) {
-                        throw new Exception('Import of a subscriber failed! No email. Name:'.$row['name']);
-                    }    
-                    else {
-                        $skipped++;
-                        continue;
-                    }    
-                }
-                
-                $isExists = $subscriber->load(array('email' => $row['email']));
-            }    
+			$row = (array) $row;
 
-            // Set confirmed if it's empty
-            if (!$subscriber->confirmed == 0) {
-                $subscriber->confirmed = 1;
-            }
+			$success = true;
+			$isExists = false;
 
-            if (!$isExists) {
-                
-                // If user is not exists then add it!
-                // Can create ONLY subscribers, NOT J!USERS.
-                if ($success = $subscriber->save($row)) {
-                    $added++; 
-                }
+			// Try to load J! user first if id is provided
+			if (!empty($row['id'])) {
+				$isExists = $subscriber->load('-' . $row['id']);
+			}
 
-            } else {
-                
-                // If user is present and we can update it
-                // Then do it but not for J! Users
-                if ($options['overwrite'] && 
-                    !$subscriber->isJoomlaUserType() && 
-                    $success = $subscriber->save($row)
-                ) {
-                    $updated++;
-                }	
-                
-            }
+			// If fail then Try to load a man by email
+			if (!$isExists) {
 
-            if ($subscriber->getId() && $success) {
+				// No email. Skip this record or throw an error
+				if (empty($row['email'])) {
+					if ($errorOnFail) {
+						throw new Exception('Import of a subscriber failed! No email. Name:' . $row['name']);
+					} else {
+						$skipped++;
+						continue;
+					}
+				}
 
-                // Assign the man only if he is not in list already
-                if(!$subscriber->isInList($listId)) {
-                    if($subscriber->assignToList($listId)) {
+				$isExists = $subscriber->load(array('email' => $row['email']));
+			}
 
-						// Send subscription letter. But not immediately.
-						// Just add in queue
-						$res = $this->sendSubscriptionMail(
-							$subscriber, 
-							$listId,
-							array(
-								'addToQueue'       => true,
+
+			if (!empty($options['autoconfirm'])) {
+				$row['confirmed'] = 1;
+			}
+
+			if (!$isExists) {
+
+				// If this is a new subscriber then check if autoconfirm
+				// TODO: In future need to add the sending of a confirmation mail here
+				// If user is not exists then add it!
+				// Can create ONLY subscribers, NOT J!USERS.
+				if ($success = $subscriber->save($row)) {
+					$added++;
+				}
+			} else {
+
+				// If user is present and we can update it
+				// Then do it but not for J! Users
+				if (!empty($options['overwrite']) &&
+					!$subscriber->isJoomlaUserType() &&
+					$success = $subscriber->save($row)
+				) {
+					$updated++;
+				}
+			}
+
+			if ($subscriber->getId() && $success) {
+
+				// Assign the man only if he is not in list already
+				if (!$subscriber->isInList($listId)) {
+
+					try {
+
+						if (!$subscriber->assignToList($listId))
+							throw new Exception;
+
+						if ($options['sendRegmail']) {
+							// Send subscription letter. But not immediately.
+							// Just add in queue
+							$res = $this->sendSubscriptionMail(
+								$subscriber, $listId, array(
+								'addToQueue' => true,
 								'ignoreDuplicates' => true)
-						);
-						
-						if ($res) {
-							
-							// Fire event onMigurAfterSubscriberImport
-							JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberImport', array(
-								'subscriberId' => $subscriber->getId(),
-								'lists' => array($listId)
-							));
+							);
 
-							$assigned++;
-							
-						} else {
-							
-	                        $errors++;
-						}	
+							if (!$res)
+								throw new Exception;
+						}
 
-                    } else {
+						// Fire event onMigurAfterSubscriberImport
+						JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberImport', array(
+							'subscriberId' => $subscriber->getId(),
+							'lists' => array($listId)
+						));
 
-                        $errors++;
-                    }
-                }	
+						// Finaly all ok!
+						$assigned++;
+					} catch (Exception $e) {
 
-            } else {
+						$errors++;
+					}
+				}
+			} else {
 
-                $errors++;
-            }
-			
+				$errors++;
+			}
+
 			// Handle the transaction
 			// Commit each 100 items
 			$transactionItemsCount++;
-			
+
 			if ($transactionItemsCount > 500) {
 				$db->setQuery('COMMIT;');
 				$db->query();
 				$transactionItemsCount = 0;
-			}	
-        }
+			}
+		}
 
 		// Commit it all!
 		$db->setQuery('COMMIT;');
@@ -240,56 +243,49 @@ class NewsletterModelList extends JModelAdmin
 
 		$db->setQuery('SET AUTOCOMMIT=0;');
 		$db->query();
-		
-        return array(
-            'errors'   => $errors,
-            'added'    => $added,
-            'updated'  => $updated,
-            'assigned' => $assigned,
-            'skipped'  => $skipped
-        );
-    }
-	
-	function sendSubscriptionMail($subscriber, $listId, $options = array()) 
-	{		
+
+		return array(
+			'errors' => $errors,
+			'added' => $added,
+			'updated' => $updated,
+			'assigned' => $assigned,
+			'skipped' => $skipped
+		);
+	}
+
+	function sendSubscriptionMail($subscriber, $listId, $options = array())
+	{
 		JLoader::import('helpers.placeholder', JPATH_COMPONENT_ADMINISTRATOR);
 		jimport('migur.library.mailer');
-		
+
 		if (empty($subscriber) || empty($listId)) {
 			throw new Exception('Missing required parameters');
 		}
-		
+
 		// Get list
 		$table = $this->getTable();
 		$table->load($listId);
 		$list = (object) $table->getProperties();
-		
-		// Check if we need to use fallback newsletter if 
-		// newsletter on subscription is not defined
-		if (!empty($options['noFallback']) && empty($list->send_at_reg)) {
-			// True means no errors...
-			return true;
-		}
 
 		// Get subscriber
 		$subManager = JModel::getInstance('Subscriber', 'NewsletterModel');
-		
+
 		if (is_numeric($subscriber)) {
 			$subscriber = $subManager->getItem($subscriber);
-		} 
-		
+		}
+
 		if ($subscriber instanceof NewsletterModelEntitySubscriber) {
 			$subscriber = $subscriber->toArray();
 		}
-		
+
 		if (!is_array($subscriber)) {
-			$subscriber = (array)$subscriber;
+			$subscriber = (array) $subscriber;
 		}
-		
+
 		// Get newsletter to send
 		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
 		$newsletter->loadAsWelcoming($list->send_at_reg);
-		
+
 		if (!$subscriber['subscriber_id'] || !$newsletter->getId() || empty($list->list_id)) {
 			throw new Exception('Missing required options');
 		}
@@ -301,42 +297,39 @@ class NewsletterModelList extends JModelAdmin
 			$queueManager->isMailExist($subscriber['subscriber_id'], $newsletter->getId())
 		) {
 			return true;
-		}	
-		
+		}
+
 		// Check if we need to send it immediately or just store it in queue
 		if (!empty($options['addToQueue'])) {
-			
+
 			return $queueManager->addMail(
-				$subscriber['subscriber_id'],
-				$newsletter->getId(),
-				$list->list_id);
-			
+					$subscriber['subscriber_id'], $newsletter->getId(), $list->list_id);
 		}
-		
+
 		// Let's send wellcoming letter
 		try {
-			
+
 			PlaceholderHelper::setPlaceholder('listname', $list->name);
-			
+			PlaceholderHelper::setPlaceholder('list id', $list->list_id);
+
 			if (!$this->_mailer) {
 				$this->_mailer = new MigurMailer();
-			}	
-			
+			}
+
 			$res = $this->_mailer->send(array(
-				'type'          => $newsletter->isFallback() ? 'plain' : $subManager->getType($subscriber),
-				'subscriber'    => (object)$subscriber,
+				'type' => $newsletter->isFallback() ? 'plain' : $subManager->getType($subscriber),
+				'subscriber' => (object) $subscriber,
 				'newsletter_id' => $newsletter->newsletter_id,
-				'tracking'      => isset($options['tracking'])? $options['tracking'] : true,
-				'useRawUrls'    => isset($options['useRawUrls'])? $options['useRawUrls'] : NewsletterHelper::getParam('rawurls') == '1'
-			));
+				'tracking' => isset($options['tracking']) ? $options['tracking'] : true,
+				'useRawUrls' => isset($options['useRawUrls']) ? $options['useRawUrls'] : NewsletterHelper::getParam('rawurls') == '1'
+				));
 
 			if (!$res->state) {
 				throw new Exception(json_encode($res->errors));
 			}
-			
+
 			LogHelper::addMessage(
 				'COM_NEWSLETTER_WELLCOMING_NEWSLETTER_SENT_SUCCESSFULLY', LogHelper::CAT_SUBSCRIPTION, array('Email' => $subscriber['email'], 'Newsletter' => $newsletter->name));
-
 		} catch (Exception $e) {
 			LogHelper::addError(
 				'COM_NEWSLETTER_WELCOMING_SEND_FAILED', LogHelper::CAT_SUBSCRIPTION, array(
@@ -345,10 +338,10 @@ class NewsletterModelList extends JModelAdmin
 				'Newsletter' => $newsletter->name));
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Bind subscriber to list.
 	 * Can himself determine the confirmed value.
@@ -360,29 +353,38 @@ class NewsletterModelList extends JModelAdmin
 	 * @return	boolean	True on success.
 	 * @since	12.05
 	 */
-	public function assignSubscriber($lid, $subscriber,  $options = array())
+	public function assignSubscriber($lid, $subscriber, $options = array())
 	{
 		if (empty($lid) || empty($subscriber)) {
 			return false;
 		}
 
+		if (!is_numeric($subscriber)) {
+
+			$sub = (array) $subscriber;
+			$sid = $subscriber['subscriber_id'];
+		} else {
+
+			$sid = (int) $subscriber;
+		}
+
+
 		// Determine the confirmed value
 		if (!isset($options['confirmed'])) {
 			$options['confirmed'] = DataHelper::getDefault('confirmed', 'sublist');
 		}
-		
+
 		// If passed or default is false then 
 		// try to determine from subscriber entity or from DB.
 		if (empty($options['confirmed'])) {
-			
+
 			if (!is_numeric($subscriber)) {
-				
-				$sub = (array)$subscriber;
+
+				$sub = (array) $subscriber;
 				$confirmed = $sub['subscription_key'];
 				$subscriber = $sub['subscriber_id'];
-				
 			} else {
-			
+
 				$subTable = $this->getTable('Subscriber', 'NewsletterTable');
 
 				if (!$subTable->load($sid)) {
@@ -390,22 +392,38 @@ class NewsletterModelList extends JModelAdmin
 				}
 
 				$confirmed = $subTable->subscription_key;
-			}	
-			
+			}
 		} else {
-			
+
 			$confirmed = 1;
-			
 		}
-		
+
 		// Save and finish.
 		return $this->getTable('sublist')
 				->save(array(
-					'subscriber_id' => (int) $subscriber,
+					'subscriber_id' => (int) $sid,
 					'list_id' => (int) $lid,
 					'confirmed' => $confirmed));
 	}
-	
+
+	/**
+	 * @return	boolean	True on success.
+	 * @since	12.05
+	 */
+	public function confirmSubscriber($lid, $sid)
+	{
+		if (empty($lid) || empty($sid)) {
+			return false;
+		}
+
+		$db = JFactory::getDbo();
+		$db->setQuery(
+			"UPDATE #__newsletter_sub_list set confirmed=1 WHERE " .
+			" subscriber_id=" . $db->quote($sid) .
+			" AND list_id=" . $db->quote($lid));
+		return $db->query();
+	}
+
 	/**
 	 * Method to check if user is already binded to the list.
 	 *
@@ -420,16 +438,87 @@ class NewsletterModelList extends JModelAdmin
 		if (empty($lid) || empty($sid)) {
 			throw new Exception('Required parameter is missing');
 		}
-		
+
 		if (!is_numeric($sid)) {
 			$sid = $sid['subscriber_id'];
 		}
 
-		return 
-			$this->getTable('sublist')
+		return
+				$this->getTable('sublist')
 				->load(array(
 					'subscriber_id' => (int) $sid,
 					'list_id' => (int) $lid
-			));
+				));
 	}
+
+	/**
+	 * Bind current subscriber to list.
+	 *
+	 * @param	array	$data	The form data.
+	 *
+	 * @return	boolean	True on success.
+	 * @since	1.0
+	 */
+	public function unbindSubscriber($lid, $subscriber, $options = array())
+	{
+		if (empty($lid) || empty($subscriber)) {
+			return false;
+		}
+
+		if (is_numeric($subscriber)) {
+			$sid = $subscriber;
+		}
+
+		if (is_object($subscriber)) {
+			$sid = $subscriber->subscriber_id;
+		}
+
+		// Delete and finish.
+		$dbo = JFactory::getDbo();
+		$dbo->setQuery(
+			'DELETE FROM #__newsletter_sub_list WHERE' .
+			' `subscriber_id` = ' . (int) $sid .
+			' AND `list_id` = ' . (int) $lid
+		);
+
+		return $dbo->query();
+	}
+
+	public function isConfirmed($lid, $sid)
+	{
+		if (empty($lid) || empty($sid)) {
+			throw new Exception('Missing required data');
+		}
+
+		if (!is_numeric($sid)) {
+			$sid = $sid['subscriber_id'];
+		}
+
+		$table = $this->getTable('sublist');
+		$res = $table->load(array('list_id' => $lid, 'subscriber_id' => $sid));
+
+		$res = ($res && $table->confirmed == 1);
+
+		unset($table);
+
+		return $res;
+	}
+
+	public function getEventsCollection($lid)
+	{
+		if (empty($lid)) {
+			throw new Exception('Required data absent');
+		}
+
+		$dbo = JFactory::getDbo();
+		$query = $dbo->getQuery(true);
+		$query
+			->select('*')
+			->from('#__newsletter_list_events AS le')
+			->join('left', '#__usergroups AS ug ON le.jgroup_id = ug.id')
+			->where('list_id=' . (int) $lid);
+		$dbo->setQuery($query);
+		return $dbo->loadObjectList();
+	}
+
 }

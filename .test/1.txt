@@ -1,8 +1,0 @@
-Email, Name, Html
-woody@nixsolutions.com, !!!woody, 1
-woody1@nixsolutions.com, !!!woody1, 1
-woody2@nixsolutions.com, !!!woody2, 0
-woody3@nixsolutions.com, !!!woody3, 1
-woody4@nixsolutions.com, !!!woody4, 0
-woody5@nixsolutions.com, !!!woody5, 1
-woody6@nixsolutions.com, !!!woody6, 0

@@ -87,8 +87,40 @@ window.addEvent('domready', function() {try {
 			title: 'License checks'
 		}}, Migur.widget.ajaxChecker);
 
+// License widget
+	Migur.createWidget('extensions-check-pane', { 
+		options: { 
+			url: '?option=com_newsletter&task=maintainance.checkextensions',
+			usePreloader: true,
+			title: 'License checks'
+		}}, Migur.widget.ajaxChecker);
+
+// Joomla general info
+	Migur.createWidget('generalsysinfo-check-pane', { 
+		options: { 
+			url: '?option=com_newsletter&task=maintainance.checksysteminfo',
+			usePreloader: true,
+			title: 'General system information'
+		}}, Migur.widget.ajaxChecker);
+
+// Joomla directories
+	Migur.createWidget('phpsettings-check-pane', { 
+		options: { 
+			url: '?option=com_newsletter&task=maintainance.checkphpsettings',
+			usePreloader: true,
+			title: 'Directory permissions'
+		}}, Migur.widget.ajaxChecker);
+
+
+// Joomla directories
+	Migur.createWidget('jdirectories-check-pane', { 
+		options: { 
+			url: '?option=com_newsletter&task=maintainance.checkjdirectories',
+			usePreloader: true,
+			title: 'Directory permissions'
+		}}, Migur.widget.ajaxChecker);
+
 	Migur.maintainanceManager
-	
 		.add(function(callback, type){
 			var w = Migur.getWidget('environment-check-pane');
 			return w[type](callback);})
@@ -107,6 +139,22 @@ window.addEvent('domready', function() {try {
 
 		.add(function(callback, type){
 			var w = Migur.getWidget('license-check-pane');
+			return w[type](callback);})
+
+		.add(function(callback, type){
+			var w = Migur.getWidget('extensions-check-pane');
+			return w[type](callback);})
+
+		.add(function(callback, type){
+			var w = Migur.getWidget('generalsysinfo-check-pane');
+			return w[type](callback);})
+
+		.add(function(callback, type){
+			var w = Migur.getWidget('jdirectories-check-pane');
+			return w[type](callback);})
+
+		.add(function(callback, type){
+			var w = Migur.getWidget('phpsettings-check-pane');
 			return w[type](callback);})
 
 		.add(function(){

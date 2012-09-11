@@ -1,0 +1,2 @@
+'id','name','username','email','password','usertype','block','sendEmail','registerDate','lastvisitDate','activation','params'
+'1','Name','User name','name@blackhole.com','123456','','0','1','','','',''

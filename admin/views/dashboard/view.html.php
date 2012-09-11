@@ -78,13 +78,12 @@ class NewsletterViewDashboard extends MigurView
 		$total = 0;
 		foreach ($stat as $row) {
 			$sent += $row['sent'];
-			$toSend += $row['to_send'];
 			$total += $row['total'];
 		}
 
-		JavascriptHelper::addStringVar('emailsSent', $sent);
-		JavascriptHelper::addStringVar('emailsToSend', $toSend);
-		JavascriptHelper::addStringVar('emailsTotal', $total);
+		JavascriptHelper::addStringVar('mailsSent', $sent);
+		JavascriptHelper::addStringVar('mailsToSend', $total - $sent);
+		JavascriptHelper::addStringVar('mailsTotal', $total);
 		JavascriptHelper::addStringVar('newslettersSent', count($stat));
 
 		$cache = JFactory::getCache('com_newsletter');
@@ -119,6 +118,8 @@ class NewsletterViewDashboard extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_DASHBOARD_TITLE'), 'article.png');
 		$bar = JToolBar::getInstance();
 		$bar->appendButton('Link', 'alert', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
+		$bar->appendButton('Separator');
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', SupportHelper::getResourceUrl('mailing', 'general'));
 
 		JToolBarHelper::custom('', 'progress', '', '', false);
 

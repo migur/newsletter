@@ -144,13 +144,13 @@ class NewsletterModelImportCommon
 
 				try {
 					// Send message
-					$listManager->sendSubscriptionMail(
-						$subscriber,
-						$lid, 
-						array(
-							'addToQueue'       => true,
-							'ignoreDuplicates' => true
-					));
+//					$listManager->sendSubscriptionMail(
+//						$subscriber,
+//						$lid, 
+//						array(
+//							'addToQueue'       => true,
+//							'ignoreDuplicates' => true
+//					));
 
 					// Assign to list
 					$listManager->assignSubscriber($lid, $subscriber);
@@ -292,7 +292,7 @@ class NewsletterModelImportCommon
 	public static function getSupported()
 	{
 		// Get a list of files
-		$files = glob(__DIR__ . '/*.php');
+		$files = glob(dirname(__FILE__) . '/*.php');
 		
 		// Fetch all supported component managers
 		$res = array();

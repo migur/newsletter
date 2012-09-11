@@ -88,8 +88,8 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 * 
 	 * @return type 
 	 */
-	public function save(){
-		
+	public function save()
+	{
 		
 		$task = JRequest::getString('task');
 		

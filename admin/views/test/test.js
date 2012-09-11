@@ -55,8 +55,50 @@ window.addEvent('domready', function() {
 			nonVisible.setStyle('display', 'block');
 			
 		});
+
+		window.cronSendPeriodHandler = function(){
+
+			var url = $$('.cron-send.test-url')[0].getProperty('value');
+
+			window.cronSendPeriodRequest = new Request({
+				url: migurSiteRoot + url,
+				method: 'get',
+
+				onComplete: function(res){
+					$$('.test-result')[0].removeClass('preloader');
+					$$('.test-result')[0].set('html', $$('.test-result')[0].get('html') + "<br/>" + res);
+					delete window.cronSendPeriodRequest;
+				},
+
+				onError: function(res){
+					$$('.test-result')[0].removeClass('preloader');
+					$$('.test-result')[0].set('html', '<ERROR>'+res);
+					delete window.cronSendPeriodRequest;
+				}
+			}).send();
+		}	
+
+		$$('.cron-send-start').addEvent('click', function(){
+
+			var val = $$('.cron-send.test-params')[0].getProperty('value');
+
+			if (window.cronSendPeriodPtr) {
+				clearInterval(window.cronSendPeriodPtr);
+			}
+
+			window.cronSendPeriodPtr = setInterval(window.cronSendPeriodHandler, val * 1000);
+			window.cronSendPeriodHandler();
+		});
 	
-	
+		$$('.cron-send-stop').addEvent('click', function(){
+			
+			if (window.cronSendPeriodPtr) {
+				delete window.cronSendPeriodRequest;
+				clearInterval(window.cronSendPeriodPtr);
+			}
+		});
+
+
 	} catch(e){}
 
 });

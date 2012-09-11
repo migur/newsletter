@@ -10,6 +10,8 @@
 // No direct access.
 defined('_JEXEC') or die;
 
+jimport('migur.library.table');
+
 /**
  * Class of smtp_profiles table. Implement the functionality for it.
  *

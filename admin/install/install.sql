@@ -43,6 +43,7 @@ DROP TABLE IF EXISTS `#__newsletter_automailing_items`;
 DROP TABLE IF EXISTS `#__newsletter_automailing_targets`;
 DROP TABLE IF EXISTS `#__newsletter_threads`;
 DROP TABLE IF EXISTS `#__newsletter_logs`;
+DROP TABLE IF EXISTS `#__newsletter_list_events`;
 
 
 CREATE TABLE `#__newsletter_template_styles`
@@ -145,6 +146,7 @@ CREATE TABLE `#__newsletter_lists`
 `internal` TINYINT(3) DEFAULT '0' NOT NULL,
 send_at_reg INT(11) DEFAULT '0' NOT NULL,
 send_at_unsubscribe INT(11) DEFAULT '0' NOT NULL,
+autoconfirm SMALLINT,
 `extra` text,
 
 PRIMARY KEY (`list_id`)
@@ -217,6 +219,7 @@ CREATE TABLE `#__newsletter_extensions`
 `extension` VARCHAR(255) DEFAULT '' NOT NULL,
 `params` TEXT,
 `type` int(11) NOT NULL,
+`namespace` VARCHAR(255) DEFAULT '',
 
 PRIMARY KEY (`extension_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
@@ -233,6 +236,8 @@ CREATE TABLE `#__newsletter_queue`
 
 PRIMARY KEY (`queue_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE INDEX `nid_sid_lid_state_idx` ON `#__newsletter_queue`(`newsletter_id`, `subscriber_id`, `list_id`, `state`);
 
 CREATE TABLE `#__newsletter_downloads`
 (
@@ -330,6 +335,18 @@ CREATE TABLE `#__newsletter_logs` (
 CREATE INDEX `date_idfk` ON `#__newsletter_logs`(`date`);
 CREATE INDEX `category_idfk` ON `#__newsletter_logs`(`category`);
 
+CREATE TABLE `#__newsletter_list_events` (
+  `le_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `list_id` BIGINT(20) NOT NULL,
+  `jgroup_id` INT(10) UNSIGNED,
+  `event` VARCHAR(255),
+  `action` VARCHAR(255),
+
+  PRIMARY KEY (`le_id`)
+) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE INDEX `lid_jgid_idfk` ON `#__newsletter_list_events`(`list_id`, `jgroup_id`);
+
 
 
 CREATE INDEX `smtp_profile_id_idxfk` ON `#__newsletter_newsletters`(`smtp_profile_id`);
@@ -360,6 +377,8 @@ ALTER TABLE #__newsletter_sub_list ADD FOREIGN KEY (subscriber_id) REFERENCES #_
 
 CREATE INDEX newsletter_idxfk ON #__newsletter_newsletters_ext(newsletter_id);
 ALTER TABLE #__newsletter_newsletters_ext ADD FOREIGN KEY (newsletter_id) REFERENCES #__newsletter_newsletters (newsletter_id) ON DELETE CASCADE ON UPDATE RESTRICT;
+# Do not add it. It prevents to assign the NATIVE modules to a letter;
+# ALTER TABLE #__newsletter_newsletters_ext ADD FOREIGN KEY (extension_id) REFERENCES #__newsletter_extensions (extension_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE INDEX extension_id_idxfk ON #__newsletter_newsletters_ext(extension_id);
 # Do not use this index because it prevent to bind the Joomla native modules to newsletter;
@@ -382,6 +401,7 @@ ALTER TABLE #__newsletter_queue ADD FOREIGN KEY (newsletter_id) REFERENCES #__ne
 CREATE INDEX subscriber_ids_idxfk ON #__newsletter_queue(subscriber_id);
 ALTER TABLE #__newsletter_queue ADD FOREIGN KEY (subscriber_id) REFERENCES #__newsletter_subscribers (subscriber_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
+ALTER TABLE `#__newsletter_list_events` ADD FOREIGN KEY (`list_id`) REFERENCES `#__newsletter_lists`(`list_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 # Data for the table `#__newsletter_extensions`;
 insert  into `#__newsletter_extensions`(`extension_id`,`title`,`extension`,`params`,`type`) values (1,'Article Module','mod_article','{}',1);

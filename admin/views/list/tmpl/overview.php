@@ -14,10 +14,11 @@
                     <?php echo $this->listForm->getInput('description'); ?>
                 </dd>
                 <dt>
-                    <?php echo $this->listForm->getLabel('smtp_profile'); ?>
+					<?php echo JHtml::_('migurhelp.link', 'smtpp', 'general', 'smtpp-list'); ?>
+                    <?php echo $this->listForm->getLabel('smtp_profile_id'); ?>
                 </dt>
                 <dd>
-                    <?php echo $this->listForm->getInput('smtp_profile'); ?>
+                    <?php echo $this->listForm->getInput('smtp_profile_id'); ?>
                 </dd>
                 <dt></dt>
 

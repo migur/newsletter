@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension
-	type="module"
-	version="1.6.0"
-	client="administrator">
+<extension type="newsletter_module">
 	<name>Article module</name>
 	<author>Migur</author>
 	<creationDate>June 2011</creationDate>

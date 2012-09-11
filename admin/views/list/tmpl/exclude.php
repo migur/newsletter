@@ -96,9 +96,11 @@
 
     <fieldset id="exclude-fields">
         <legend><?php echo JText::_('COM_NEWSLETTER_IMPORT_DND_FIELDS'); ?></legend>
-            <div style="float:left"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?></div><div class="drop" style="float:left" rel="username"></div><div style="float:left"><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('COM_NEWSLETTER_SUBSCRIBER_NAME'); ?></div>
+            <div class="drop fltlft" rel="username"></div>
+			<div class="fltlft"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD') ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('COM_NEWSLETTER_SUBSCRIBER_NAME'); ?></div>
             <div class="clr"></div>
-            <div style="float:left"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?></div><div class="drop" style="float:left" rel="email"></div><div style="float:left"><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('JGLOBAL_EMAIL'); ?></div>
+            <div class="drop fltlft" rel="email"></div>
+			<div class="fltlft"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('JGLOBAL_EMAIL'); ?></div>
     </fieldset>
 
     <fieldset id="exclude-settings">
@@ -148,6 +150,13 @@
             />
 
             <div class="clr"></div>
+			
+			<div style="margin-top:10px; overflow:hidden">
+				<input type="checkbox" id="exclude-skip-header" name="exclude_skip_header" value="yes">
+				<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
+					<?php echo JHtml::_('migurhelp.link', 'list', 'exclude'); ?>
+				</div>
+			</div>
         </div>
     </fieldset>
 

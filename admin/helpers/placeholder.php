@@ -10,7 +10,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-class PlaceholderHelper
+class NewsletterHelperPlaceholder
 {
 	/*
 	 * The allowed types of a letter
@@ -134,7 +134,7 @@ class PlaceholderHelper
 
 			self::$placeholders['confirmation link'] = array(
 				'data' => null,
-				'default' => 'index.php?option=com_newsletter&task=subscribe.confirm&id=[subscription key]',
+				'default' => 'index.php?option=com_newsletter&task=subscribe.confirm&id=[subscription key]&lid=[list id]',
 				'class' => 'link'
 			);
 
@@ -231,3 +231,9 @@ class PlaceholderHelper
 		return array_values(array_unique($matches[1]));
 	}
 }
+
+/**
+ * Legacy support for class name
+ */
+class PlaceholderHelper extends NewsletterHelperPlaceholder
+{}

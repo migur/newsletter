@@ -32,11 +32,17 @@
 					</select>
 				</div>
 				<div class="fltlft">
+					<div class="label"><?php echo JText::_('COM_NEWSLETTER_JUSERGROUP'); ?></div>
+					<?php echo JHtml::_('access.usergroup', 'filter_jusergroup', $this->subscribers->state->get('filter.jusergroup'), "onchange=\"document.subscribersForm.filter_type.value='2';this.form.submit();\"", true); ?>
+				</div>	
+				<div class="fltlft">
 					<div class="label"><?php echo JText::_('COM_NEWSLETTER_FILTER'); ?></div>
 					<input type="text" name="filter_search" id="ss_filter_search" class="migur-search" value="<?php echo $this->escape($this->subscribers->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
-
-					<button class="filter-search-button" type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-					<button type="button" onclick="document.id('ss_filter_search').value='';document.subscribersForm.filter_list.value='';document.subscribersForm.filter_published.value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+					
+					<div class="fltlft" style="margin-left:10px">
+						<button class="filter-search-button" type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
+						<button type="button" onclick="document.id('ss_filter_search').value='';document.subscribersForm.filter_list.value='';document.subscribersForm.filter_published.value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+					</div>
 				</div>
             </div>
 	</fieldset>
@@ -53,6 +59,9 @@
 				<th class="left">
 					<?php echo JHtml::_('multigrid.sort', 'JGLOBAL_EMAIL', 'a.email', $this->subscribers->listDirn, $this->subscribers->listOrder, null, null, 'subscribersForm'); ?>
 				</th>
+				<th class="left" width="120px">
+					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_REGISTRATION_DATE', 'a.registerDate', $this->subscribers->listDirn, $this->subscribers->listOrder, null, null, 'subscribersForm'); ?>
+				</th>
 				<th width="8%" class="left">
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ENABLED', 'a.state', $this->subscribers->listDirn, $this->subscribers->listOrder, NULL, 'desc', 'subscribersForm'); ?>
 				</th>
@@ -63,7 +72,7 @@
 		</thead>
 		<tfoot>
 			<tr>
-				<td class="left" colspan="5">
+				<td class="left" colspan="6">
 					<?php echo $this->subscribers->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -79,16 +88,26 @@
 				<td>
 					<?php echo JHtml::_('multigrid.id', $i, $subscriber->getExtendedId(), false, 'cid', 'subscribersForm'); ?>
 				</td>
-				<td>
-					<a href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&subscriber_id='.$subscriber->getExtendedId()); ?>"
+				<td class="subscriber-name">
+					<?php 
+						if (!$subscriber->subscriber_id) { 
+							$href = JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&user_id='.$subscriber->user_id, false);
+						} else {
+							$href = JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&subscriber_id='.$subscriber->subscriber_id, false);
+						}
+					?>
+					<a href="<?php echo $href; ?>"
 					   rel="{handler: 'iframe', size: {x: 965, y: 540}}"
 					   class="modal" >
 						<?php echo $this->escape($item->name); ?>
 					</a>
 					<div class="<?php echo $subscriber->isJoomlaUserType()? 'juser-type-icon' : 'subscriber-type-icon'; ?>"></div>
 				</td>
-				<td>
-                                        <?php echo $this->escape($subscriber->email); ?>
+				<td class="subscriber-email">
+					<?php echo $this->escape($subscriber->email); ?>
+				</td>
+				<td class="subscriber-registerDate">
+					<?php echo $this->escape($subscriber->registerDate); ?>
 				</td>
 				<td class="center">
 					<?php echo JHtml::_('multigrid.enabled', $subscriber->state, $i, 'tick.png', 'publish_x.png', 'subscribers.', 'subscribersForm'); ?>

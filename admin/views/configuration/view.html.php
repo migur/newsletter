@@ -51,6 +51,10 @@ class NewsletterViewConfiguration extends MigurView
 		JHTML::stylesheet('media/com_newsletter/css/configuration.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
 		JHTML::script('administrator/components/com_newsletter/views/configuration/configuration.js');
+		
+		// Add JS and create namespace for data
+		//$document = JFactory::getDocument();
+		//$document->addScript(JURI::root() . "media/com_newsletter/js/migur/js/support.js");
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
@@ -64,15 +68,17 @@ class NewsletterViewConfiguration extends MigurView
 			'checkLogs',
 			'checkAcl'));
 		
-		$this->general = JComponentHelper::getParams('com_newsletter');
+		$this->assignRef('general', JComponentHelper::getParams('com_newsletter'));
 
 		//$model = JModel::getInstance('extensions', 'NewsletterModel');
 		//$this->modules = $model->getModules();
 		//$this->plugins = $model->getPlugins();
-		$this->modules = MigurModuleHelper::getSupported();
-		$this->plugins = MigurPluginHelper::getSupported();
+		$this->assignRef('modules', MigurModuleHelper::getSupported());
+		$this->assignRef('plugins', MigurPluginHelper::getSupported());
 
-		$this->form = $this->get('Form');
+		$this->assignRef('templates', JModel::getInstance('Templates', 'NewsletterModel')->getAllInstalledItems());
+		
+		$this->assignRef('form', $this->get('Form'));
 		$this->addToolbar();
 		parent::display($tpl);
 	}
