@@ -55,30 +55,30 @@ class NewsletterViewSubscriber extends MigurView
 
 		$this->ssForm = $this->get('Form', 'subscriber');
 
-		// call getItems from model 'lists' via JView->get()
+		// call getItems from model 'lists' via MigurView->get()
 		$this->subscriberId = $this->ssForm->getValue('subscriber_id');
 
 
 		if ($this->getLayout() == 'edit') {
 
-			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 			$model->load($this->subscriberId);
 			$this->subscriber = $model;
 			
 			$model = $this->setModel(
-					JModel::getInstance('lists', 'NewsletterModel')
+					MigurModel::getInstance('lists', 'NewsletterModel')
 			);
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 			$model->setSubscriberQuery();
 
 			$model = $this->setModel(
-					JModel::getInstance('sents', 'NewsletterModel')
+					MigurModel::getInstance('sents', 'NewsletterModel')
 			);
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 
 
 			$model = $this->setModel(
-					JModel::getInstance('history', 'NewsletterModel')
+					MigurModel::getInstance('history', 'NewsletterModel')
 			);
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 

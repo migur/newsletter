@@ -68,8 +68,8 @@ try {
 
 	JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'rules');
 	JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'tables');
-	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models', 'NewsletterModel');
-	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'entities', 'NewsletterModelEntity');
+	MigurModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models', 'NewsletterModel');
+	MigurModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'entities', 'NewsletterModelEntity');
 
 	// Add the site root and user's ACL to JS
 	JavascriptHelper::addStringVar('migurSiteRoot', JUri::root());
@@ -84,7 +84,7 @@ try {
 	// Here we get full task and preserve it from exploding
     JRequest::setVar('completetask', JRequest::getCmd('task'));
     
-	$controller = JController::getInstance('Newsletter');
+	$controller = MigurController::getInstance('Newsletter');
 	
 	// Perform the Request task
 	// Here we get only tail of a task 

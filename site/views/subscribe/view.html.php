@@ -20,7 +20,7 @@ JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @subpackage	com_newsletter
  * @since 		1.0
  */
-class NewsletterViewSubscribe extends JView
+class NewsletterViewSubscribe extends MigurView
 {
 	function display($tpl = null)
 	{
@@ -29,7 +29,7 @@ class NewsletterViewSubscribe extends JView
 
 		$user = JFactory::getUser();
 		
-		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$subscriber = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
 		if (!empty($uid)) {
 			$subscriber->load(array('subscription_key' => $uid));

@@ -16,8 +16,6 @@ if (!defined('MIGUR')) {
 	die(JError::raiseWarning(0, JText::_("MIGUR library wasn't found.")));
 }
 
-jimport('joomla.application.component.modellist');
-
 /**
  * Class extends the functionality of JModelList
  *
@@ -26,11 +24,11 @@ jimport('joomla.application.component.modellist');
  * 
  * @deprecated since 12.05
  */
-if (!class_exists('JModelLegacy')) {
-	class JModelLegacy extends JModel {}
+if (!class_exists('JControllerLegacy')) {
+	class JControllerLegacy extends JController {}
 }
 
-class MigurModel extends JModelLegacy
+class MigurController extends JControllerLegacy
 {
 	
 	protected $_defaults = array();

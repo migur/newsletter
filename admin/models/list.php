@@ -109,7 +109,7 @@ class NewsletterModelList extends JModelAdmin
 	 */
 	public function importCollection($listId, $collection, $options)
 	{
-		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$subscriber = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
 		$errors = 0;
 		$added = 0;
@@ -268,7 +268,7 @@ class NewsletterModelList extends JModelAdmin
 		$list = (object) $table->getProperties();
 
 		// Get subscriber
-		$subManager = JModel::getInstance('Subscriber', 'NewsletterModel');
+		$subManager = MigurModel::getInstance('Subscriber', 'NewsletterModel');
 
 		if (is_numeric($subscriber)) {
 			$subscriber = $subManager->getItem($subscriber);
@@ -283,14 +283,14 @@ class NewsletterModelList extends JModelAdmin
 		}
 
 		// Get newsletter to send
-		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$newsletter = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
 		$newsletter->loadAsWelcoming($list->send_at_reg);
 
 		if (!$subscriber['subscriber_id'] || !$newsletter->getId() || empty($list->list_id)) {
 			throw new Exception('Missing required options');
 		}
 
-		$queueManager = JModel::getInstance('Queues', 'NewsletterModel');
+		$queueManager = MigurModel::getInstance('Queues', 'NewsletterModel');
 		// Return if no need to send duplicaded mails
 		if (
 			empty($options['ignoreDuplicates']) &&

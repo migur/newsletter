@@ -535,7 +535,7 @@ class com_newsletterInstallerScript
 
 			JLoader::import('migur.migur', JPATH_LIBRARIES);
 
-			$model = JModel::getInstance('Install', 'NewsletterModel');
+			$model = MigurModel::getInstance('Install', 'NewsletterModel');
 			$model->restore();
 		
 		} catch(Extension $e) {}	

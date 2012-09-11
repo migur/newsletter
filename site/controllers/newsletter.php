@@ -25,7 +25,7 @@ JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR);
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterControllerNewsletter extends JControllerForm
+class NewsletterControllerNewsletter extends MigurControllerForm
 {
 
 	/**
@@ -68,7 +68,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$email        = urldecode(JRequest::getVar('email', null));
 		$alias        = JRequest::getString('alias', null);
 
-		$model = JModel::getInstance('Newsletter', 'NewsletterModel');
+		$model = MigurModel::getInstance('Newsletter', 'NewsletterModel');
 		
 		if (!empty($alias)) {
 			$newsletter = NewsletterHelper::getByAlias($alias);
@@ -186,7 +186,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		
 		// Process list of emails....
 		$messagesSkipped = array();
-		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$subscriber = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		foreach ($emails as $email) {
 			
 			// Trying to find subscriber or J!user

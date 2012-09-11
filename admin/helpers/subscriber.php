@@ -42,7 +42,7 @@ class NewsletterHelperSubscriber
 			return false;
 		}
 
-		$model = JModel::getInstance('Subscriber', 'NewsletterModel');
+		$model = MigurModel::getInstance('Subscriber', 'NewsletterModel');
 		$subscriber = (object) $model->getItem($params);
 		
 		$user = JUser::getInstance();

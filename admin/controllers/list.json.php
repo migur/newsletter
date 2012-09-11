@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla controllerform library
 jimport('joomla.application.component.controllerform');
 
-class NewsletterControllerList extends JControllerForm
+class NewsletterControllerList extends MigurControllerForm
 {
 
 	/**
@@ -115,7 +115,7 @@ class NewsletterControllerList extends JControllerForm
 	public function upload()
 	{
 
-		$uploader = JModel::getInstance('file', 'NewsletterModel');
+		$uploader = MigurModel::getInstance('file', 'NewsletterModel');
 		$data = $uploader->upload(array('overwrite' => true));
 		$listId = JRequest::getInt('list_id', 0);
 

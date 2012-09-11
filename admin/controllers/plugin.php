@@ -15,7 +15,7 @@ jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer');
 
 
-class NewsletterControllerPlugin extends JControllerForm
+class NewsletterControllerPlugin extends MigurControllerForm
 {
 	public function trigger()
 	{

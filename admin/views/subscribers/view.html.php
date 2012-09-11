@@ -53,7 +53,7 @@ class NewsletterViewSubscribers extends MigurView
 
 
 		$this->setModel(
-			JModel::getInstance('lists', 'NewsletterModel')
+			MigurModel::getInstance('lists', 'NewsletterModel')
 		);
 
 		EnvironmentHelper::showWarnings(array(
@@ -92,7 +92,7 @@ class NewsletterViewSubscribers extends MigurView
 		);
 		$this->assignRef('lists', $lists);
 
-		$this->assignRef('subscriberModel', JModel::getInstance('Subscriber', 'NewsletterModelEntity'));
+		$this->assignRef('subscriberModel', MigurModel::getInstance('Subscriber', 'NewsletterModelEntity'));
 		
 		parent::display($tpl);
 	}

@@ -70,13 +70,13 @@ class NewsletterViewConfiguration extends MigurView
 		
 		$this->assignRef('general', JComponentHelper::getParams('com_newsletter'));
 
-		//$model = JModel::getInstance('extensions', 'NewsletterModel');
+		//$model = MigurModel::getInstance('extensions', 'NewsletterModel');
 		//$this->modules = $model->getModules();
 		//$this->plugins = $model->getPlugins();
 		$this->assignRef('modules', MigurModuleHelper::getSupported());
 		$this->assignRef('plugins', MigurPluginHelper::getSupported());
 
-		$this->assignRef('templates', JModel::getInstance('Templates', 'NewsletterModel')->getAllInstalledItems());
+		$this->assignRef('templates', MigurModel::getInstance('Templates', 'NewsletterModel')->getAllInstalledItems());
 		
 		$this->assignRef('form', $this->get('Form'));
 		$this->addToolbar();

@@ -23,6 +23,7 @@ class NewsletterHelperAutoload
 		// Register the base path for Joomla platform libraries.
 		jimport('migur.migur');
 		self::registerPrefix('MigurJ', $migurlibPath);
+		self::registerPrefix('Migur', $migurlibPath);
 		self::registerPrefix('NewsletterAutomlailingPlan', $componentPath . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'automailing' . DIRECTORY_SEPARATOR . 'plans');
 		self::registerPrefix('NewsletterAutomlailingThread', $componentPath . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'automailing' . DIRECTORY_SEPARATOR . 'threads');
 		

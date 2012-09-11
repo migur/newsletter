@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.controlleradmin');
 
-class NewsletterControllerSubscribers extends JControllerAdmin
+class NewsletterControllerSubscribers extends MigurControllerAdmin
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.
@@ -44,7 +44,7 @@ class NewsletterControllerSubscribers extends JControllerAdmin
 		
 		if (!empty($cids)) {
 
-			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 			
 			foreach($cids as $idx => $cid) {
 				
@@ -89,7 +89,7 @@ class NewsletterControllerSubscribers extends JControllerAdmin
 		$cids = JRequest::getVar('cid', array(), '', 'array');
 		
 		// If needed create rows in SUBSCRIBERS for J! user
-		$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		$newCids = array();
 		foreach($cids as $cid) {
 			$model->load($cid);

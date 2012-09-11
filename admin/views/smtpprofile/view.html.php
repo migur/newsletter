@@ -38,7 +38,7 @@ class NewsletterViewSmtpprofile extends MigurView
 
 		$this->ssForm = $this->get('Form', 'smtpprofile');
 		
-		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$model = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$smtpid = JRequest::getInt('smtp_profile_id', null);
 		
 		if ($smtpid !== null) {

@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla controllerform library
 jimport('joomla.application.component.controllerform');
 
-class NewsletterControllerListevent extends JControllerForm
+class NewsletterControllerListevent extends MigurControllerForm
 {
 	public function __construct($config = array())
 	{

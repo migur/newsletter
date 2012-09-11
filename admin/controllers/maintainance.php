@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla controllerform library
 jimport('joomla.application.component.controllerform');
 
-class NewsletterControllerMaintainance extends JControllerForm
+class NewsletterControllerMaintainance extends MigurControllerForm
 {
 
 	/**
@@ -233,14 +233,14 @@ class NewsletterControllerMaintainance extends JControllerForm
 	{
 		$res = array();
 
-		$manager = JModel::getInstance('Smtpprofiles', 'NewsletterModel');
+		$manager = MigurModel::getInstance('Smtpprofiles', 'NewsletterModel');
 		$smtpps = $manager->getAllItems();
 
 		if (!empty($manager)) {
 
 			jimport('migur.library.mailer.sender');
 			$sender = new MigurMailerSender();
-			$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+			$model = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 
 			foreach ($smtpps as $smtpp) {
 
@@ -275,7 +275,7 @@ class NewsletterControllerMaintainance extends JControllerForm
 	{
 		$res = array();
 
-		$manager = JModel::getInstance('Mailboxprofiles', 'NewsletterModel');
+		$manager = MigurModel::getInstance('Mailboxprofiles', 'NewsletterModel');
 		$mailboxes = $manager->getAllItems();
 
 		if (!empty($mailboxes)) {

@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla controller library
 jimport('joomla.application.component.controller');
 
-class NewsletterController extends JController
+class NewsletterController extends MigurController
 {
 	/**
 	 * display task

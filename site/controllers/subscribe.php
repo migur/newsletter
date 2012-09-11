@@ -22,7 +22,7 @@ jimport('migur.library.mailer');
  * @package Migur.Newsletter
  */
 
-class NewsletterControllerSubscribe extends JController
+class NewsletterControllerSubscribe extends MigurController
 {
 	/**
 	 * The constructor of a class
@@ -98,7 +98,7 @@ class NewsletterControllerSubscribe extends JController
 
 		// Trying to find subscriber or J!user with provided email.
 		// TODO Need to replace this 'NewsletterModelEntity' to 'NewsletterModel'
-		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$subscriber = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		$subscriber->load(array('email' => $email));
 
 		// If not found then this email does not belongs anyone in system.
@@ -128,7 +128,7 @@ class NewsletterControllerSubscribe extends JController
 
 		$message = JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name);
 		
-		$listModel = JModel::getInstance('List',  'NewsletterModel');
+		$listModel = MigurModel::getInstance('List',  'NewsletterModel');
 
 		$assignedListsIds = array();
 		

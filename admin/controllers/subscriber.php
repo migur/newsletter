@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla controllerform library
 jimport('joomla.application.component.controllerform');
 
-class NewsletterControllerSubscriber extends JControllerForm
+class NewsletterControllerSubscriber extends MigurControllerForm
 {
 
 	/**
@@ -47,7 +47,7 @@ class NewsletterControllerSubscriber extends JControllerForm
 				$sid = JRequest::getInt('subscriber_id', null, 'post');
 				$lid = JRequest::getInt('list_to_subscribe', null, 'post');
 				
-				$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+				$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 				
 				if (!$model->load($sid)) {
 					throw new Exception();
@@ -63,7 +63,7 @@ class NewsletterControllerSubscriber extends JControllerForm
 					// Cant send immediatelty because we are in ADMIN side
 					// and some j! native modules cause fail when 
 					// JOOMLA_BASE = '/administrator/' (mod_latest_articles)
-//					$listModel = JModel::getInstance('List', 'NewsletterModel');
+//					$listModel = MigurModel::getInstance('List', 'NewsletterModel');
 //					$res = $listModel->sendSubscriptionMail(
 //						$model, 
 //						$lid,
@@ -109,7 +109,7 @@ class NewsletterControllerSubscriber extends JControllerForm
 				$sid = JRequest::getInt('subscriber_id', null, 'post');
 				$lid = JRequest::getInt('list_to_unbind', null, 'post');
 				
-				$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+				$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 				
 				if (!$model->load($sid)) {
 					throw new Exception();

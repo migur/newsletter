@@ -101,7 +101,7 @@ class NewsletterViewNewsletter extends MigurView
 		$this->form = $this->get('Form', 'newsletter');
 		$this->newsletter = $this->get('Item');
 
-		$smtpModel = JModel::getInstance('SMtpProfile', 'NewsletterModelEntity'); 
+		$smtpModel = MigurModel::getInstance('SMtpProfile', 'NewsletterModelEntity'); 
 		
 		// Let's add J! profile
 		$smtpp = $smtpModel->loadJoomla();
@@ -111,7 +111,7 @@ class NewsletterViewNewsletter extends MigurView
 		);
 		
 		// get the SmtpProfiles data
-		$smtpprofilesManager = JModel::getInstance('smtpprofiles', 'NewsletterModel');
+		$smtpprofilesManager = MigurModel::getInstance('smtpprofiles', 'NewsletterModel');
 		$this->assignRef('smtpprofiles', $smtpprofilesManager->getAllItems('withDefault'));
 
 		// get all the Extensions
@@ -119,12 +119,12 @@ class NewsletterViewNewsletter extends MigurView
 		$this->plugins = MigurPluginHelper::getSupported(array('withoutInfo'=>true), 'newsletter.html');
 
 		// get the Extensions used in this newsletter
-		$model = JModel::getInstance('newsletterext', 'NewsletterModel');
+		$model = MigurModel::getInstance('newsletterext', 'NewsletterModel');
 		$this->usedExts = $model->getExtensionsBy($nId);
 		
 		// Get a list of all templates
 		$this->setModel(
-			JModel::getInstance('templates', 'NewsletterModel')
+			MigurModel::getInstance('templates', 'NewsletterModel')
 		);
 		$model = $this->getModel('templates');
 		$templs = $model->getItems();

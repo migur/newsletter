@@ -14,7 +14,7 @@ jimport('joomla.filesystem.file');
 jimport('joomla.filesystem.folder');
 JLoader::import('helpers.media', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-class NewsletterControllerFile extends JController
+class NewsletterControllerFile extends MigurController
 {
 	public function fileinfo()
 	{

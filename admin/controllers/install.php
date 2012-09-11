@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
  * @package		Joomla.Administrator
  * @subpackage	com_newsletter
  */
-class NewsletterControllerInstall extends JController
+class NewsletterControllerInstall extends MigurController
 {
 	/**
 	 * Install an extension.

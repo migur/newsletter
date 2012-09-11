@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
 /**
  * @since 1.0
  */
-class NewsletterControllerConfiguration extends JController
+class NewsletterControllerConfiguration extends MigurController
 {
 	/**
 	 * Class Constructor
@@ -94,7 +94,7 @@ class NewsletterControllerConfiguration extends JController
 			'option' => $option
 		);
 		
-		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$newsletter = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
 		$newsletter->loadFallBackNewsletter();
 		$newsletter->subject = $data['params']['confirm_mail_subject'];
 		$newsletter->plain = $data['params']['confirm_mail_body'];

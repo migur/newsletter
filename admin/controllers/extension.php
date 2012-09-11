@@ -11,7 +11,7 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controllerform');
 
-class NewsletterControllerExtension extends JControllerForm
+class NewsletterControllerExtension extends MigurControllerForm
 {
 
 	/**

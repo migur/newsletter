@@ -19,6 +19,6 @@ JHtml::_('behavior.formvalidation');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterViewError extends JView
+class NewsletterViewError extends MigurView
 {
 }

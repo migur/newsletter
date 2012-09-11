@@ -16,7 +16,7 @@ jimport('migur.library.mailer');
 
 JLoader::import('helpers.autocompleter', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-class NewsletterControllerSender extends JControllerForm
+class NewsletterControllerSender extends MigurControllerForm
 {
 
 	/**

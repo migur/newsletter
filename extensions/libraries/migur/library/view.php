@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The extension for JView
+ * The extension for MigurView
  *
  * @version	   $Id:  $
  * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
@@ -16,15 +16,19 @@ if (!defined('MIGUR')) {
 	die(JError::raiseWarning(0, JText::_("MIGUR library wasn't found.")));
 }
 
-jimport('joomla.application.component.view');
+jimport('joomla.legacy.view.legacy');
 
 /**
- * Class to extent the JView functionality
+ * Class to extent the MigurView functionality
  *
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurView extends JView
+if (!class_exists('JViewLegacy')) {
+	class JViewLegacy extends JView {}
+}
+
+class MigurView extends JViewLegacy
 {
 
 	/**

@@ -21,7 +21,7 @@ JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @subpackage	com_newsletter
  * @since 		1.0
  */
-class NewsletterViewShow extends JView
+class NewsletterViewShow extends MigurView
 {
 	function display($tpl = null)
 	{
