@@ -3,10 +3,10 @@
 class NewsletterPlugin extends JPlugin 
 {
     // Description of what plugin intended for
-    protected $_description = "PLG_MIGUR_{PLUGINNAME}_DESCRIPTION";
+    protected $_description = "PLG_MIGUR_{PLUGINEXTENSION}_DESCRIPTION";
 
     // Verbal name
-    protected $_title = "PLG_MIGUR_{PLUGINNAME}_TITLE";
+    protected $_title = "PLG_MIGUR_{PLUGINEXTENSION}_TITLE";
 
     // Prefix for *State methods
     protected $_statePrefix = 'com_newsletter.plugins.';

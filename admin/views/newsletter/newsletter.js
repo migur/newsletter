@@ -889,30 +889,6 @@ window.addEvent('domready', function() {
         });
 
 
-        /* Save handlers */
-        $$('#toolbar-save a')[0].addEvent('click', function(ev){
-
-			var form = $$('form.form-validate')[0];
-			var res = document.formvalidator.isValid(form);
-
-			Migur.validator.tabIndicator(
-				'#tabs-sub-container',
-				'span h3 a',
-				'tab-invalid',
-				'.invalid'
-				);
-
-			if (!res) {
-                alert(Joomla.JText._('THERE_ARE_SOME_ERRORS_ON_THE_PAGE','There are some errors on the page.'));
-                ev.stop();
-                return false;
-            }
-			
-			// To set jform[htmlTpl] and jform[plugins] fields
-			autosaver.getter();
-			return true;
-        });
-
         $$('#toolbar-apply a')[0].addEvent('click', function(ev){
 
             ev.stop();

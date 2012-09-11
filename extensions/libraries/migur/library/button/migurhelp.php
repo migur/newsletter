@@ -23,7 +23,7 @@ if (!defined('MIGUR')) {
  * @since       11.1
  */
 
-/*
+/**
  * Legacy support
  */
 JToolbar::getInstance()->loadButtonType('help');
@@ -47,7 +47,7 @@ class JButtonMigurHelp extends JButton
 	 */
 	public function fetchButton($type = 'MigurHelp', $ref = '', $com = false, $override = null, $component = null, $target = '_blank', $width='980', $height='600')
 	{
-		$text	= JText::_('JTOOLBAR_HELP');
+		$text	= !empty($com)? JText::_($com) : JText::_('JTOOLBAR_HELP');
 		$class	= $this->fetchIconClass('help');
 		$doTask	= $this->_getCommand($ref, $com, $override, $component, $width, $height);
 

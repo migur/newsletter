@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @since   1.0
  * @package Migur.Newsletter
  */
- class RssfeedHelper
+ class NewsletterHelperRssfeed
 {
 
 	/**
@@ -110,3 +110,9 @@ defined('_JEXEC') or die;
 		}
 	}
 }
+
+/**
+ * Legacy support for class name
+ */
+class RssfeedHelper extends NewsletterHelperRssfeed
+{}

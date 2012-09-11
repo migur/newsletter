@@ -96,6 +96,54 @@ defined('_JEXEC') or die;
 			<div class="notifications"></div>
 			<div class="suggestions"></div>
 		</fieldset>
+		<fieldset id="extensions-check-pane" class="check-pane">
+			<legend><?php echo JText::_('COM_NEWSLETTER_MAINTAINANCE_CHECKEXTENSIONS'); ?></legend>
+			<div class="status">
+				<span class="status-verbal"></span>		
+				<span class="preloader-container"></span>
+				<button class="refresh-control" style="float:right;">
+					<?php echo JText::_('COM_NEWSLETTER_REFRESH'); ?>
+				</button>
+			</div>
+			<div class="notifications"></div>
+			<div class="suggestions"></div>
+		</fieldset>
+		<fieldset id="generalsysinfo-check-pane" class="check-pane">
+			<legend><?php echo JText::_('COM_NEWSLETTER_GENERALSYSINFO_CHECK'); ?></legend>
+			<div class="status">
+				<span class="status-verbal"></span>		
+				<span class="preloader-container"></span>
+				<button class="refresh-control" style="float:right;">
+					<?php echo JText::_('COM_NEWSLETTER_REFRESH'); ?>
+				</button>
+			</div>
+			<div class="notifications"></div>
+			<div class="suggestions"></div>
+		</fieldset>
+		<fieldset id="jdirectories-check-pane" class="check-pane">
+			<legend><?php echo JText::_('COM_NEWSLETTER_JDIRECTORIES_CHECK'); ?></legend>
+			<div class="status">
+				<span class="status-verbal"></span>		
+				<span class="preloader-container"></span>
+				<button class="refresh-control" style="float:right;">
+					<?php echo JText::_('COM_NEWSLETTER_REFRESH'); ?>
+				</button>
+			</div>
+			<div class="notifications"></div>
+			<div class="suggestions"></div>
+		</fieldset>
+		<fieldset id="phpsettings-check-pane" class="check-pane">
+			<legend><?php echo JText::_('COM_NEWSLETTER_PHPSETTINGS_CHECK'); ?></legend>
+			<div class="status">
+				<span class="status-verbal"></span>		
+				<span class="preloader-container"></span>
+				<button class="refresh-control" style="float:right;">
+					<?php echo JText::_('COM_NEWSLETTER_REFRESH'); ?>
+				</button>
+			</div>
+			<div class="notifications"></div>
+			<div class="suggestions"></div>
+		</fieldset>
 	</div>	
 	
 </fieldset>

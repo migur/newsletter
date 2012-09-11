@@ -10,21 +10,21 @@
 // no direct access
 defined('_JEXEC') or die;
 
-class ContentHelper
+class NewsletterHelperContent
 {
 
-       /**
-        * Each link in content at the end should has ABSOLUTE url
-        * If link or src has relative path (not started with 'http')
-        * then we complemet it with current base url
-        *
-        * @param string $content to handle
-        *
-        * @return string result content with repaired paths
-        *
-        * @since 1.0.2
-        */
-    	public static function pathsToAbsolute($content)
+   /**
+	 * Each link in content at the end should has ABSOLUTE url
+	 * If link or src has relative path (not started with 'http')
+	 * then we complemet it with current base url
+	 *
+	 * @param string $content to handle
+	 *
+	 * @return string result content with repaired paths
+	 *
+	 * @since 1.0.2
+	 */
+	public static function pathsToAbsolute($content)
 	{
 		// Gets all links (href and src attributes has been parsed)
 		preg_match_all("/(?:href[\s\=\"\']+|src[\s\=\"\']+)([^\"\']+)/", $content, $matches);
@@ -60,3 +60,9 @@ class ContentHelper
 	}
 
 }
+
+/**
+ * Legacy support for class name
+ */
+class ContentHelper extends NewsletterHelperContent 
+{}

@@ -16,7 +16,7 @@ jimport('migur.library.mailer');
 
 JLoader::import('helpers.autocompleter', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-class NewsletterControllerSender extends JControllerForm
+class NewsletterControllerSender extends MigurControllerForm
 {
 
 	/**
@@ -78,7 +78,7 @@ class NewsletterControllerSender extends JControllerForm
 		$dbo = JFactory::getDbo();
 		$query = $dbo->getQuery(true);
 		$query
-			->select('distinct s.subscriber_id')
+			->select('distinct s.subscriber_id, sl.list_id')
 			->from('#__newsletter_sub_list AS sl')
 			->join('', '#__newsletter_subscribers AS s ON s.subscriber_id = sl.subscriber_id')
 			->where('list_id IN (' . implode(',', $lists) . ')');
@@ -105,12 +105,15 @@ class NewsletterControllerSender extends JControllerForm
 
 				if (!$table->load(array(
 						'newsletter_id' => $newsletterId,
-						'subscriber_id' => $item['subscriber_id']))) {
+						'subscriber_id' => $item['subscriber_id'],
+						'list_id'       => $item['list_id']))
+				) {
 
 					// add new row only if it does not exist...
 					if ($table->save(array(
 						'newsletter_id' => $newsletterId,
 						'subscriber_id' => $item['subscriber_id'],
+						'list_id'       => $item['list_id'],
 						'created' => date('Y-m-d H:i:s'),
 						'state' => 1))) {
 

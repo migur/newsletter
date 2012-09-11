@@ -21,7 +21,10 @@
                     <td><?php echo current($items)->input; ?></td>
                 </tr>
                 <tr>
-                    <td><?php next($items); echo current($items)->label; ?></td>
+                    <td>
+						<?php next($items); echo current($items)->label; ?>
+						<?php echo JHtml::_('migurhelp.link', 'smtpp', 'general', 'smtpp-default'); ?>
+					</td>
                     <td>
 					<?php 
 						echo current($items)->input;
@@ -58,12 +61,11 @@
                     <td colspan="2">
 						<?php next($items); ?>
 						<?php echo current($items)->label; ?>
+						<div class="fltlft"><?php echo JHtml::_('migurhelp.link', 'subscriber', 'subscription'); ?></div>
 						<?php echo current($items)->input; ?>
 						<?php next($items); ?>
 						<?php echo current($items)->label; ?>
-						<?php echo current($items)->input; ?>
-						<?php next($items); ?>
-						<?php echo current($items)->label; ?>
+						<div class="fltlft"><?php echo JHtml::_('migurhelp.link', 'subscriber', 'subscription'); ?></div>
 						<?php echo current($items)->input; ?>
 					</td>
                 </tr>

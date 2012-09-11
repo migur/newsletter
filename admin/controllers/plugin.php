@@ -15,7 +15,7 @@ jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer');
 
 
-class NewsletterControllerPlugin extends JControllerForm
+class NewsletterControllerPlugin extends MigurControllerForm
 {
 	public function trigger()
 	{
@@ -27,7 +27,7 @@ class NewsletterControllerPlugin extends JControllerForm
         
             JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-            $manager = NewsletterPluginManager::factory($pGroup);
+            $manager = NewsletterDispatcher::factory($pGroup);
 
             $manager->trigger(array(
                 'name'  => $pName,

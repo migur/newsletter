@@ -11,7 +11,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-class EnvironmentHelper 
+class NewsletterHelperEnvironment
 {
     static $data = array();
     
@@ -189,3 +189,10 @@ class EnvironmentHelper
 		return $res['version_id'];
 	}
 }
+
+
+/**
+ * Legacy support for class name
+ */
+class EnvironmentHelper extends NewsletterHelperEnvironment
+{}

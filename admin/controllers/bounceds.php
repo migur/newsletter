@@ -16,7 +16,7 @@ jimport('migur.library.mailer');
 
 JLoader::import('tables.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-class NewsletterControllerBounceds extends JControllerForm
+class NewsletterControllerBounceds extends MigurControllerForm
 {
 
 	/**
@@ -43,7 +43,7 @@ class NewsletterControllerBounceds extends JControllerForm
 			return false;
 		}
 		
-		$queues = JModel::getInstance('Queues', 'NewsletterModel');
+		$queues = MigurModel::getInstance('Queues', 'NewsletterModel');
 		
 		foreach($cids as $cid) {
 			

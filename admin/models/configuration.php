@@ -74,7 +74,7 @@ class NewsletterModelConfiguration extends JModelForm
 
 	public function loadFormData()
 	{
-		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$newsletter = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
 		$newsletter->loadFallBackNewsletter();
 		$result = $this->getComponent()->params->toArray();
 		$result['confirm_mail_subject'] = $newsletter->subject;
@@ -113,7 +113,7 @@ class NewsletterModelConfiguration extends JModelForm
 	 */
 	public function save($data)
 	{
-		$table = JTable::getInstance('extension');
+		$table = JTable::getInstance('JExtension', 'NewsletterTable');
 		// Save the rules.
 		if (isset($data['params']) && isset($data['params']['rules'])) {
 			jimport('joomla.access.rules');

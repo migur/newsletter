@@ -16,6 +16,8 @@ jimport('migur.library.mailer');
 JLoader::import('helpers.module', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR);
+JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR);
 
 /**
  * Class of the cron controller. Handles the  request of a "trigger" from remote server.
@@ -23,7 +25,7 @@ JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterControllerNewsletter extends JControllerForm
+class NewsletterControllerNewsletter extends MigurControllerForm
 {
 
 	/**
@@ -61,23 +63,30 @@ class NewsletterControllerNewsletter extends JControllerForm
 		 *  to environment
 		 */
 
-		$newsletterId = JRequest::getVar('newsletter_id');
-		$type         = JRequest::getVar('type');
-		$email        = urldecode(JRequest::getVar('email'));
+		$newsletterId = JRequest::getVar('newsletter_id', null);
+		$type         = JRequest::getVar('type', null);
+		$email        = urldecode(JRequest::getVar('email', null));
 		$alias        = JRequest::getString('alias', null);
 
-		if (!empty($alias)) {
-			$newslettter = NewsletterHelper::getByAlias($alias);
-			$newsletterId = $newslettter['newsletter_id'];
-		}	
+		$model = MigurModel::getInstance('Newsletter', 'NewsletterModel');
 		
-		if (empty($newsletterId)) {
+		if (!empty($alias)) {
+			$newsletter = NewsletterHelper::getByAlias($alias);
+		}
+		
+		if (!empty($newsletterId)) {
+			$newsletter = (array) $model->getItem($newsletterId);
+		}	
+
+		if (empty($newsletter)) {
 			echo json_encode(array(
 				'state' => '0',
 				'error' => JText::_('COM_NEWSLETTER_NEWSLETTER_ID_NOT_FOUND'),
 			));
 			return;
 		}
+		
+		$newsletterId = $newsletter['newsletter_id'];
 
 		if (empty($type)) {
 			echo json_encode(array(
@@ -94,8 +103,9 @@ class NewsletterControllerNewsletter extends JControllerForm
 		SubscriberHelper::saveRealUser();
 		SubscriberHelper::emulateUser(array('email' => $email));
 
+		
 		// render the content of letter for each user
-		$res = $mailer->render(array(
+		$html = $mailer->render(array(
 			'type' => $type,
 			'newsletter_id' => $newsletterId,
 			'useRawUrls' => NewsletterHelper::getParam('rawurls') == '1'
@@ -103,11 +113,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		SubscriberHelper::restoreRealUser();
 
-		echo $res; die;
-//		echo json_encode(array(
-//			'state' => '1',
-//			'error' => $res,
-//		));
+		echo $html; die;
 	}
 
 
@@ -180,7 +186,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		
 		// Process list of emails....
 		$messagesSkipped = array();
-		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$subscriber = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		foreach ($emails as $email) {
 			
 			// Trying to find subscriber or J!user

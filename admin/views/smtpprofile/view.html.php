@@ -6,7 +6,6 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 // No direct access to this file
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JHtml::_('behavior.formvalidation');
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.form.helper');
@@ -39,7 +38,7 @@ class NewsletterViewSmtpprofile extends MigurView
 
 		$this->ssForm = $this->get('Form', 'smtpprofile');
 		
-		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$model = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$smtpid = JRequest::getInt('smtp_profile_id', null);
 		
 		if ($smtpid !== null) {
@@ -71,6 +70,8 @@ class NewsletterViewSmtpprofile extends MigurView
 	protected function addToolbar()
 	{
 		$bar = JToolBar::getInstance('smtp-toolbar', 'smtpprofileForm');
+		$bar->addButtonPath(MIGURPATH_LIBRARY . '/button');
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', SupportHelper::getResourceUrl('smtpp', 'general'));
 		$bar->appendButton('Standard', 'publish', 'COM_NEWSLETTER_CHECK', 'smtpprofile.checkconnection', false);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'smtpprofile.save', false);

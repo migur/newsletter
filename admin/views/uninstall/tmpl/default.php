@@ -26,7 +26,9 @@ defined('_JEXEC') or die;
 	<br/>
 	<br/>
 
-	<input type="hidden" name="cid[]" value="<?php echo $this->extension['extension_id']; ?>" />
+	<?php foreach($this->cids as $cid){ ?>
+		<input type="hidden" name="cid[]" value="<?php echo $cid; ?>" />
+	<?php } ?>	
 	<input type="hidden" name="task" value="manage.remove" />
 	<input type="hidden" name="com_newsletter_uninstall" value="1" />
 	<?php echo JHtml::_('form.token'); ?>

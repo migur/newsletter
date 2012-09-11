@@ -10,7 +10,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-class AclHelper
+class NewsletterHelperAcl
 {
 	/* No need to parse rules again and again */
 	protected static $_toArrayCache = null;
@@ -159,14 +159,16 @@ class AclHelper
 		}	
 	}
 	
-	public static function toArray()
+	public static function toArray($user = null)
 	{
 		if(self::$_toArrayCache !== null) {
 			return self::$_toArrayCache;
 		}
 		
-		$user = JFactory::getUser();
-		
+		if (!$user instanceof JUser) {
+			$user = JFactory::getUser();
+		}	
+
 		$result = array();
 		$actions = self::getActions();
 		foreach($actions as $action) {
@@ -180,3 +182,9 @@ class AclHelper
 	}
 	
 }
+
+/**
+ * Legacy support for class name
+ */
+class AclHelper extends NewsletterHelperAcl
+{}

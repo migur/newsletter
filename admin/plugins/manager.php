@@ -12,7 +12,7 @@ class NewsletterPluginManager extends JDispatcher
     
     public function factory($group)
     {
-        include_once(realpath(__DIR__) . DIRECTORY_SEPARATOR . 'manager' . DIRECTORY_SEPARATOR . $group . '.php');
+        include_once(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . 'manager' . DIRECTORY_SEPARATOR . $group . '.php');
         $class = 'NewsletterPluginManager'.ucfirst($group);
         return new $class;
     }
@@ -26,7 +26,7 @@ class NewsletterPluginManager extends JDispatcher
 
         $this->pluginName = !empty($options['name'])? $options['name'] : null;
         $this->pluginGroup = $options['group'];
-		$this->pluginEvent = $options['event'];
+        $this->pluginEvent = $options['event'];
         
         $this->import($this->pluginGroup, $this->pluginName);
 
@@ -102,6 +102,6 @@ class NewsletterPluginManager extends JDispatcher
     
     public function import($pluginGroup, $pluginName)
     {
-        JPluginHelper::importPlugin($pluginGroup, $pluginName, true, $this);
+        MigurPluginHelper::importPlugin($pluginGroup, $pluginName, true, $this);
     }
 }

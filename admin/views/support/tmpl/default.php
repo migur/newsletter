@@ -1,0 +1,1 @@
+<?php echo $this->loadTemplate($this->layout['fullname'], $this->layout['version']); ?>

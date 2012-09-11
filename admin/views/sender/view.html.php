@@ -54,11 +54,11 @@ class NewsletterViewSender extends MigurView
 
 
 		$this->setModel(
-			JModel::getInstance('lists', 'NewsletterModel')
+			MigurModel::getInstance('lists', 'NewsletterModel')
 		);
 
 		$this->setModel(
-			JModel::getInstance('newsletters', 'NewsletterModel')
+			MigurModel::getInstance('newsletters', 'NewsletterModel')
 		);
 
 		// Check for errors.

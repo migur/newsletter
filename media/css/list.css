@@ -16,7 +16,6 @@
 
 /* overview1 */
 #overview1 {
-    width: 400px;
     height: 400px;
     float: left;
 }
@@ -67,8 +66,8 @@
 /* overview2 */
 
 #overview2 {
-    width: 450px;
-    float: left;
+    width: 400px;
+    float: right;
     height: 500px;
     overflow: auto;
 }
@@ -101,10 +100,6 @@
     float: none;
     margin: 0px;
     padding: 0px;
-}
-
-#tab-container-advanced {
-    width: 500px;
 }
 
 #tab-container-advanced select {
@@ -221,11 +216,11 @@
 
 #import-settings,
 #exclude-settings {
-    margin: 5px 10px 10px 0px;
+    margin: 5px 10px 0px 0px;
     padding: 0px;
     border: 1px solid #cccccc;
     width: 26%;
-    height: 150px;
+    height: 180px;
     float: right;
     position: relative;
 }
@@ -233,10 +228,12 @@
 .drag {
     top: 0px;
     left: 0px;
-    width: 150px;
+    width: 210px;
     height: 15px;
     cursor: move;
     margin: 5px;
+	padding: 0 5px;
+	overflow: hidden;
     text-align: center;
     vertical-align: middle;
     background: #fafafa;
@@ -248,8 +245,8 @@
 #import-fields .drop,
 #exclude-fields .drop {
     border: 1px solid #cccccc;
-    height: 25px;
-    width: 165px;
+    height: 27px;
+    width: 233px;
 }
 
 #import-file-apply,
@@ -372,4 +369,21 @@
 .upload-queue {
 	padding:0 !important;
 	margin:0 !important;
+}
+
+#import-file-html-default {
+	float: none !important;
+}
+
+div.form-text dl dt {
+	width: auto !important;
+}
+
+#listevents-toolbar-popup-new a {
+	width: 150px;
+}
+
+#jgroups-pane {
+	max-height: 270px;
+	overflow: auto;
 }

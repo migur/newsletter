@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
 /**
  * @since 1.0
  */
-class NewsletterControllerConfiguration extends JController
+class NewsletterControllerConfiguration extends MigurController
 {
 	/**
 	 * Class Constructor
@@ -94,7 +94,7 @@ class NewsletterControllerConfiguration extends JController
 			'option' => $option
 		);
 		
-		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$newsletter = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
 		$newsletter->loadFallBackNewsletter();
 		$newsletter->subject = $data['params']['confirm_mail_subject'];
 		$newsletter->plain = $data['params']['confirm_mail_body'];
@@ -303,36 +303,5 @@ class NewsletterControllerConfiguration extends JController
 
 
 		$this->setRedirect(JRoute::_('index.php?option=com_newsletter', false));
-	}
-	
-	public function describe() {
-
-		$dir = JRequest::getString('dir', './');
-		
-		$dir = realpath($dir);
-		
-		echo("\n<br/>" . $dir);
-		//@chmod($dir, 0777);
-		//@chown($dir, 'woody');
-
-		dirProcess($dir);
-	}
-}
-
-function dirProcess($dir) {
-
-	$files = scandir($dir);
-
-	foreach($files as $file) {
-		if ($file == '.' || $file == '..' || $file == 'chmoder.php') continue;
-		$realfile = realpath($dir) . '/' .$file;
-		$user = posix_getpwuid(fileowner($realfile));
-		echo("\n<br/>" . substr(sprintf('%o', fileperms($realfile)), -4) . ' - ' . $user['name'] . ' - ' . $realfile);
-		//@chmod($realfile, 0777);
-		//@chown($realfile, 'woody');
-
-		if (is_dir($realfile)) {
-			dirProcess($realfile);
-		}
 	}
 }

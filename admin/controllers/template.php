@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer');
 
-class NewsletterControllerTemplate extends JControllerForm
+class NewsletterControllerTemplate extends MigurControllerForm
 {
 
 	public function __construct($config = array())
@@ -105,7 +105,6 @@ class NewsletterControllerTemplate extends JControllerForm
 			't_style_id' => JRequest::getString('t_style_id'),
 			'showNames'  => (bool)JRequest::getString('shownames'),
 			'tracking'   => false,
-			'trackingGa' => false,
 			'renderMode' => JRequest::getString('tagsRenderMode')
 		));
 

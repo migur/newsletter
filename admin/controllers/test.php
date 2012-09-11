@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla controllerform library
 jimport('joomla.application.component.controllerform');
 
-class NewsletterControllerTest extends JControllerForm
+class NewsletterControllerTest extends MigurControllerForm
 {
 	/**
 	 * Used only for development.
@@ -34,13 +34,22 @@ class NewsletterControllerTest extends JControllerForm
 		$dbo->setQuery('SET foreign_key_checks=0');
 		$dbo->query();
 		
+		$dbo->setQuery('SET autocommit=0;');
+		$dbo->query();
+
 		for($i=$start; $i < $start + $count; $i++) {
-			$name = $prefix.$i;
-			$dbo->setQuery('INSERT INTO #__users (name,username,email,password,userType,block,sendEmail,registerDate,lastVisitDate,activation,params) values("zFake User '.$i.'", "'.$name.'", "'.$name.'@gmail.com", "", "", "", 1, "'.date('Y-m-d H:i:s').'", 0, "", "{}")');
+			$name = str_replace(' ', '_', $prefix.$i);
+			$username = $prefix.$i;
+			$email = str_replace(' ', '.', strtolower($prefix).$i.'@absentdomain.com');
+			$dbo->setQuery('INSERT INTO #__users (name,username,email,password,userType,block,sendEmail,registerDate,lastVisitDate,activation,params) values("'.$name.'", "'.$username.'", "'.$email.'", "", "", "", 1, "'.date('Y-m-d H:i:s').'", 0, "", "{}")');
 			//echo $dbo->getQuery();
 			$res = $dbo->query();
 			echo "\n".$name.' - '.($res?'ok':'fail');
 		}
+		
+		$dbo->setQuery('COMMIT;');
+		$dbo->query();
+		
 		$dbo->setQuery('SET foreign_key_checks=1');
 		$dbo->query();
 		
@@ -65,18 +74,25 @@ class NewsletterControllerTest extends JControllerForm
 		
 		$dbo->setQuery('SET foreign_key_checks=0;');
 		$dbo->query();
+
+		$dbo->setQuery('SET autocommit=0;');
+		$dbo->query();
 		
 		for($i=$start; $i < $start + $count; $i++) {
 			$name = $prefix.$i;
-			$dbo->setQuery('INSERT INTO #__newsletter_subscribers (name,email,state,html,user_id,created_on,created_by,modified_on,modified_by,locked_on,locked_by,confirmed,subscription_key,extra) values("'.$name.'", "'.$name.'@gmail.com", "1", "1", "0", "'.date('Y-m-d H:i:s').'", "0", "0", "0", "0", "0", "1", "0", "{}")');
+			$email = str_replace(' ', '.', strtolower($prefix).$i.'@absentdomain.com');
+			$dbo->setQuery('INSERT INTO #__newsletter_subscribers (name,email,state,html,user_id,created_on,created_by,modified_on,modified_by,locked_on,locked_by,confirmed,subscription_key,extra) values("'.$name.'", "'.$email.'", "1", "1", "0", "'.date('Y-m-d H:i:s').'", "0", "0", "0", "0", "0", "1", "0", "{}")');
 			//echo $dbo->getQuery();
 			$res = $dbo->query();
 			echo "\n".$name.' - '.($res?'ok':'fail');
 		}
+		
+		$dbo->setQuery('COMMIT;');
+		$dbo->query();
 
 		$dbo->setQuery('SET foreign_key_checks=1;');
 		$dbo->query();
-		
+
 		die("\n Complete");
 	}
 
@@ -98,16 +114,17 @@ class NewsletterControllerTest extends JControllerForm
 		$csv = '';
 		
 		$csv .= 
-			$q.'Email'.$q .$s. 
-			$q.'Name'.$q  .$s.
+			$q.'Name'.$q .$s. 
+			$q.'Email'.$q  .$s.
 			$q.'Html'.$q  ."\n";
 			
 			
 		for($i=$start; $i < $start + $count; $i++) {
 			$name = $prefix.$i;
+			$email = str_replace(' ', '.', strtolower($prefix).$i.'@absentdomain.com');
 			$csv .= 
 				$q.$name.$q .$s.
-				$q.$name.'@gmail.com'.$q .$s.
+				$q.$email.$q .$s.
 				$q.rand(0,1).$q
 				."\n";
 		}

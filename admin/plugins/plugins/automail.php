@@ -14,9 +14,10 @@ class plgMigurAutomail extends JPlugin
      */
     public function onMigurAfterSubscribe($sid, $lid)
     {
+		$args = func_get_args();
 		return call_user_func_array(
 			array($this->_getAutomailer(), 'processSubscription'),
-			func_get_args());
+			$args);
     }
     
 	/**
@@ -26,9 +27,10 @@ class plgMigurAutomail extends JPlugin
      */
 	public function onMigurAfterSubscriberImport($options)
     {
+		$args = func_get_args();
 		return call_user_func_array(
 			array($this->_getAutomailer(), 'processSubscription'),
-			func_get_args());
+			$args);
     }
 
 	
@@ -39,9 +41,10 @@ class plgMigurAutomail extends JPlugin
      */
     public function onMigurAfterSubscriberAssign($options)
     {
+		$args = func_get_args();
 		return call_user_func_array(
 			array($this->_getAutomailer(), 'processSubscription'),
-			func_get_args());
+			$args);
     }
 	
 
@@ -52,9 +55,10 @@ class plgMigurAutomail extends JPlugin
      */
     public function onMigurAfterUnsubscribe($sid, $lids)
     {
+		$args = func_get_args();
 		return call_user_func_array(
 			array($this->_getAutomailer(), 'processUnsubscription'),
-			func_get_args());
+			$args);
     }
 	
 
@@ -65,9 +69,10 @@ class plgMigurAutomail extends JPlugin
      */
     public function onMigurAfterSubscriberUnbind($sid, $lids)
     {
+		$args = func_get_args();
 		return call_user_func_array(
 			array($this->_getAutomailer(), 'processUnsubscription'),
-			func_get_args());
+			$args);
     }
 	
 	
@@ -78,9 +83,10 @@ class plgMigurAutomail extends JPlugin
      */
     public function onMigurAfterSubscriberDelete($sid)
     {
+		$args = func_get_args();
 		return call_user_func_array(
 			array($this->_getAutomailer(), 'processSubscriberDeletion'),
-			func_get_args());
+			$args);
     }
 	
 	
@@ -97,4 +103,19 @@ class plgMigurAutomail extends JPlugin
 		
 		return $this->_automailer;
 	}
+	
+	/**
+	 * Set an instance of automailer manager
+	 * @return type 
+	 */
+	public function setAutomailer($instance = null)
+	{
+		if (!$instance) {
+			$instance = new NewsletterAutomailingManager();
+		}
+		
+		$this->_automailer = $instance;
+		return $this->_automailer;
+	}
+	
 }

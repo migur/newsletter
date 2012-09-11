@@ -16,7 +16,7 @@ jimport('migur.library.mailer');
 
 JLoader::import('tables.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-class NewsletterControllerNewsletter extends JControllerForm
+class NewsletterControllerNewsletter extends MigurControllerForm
 {
 
 	/**
@@ -88,8 +88,8 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 * 
 	 * @return type 
 	 */
-	public function save(){
-		
+	public function save()
+	{
 		
 		$task = JRequest::getString('task');
 		

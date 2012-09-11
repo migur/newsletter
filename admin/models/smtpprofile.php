@@ -68,7 +68,7 @@ class NewsletterModelSmtpprofile extends JModelAdmin
 		// Check the session for previously entered form data.
 		$data = JFactory::getApplication()->getUserState('com_newsletter.edit.smtpprofile.data', array());
 		if (empty($data)) {
-			$model = JModel::getInstance('SmtpProfile', 'NewsletterModelEntity');
+			$model = MigurModel::getInstance('SmtpProfile', 'NewsletterModelEntity');
 			$smtpid = JRequest::getVar('smtp_profile_id', null);
 			if ($smtpid !== null) {
 				$model->load($smtpid);

@@ -53,7 +53,9 @@ class com_newsletterInstallerScript
 		
 		// If we proceed NOT from our uninstall page then redirect to it!
 		if (!$doInstall) {
-			$app->redirect(JRoute::_('index.php?option=com_newsletter&view=uninstall', false));
+			$cid = (array) JRequest::getVar('cid', array());
+			$element = strtolower(str_replace('JInstaller', '', get_class($parent->getParent())));
+			$app->redirect(JRoute::_('index.php?option=com_newsletter&view=uninstall&cid='.implode(',',$cid), false));
 		}
 
 		
@@ -167,20 +169,12 @@ class com_newsletterInstallerScript
 	 */
 	function postflight($type, $parent)
 	{
-            // In both cases check if the tables/extension.php is not exists!
+		// In both cases check if the tables/extension.php is not exists!
 		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'tables'. DIRECTORY_SEPARATOR .'extension.php');
-//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3.sql');
-//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3b.sql');
-//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3b2.sql');
-//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3b3.sql');
-//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3c.sql');
-//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.3d.sql');
-//		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'install'. DIRECTORY_SEPARATOR .'updates'. DIRECTORY_SEPARATOR .'1.0.4a.sql');
-			
-            //error_reporting(E_ALL);
-            //ini_set('display_errors', 1);
-            /* Dirty hack. Changes the type of the update adapter for sites of com_newsletter 
-               to able to update this component via J! Updater */
+		//error_reporting(E_ALL);
+		//ini_set('display_errors', 1);
+		/* Dirty hack. Changes the type of the update adapter for sites of com_newsletter 
+			to able to update this component via J! Updater */
             if ($type == 'update') {
 
                 $dbo = JFactory::getDbo();
@@ -213,6 +207,12 @@ class com_newsletterInstallerScript
 			
 			// Populate and check initial required data in DB
 			$this->_setInitialData();
+			
+
+			// Refresh extensions table with extensions present in filesystem
+			$this->_syncExtensions();
+			
+			$this->_enableJplugin('migurlistsync', 'system');
 			
             /* Redirect after installation. Make sure the component was installed the last if
                there is package */
@@ -327,21 +327,6 @@ class com_newsletterInstallerScript
 	 */
 	protected function _setInitialData() 
 	{
-		// Check/set the record for J! SMTP profile in SMTP_PROFILES table 
-//		$dbo = JFactory::getDbo();
-//		$dbo->setQuery('select * from #__newsletter_smtp_profiles where is_joomla=1');
-//		$list = $dbo->loadObjectList();
-//		
-//		if (count($list) == 0) {
-//			
-//			$dbo->setQuery(
-//				'INSERT INTO #__newsletter_smtp_profiles SET '.
-//				'params="{\"periodLength\":\"60\",\"sentsPerPeriodLimit\":\"100\",\"inProcess\":0,\"periodStartTime\":0,\"sentsPerLastPeriod\":0}", '.
-//				'is_joomla=1, '.
-//				'mailbox_profile_id=-1, '.
-//				'pop_before_smtp="0"');
-//			$dbo->query();
-//		}
 	}
 
 	protected function _checkVersion()
@@ -526,6 +511,52 @@ class com_newsletterInstallerScript
 		 	
 		$dbo->setQuery($query);
 		return $dbo->loadObjectList();
+	}
+	
+	
+	
+	
+	protected function _syncExtensions()
+	{
+		
+		// Let's do it quiet. It must not interrupt the installation
+		
+		try {
+			// Now we need to use our models and tables. So...
+			JTable::addIncludePath(
+				JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_newsletter' . DIRECTORY_SEPARATOR . 'tables',
+				'NewsletterTable'	
+			);
+
+			JModel::addIncludePath(
+				JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_newsletter' . DIRECTORY_SEPARATOR . 'models', 
+				'NewsletterModel'
+			);
+
+			JLoader::import('migur.migur', JPATH_LIBRARIES);
+
+			$model = MigurModel::getInstance('Install', 'NewsletterModel');
+			$model->restore();
+		
+		} catch(Extension $e) {}	
+	}		
+	
+	protected function _enableJplugin($name, $folder)
+	{
+		// Enable migurlistsync plugin!
+		$row = JTable::getInstance('extension');
+		$row->load(array(
+			'type'    => 'plugin',
+			'element' => $name,
+			'folder'  => $folder
+		));
+		
+		if (!empty($row->extension_id)) {
+			$row->enabled = '1';
+			$row->store();
+		}
+		
+		return $row->extension_id;
 	}
 }
 

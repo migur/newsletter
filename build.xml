@@ -47,10 +47,17 @@
 
     <target name="build" depends="up" />
 
-    <target name="up" description="attemps to update files on localhost server with files from working directory">
-        <condition property="destdir" value="${tmpdir}" else="${cfg.localhostRoot}" >
-            <available file="${tmpdir}" type="dir" />
-        </condition>
+	<target name="up">
+		<antcall target="_up">
+			<param name="destdir" value="${cfg.localhostRoot}"/>
+		</antcall>
+		
+		<antcall target="_up">
+			<param name="destdir" value="${cfg.localhostRoot3}"/>
+		</antcall>
+	</target>
+	
+    <target name="_up" description="attemps to update files on localhost server with files from working directory">
     	<!-- MAIN COMPONENT -->	
         <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.adminFilesDir}" />
@@ -64,8 +71,6 @@
         <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset file="${cfg.comDir}/script.php" />
         </copy>
-
-        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>
 
         <copy todir="${destdir}/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.siteFilesDir}" />
@@ -123,163 +128,23 @@
             <fileset dir="${cfg.comDir}/newsletter_plugin_bug_report" />
         </copy>
     -->
-    </target>
-
-    <target name="up30a" description="attemps to update files on localhost server with files from working directory">
-        <condition property="destdir" value="${tmpdir}" else="${cfg.localhostRoot30a}" >
-            <available file="${tmpdir}" type="dir" />
-        </condition>
-    	<!-- MAIN COMPONENT -->	
-        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.adminFilesDir}" />
+	
+<!-- plg_migurlistsync -->	
+        <copy todir="${destdir}/plugins/system/migurlistsync/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/migurlistsync.xml" />
         </copy>
-        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
-            <fileset file="${cfg.comDir}/${cfg.comName}.xml" />
+        <copy todir="${destdir}/plugins/system/migurlistsync/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/migurlistsync.php" />
         </copy>
-        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
-            <fileset file="${cfg.comDir}/manifest.xml" />
+        <copy todir="${destdir}/plugins/system/migurlistsync/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/index.html" />
         </copy>
-        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
-            <fileset file="${cfg.comDir}/script.php" />
-        </copy>
-
-        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>
-
-        <copy todir="${destdir}/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.siteFilesDir}" />
-        </copy>
-    	<!-- MEDIA FILES -->
-        <copy todir="${destdir}/media/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.mediaFilesDir}" />
-        </copy>
-
     	<!-- LANGUAGE FILES -->
-        <copy todir="${destdir}/administrator/language" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.adminLangDir}" />
+		
+        <copy todir="${destdir}/administrator/language/en-GB/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/en-GB.plg_system_migurlistsync.ini" />
         </copy>
-        <copy todir="${destdir}/language" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.siteLangDir}" />
-        </copy>
-
-        <!-- Copy library MIGUR -->
-        <copy todir="${destdir}/libraries/migur" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.libFilesDir}/migur" />
-        </copy>
-
-        <copy todir="${destdir}/modules" preservelastmodified="true" overwrite="true">
-            <fileset dir="${basedir}/extensions/modules" />
-        </copy>
-
-<!-- Copy plugins -->
-<!--        <copy todir="${destdir}/plugins" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.buildDir}/plugins" />
-        </copy>-->
-
-<!-- Copy plugin lang file -->
-<!--        <copy todir="${destdir}/administrator/language/en-GB" preservelastmodified="true" overwrite="true">
-            <fileset file="${cfg.buildDir}/plugins/system/newsletterga/en-GB.plg_system_newsletterga.ini" />
-        </copy>
-        <copy todir="${destdir}/administrator/language/en-GB" preservelastmodified="true" overwrite="true">
-            <fileset file="${cfg.buildDir}/plugins/system/newsletterga/en-GB.plg_system_newsletterga.sys.ini" />
-        </copy>-->
-        <copy todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
-            <fileset file="${basedir}/extensions/modules/mod_newsletter_subscribe/en-GB.mod_newsletter_subscribe.ini" />
-        </copy>
-        <copy todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
-            <fileset file="${basedir}/extensions/modules/mod_newsletter_subscribe/en-GB.mod_newsletter_subscribe.sys.ini" />
-        </copy>
-
-<!--        <delete dir="${destdir}/administrator/components/com_${cfg.comName}/migur" />-->
-    <!-- MODULES -->
-        <!-- CART -->
-        <!-- copy todir="${destdir}/modules/mod_${cfg.comName}_cart" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.comDir}/mod_${cfg.comName}_cart" />
-        </copy -->
-    <!-- PLUGINS -->
-        <!-- BUG REPORT -->
-        <!-- copy todir="${destdir}/plugins/newsletter" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.comDir}/newsletter_plugin_bug_report" />
-        </copy>
-    -->
-    </target>
-
-    <target name="upBS" description="attemps to update files on localhost server with files from working directory">
-        <condition property="destdir" value="${tmpdir}" else="${cfg.localhostRootBS}" >
-            <available file="${tmpdir}" type="dir" />
-        </condition>
-    	<!-- MAIN COMPONENT -->	
-        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.adminFilesDir}" />
-        </copy>
-        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
-            <fileset file="${cfg.comDir}/${cfg.comName}.xml" />
-        </copy>
-        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
-            <fileset file="${cfg.comDir}/manifest.xml" />
-        </copy>
-        <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
-            <fileset file="${cfg.comDir}/script.php" />
-        </copy>
-
-        <chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="777"/>
-
-        <copy todir="${destdir}/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.siteFilesDir}" />
-        </copy>
-    	<!-- MEDIA FILES -->
-        <copy todir="${destdir}/media/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.mediaFilesDir}" />
-        </copy>
-
-    	<!-- LANGUAGE FILES -->
-        <copy todir="${destdir}/administrator/language" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.adminLangDir}" />
-        </copy>
-        <copy todir="${destdir}/language" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.siteLangDir}" />
-        </copy>
-
-        <!-- Copy library MIGUR -->
-        <copy todir="${destdir}/libraries/migur" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.libFilesDir}/migur" />
-        </copy>
-
-        <copy todir="${destdir}/modules" preservelastmodified="true" overwrite="true">
-            <fileset dir="${basedir}/extensions/modules" />
-        </copy>
-
-<!-- Copy plugins -->
-<!--        <copy todir="${destdir}/plugins" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.buildDir}/plugins" />
-        </copy>-->
-
-<!-- Copy plugin lang file -->
-<!--        <copy todir="${destdir}/administrator/language/en-GB" preservelastmodified="true" overwrite="true">
-            <fileset file="${cfg.buildDir}/plugins/system/newsletterga/en-GB.plg_system_newsletterga.ini" />
-        </copy>
-        <copy todir="${destdir}/administrator/language/en-GB" preservelastmodified="true" overwrite="true">
-            <fileset file="${cfg.buildDir}/plugins/system/newsletterga/en-GB.plg_system_newsletterga.sys.ini" />
-        </copy>-->
-        <copy todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
-            <fileset file="${basedir}/extensions/modules/mod_newsletter_subscribe/en-GB.mod_newsletter_subscribe.ini" />
-        </copy>
-        <copy todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
-            <fileset file="${basedir}/extensions/modules/mod_newsletter_subscribe/en-GB.mod_newsletter_subscribe.sys.ini" />
-        </copy>
-
-<!--        <delete dir="${destdir}/administrator/components/com_${cfg.comName}/migur" />-->
-    <!-- MODULES -->
-        <!-- CART -->
-        <!-- copy todir="${destdir}/modules/mod_${cfg.comName}_cart" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.comDir}/mod_${cfg.comName}_cart" />
-        </copy -->
-    <!-- PLUGINS -->
-        <!-- BUG REPORT -->
-        <!-- copy todir="${destdir}/plugins/newsletter" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.comDir}/newsletter_plugin_bug_report" />
-        </copy>
-    -->
-    </target>
+	</target>
 	
     <target name="init" description="creates nessecary directory to build with">
         <mkdir dir="${cfg.buildVersionDir}" />
@@ -296,7 +161,7 @@
 
         <delete  dir="${cfg.buildVersionDir}" />
 
-    	<!-- MAIN COMPONENT -->
+<!-- MAIN COMPONENT -->
         <copy todir="${cfg.buildVersionDir}/packages/com_${cfg.comName}/admin" preservelastmodified="true" overwrite="true">
             <fileset dir="${basedir}/admin" />
         </copy>
@@ -315,23 +180,37 @@
         <zip destfile="${cfg.buildVersionDir}/packages/com_${cfg.comName}.zip" basedir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" />
         <delete dir="${cfg.buildVersionDir}/packages/com_${cfg.comName}" />
 
+<!-- Module -->
         <copy todir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" preservelastmodified="true" overwrite="true">
             <fileset dir="${basedir}/extensions/modules/mod_newsletter_subscribe" />
         </copy>
         <zip destfile="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe.zip" basedir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" />
         <delete dir="${cfg.buildVersionDir}/packages/mod_newsletter_subscribe" />
 
+<!-- Library -->
         <copy todir="${cfg.buildVersionDir}/packages/migur" preservelastmodified="true" overwrite="true">
             <fileset dir="${basedir}/extensions/libraries/migur" />
         </copy>
         <zip destfile="${cfg.buildVersionDir}/packages/migur.zip" basedir="${cfg.buildVersionDir}/packages/migur" />
         <delete dir="${cfg.buildVersionDir}/packages/migur" />
 
+<!-- Plugin -->
+        <copy todir="${cfg.buildVersionDir}/packages/plg_migurlistsync" preservelastmodified="true" overwrite="true">
+            <fileset dir="${basedir}/extensions/plugins/plg_migurlistsync" />
+        </copy>
+        <zip destfile="${cfg.buildVersionDir}/packages/plg_migurlistsync.zip" basedir="${cfg.buildVersionDir}/packages/plg_migurlistsync" />
+        <delete dir="${cfg.buildVersionDir}/packages/plg_migurlistsync" />
+
+<!-- Last preparations -->
         <copy todir="${cfg.buildVersionDir}" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/pkg_newsletter.xml" />
         </copy>
+        <copy todir="${cfg.buildVersionDir}" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/pkg_newsletter_script.php" />
+        </copy>
         <delete  file="${cfg.buildVersionDir}/pkg_newsletter.zip" />
         <zip destfile="${cfg.buildVersionDir}/pkg_newsletter.zip" basedir="${cfg.buildVersionDir}" />
+		<chmod file="${cfg.buildVersionDir}/pkg_newsletter.zip" perm="ugo+rwx" />
 
     </target>
 

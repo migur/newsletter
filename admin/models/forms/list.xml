@@ -9,7 +9,7 @@
             class="inputbox validate-name"
             size="10"
             required="true"
-/>
+		/>
         <field
             type="textarea"
             name="description"
@@ -21,18 +21,25 @@
             cols="30"
             max="255"
             required="false"
- />
-
+		/>
         <field
             type="smtpprofiles"
-            name="smtp_profile"
-            default=""
+            name="smtp_profile_id"
+            default="-1"
             label="COM_NEWSLETTER_PROFILE"
             description="COM_NEWSLETTER_PROFILE"
             class="selectbox validate-smtp_profile"
             required="true"
-        >
-        </field>
+        />
+        <field 
+			type="checkbox"
+			name="autoconfirm"
+			label="COM_NEWSLETTER_AUTOCONFIRM_USERS"
+			description="COM_NEWSLETTER_AUTOCONFIRM_USERS"
+			class="inputbox validate-autoconfirm"
+			default=""
+			value="1"			
+         />
         <field 
             type="newsletters"
             scope="static"

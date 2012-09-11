@@ -135,7 +135,7 @@ class NewsletterAutomlailingThreadCommon extends MigurJTable
 		}
 		
 		// Update the count of sent items and state of Item
-		$serieModel = JModel::getInstance('AutomailingItem', 'NewsletterModel');
+		$serieModel = MigurModel::getInstance('AutomailingItem', 'NewsletterModel');
 		$serie->sent += $sents;
 		$serie->status++;
 		$serieModel->save((array)$serie);
@@ -197,12 +197,12 @@ class NewsletterAutomlailingThreadCommon extends MigurJTable
 	{
 		// Decide what object we should create
 		if ($type == 'scheduled') {
-			JLoader::import('models.automailing.threads.scheduled', JPATH_COMPONENT_ADMINISTRATOR, '');
+			JLoader::import('models.automailing.threads.scheduled', COM_NEWSLETTER_PATH_ADMIN, '');
 			return new NewsletterAutomlailingThreadScheduled();
 		}
 
 		if ($type == 'eventbased') {
-			JLoader::import('models.automailing.threads.eventbased', JPATH_COMPONENT_ADMINISTRATOR, '');
+			JLoader::import('models.automailing.threads.eventbased', COM_NEWSLETTER_PATH_ADMIN, '');
 			return new NewsletterAutomlailingThreadEventbased();
 		}
 		

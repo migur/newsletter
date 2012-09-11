@@ -167,39 +167,73 @@ class NewsletterModelQueues extends JModelList
 		$id = $options['smtpProfileId'];
 		$limit = $options['limit'];
 		
-		$smtpModel = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$smtpModel = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$smtpModel->load($id);
+
+		// This SMTP profile ($id) may be used by NEWSLETTER or LIST
+		// To fetch these all data we need to do several steps.
+		// Priority:
+		// 1.Use SMTP profile of LSIT if it is setted. 
+		// 2.If not then use SMTP pofile of NEWSLETTER.
+		$smtpList = array($id);
+
+		// 1. First check if this profile is default ($id = -1)
+		// and add to smptList the actual id of default profile
+		if($smtpModel->isDefaultProfile()) {
+			$smtpList[] = (int)NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID;
+		}
+		
+		// 1. In addition check if this profile is Joomla ($id = -1)
+		// and add to smptList the actual id of JOOMLA profile.
+		if ($smtpModel->isJoomlaProfile()) {
+			$smtpList[] = (int)NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID;
+		}
+
+		// Now we can use this list to check occurences.
 		
 		// Initialise variables.
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
-		$query->select('DISTINCT q.newsletter_id, q.subscriber_id');
+		// Let's add is_sent=0 for this mail if it was sent earlier(q.status IN (0,2)) and 1 otherwise
+		$query->select('DISTINCT q.newsletter_id, q.subscriber_id, CASE WHEN q.state=1 THEN 0 ELSE 1 END AS is_sent'); 
 		$query->from('`#__newsletter_queue` AS q');
-		$query->join('left', '`#__newsletter_newsletters` AS n ON n.newsletter_id = q.newsletter_id');
+		$query->join('', '`#__newsletter_newsletters` AS n ON n.newsletter_id = q.newsletter_id');
+		$query->join('', '`#__newsletter_subscribers` AS s ON s.subscriber_id = q.subscriber_id');
 		$query->join('left', '`#__newsletter_lists` AS l ON l.list_id = q.list_id');
-		$query->where('(l.state IS NULL OR l.state = 1)');
 		
-		//  Add filter to cut off unconfirmed users. (subscribers.confirm)
+		// Add filter to select only ACTIVE lists and subscribers
+		$query->where('(l.state = 1 OR l.list_id IS NULL)');
+		$query->where('s.state = 1');
+		
+		//  Add filter to cut off unconfirmed subscribers-in-lists or 
+		//  unconfirmed subscribers if there is no information about list for this row.
 		if ($options['skipUnconfirmed']) {
-			$query->join('left', '`#__newsletter_subscribers` AS s ON s.subscriber_id = q.subscriber_id');
-			$query->join('left', '`#__users` AS u ON u.id = s.user_id');
-			$query->where('s.confirmed = 1');
-			$query->where('s.state = 1');
+			$query->join('left', '`#__newsletter_sub_list` AS sl ON s.subscriber_id = sl.subscriber_id AND l.list_id = sl.list_id');
+			$query->where('(sl.confirmed = 1 OR (sl.sublist_id IS NULL AND s.confirmed = 1))');
 		}	
-			
-		$and = 'n.smtp_profile_id='.(int)$id;
+
+		// Let's create filter by SMTP id.
+		// First add the check for newsletter (rule acts if newsletter has non-default SMTPp).
+		$and = 
+			' (n.smtp_profile_id != '.(int) NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID.
+			' AND n.smtp_profile_id IN ('.implode(',', $smtpList).'))';
+
+		// then add the check for LIST if newsletter has DEFAULT SMTPp (override newsletter's SMTPp). 
+		$and .= 
+			' OR (n.smtp_profile_id = '.(int) NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID.' AND '.
+				' (l.smtp_profile_id IN ('.implode(',', $smtpList).')'.
+				' OR (l.list_id IS NULL AND n.smtp_profile_id IN ('.implode(',', $smtpList).'))))';
+
+		$query->where('('.$and.')');
 		
-		if ($smtpModel->isDefaultProfile()) {
-			$and .= ' OR n.smtp_profile_id='.(int)NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID;
-		}
+		// Group all letters by nid-sid and
+		// eliminate sid-nid pair if this pair has been sent earlier
+		$query->group('q.newsletter_id, q.subscriber_id');
+		// If at least one letter from group was sent earlier then MIN(is_sent) > 0.
+		// We need groups (nid-sid) that contain only non-sent letters (all DUPLICATE in group should be = 1).
+		// So we use MIN(duplicate) = 1
+		$query->having('MIN(is_sent) = 0');
 		
-		// Back compatibility
-		if ($smtpModel->isJoomlaProfile()) {
-			$and .= ' OR n.smtp_profile_id='.(int)NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID;
-		}
-		
-		$query->where('q.state=1 AND ('. $and .')');
-		//echo str_replace('#__','jos_',$query); die;
 		$db->setQuery($query, 0, $limit);
 		
 		return $db->loadObjectList();
@@ -269,11 +303,10 @@ class NewsletterModelQueues extends JModelList
 		$query = $dbo->getQuery(true);
 
 		// Select the required fields from the table.
-		$query->select('newsletter_id, SUM(CASE WHEN state=1 THEN 1 ELSE 0 END) AS to_send, SUM(CASE WHEN state=1 THEN 0 ELSE 1 END) AS sent, COUNT(*) AS total');
-		$query->from('(SELECT DISTINCT newsletter_id, subscriber_id, state FROM #__newsletter_queue) AS q');
+		$query->select('newsletter_id, SUM(sent) AS sent, COUNT(*) AS total');
+		$query->from('(SELECT newsletter_id, subscriber_id, MAX(CASE WHEN state=1 THEN 0 ELSE 1 END) AS sent FROM #__newsletter_queue AS q GROUP BY newsletter_id, subscriber_id) AS q');
 		$query->group('newsletter_id');
 		
-		//echo nl2br(str_replace('#__','jos_',$query->__toString())); die;
 		$data = $dbo->setQuery($query)->loadAssocList();
 		return $data;
 	}

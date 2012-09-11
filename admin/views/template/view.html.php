@@ -43,7 +43,7 @@ class NewsletterViewTemplate extends MigurView
 
 		$tStyleId = JRequest::getInt('t_style_id');
 		
-		$modelTemps = JModel::getInstance('Templates', 'NewsletterModel');
+		$modelTemps = MigurModel::getInstance('Templates', 'NewsletterModel');
 		$temps = (object) array(
 				'items' => $modelTemps->getStandardTemplates(),
 				'state' => $modelTemps->getState(),

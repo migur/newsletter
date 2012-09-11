@@ -1,0 +1,2 @@
+'newsletter_id',	'name',				'subject',																							'alias',	'smtp_profile_id',	't_style_id',	'plain',				'params',				'ordering',	'language',	'checked_out',	'checked_out_time',		'created',				'sent_started',			'type',	'category'
+'100',				'Newsletter100',	'[username]-[useremail]-[sitename]-[subscription key]-[unsubscription link]-[confirmation link]',	'als100',	'-1',				'100',			'[confirmation link]',	'{"encoding":"utf-8"}',	'0',		'',			'0',			'0000-00-00 00:00:00',	'0000-00-00 00:00:00',	'0000-00-00 00:00:00',	'1',	'1'

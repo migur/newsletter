@@ -74,4 +74,45 @@ class NewsletterModelNewsletter extends JModelAdmin
 		}
 		return $data;
 	}
+	
+	/**
+	 * Gets the list of plugins used in newsletter
+	 *
+	 * @param  integer $nid
+	 * @param  string  $namespace May be used as filter 
+	 *
+	 * @return array of objects
+	 * @since  1.0
+	 */
+	static public function getUsedPlugins($nid, $namespace = '')
+	{
+		if (empty($nid)) {
+			return array();
+		}	
+		
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('ne.*, e.extension, e.namespace');
+		$query->from('#__newsletter_extensions AS e');
+		$query->join('', '#__newsletter_newsletters_ext AS ne ON e.extension_id = ne.extension_id');
+		$query->where('ne.newsletter_id='.$db->quote((int)$nid));
+		$query->where('e.type = "2"');
+
+		// Set the query
+		$db->setQuery($query);
+		$objs = $db->loadObjectList();
+
+		$res = array();
+		foreach($objs as $obj) {
+			
+			// Check if plugin is included into NAMESPACE and anabled for this letter
+			if (MigurPluginHelper::namespaceCheckOccurence($namespace, $obj->namespace)) {
+				$obj->params = (object) json_decode($obj->params);
+				if (!empty($obj->params->active)) {
+					$res[] = $obj;
+				}	
+			}	
+		}
+		return $res;
+	}
 }

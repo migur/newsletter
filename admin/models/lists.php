@@ -285,7 +285,7 @@ class NewsletterModelLists extends MigurModelList
 
 		$result = array();
 		foreach($lists as $list) {
-			$model = JModel::getInstance('List', 'NewsletterModelEntity');
+			$model = MigurModel::getInstance('List', 'NewsletterModelEntity');
 			$model->setFromArray($list);
 			$result[] = $model;
 		}
@@ -317,7 +317,7 @@ class NewsletterModelLists extends MigurModelList
 		
 		$result = array();
 		foreach($nids as $nid) {
-			$model = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+			$model = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
 			$model->loadAsWelcoming($nid);
 			$result[] = $model;
 		}

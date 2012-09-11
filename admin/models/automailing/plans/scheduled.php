@@ -10,7 +10,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-JLoader::import('models.automailing.threads.scheduled', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('models.automailing.threads.scheduled', COM_NEWSLETTER_PATH_ADMIN, '');
 
 
 /**
@@ -66,7 +66,7 @@ class NewsletterAutomlailingPlanScheduled extends NewsletterAutomlailingPlanComm
 	public function createThread($options = array())
 	{
 		// Get all targets
-		$tergetsModel = JModel::getInstance('AutomailingTargets', 'NewsletterModel');
+		$tergetsModel = MigurModel::getInstance('AutomailingTargets', 'NewsletterModel');
 		$targets = $tergetsModel->findByAid($this->automailing_id);
 
 		// Get their ids

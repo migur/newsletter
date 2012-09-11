@@ -186,6 +186,7 @@ try {
             }
 
             res.overwrite = $('import-overwrite').getProperty('checked');
+            res.skipHeader = $('import-skip-header').getProperty('checked');
         }
 
         if (type == 'exclude') {
@@ -201,6 +202,8 @@ try {
             } else {
                 res.enclosure = $('exclude-enclosure-custom').get('value');
             }
+			
+            res.skipHeader = $('exclude-skip-header').getProperty('checked');
         }
 
         if (!res.delimiter) {
@@ -272,15 +275,23 @@ try {
         data = {'lists': data};
         var id = $$('[name=list_id]').get('value');
         new Request.JSON({
-            url: '?option=com_newsletter&task=list.exclude&subtask=lists&format=json',
+            url: '?option=com_newsletter&task=list.exclude&subtask=lists',
             onComplete: function(res){
-                if (!res) {
-                    alert(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED','An unknown error occured!'));
-                    return;
-                }
+				
+				var parser = new Migur.jsonResponseParser();
+				parser.setResponse(res);
 
-                alert(res.error + "\n\n"+Joomla.JText._('TOTAL_PROCESSED', 'Total processed')+": " + res.total);
-				Cookie.write('jpanetabs_tabs-list', 3);
+				var data = parser.getData();
+
+				if (parser.isError()) {
+					alert(
+						parser.getMessagesAsList(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured!'))
+					);
+					return;	
+				}
+
+                alert(parser.getMessagesAsList() + "\n\n"+Joomla.JText._('TOTAL_PROCESSED', 'Total processed')+": " + data.total);
+				//Cookie.write('jpanetabs_tabs-list', 3);
 				window.location.reload();
             }
         }).send('&list_id=' + id + '&jsondata='+JSON.encode(data));
@@ -436,14 +447,22 @@ try {
             //$$('#exclude-del-cont .active')
 
             new Request.JSON({
-                url: '?option=com_newsletter&task=list.exclude&subtask=parse&format=json',
+                url: '?option=com_newsletter&task=list.exclude&subtask=parse',
                 onComplete: function(res){
-                    if (!res) {
-                        alert(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured'));
-                        return;
-                    }
+					
+					var parser = new Migur.jsonResponseParser();
+					parser.setResponse(res);
 
-                    alert(res.error + "\n\n"+Joomla.JText._('PROCESSED', 'Processed')+": " + res.processed + "\n"+Joomla.JText._('ABSENT', 'Absent')+": " + res.absent + "\n" + Joomla.JText._('TOTAL','Total')+": " + res.total);
+					var data = parser.getData();
+
+					if (parser.isError()) {
+						alert(
+							parser.getMessagesAsList(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured!'))
+						);
+						return;	
+					}
+
+                    alert(parser.getMessagesAsList() + "\n\n"+Joomla.JText._('PROCESSED', 'Processed')+": " + data.processed + "\n"+Joomla.JText._('ABSENT', 'Absent')+": " + data.absent + "\n" + Joomla.JText._('TOTAL','Total')+": " + data.total);
                     document.location.reload();
                 }
             }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res) );
@@ -556,7 +575,17 @@ try {
 			'.invalid'
 		);
 	});
-		
+	
+	var handler = function(){
+		var checked = $(this).getProperty('checked');
+		$('jform_send_at_reg').setProperty('disabled', checked);
+		$('jform_send_at_reg').setProperty('readonly', checked);
+	};
+	
+	$('jform_autoconfirm').addEvent('click', handler);
+	handler.apply($('jform_autoconfirm'));
+	delete handler;
+	
 
 } catch(e){
     if (console && console.log) console.log(e);

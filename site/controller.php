@@ -22,7 +22,7 @@ jimport('migur.library.mailer');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterController extends JController
+class NewsletterController extends MigurController
 {
 
 	/**

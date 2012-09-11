@@ -19,7 +19,7 @@ JHtml::_('behavior.framework', true);
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterViewTest extends JView
+class NewsletterViewTest extends MigurView
 {
 	/**
 	 * Displays the view. Used to close the popup.

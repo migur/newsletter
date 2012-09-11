@@ -25,11 +25,17 @@ class NewsletterViewUninstall extends MigurView
 {
 	public function display($tpl = null)
 	{
-		$table = JTable::getInstance('Extension');
-		$table->load(array('element' => 'com_newsletter'));
+		$cids = JRequest::getString('cid', '');
+		$cids = (array) explode(',', $cids);
 		
-		$this->assign('extension', $table->getProperties());
-			
+		if (empty($cids)) {
+			$table = JTable::getInstance('Extension');
+			$table->load(array('element' => 'com_newsletter'));
+			$cids = (array) $table->extension_id;
+		}	
+
+		$this->assign('cids', $cids);
+		
 		return parent::display($tpl);
 	}
 }

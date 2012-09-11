@@ -19,7 +19,7 @@ JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
  *
  * @since		1.0
  */
-class NewsletterHelper
+class NewsletterHelperNewsletter
 {
 
 	public static $extension = 'com_newsletter';
@@ -562,8 +562,6 @@ class NewsletterHelper
 		return ini_get('max_execution_time') == $time;
 	}
 
-
-
 	/**
 	 * Check if memory is about to overflow.
 	 * Can be used to prevent FATAL ERROR
@@ -578,3 +576,9 @@ class NewsletterHelper
 	}
 	
 }
+
+/**
+ * Legacy support for class name
+ */
+class NewsletterHelper extends NewsletterHelperNewsletter
+{}

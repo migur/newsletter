@@ -20,7 +20,7 @@ JLoader::import('tables.nextension', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @static
  * @since		1.0
  */
-abstract class MigurModuleHelper extends JModuleHelper
+abstract class NewsletterHelperModule extends JModuleHelper
 {
 
 	public static $clean;
@@ -481,7 +481,7 @@ abstract class MigurModuleHelper extends JModuleHelper
 	 */
 	public static function getNativeSupportedNames()
 	{
-		$file = realpath(JPATH_COMPONENT_ADMINISTRATOR) . DIRECTORY_SEPARATOR . 'modules.xml';
+		$file = JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'modules.xml';
 
 		// Attempt to load the xml file.
 		if (file_exists($file)) {
@@ -526,3 +526,9 @@ function modChrome_newsletterDefault($module, &$params, &$attribs)
 		echo '</div>';
 	}
 }
+
+/**
+ * Legacy support for class name
+ */
+abstract class MigurModuleHelper extends NewsletterHelperModule
+{}

@@ -10,7 +10,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-JLoader::import('models.automailing.threads.common', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('models.automailing.threads.common', COM_NEWSLETTER_PATH_ADMIN, '');
 
 /**
  * Common methods

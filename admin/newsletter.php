@@ -15,9 +15,13 @@ defined('_JEXEC') or die('Restricted access');
 //  ini_set("log_errors" , "0");
 //  ini_set("error_log" , "/var/log/php-error.log");
 
-JLog::addLogger(array());
+require_once 'constants.php';
 
 try {
+
+	// Run autoloader
+	JLoader::import('helpers.autoload', COM_NEWSLETTER_PATH_ADMIN, '');
+	NewsletterHelperAutoload::setup();
 
 	// import joomla controller library
 	jimport('joomla.application.component.controller');
@@ -25,6 +29,7 @@ try {
 	jimport('joomla.form.helper');
 	jimport('migur.migur');
 
+	
 	JLoader::import('helpers.acl', JPATH_COMPONENT_ADMINISTRATOR, '');
 	
 	// First check if user has access to the component.
@@ -41,6 +46,7 @@ try {
 	JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JLoader::import('helpers.log', JPATH_COMPONENT_ADMINISTRATOR, '');
+	JLoader::import('helpers.support', JPATH_COMPONENT_ADMINISTRATOR, '');
 	JHtml::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'helpers'. DIRECTORY_SEPARATOR .'html');
 
 	// Add translations used in JavaScript
@@ -62,8 +68,8 @@ try {
 
 	JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'rules');
 	JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'tables');
-	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models', 'NewsletterModel');
-	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'entities', 'NewsletterModelEntity');
+	MigurModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models', 'NewsletterModel');
+	MigurModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'entities', 'NewsletterModelEntity');
 
 	// Add the site root and user's ACL to JS
 	JavascriptHelper::addStringVar('migurSiteRoot', JUri::root());
@@ -78,7 +84,7 @@ try {
 	// Here we get full task and preserve it from exploding
     JRequest::setVar('completetask', JRequest::getCmd('task'));
     
-	$controller = JController::getInstance('Newsletter');
+	$controller = MigurController::getInstance('Newsletter');
 	
 	// Perform the Request task
 	// Here we get only tail of a task 
@@ -109,7 +115,7 @@ try {
 	
 } catch (Exception $e) {
 	
-	LogHelper::addDebug(
+	NewsletterHelperLog::addDebug(
 		'COM_NEWSLETTER_UNCAUGHT_EXCEPTION',
 		'common',
 		$e);
