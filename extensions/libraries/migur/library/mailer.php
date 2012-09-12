@@ -14,13 +14,13 @@ defined('_JEXEC') or die;
 jimport('migur.library.mailer.document');
 jimport('migur.library.mailer.sender');
 
-JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('helpers.mail', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('helpers.download', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('tables.history', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR);
-JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR);
+JLoader::import('helpers.subscriber', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('helpers.mail', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('helpers.download', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('helpers.newsletter', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('tables.history', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('plugins.manager', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('helpers.plugin', COM_NEWSLETTER_PATH_ADMIN);
 jimport('joomla.error.log');
 
 /**
