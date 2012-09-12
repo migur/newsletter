@@ -20,6 +20,33 @@
 	</languages>
 
 	<config>
+		<fields name="params">
+			<fieldset 
+                name="basic"
+                addfieldpath="/administrator/components/com_newsletter/models/fields">
+
+<!--				<field
+					name="listselector"
+					type="radio"
+					default="1"
+					label="MOD_NEWSLETTER_SELECT_LIST_RANGE"
+					description="MOD_NEWSLETTER_MULTILIST_DESC">
+					<option
+						value="0">MOD_NEWSLETTER_LISTS_ALL</option>
+					<option
+						value="3">MOD_NEWSLETTER_LISTS_CUSTOM</option>
+				</field>-->
+
+				<field
+					name="listid"
+					type="listslist"
+					default="0"
+                    multiple="false"
+					label="PLG_MIGURUSERREG_LIST"
+					description="PLG_MIGURUSERREG_LIST_DESC" />
+
+			</fieldset>
+		</fields>
 	</config>
 		
 	<updateservers>

@@ -43,7 +43,7 @@ class plgSystemMiguruserreg extends JPlugin
 	public function __construct($subject, $config)
 	{
 		// Check if component is absent or disabled
-		if (JComponentHelper::getParams('com_newsletter')) {
+		if (!JComponentHelper::getParams('com_newsletter')) {
 			$this->_disabled = true;
 			return;
 		}	
@@ -83,13 +83,8 @@ class plgSystemMiguruserreg extends JPlugin
 		$option	= JRequest::getVar('option', '');
 		$task	= JRequest::getVar('task', '');
 
-		
 		if ($option == 'com_users') {
-			if ($task == 'registration.register') {
-				$this->_usersRegistrationRegister($user);
-			}
-			
-			if ($task == 'registration.confirm') {
+			if ($task == 'register') {
 				$this->_usersRegistrationRegister($user);
 			}
 		}
@@ -97,9 +92,11 @@ class plgSystemMiguruserreg extends JPlugin
 	
 	protected function _usersRegistrationRegister($user)
 	{
-		$config = JPluginHelper::getPlugin('plg_miguruserreg');
+		$lid = $this->params->get('listid');
 		
-		$lid = $config->get('listid');
+		if (empty($lid)) {
+			return;
+		}
 		
 		// Get models
 		$subscriberModel = MigurModel::getInstance('Subscriber', 'NewsletterModel');
@@ -111,28 +108,69 @@ class plgSystemMiguruserreg extends JPlugin
 		
 		$list = $listModel->getItem($lid);
 
-		$listModel->assignSubscriber($lid, $subscriber, array('confirmed' => true));
+		try {
+			$dbo = JFactory::getDbo();
+			$dbo->transactionStart();
+			
+			$listModel->assignSubscriber($lid, $subscriber, array('confirmed' => false));
 
-		// Add to history all subscriptions
-		$history = JTable::getInstance('history', 'NewsletterTable');
-		$history->save(array(
-			'subscriber_id' => $sid,
-			'list_id' => $lid,
-			'newsletter_id' => NULL,
-			'action' => NewsletterTableHistory::ACTION_SIGNEDUP,
-			'date' => date('Y-m-d H:i:s'),
-			'text' => addslashes($list->name)
-		));
-		unset($history);
+			// Add to history all subscriptions
+			$history = JTable::getInstance('history', 'NewsletterTable');
+			$history->save(array(
+				'subscriber_id' => $sid,
+				'list_id' => $lid,
+				'newsletter_id' => NULL,
+				'action' => NewsletterTableHistory::ACTION_SIGNEDUP,
+				'date' => date('Y-m-d H:i:s'),
+				'text' => addslashes($list->name)
+			));
+			unset($history);
 
-		// Triggering the subscribed plugins.
-		// Process automailing via internal plugin plgMigurAutomail
-		JFactory::getApplication()->triggerEvent(
-			'onMigurAfterSubscribe', 
-			array(
-				'subscriberId' => $sid,
-				'lists' => array($lid))
-		);
+			// If list is not confirmed then send the newsletter
+			if(!$listModel->isConfirmed($lid, $sid)) {
+
+				// Immediately mail subscription letter
+				$res = $listModel->sendSubscriptionMail(
+					$subscriber, 
+					$list->list_id,
+					array(
+						'ignoreDuplicates' => true
+					));
+
+				// Set message and add some logs
+				if($res) {
+					$message =
+						JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name) . ' ' .
+						JText::_('COM_NEWSLETTER_YOU_WILL_NEED_CONFIRM_SUBSCRIPTION');
+				}
+			}		
+
+			// Triggering the subscribed plugins.
+			// Process automailing via internal plugin plgMigurAutomail
+			JFactory::getApplication()->triggerEvent(
+				'onMigurAfterSubscribe', 
+				array(
+					'subscriberId' => $sid,
+					'lists' => array($lid))
+			);
+
+			$dbo->transactionCommit();
+			
+		} catch(Exception $e) {
+			
+			$dbo->transactionRollback();
+			
+			if (class_exists('NewsletterHelperLog')) {
+				
+				unset($user['password']);
+				unset($user['password2']);
+				
+				NewsletterHelperLog::addError(
+					JText::_($e->getMessage()),
+					'plg_miguruserreg',
+					$user);
+			}	
+		}
 	}
 }
 
