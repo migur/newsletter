@@ -4,6 +4,8 @@ class NewsletterHelperAutoload
 {
 
 	public static $prefixes;
+	
+	public static $componentAdminPath;
 
 	/**
 	 * Method to setup the autoloaders for the Joomla Platform.  Since the SPL autoloaders are
@@ -18,6 +20,7 @@ class NewsletterHelperAutoload
 	public static function setup()
 	{
 		$componentPath = JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_newsletter';
+		self::$componentAdminPath = $componentPath;
 		$migurlibPath = JPATH_ROOT . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'migur' . DIRECTORY_SEPARATOR . 'library';
 
 		// Register the base path for Joomla platform libraries.
@@ -31,6 +34,8 @@ class NewsletterHelperAutoload
 		self::registerPrefix('NewsletterModel',  $componentPath . DIRECTORY_SEPARATOR . 'models');
 		self::registerPrefix('NewsletterTable',  $componentPath . DIRECTORY_SEPARATOR . 'tables');
 
+		JLoader::import('helpers.module', $componentPath);
+		
 		// Register the autoloader functions.
 		spl_autoload_register(array('NewsletterHelperAutoload', '_autoload'));
 	}
@@ -78,6 +83,19 @@ class NewsletterHelperAutoload
 	 */
 	private static function _autoload($class)
 	{
+		// BAD HALPERS NAMING SUPPORT!!
+		if (strrpos($class, 'Helper') == strlen($class) - strlen('Helper')) {
+
+			$file = self::$componentAdminPath . 
+				DIRECTORY_SEPARATOR . 'helpers' . 
+				DIRECTORY_SEPARATOR . strtolower(str_replace('Helper', '', $class)) . '.php';
+
+			if (file_exists($file)) {
+				include_once $file;
+			}	
+		}
+		//
+		
 		foreach (self::$prefixes as $prefix => $lookup) {
 			if (strpos($class, $prefix) === 0) {
 				return self::_load(substr($class, strlen($prefix)), $lookup);
