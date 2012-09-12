@@ -8,11 +8,11 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 // No direct access
-defined('JPATH_BASE') or die;
+defined('MIGUR_COM_NEWSLETTER') or die;
 
 // Import library dependencies
 jimport('joomla.application.module.helper');
-JLoader::import('tables.nextension', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('tables.nextension', COM_NEWSLETTER_PATH_ADMIN);
 
 /**
  * Module helper class
@@ -41,7 +41,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 	 */
 	public static function getInfo($module, $native = false)
 	{
-		$root = (!$native) ? JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'modules' : JPATH_SITE . DIRECTORY_SEPARATOR . 'modules';
+		$root = (!$native) ? COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'modules' : JPATH_SITE . DIRECTORY_SEPARATOR . 'modules';
 		$path = JPath::clean($root . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR . $module . '.xml');
 		if (file_exists($path)) {
 			$xml = simplexml_load_file($path);
@@ -93,7 +93,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 		$module->module = preg_replace('/[^A-Z0-9_\.-]/i', '', $module->module);
 
 		if ($module->native == 0) {
-			$path = JPATH_COMPONENT_ADMINISTRATOR . '/extensions/modules/' . $module->module . '/' . $module->module . '.php';
+			$path = COM_NEWSLETTER_PATH_ADMIN . '/extensions/modules/' . $module->module . '/' . $module->module . '.php';
 		} else {
 			$path = JPATH_SITE . '/modules/' . $module->module . '/' . $module->module . '.php';
 		}
@@ -481,7 +481,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 	 */
 	public static function getNativeSupportedNames()
 	{
-		$file = JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'modules.xml';
+		$file = COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'modules.xml';
 
 		// Attempt to load the xml file.
 		if (file_exists($file)) {
