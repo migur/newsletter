@@ -45,19 +45,29 @@
     <property name="cfg.siteLangDir" location="${cfg.comDir}/site/language" />
 
 
+
     <target name="build" depends="up" />
 
+
+
 	<target name="up">
-		<antcall target="_up">
+		<antcall target="_up_component">
 			<param name="destdir" value="${cfg.localhostRoot}"/>
 		</antcall>
-		
-		<antcall target="_up">
-			<param name="destdir" value="${cfg.localhostRoot3}"/>
+
+		<antcall target="_up_migur">
+			<param name="destdir" value="${cfg.localhostRoot}"/>
+		</antcall>
+
+		<antcall target="_up_module">
+			<param name="destdir" value="${cfg.localhostRoot}"/>
+			<param name="ext_name" value="mod_newsletter_subscribe"/>
 		</antcall>
 	</target>
+
+
 	
-    <target name="_up" description="attemps to update files on localhost server with files from working directory">
+    <target name="_up_component" description="attemps to update files on localhost server with files from working directory">
     	<!-- MAIN COMPONENT -->	
         <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.adminFilesDir}" />
@@ -87,64 +97,49 @@
         <copy todir="${destdir}/language" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.siteLangDir}" />
         </copy>
+	</target>
 
+
+
+    <target name="_up_migur">
         <!-- Copy library MIGUR -->
         <copy todir="${destdir}/libraries/migur" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.libFilesDir}/migur" />
         </copy>
+    </target>
 
+
+
+    <target name="_up_module">
         <copy todir="${destdir}/modules" preservelastmodified="true" overwrite="true">
-            <fileset dir="${basedir}/extensions/modules" />
-        </copy>
-
-<!-- Copy plugins -->
-<!--        <copy todir="${destdir}/plugins" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.buildDir}/plugins" />
-        </copy>-->
-
-<!-- Copy plugin lang file -->
-<!--        <copy todir="${destdir}/administrator/language/en-GB" preservelastmodified="true" overwrite="true">
-            <fileset file="${cfg.buildDir}/plugins/system/newsletterga/en-GB.plg_system_newsletterga.ini" />
-        </copy>
-        <copy todir="${destdir}/administrator/language/en-GB" preservelastmodified="true" overwrite="true">
-            <fileset file="${cfg.buildDir}/plugins/system/newsletterga/en-GB.plg_system_newsletterga.sys.ini" />
-        </copy>-->
-        <copy todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
-            <fileset file="${basedir}/extensions/modules/mod_newsletter_subscribe/en-GB.mod_newsletter_subscribe.ini" />
+            <fileset dir="${basedir}/extensions/modules/${ext_name}" />
         </copy>
         <copy todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
-            <fileset file="${basedir}/extensions/modules/mod_newsletter_subscribe/en-GB.mod_newsletter_subscribe.sys.ini" />
+            <fileset file="${basedir}/extensions/modules/${ext_name}/en-GB.${ext_name}.ini" />
         </copy>
+        <copy todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/modules/${ext_name}/en-GB.${ext_name}.sys.ini" />
+        </copy>
+	</target>	
 
-<!--        <delete dir="${destdir}/administrator/components/com_${cfg.comName}/migur" />-->
-    <!-- MODULES -->
-        <!-- CART -->
-        <!-- copy todir="${destdir}/modules/mod_${cfg.comName}_cart" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.comDir}/mod_${cfg.comName}_cart" />
-        </copy -->
-    <!-- PLUGINS -->
-        <!-- BUG REPORT -->
-        <!-- copy todir="${destdir}/plugins/newsletter" preservelastmodified="true" overwrite="true">
-            <fileset dir="${cfg.comDir}/newsletter_plugin_bug_report" />
+
+
+    <target name="_up_plugin">
+        <copy todir="${destdir}/plugins/${group_name}/${ext_name}/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_${ext_name}/${ext_name}.xml" />
         </copy>
-    -->
-	
-<!-- plg_migurlistsync -->	
-        <copy todir="${destdir}/plugins/system/migurlistsync/" preservelastmodified="true" overwrite="true">
-            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/migurlistsync.xml" />
+        <copy todir="${destdir}/plugins/system/${ext_name}/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_${ext_name}/${ext_name}.php" />
         </copy>
-        <copy todir="${destdir}/plugins/system/migurlistsync/" preservelastmodified="true" overwrite="true">
-            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/migurlistsync.php" />
+        <copy todir="${destdir}/plugins/system/${ext_name}/" preservelastmodified="true" overwrite="true">
+            <fileset file="${basedir}/extensions/plugins/plg_${ext_name}/index.html" />
         </copy>
-        <copy todir="${destdir}/plugins/system/migurlistsync/" preservelastmodified="true" overwrite="true">
-            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/index.html" />
-        </copy>
-    	<!-- LANGUAGE FILES -->
-		
         <copy todir="${destdir}/administrator/language/en-GB/" preservelastmodified="true" overwrite="true">
-            <fileset file="${basedir}/extensions/plugins/plg_migurlistsync/en-GB.plg_system_migurlistsync.ini" />
+            <fileset file="${basedir}/extensions/plugins/plg_${ext_name}/en-GB.plg_${group_name}_${ext_name}.ini" />
         </copy>
-	</target>
+    </target>
+
+
 	
     <target name="init" description="creates nessecary directory to build with">
         <mkdir dir="${cfg.buildVersionDir}" />
@@ -153,6 +148,8 @@
         <mkdir dir="${cfg.buildVersionDir}/components" />
         <mkdir dir="${cfg.extensionsDir}" />
     </target>
+
+
 
     <target name="build_package" description="build the package">
         <condition property="destdir" value="${tmpdir}" else="${cfg.localhostRoot}" >
