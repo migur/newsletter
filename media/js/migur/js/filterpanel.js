@@ -15,21 +15,36 @@ window.addEvent('domready', function() {
             //TODO: Move to widgets
 
             var id = el.getProperty('id');
-            var slide = new Fx.Slide(id);
-            el.store('slide', slide);
+			
             var control = new Element('a', {
                 href: '#',
                 //TODO: It must be a multilingual
-                html: Joomla.JText._('SEARCH_AND_FILTERS', 'Search & Filters') + '<span></span>',
+                html: Joomla.JText._('SEARCH_AND_FILTERS', 'Search & Filters') + '<span data-role="ctrl-icon"></span>',
                 events: {
                     click: function(){
-                        var controlId = $(this).getParent().getProperty('id');
+                        var controlId = $(this).getParent('[data-role="ctrl-container"]').getProperty('id');
                         var id = controlId.replace('-control', '');
-                        var slide = $(id).retrieve('slide');
-                        slide.toggle();
-                        var arrow = (slide.open)? 'icon-16-slide-down' : 'icon-16-slide-up';
-                        $(this).getChildren('span').set('class', arrow);
-                        Cookie.write(id, (slide.open)? '0' : '1');
+						var arrow;
+						var isOpen = Cookie.read(id)
+						
+						if (isOpen == '1') {
+							$(id).setStyle('overflow', 'hidden');
+							$(id).tween('height', 0);
+							arrow = 'icon-16-slide-down';
+						} else {
+							var child = $(id).getChildren('[data-role="panel-container-inner"]');
+							child.setStyle('overflow', 'hidden');
+							var hght = child.getStyle('height');
+							child.setStyle('overflow', 'visible');
+							
+							var fx = new Fx.Tween(id, {'link': 'chain'});
+							fx.start('height', hght);
+							fx.start('overflow', 'visible');
+							arrow = 'icon-16-slide-up';
+						}
+						
+                        $(this).getChildren('[data-role="ctrl-icon"]').set('class', arrow);
+                        Cookie.write(id, (isOpen == '1')? '0' : '1');
                         return false;
                     }
                 }
@@ -39,13 +54,16 @@ window.addEvent('domready', function() {
 
             var arrow;
             if(Cookie.read(id) == '1' || el.hasClass('opened')) {
-                slide.show();
+				var hght = $(id).getChildren('[data-role="panel-container-inner"]')[0].getStyle('height');
+				el.setStyle('height', hght);
+				el.setStyle('overflow', 'visible');
                 arrow = 'icon-16-slide-up';
             } else {
-                slide.hide();
+				el.setStyle('height', 0);
+				el.setStyle('overflow', 'hidden');
                 arrow = 'icon-16-slide-down';
             }
-            $(control).getChildren('span').set('class', arrow);
+            $(control).getChildren('[data-role="ctrl-icon"]')[0].set('class', arrow);
         });
 
     } catch(e){
