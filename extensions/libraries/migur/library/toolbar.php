@@ -25,8 +25,9 @@ if (!defined('MIGUR')) {
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurToolBar extends JToolBar
+class MigurToolbar extends JToolbar
 {
+	static public $globalButtonPath = array();
 
 	protected $_formName = '';
 	
@@ -57,6 +58,11 @@ class MigurToolBar extends JToolBar
 		$this->_useAcl = $useAcl;
 		
 		$this->_options = (array) $options;
+		
+		// Populate each MigurToolbar instance with global paths
+		foreach(self::$globalButtonPath as $path) {
+			array_push($this->_buttonPath, $path);
+		}
 	}
 
 	/**
@@ -70,16 +76,14 @@ class MigurToolBar extends JToolBar
 	 */
 	public static function getInstance($name = 'toolbar', $form = null, $actionPrefix = '', $useAcl = false, $options = array())
 	{
-		static $instances;
-
-		if (!isset($instances)) {
-			$instances = array();
+		if (!isset(self::$instances)) {
+			self::$instances = array();
 		}
-		if (empty($instances[$name])) {
-			$instances[$name] = new MigurToolBar($name, $form, $actionPrefix, $useAcl, $options);
+		if (empty(self::$instances[$name])) {
+			self::$instances[$name] = new MigurToolBar($name, $form, $actionPrefix, $useAcl, $options);
 		}
 
-		return $instances[$name];
+		return self::$instances[$name];
 	}
 
 	/**
@@ -127,7 +131,7 @@ class MigurToolBar extends JToolBar
 	{
 		$args = func_get_args();
 
-		$action = $args[1];
+		$action = !empty($args[1])? $args[1] : '';
 		
 		if ($this->_useAcl) {
 			if (!AclHelper::actionIsAllowed($this->_actionPrefix.'.'.$action)) {
@@ -137,4 +141,31 @@ class MigurToolBar extends JToolBar
 		
 		return call_user_func_array(array('parent', 'appendButton'), $args);
 	}
+	
+	
+	/**
+	 * Add a directory where JToolbar should search for button types in LIFO order.
+	 *
+	 * You may either pass a string or an array of directories.
+	 *
+	 * JToolbar will be searching for an element type in the same order you
+	 * added them. If the parameter type cannot be found in the custom folders,
+	 * it will look in libraries/joomla/html/toolbar/button.
+	 *
+	 * @param   mixed  $path  Directory or directories to search.
+	 *
+	 * @return  void
+	 *
+	 * @since   boolean
+	 * @see     JToolbar
+	 */
+	public static function addGlobalButtonPath($dir)
+	{
+		// No surrounding spaces allowed!
+		$dir = trim($dir);
+		if (substr($dir, -1) != DIRECTORY_SEPARATOR)
+			$dir .= DIRECTORY_SEPARATOR;
+		
+		self::$globalButtonPath[] = $dir;
+	}	
 }

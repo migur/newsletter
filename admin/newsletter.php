@@ -17,11 +17,11 @@ defined('_JEXEC') or die('Restricted access');
 
 require_once 'constants.php';
 
-try {
+// Run autoloader
+JLoader::import('helpers.autoload', COM_NEWSLETTER_PATH_ADMIN);
+NewsletterHelperAutoload::setup();
 
-	// Run autoloader
-	JLoader::import('helpers.autoload', COM_NEWSLETTER_PATH_ADMIN, '');
-	NewsletterHelperAutoload::setup();
+try {
 
 	// import joomla controller library
 	jimport('joomla.application.component.controller');
@@ -30,7 +30,7 @@ try {
 	jimport('migur.migur');
 
 	
-	JLoader::import('helpers.acl', JPATH_COMPONENT_ADMINISTRATOR, '');
+	JLoader::import('helpers.acl', COM_NEWSLETTER_PATH_ADMIN);
 	
 	// First check if user has access to the component.
 	if (
@@ -41,19 +41,28 @@ try {
 	}
 	
 	// Add the helper
-	JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.log', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.support', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JHtml::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'helpers'. DIRECTORY_SEPARATOR .'html');
+	JLoader::import('helpers.plugin', COM_NEWSLETTER_PATH_ADMIN);
+	JLoader::import('helpers.javascript', COM_NEWSLETTER_PATH_ADMIN);
+	JLoader::import('helpers.rssfeed', COM_NEWSLETTER_PATH_ADMIN);
+	JLoader::import('helpers.newsletter', COM_NEWSLETTER_PATH_ADMIN);
+	JLoader::import('helpers.log', COM_NEWSLETTER_PATH_ADMIN);
+	JLoader::import('helpers.support', COM_NEWSLETTER_PATH_ADMIN);
+	
+	// Add the helper
+	JHtml::addIncludePath(
+		COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'html');
+	
+	JToolbar::getInstance()->addButtonPath(
+		COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
+
+	MigurToolbar::addGlobalButtonPath(
+		COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
 
 	// Add translations used in JavaScript
-	JavascriptHelper::requireTranslations();
+	NewsletterHelperJavascript::requireTranslations();
 
 	// Load 'Migur' group of plugins
-	MigurPluginHelper::prepare();	
+	NewsletterHelperPlugin::prepare();	
 	
 	$app = JFactory::getApplication();
 	$app->triggerEvent('onMigurStart');
