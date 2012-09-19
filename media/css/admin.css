@@ -20,10 +20,6 @@ form #filter-bar
     height: auto !important;
 }
 
-.filter-panel {
-/*    height: 45px;*/
-}
-
 .icon-16-slide-up {
     background-image: url("../../system/images/sort0.png");
 }
@@ -32,10 +28,6 @@ form #filter-bar
     background-image: url("../../system/images/sort1.png");
 }
 
-.filter-panel-control {
-    margin-top: 38px;
-    float: left;
-}
 .filter-panel .label {
     color: #888;
     margin-left: 3px;
@@ -43,6 +35,10 @@ form #filter-bar
 
 tr th img {
     float: none;
+}
+
+.filter-panel-control {
+	margin-top: 15px;
 }
 
 .filter-panel-control span {
@@ -407,4 +403,12 @@ textarea.invalid {
 
 .badge-warning {
     background-color: #F89406;
+}
+
+.column-date {
+	min-width: 120px;
+}
+
+.column-narrow {
+	min-width: 50px;
 }

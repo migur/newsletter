@@ -1,26 +1,12 @@
 <?php $items = $this->form->getFieldset('newsletters'); ?>
 
-<table class="adminlist  table table-striped" width="100%">
-        <thead>
-            <tr>
-                <th width="40%" class="left">
-                    <?php echo JText::_('COM_NEWSLETTER_CONFIG_NAME'); ?>
-                </th>
-                <th width="40%" class="left">
-                    <?php echo JText::_('COM_NEWSLETTER_CONFIG_VALUE'); ?>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($items as $i => $item) : ?>
-                <tr class="row<?php echo $i % 2; ?>">
-                    <td>
-                        <?php echo $item->label; ?>
-                    </td>
-                    <td>
-                        <?php echo $item->input; ?>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+<?php foreach ($items as $i => $item) : ?>
+	<div class="control-group">
+		<div class="control-label">
+				<?php echo $item->label; ?>
+		</div>
+		<div class="controls offset4">
+			<?php echo $item->input; ?>
+		</div>	
+	</div>
+<?php endforeach; ?>

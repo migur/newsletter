@@ -57,14 +57,14 @@
 
 			<fieldset id="import-fields">
 				<legend><?php echo JText::_('COM_NEWSLETTER_IMPORT_DND_FIELDS'); ?></legend>
-					<div class="drop fltlft" rel="username"></div>
-					<div class="fltlft"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('COM_NEWSLETTER_SUBSCRIBER_NAME'); ?></div>
+					<div class="drop pull-left" rel="username"></div>
+					<div class="pull-left"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('COM_NEWSLETTER_SUBSCRIBER_NAME'); ?></div>
 					<div class="clr"></div>
-					<div class="drop fltlft" rel="email"></div>
-					<div class="fltlft"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('JGLOBAL_EMAIL'); ?></div>
+					<div class="drop pull-left" rel="email"></div>
+					<div class="pull-left"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('JGLOBAL_EMAIL'); ?></div>
 					<div class="clr"></div>
-					<div class="drop fltlft" rel="html"></div>
-					<div class="fltlft"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD') . ' ' . JText::_('COM_NEWSLETTER_AS') . ' HTML.'?><br/>
+					<div class="drop pull-left" rel="html"></div>
+					<div class="pull-left"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD') . ' ' . JText::_('COM_NEWSLETTER_AS') . ' HTML.'?><br/>
 						<?php echo JText::_('COM_NEWSLETTER_DEFAULT'); ?>
 						<select id="import-file-html-default">
 							<option value="0">No</option>
@@ -145,7 +145,7 @@
 			/>
 
 			<div class="fltrt submit-control">
-				<div class="fltlft">
+				<div class="pull-left">
 					<span id="import-message"></span>&nbsp;&nbsp;&nbsp;
 					<div id="import-preloader" class="fltrt"></div>
 				</div>

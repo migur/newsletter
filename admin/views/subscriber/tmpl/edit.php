@@ -3,7 +3,7 @@
 defined('_JEXEC') or die;
 ?>
 
-<div id="subscriber-form-edit" class="width-100 fltlft">
+<div id="subscriber-form-edit" class="width-100 pull-left">
 	<fieldset class="adminform" id="subscriber-edit-main">
 	   <legend><?php echo JText::_('COM_NEWSLETTER_INFORMATION'); ?></legend>
 	   <?php echo $this->loadTemplate('subscriber'); ?>

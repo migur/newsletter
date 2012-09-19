@@ -35,7 +35,7 @@ defined('_JEXEC') or die;
                         <thead>
                                 <tr>
                                         <th width="1%">
-                                                <input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
+                                                <input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
                                         </th>
                                         <th class="left">
                                                 <?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_AUTOMAILING', 'a.title', $this->automailings->listDirn, $this->automailings->listOrder, null, null, 'automailingsForm'); ?>

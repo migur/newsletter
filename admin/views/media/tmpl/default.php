@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 		<span id="message"></span><?php echo JHtml::_('image', 'media/dots.gif', '...', array('width' =>22, 'height' => 12), true)?>
 	</div>
 	<fieldset>
-		<div class="fltlft"><span style="line-height:32px;"><?php echo JText::_('COM_NEWSLETTER_MEDIA_INSERT_DESC') ?></span></div>
+		<div class="pull-left"><span style="line-height:32px;"><?php echo JText::_('COM_NEWSLETTER_MEDIA_INSERT_DESC') ?></span></div>
 		<div class="fltrt">
 			<button type="button" id="insert-button"><?php echo JText::_('COM_NEWSLETTER_MEDIA_INSERT') ?></button>
 			<button type="button" onclick="window.parent.SqueezeBox.close();"><?php echo JText::_('JCANCEL') ?></button>

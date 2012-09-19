@@ -1,5 +1,5 @@
 <div id="tab-container-unsubscribed">
-        <div class="filter-search fltlft">
+        <div class="filter-search pull-left">
             <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
             <input type="text" name="filter_search" id="unsubscribed_filter_search" value="<?php //echo $this->escape($this->lists->state->get('filter.search')); ?>" title="<?php echo JText::_('com_newsletter_FILTER_SEARCH_DESC'); ?>" />
         </div>

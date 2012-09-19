@@ -3,11 +3,11 @@
         <legend>Newsletters</legend>
 		
 		<a class="btn btn-success" href="index.php?option=com_newsletter&amp;view=newsletter">
-			<span class="icon-new icon-white"></span>Create Newsletter
+			Create Newsletter
 		</a>
 		
 		<a class="btn" rel="{handler: 'iframe', size: {x: 920, y: 450}, onClose: function() {}}" href="http://migur.woody.rhino.nixsolutions.com/dev/joomla/administrator/index.php?option=com_newsletter&amp;view=sender&amp;tmpl=component" class="modal">
-			<span class="icon-send"></span>Send Newsletter
+			<span>Send Newsletter</span>
 		</a>
 	</div> 
 
@@ -15,10 +15,10 @@
         <legend>Subscribers</legend>
 		
 		<a class="btn btn-success" rel="{handler: 'iframe', size: {x: 400, y: 220}, onClose: function() {}}" href="http://migur.woody.rhino.nixsolutions.com/dev/joomla/administrator/index.php?option=com_newsletter&amp;view=subscriber&amp;tmpl=component" class="modal">
-			<span class="icon-new icon-white"></span>Create Subscriber
+			Create Subscriber
 		</a>
 		<a class="btn btn-success" rel="{handler: 'iframe', size: {x: 1000, y: 600}, onClose: function() {}}" href="http://migur.woody.rhino.nixsolutions.com/dev/joomla/administrator/index.php?option=com_newsletter&amp;view=list&amp;tmpl=component" class="modal">
-			<span  class="icon-new icon-white"></span>Create List
+			Create List
 		</a>
 	</div>	
 	
@@ -34,22 +34,22 @@
 		<legend>Configuration &amp; Installation</legend>
 		
 		<a class="btn" rel="{handler: 'iframe', size: {x: 350, y: 150}, onClose: function() {}}" href="http://migur.woody.rhino.nixsolutions.com/dev/joomla/administrator/index.php?option=com_newsletter&amp;view=extension&amp;layout=install&amp;tmpl=component" class="modal">
-			<span class="icon-export"></span>Install Extensions
+			Install Extensions
 		</a>
 		
 		<a class="btn" href="index.php?option=com_newsletter&amp;view=configuration">
-			<span class="icon-edit"></span>Configuration
+			Configuration
 		</a>
 	</div>
 
 	<div class="span6">
 		<legend>Help &amp; About</legend>
 		<a class="btn" rel="{handler: 'iframe', size: {x: 800, y: 600}, onClose: function() {}}" href="http://migur.com/products/newsletter" class="modal">
-			<span class="icon-32-publish"></span>About
+			About
 		</a>
 
-		<a class="btn" rel="help" onclick="popupWindow('http://migur.com/support/documentation/newsletter', 'Help', 980, 600, 1)" href="#">
-			<span class="icon-32-help"><i class="icon-question-sign"></i></span>Help
+		<a class="btn" rel="help" onclick="Joomla.popupWindow('http://migur.com/support/documentation/newsletter', 'Help', 980, 600, 1)" href="#">
+			Help
 		</a>
 	</div>
 

@@ -1,14 +1,23 @@
 <fieldset>
 	<legend><?php echo JText::_('Statistics'); ?></legend>
-	<?php
-//1st Parameter: Specify 'tabs' as appearance 
-//2nd Parameter: Starting with third tab as the default (zero based index)
-//open one!
-	echo JHtml::_('tabs.start', 'pane');
-	echo JHtml::_('tabs.panel', 'Overview', 'panel_overview');
-	echo $this->loadTemplate('overview');
-	echo JHtml::_('tabs.panel', 'Hard facts', 'panel_hardfacts');
-	echo $this->loadTemplate('hardfacts');
-	echo JHtml::_('tabs.end');
-	?>
+	
+	<ul id="prewiew" class="nav nav-tabs">
+		<li class="active">
+			<a data-toggle="tab" href="#statistics-overview"><?php echo JText::_('COM_NEWSLETTER_OVERVIEW'); ?></a>
+		</li>
+		
+		<li>
+			<a data-toggle="tab" href="#statistics-hardfacts"><?php echo JText::_('COM_NEWSLETTER_HARDFACTS'); ?></a>
+		</li>	
+	</ul>
+
+	<div class="tab-content">
+		<div id="statistics-overview" class="tab-pane active">
+			<?php echo $this->loadTemplate('overview'); ?>
+		</div>	
+		<div id="statistics-hardfacts" class="tab-pane">
+			<?php echo $this->loadTemplate('hardfacts'); ?>
+		</div>	
+	</div>	
+	
 </fieldset>

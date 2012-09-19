@@ -44,7 +44,7 @@
                 />
 		</li>
 		<li>
-			<div class="fltlft">
+			<div class="pull-left">
                 <?php echo $this->form->getLabel('newsletter_from_name', 'params'); ?>
                 <?php echo $this->form->getInput('newsletter_from_name', 'params'); ?>
 			</div>	
@@ -54,7 +54,7 @@
 			</div>	
 		</li>
 		<li>
-			<div class="fltlft">
+			<div class="pull-left">
                 <?php echo $this->form->getLabel('newsletter_from_email', 'params'); ?>
                 <?php echo $this->form->getInput('newsletter_from_email', 'params'); ?>
 			</div>	

@@ -1,7 +1,7 @@
 <div id="installer-manage">
 <form action="<?php echo JRoute::_('index.php?option=com_newsletter&view=install');?>" method="post" name="installForm" id="installForm">
 
-<div class="width-30 fltlft" style="margin-top:22px;">
+<div class="width-30 pull-left" style="margin-top:22px;">
 		<?php echo MigurToolBar::getInstance('install')->render(); ?>
 </div>
 
@@ -11,7 +11,7 @@
 		<thead>
 			<tr>
 				<th width="10">
-					<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
+					<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.Joomla.checkAll(this)" />
 				</th>
 				<th class="nowrap center">
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_TITLE', 'a.title', $this->listDirn, $this->listOrder, null, null, 'installForm'); ?>

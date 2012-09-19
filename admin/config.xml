@@ -8,6 +8,7 @@
         <field
             name="general_send_disable"
             type="radio"
+			class="btn-group"
             default="0"
             label="COM_NEWSLETTER_SEND_DISABLE"
             description="COM_NEWSLETTER_SEND_DISABLE">
@@ -20,6 +21,7 @@
         <field
             name="general_reg_disable"
             type="radio"
+			class="btn-group"
             default="0"
             label="COM_NEWSLETTER_REG_ENABLED"
             description="COM_NEWSLETTER_REG_ENABLED">
@@ -40,7 +42,7 @@
         <field
             name="newsletter_smtp_edit"
             type="button"
-			class="button"
+			class="btn"
             label=" "
             description="COM_NEWSLETTER_EDIT"
 			required="false"
@@ -49,7 +51,7 @@
         <field
             name="newsletter_smtp_create"
             type="button"
-			class="button"
+			class="btn"
             label=" "
             description="COM_NEWSLETTER_CREATE_SMTP_PROFILE"
 			required="false"
@@ -58,7 +60,7 @@
         <field
             name="newsletter_smtp_delete"
             type="button"
-			class="button"
+			class="btn btn-danger"
             label=" "
             description="COM_NEWSLETTER_DELETE_SMTP_PROFILE"
 			required="false"
@@ -76,7 +78,7 @@
         <field
             name="newsletter_mailbox_edit"
             type="button"
-			class="button"
+			class="btn"
             label=" "
             description="COM_NEWSLETTER_EDIT"
 			required="false"
@@ -85,7 +87,7 @@
         <field
             name="newsletter_mailbox_create"
             type="button"
-			class="button"
+			class="btn"
             label=" "
             description="COM_NEWSLETTER_CREATE_MAILBOX_PROFILE"
 			required="false"
@@ -94,7 +96,7 @@
         <field
             name="newsletter_mailbox_delete"
             type="button"
-			class="button"
+			class="btn btn-danger"
             label=" "
             description="COM_NEWSLETTER_DELETE_MAILBOX_PROFILE"
 			required="false"
@@ -104,6 +106,7 @@
 		<field
             name="autosaver_enabled"
             type="radio"
+			class="btn-group"
             default="0"
             label="COM_NEWSLETTER_AUTOSAVER_IS_ON"
             description="COM_NEWSLETTER_AUTOSAVER_IS_ON">
@@ -116,6 +119,7 @@
 <!--		<field
             name="users_autoconfirm"
             type="radio"
+			class="btn-group"
             default="0"
             label="COM_NEWSLETTER_AUTOCONFIRM_USERS"
             description="COM_NEWSLETTER_AUTOCONFIRM_USERS">
@@ -150,6 +154,7 @@
         <field
             name="newsletter_save_to_db"
             type="radio"
+			class="btn-group"
             default="1"
             label="COM_NEWSLETTER_SAVE_NEWSLETTERS"
             description="COM_NEWSLETTER_SAVE_NEWSLETTERS">
@@ -162,7 +167,7 @@
         <field
             name="newsletter_clear_db"
             type="button"
-                        class="button"
+			class="btn btn-danger"
             label="COM_NEWSLETTER_CLEAR_DB"
             description="COM_NEWSLETTER_CLEAR_DB"
                         required="false"
@@ -277,6 +282,7 @@
         <field
             name="debug"
             type="radio"
+			class="btn-group"
             default="0"
             label="COM_NEWSLETTER_DEBUG_COMPONENT">
             <option value="1">JYES</option>
@@ -290,6 +296,7 @@
         <field
             name="rawurls"
             type="radio"
+			class="btn-group"
             default="0"
             label="COM_NEWSLETTER_USE_RAW_URLS"
 			description="COM_NEWSLETTER_USE_RAW_URLS_DESC"

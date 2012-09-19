@@ -1,6 +1,6 @@
 <?php echo $this->loadTemplate('updater', ''); ?>
 
-<fieldset id="links">
+<div id="links">
     <a href="http://migur.com/support/documentation/newsletter" target="_blank" class="horizontal margin-5">
 		<?php echo JText::_('COM_NEWSLETTER_DOCS'); ?>
     </a>
@@ -12,7 +12,7 @@
     <a href="http://migur.com/community/forum/4-newsletter-component" target="_blank" class="horizontal margin-5">
 		<?php echo JText::_('COM_NEWSLETTER_SUPPORT'); ?>
     </a>
-</fieldset>
+</div>
 
 <?php echo $this->loadTemplate('news', ''); ?>
 

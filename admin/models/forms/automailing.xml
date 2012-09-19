@@ -27,7 +27,7 @@
 			default="all"
 			label="COM_NEWSLETTER_SELECT_SCOPE"
 			description="COM_NEWSLETTER_SELECT_SCOPE"
-			class="inputbox validate-scope"
+			class="inputbox validate-scope btn-group"
 		>
 			<option value="all">COM_NEWSLETTER_FOR_ALL_SUBSCRIBERS</option>
 			<option value="targets">COM_NEWSLETTER_FOR_SUBSCRIBERS_FROM_LISTS</option>

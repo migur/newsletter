@@ -45,7 +45,6 @@ class NewsletterViewDashboard extends MigurView
 	public function display($tpl = null)
 	{
 
-
 		JHTML::stylesheet('media/com_newsletter/css/admin.css');
 		JHTML::stylesheet('media/com_newsletter/css/dashboard.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
@@ -69,7 +68,7 @@ class NewsletterViewDashboard extends MigurView
 			'checkJoomla',
 			'checkImap',
 			'checkLogs'));
-		
+
 		$this->addToolbar();
 
 		$stat = MigurModel::getInstance('Queues', 'NewsletterModel')->getSummary();
@@ -85,7 +84,7 @@ class NewsletterViewDashboard extends MigurView
 		JavascriptHelper::addStringVar('mailsToSend', $total - $sent);
 		JavascriptHelper::addStringVar('mailsTotal', $total);
 		JavascriptHelper::addStringVar('newslettersSent', count($stat));
-
+		
 		$cache = JFactory::getCache('com_newsletter');
 		$this->news = $cache->call(
 			array('RssfeedHelper', 'loadFeed'),
@@ -117,11 +116,16 @@ class NewsletterViewDashboard extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_DASHBOARD_TITLE'), 'article.png');
 		$bar = JToolBar::getInstance();
-		$bar->appendButton('Link', 'alert', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
-		$bar->appendButton('Separator');
+		$bar->appendButton('Link', 'warning', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
 		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', SupportHelper::getResourceUrl('mailing', 'general'));
+		$bar->appendButton('Separator');
+		
+		$bar->appendButton('MigurSendProgress', 'progress', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
 
-		JToolBarHelper::custom('', 'progress', '', '', false);
+		$bar->appendButton('Link', 'view', 'COM_NEWSLETTER_VIEW_QUEUE', 'index.php?option=com_newsletter&view=queues');
+		$bar->appendButton('Link', 'queue', 'COM_NEWSLETTER_PROCESS_QUEUE', '#');
+		$bar->appendButton('Link', 'bounces', 'COM_NEWSLETTER_PROCESS_BOUNCES', '#');
+
 
 //		$bar = MigurToolBar::getInstance('newsletters-toolbar');
 //		$bar->appendButton('Link', 'new', 'COM_NEWSLETTER_NEWSLETTER_CREATE', 'index.php?option=com_newsletter&amp;view=newsletter');

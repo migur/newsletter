@@ -31,11 +31,12 @@
 			required="true"
             validate=""
 		 />
-		<field name="type"
+		<field 
+			name="type"
 			type="radio"
 			label="COM_NEWSLETTER_TYPE"
 			description="COM_NEWSLETTER_TYPE"
-			class="inputbox validate-type autosaverable"
+			class="inputbox validate-type autosaverable btn-group"
 			default="0"
 			required="true"
 		 >

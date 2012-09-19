@@ -2,6 +2,11 @@
 // no direct access
 defined('_JEXEC') or die;
 
+JHtml::_('bootstrap.tooltip');
+JHtml::_('behavior.multiselect');
+JHtml::_('dropdown.init');
+JHtml::_('jquery.chosen');
+
 $showFull = AclHelper::canConfigureComponent(); 
 
 ?>
@@ -13,55 +18,83 @@ $showFull = AclHelper::canConfigureComponent();
 	</div>
 	
 	<legend><?php echo JText::_('COM_NEWSLETTER_INSTALLED_EXTESIONS'); ?></legend>
-	<?php
-	echo JHtml::_('tabs.start', 'tabs-extensions');
-	echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_MODULES'), 'tab-modules');
-	echo $this->loadTemplate('modules', 'extensions');
-	echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PLUGINS'), 'tab-plugins');
-	echo $this->loadTemplate('plugins', 'extensions');
-	echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_TEMPLATES'), 'tab-templates');
-	echo $this->loadTemplate('templates', 'extensions');
-	echo JHtml::_('tabs.end');
-	?>
+	
+	<ul id="tabs-extensions" class="nav nav-tabs">
+		<li class="active"><a data-toggle="tab" href="#tabext-modules"><?php echo JText::_('COM_NEWSLETTER_MODULES'); ?></a></li>	
+		<li><a data-toggle="tab" href="#tabext-plugins"><?php echo JText::_('COM_NEWSLETTER_PLUGINS'); ?></a></li>	
+		<li><a data-toggle="tab" href="#tabext-templates"><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></a></li>	
+	</ul>
+	
+	<div class="tab-content">
+		
+		<div id="tabext-modules" class="tab-pane active">
+			<?php echo $this->loadTemplate('modules', 'extensions'); ?></div>	
+			
+		<div id="tabext-plugins" class="tab-pane">
+			<?php echo $this->loadTemplate('plugins', 'extensions'); ?></div>	
+		
+		<div id="tabext-templates" class="tab-pane">
+			<?php echo $this->loadTemplate('templates', 'extensions'); ?></div>	
+	</div>	
+	
 </fieldset>
 
 <?php if ($showFull) { ?>
 <fieldset id="config-config">
 	<legend><?php echo JText::_('COM_NEWSLETTER_GLOBAL_CONFIG'); ?></legend>
-	<form name="adminForm" method="POST" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
-		<?php
-		echo JHtml::_('tabs.start', 'tabs-config');
-		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_GENERAL'), 'tab-general');
-		echo $this->loadTemplate('general', 'config');
-		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_NEWSLETTERS'), 'tab-newsletters');
-		echo $this->loadTemplate('newsletters', 'config');
-		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_TEMPLATES'), 'tab-templates');
-		echo $this->loadTemplate('templates', 'config');
-		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_SUBSCRIBERS'), 'tab-subscribers');
-		echo $this->loadTemplate('subscribers', 'config');
-		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_ADVANCED'), 'tab-advanced');
-		echo $this->loadTemplate('advanced', 'config');
-		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_IMPORT_EXPORT'), 'tab-export');
-		echo $this->loadTemplate('export', 'config');
-		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PERMISSIONS'), 'tab-permissions');
-		?>
-		
-		<?php
-		// First check if user has access to the component.
-		if (AclHelper::canConfigureComponent()) {
-			echo $this->loadTemplate('permissions', 'config');
-		} else { ?>
-			<center>
-			<?php echo JText::_('COM_NEWSLETTER_YOU_CANT_CHANGE_COMPONENT_PERMISSIONS'); ?>
-			</center>
-		<?php }	
-		echo JHtml::_('tabs.end');
-		?>
-		<div>
-			<input type="hidden" name="task" value="" />
-			<input type="hidden" name="returnurl" value="<?php echo base64_encode(JRoute::_('index.php?option=com_newsletter&view=configuration', false)); ?>" />
-			<?php echo JHtml::_('form.token'); ?>
-		</div>
+	
+	<form id="adminForm" name="adminForm" method="POST" class="form-horizontal form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
+	
+		<ul id="tabs-config" class="nav nav-tabs">
+			<li class="active"><a data-toggle="tab" href="#tabconf-general"><?php echo JText::_('COM_NEWSLETTER_GENERAL'); ?></a></li>	
+			<li><a data-toggle="tab" href="#tabconf-newsletters"><?php echo JText::_('COM_NEWSLETTER_NEWSLETTERS'); ?></a></li>	
+			<li><a data-toggle="tab" href="#tabconf-templates"><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></a></li>	
+			<li><a data-toggle="tab" href="#tabconf-subscribers"><?php echo JText::_('COM_NEWSLETTER_SUBSCRIBERS'); ?></a></li>	
+			<li><a data-toggle="tab" href="#tabconf-advanced"><?php echo JText::_('COM_NEWSLETTER_ADVANCED'); ?></a></li>	
+			<li><a data-toggle="tab" href="#tabconf-export"><?php echo JText::_('COM_NEWSLETTER_IMPORT_EXPORT'); ?></a></li>	
+			<li><a data-toggle="tab" href="#tabconf-permissions"><?php echo JText::_('COM_NEWSLETTER_PERMISSIONS'); ?></a></li>	
+		</ul>
+
+		<div class="tab-content">
+
+			<div id="tabconf-general" class="tab-pane active">
+				<?php echo $this->loadTemplate('general', 'config'); ?></div>	
+
+			<div id="tabconf-newsletters" class="tab-pane">
+				<?php echo $this->loadTemplate('newsletters', 'config'); ?></div>	
+
+			<div id="tabconf-templates" class="tab-pane">
+				<?php echo $this->loadTemplate('templates', 'config'); ?></div>	
+
+			<div id="tabconf-subscribers" class="tab-pane">
+				<?php echo $this->loadTemplate('subscribers', 'config'); ?></div>	
+
+			<div id="tabconf-advanced" class="tab-pane">
+				<?php echo $this->loadTemplate('advanced', 'config'); ?></div>	
+
+			<div id="tabconf-export" class="tab-pane">
+				<?php echo $this->loadTemplate('export', 'config'); ?></div>	
+
+			<div id="tabconf-permissions" class="tab-pane">
+
+				<?php
+				// First check if user has access to the component.
+				if (AclHelper::canConfigureComponent()) {
+					echo $this->loadTemplate('permissions', 'config');
+				} else { ?>
+					<center>
+					<?php echo JText::_('COM_NEWSLETTER_YOU_CANT_CHANGE_COMPONENT_PERMISSIONS'); ?>
+					</center>
+				<?php }	
+				echo JHtml::_('tabs.end');
+				?>
+				<div>
+					<input type="hidden" name="task" value="" />
+					<input type="hidden" name="returnurl" value="<?php echo base64_encode(JRoute::_('index.php?option=com_newsletter&view=configuration', false)); ?>" />
+					<?php echo JHtml::_('form.token'); ?>
+				</div>
+			</div>	
+		</div>	
 	</form>
 </fieldset>
 <?php } ?>

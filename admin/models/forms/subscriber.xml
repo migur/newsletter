@@ -28,7 +28,7 @@
 			default="1"
 			label="COM_NEWSLETTER_HTML"
 			description=""
-			class="inputbox"
+			class="inputbox btn-group"
 			size="30"
 			required="true"
 		 >

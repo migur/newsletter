@@ -11,9 +11,9 @@ defined('_JEXEC') or die;
 	</div>	
 
 	<div id="send-msg-container"class="fltrt">
-		<div id="send-message" class="fltlft"></div>
-		<div class="fltlft">&nbsp;&nbsp;&nbsp;</div>
-		<div id="send-preloader" class="fltlft"></div>
+		<div id="send-message" class="pull-left"></div>
+		<div class="pull-left">&nbsp;&nbsp;&nbsp;</div>
+		<div id="send-preloader" class="pull-left"></div>
 	</div>
 
 	<table class="nl-subscribers">
