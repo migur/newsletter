@@ -6,91 +6,94 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-window.addEvent('domready', function() {
-try {
-
-	$$('#templates-edit .toolbar, #templates-trash .toolbar').each(function(el) { el.removeProperty('onclick'); });
+window.addEvent('domready', function() { try {
 	
-	$$('.templateslist [type=checkbox]').addEvent('click', function(){
+	(function(){
 
-       var active = $$('.templateslist [type=checkbox]').some(function(el){
-           return el.get('checked');
-       });
+		var edit  = $$('#templates-edit > button');
+		var trash = $$('#templates-trash > button');
+		var glasses = $$('.templateslist .search')
+		var checkboxes = $$('.templateslist [type=checkbox]');
+		
+		var buttons = [edit, trash];
 
-       if( active ) {
-            $$('#templates-edit, #templates-trash').each(function(el){
-	            el.getElements('span')[0].removeClass('toolbar-inactive');
-			});
+		// Manipulates with access to a buttons depending on checkboxes
+		var updateBtnState = function() {
 			
-        } else {
-            $$('#templates-edit, #templates-trash').each(function(el){
-                el.getElements('span')[0].addClass('toolbar-inactive');
-			});
-       }
-   });
+			checkboxes.some(function(el){ return el.get('checked') })? 
 
-/* Expand the functionality of the delete button */
-$$('#templates-trash .toolbar')[0].addEvent('click', function(el){
-	if ($(this).getElements('span')[0].hasClass('toolbar-inactive')) return false;
-	
-	if( confirm('One or more newsletters may use this template(s). Do you want to delete?') ) {
-		Joomla.submitform('templates.delete', $$('[name=templatesForm]')[0]);
-	};
-	return false;
-});
+				buttons.each(function(el){
+					 el.removeClass('disabled');
+				 }) :
 
-/* Expand the functionality of the edit button */
-$$('#templates-edit a')[0].addEvent('click', function(ev){
+				 buttons.each(function(el){
+					 el.addClass('disabled');
+				});
+		}
+		
+		checkboxes.addEvent('click', updateBtnState);
+		buttons.each(function(el) { el.removeProperty('onclick'); });
+		updateBtnState();
 
-	ev.stop();
-	
-	if ($$('[name=cid[]]').length > 0) {
-		$$('[name=cid[]]').each(function(el){
-			if(el.getProperty('checked')) {
-				el.getParent('tr').getElements('.modal').fireEvent('click');
-			}
+		/* Expand the functionality of the delete button */
+		trash.addEvent('click', function() {
+			if (
+				$(this).hasClass('disabled') == false && 
+				confirm('One or more newsletters may use this template(s). Do you want to delete?') 
+			) {
+				Joomla.submitform('templates.delete', $$('[name=templatesForm]')[0]);
+			};
+			
+			return false;
 		});
-	}	
-});
 
 
-$$('.templateslist [type=checkbox]')[0].fireEvent('click');
 
-if ($$('.templateslist .search').length > 0) {
-	
-	tplTransport = null;
-	$$('.templateslist .search').addEvent('click', function(){
+		/* Expand the functionality of the edit button */
+		edit.addEvent('click', function(ev){
 
-		var id = $(this).getParent('tr').getElements('[name=cid[]]')[0].get('value');
+			ev.stop();
 
-		delete tplTransport;
-		tplTransport = new Request.JSON({
-			url: '?option=com_newsletter&task=template.getparsed&shownames=1',
-			data: {
-				t_style_id: id,
-				tagsRenderMode: 'schematic',
-				type: 'html' },
-
-			onComplete: function(res){
-
-				$('preview-container').set('html', res.data.content);
-				$('tpl-title').set('text', res.data.information.name);
-				$('tpl-name').set('text', res.data.information.author);
-				$('tpl-email').set('text', res.data.information.authorEmail);
-			}
-		}).send();
-
-		return false;
-	});
+			checkboxes.each(function(el){
+				if(el.getProperty('checked')) {
+					el.getParent('tr').getElements('.modal').fireEvent('click');
+				}
+			});
+		});
 
 
-	$$('.templateslist .search')[0].fireEvent('click');
-}
+		// Add AJAX preview functionality to glasses
+		glasses.addEvent('click', function(){
+
+			var id = $(this).getParent('tr').getElements('[name=cid[]]')[0].get('value');
+
+			new Request.JSON({
+				url: '?option=com_newsletter&task=template.getparsed&shownames=1',
+				data: {
+					t_style_id: id,
+					tagsRenderMode: 'schematic',
+					type: 'html' },
+
+				onComplete: function(res){
+
+					$('preview-container').set('html', res.data.content);
+					$('tpl-title').set('text', res.data.information.name);
+					$('tpl-name').set('text', res.data.information.author);
+					$('tpl-email').set('text', res.data.information.authorEmail);
+				}
+			}).send();
+
+			return false;
+		});
+
+
+		glasses[0].fireEvent('click');
+
+})();	
 
 
 } catch(e){
     if (console && console.log) console.log(e);
 }
-
 
 });
