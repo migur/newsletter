@@ -25,7 +25,7 @@ JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR);
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterControllerNewsletter extends MigurControllerForm
+class NewsletterControllerNewsletter extends JControllerForm
 {
 
 	/**

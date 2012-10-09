@@ -17,7 +17,7 @@ jimport('migur.library.mailer.mailbox');
 JLoader::import('helpers.mail', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 
-class NewsletterControllerMailboxprofile extends MigurControllerForm
+class NewsletterControllerMailboxprofile extends JControllerForm
 {
 
 	/**

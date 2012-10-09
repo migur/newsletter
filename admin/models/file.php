@@ -23,7 +23,7 @@ JLoader::import('helpers.media', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelFile extends JModel
+class NewsletterModelFile extends MigurModel
 {
 
 	/**

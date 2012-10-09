@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.controlleradmin');
 
-class NewsletterControllerNewsletters extends MigurControllerAdmin
+class NewsletterControllerNewsletters extends JControllerAdmin
 {
 
 	/**

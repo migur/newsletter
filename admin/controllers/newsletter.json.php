@@ -19,7 +19,7 @@ JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.download', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.html.file', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-class NewsletterControllerNewsletter extends MigurControllerForm
+class NewsletterControllerNewsletter extends JControllerForm
 {
 	/**
 	 * Get data for JS autocompleter to the client
