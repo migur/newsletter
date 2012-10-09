@@ -6,10 +6,10 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-window.addEvent('domready', function() { try {
-	
-	(function(){
+window.addEvent('domready', 
 
+	function() {
+	
 		var edit  = $$('#templates-edit > button');
 		var trash = $$('#templates-trash > button');
 		var glasses = $$('.templateslist .search')
@@ -89,11 +89,5 @@ window.addEvent('domready', function() { try {
 
 		glasses[0].fireEvent('click');
 
-})();	
-
-
-} catch(e){
-    if (console && console.log) console.log(e);
-}
-
-});
+	}
+);
