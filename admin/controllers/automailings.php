@@ -18,7 +18,7 @@ jimport('joomla.application.component.controlleradmin');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterControllerAutomailings extends MigurControllerAdmin
+class NewsletterControllerAutomailings extends JControllerAdmin
 {
 
 	/**

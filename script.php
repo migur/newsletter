@@ -528,7 +528,7 @@ class com_newsletterInstallerScript
 				'NewsletterTable'	
 			);
 
-			JModel::addIncludePath(
+			MigurModel::addIncludePath(
 				JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_newsletter' . DIRECTORY_SEPARATOR . 'models', 
 				'NewsletterModel'
 			);

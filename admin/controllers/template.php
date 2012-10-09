@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer');
 
-class NewsletterControllerTemplate extends MigurControllerForm
+class NewsletterControllerTemplate extends JControllerForm
 {
 
 	public function __construct($config = array())

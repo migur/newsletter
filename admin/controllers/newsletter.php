@@ -16,7 +16,7 @@ jimport('migur.library.mailer');
 
 JLoader::import('tables.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-class NewsletterControllerNewsletter extends MigurControllerForm
+class NewsletterControllerNewsletter extends JControllerForm
 {
 
 	/**
