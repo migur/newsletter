@@ -63,6 +63,12 @@
 			<param name="destdir" value="${cfg.localhostRoot3}"/>
 			<param name="ext_name" value="mod_newsletter_subscribe"/>
 		</antcall>
+
+		<antcall target="_up_plugin">
+			<param name="destdir" value="${cfg.localhostRoot3}"/>
+			<param name="group_name" value="system"/>
+			<param name="ext_name" value="migurlistsync"/>
+		</antcall>
 	</target>
 
 

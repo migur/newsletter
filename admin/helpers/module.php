@@ -7,8 +7,6 @@
  * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
-// No direct access
-defined('MIGUR_COM_NEWSLETTER') or die;
 
 // Import library dependencies
 jimport('joomla.application.module.helper');
