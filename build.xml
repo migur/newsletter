@@ -52,15 +52,15 @@
 
 	<target name="up">
 		<antcall target="_up_component">
-			<param name="destdir" value="${cfg.localhostRoot}"/>
+			<param name="destdir" value="${cfg.localhostRoot3}"/>
 		</antcall>
 
 		<antcall target="_up_migur">
-			<param name="destdir" value="${cfg.localhostRoot}"/>
+			<param name="destdir" value="${cfg.localhostRoot3}"/>
 		</antcall>
 
 		<antcall target="_up_module">
-			<param name="destdir" value="${cfg.localhostRoot}"/>
+			<param name="destdir" value="${cfg.localhostRoot3}"/>
 			<param name="ext_name" value="mod_newsletter_subscribe"/>
 		</antcall>
 	</target>
