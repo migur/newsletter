@@ -5,7 +5,7 @@ defined('_JEXEC') or die;
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
 JHtml::_('dropdown.init');
-JHtml::_('jquery.chosen');
+JHtml::_('formbehavior.chosen');
 ?>
 
 <div>

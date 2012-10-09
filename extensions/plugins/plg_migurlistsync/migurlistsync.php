@@ -42,12 +42,6 @@ class plgSystemMigurlistsync extends JPlugin
 	 */
 	public function __construct($subject, $config)
 	{
-		if (!defined('COM_NEWSLETTER_PATH_ADMIN')) {
-			define('COM_NEWSLETTER_PATH_ADMIN', 
-				JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_newsletter'
-			);
-		}	
-		
 		// Check if component is present
 		$newsletter = JComponentHelper::getComponent('com_newsletter');
 		if (empty($newsletter)) {
@@ -56,12 +50,19 @@ class plgSystemMigurlistsync extends JPlugin
 		}	
 		
 		parent::__construct($subject, $config);
+
+		require_once 
+			JPATH_ADMINISTRATOR . 
+			DIRECTORY_SEPARATOR . 'components' . 
+			DIRECTORY_SEPARATOR . 'com_newsletter' . 
+			DIRECTORY_SEPARATOR . 'bootstrap.php';
+		
+		MigurComNewsletterBootstrap::initEnvironment();
+		MigurComNewsletterBootstrap::initAutoloading();
+		
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_user_migurlistsync', JPATH_ADMINISTRATOR, null, false, false);
 
-		JLoader::import('helpers.autoload', COM_NEWSLETTER_PATH_ADMIN);
-		NewsletterHelperAutoload::setup();
-		
 		JLoader::import('helpers.plugin', COM_NEWSLETTER_PATH_ADMIN);
 		JLoader::import('models.automailing.manager', COM_NEWSLETTER_PATH_ADMIN);
 		MigurPluginHelper::prepare();
