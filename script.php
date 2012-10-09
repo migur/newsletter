@@ -3,6 +3,10 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+jimport('migur.migur');
+
+defined('MIGUR') or die('The MIGUR library was not found.');
+
 /**
  * Script file of HelloWorld component
  */
@@ -199,7 +203,7 @@ class com_newsletterInstallerScript
             }
 
             // Let's store the info about backed up tables
-            if (!empty($this->tables)) {
+            if (!empty($this->tables) && !empty($this->backedup)) {
                     $sess = JFactory::getSession();
                     $sess->set('com-newsletter-backup', $this->backedup);
             }
@@ -522,20 +526,23 @@ class com_newsletterInstallerScript
 		// Let's do it quiet. It must not interrupt the installation
 		
 		try {
+			
+			jimport('migur.library.model');
+			
 			// Now we need to use our models and tables. So...
 			JTable::addIncludePath(
 				JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_newsletter' . DIRECTORY_SEPARATOR . 'tables',
 				'NewsletterTable'	
 			);
 
-			MigurModel::addIncludePath(
-				JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_newsletter' . DIRECTORY_SEPARATOR . 'models', 
-				'NewsletterModel'
-			);
+			require_once 
+				JPATH_ADMINISTRATOR . 
+					DIRECTORY_SEPARATOR . 'components' . 
+					DIRECTORY_SEPARATOR . 'com_newsletter' . 
+					DIRECTORY_SEPARATOR . 'models' . 
+					DIRECTORY_SEPARATOR . 'install.php';
 
-			JLoader::import('migur.migur', JPATH_LIBRARIES);
-
-			$model = MigurModel::getInstance('Install', 'NewsletterModel');
+			$model = new NewsletterModelInstall;
 			$model->restore();
 		
 		} catch(Extension $e) {}	
