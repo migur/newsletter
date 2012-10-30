@@ -1,4 +1,4 @@
-'id',	'name',			'username',		'email',				'password',	'usertype',	'block','sendEmail','registerDate',	'lastvisitDate','activation',	'params'
-'1',	'User Name',	'username',		'user@blackhole.com',	'123456',	'',			'0',	'1',		'',				'',				'',				''
-'2',	'User Name II',	'username2',	'user2@blackhole.com',	'qwerty',	'',			'0',	'1',		'',				'',				'',				''
-'3',	'User Name III','username3',	'user3@blackhole.com',	'qwerty',	'',			'0',	'1',		'',				'',				'',				''
+'id',	'name',			'username',		'email',				'password',	'block','sendEmail','registerDate',	'lastvisitDate','activation',	'params'
+'1',	'User Name',	'username',		'user@blackhole.com',	'123456',	'0',	'1',		'',				'',				'',				''
+'2',	'User Name II',	'username2',	'user2@blackhole.com',	'qwerty',	'0',	'1',		'',				'',				'',				''
+'3',	'User Name III','username3',	'user3@blackhole.com',	'qwerty',	'0',	'1',		'',				'',				'',				''
