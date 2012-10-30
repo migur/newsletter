@@ -4,151 +4,44 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-body {
-    overflow: hidden;
+@media (min-width: 900px) { 
+	
+	.left-bar  {
+		float:left;
+		width:73%;
+	}
+ 
+	.right-bar {
+		float: right;
+		width:25%;
+	}
 }
 
-iframe {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
+
+@media (max-width: 1000px) { 
 }
+
+
 
 .MooDialog iframe {
     overflow: hidden !important;
 }
 
-#tabs-sub-container > .current {
-/*    width: 600px;*/
-    min-height: 300px;
-    z-index: 0;
-
-    position: relative;
-}
-
-#tabs {
-/*    width: 850px;*/
-/*    height: 370px;*/
-	background-color: #FFFFFF;
-	border: 1px solid #CCCCCC;
-    margin-bottom: 10px;
-    text-align: left;
-	border-style: solid;
-}
-
-#tabs-legend {
-    margin: -15px 0 15px -10px;
-}
-
-#tabs-sub-container
-{
-    width: 100%;
-/*    float: left;*/
-}
-
-#tabs td {
-    vertical-align: top;
-}
-
-#send {
-	margin-top: 20px;
-    width: 550px;
-}
-
-#send * {
-	overflow: hidden;
-}
-
-#send dt {
-    width: 110px;
-}
-
-#send li {
-	clear: both;
-	padding: 0 5px;
-}
-
-#send .container-top input {
-	float: right;
-	width: 450px;
-}
-
-div.form-text dl dd,
-div.form-text ul li {
-    padding: 2px 0 0 110px;
-}
-
-
-#send li label {
-	margin-top: 0;
-	min-width: 85px;
-}
-
-#jform_smtp_profile_id {
-    width: 152px;
-}
-
-
-
-.smtp-dependency {
-	width: 150px;
-}
-
-#button-newsletter-clear-profile {
-    width: 152px;
-    float: right;
-}
-
-#jform_newsletter_from_name-dt,
-#jform_newsletter_to_name-dt,
-#jform_newsletter_from_email-dt,
-#jform_newsletter_to_email-dt
-{
-    float: left;
-    clear: none;
-}
-
-#jform_newsletter_to_name-dt,
-#jform_newsletter_to_email-dt {
-    margin-left: 10px;
-}
-
-#jform_newsletter_to_name-lbl,
-#jform_newsletter_to_email-lbl {
-    width: 100%;
-    text-align: right;
-}
-
-#link-website-dd {
-    padding: 5px;
-    text-align: left;
-    width: 390px;
-    float: left;
-}
-
 #acc-newsletter {
-    width: 200px;
-    float:right;
-    clear: right;
-    margin-top: 3px;
-    display: none;
+    /*width: 250px;*/
+    /*display: none;*/
 }
 
-#acc-newsletter .pane-container {
-    height: 220px;
+#acc-extensions {
+	margin-top: 30px;
 }
 
-#acc2-newsletter {
-    width: 200px;
-    float:right;
-    margin-top: 3px;
-    display: none;
+#acc-extensions .pane-container {
+    height: 300px;
 }
 
 #acc2-newsletter .pane-container {
-    height: 200px;
-
+    height: 300px;
 }
 
 #attachments dd {
@@ -173,27 +66,9 @@ div.form-text ul li {
     float: left;
 }
 
-#att-controls {
-    height: 30px;
-}
-
-
 .html-slider-modules {
     overflow: auto;
     position: relative;
-}
-
-.plugin {
-	top: 0px;
-	left: 0px;
-	width: 185px;
-	height: 18px;
-    margin: 5px;
-    vertical-align: middle;
-	background: #fafafa;
-	position: relative;
-    border: 1px solid #cccccc;
-    padding: 2px 0 0 0;
 }
 
 .plugin input {
@@ -201,43 +76,54 @@ div.form-text ul li {
     margin: 2px 10px 0 0;
 }
 
-.plugin .settings {
+.widget.module,
+.widget.plugin {
+	top: 0px;
+	left: 0px;
+    margin: 5px;
+    text-align: left;
+    vertical-align: middle;
+	position: relative;
+    overflow: hidden;
+    background-color: #3A87AD;	
+    border-radius: 3px 3px 3px 3px;
+    padding: 1px 4px 2px;	
+}
+
+.widget.module .widget-header,
+.widget.plugin .widget-header {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.widget.plugin .widget-header [type="checkbox"] {
+    float: right;
+	display: block;
+	margin: 0 10px;
+}
+
+.widget.module .widget-header .settings,
+.widget.plugin .widget-header .settings {
     float: right;
     margin-right: 2px;
 }
 
-
-.drag {
-	top: 0px;
-	left: 0px;
-	min-height: 18px;
-	width: 300px;
+.widget.drag {
 	cursor: move;
-    margin: 5px;
-    text-align: left;
-    vertical-align: middle;
-	background: #fafafa;
-	position: relative;
-    border: 1px solid #cccccc;
-    padding: 2px 0 0 0;
-    overflow: hidden;
-}
-
-.html-slider-modules .drag {
-	width: auto !important;
 }
 
 .data {
 	top: 0px;
 	left: 0px;
-	width: 185px;
-	height: 15px;
-        margin: 5px;
-        text-align: center;
-        vertical-align: middle;
-	background: #fafafa;
-	position: relative;
-        border: 1px solid #cccccc;
+	/*width: 185px;*/
+	/*height: 15px;*/
+	margin: 5px;
+	text-align: center;
+	vertical-align: middle;
+	/*background: #fafafa;*/
+	/*position: relative;*/
+	/*border: 1px solid #cccccc;*/
+	display: block;
 }
 
 
@@ -256,57 +142,12 @@ div.form-text ul li {
 }
 
 #jform_plain_area {
-    margin: -2px 0 0 0;
-    padding: 0;
-    width: 100%;
-    height: 300px;
-}
-
-#tab-preview-container {
-    width: 100%;
-    overflow: auto;
-    margin: 0;
-    max-height: 1000px;
-}
-
-#tab-preview-tabs {
-    top: 0;
-    right: 0;
-    clear: none;
-    float: right;
-    width: 150px;
-    margin-top: 40px;
-    margin-right: -150px;
-    position: absolute;
-}
-
-#tab-preview-tabs > dt {
-    width: 100px;
-    border-left: none;
-    border-bottom: 1px solid #CCCCCC;
-    text-align: left;
-    margin: 5px 0;
-}
-
-#tab-preview-container .current {
-    clear: none;
-    float: left;
-/*    height: 250px;*/
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    border: none;
-    overflow: hidden
+    width: 99.9%;
 }
 
 .plugin-link {
     display: block;
     margin: 20px;
-}
-
-#button-newsletter-send-preview {
-    float: left;
-    margin: 3px 10px;
 }
 
 .html-position-top {
@@ -341,21 +182,10 @@ div.form-text ul li {
     float: right;
 }
 
-#tab-preview-html-container {
-    height: 240px;
-    overflow: auto;
-}
-
-#tab-preview-html-container * {
-/*    height: 240px;*/
-    overflow: hidden;
-}
-
-
 #html-area .modules {
-    width: 100%;
+    /*width: 100%;*/
     min-width: 200px;
-    height: 100%;
+    /*height: 100%;*/
     min-height: 80px;
     border: 1px dashed #CCCCCC;
     display: block;
@@ -365,7 +195,7 @@ div.form-text ul li {
 
 #html-area table,
 #html-area tbody {
-    width: 100%;
+    width: 99.9%;
     height: 100%;
     position: relative;
 }
@@ -391,19 +221,22 @@ div.form-text ul li {
 }
 
 .overdropp {
-    background-color: #EFFFEF;
+    background-color: #EFFFEF !important;
 }
 
-
-.module .settings {
-    float: right;
-    margin-right: 2px;
+#trashcan-container.overdropp {
+    background-color: #F2DEDE !important;
 }
 
 #trashcan-container {
-    height: 50px;
-    width:  110px;
-    margin-top: -20px;
+	background-color: #FFFFD0;
+    border: 1px solid #CCCCCC;
+	padding: 30px 10px;
+	text-align: center;
+	margin-bottom: 30px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
 }
 
 #email-container {
@@ -430,9 +263,26 @@ div.toolbar-list #autosaver-switch #content-state {
 }
 
 .widget-header {
-    margin-left: 10px;
-    height: 16px;
+	padding: 5px;
+	overflow: hidden;
+    /*height: 16px;*/
 }
+
+.widget-header .settings,
+.widget-header .settings:before {
+	color: #ddd !important;
+}
+
+.widget-header span {
+	display: block;
+	float: left;
+}
+
+.widget-header a {
+	display: block;
+	float: right;
+}
+
 
 .widget-content {
     background-color: #fff;
@@ -456,11 +306,6 @@ textarea.focused {
     font-weight: normal !important;		
 }
 
-#tab-preview-plain-container {
-    width: 99%;
-    height: 200px;
-}
-
 #html-area img {
 /*    width: 100% !important;*/
 }
@@ -469,6 +314,28 @@ textarea.focused {
 	float:left;
 }
 
+#tab-preview .autocompleter-migur {
+	margin-bottom: 15px;
+}
+
 .autocompleter-item span {
 	line-height: 18px;
+}
+
+#tab-preview-container .tab-content {
+	margin-left: 0px !important;
+}
+
+#tab-preview-html-container,
+#tab-preview-plain-container {
+	width: 99.9%;
+	min-height: 500px;
+    overflow: auto;
+    max-height: 1000px;
+	border-top: 1px solid #DDDDDD;
+	border-left: 1px solid #DDDDDD;
+	border-radius: 4px 0 0 0;
+	-moz-border-radius: 4px 0 0 0;
+	-webkit-border-radius: 4px 0 0 0;
+	padding: 30px;
 }

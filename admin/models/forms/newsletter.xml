@@ -119,7 +119,7 @@
 			description="COM_NEWSLETTER_PLAIN"
 			class="inputbox validate-newsletter_plain autosaverable"
 			cols="50"
-			rows="100"
+			rows="20"
 			id="plain-area"
 			default=""
 			required="true"

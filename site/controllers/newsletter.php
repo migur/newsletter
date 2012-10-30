@@ -49,7 +49,6 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 */
 	public function render()
 	{
-
 		/*
 		 * Get the info about current user.
 		 * Check if the user is admin.
@@ -65,6 +64,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		$newsletterId = JRequest::getVar('newsletter_id', null);
 		$type         = JRequest::getVar('type', null);
+		$htmlEncoded  = JRequest::getVar('htmlencoded', null);
 		$email        = urldecode(JRequest::getVar('email', null));
 		$alias        = JRequest::getString('alias', null);
 
@@ -77,7 +77,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		if (!empty($newsletterId)) {
 			$newsletter = (array) $model->getItem($newsletterId);
 		}	
-
+		
 		if (empty($newsletter)) {
 			echo json_encode(array(
 				'state' => '0',
@@ -96,13 +96,13 @@ class NewsletterControllerNewsletter extends JControllerForm
 			return;
 		}
 
-
 		$mailer = new MigurMailer();
 		
 		// emulate user environment
-		SubscriberHelper::saveRealUser();
-		SubscriberHelper::emulateUser(array('email' => $email));
-
+		if (!empty($email)) {
+			SubscriberHelper::saveRealUser();
+			SubscriberHelper::emulateUser(array('email' => $email));
+		}	
 		
 		// render the content of letter for each user
 		$html = $mailer->render(array(
@@ -111,8 +111,14 @@ class NewsletterControllerNewsletter extends JControllerForm
 			'useRawUrls' => NewsletterHelper::getParam('rawurls') == '1'
 		));
 
-		SubscriberHelper::restoreRealUser();
+		if (!empty($email)) {
+			SubscriberHelper::restoreRealUser();
+		}	
 
+		if (!empty($htmlEncoded)) {
+			$html = nl2br(htmlspecialchars($html, ENT_QUOTES));
+		}
+		
 		echo $html; die;
 	}
 

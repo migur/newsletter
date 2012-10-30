@@ -50,6 +50,8 @@ Migur.translations = {};
  */
 Migur.app = {};
 
+Migur.app.modules = {}
+
 Migur.classes = {};
 
 /**
