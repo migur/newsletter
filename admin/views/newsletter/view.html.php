@@ -14,6 +14,8 @@ defined('_JEXEC') or die('Restricted access');
 jimport('migur.library.toolbar');
 jimport('joomla.utilities.simplexml');
 jimport('joomla.html.html.sliders');
+jimport('joomla.filesystem.folder');
+
 JLoader::import('helpers.mail',   JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.module', JPATH_COMPONENT_ADMINISTRATOR, '');
 JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
@@ -101,7 +103,7 @@ class NewsletterViewNewsletter extends MigurView
 		$this->form = $this->get('Form', 'newsletter');
 		$this->newsletter = $this->get('Item');
 
-		$smtpModel = MigurModel::getInstance('SMtpProfile', 'NewsletterModelEntity'); 
+		$smtpModel = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity'); 
 		
 		// Let's add J! profile
 		$smtpp = $smtpModel->loadJoomla();
@@ -260,6 +262,8 @@ class NewsletterViewNewsletter extends MigurView
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_NEWSLETTER_CREATING') : JText::_('COM_NEWSLETTER_NEWSLETTER_EDITING'));
 		$document->addScript(JURI::root() . $this->script);
+		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/preview.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/autocompleter.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/newsletter.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/downloads.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/submitbutton.js");

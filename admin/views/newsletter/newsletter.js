@@ -46,8 +46,11 @@ Migur.dnd.makeAvatar = function(el, droppables){
 
         onBeforeStart: function(draggable, droppable){
 
+
             var coords = draggable.getCoordinates($$('body')[0]);
             $(draggable).store('source', draggable.getParent('div'));
+            $(draggable).store('source', draggable.getParent('div'));
+			$(draggable).setStyle('width', coords.width);
             $$('body').grab(draggable);
             draggable.setStyles({
                 left: coords.left + 'px',
@@ -103,6 +106,8 @@ Migur.dnd.makeAvatar = function(el, droppables){
                         position: 'relative',
                         zIndex: 'auto'
                     });
+					
+					draggable.setStyle('width', null);
 
                     var widget = Migur.getWidget(draggable);
                     widget.load(
@@ -270,14 +275,14 @@ avatarSetSettings = function(avatar) {
 		
         phonyForm.submit();
     })
-    .removeClass('icon-16-gear-disabled')
-    .addClass('icon-16-gear');
+	.setStyle('display', 'block');
 }
 
 
 
-window.addEvent('domready', function() {
-    try {
+window.addEvent('domready', 
+
+function() { try {
 
         $('tabs-sub-container').getElements('input, textarea')
         .addEvent('focus', function(ev){
@@ -288,11 +293,11 @@ window.addEvent('domready', function() {
         });
 
 
-        acc1 = new Fx.Accordion($('acc-newsletter'), '#acc-newsletter h3', '#acc-newsletter .content', {
+        var acc1 = new Fx.Accordion($('acc-newsletter'), '#acc-newsletter h3', '#acc-newsletter .content', {
             fixedHeight: '220px'
         });
 
-        acc2 = new Fx.Accordion($('acc2-newsletter'), '#acc2-newsletter h3', '#acc2-newsletter .content', {
+        var acc2 = new Fx.Accordion($('acc2-newsletter'), '#acc2-newsletter h3', '#acc2-newsletter .content', {
             fixedHeight: '245px'
         });
 
@@ -686,14 +691,13 @@ window.addEvent('domready', function() {
         });
 
         /*  Main tabs -> click-handlers  */
-        $$('#tabs-newsletter > dt').addEvent('click', function (event) {
+        $$('#tabs-newsletter > [data-role="tab-header"]').addEvent('click', function (event) {
 
             $$('#trashcan-container ul').addClass('hide');
             if ( $(this).match('.tab-html') ) {
                 $('acc-newsletter').set('styles', {
                     display:'block'
                 } );
-                $$('#trashcan-container ul').removeClass('hide');
             } else {
                 $('acc-newsletter').set('styles', {
                     display:'none'
@@ -711,7 +715,7 @@ window.addEvent('domready', function() {
             }
         });
     
-        $$('#tabs-newsletter > dt')[0].fireEvent('click');
+        $$('#tabs-newsletter > li')[0].fireEvent('click');
 
         /* Type of letter */
         if (dataStorage.newsletter.type_changeable !== undefined && !dataStorage.newsletter.type_changeable) {
@@ -889,7 +893,7 @@ window.addEvent('domready', function() {
         });
 
 
-        $$('#toolbar-apply a')[0].addEvent('click', function(ev){
+        $$('#toolbar-apply > *')[0].addEvent('click', function(ev){
 
             ev.stop();
         
@@ -917,7 +921,7 @@ window.addEvent('domready', function() {
 
 
         /* Autosaver switch onclick-handler */
-        $$('#toolbar-autosaver a')[0].setProperty('id', 'autosaver-switch');
+        $$('#toolbar-autosaver > *')[0].setProperty('id', 'autosaver-switch');
 
         Migur.createWidget('autosaver-switch', {
 
@@ -987,6 +991,7 @@ window.addEvent('domready', function() {
             }
         });
 
+
         /* "Subject" input -> keyup-handler */
 		 Migur.createWidget('jform_alias', {
 
@@ -1053,120 +1058,6 @@ window.addEvent('domready', function() {
             }
         })
         $('jform_newsletter_preview_email').fireEvent('blur');
-
-
-        // Test source, list of tags from http://del.icio.us/tag/
-        //var tokens = [['.net', 'net2', 0], ['2008', '20082', 1], ['3d', 'advertising', 2]];
-
-        // Our instance for the element with id "demo-local"
-        autocomp = new Autocompleter.Local('jform_newsletter_preview_email', [], {
-            'minLength': 1, // We need at least 1 character
-            'selectMode': false, // Instant completion
-            'multiple': true // Tag support, by default comma separated
-        });
-
-        //previewTextBox.container.addClass('textboxlist-loading');
-        new Request({
-            url: '?option=com_newsletter&task=newsletter.autocomplete&format=json',
-            onSuccess: function(res){
-				
-                autocomp.tokens = JSON.decode(res);
-            }
-        }).send();
-
-
-    autocomp.addEvent('boxSelect', function(bit){
-
-        if ( !$$('[name=newsletter_id]')[0].get('value') ) {
-            alert(Joomla.JText._('PLEASE_SAVE_THE_NEWSLETTER_FIRST', "Please save the newsletter first!"));
-            return;
-        }
-
-        var email = bit? bit[1] : null;
-
-        var nsId = $$('[name=newsletter_id]')[0].get('value');
-        $('tab-preview-html-container').setProperty(
-            'src', 
-            migurSiteRoot + 'index.php?option=com_newsletter&task=newsletter.render&type=html&email='+escape(email)+'&newsletter_id='+nsId);
-
-        new Request({
-            url: migurSiteRoot + 'index.php?option=com_newsletter&task=newsletter.render',
-            data: {
-                newsletter_id: $$('[name=newsletter_id]')[0].get('value'),
-                email: escape(email),
-                type: 'plain'
-            },
-            onComplete: function(res){
-				
-				$('tab-preview-plain-container').removeClass('preloader');
-				
-                if (res) {
-                    $('tab-preview-plain-container')
-                    .set('value', res);
-                } else {
-                    alert("An unknown error occured");
-                }
-            }
-        }).send();
-		
-		$('tab-preview-plain-container').addClass('preloader');
-		
-    });
-
-    $$('.tab-preview').addEvent('click', function(){
-        autocomp.fireEvent('boxSelect');
-    });
-
-    // sample data loading with json, but can be jsonp, local, etc.
-    // the only requirement is that you call setValues with an array of this format:
-    // [
-    //	[id, bit_plaintext (on which search is performed), bit_html (optional, otherwise plain_text is used), autocomplete_html (html for the item displayed in the autocomplete suggestions dropdown)]
-    // ]
-    // read autocomplete.php for a JSON response exmaple
-
-
-    $('button-newsletter-send-preview').addEvent('click', function(){
-
-		var emails = autocomp.getBoxes();
-		
-		if (emails.length < 1) {
-			var val = $('jform_newsletter_preview_email').getProperty('value');
-			if (document.formvalidator.handlers.email.exec(val) == false) {
-				alert(Joomla.JText._('PLEASE_INPUT_A_VALID_EMAIL', 'Please input a valid email'));
-				return;
-			}
-			emails.push([null, val, -1]);
-		}
-
-        var type = ($$('.tab-preview-html')[0].hasClass('open') == true)? 'html' : 'plain';
-        new Request({
-            url: migurSiteRoot + 'index.php?option=com_newsletter&task=newsletter.sendpreview&tmpl=component',
-            data: {
-                newsletter_id: $$('[name=newsletter_id]')[0].get('value'),
-                emails: emails,
-                type: type
-            },
-            onComplete: function(res){
-				
-				$('send-preview-preloader').removeClass('preloader');
-                
-				try{res = JSON.decode(res);}
-				catch (e) {res = null;}
-				
-                var text;
-                if (res && res.state == true) {
-                    text = Joomla.JText._('THE_PREVIEWS_WERE_SUCCESFULLY_MAILED',"The previews were succesfully mailed") + "\n" +
-							res.messages.join("\n");
-                } else {
-                    text = Joomla.JText._('AN_ERROR_OCCURED', "An error occured!") + "\n" +
-							res.messages.join("\n");
-                }
-                alert(text);
-            }
-        }).send();
-		
-		$('send-preview-preloader').addClass('preloader');
-    });
 
 
     $('templates-container').set( 'value', $$('[name=jform[t_style_id]]')[0].get('value') );
@@ -1258,6 +1149,14 @@ window.addEvent('domready', function() {
     setTimeout('migurGuide.start.apply(migurGuide)', '1000');
 }
 
+// Create autocompleter module
+//Migur.app.modules.autocompleter = new Migur.classes.autocompleter();
+
+
+// Create preview module
+Migur.app.modules.preview = new Migur.classes.preview({
+	//'autocompleter': Migur.app.modules.autocompleter
+});
 
 } catch(e){
     if (console && console.log) console.log(e);
