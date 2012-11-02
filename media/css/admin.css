@@ -7,7 +7,7 @@
 /* TODO: Need to move all *newsletters* styles to newsletters.css */
 
 iframe {
-    overflow: hidden;
+    overflow: auto;
 	border: 0;
 }
 
@@ -214,11 +214,13 @@ div.mrg {
     width: 100%;
 }
 
-.icon-32-autosave-on {
+.icon-32-autosave-on,
+.pic-autosave-on {
     background: url('../images/icon-32-autosave.png') no-repeat left top;
 }
 
-.icon-32-autosave-off {
+.icon-32-autosave-off,
+.pic-autosave-off {
     background: url('../images/icon-32-autosave.png') no-repeat left bottom;
 }
 
