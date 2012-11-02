@@ -67,25 +67,6 @@ class NewsletterViewNewsletter extends MigurView
 		}	
 		
 		
-		//TODO: Need to move css/js to SetDocument
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/newsletter.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script('media/com_newsletter/js/migur/js/ajax.js');
-		JHTML::script('media/com_newsletter/js/migur/js/widgets.js');
-		JHTML::script('media/com_newsletter/js/migur/js/moodialog/MooDialog.js');
-		JHTML::script('media/com_newsletter/js/migur/js/moodialog/MooDialog.Request.js');
-		JHTML::script('media/com_newsletter/js/migur/js/moodialog/MooDialog.IFrame.js');
-		JHTML::stylesheet('media/com_newsletter/js/migur/js/moodialog/css/MooDialog.css');
-
-		JHTML::script('media/com_newsletter/js/migur/js/autocompleter/Observer.js');
-		JHTML::script('media/com_newsletter/js/migur/js/autocompleter/Autocompleter.js');
-		JHTML::script('media/com_newsletter/js/migur/js/autocompleter/Autocompleter.Local.js');
-		JHTML::stylesheet('media/com_newsletter/js/migur/js/autocompleter/css/Autocompleter.css');
-
-		JHTML::script('media/com_newsletter/js/migur/js/guide.js');
-		JHTML::stylesheet('media/com_newsletter/css/guide.css');
-
 		//TODO: Bulk-code. Need to refactor.
 
 		JavascriptHelper::addObject(
@@ -238,8 +219,6 @@ class NewsletterViewNewsletter extends MigurView
 			( $isNew && AclHelper::actionIsAllowed('newsletter.add' )) ||
 			(!$isNew && AclHelper::actionIsAllowed('newsletter.edit')) 
 		) {
-			$bar->appendButton('Link', 'autosaver', '', '#', false);
-			$bar->appendButton('Separator', null, '50');
 			$bar->appendButton('Link', 'apply', 'JTOOLBAR_APPLY', '#', false);
 			$bar->appendButton('Standard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
 		}
@@ -247,6 +226,16 @@ class NewsletterViewNewsletter extends MigurView
 		$helpLink = 'http://migur.com/support/documentation/newsletter/' . NewsletterHelper::getManifest()->version . '/newsletters';
         $bar->appendButton('Popup', 'default', 'COM_NEWSLETTER_TUTORIAL', $helpLink, 1000, 600, 0, 0);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
+
+		if (
+			( $isNew && AclHelper::actionIsAllowed('newsletter.add' )) ||
+			(!$isNew && AclHelper::actionIsAllowed('newsletter.edit')) 
+		) {
+			$bar->appendButton('Separator', null, '50');
+			$bar->appendButton('Custom', '<button class="btn btn-small" id="autosaver-switch"><span id="autosaver-icon"></span><span id="content-state"></span></button>', 'autosaver', '', false);
+			$bar->appendButton('Separator', null, '25');
+			$bar->appendButton('Custom', '<span></span>', 'docstate', '', false);
+		}	
 	}
 
 	/**
@@ -261,9 +250,35 @@ class NewsletterViewNewsletter extends MigurView
 		JavascriptHelper::addStringVar('isNew', (int)$isNew);
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_NEWSLETTER_CREATING') : JText::_('COM_NEWSLETTER_NEWSLETTER_EDITING'));
+		
+		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
+		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/newsletter.css');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/ajax.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/widgets.js');
+		
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/moodialog/MooDialog.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/moodialog/MooDialog.Request.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/moodialog/MooDialog.IFrame.js');
+		$document->addStylesheet(JURI::root() . 'media/com_newsletter/js/migur/js/moodialog/css/MooDialog.css');
+
+		//$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/autocompleter/Observer.js');
+		//$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/autocompleter/Autocompleter.js');
+		//$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/autocompleter/Autocompleter.Local.js');
+		//$document->addStylesheet(JURI::root() . 'media/com_newsletter/js/migur/js/autocompleter/css/Autocompleter.css');
+
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/guide.js');
+		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/guide.css');
+		
+		
+		
 		$document->addScript(JURI::root() . $this->script);
+		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/html.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/plain.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/preview.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/autocompleter.js");
+		//$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/autocompleter.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/autosaver.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/guide.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/newsletter.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/downloads.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/submitbutton.js");

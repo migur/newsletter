@@ -14,8 +14,6 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controllerform');
 jimport('migur.library.mailer');
 
-JLoader::import('tables.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
-
 class NewsletterControllerNewsletter extends JControllerForm
 {
 
@@ -90,6 +88,11 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 */
 	public function save()
 	{
+		$context = JRequest::getString('context', 'html');
+
+		if ($context == 'json') {
+			NewsletterHelperNewsletter::jsonPrepare();
+		}
 		
 		$task = JRequest::getString('task');
 		
@@ -127,12 +130,10 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 					if ($context == 'json') {
 
-						echo json_encode(array(
-							'state' => $error,
-							'newsletter_id' => $nsid
-							));
-						jexit();
+						NewsletterHelperNewsletter::jsonError($error, array('newsletter_id' => $nsid));
+						
 					} else {
+						
 						JFactory::getApplication()->enqueueMessage($error, 'error');
 						$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletter&layout=edit&newsletter_id='.$nsid, false));
 						return;
@@ -177,13 +178,13 @@ class NewsletterControllerNewsletter extends JControllerForm
 					$error = !empty($msgs[0]['message'])? $msgs[0]['message'] : null;
 				}
 
-				echo json_encode(array(
-					'state' => (!empty($error)) ? $error : 'ok',
-					'newsletter_id' => $nsid, 
-					'alias' => $data['alias']
-				));
-
-				jexit();
+				NewsletterHelperNewsletter::jsonResponse(
+					empty($error), 
+					array(),
+					array(
+						'newsletter_id' => $nsid, 
+						'alias' => $data['alias']
+					));
 			}	
 		}
 	}
@@ -315,5 +316,100 @@ class NewsletterControllerNewsletter extends JControllerForm
 			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters', false), $message, 'error');
 			return true;
 		}		
+	}
+	
+	/**
+	 * Handles the binding of a file attached to a newsletter
+	 *
+	 * @return void
+	 * @since  1.0
+	 */
+	public function fileAttach()
+	{
+		NewsletterHelperNewsletter::jsonPrepare();
+		
+		$filename = JRequest::getString('filename');
+		$nId = JRequest::getInt('newsletter_id');
+
+		if (empty($nId) || empty($filename)) {
+			echo json_encode(array(
+				'state' => 0,
+				'error' => 'Parameters are mising',
+			));
+			return;
+		}
+
+		$mediaParams = JComponentHelper::getParams('com_media');
+		$filename = $mediaParams->get('file_path') . DIRECTORY_SEPARATOR . $filename;
+		$filename = str_replace('/', DIRECTORY_SEPARATOR, $filename);
+		
+		$table = JTable::getInstance('downloads', 'NewsletterTable');
+		$res = $table->save(array('filename' => $filename, 'newsletter_id' => $nId));
+
+		$file = new stdClass();
+
+		if ($res) {
+			$file->downloads_id = $table->downloads_id;
+			$file->newsletter_id = $nId;
+			$file->filename = $filename;
+			DownloadHelper::getAttributes($file);
+			$file->size = JHtml::_('file.size', $file->size, 'kb/mb');
+		}
+		
+		
+		NewsletterHelperNewsletter::jsonResponse((bool) $res, $table->getErrors(), $file);
+	}
+	
+	/**
+	 * Handles the unbinding of a file attached to a newsletter
+	 *
+	 * @return void
+	 * @since  1.0
+	 */
+	public function fileUnbind()
+	{
+		NewsletterHelperNewsletter::jsonPrepare();
+
+		$id = JRequest::getInt('download_id');
+		if (empty($id)) {
+			echo json_encode(array(
+				'state' => 0,
+				'error' => 'Parameters are mising',
+			));
+			return;
+		}
+
+		$table = JTable::getInstance('downloads', 'NewsletterTable');
+		$res = $table->delete($id);
+		
+		NewsletterHelperNewsletter::jsonResponse((bool) $res, $table->getErrors());
+	}
+
+	
+	/**
+	 * Get data for JS autocompleter to the client
+	 *
+	 * @since 1.0
+	 */
+	public function autocomplete()
+	{
+		echo json_encode(AutocompleterHelper::getSubscribers());
+		jexit();
+	}
+	
+	/**
+	 * Handles the configuration "Clear sent" button
+	 * Clear all data from table "_sent".
+	 * @return void
+	 * @since  1.0
+	 */
+	public function clearSent()
+	{
+		NewsletterHelperNewsletter::jsonPrepare();
+		
+		$table = JTable::getInstance('sent', 'NewsletterTable');
+		$res = $table->deleteAll();
+
+		NewsletterHelperNewsletter::jsonResponse((bool) $res, $table->getErrors());
 	}
 }

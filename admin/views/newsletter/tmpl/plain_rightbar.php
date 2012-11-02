@@ -12,8 +12,8 @@
 			<div class="accordion-inner pane-container">
                 <div id="dynamic-data-container">
                     <?php foreach ($this->dynamicData as $name => $item) { ?>
-                        <div class="data">
-                            <a href="<?php echo $item; ?>" rel="<?php echo $item; ?>"><?php echo $name; ?> +</a>
+                        <div class="data badge" data-value="<?php echo $item; ?>" data-control="placeholder">
+							<span><?php echo $name; ?></span>
                         </div>
                     <?php } ?>
                 </div>

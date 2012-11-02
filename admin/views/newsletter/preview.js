@@ -1,5 +1,5 @@
 
-Migur.classes.preview = function(options) {
+Migur.define("preview", function(options) {
 
 	var self = this;
 
@@ -23,8 +23,6 @@ Migur.classes.preview = function(options) {
 	// Panel updating method
 	this.update = function(bit) {
 
-		ev.stop();
-
 		if ( !$$('[name=newsletter_id]')[0].get('value') ) {
 			alert(Joomla.JText._('PLEASE_SAVE_THE_NEWSLETTER_FIRST', "Please save the newsletter first!"));
 			return;
@@ -44,7 +42,6 @@ Migur.classes.preview = function(options) {
 			onComplete: function(res){
 
 				$('tab-preview-plain-container').removeClass('preloader');
-
 
 				if (res) {
 					$('tab-preview-plain-container')
@@ -108,4 +105,4 @@ Migur.classes.preview = function(options) {
 	
 	// Let's initialize this stuff!
 	this.init(options);
-}	
+});	

@@ -1,5 +1,6 @@
 
-Migur.classes.autocompleter = function() {
+Migur.define("autocompleter", function() {
+	
 	// Test source, list of tags from http://del.icio.us/tag/
 	//var tokens = [['.net', 'net2', 0], ['2008', '20082', 1], ['3d', 'advertising', 2]];
 
@@ -12,7 +13,7 @@ Migur.classes.autocompleter = function() {
 
 	//previewTextBox.container.addClass('textboxlist-loading');
 	new Request({
-		url: '?option=com_newsletter&task=newsletter.autocomplete&format=json',
+		url: '?option=com_newsletter&task=newsletter.autocomplete',
 		onSuccess: function(res){
 
 			this.autocompleter.tokens = JSON.decode(res);
@@ -26,4 +27,4 @@ Migur.classes.autocompleter = function() {
 //	[id, bit_plaintext (on which search is performed), bit_html (optional, otherwise plain_text is used), autocomplete_html (html for the item displayed in the autocomplete suggestions dropdown)]
 // ]
 // read autocomplete.php for a JSON response exmaple
-}
+});
