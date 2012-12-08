@@ -15,8 +15,8 @@ defined('_JEXEC') or die;
 					<?php echo JToolBar::getInstance('automailing')->render(); ?>
 				</div>	
 				
-				<div id="form-container" class="fltlft">
-					<div class="fltlft">
+				<div id="form-container" class="pull-left">
+					<div class="pull-left">
 						<?php echo $this->form->getLabel('automailing_name'); ?>
 						<?php echo $this->form->getInput('automailing_name'); ?>
 					</div>

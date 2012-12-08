@@ -6,7 +6,7 @@
             <div id="queues-filter-panel-control" class="filter-panel-control"></div>
             <div class="clr"></div>
             <div id="queues-filter-panel" class="filter-panel">
-				<div class="fltlft">
+				<div class="pull-left">
 					<input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
 					<button type="submit" class="btn migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 					<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
@@ -19,7 +19,7 @@
 		<thead>
 			<tr>
 				<th width="1%">
-					<input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
+					<input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
 				</th>
 				<th width="15%" class="left">
 					<?php echo JHtml::_('grid.sort', 'JGLOBAL_EMAIL', 's.name', $this->listDirn, $this->listOrder, NULL, 'desc'); ?>

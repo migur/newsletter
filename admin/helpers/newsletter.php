@@ -10,10 +10,6 @@
 // No direct access
 defined('_JEXEC') or die;
 
-JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
-
-
 /**
  * Content component helper.
  *

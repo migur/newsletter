@@ -25,7 +25,7 @@ try {
 		var id = el.getProperty('rel')
 
 		new Request.JSON({
-			url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=newsletter.fileunbind&format=json',
+			url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=newsletter.fileunbind',
 			data: {
 				download_id: id
 			},
@@ -45,39 +45,49 @@ try {
         el.addEvent('click', Migur.fileRemoveClickHandler);
 	});	
 
-    if ($('element-box') != null) {
-        $('element-box').addEvent('mediaselected', function(event){
+    if ($('tabs') != null) {
+        $('tabs').addEvent('mediaselected', function(event){
 
             if (event.id == 'fileattach') {
 
                 new Request.JSON({
-                    url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=newsletter.fileattach&format=json',
+                    url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=newsletter.fileattach',
                     data: {
                         filename: event.value,
                         newsletter_id: $$('[name="newsletter_id"]')[0].getProperty('value')
                     },
                     onComplete: function(res){
 
-                        if (res.state && res.state == 1) {
-							var cnt = $$('#attlist-container tbody tr').length;
-							
-							// TODO: ADD CORRECT IMAGE RELATIVE PATH
-                            var tr = new Element('tr',
-								{	'class': 'row'+(cnt%2),
-									'html':
-										'<td>'+res.data.filename+'</td><td>'+res.data.size+'</td><td>'+res.data.type+'</td>'+
-										'<td class="center">'+
-										'<a rel="'+res.data.downloads_id+'" class="remove-link" href="#">' +
-										'<img border="0" src="' + migurSiteRoot + 'media/media/images/remove.png" alt="'+Joomla.JText._('REMOVE', 'Remove')+'" style="margin:0;">'+
-										'</a>'+
-										'</td>' }
-							);
-							
-							tr.inject($$('#attlist-container tbody')[0]);		
-							tr.getElements('.remove-link')[0].addEvent('click', Migur.fileRemoveClickHandler);
-                        } else {
-                            alert(res.error);
-                        }
+						var parser = new Migur.jsonResponseParser(res);
+						
+						var data = parser.getData();
+
+						if (parser.isError()) {
+							alert( parser.getMessagesAsList(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured!')) );
+							return;	
+						}
+
+						 if(!data) {
+							alert(Joomla.JText._('NO_FILES_FOUND', 'No files found!'));
+							return;
+						}
+
+						var cnt = $$('#attlist-container tbody tr').length;
+
+						// TODO: ADD CORRECT IMAGE RELATIVE PATH
+						var tr = new Element('tr',
+							{	'class': 'row'+(cnt%2),
+								'html':
+									'<td>'+data.filename+'</td><td>'+data.size+'</td><td>'+data.type+'</td>'+
+									'<td class="center">'+
+									'<a rel="'+data.downloads_id+'" class="remove-link" href="#">' +
+									'<img border="0" src="' + migurSiteRoot + 'media/media/images/remove.png" alt="'+Joomla.JText._('REMOVE', 'Remove')+'" style="margin:0;">'+
+									'</a>'+
+									'</td>' }
+						);
+
+						tr.inject($$('#attlist-container tbody')[0]);		
+						tr.getElements('.remove-link')[0].addEvent('click', Migur.fileRemoveClickHandler);
                     }
                 }).send();
             }
@@ -103,8 +113,8 @@ try {
 		SqueezeBox.open(href, {
 			handler: 'iframe',
 			size: {
-				x: 700,
-				y: 720
+				x: 800,
+				y: 700
 			}
 		});
 

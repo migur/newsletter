@@ -7,7 +7,8 @@
 /* TODO: Need to move all *newsletters* styles to newsletters.css */
 
 iframe {
-    overflow: hidden;
+    overflow: auto;
+	border: 0;
 }
 
 div.toolbar-list li a span {
@@ -19,10 +20,6 @@ form #filter-bar
     height: auto !important;
 }
 
-.filter-panel {
-/*    height: 45px;*/
-}
-
 .icon-16-slide-up {
     background-image: url("../../system/images/sort0.png");
 }
@@ -31,10 +28,6 @@ form #filter-bar
     background-image: url("../../system/images/sort1.png");
 }
 
-.filter-panel-control {
-    margin-top: 38px;
-    float: left;
-}
 .filter-panel .label {
     color: #888;
     margin-left: 3px;
@@ -42,6 +35,10 @@ form #filter-bar
 
 tr th img {
     float: none;
+}
+
+.filter-panel-control {
+	margin-top: 15px;
 }
 
 .filter-panel-control span {
@@ -53,23 +50,23 @@ tr th img {
 }
 
 button {
-    height: 18px;
-    font-size: 0.909em;
+/*3.0    height: 18px;
+    font-size: 0.909em;*/
 }
 
-.button {
+/*.button {
     height: 18px;
     padding-bottom: 2px;
-}
+}*/
 
 fieldset {
     background-color: #ffffff;
 }
 
 fieldset.filter-bar {
-    border-color: -moz-use-text-color -moz-use-text-color #D5D5D5;
+/*3.0    border-color: -moz-use-text-color -moz-use-text-color #D5D5D5;
     border-style: none none solid;
-    border-width: 0 0 1px;
+    border-width: 0 0 1px;*/
 }
 
 #form-subscribers .filter-search .btn,
@@ -217,11 +214,13 @@ div.mrg {
     width: 100%;
 }
 
-.icon-32-autosave-on {
+.icon-32-autosave-on,
+.pic-autosave-on {
     background: url('../images/icon-32-autosave.png') no-repeat left top;
 }
 
-.icon-32-autosave-off {
+.icon-32-autosave-off,
+.pic-autosave-off {
     background: url('../images/icon-32-autosave.png') no-repeat left bottom;
 }
 
@@ -406,4 +405,12 @@ textarea.invalid {
 
 .badge-warning {
     background-color: #F89406;
+}
+
+.column-date {
+	min-width: 120px;
+}
+
+.column-narrow {
+	min-width: 50px;
 }

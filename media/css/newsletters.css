@@ -4,6 +4,36 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
  
+/* High resolution */
+@media (min-width: 1000px) {
+	
+	#newsletters-list {
+		float: left;
+		width:59%;
+	}
+	
+	#newsletters-statistics {
+		float: right;
+		width:40%;
+	}
+	
+}
+
+@media (max-width: 1000px) {
+	
+	.newsletters-list {
+		float: left;
+		width:100%;
+	}
+	
+	.newsletters-statistics {
+		float: left;
+		width:100%;
+	}
+}
+ 
+ 
+
 #statistics-container {
     width: 440px;
 }

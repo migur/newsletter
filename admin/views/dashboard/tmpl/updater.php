@@ -1,4 +1,4 @@
-<fieldset>
+<div>
 	<legend><?php echo JText::_('MOD_UPDATER_INFORMATION'); ?></legend>
     <table class="adminlist  table table-striped">
         <tbody>
@@ -28,4 +28,4 @@
             </tr>
         </tbody>
     </table>
-</fieldset>
+</div>

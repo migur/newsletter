@@ -1,30 +1,67 @@
+<div class="row-fluid">
+	<div class="span6">
+        <legend>Newsletters</legend>
+		
+		<a class="btn btn-success" href="index.php?option=com_newsletter&amp;view=newsletter">
+			Create Newsletter
+		</a>
+		
+		<a class="btn" rel="{handler: 'iframe', size: {x: 920, y: 450}, onClose: function() {}}" href="http://migur.woody.rhino.nixsolutions.com/dev/joomla/administrator/index.php?option=com_newsletter&amp;view=sender&amp;tmpl=component" class="modal">
+			<span>Send Newsletter</span>
+		</a>
+	</div> 
 
-<div class="container" id="container-left-left">
-    <fieldset id="dashboard-newsletters">
-        <legend><?php echo JText::_('COM_NEWSLETTER_NEWSLETTERS'); ?></legend>
-        <?php echo MigurToolBar::getInstance('newsletters-toolbar')->render(); ?>
-    </fieldset>
-    <fieldset id="dashboard-config">
-        <legend><?php echo JText::_('COM_NEWSLETTER_CONFIG_N_INSTALL'); ?></legend>
-        <?php echo MigurToolBar::getInstance('config-toolbar')->render(); ?>
-    </fieldset>
+    <div class="span6">
+        <legend>Subscribers</legend>
+		
+		<a class="btn btn-success" rel="{handler: 'iframe', size: {x: 400, y: 220}, onClose: function() {}}" href="http://migur.woody.rhino.nixsolutions.com/dev/joomla/administrator/index.php?option=com_newsletter&amp;view=subscriber&amp;tmpl=component" class="modal">
+			Create Subscriber
+		</a>
+		<a class="btn btn-success" rel="{handler: 'iframe', size: {x: 1000, y: 600}, onClose: function() {}}" href="http://migur.woody.rhino.nixsolutions.com/dev/joomla/administrator/index.php?option=com_newsletter&amp;view=list&amp;tmpl=component" class="modal">
+			Create List
+		</a>
+	</div>	
+	
 </div>
 
-<div class="container" id="container-left-right">
-    <fieldset id="dashboard-subscribers">
-        <legend><?php echo JText::_('COM_NEWSLETTER_SUBSCRIBERS'); ?></legend>
-        <?php echo MigurToolBar::getInstance('subscribers-toolbar')->render(); ?>
-    </fieldset>
-    <fieldset id="dashboard-help">
-        <legend><?php echo JText::_('COM_NEWSLETTER_HELP_N_ABOUT'); ?></legend>
-        <?php echo MigurToolBar::getInstance('help-toolbar')->render(); ?>
-    </fieldset>
+<br/>
+<br/>
+
+<div class="row-fluid">
+
+	<div class="span6">
+		
+		<legend>Configuration &amp; Installation</legend>
+		
+		<a class="btn" rel="{handler: 'iframe', size: {x: 350, y: 150}, onClose: function() {}}" href="http://migur.woody.rhino.nixsolutions.com/dev/joomla/administrator/index.php?option=com_newsletter&amp;view=extension&amp;layout=install&amp;tmpl=component" class="modal">
+			Install Extensions
+		</a>
+		
+		<a class="btn" href="index.php?option=com_newsletter&amp;view=configuration">
+			Configuration
+		</a>
+	</div>
+
+	<div class="span6">
+		<legend>Help &amp; About</legend>
+		<a class="btn" rel="{handler: 'iframe', size: {x: 800, y: 600}, onClose: function() {}}" href="http://migur.com/products/newsletter" class="modal">
+			About
+		</a>
+
+		<a class="btn" rel="help" onclick="Joomla.popupWindow('http://migur.com/support/documentation/newsletter', 'Help', 980, 600, 1)" href="#">
+			Help
+		</a>
+	</div>
+
 </div>
 
-<fieldset id="statistic">
+<br/>
+<br/>
+
+<div id="statistic">
 	<legend><?php echo JText::_('COM_NEWSLETTER_STATISTICS'); ?></legend>
 	<div id="dashboard-statistic-chart"></div>
-</fieldset>
+</div>
 
 <script type="text/javascript">
 

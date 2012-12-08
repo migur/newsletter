@@ -19,37 +19,24 @@ require_once JPATH_ROOT
 	.DIRECTORY_SEPARATOR.'administrator'
 	.DIRECTORY_SEPARATOR.'components'
 	.DIRECTORY_SEPARATOR.'com_newsletter'
-	.DIRECTORY_SEPARATOR.'constants.php';
+	.DIRECTORY_SEPARATOR.'bootstrap.php';
 
 try {
 
+	// Constants, required J! files, so on...
+	MigurComNewsletterBootstrap::initEnvironment();
+
 	// Run autoloader
-	JLoader::import('helpers.autoload', COM_NEWSLETTER_PATH_ADMIN, '');
-	NewsletterHelperAutoload::setup();
+	MigurComNewsletterBootstrap::initAutoloading();
 
+	// Setup the cache
+	MigurComNewsletterBootstrap::initCache();
 
-	// import joomla controller library
-	jimport('joomla.application.component.controller');
-	jimport('joomla.application.component.view');
-	jimport('joomla.form.helper');
-	jimport('migur.migur');
-	jimport('joomla.error.log');
-
-	// Add the helper
-	JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.log', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JHtml::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'helpers'. DIRECTORY_SEPARATOR .'html');
-
-	JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'rules');
-	JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'tables');
-	JModelLegacy::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models');
-	JModelLegacy::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models', 'NewsletterModel');
-	JModelLegacy::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'entities', 'NewsletterModelEntity');
-
+	// Setub toolbar, forms and so on...
+	MigurComNewsletterBootstrap::initJoomlaTools();	
+	
 	// Get an instance of the controller prefixed by Newsletter
-	$controller = JController::getInstance('Newsletter');
+	$controller = MigurController::getInstance('Newsletter');
 
 	// ACL
 		$resource = JRequest::getString('view','') .'.'. JRequest::getString('layout','default');

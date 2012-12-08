@@ -2,42 +2,53 @@
     <fieldset>
         <legend><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></legend>
     	<fieldset class="filter-bar">
-            <?php echo MigurToolBar::getInstance('lists')->render(); ?>
-            <div id="lists-filter-panel-control" class="filter-panel-control"></div>
-            <div class="clr"></div>
-            <div id="lists-filter-panel" class="filter-panel">
-				<div class="fltlft">
-				<div class="label"><?php echo JText::_('COM_NEWSLETTER_STATE'); ?></div>
-					<select name="filter_published" class="inputbox fltlt" onchange="this.form.submit()">
-							<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
-							<?php echo JHtml::_('select.options', JHtml::_('multigrid.enabledOptions'), 'value', 'text', $this->lists->state->get('filter.published'), true);?>
-					</select>
+			<div class="row-fluid">
+				<div class="pull-right">
+		            <?php echo MigurToolBar::getInstance('lists')->render(); ?>
 				</div>
-				<div class="fltlft">
-				<div class="label"><?php echo JText::_('COM_NEWSLETTER_FILTER'); ?></div>
-					<input type="text" name="filter_search" id="lists_filter_search" class="migur-search" value="<?php echo $this->escape($this->lists->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
-					
-					<div class="fltlft" style="margin-left:10px">
-						<button class="filter-search-button" type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-						<button type="button" onclick="document.id('lists_filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+				
+				<div id="lists-filter-panel-control" class="pull-left filter-panel-control" data-role="ctrl-container">
+				</div>
+				
+			</div>
+			<br/>
+
+			<div id="lists-filter-panel" class="row-fluid filter-panel"  data-role="panel-container">
+				
+				<div class="filter-panel-inner" data-role="panel-container-inner">
+
+					<div class="pull-left btn-group">
+					<!--<label><?php echo JText::_('COM_NEWSLETTER_STATE'); ?></label>-->
+						<select name="filter_published" class="input-medium" onchange="this.form.submit()">
+								<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
+								<?php echo JHtml::_('select.options', JHtml::_('multigrid.enabledOptions'), 'value', 'text', $this->lists->state->get('filter.published'), true);?>
+						</select>
 					</div>
+					<div class="filter-search btn-group pull-left">
+						<input type="text" name="filter_search" id="lists_filter_search" class="migur-search" value="<?php echo $this->escape($this->lists->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
+					</div>	
+					<div class="btn-group pull-left">
+						<button class="btn tip filter-search-button" type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
+						<button class="btn tip" type="button" onclick="document.id('lists_filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+					</div>	
+
 				</div>
-            </div>
+			</div>	
 	</fieldset>
 
 	<table class="sslist adminlist  table table-striped">
 		<thead>
 			<tr>
 				<th class="left" width="1%">
-					<input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
+					<input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
 				</th>
 				<th class="left">
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_LIST_NAME', 'a.name', $this->lists->listDirn, $this->lists->listOrder, null, null, 'listsForm'); ?>
 				</th>
-				<th class="left" width="20%">
+				<th class="left" width="22%">
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_SUBSCRIBERS', 'subscribers', $this->lists->listDirn, $this->lists->listOrder, null, null, 'listsForm'); ?>
 				</th>
-				<th class="left" width="15%">
+				<th class="left" width="19%">
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ACTIVATED', 'a.state', $this->lists->listDirn, $this->lists->listOrder, NULL, 'desc', 'listsForm'); ?>
 				</th>
 			</tr>

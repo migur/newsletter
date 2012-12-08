@@ -46,7 +46,7 @@ Joomla.submitbutton = function(task)
 		if (isValid)
 		{
 			// To set jform[htmlTpl] and jform[plugins] fields
-			autosaver.getter();
+			Migur.app.autosaver.getter();
 			Joomla.submitform(task, document.newsletterForm);
 			return true;
 		}

@@ -1,4 +1,4 @@
-<fieldset id="news">
+<div id="news">
     <legend><?php echo JText::_('COM_NEWSLETTER_LATEST_NEWS'); ?></legend>
 
     <ul>
@@ -19,4 +19,4 @@
 			JText::_('There are no news');
 		} ?>
     </ul>
-</fieldset>
+</div>

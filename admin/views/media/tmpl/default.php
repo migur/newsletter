@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 		<span id="message"></span><?php echo JHtml::_('image', 'media/dots.gif', '...', array('width' =>22, 'height' => 12), true)?>
 	</div>
 	<fieldset>
-		<div class="fltlft"><span style="line-height:32px;"><?php echo JText::_('COM_NEWSLETTER_MEDIA_INSERT_DESC') ?></span></div>
+		<div class="pull-left"><span style="line-height:32px;"><?php echo JText::_('COM_NEWSLETTER_MEDIA_INSERT_DESC') ?></span></div>
 		<div class="fltrt">
 			<button type="button" id="insert-button"><?php echo JText::_('COM_NEWSLETTER_MEDIA_INSERT') ?></button>
 			<button type="button" onclick="window.parent.SqueezeBox.close();"><?php echo JText::_('JCANCEL') ?></button>
@@ -25,8 +25,15 @@ defined('_JEXEC') or die;
 		id="imageframe" 
 		name="imageframe" 
 		src="index.php?option=com_media&amp;view=media&amp;tmpl=component&amp;folder=&amp;asset=&amp;author="
-		width="680px"
-		height="630px" 
+		width="800px"
+		height="530px" 
 	/>
 	
 </form>	
+
+<stylesheet>
+	#imageframe {
+		border: 0;
+		overflow: hidden;
+	}
+</stylesheet>

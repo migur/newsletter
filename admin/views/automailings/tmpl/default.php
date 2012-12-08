@@ -12,22 +12,30 @@ defined('_JEXEC') or die;
                 <legend><?php echo JText::_('COM_NEWSLETTER_AUTOMAILINGS'); ?></legend>
 
                 <fieldset class="filter-bar" >
-                    <?php echo JToolBar::getInstance('automailings')->render(); ?>
-                    <div id="automailings-filter-panel-control" class="filter-panel-control"></div>
-                    <div class="clr"></div>
-                    <div id="automailings-filter-panel" class="filter-panel">
-						<div class="fltlft">
-							<input type="text" name="filter_search" id="automailing_filter_search" class="migur-search" value="<?php echo $this->escape($this->automailings->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
-							<button type="submit" class="migur-search-submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-							<button type="button" onclick="document.id('automailing_filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
-						</div>
-                    </div>
+					<div class="pull-left">
+						<?php echo JToolBar::getInstance('automailings')->render(); ?>
+					</div>	
+					<div class="btn-toolbar pull-right">
+						<a class="btn" data-target="#automailings-filter-panel" data-toggle="collapse">Filter: <span class="caret"></span></a>
+					</div>
                 </fieldset>
+				<div id="automailings-filter-panel" class="collaps collapse">
+					<div class="filter-select well">
+						<div class="filter-search btn-group pull-left">
+							<input type="text" name="filter_search" id="automailing_filter_search" class="migur-search" value="<?php echo $this->escape($this->automailings->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" placeholder="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>"/>
+						</div>
+						<div class="btn-group pull-left">
+							<button type="submit" class="btn tip migur-search-submit" data-original-title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
+							<button rel="tooltip" onclick="document.id('automailing_filter_search').value='';this.form.submit();" type="button" class="btn tip" data-original-title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+						</div>
+					</div>	
+				</div>
+
                 <table class="automailingslist adminlist  table table-striped" width="100%">
                         <thead>
                                 <tr>
                                         <th width="1%">
-                                                <input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
+                                                <input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
                                         </th>
                                         <th class="left">
                                                 <?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_AUTOMAILING', 'a.title', $this->automailings->listDirn, $this->automailings->listOrder, null, null, 'automailingsForm'); ?>
@@ -59,7 +67,7 @@ defined('_JEXEC') or die;
 											<?php echo $this->escape($item->automailing_name); ?>
 										</a>
 
-										<a href="#" class="search icon-16-search"></a>
+										<a href="#" class="search icon-search"></a>
 									</td>
                                 </tr>
                                 <?php } ?>
@@ -80,10 +88,19 @@ defined('_JEXEC') or die;
         <td width="1%"></td>
 
         <td style="vertical-align: top;">
-            <?php echo JHtml::_('tabs.start', 'prewiew'); ?>
+			
+			<ul class="nav nav-tabs">
+				<li class="active"><a data-toggle="tab" href="#details">JText::_('COM_NEWSLETTER_PREVIEW')</a></li>
+			</ul>
+			<div class="tab-content">
+				<div id="details" class="tab-pane active">
+	                <iframe id="preview-container"></iframe>
+				</div>	
+			</div>
+<!-- 2.5            <?php echo JHtml::_('tabs.start', 'prewiew'); ?>
             <?php echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PREVIEW'), 'tab-preview'); ?>
                 <iframe id="preview-container"></iframe>
-            <?php echo JHtml::_('tabs.end'); ?>
+            <?php echo JHtml::_('tabs.end'); ?> -->
         </td>
     </tr>
 </table>

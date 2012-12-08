@@ -23,6 +23,21 @@
     list-style-type: none;
 }
 
+@media (min-width: 1000px) { 
+
+	#dashboard-handlers {
+		width: 60%;
+		float: left;
+	}
+	
+	#dashboard-static {
+		width: 39%;
+		float: right;
+		clear: none;
+	}
+}
+
+
 #dashboard-handlers fieldset div.toolbar-list {
     margin: auto;
     float: none;
@@ -40,17 +55,6 @@ fieldset .toolbar-list a {
     margin: 0;
     width: 100px;
     padding: 0;
-}
-
-#dashboard-handlers {
-    width: 69%;
-    float: left;
-}
-
-#dashboard-static {
-    width: 30%;
-    float: right;
-    clear: none;
 }
 
 #dashboard-info {
@@ -80,9 +84,16 @@ fieldset .toolbar-list a {
     padding: 0;
 }
 
-/*#dashboard-handlers .toolbar-list li {
-    margin-left: 15%;
-}*/
+@media (max-width: 1000px) { 
+
+	#dashboard-handlers {
+		width: 100%;
+	}
+	
+	#dashboard-static {
+		width: 100%;
+	}
+}
 
 #links {
     text-align: center;
@@ -100,6 +111,7 @@ fieldset .toolbar-list a {
 
 #toolbar-progress {
     position: relative;
+	font-size: 12px !important;
 }
 
 .progress-info {

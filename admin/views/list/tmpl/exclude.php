@@ -28,7 +28,7 @@
             <thead>
                 <tr>
                     <th class="left" width="1%">
-                        <input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
+                        <input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
                     </th>
                     <th class="left">
                         <?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_LIST_NAME', 'a.name', $this->lists->listDirn, $this->lists->listOrder, null, null, 'listsForm'); ?>
@@ -96,11 +96,11 @@
 
     <fieldset id="exclude-fields">
         <legend><?php echo JText::_('COM_NEWSLETTER_IMPORT_DND_FIELDS'); ?></legend>
-            <div class="drop fltlft" rel="username"></div>
-			<div class="fltlft"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD') ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('COM_NEWSLETTER_SUBSCRIBER_NAME'); ?></div>
+            <div class="drop pull-left" rel="username"></div>
+			<div class="pull-left"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD') ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('COM_NEWSLETTER_SUBSCRIBER_NAME'); ?></div>
             <div class="clr"></div>
-            <div class="drop fltlft" rel="email"></div>
-			<div class="fltlft"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('JGLOBAL_EMAIL'); ?></div>
+            <div class="drop pull-left" rel="email"></div>
+			<div class="pull-left"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('JGLOBAL_EMAIL'); ?></div>
     </fieldset>
 
     <fieldset id="exclude-settings">

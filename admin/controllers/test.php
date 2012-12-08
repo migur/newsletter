@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla controllerform library
 jimport('joomla.application.component.controllerform');
 
-class NewsletterControllerTest extends MigurControllerForm
+class NewsletterControllerTest extends JControllerForm
 {
 	/**
 	 * Used only for development.
@@ -41,7 +41,7 @@ class NewsletterControllerTest extends MigurControllerForm
 			$name = str_replace(' ', '_', $prefix.$i);
 			$username = $prefix.$i;
 			$email = str_replace(' ', '.', strtolower($prefix).$i.'@absentdomain.com');
-			$dbo->setQuery('INSERT INTO #__users (name,username,email,password,userType,block,sendEmail,registerDate,lastVisitDate,activation,params) values("'.$name.'", "'.$username.'", "'.$email.'", "", "", "", 1, "'.date('Y-m-d H:i:s').'", 0, "", "{}")');
+			$dbo->setQuery('INSERT INTO #__users (name,username,email,password,block,sendEmail,registerDate,lastVisitDate,activation,params) values("'.$name.'", "'.$username.'", "'.$email.'", "", "", "", 1, "'.date('Y-m-d H:i:s').'", 0, "", "{}")');
 			//echo $dbo->getQuery();
 			$res = $dbo->query();
 			echo "\n".$name.' - '.($res?'ok':'fail');

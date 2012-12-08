@@ -9,12 +9,12 @@
 window.addEvent('domready', function() {
     try {
 
-        $$('#newsletters-default a')[0].addEvent('click', function(ev){
+        $$('#newsletters-default button')[0].addEvent('click', function(ev){
 
             ev.stop();
 
             var listIds = [];
-            $$('#form-newsletterslist [name=cid[]]').each(function(el){
+            $$('#adminForm [name=cid[]]').each(function(el){
 
                 if( $(el).getProperty('checked') ) {
 

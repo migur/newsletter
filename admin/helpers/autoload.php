@@ -35,8 +35,6 @@ class NewsletterHelperAutoload
 		self::registerPrefix('NewsletterModel',  $componentPath . DIRECTORY_SEPARATOR . 'models');
 		self::registerPrefix('NewsletterTable',  $componentPath . DIRECTORY_SEPARATOR . 'tables');
 
-		self::registerPrefix('JToolbarButton',  MIGURPATH_LIBRARY . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
-		
 		JLoader::import('helpers.module', $componentPath);
 		
 		// Register the autoloader functions.

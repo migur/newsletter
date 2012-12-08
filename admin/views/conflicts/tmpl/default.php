@@ -8,7 +8,7 @@
 		<thead>
 			<tr>
 				<th class="left" width="1%">
-					<input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
+					<input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
 				</th>
 				<th class="left" width="24%">
 					<?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_NAME', 'subName', $this->listDirn, $this->listOrder, null, null, 'subscribersForm'); ?>

@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.controlleradmin');
 
-class NewsletterControllerSubscribers extends MigurControllerAdmin
+class NewsletterControllerSubscribers extends JControllerAdmin
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.

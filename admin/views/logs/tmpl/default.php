@@ -6,30 +6,30 @@
             <div id="logs-filter-panel-control" class="filter-panel-control"></div>
             <div class="clr"></div>
             <div id="logs-filter-panel" class="filter-panel">
-				<div class="fltlft">
+				<div class="pull-left">
 					<input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
 					<button type="submit" class="btn migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 					<button type="button" onclick="document.id('filter_search').value='';document.id('filter_priority').value='';document.id('filter_category').value='';document.id('filter_dateFrom').value='';document.id('filter_dateTo').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 				</div>
-				<div class="fltlft">
+				<div class="pull-left">
 					<label><?php echo JText::_('COM_NEWSLETTER_CATEGORY'); ?></label>
-					<select id="filter_category" name="filter_category" class="inputbox fltlt" onchange="this.form.submit()">
+					<select id="filter_category" name="filter_category" class="input-medium" onchange="this.form.submit()">
 							<option value=""><?php echo JText::_('COM_NEWSLETTER_FILTER_ON_CATEGORY');?></option>
 							<?php echo JHtml::_('select.options', JHtml::_('multigrid.generalOptions', $this->categories, null), 'value', 'text', $this->state->get('filter.category'), true);?>
 					</select>
 				</div>
-				<div class="fltlft">
+				<div class="pull-left">
 					<label><?php echo JText::_('COM_NEWSLETTER_NOTIFICATION_TYPE'); ?></label>
-					<select id="filter_priority" name="filter_priority" class="inputbox fltlt" onchange="this.form.submit()">
+					<select id="filter_priority" name="filter_priority" class="input-medium" onchange="this.form.submit()">
 							<option value=""><?php echo JText::_('COM_NEWSLETTER_FILTER_ON_TYPES');?></option>
 							<?php echo JHtml::_('select.options', JHtml::_('multigrid.generalOptions', $this->priorities), 'value', 'text', $this->state->get('filter.priority'), true);?>
 					</select>
 				</div>
-				<div class="fltlft">
+				<div class="pull-left">
 					<label><?php echo JText::_('COM_NEWSLETTER_DATE_FROM'); ?></label>
 					<?php echo JHtml::_('calendar', $this->state->get('filter.dateFrom'), 'filter_dateFrom', 'filter_dateFrom', '%Y-%m-%d', array('onchange' => 'this.form.submit()')); ?>
 				</div>
-				<div class="fltlft">
+				<div class="pull-left">
 					<label><?php echo JText::_('COM_NEWSLETTER_DATE_TO'); ?></label>
 					<?php echo JHtml::_('calendar', $this->state->get('filter.dateTo'), 'filter_dateTo', 'filter_dateTo', '%Y-%m-%d', array('onchange' => 'this.form.submit()')); ?>
 				</div>
@@ -41,7 +41,7 @@
 		<thead>
 			<tr>
 				<th width="1%">
-					<input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
+					<input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
 				</th>
 				<th class="left">
 					<?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_MESSAGE', 'l.message', $this->listDirn, $this->listOrder, NULL, 'desc'); ?>

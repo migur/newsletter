@@ -230,7 +230,6 @@ class NewsletterModelSubscriber extends JModelAdmin
 					"u.username as juser_username, " . 
 					"u.email as juser_email, " .
 					"u.password as juser_password, " . 
-					"u.usertype as juser_usertype, " . 
 					"u.block as juser_block, " . 
 					"u.sendEmail as juser_sendEmail, " . 
 					"u.registerDate as juser_registerDate, " . 
@@ -274,7 +273,6 @@ class NewsletterModelSubscriber extends JModelAdmin
 						"u.username as juser_username, " . 
 						"u.email as juser_email, " .
 						"u.password as juser_password, " . 
-						"u.usertype as juser_usertype, " . 
 						"u.block as juser_block, " . 
 						"u.sendEmail as juser_sendEmail, " . 
 						"u.registerDate as juser_registerDate, " . 
