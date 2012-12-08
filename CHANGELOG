@@ -1,4 +1,12 @@
-DEPRECATED IN J!2.5.4 METHODS USED IN IT:
+12.06 FREE
+Fixed some bugs.
 
-JDatabaseInterface::getErrorNum
+12.06 PREMIUM
+Fixed some bugs.
+Added (?) help pages.
+Added uninstall page. That gives ability to confirm and manage removing process.
+Added ability to install uninstall extensions of Migur Newsletter.
+Added synchronisation of Migur lists with Joomla groups.
 
+12.06.02 FREE/PREMIUM
+Fixed some bugs.
