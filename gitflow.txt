@@ -1,0 +1,54 @@
+
+Now we have 4 versions:
+1. Free J!2
+2. Premium J!2
+3. Free J!3
+4. Premium J!3
+
+
+MAIN BRANCHES 
+---------------------
+MASTER			
+Contains Premium J!3.x releases. Head points to latest Premium J!3 release.
+
+DEVELOPMENT		
+Contains code that common for ALL versions. 
+For example 
+   - DB schema. Think it should BE THE SAME for ALL versions till we support both J!2 and J!3.
+   - core functionality that works fine on both J2 and J3.
+It is the base branch for DEV-J* branches. This branch should be merged into both DEV/J2/COMMONand DEV/J3/COMMONaftrer committing into it.
+
+DEV/J3/COMMON			
+Is related to J!3x versions. Contains features that are common for Free J!3 and Premium J!3 branches. Start J!3-specific feature branch here. Then merge it into DEV/J3/FREE or DEV/J3/PREM or into both.
+
+DEV/J3/FREE		
+Branch for Free J!3 code. Contains latest state for Free J!3 version. Start J!3 premium-specific feature branch here.
+
+DEV/J3/PREM 		
+Branch for Premium J!3 code. Contains latest state for Premium J!3 version.
+
+DEV/J2/COMMON			
+Is related to J!2x versions. Contains features that are common for Free J!2 and Premium J!2 branches. Start J!2-specific feature branch here. Then merge back it into here when complete.
+
+DEV/J2/PREM		
+Branch for Premium J!2 code.
+ 
+DEV/J2/FREE		
+Branch for Free J!2 code.
+
+
+RELEASING
+--------------
+Do not toch versions in DEVELOPMENT or DEV/J*/COMMON branches!
+Swith to branch of version you want to release (DEV/J*/FREE or DEV/J*/PREM]).
+Create temporary branch for releasing RELEASE/XX.XX-JX or something like that.
+Change versions in manifests and all other stuff for releasing. 
+Create tag and merge it back.
+
+Releasing is made by tagging in  
+	DEV/J3/FREE
+	DEV/J3/PREM	
+	DEV/J2/FREE
+	DEV/J2/PREM
+branches.
+	
