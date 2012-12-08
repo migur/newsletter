@@ -8,7 +8,7 @@ defined('_JEXEC') or die;
     <form class="form-validate" method="POST" action="<?php echo JURI::base(); ?>index.php?option=com_newsletter&amp;view=list&amp;tmpl=component&amp;<?php echo $this->session->getName().'='.$this->session->getId(); ?>&amp;<?php echo JUtility::getToken();?>=1" enctype="multipart/form-data" id="listForm" name="listForm">
     <?php
         echo JToolBar::getInstance('multitab-toolbar')->render();
-        echo JHtml::_('tabs.start', 'tabs-list', array('startOffset'=> $this->subtask));
+        echo JHtml::_('tabs.start', 'tabs-list', array('startOffset'=> $this->activeTab));
         echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_OVERVIEW'), 'tab-overview');
         echo $this->loadTemplate('overview', '');
 		
@@ -37,3 +37,5 @@ defined('_JEXEC') or die;
         <?php echo JHtml::_('form.token'); ?>
     </form>
 </fieldset>
+
+<script src="<?php echo JUri::base(); ?>/components/com_newsletter/views/list/tabs.js" type="text/javascript"></script>

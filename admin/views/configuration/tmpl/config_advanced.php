@@ -32,7 +32,7 @@
 			<td>
 				<a 
 					class="modal"
-					rel="{handler: 'iframe', size: {x: 600, y: 650}, onClose: function() {}}" 
+					rel="{handler: 'iframe', size: {x: 700, y: 700}, onClose: function() {}}" 
 					href="<?php echo JRoute::_('index.php?option=com_newsletter&view=maintainance&tmpl=component', true); ?>">
 					
 					<?php echo JText::_('COM_NEWSLETTER_MAINTAINANCE'); ?>	

@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 
 jimport('migur.library.language');
 
-class JavascriptHelper
+class NewsletterHelperJavascript
 {
 
 	public static $extension = 'com_newsletter';
@@ -74,3 +74,9 @@ class JavascriptHelper
 		}	
 	}
 }
+
+/**
+ * Legacy support for class name
+ */
+class JavascriptHelper extends NewsletterHelperJavascript
+{}

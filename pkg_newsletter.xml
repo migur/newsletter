@@ -2,7 +2,7 @@
 <extension type="package" version="1.6.0">
 	<name>Migur Newsletter</name>
 	<packagename>newsletter</packagename>
-	<version>12.06.01</version>
+	<version>12.07</version>
 	<url>http://migur.com</url>
 	<packager>Migur</packager>
 	<packagerurl>http://migur.com</packagerurl>
@@ -16,10 +16,12 @@
 		Don't change the direction! The component should be in line before LIBRARY.
 		Component has pages that requires the library in both install and uninstall flows . 
 		So library should be installed BEFORE the component and removed AFTER the component.
-		pkg_newslette_script will reverse the order of these extensions on installation/updating the package. 
+		pkg_newslette_script will reverse the order of these extensions on installation/updating the package.
+		Component should be installed AFTER plugins to be able to manage (enable) these plugins.
 	-->
 		<file type="component" id="com_newsletter">com_newsletter.zip</file>
 		<file type="library" id="migur">migur.zip</file>
 		<file type="module" id="mod_newsletter_subscribe" client="site">mod_newsletter_subscribe.zip</file>
+		<file type="plugin" id="plg_migurlistsync">plg_migurlistsync.zip</file>
 	</files>
 </extension>

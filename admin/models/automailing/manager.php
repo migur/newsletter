@@ -10,16 +10,17 @@
 // no direct access
 defined('_JEXEC') or die;
 
-JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('tables.history', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('tables.thread', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('helpers.mail', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('models.automailing.plans.common', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('models.automailing.plans.scheduled', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('models.automailing.plans.eventbased', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('models.automailing.threads.common', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('models.automailing.threads.eventbased', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('tables.smtpprofile', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('tables.mailboxprofile', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('tables.history', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('tables.thread', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('helpers.mail', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('helpers.log', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('models.automailing.plans.common', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('models.automailing.plans.scheduled', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('models.automailing.plans.eventbased', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('models.automailing.threads.common', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('models.automailing.threads.eventbased', COM_NEWSLETTER_PATH_ADMIN);
 
 /**
  * Class of subscribers list model of the component.
@@ -56,7 +57,6 @@ class NewsletterAutomailingManager
 			
 			// Create subscription threads but dont run it 
 			$plans = $this->getEventbasedPlans('subscription', $lists);
-
 			if (!empty($plans)){
 				foreach($plans as $plan) {
 

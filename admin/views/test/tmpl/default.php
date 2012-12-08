@@ -22,18 +22,25 @@ defined('_JEXEC') or die;
 	</tfoot>
 
 	<tbody>
-		<tr class="row1">
+		<tr class="row2">
 			<td><a class="test-title" href="#">Subscription</a></td>
 			<td><select class="test-method"><option value="get">GET</option><option selected value="post">POST</option></td>
 			<td><input class="test-url" value="<?php echo 'index.php?option=com_newsletter&task=subscribe.subscribe'; ?>" size="60"/></td>
 			<td><input class="test-params" value="<?php echo 'newsletter-name=NameOfUser&newsletter-email=email@ofuser.com&newsletter-html=1&newsletter-lists=&fbenabled=0'; ?>" size="80" /></td>
 			<td><input class="test-other" value="<?php echo JUtility::getToken(); ?>=1" size="60" /></td>
 		</tr>
-		<tr class="row0">
+		<tr class="row1">
 			<td><a class="test-title" href="#">Unsubscription</a></td>
 			<td><select class="test-method"><option value="get">GET</option><option selected value="post">POST</option></td>
 			<td><input class="test-url" value="<?php echo 'index.php?option=com_newsletter&task=subscribe.showunsubscribe'; ?>" size="60"/></td>
 			<td><input class="test-params" value="<?php echo 'uid=&nid='; ?>" size="80" /></td>
+			<td><input class="test-other" value="" size="60" /></td>
+		</tr>
+		<tr class="row0">
+			<td><a class="test-title new-window" href="#" onClick="">Cron.send</a></td>
+			<td><input type="button" value="Start" class="cron-send-start" /><input type="button" value="Stop" class="cron-send-stop" /></td>
+			<td><input class="cron-send test-url" value="<?php echo 'index.php?option=com_newsletter&task=cron.send'; ?>" size="60"/></td>
+			<td><input class="cron-send test-params" value="120" size="80" /></td>
 			<td><input class="test-other" value="" size="60" /></td>
 		</tr>
 		<tr class="row1">
@@ -92,7 +99,6 @@ defined('_JEXEC') or die;
 			<td><input class="test-params" value='count=10000&start=1&quote="&separator=,' size="80" /></td>
 			<td><input class="test-other" value="" size="60" /></td>
 		</tr>
-		
 	</tbody>
 </table>
 

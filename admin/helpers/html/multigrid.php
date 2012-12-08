@@ -255,24 +255,34 @@ abstract class JHtmlMultigrid
 		return $html;
 	}
 	
-	static function renderObject($data, $level = 0, $color = 'black') 
+	static function renderObject($data, $level = 0, $color = 'black', $options = array()) 
 	{
 		$spaces = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 		$res = '';
+
+		if (is_bool($data)) {
+			$data = $data? 'true':'false';
+		}
+
+		if (empty($data)) {
+			if (is_array($data)) { $data = '(empty array)'; }
+			if (is_object($data)) { $data = '(empty object)'; }
+			if (is_null($data)) { $data = '(null)'; }
+		}
 		
 		if (is_array($data) || is_object($data)) {
 			
 			foreach($data as $key => $value) {
-				
+
 				if (!is_numeric($key)) {
-					
+
 					switch(strtolower($key)) {
-						
+
 						case 'error':
 						case 'errors':
 							$color = 'red';
 							break;
-						
+
 						default: 
 							$color = 'black';
 							break;
@@ -280,11 +290,16 @@ abstract class JHtmlMultigrid
 					$res .= substr($spaces, 0, $level*12) . '<span style="color:'.$color.'">'.$key.'</span>' . ':';
 					$res .= (is_array($value) || is_object($value))? '<br/>' : '';
 				}
+
+				$res .= self::renderObject($value, $level+1, $color, $options);
+			}
 				
-				$res .= self::renderObject($value, $level+1, $color);
+		} else {
+			
+			if (!empty($options['maxLength']) && strlen($data) > $options['maxLength']) {
+				$data = !empty($options['maxLengthMessage'])? $options['maxLengthMessage'] : '...';
 			}
 			
-		} else {
 			$res .= '<span style="color:'.$color.'">' . substr($spaces, 0, $level*12) . $data . '</span><br/>';
 		}
 		

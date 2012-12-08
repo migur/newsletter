@@ -15,7 +15,13 @@ defined('_JEXEC') or die('Restricted access');
 //  ini_set("log_errors" , "0");
 //  ini_set("error_log" , "/var/log/php-error.log");
 
+require_once 'constants.php';
+
 try {
+
+	// Run autoloader
+	JLoader::import('helpers.autoload', COM_NEWSLETTER_PATH_ADMIN, '');
+	NewsletterHelperAutoload::setup();
 
 	// import joomla controller library
 	jimport('joomla.application.component.controller');
@@ -23,6 +29,7 @@ try {
 	jimport('joomla.form.helper');
 	jimport('migur.migur');
 
+	
 	JLoader::import('helpers.acl', JPATH_COMPONENT_ADMINISTRATOR, '');
 	
 	// First check if user has access to the component.
@@ -108,7 +115,7 @@ try {
 	
 } catch (Exception $e) {
 	
-	LogHelper::addDebug(
+	NewsletterHelperLog::addDebug(
 		'COM_NEWSLETTER_UNCAUGHT_EXCEPTION',
 		'common',
 		$e);

@@ -19,7 +19,7 @@ JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
  *
  * @since		1.0
  */
-class NewsletterHelper
+class NewsletterHelperNewsletter
 {
 
 	public static $extension = 'com_newsletter';
@@ -576,3 +576,9 @@ class NewsletterHelper
 	}
 	
 }
+
+/**
+ * Legacy support for class name
+ */
+class NewsletterHelper extends NewsletterHelperNewsletter
+{}
