@@ -10,7 +10,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-JLoader::import('models.automailing.threads.common', JPATH_COMPONENT_ADMINISTRATOR, '');
+JLoader::import('models.automailing.threads.common', COM_NEWSLETTER_PATH_ADMIN, '');
 
 /**
  * Common methods
@@ -90,12 +90,12 @@ class NewsletterAutomlailingPlanCommon extends MigurJTable
 	{
 		// Decide what object we should create
 		if ($type == 'scheduled') {
-			JLoader::import('models.automailing.plans.scheduled', JPATH_COMPONENT_ADMINISTRATOR, '');
+			JLoader::import('models.automailing.plans.scheduled', COM_NEWSLETTER_PATH_ADMIN, '');
 			return new NewsletterAutomlailingPlanScheduled();
 		}
 
 		if ($type == 'eventbased') {
-			JLoader::import('models.automailing.plans.eventbased', JPATH_COMPONENT_ADMINISTRATOR, '');
+			JLoader::import('models.automailing.plans.eventbased', COM_NEWSLETTER_PATH_ADMIN, '');
 			return new NewsletterAutomlailingPlanEventbased();
 		}
 		

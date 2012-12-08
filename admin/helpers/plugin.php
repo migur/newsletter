@@ -10,7 +10,7 @@
 // No direct access
 defined('JPATH_BASE') or die;
 
-JLoader::import('tables.nextension', JPATH_COMPONENT_ADMINISTRATOR);
+JLoader::import('tables.nextension', COM_NEWSLETTER_PATH_ADMIN);
 
 /**
  * Plugin helper class
@@ -18,30 +18,41 @@ JLoader::import('tables.nextension', JPATH_COMPONENT_ADMINISTRATOR);
  * @static
  * @since		1.0
  */
-abstract class MigurPluginHelper
+abstract class NewsletterHelperPlugin
 {
 	static $_plugins;
 
-        static $_lang;
+	static $_lang;
+	
+	static $_prepared = false;
+	
 	/**
 	 * Import all needed plugins. Add all needed handlers
 	 * 
 	 */
 	public static function prepare()
 	{
+		if (self::$_prepared) {
+			return;
+		}
+		
+		$jpathComponentAdministrator = JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_newsletter';
+		
 		// Load 'Migur' group of plugins
-		JLoader::import('plugins.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
+		JLoader::import('plugins.plugin', $jpathComponentAdministrator, '');
 
 		JPluginHelper::importPlugin('migur');
 
 		// Bind automailing to several events
-		JLoader::import('plugins.plugins.automail', JPATH_COMPONENT_ADMINISTRATOR, '');
+		JLoader::import('plugins.plugins.automail', $jpathComponentAdministrator);
 		JFactory::getApplication()->registerEvent('onMigurAfterSubscribe', 'plgMigurAutomail');
 		JFactory::getApplication()->registerEvent('onMigurAfterSubscriberImport', 'plgMigurAutomail');
 		JFactory::getApplication()->registerEvent('onMigurAfterSubscriberAssign', 'plgMigurAutomail');
 		JFactory::getApplication()->registerEvent('onMigurAfterUnsubscribe', 'plgMigurAutomail');
 		JFactory::getApplication()->registerEvent('onMigurAfterSubscriberUnbind', 'plgMigurAutomail');
 		JFactory::getApplication()->registerEvent('onMigurAfterSubscriberDelete', 'plgMigurAutomail');
+		
+		self::$_prepared = true;
 	}
 
 	
@@ -482,3 +493,9 @@ abstract class MigurPluginHelper
 			$extension;
 		}	
 }
+
+/**
+ * Legacy support for class name
+ */
+abstract class MigurPluginHelper extends NewsletterHelperPlugin 
+{}

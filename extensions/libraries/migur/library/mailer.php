@@ -14,13 +14,13 @@ defined('_JEXEC') or die;
 jimport('migur.library.mailer.document');
 jimport('migur.library.mailer.sender');
 
-JLoader::import('helpers.subscriber', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('helpers.mail', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('helpers.download', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('tables.history', JPATH_COMPONENT_ADMINISTRATOR, '');
-JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR);
-JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR);
+JLoader::import('helpers.subscriber', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('helpers.mail', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('helpers.download', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('helpers.newsletter', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('tables.history', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('plugins.manager', COM_NEWSLETTER_PATH_ADMIN);
+JLoader::import('helpers.plugin', COM_NEWSLETTER_PATH_ADMIN);
 jimport('joomla.error.log');
 
 /**
@@ -264,7 +264,9 @@ class MigurMailer extends JObject
 			}
 
 			// Finish with content
-			$this->dispatcher->trigger('onMigurNewsletterMailContentComplete', array(&$letter->content, $letter->toObject()));
+			$letterContent = $letter->content;
+			$this->dispatcher->trigger('onMigurNewsletterMailContentComplete', array(&$letterContent, $letter->toObject()));
+			$letter->content = $letterContent;
 			
 			if (!empty($letter->name)) {
 				$sender->AddCustomHeader('Email-Name:' . $letter->name);
@@ -274,7 +276,7 @@ class MigurMailer extends JObject
 				$sender->AddCustomHeader('Subscriber-ID:' . $item->subscriber_id);
 			}	
 
-			$letter->encoding = $letter->params->encoding;
+			$letter->encoding = !empty($letter->params->encoding)? $letter->params->encoding : null;
 
 			if (!$smtpProfile->isJoomlaProfile()) {
 				$fromName  = $smtpProfile->from_name;
@@ -522,16 +524,17 @@ class MigurMailer extends JObject
 			$timeSending = microtime(true);
 			// send the unique letter to ONE recipient
 			$sendRes = $sender->send(array(
-					'letter' => $letter->toObject(),
-					'attach' => $atts,
-					'emails' => array($subscriber),
-					'smtpProfile' => $smtpProfile->toObject(),
-					'fromName' => $fromName,
-					'fromEmail' => $fromEmail,
-					'toName' => $toName,
-					'toEmail' => $toEmail,
-					'type' => $type,
-					'tracking' => $params['tracking']));
+				'letter' => $letter->toObject(),
+				'attach' => $atts,
+				'emails' => array($subscriber),
+				'smtpProfile' => $smtpProfile->toObject(),
+				'fromName' => $fromName,
+				'fromEmail' => $fromEmail,
+				'toName' => $toName,
+				'toEmail' => $toEmail,
+				'type' => $type,
+				'tracking' => $params['tracking']
+			));
 			
 			$timeSending = floor((microtime(true) - $timeSending)*1000);
 			

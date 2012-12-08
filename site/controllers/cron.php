@@ -46,7 +46,7 @@ class NewsletterControllerCron extends JControllerForm
 	{
 		parent::__construct($config);
 		
-		LogHelper::startJoomlaDbErrorLogger();
+		NewsletterHelperLog::startJoomlaDbErrorLogger();
 	}
 
 	
@@ -63,36 +63,69 @@ class NewsletterControllerCron extends JControllerForm
 	public function send() 
 	{
 		
-		LogHelper::addDebug('Cron started', 'cron');
+		NewsletterHelperLog::addDebug('Cron started', 'cron');
 		
 		$res = array();
 
 		// First check if we need to process some automailing items.
 		// It does not take much time...
 		try {
-			$res['automailing'] = $this->automailing('triggered');
+			$res['automailing'] = $this->_automailing();
 		} catch (Exception $e){
 			$res['automailing'] = array('error' => $e->getMessage());
 		}	
 		
-		
 		try {
-			$res['mailing'] = $this->mailing('triggered');
+			$res['mailing'] = $this->_mailing();
 		} catch (Exception $e){
 			$res['mailing'] = array('error' => $e->getMessage());
 		}	
 
 		try {
-			$res['processBounced'] = $this->processBounced('triggered');
+			$res['processBounced'] = $this->_processBounced();
 		} catch (Exception $e){
 			$res['processBounced'] = array('error' => $e->getMessage());
 		}	
 		
-		LogHelper::addDebug('Cron finished', 'cron', $res);
+		NewsletterHelperLog::addDebug('Cron finished', 'cron', $res);
 		jexit();
+	}
+	
+
+	/**
+	 * Action that proxies to _mailing
+	 */
+	public function mailing()
+	{
+		NewsletterHelperNewsletter::jsonPrepare();
+		$res = $this->_mailing();
+		NewsletterHelperNewsletter::jsonResponse($res['status'], $res['messages'], $res['data']);
 	}
 
 	
+	/**
+	 * Action that proxies to _processbounced
+	 * 
+	 * curl [BASE_URL]/index.php\?option=com_newsletter\&task=cron.processbounced
+	 * wget --delete-after [BASE_URL]/index.php\?option=com_newsletter\&task=cron.processbounced
+	 */
+	public function processbounced()
+	{
+		NewsletterHelperNewsletter::jsonPrepare();
+		$res = $this->_processbounced();
+		NewsletterHelperNewsletter::jsonResponse($res['status'], $res['messages'], $res['data']);
+	}
+
+	
+	/**
+	 * Action that proxies to _automailing
+	 */
+	public function automailing()
+	{
+		NewsletterHelperNewsletter::jsonPrepare();
+		$res = $this->_automailing();
+		NewsletterHelperNewsletter::jsonResponse($res['status'], $res['messages'], $res['data']);
+	}	
 	
 	/**
 	 * Sends the bulk of letters to queued subscribers.
@@ -104,29 +137,25 @@ class NewsletterControllerCron extends JControllerForm
 	 * @return void
 	 * @since  1.0
 	 */
-	public function mailing($mode = 'std')
+	protected function _mailing()
 	{
-		if ($mode == 'std') {
-			NewsletterHelper::jsonPrepare();
-		}
+		NewsletterHelperProcess::startTimer('mailing');
+		
+		NewsletterHelperLog::addDebug('Mailing started', NewsletterHelperLog::CAT_MAILER);
 		
 		$config = JComponentHelper::getParams('com_newsletter');
 
 		// Let's check if general send is disabled
 		if ($config->get('general_send_disable') == true) {
-			
-			if ($mode == 'std') {
-				NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_GENERAL_SENDING_DISABLED'));
-			} else {
-				return array('error' => JText::_('COM_NEWSLETTER_GENERAL_SENDING_DISABLED'));
-			}	
+			return array(
+				'state'    => false, 
+				'messages' => array(JText::_('COM_NEWSLETTER_GENERAL_SENDING_DISABLED')),
+				'data'     => array()
+			);
 		}
 		
 		$forced = JRequest::getBool('forced', false);
 		
-		LogHelper::addDebug('Mailing started', LogHelper::CAT_MAILER);
-		$timeSpent = microtime(true);
-
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
 
 		// 1. Get all SMTP profiles.
@@ -167,7 +196,7 @@ class NewsletterControllerCron extends JControllerForm
 				// letters for mailing interval.
 				// In case if it is not FORCED.
 				if (!$forced && $smtpProfile->isNeedNewPeriod() && $smtpProfile->needToSendCount() > 0) {
-					LogHelper::addMessage(
+					NewsletterHelperLog::addMessage(
 						JText::_('COM_NEWSLETTER_SENDING_INTERVAL_TOO_SHORT'),
 						'mailing',
 						array(
@@ -243,7 +272,7 @@ class NewsletterControllerCron extends JControllerForm
 										'tracking'      => true,
 										'keepAlive'     => $keepAlive,
 										'doClose'		=> $doClose,
-										'useRawUrls'    => NewsletterHelper::getParam('rawurls') == '1'
+										'useRawUrls'    => NewsletterHelperNewsletter::getParam('rawurls') == '1'
 									));
 
 									// Now all good and we can update informtion 
@@ -330,7 +359,7 @@ class NewsletterControllerCron extends JControllerForm
 
 							}
 							
-							LogHelper::addMessage('COM_NEWSLETTER_SENT_MAILS_BY_CRON', LogHelper::CAT_MAILER, array(
+							NewsletterHelperLog::addMessage('COM_NEWSLETTER_SENT_MAILS_BY_CRON', NewsletterHelperLog::CAT_MAILER, array(
 								'SMTP profile' => $smtpProfile->smtp_profile_name,
 								'Letters sent' => $sent,
 								'Sent errors'  => $ret));
@@ -355,18 +384,15 @@ class NewsletterControllerCron extends JControllerForm
 
 		
 		// Let's log some statistics info
-		LogHelper::addDebug('Mailing finished', LogHelper::CAT_MAILER, array(
-			'Time spent' => floor((microtime(true) - $timeSpent) * 1000)
+		NewsletterHelperLog::addDebug('Mailing finished', NewsletterHelperLog::CAT_MAILER, array(
+			'Time spent' => NewsletterHelperProcess::getTimer('mailing')
 		));
-	
 		
-		if ($mode == 'std') {
-			// Send and exit
-			NewsletterHelper::jsonMessage('ok', $response);
-			
-		} else {
-			return $response;
-		}	
+		return array(
+			'state'    => true,
+			'messages' => array('ok'), 
+			'data'     => $response
+		);
 	}
 
 	
@@ -374,13 +400,12 @@ class NewsletterControllerCron extends JControllerForm
 	/**
 	 * Process mailboxes for presence of bounced mails.
 	 * 
-	 * curl [BASE_URL]/index.php\?option=com_newsletter\&task=cron.processbounced
-	 * wget --delete-after [BASE_URL]/index.php\?option=com_newsletter\&task=cron.processbounced
+	 * @return array Result state 
 	 */
-	public function processbounced($mode = 'std')
+	public function _processbounced($mode = 'std')
 	{
-		ob_start();
-
+		NewsletterHelperLog::addDebug('Bounced processing started', NewsletterHelperLog::CAT_BOUNCES);
+		
 		$response = array();
 		
 		$config   = JComponentHelper::getParams('com_newsletter');
@@ -388,16 +413,16 @@ class NewsletterControllerCron extends JControllerForm
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
 		$count    = (int)  $config->get('mailer_cron_count');
 
-		$isExec = NewsletterHelper::getParam('mailer_cron_bounced_is_executed');
+		$isExec = NewsletterHelperNewsletter::getParam('mailer_cron_bounced_is_executed');
 		if ($isExec === null) {
-			NewsletterHelper::setParam('mailer_cron_bounced_is_executed', 0);
+			NewsletterHelperNewsletter::setParam('mailer_cron_bounced_is_executed', 0);
 		}
 		$isExec = (bool)$isExec;
 		
-		$lastExec = NewsletterHelper::getParam('mailer_cron_bounced_last_execution_time');
+		$lastExec = NewsletterHelperNewsletter::getParam('mailer_cron_bounced_last_execution_time');
 		$lastExec = !empty($lastExec) ? strtotime($lastExec) : 0;
 
-		$interval = (int)NewsletterHelper::getParam('mailer_cron_bounced_interval');
+		$interval = (int)NewsletterHelperNewsletter::getParam('mailer_cron_bounced_interval');
 		$interval = $interval * 60;
 		
 		$timeHasCome = ($lastExec + $interval) < time();
@@ -405,36 +430,44 @@ class NewsletterControllerCron extends JControllerForm
 
 		// Post warning if found unfinished checking process
 		if ($timeHasCome && $isExec && !$isAdmin) {
-			LogHelper::addWarning(
+			NewsletterHelperLog::addWarning(
 				JText::_('COM_NEWSLETTER_BOUNCE_UNFINISHED_FOUND'),
-				LogHelper::CAT_BOUNCES);
+				NewsletterHelperLog::CAT_BOUNCES);
 		}
 
 		// Pre check if the isExec is too long
 		if ($isExec && ((time() - $lastExec) > $interval * 10)) {
-			NewsletterHelper::setParam('mailer_cron_bounced_is_executed', 0);
+			NewsletterHelperNewsletter::setParam('mailer_cron_bounced_is_executed', 0);
 			$isExec = false;
-			LogHelper::addWarning(
+			NewsletterHelperLog::addWarning(
 				JText::_('COM_NEWSLETTER_BOUNCE_HANGEDUP_FOUND'),
-				LogHelper::CAT_BOUNCES);
+				NewsletterHelperLog::CAT_BOUNCES);
 		}
 
 		
 		// If this is a admins request then return 
 		// message and exit
 		if ($isExec) {
-			NewsletterHelper::jsonError(array(JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_IS_IN_PROCESS_NOW')));
+			return array(
+				'state'    => false,
+				'messages' => array(JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_IS_IN_PROCESS_NOW')),
+				'data'     => array()
+			);
 		}
 		
 		
 		// If this is a regular CRON or external request 
 		// then return message and exit
 		if (!$isAdmin && !$timeHasCome) {
-			NewsletterHelper::jsonError(array(JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_INTERVAL_IS_NOT_EXEDED')));
+			return array(
+				'state'    => false,
+				'messages' => array(JText::_('COM_NEWSLETTER_BOUNCE_HANDLING_INTERVAL_IS_NOT_EXEDED')),
+				'data'     => array()
+			);
 		}	
 
 		
-		NewsletterHelper::setParam('mailer_cron_bounced_is_executed', 1);
+		NewsletterHelperNewsletter::setParam('mailer_cron_bounced_is_executed', 1);
 
 		$bounceds = JModel::getInstance('Bounceds', 'NewsletterModel');
 
@@ -471,9 +504,9 @@ class NewsletterControllerCron extends JControllerForm
 						if (!$mailbox->connect()) {
 							
 							// Log about accident
-							LogHelper::addError(
+							NewsletterHelperLog::addError(
 								'COM_NEWSLETTER_MAILBOX_CANT_CONNECT',
-								LogHelper::CAT_BOUNCES,
+								NewsletterHelperLog::CAT_BOUNCES,
 								$logData);
 							
 							throw new Exception($mailbox->getLastError());
@@ -481,9 +514,9 @@ class NewsletterControllerCron extends JControllerForm
 					}
 					
 					// Log about accident
-					LogHelper::addWarning(
+					NewsletterHelperLog::addWarning(
 						'COM_NEWSLETTER_MAILBOX_CANT_CONNECT_WITH_CERT',
-						LogHelper::CAT_MAILBOX,
+						NewsletterHelperLog::CAT_MAILBOX,
 						$logData);
 				}	
 				
@@ -518,15 +551,15 @@ class NewsletterControllerCron extends JControllerForm
 										if (!$mailbox->deleteMail($mail->msgnum)) {
 											
 											// Log about accident
-											LogHelper::addWarning(
+											NewsletterHelperLog::addWarning(
 												'COM_NEWSLETTER_MAILBOX_CANT_DELETE_BOUNCED_MAIL',
-												LogHelper::CAT_MAILBOX,
+												NewsletterHelperLog::CAT_MAILBOX,
 												$logData);
 
 											throw new Exception('Delete message error.');
 										}
 
-										LogHelper::addDebug('Mailbox.Delete mail.Position:'.$mail->msgnum, 'cron');
+										NewsletterHelperLog::addDebug('Mailbox.Delete mail.Position:'.$mail->msgnum, 'cron');
 										$processed++;
 										$processedAll++;
 									}
@@ -568,66 +601,28 @@ class NewsletterControllerCron extends JControllerForm
 			unset($mailbox);
 		}
 
-		NewsletterHelper::setParam('mailer_cron_bounced_is_executed', 0);
-		NewsletterHelper::setParam('mailer_cron_bounced_last_execution_time', date('Y-m-d H:i:s'));
+		NewsletterHelperNewsletter::setParam('mailer_cron_bounced_is_executed', 0);
+		NewsletterHelperNewsletter::setParam('mailer_cron_bounced_last_execution_time', date('Y-m-d H:i:s'));
 
-		LogHelper::addMessage(
-			JText::_('COM_NEWSLETTER_BOUNCE_CHECK_FINISHED'),
-			LogHelper::CAT_BOUNCES,
-			$response);
+		NewsletterHelperLog::addDebug('Bounced processing finished', NewsletterHelperLog::CAT_BOUNCES, $response);
         
-		if ($mode == 'std') {
-			
-			NewsletterHelper::jsonMessage(
-				array(JText::_('COM_NEWSLETTER_BOUNCE_CHECK_FINISHED')),
-				$response);
-			
-		} else {
-			
-			return $response;
-		}	
+		return array(
+			'state'    => true,
+			'messages' => array(JText::_('COM_NEWSLETTER_BOUNCE_CHECK_FINISHED')),
+			'data'     => $response
+		);
 	}
 	
 	
-	
-	public function _isAdminAuthorized()
+	/**
+	 * Automailing processing
+	 * 
+	 * @return array Result state 
+	 */
+	public function _automailing()
 	{
-		if ($this->_isAdminAuthorized !== null) {
-			return $this->_isAdminAuthorized;
-		}
 		
-		if(JRequest::getBool('forced', false)) {
-                    
-			$conf = JFactory::getConfig();
-			$handler = $conf->get('session_handler', 'none');
-			$sessId = JRequest::getVar(JRequest::getString('sessname', ''), false, 'COOKIE');
-			
-			if(!empty($sessId)){
-				
-				$data = JSessionStorage::getInstance($handler, array())->read($sessId);
-
-				// Save session
-				$sessTmp = $_SESSION;
-				$_SESSION = array();
-				session_decode($data);
-				$user = $_SESSION['__default']['user'];
-				$_SESSION = $sessTmp;
-				$this->_isAdminAuthorized = (bool)$user->authorise('core.admin');
-			} else {
-				$this->_isAdminAuthorized = false;
-			}
-			
-			return $this->_isAdminAuthorized;
-		}
-		
-		return false;
-	}
-	
-	public function automailing($mode = 'std')
-	{
-		if ($mode == 'std') {
-			NewsletterHelper::jsonPrepare();
-		}	
+		NewsletterHelperLog::addDebug('Automailing started', NewsletterHelperLog::CAT_AUTOMAILING);
 		
 		/** 
 		 * Has 3 phases:
@@ -678,12 +673,53 @@ class NewsletterControllerCron extends JControllerForm
 		
 		// Phase #3 ...........
 		
-		if ($mode == 'std') {
-			LogHelper::addDebug('Automailing.Finished: '.json_encode($response), 'automailing/');
-			NewsletterHelper::jsonResponse('ok', '', $response);
-		} else {
-			return $response;
-		}	
+		NewsletterHelperLog::addDebug('Automailing finished', NewsletterHelperLog::CAT_AUTOMAILING, $response);
+		
+		return array(
+			'state'    => true,
+			'messages' => array('ok'),
+			'data'     => $response
+		);
+	}
+	
+	
+	/**
+	 * Check if admin this request came from ADMIN side. 
+	 * And we can do some stuff without some limitations
+	 * 
+	 * @return boolean
+	 */
+	public function _isAdminAuthorized()
+	{
+		if ($this->_isAdminAuthorized !== null) {
+			return $this->_isAdminAuthorized;
+		}
+		
+		if(JRequest::getBool('forced', false)) {
+                    
+			$conf = JFactory::getConfig();
+			$handler = $conf->get('session_handler', 'none');
+			$sessId = JRequest::getVar(JRequest::getString('sessname', ''), false, 'COOKIE');
+			
+			if(!empty($sessId)){
+				
+				$data = JSessionStorage::getInstance($handler, array())->read($sessId);
+
+				// Save session
+				$sessTmp = $_SESSION;
+				$_SESSION = array();
+				session_decode($data);
+				$user = $_SESSION['__default']['user'];
+				$_SESSION = $sessTmp;
+				$this->_isAdminAuthorized = (bool)$user->authorise('core.admin');
+			} else {
+				$this->_isAdminAuthorized = false;
+			}
+			
+			return $this->_isAdminAuthorized;
+		}
+		
+		return false;
 	}
 }
 

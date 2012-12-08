@@ -10,7 +10,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-class AclHelper
+class NewsletterHelperAcl
 {
 	/* No need to parse rules again and again */
 	protected static $_toArrayCache = null;
@@ -179,3 +179,9 @@ class AclHelper
 	}
 	
 }
+
+/**
+ * Legacy support for class name
+ */
+class AclHelper extends NewsletterHelperAcl
+{}

@@ -43,7 +43,8 @@ class NewsletterModelSubscribers extends MigurModelList
 				'list', 'sl.list_id',
 				'publish_up', 'a.publish_up',
 				'publish_down', 'a.publish_down',
-				'confirmed', 'a.confirmed'
+				'confirmed', 'a.confirmed',
+				'registerDate', 'a.registerDate'
 			);
 		}
 
@@ -79,6 +80,7 @@ class NewsletterModelSubscribers extends MigurModelList
 			$published = $app->getUserState($this->context . '.filter.published');
 			$published = ($published) ? $published : '';
 			$search = $app->getUserState($this->context . '.filter.search');
+			$jusergroup = $app->getUserState($this->context . '.filter.jusergroup');
 		} else {
 			$list = $this->getUserStateFromRequest($this->context . '.filter.list', 'filter_list', '');
 			$type = $this->getUserStateFromRequest($this->context . '.filter.type', 'filter_type', '');
@@ -87,12 +89,14 @@ class NewsletterModelSubscribers extends MigurModelList
 			if ($search == "Search...") {
 				$search = "";
 			}
+			$jusergroup = $this->getUserStateFromRequest($this->context . '.filter.jusergroup', 'filter_jusergroup');
 		}
 
 		$this->setState('filter.type', $type);
 		$this->setState('filter.list', $list);
 		$this->setState('filter.published', $published);
 		$this->setState('filter.search', $search);
+		$this->setState('filter.jusergroup', $jusergroup);
 
 		// List state information.
 		parent::populateState('a.name', 'asc');
@@ -134,14 +138,14 @@ class NewsletterModelSubscribers extends MigurModelList
 		// SQL-query for gettting the users-subscibers list.
 		$query->select('a.*');
 		$query->from(
-			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, u.id AS user_id, s.confirmed
+			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id, COALESCE(s.confirmed, u.activation = "") AS confirmed
 			FROM #__newsletter_subscribers AS s
 			LEFT JOIN #__users AS u ON (s.user_id = u.id)
 			WHERE s.user_id = 0 OR u.id IS NOT NULL OR s.email != ""
 			
 			UNION
 
-			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, u.id AS user_id, s.confirmed
+			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id, COALESCE(s.confirmed, u.activation = "") AS confirmed
 			FROM #__newsletter_subscribers AS s
 			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS a');
 		
@@ -191,8 +195,15 @@ class NewsletterModelSubscribers extends MigurModelList
 			}
 		}
 
+		// Filter by J! user group
+		$jusergroup =(int) $this->getState('filter.jusergroup');
+		if (!empty($jusergroup)) {
+			$jusergroup = (array) $jusergroup;
+			$query->join('', "#__user_usergroup_map AS ug ON ug.user_id = a.user_id");
+			$query->where('ug.group_id IN (' . implode(',', $jusergroup) . ')');
+		}
+		
 		// Add the list ordering clause.
-
 		$orderCol = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
 

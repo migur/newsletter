@@ -35,7 +35,7 @@ Migur.widget.ajaxChecker = new Class({
 		
 		this.clearNotifications();
 		
-		this.setStatus(Joomla.JText._('CHECKING', 'Checking') + '...', 'neutral');
+		this.setStatus(Joomla.JText._('CHECKING', 'Checking') + '...', 'warning');
 		
 		this.load(
 			this.options.url,
@@ -54,7 +54,7 @@ Migur.widget.ajaxChecker = new Class({
 		if (parser.getData().length > 0) {
 			
 			Array.each(parser.getData(), function(row){
-				widget.addNotification(row.text, row.type);
+				widget.addNotification(row.check, row.message, row.status);
 			});	
 			
 		} else {
@@ -104,15 +104,15 @@ Migur.widget.ajaxChecker = new Class({
 		
 		if(parser.isError()) {
 			this.setStatus(Joomla.JText._('CHECK_FAILED', 'Check failed'), 'error');
-			this.data.status = false;
+			this.data.status = 0;
 			this.data.data = [];
 			return;
 		}	
 		
-		this.data.status = true;
+		this.data.status = 2;
 		this.data.data = parser.getData();
 		
-		this.setStatus(Joomla.JText._('CHECK_COMPLETED', 'Check completed'), 'ok');
+		this.setStatus(Joomla.JText._('CHECK_COMPLETED', 'Check completed'), 'neutral');
 	},
 
 
@@ -150,18 +150,25 @@ Migur.widget.ajaxChecker = new Class({
 
 
 
-	addNotification: function(data, type) 
+	addNotification: function(data, message, status) 
 	{
-		var cls = (type)? 'check check-message' : 'check check-error'
+		var cls = 'check'
+		switch(status) {
+			case 0:
+				cls += ' check-error'; break;
+			case 1:
+				cls += ' check-warning'; break;
+			case 2:
+				cls += ' check-message'; break;
+		}
 		
+		if (!message) message = '';
 		
 		var wrp = new Element('div', {
 			'class': cls,
 			'html': 
 				'<span class="notification-text">'+data+'</span>'+
-				'<span class="notifiacation-status">'+
-					((type)? Joomla.JText._('OK') : Joomla.JText._('FAIL'))+
-				'</span>'	
+				'<span class="notifiacation-status">'+message+'</span>'	
 		});
 		
 		var cont = $(this.domEl).getElements('.notifications')[0];

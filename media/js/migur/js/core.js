@@ -50,6 +50,7 @@ Migur.translations = {};
  */
 Migur.app = {};
 
+Migur.classes = {};
 
 /**
  * Need for Table Column ordering in multiple-forms page.

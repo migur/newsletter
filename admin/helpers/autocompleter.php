@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 
 JLoader::import('tables.history', JPATH_COMPONENT_ADMINISTRATOR, '');
 
-class AutocompleterHelper
+class NewsletterHelperAutocompleter
 {
 
 	/**
@@ -43,3 +43,9 @@ class AutocompleterHelper
 	}
 
 }
+
+/**
+ * Legacy support for class name
+ */
+class AutocompleterHelper extends NewsletterHelperAutocompleter
+{}

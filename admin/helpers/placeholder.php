@@ -10,7 +10,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-class PlaceholderHelper
+class NewsletterHelperPlaceholder
 {
 	/*
 	 * The allowed types of a letter
@@ -231,3 +231,9 @@ class PlaceholderHelper
 		return array_values(array_unique($matches[1]));
 	}
 }
+
+/**
+ * Legacy support for class name
+ */
+class PlaceholderHelper extends NewsletterHelperPlaceholder
+{}

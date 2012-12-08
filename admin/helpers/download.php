@@ -10,7 +10,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-class DownloadHelper
+class NewsletterHelperDownload
 {
 
 	/**
@@ -66,3 +66,9 @@ class DownloadHelper
 	}
 
 }
+
+/**
+ * Legacy support for class name
+ */
+class DownloadHelper extends NewsletterHelperDownload 
+{}
