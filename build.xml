@@ -66,7 +66,6 @@
 	</target>
 
 
-	
     <target name="_up_component" description="attemps to update files on localhost server with files from working directory">
     	<!-- MAIN COMPONENT -->	
         <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
