@@ -42,23 +42,11 @@ class SubscriberHelper
 			return false;
 		}
 
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-
-		$query->select('*');
-		$query->from('#__newsletter_subscribers');
-		if (!empty($params['email'])) {
-			$query->where('email="' . $params['email'] . '"');
-		}
-		if (!empty($params['subscriber_id'])) {
-			$query->where('subscriber_id="' . (int) $params['subscriber_id'] . '"');
-		}
-
-
-		$db->setQuery($query);
-		$subscriber = $db->loadObject();
+		$model = JModel::getInstance('Subscriber', 'NewsletterModel');
+		$subscriber = (object) $model->getItem($params);
+		
 		$user = JUser::getInstance();
-
+		
 		if (!empty($subscriber->user_id)) {
 			// Get a database object
 			$user->load($subscriber->user_id);
@@ -87,7 +75,7 @@ class SubscriberHelper
 				'username' => $user->name,
 				'useremail' => $user->email,
 				'userid' => !empty($subscriber->subscriber_id) ? $user->subscriber_id : null,
-				'subscription key' => !empty($user->subscription_key) ? $user->subscription_key : null
+				'subscription key' => !empty($subscriber->subscription_key) ? $subscriber->subscription_key : null
 			));
 
 		return $user;
