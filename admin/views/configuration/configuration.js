@@ -32,7 +32,7 @@ window.addEvent('domready', function() {
 
             if ( confirm(Joomla.JText._('DO_YOU_REALY_WANT_TO_DELETE_ALL_SENT_LETTERS_QM', 'Do you realy want to delete all sent letters?')) ) {
                 new Request.JSON({
-                    url: '?option=com_newsletter&task=newsletter.clearsent&format=json',
+                    url: '?option=com_newsletter&task=newsletter.clearsent',
                     data: {},
                     onComplete: function(res){
                         if (res && res.state) {

@@ -52,6 +52,8 @@ Migur.app = {};
 
 Migur.classes = {};
 
+Migur.modules = {};
+
 /**
  * Need for Table Column ordering in multiple-forms page.
  * Expand the functionality to handle multiform pages
@@ -680,7 +682,7 @@ Migur.multistepProcess = function(){
 }
 
 
-Migur.jsonResponseParser = function() {
+Migur.jsonResponseParser = function(response) {
 	
 	this.errors = [];
 	
@@ -782,6 +784,10 @@ Migur.jsonResponseParser = function() {
 		
 		return this.response.data;
 	}
+	
+	if (response) {
+		this.setResponse(response);
+	}
 }
 
 Migur.addNotifications = function(messages, type, container, place) {
@@ -810,4 +816,13 @@ Migur.addNotifications = function(messages, type, container, place) {
 			html: Joomla.JText._(msg, msg)
 		}));
 	});
+}
+
+Migur.define = function(id, factory) {
+	
+	if (typeof Migur.modules[id] != 'undefined') {
+		throw "Module "+id+" already defined";
+	}
+	
+	Migur.modules[id] = factory;
 }

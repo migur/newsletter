@@ -28,7 +28,7 @@ JLoader::import('models.automailing.manager', JPATH_COMPONENT_ADMINISTRATOR, '')
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterControllerCron extends MigurControllerForm
+class NewsletterControllerCron extends JControllerForm
 {
 	
 	protected $_isAdminAuthorized = null;

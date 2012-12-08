@@ -1,17 +1,15 @@
     <div id="attachments" class="form-text">
-        <dl id="att-controls">
-            <div class="fltrt">
-				<a
-					href="#"
-					class="button"
-					id="newsletter_upload"
-					name="newsletter_upload">
-					
-					<?php  echo JText::_('COM_NEWSLETTER_UPLOAD'); ?>
-				</a>
-				<input type="hidden" id="fileattach" name="fileattach" />
-            </div>
-        </dl>
+        <div id="att-controls" class="btn-toolbar">
+            <div class="btn-group">   
+                <button
+                    class="button btn"
+                    id="newsletter_upload">
+
+                    <?php  echo JText::_('COM_NEWSLETTER_UPLOAD'); ?>
+                </button>
+             </div>   
+        </div>
+        <input type="hidden" id="fileattach" name="fileattach" />
 
         <div id="attlist-container">
         <table class="attlist adminlist  table table-striped" width="100%">
