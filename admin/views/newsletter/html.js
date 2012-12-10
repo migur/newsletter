@@ -510,7 +510,7 @@ Migur.define('htmlPane', function(){
 
 			var $this = this;
 			new Request.JSON({
-				url: '?option=com_newsletter&task=template.getparsed',
+				url: '?option=com_newsletter&task=template.getparsed&format=html',
 				data: {
 					t_style_id: data.t_style_id,
 					type: 'html',
