@@ -92,7 +92,7 @@ try {
         Uploader.uploadControl = target;
         var id = $$('[name=list_id]')[0].get('value');
         new Request.JSON({
-            url: '?option=com_newsletter&task=list.gethead',
+            url: '?option=com_newsletter&task=list.gethead&format=html',
             onComplete: Uploader.headParser
         }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(settings) );
     }
@@ -275,7 +275,7 @@ try {
         data = {'lists': data};
         var id = $$('[name=list_id]').get('value');
         new Request.JSON({
-            url: '?option=com_newsletter&task=list.exclude&subtask=lists',
+            url: '?option=com_newsletter&task=list.exclude&subtask=lists&format=html',
             onComplete: function(res){
 				
 				var parser = new Migur.jsonResponseParser();
@@ -447,7 +447,7 @@ try {
             //$$('#exclude-del-cont .active')
 
             new Request.JSON({
-                url: '?option=com_newsletter&task=list.exclude&subtask=parse',
+                url: '?option=com_newsletter&task=list.exclude&subtask=parse&format=html',
                 onComplete: function(res){
 					
 					var parser = new Migur.jsonResponseParser();
