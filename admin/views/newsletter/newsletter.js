@@ -544,7 +544,7 @@ window.addEvent('domready', function() {
 
                 var $this = this;
                 new Request.JSON({
-                    url: '?option=com_newsletter&task=template.getparsed',
+                    url: '?option=com_newsletter&task=template.getparsed&format=html',
                     data: {
                         t_style_id: data.t_style_id,
                         type: 'html',
@@ -798,7 +798,7 @@ window.addEvent('domready', function() {
                 repeat: true,
                 timeout: 3000,
                 observable: $('tabs-sub-container'),
-                url: '?option=com_newsletter&context=json'
+                url: '?option=com_newsletter&context=json&format=html'
             },
 
             beforeSend: function(){
