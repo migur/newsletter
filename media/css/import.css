@@ -24,3 +24,8 @@ select {
 	margin-top:5px;
 	float: left;
 }
+
+#import-message {
+	line-height: 18px;
+	margin-right: 10px;
+}
