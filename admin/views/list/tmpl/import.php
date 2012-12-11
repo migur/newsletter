@@ -20,9 +20,8 @@
 	
 	<div class="import-content">
 
-		<div class="plugin-preloader"><div>
-		<div class="plugin-pane">
-		</div>
+		<div class="plugin-preloader"></div>
+		<iframe class="plugin-pane" src="" scrolling="auto"></iframe>
 
 		<div class="clr"></div>
 		<div id="import-file" class="file-form hide">
