@@ -1,4 +1,4 @@
-<fieldset>
+<fieldset class="plugin-container plugin-import">
     <legend><?php echo JText::_($this->plugin->title); ?></legend>
 	
     <table class="adminlist  table table-striped">
@@ -31,15 +31,17 @@
 			<input 
 				type="button" 
 				class="button plugin-icon" 
-				role="formCancel" 
-				value="<?php echo JText::_('COM_NEWSLETTER_CLOSE'); ?>" />
+				data-role="formCancel" 
+				value="<?php echo JText::_('COM_NEWSLETTER_CLOSE'); ?>" 
+				onclick="migurPluginManager.cancel(); return false;"
+			/>
 		</div>
 			
         <input type="hidden" name="pluginevent" value="onMigurImportExecRule" />
         <input type="hidden" name="pluginname" value="<?php echo $this->plugin->name; ?>" />
         <input type="hidden" name="option" value="com_newsletter" />
         <input type="hidden" name="tmpl" value="component" />
-        <input type="hidden" name="task" value="list.importPluginTrigger" />
+        <input type="hidden" name="task" value="plugin.triggerListimport" />
         <input type="hidden" name="format" value="html" />
         <input type="hidden" name="list_id" value="<?php echo $this->listId; ?>" />
         <?php JHtml::_('form.token'); ?>
