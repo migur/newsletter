@@ -38,8 +38,8 @@
 		<div class="clr"></div>
 		<div class="fltrt">
 			<div id="status">
-				<span id="import-message"></span>&nbsp;&nbsp;&nbsp;
 				<div id="import-preloader" class="fltrt"></div>
+				<div id="import-message" class="fltlft"></div>
 			</div>
 			<input name="submit" type="button" value="<?php echo JText::_('COM_NEWSLETTER_IMPORT'); ?>" />
 		</div>
