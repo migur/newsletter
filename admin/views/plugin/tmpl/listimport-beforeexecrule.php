@@ -1,4 +1,4 @@
-<fieldset>
+<fieldset class="plugin-container plugin-import">
     <legend><?php echo JText::_($this->plugin->title); ?></legend>
 	
 	<?php if (!empty($this->plugin->data['helpText'])) { ?>
@@ -8,7 +8,7 @@
 	<?php } ?>
 
 	
-    <form id="plugin-form" action="<?php echo JUri::current(); ?>">
+    <form id="plugin-form" action="<?php echo JUri::current(); ?>" method="post">
         <table class="adminlist  table table-striped">
             <thead>
                 <tr>
@@ -53,14 +53,18 @@
                 <input 
                     type="button" 
                     class="button plugin-icon" 
-                    role="formSubmit" 
-                    value="<?php echo JText::_('PLG_MIGUR_IMPORTEXAMPLE_IMPORT'); ?>" />
+                    data-role="formSubmit" 
+                    value="<?php echo JText::_('PLG_MIGUR_IMPORTEXAMPLE_IMPORT'); ?>" 
+					onclick="this.form.submit(); return false;"
+				/>
 
                 <input 
                     type="button" 
                     class="button plugin-icon" 
-                    role="formCancel" 
-                    value="<?php echo JText::_('JCANCEL'); ?>" />
+                    data-role="formCancel" 
+                    value="<?php echo JText::_('JCANCEL'); ?>" 
+					onclick="migurPluginManager.cancel(); return false;"
+				/>
             </div>
         </div>   
         
@@ -69,7 +73,7 @@
 
         <input type="hidden" name="option" value="com_newsletter" />
         <input type="hidden" name="tmpl" value="component" />
-        <input type="hidden" name="task" value="list.importPluginTrigger" />
+        <input type="hidden" name="task" value="plugin.triggerListimport" />
         <input type="hidden" name="format" value="html" />
         <input type="hidden" name="list_id" value="<?php echo $this->listId; ?>" />
         <?php JHtml::_('form.token'); ?>
