@@ -135,7 +135,7 @@ try {
                         }
                     )
 
-                $('import-founded-fields').grab(newEl);
+                $$('#import-founded-fields .drop')[0].grab(newEl);
                 Migur.dnd.makeDND(newEl, $$('#import-file .drop'));
                 newEl.setStyle('position', 'relative');
             }
@@ -156,7 +156,7 @@ try {
                         }
                     )
 
-                $('exclude-founded-fields').grab(newEl);
+                $$('#exclude-founded-fields .drop')[0].grab(newEl);
                 Migur.dnd.makeDND(newEl, $$('#exclude-file .drop'));
                 newEl.setStyle('position', 'relative');
             }
