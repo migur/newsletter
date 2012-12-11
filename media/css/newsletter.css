@@ -67,6 +67,7 @@ iframe {
 #send li {
 	clear: both;
 	padding: 0 5px;
+	list-style: none;
 }
 
 #send .container-top input {
