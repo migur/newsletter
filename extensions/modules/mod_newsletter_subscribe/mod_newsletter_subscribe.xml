@@ -8,7 +8,7 @@
 	<authorEmail>info@migur.com</authorEmail>
 	<authorUrl>www.migur.com</authorUrl>
 	<version>12.07</version>
-	<description>MOD_NEWSLETTER_SUBSCRIBE_DESCRIPTION</description>
+	<description>This module allows to subscribe the J! user to one or more lists.</description>
 	<files>
 		<filename
 			module="mod_newsletter_subscribe">mod_newsletter_subscribe.php</filename>
