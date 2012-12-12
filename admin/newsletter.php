@@ -15,23 +15,14 @@ defined('_JEXEC') or die('Restricted access');
 //  ini_set("log_errors" , "0");
 //  ini_set("error_log" , "/var/log/php-error.log");
 
-require_once 'constants.php';
+require_once 'bootstrap.php';
+
+MigurComNewsletterBootstrap::initEnvironment();
+
+MigurComNewsletterBootstrap::initAutoloading();
 
 try {
 
-	// Run autoloader
-	JLoader::import('helpers.autoload', COM_NEWSLETTER_PATH_ADMIN, '');
-	NewsletterHelperAutoload::setup();
-
-	// import joomla controller library
-	jimport('joomla.application.component.controller');
-	jimport('joomla.application.component.view');
-	jimport('joomla.form.helper');
-	jimport('migur.migur');
-
-	
-	JLoader::import('helpers.acl', JPATH_COMPONENT_ADMINISTRATOR, '');
-	
 	// First check if user has access to the component.
 	if (
 		!AclHelper::canAccessComponent() /*|| 
@@ -39,21 +30,18 @@ try {
 	) {
 		AclHelper::redirectToAccessDenied();
 	}
-	
-	// Add the helper
-	JLoader::import('helpers.plugin', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.javascript', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.rssfeed', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.newsletter', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.log', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JLoader::import('helpers.support', JPATH_COMPONENT_ADMINISTRATOR, '');
-	JHtml::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR. DIRECTORY_SEPARATOR .'helpers'. DIRECTORY_SEPARATOR .'html');
 
+	// Setup the cache
+	MigurComNewsletterBootstrap::initCache();
+
+	// Setub toolbar, forms and so on...
+	MigurComNewsletterBootstrap::initJoomlaTools();	
+	
 	// Add translations used in JavaScript
-	JavascriptHelper::requireTranslations();
+	NewsletterHelperJavascript::requireTranslations();
 
 	// Load 'Migur' group of plugins
-	MigurPluginHelper::prepare();	
+	NewsletterHelperPlugin::prepare();	
 	
 	$app = JFactory::getApplication();
 	$app->triggerEvent('onMigurStart');
@@ -66,19 +54,9 @@ try {
 		$sess->set('migur.queue', null);
 	}
 
-	JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'rules');
-	JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'tables');
-	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models', 'NewsletterModel');
-	JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'entities', 'NewsletterModelEntity');
-
 	// Add the site root and user's ACL to JS
 	JavascriptHelper::addStringVar('migurSiteRoot', JUri::root());
 	JavascriptHelper::addObject('migurUserAcl', AclHelper::toArray());
-
-	// Setup the cache
-	$cache = JFactory::getCache('com_newsletter');
-	$cache->setCaching(true);
-	$cache->setLifeTime(900); // cache to 5 min
 
 	// Get an instance of the controller
 	// Here we get full task and preserve it from exploding
@@ -105,7 +83,7 @@ try {
 	if ( JRequest::getString('tmpl') != 'component') {
 
 		// Get license data (may be cached data)
-		$info = NewsletterHelper::getCommonInfo();
+		$info = NewsletterHelperNewsletter::getCommonInfo();
 
 		// If it has no valid license then show the RED message
 		if ($info->is_valid == "JNO") {
@@ -122,4 +100,3 @@ try {
 	
 	throw $e;
 }
-
