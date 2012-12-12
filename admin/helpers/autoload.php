@@ -34,8 +34,6 @@ class NewsletterHelperAutoload
 		self::registerPrefix('NewsletterModel',  $componentPath . DIRECTORY_SEPARATOR . 'models');
 		self::registerPrefix('NewsletterTable',  $componentPath . DIRECTORY_SEPARATOR . 'tables');
 
-		JLoader::import('helpers.module', $componentPath);
-		
 		// Register the autoloader functions.
 		spl_autoload_register(array('NewsletterHelperAutoload', '_autoload'));
 	}

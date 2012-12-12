@@ -17,11 +17,14 @@ defined('_JEXEC') or die('Restricted access');
 
 require_once 'bootstrap.php';
 
-MigurComNewsletterBootstrap::initEnvironment();
-
 MigurComNewsletterBootstrap::initAutoloading();
 
 try {
+
+	// Setub toolbar, forms and so on...
+	MigurComNewsletterBootstrap::initJoomlaTools();	
+
+	MigurComNewsletterBootstrap::initEnvironment();
 
 	// First check if user has access to the component.
 	if (
@@ -33,9 +36,6 @@ try {
 
 	// Setup the cache
 	MigurComNewsletterBootstrap::initCache();
-
-	// Setub toolbar, forms and so on...
-	MigurComNewsletterBootstrap::initJoomlaTools();	
 	
 	// Add translations used in JavaScript
 	NewsletterHelperJavascript::requireTranslations();
