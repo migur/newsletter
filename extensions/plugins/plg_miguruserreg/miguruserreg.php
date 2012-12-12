@@ -42,28 +42,30 @@ class plgSystemMiguruserreg extends JPlugin
 	 */
 	public function __construct($subject, $config)
 	{
-		// Check if component is absent or disabled
-		if (!JComponentHelper::getParams('com_newsletter')) {
+		// Check if component is present
+		$newsletter = JComponentHelper::getComponent('com_newsletter');
+		if (empty($newsletter)) {
 			$this->_disabled = true;
 			return;
 		}	
-
-		// Import component's constants
-		require_once JPATH_ADMINISTRATOR . 
-			DIRECTORY_SEPARATOR . 'components' .
-			DIRECTORY_SEPARATOR . 'com_newsletter' .
-			DIRECTORY_SEPARATOR . 'constants.php';
 		
 		parent::__construct($subject, $config);
+
+		require_once 
+			JPATH_ADMINISTRATOR . 
+			DIRECTORY_SEPARATOR . 'components' . 
+			DIRECTORY_SEPARATOR . 'com_newsletter' . 
+			DIRECTORY_SEPARATOR . 'bootstrap.php';
+		
+		MigurComNewsletterBootstrap::initEnvironment();
+		MigurComNewsletterBootstrap::initAutoloading();
+		
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_user_miguruserreg', JPATH_ADMINISTRATOR, null, false, false);
 
-		JLoader::import('helpers.autoload', COM_NEWSLETTER_PATH_ADMIN);
-		NewsletterHelperAutoload::setup();
-		
 		JLoader::import('helpers.plugin', COM_NEWSLETTER_PATH_ADMIN);
 		JLoader::import('models.automailing.manager', COM_NEWSLETTER_PATH_ADMIN);
-		MigurPluginHelper::prepare();
+		NewsletterHelperPlugin::prepare();
 	}
 
 

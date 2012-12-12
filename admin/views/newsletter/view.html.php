@@ -101,7 +101,7 @@ class NewsletterViewNewsletter extends MigurView
 		$this->form = $this->get('Form', 'newsletter');
 		$this->newsletter = $this->get('Item');
 
-		$smtpModel = JModel::getInstance('SMtpProfile', 'NewsletterModelEntity'); 
+		$smtpModel = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity'); 
 		
 		// Let's add J! profile
 		$smtpp = $smtpModel->loadJoomla();
