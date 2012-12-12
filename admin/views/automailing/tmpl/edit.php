@@ -9,22 +9,17 @@ defined('_JEXEC') or die;
     <tr>
 		<td width="45%" style="vertical-align: top;" colspan="2">
 
-			<form name="automailingForm" method="POST" id="form-automailing" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
+			<form name="automailingForm" method="POST" id="form-automailing" class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
 
-				<div class="fltrt">
-					<?php echo JToolBar::getInstance('automailing')->render(); ?>
-				</div>	
-				
-				<div id="form-container" class="pull-left">
-					<div class="pull-left">
+				<div id="form-container">
+                    <div class="pull-left">
 						<?php echo $this->form->getLabel('automailing_name'); ?>
 						<?php echo $this->form->getInput('automailing_name'); ?>
-					</div>
-
-					<div class="fltrt">
+                    </div>    
+                    <div class="pull-left offset1">
 						<?php echo $this->form->getLabel('automailing_event'); ?>
 						<?php echo $this->form->getInput('automailing_event'); ?>
-					</div>
+                    </div>    
 				</div>	
 				
 				<input type="hidden" id="jf_scope" name="jform[scope]" value="<?php echo  ($this->automailing->automailing_type == "scheduled")? 'targets' : $this->form->getField('scope')->value; ?>">

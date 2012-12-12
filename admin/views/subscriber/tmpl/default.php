@@ -3,47 +3,38 @@
 defined('_JEXEC') or die;
 ?>
 
-<fieldset>
-<legend><?php echo JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER'); ?></legend>
-<form id="subscriber-form" class="form-validate" name="subscriberForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
-    <dl>
-        <dt>
-            <?php echo $this->ssForm->getLabel('name'); ?>
-        </dt>
-        <dd> 
-            <?php echo $this->ssForm->getInput('name'); ?>
-        </dd>
-		<div class="cls"></div>
-        <dt> 
-            <?php echo $this->ssForm->getLabel('email'); ?>
-        </dt>
-        <dd> 
-            <?php echo $this->ssForm->getInput('email'); ?>
-        </dd>
-		<div class="cls"></div>
-        <dt>
-            <?php echo $this->ssForm->getLabel('html'); ?>
-        </dt>
-        <dd>
-            <?php echo $this->ssForm->getInput('html'); ?>
-        </dd>
-    </dl>
+<form id="subscriber-form" class="form-horizontal form-validate" name="subscriberForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
 
+	<div class="control-group">
+		<label class="control-label" for="jform-name"><?php echo $this->ssForm->getLabel('name'); ?></label>
+		<div class="controls">
+			<?php echo $this->ssForm->getInput('name'); ?>
+		</div>
+	</div>
 
+	<div class="control-group">
+		<label class="control-label" for="jform-email"><?php echo $this->ssForm->getLabel('email'); ?></label>
+		<div class="controls">
+			<?php echo $this->ssForm->getInput('email'); ?>
+		</div>
+	</div>
 
-    <div class="buttons-container">
-            <?php echo JToolBar::getInstance('subscriber-toolbar')->render(); ?>
-    </div>
+	<div class="control-group">
+		<label class="control-label" for="jform-html"><?php echo $this->ssForm->getLabel('html'); ?></label>
+		<div class="controls">
+			<?php echo $this->ssForm->getInput('html'); ?>
+		</div>
+	</div>
 
+	<?php echo $this->ssForm->getInput('subscriber_id'); ?>
+	<?php echo $this->ssForm->getInput('confirmed'); ?>
 
-    <div>
-            <?php echo $this->ssForm->getInput('subscriber_id'); ?>
-            <?php echo $this->ssForm->getInput('confirmed'); ?>
-		
-            <input type="hidden" name="subscriber_id" value="<?php echo $this->ssForm->getValue('subscriber_id'); ?>" />
-            <input type="hidden" name="task" value="" />
-            <?php echo JHtml::_('form.token'); ?>
-    </div>
+	<input type="hidden" name="subscriber_id" value="<?php echo $this->ssForm->getValue('subscriber_id'); ?>" />
+	<input type="hidden" name="task" value="" />
+	<?php echo JHtml::_('form.token'); ?>
+
+	<div class="form-actions">
+			<?php echo JToolBar::getInstance('subscriber-toolbar')->render(); ?>
+	</div>
 
 </form>
-</fieldset>	
