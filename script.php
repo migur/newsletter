@@ -224,6 +224,7 @@ class com_newsletterInstallerScript
 			$this->_syncExtensions();
 			
 			$this->_enableJplugin('migurlistsync', 'system');
+			$this->_enableJplugin('miguruserreg', 'system');
 			
             /* Redirect after installation. Make sure the component was installed the last if
                there is package */
