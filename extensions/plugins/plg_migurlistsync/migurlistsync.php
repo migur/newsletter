@@ -57,8 +57,8 @@ class plgSystemMigurlistsync extends JPlugin
 			DIRECTORY_SEPARATOR . 'com_newsletter' . 
 			DIRECTORY_SEPARATOR . 'bootstrap.php';
 		
-		MigurComNewsletterBootstrap::initEnvironment();
 		MigurComNewsletterBootstrap::initAutoloading();
+		MigurComNewsletterBootstrap::initEnvironment();
 		
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_user_migurlistsync', JPATH_ADMINISTRATOR, null, false, false);
