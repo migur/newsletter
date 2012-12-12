@@ -9,7 +9,7 @@
 function jInsertFieldValue(value, id) {
 
     new Request.JSON({
-        url: '?option=com_newsletter&task=file.fileinfo&format=json',
+        url: '?option=com_newsletter&task=file.fileinfo',
         data: {
             filename: migurSiteRoot + value
         },
@@ -63,7 +63,7 @@ try {
 
 			delete tplTransport;
 			tplTransport = new Request.JSON({
-				url: '?option=com_newsletter&task=template.getparsed&shownames=1',
+				url: '?option=com_newsletter&task=template.getparsed&shownames=1&format=html',
 				data: {
 					t_style_id: id,
 					tagsRenderMode: 'schematic',

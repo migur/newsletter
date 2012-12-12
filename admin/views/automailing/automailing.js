@@ -17,6 +17,22 @@ try {
 		}	
 	}
 	
+    var glasses = $$('.automailingslist .search')
+
+    // Add AJAX preview functionality to glasses
+    glasses.addEvent('click', function(){
+
+        var id = $('preview-container').getProperty(
+            'src', 
+            '?option=com_newsletter&layout=details&view=automailing&tmpl=component&automailing_id='+id
+        );
+
+        return false;
+    });
+
+
+    glasses[0].fireEvent('click');
+
 
 	$$('.item .close').addEvent('click', function(ev){
 		

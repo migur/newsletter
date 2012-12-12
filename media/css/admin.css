@@ -11,6 +11,10 @@ iframe {
 	border: 0;
 }
 
+.modal-body iframe {
+    width: 100%;
+}
+
 div.toolbar-list li a span {
     margin-bottom: 3px;
 }
@@ -413,4 +417,18 @@ textarea.invalid {
 
 .column-narrow {
 	min-width: 50px;
+}
+
+#sbox-window {
+	padding: 15px !important;
+}
+
+body.component {
+	padding: 0px;
+	height: auto;
+}
+
+.form-inline label, 
+.form-horizontal .control-group > label {
+    float: left;
 }

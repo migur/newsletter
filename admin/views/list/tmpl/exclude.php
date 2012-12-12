@@ -1,26 +1,13 @@
-<div id="exclude-toolbar" class="toolbar-list">
-    <ul>
-        <li id="exclude-toolbar-lists" class="button">
-            <a href="#">
-                <span class="icon-32-remove">
-                </span>
-                Exclude from lists
-            </a>
-        </li>
+<div id="exclude-toolbar">
+	
+	<button id="exclude-toolbar-lists" class="btn btn-large">
+		<?php echo JText::_('COM_NEWSLETTER_EXCLUDE_FROM_LISTS'); ?>
+	</button>
 
-        <li id="exclude-toolbar-file" class="button">
-            <a href="#">
-                <span class="icon-32-remove">
-                </span>
-                Exclude from CSV
-            </a>
-        </li>
-
-    </ul>
-    <div class="clr"></div>
+	<button id="exclude-toolbar-file" class="btn btn-large">
+		<?php echo JText::_('COM_NEWSLETTER_EXCLUDE_FROM_CSV'); ?>
+	</button>
 </div>
-
-<div class="clr"></div>
 
 <div id="exclude-lists" class="hide">
     <div id="exclude-tab-scroller">
@@ -69,114 +56,139 @@
         </table>
     </div>
 
-    <input id="exclude-tab-button" type="button" value="<?php echo JText::_('COM_NEWSLETTER_EXCLUDE'); ?>">
+    <input id="exclude-tab-button" class="btn btn-danger" type="button" value="<?php echo JText::_('COM_NEWSLETTER_EXCLUDE'); ?>">
 
 </div>
 
 <div id="exclude-file" class="file-form hide">
-    <div id="exclude-file-upload">
-        <fieldset id="exclude-uploadform">
-                <legend><?php echo $this->config->get('upload_maxsize')=='0' ? JText::_('COM_MEDIA_UPLOAD_FILES_NOLIMIT') : JText::sprintf('COM_MEDIA_UPLOAD_FILES', $this->config->get('upload_maxsize')); ?></legend>
-                <fieldset class="upload-noflash" class="actions">
-                        <input type="file" id="exclude-upload-file" name="Filedata-exclude" size="70"/>
-                        <input type="submit" id="exclude-upload-submit" value="<?php echo JText::_('COM_MEDIA_START_UPLOAD'); ?>"/>
-                        <ul class="upload-queue" id="upload-queue">
-                            <li></li>
-                        </ul>
-                </fieldset>
 
-                <input type="hidden" name="return-url" value="<?php echo base64_encode('index.php?option=com_media'); ?>" />
-                <input type="hidden" name="format" value="html" />
-        </fieldset>
-    </div>
-
-    <fieldset id="exclude-founded-fields" class="drop">
-        <legend><?php echo JText::_('COM_NEWSLETTER_IMPORT_FOUNDED_FIELDS'); ?></legend>
+	<iframe 
+		id="exclude-uploader" 
+		src="<?php echo JRoute::_("index.php?option=com_newsletter&tmpl=component&view=uploader&params[task]=list.upload&params[callback]=MigurExcludeUploadCallback&params[list_id]=". $this->listForm->getValue('list_id'), false); ?>">
+	</iframe>
+	
+    <fieldset id="exclude-found-fields" class="drop">
+        <legend>
+			<span><?php echo JText::_('COM_NEWSLETTER_EXCLUDE_FOUNDED_FIELDS'); ?></span>
+			<input
+				class="btn btn-info"
+				type="button"
+				name="newsletter_exclude_refresh"
+				onclick=""
+				id="exclude-file-refresh"
+				value="<?php  echo JText::_('COM_NEWSLETTER_EXCLUDE_FILE_REFRESH'); ?>"
+			/>
+		</legend>
     </fieldset>
 
     <fieldset id="exclude-fields">
-        <legend><?php echo JText::_('COM_NEWSLETTER_IMPORT_DND_FIELDS'); ?></legend>
-            <div class="drop pull-left" rel="username"></div>
-			<div class="pull-left"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD') ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('COM_NEWSLETTER_SUBSCRIBER_NAME'); ?></div>
-            <div class="clr"></div>
-            <div class="drop pull-left" rel="email"></div>
-			<div class="pull-left"><?php echo JText::_('COM_NEWSLETTER_USE_FIELD'); ?><br/><?php echo JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('JGLOBAL_EMAIL'); ?></div>
+        <legend><?php echo JText::_('COM_NEWSLETTER_EXCLUDE_DND_FIELDS'); ?></legend>
+		<div><?php echo JText::_('COM_NEWSLETTER_USE_FIELD') . JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('COM_NEWSLETTER_SUBSCRIBER_NAME'); ?></div>
+		<div class="drop" rel="username"></div>
+		<div><?php echo JText::_('COM_NEWSLETTER_USE_FIELD') . JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('JGLOBAL_EMAIL'); ?></div>
+		<div class="drop" rel="email"></div>
     </fieldset>
 
-    <fieldset id="exclude-settings">
-        <legend><?php echo JText::_('COM_NEWSLETTER_IMPORT_SETTINGS'); ?></legend>
-        <div style="margin: 5px 15px;">
-            <?php  echo JText::_('COM_NEWSLETTER_IMPORT_SELECT_DELIMITER'); ?>
-            <div id="exclude-del-cont">
-                <select name="exclude_delimiter" id ="exclude-delimiter">
-                    <option value=",">,<option>
-                    <option value=";">;<option>
-                    <option value="tab">tab<option>
-                    <option value="space">space<option>
-                </select>
-                <input id="exclude-delimiter-custom" name="exclude_delimiter_custom" value="" class="hide">
-            </div>
+	
+	<fieldset id="exclude-settings">
+		<legend><?php echo JText::_('COM_NEWSLETTER_EXCLUDE_SETTINGS'); ?></legend>
 
-            <input
-                type="button"
-                name="exclude_del_toggle_button"
-                onclick=""
-                id="exclude-del-toggle-button"
-                value="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_DEL_CUSTOM'); ?>"
-                rel="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_DEL_SELECT'); ?>"
-            />
+		<div class="control-group">
+			<label class="control-label">
+				<?php  echo JText::_('COM_NEWSLETTER_EXCLUDE_SELECT_DELIMITER'); ?>
+			</label>
+			<div class="controls" id="exclude-del-cont">
+				<select name="exclude_delimiter" id="exclude-delimiter" class="input-small">
+					<option value=",">,</option>
+					<option value=";">;</option>
+					<option value="tab">tab</option>
+					<option value="space">space</option>
+				</select>
 
-            <div class="clr"></div>
+				<input 
+					type="text"
+					id="exclude-delimiter-custom" 
+					name="exclude_delimiter_custom" 
+					value="" 
+					class="inputbox hide input-small"
+				/>
 
-            <?php  echo JText::_('COM_NEWSLETTER_IMPORT_SELECT_ENCLOSURE'); ?>
-            <div>
-                <select id="exclude-enclosure" name="exclude_enclosure">
-                    <option value="no">no<option>
-                    <option value="'">'<option>
-                    <option value='"'>"<option>
-                    <option value="`">`<option>
-                    <option value="#">#<option>
-                </select>
-                <input id="exclude-enclosure-custom" name="exclude_enclosure_custom" value="" class="hide">
-            </div>
-
-            <input
-                type="button"
-                name="exclude_enc_toggle_button"
-                onclick=""
-                id="exclude-enc-toggle-button"
-                value="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_ENC_CUSTOM'); ?>"
-                rel="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_ENC_SELECT'); ?>"
-            />
-
-            <div class="clr"></div>
-			
-			<div style="margin-top:10px; overflow:hidden">
-				<input type="checkbox" id="exclude-skip-header" name="exclude_skip_header" value="yes">
-				<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
-					<?php echo JHtml::_('migurhelp.link', 'list', 'exclude'); ?>
-				</div>
+				<input
+					type="button"
+					name="exclude_del_toggle_button"
+					onclick=""
+					id="exclude-del-toggle-button"
+					value="<?php  echo JText::_('COM_NEWSLETTER_EXCLUDE_DEL_CUSTOM'); ?>"
+					rel="<?php  echo JText::_('COM_NEWSLETTER_EXCLUDE_DEL_SELECT'); ?>"
+					class="btn btn-info"
+				/>
 			</div>
-        </div>
-    </fieldset>
+		</div>	
+
+		<div class="control-group">
+			<label class="control-label">
+				<?php  echo JText::_('COM_NEWSLETTER_EXCLUDE_SELECT_ENCLOSURE'); ?>
+			</label>
+			<div class="controls">
+				<select id="exclude-enclosure" name="exclude_enclosure" class="input-small">
+					<option value="no">no</option>
+					<option value="'">'</option>
+					<option value='"'>"</option>
+					<option value="`">`</option>
+					<option value="#">#</option>
+				</select>
+
+				<input 
+					type="text" 
+					id="exclude-enclosure-custom" 
+					name="exclude_enclosure_custom" 
+					value="" 
+					class="inputbox hide input-small"
+				/>
+
+				<input
+					type="button"
+					name="exclude_enc_toggle_button"
+					onclick=""
+					id="exclude-enc-toggle-button"
+					value="<?php  echo JText::_('COM_NEWSLETTER_EXCLUDE_ENC_CUSTOM'); ?>"
+					rel="<?php  echo JText::_('COM_NEWSLETTER_EXCLUDE_ENC_SELECT'); ?>"
+					class="btn btn-info"
+				/>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox">
+					<input type="checkbox" id="exclude-skip-header" name="exclude_skip_header" />
+					<span>
+						<?php echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
+						<?php echo JHtml::_('migurhelp.link', 'list', 'exclude'); ?>
+					</span>
+				</label>
+			</div>	
+		</div>
+
+	</fieldset>
 
 
-    <input
-        type="button"
-        name="newsletter_exclude_refresh"
-        onclick=""
-        id="exclude-file-refresh"
-        value="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_FILE_REFRESH'); ?>"
-    />
+	<div class="pull-right">
 
+		<input
+			class="btn btn-success btn-large pull-right"
+			type="button"
+			name="newsletter_upload"
+			onclick=""
+			id="exclude-file-apply"
+			value="<?php  echo JText::_('COM_NEWSLETTER_EXCLUDE_FILE_APPLY'); ?>"
+		/>
 
-    <input
-        type="button"
-        name="newsletter_upload"
-        onclick=""
-        id="exclude-file-apply"
-        value="<?php  echo JText::_('COM_NEWSLETTER_EXCLUDE_FILE_APPLY'); ?>"
-    />
+		<div class="pull-right">
+			<span id="exclude-message"></span>&nbsp;&nbsp;&nbsp;
+			<div id="exclude-preloader" class="fltrt"></div>
+		</div>
 
-
+	</div>	
+	
 </div>

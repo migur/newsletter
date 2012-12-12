@@ -61,14 +61,13 @@ window.addEvent('domready',
 			});
 		});
 
-
 		// Add AJAX preview functionality to glasses
 		glasses.addEvent('click', function(){
 
 			var id = $(this).getParent('tr').getElements('[name=cid[]]')[0].get('value');
 
 			new Request.JSON({
-				url: '?option=com_newsletter&task=template.getparsed&shownames=1',
+				url: '?option=com_newsletter&task=template.getparsed&shownames=1&format=html',
 				data: {
 					t_style_id: id,
 					tagsRenderMode: 'schematic',

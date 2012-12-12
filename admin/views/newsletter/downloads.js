@@ -25,7 +25,7 @@ try {
 		var id = el.getProperty('rel')
 
 		new Request.JSON({
-			url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=newsletter.fileunbind',
+			url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=newsletter.fileunbind&format=html',
 			data: {
 				download_id: id
 			},
@@ -51,7 +51,7 @@ try {
             if (event.id == 'fileattach') {
 
                 new Request.JSON({
-                    url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=newsletter.fileattach',
+                    url: migurSiteRoot + 'administrator/index.php?option=com_newsletter&task=newsletter.fileattach&format=html',
                     data: {
                         filename: event.value,
                         newsletter_id: $$('[name="newsletter_id"]')[0].getProperty('value')

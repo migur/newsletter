@@ -95,8 +95,7 @@ class NewsletterControllerSender extends JControllerForm
 
 			// Let's Speeeeeed up this script!
 			$transactionItemsCount = 0;
-			$dbo->setQuery('SET AUTOCOMMIT=0;');
-			$dbo->query();
+			$dbo->transactionStart();
 
 			foreach ($subs as $item) {
 
@@ -128,8 +127,8 @@ class NewsletterControllerSender extends JControllerForm
 				$transactionItemsCount++;
 
 				if ($transactionItemsCount > 500) {
-					$dbo->setQuery('COMMIT;');
-					$dbo->query();
+					
+					$dbo->transactionCommit();
 					$transactionItemsCount = 0;
 				}
 
@@ -137,11 +136,7 @@ class NewsletterControllerSender extends JControllerForm
 			}
 
 			// Commit it all!
-			$dbo->setQuery('COMMIT;');
-			$dbo->query();
-
-			$dbo->setQuery('SET AUTOCOMMIT=0;');
-			$dbo->query();
+			$dbo->transactionCommit();
 		}
 
 		// Store offsets and stats

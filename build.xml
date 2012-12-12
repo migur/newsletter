@@ -65,9 +65,15 @@
 		</antcall>
 
 		<antcall target="_up_plugin">
-			<param name="destdir" value="${cfg.localhostRoot3}"/>
-			<param name="group_name" value="system"/>
+			<param name="destdir" value="${cfg.localhostRoot}"/>
 			<param name="ext_name" value="migurlistsync"/>
+			<param name="group_name" value="system"/>
+		</antcall>
+
+		<antcall target="_up_plugin">
+			<param name="destdir" value="${cfg.localhostRoot}"/>
+			<param name="ext_name" value="miguruserreg"/>
+			<param name="group_name" value="system"/>
 		</antcall>
 	</target>
 
@@ -202,6 +208,13 @@
         </copy>
         <zip destfile="${cfg.buildVersionDir}/packages/plg_migurlistsync.zip" basedir="${cfg.buildVersionDir}/packages/plg_migurlistsync" />
         <delete dir="${cfg.buildVersionDir}/packages/plg_migurlistsync" />
+
+<!-- Plugin -->
+        <copy todir="${cfg.buildVersionDir}/packages/plg_miguruserreg" preservelastmodified="true" overwrite="true">
+            <fileset dir="${basedir}/extensions/plugins/plg_miguruserreg" />
+        </copy>
+        <zip destfile="${cfg.buildVersionDir}/packages/plg_miguruserreg.zip" basedir="${cfg.buildVersionDir}/packages/plg_miguruserreg" />
+        <delete dir="${cfg.buildVersionDir}/packages/plg_miguruserreg" />
 
 <!-- Last preparations -->
         <copy todir="${cfg.buildVersionDir}" preservelastmodified="true" overwrite="true">

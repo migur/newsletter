@@ -3,10 +3,7 @@
 defined('_JEXEC') or die;
 ?>
 
-<table class="nl-automailings" style="width:100%">
-    <tr>
-        <td width="45%" style="vertical-align: top;">
-
+<div id="automailing-list">
             <form id="form-automailings" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=automailings&form=automailings');?>" method="post" name="automailingsForm" >
                 <fieldset>
                 <legend><?php echo JText::_('COM_NEWSLETTER_AUTOMAILINGS'); ?></legend>
@@ -61,9 +58,7 @@ defined('_JEXEC') or die;
 										?>
 									</td>
 									<td>
-										<a href="<?php echo JRoute::_('index.php?option=com_newsletter&task=automailing.edit&tmpl=component&automailing_id='.(int) $item->automailing_id); ?>"
-										   rel="{handler: 'iframe', size: {x: 820, y: 480} }"
-										   class="modal" >
+										<a href="<?php echo JRoute::_('index.php?option=com_newsletter&task=automailing.edit&automailing_id='.(int) $item->automailing_id); ?>">
 											<?php echo $this->escape($item->automailing_name); ?>
 										</a>
 
@@ -83,24 +78,20 @@ defined('_JEXEC') or die;
                         </div>
                 </fieldset>
             </form>
-        </td>
+</div>
 
-        <td width="1%"></td>
-
-        <td style="vertical-align: top;">
+<div id="automailing-details">
 			
-			<ul class="nav nav-tabs">
-				<li class="active"><a data-toggle="tab" href="#details">JText::_('COM_NEWSLETTER_PREVIEW')</a></li>
-			</ul>
-			<div class="tab-content">
-				<div id="details" class="tab-pane active">
-	                <iframe id="preview-container"></iframe>
-				</div>	
-			</div>
-<!-- 2.5            <?php echo JHtml::_('tabs.start', 'prewiew'); ?>
-            <?php echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PREVIEW'), 'tab-preview'); ?>
-                <iframe id="preview-container"></iframe>
-            <?php echo JHtml::_('tabs.end'); ?> -->
-        </td>
-    </tr>
-</table>
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a data-toggle="tab" href="#details"><?php echo JText::_('COM_NEWSLETTER_PREVIEW'); ?></a>
+        </li>
+    </ul>
+    
+    <div class="tab-content">
+        <div id="details" class="tab-pane active">
+            <iframe id="preview-container"></iframe>
+        </div>	
+    </div>
+    
+</div>

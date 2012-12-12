@@ -119,12 +119,11 @@ class NewsletterModelList extends JModelAdmin
 
 		$errorOnFail = isset($options['errorOnFail']) ? (bool) $options['errorOnFail'] : false;
 
-		// Let's Speeeeeed up this script in at least 50 times!
 		$db = JFactory::getDbo();
+		
+		$db->transactionStart();
 		$transactionItemsCount = 0;
-		$db->setQuery('SET AUTOCOMMIT=0;');
-		$db->query();
-
+		
 		foreach ($collection as $row) {
 
 			foreach ($row as &$value) {
@@ -227,22 +226,18 @@ class NewsletterModelList extends JModelAdmin
 			}
 
 			// Handle the transaction
-			// Commit each 100 items
+			// Commit each 500 items
 			$transactionItemsCount++;
 
 			if ($transactionItemsCount > 500) {
-				$db->setQuery('COMMIT;');
-				$db->query();
+
+				$db->transactionStart();
 				$transactionItemsCount = 0;
 			}
 		}
-
+		
 		// Commit it all!
-		$db->setQuery('COMMIT;');
-		$db->query();
-
-		$db->setQuery('SET AUTOCOMMIT=0;');
-		$db->query();
+		$db->transactionCommit();
 
 		return array(
 			'errors' => $errors,
@@ -421,7 +416,7 @@ class NewsletterModelList extends JModelAdmin
 			"UPDATE #__newsletter_sub_list set confirmed=1 WHERE " .
 			" subscriber_id=" . $db->quote($sid) .
 			" AND list_id=" . $db->quote($lid));
-		return $db->query();
+		return $db->execute();
 	}
 
 	/**
@@ -481,7 +476,7 @@ class NewsletterModelList extends JModelAdmin
 			' AND `list_id` = ' . (int) $lid
 		);
 
-		return $dbo->query();
+		return $dbo->execute();
 	}
 
 	public function isConfirmed($lid, $sid)

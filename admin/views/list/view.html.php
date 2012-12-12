@@ -161,32 +161,32 @@ class NewsletterViewList extends MigurView
 		$lang = JFactory::getLanguage();
 		$append = '';
 
-		if ($config->get('enable_flash', 1)) {
-
-			JHTML::stylesheet('media/com_newsletter/css/uploaders.css');
-			JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/list/uploaders.js");
-
-
-			$fileTypes = $config->get('image_extensions', 'bmp,gif,jpg,png,jpeg');
-			$types = explode(',', $fileTypes);
-			$displayTypes = '';  // this is what the user sees
-			$filterTypes = '';  // this is what controls the logic
-			$firstType = true;
-
-			foreach ($types AS $type) {
-				if (!$firstType) {
-					$displayTypes .= ', ';
-					$filterTypes .= '; ';
-				} else {
-					$firstType = false;
-				}
-
-				$displayTypes .= '*.' . $type;
-				$filterTypes .= '*.' . $type;
-			}
-
-			$typeString = '{ \'' . JText::_('COM_MEDIA_FILES', 'true') . ' (' . $displayTypes . ')\': \'' . $filterTypes . '\' }';
-		}
+//		if ($config->get('enable_flash', 1)) {
+//
+//			JHTML::stylesheet('media/com_newsletter/css/uploaders.css');
+//			JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/list/uploaders.js");
+//
+//
+//			$fileTypes = $config->get('image_extensions', 'bmp,gif,jpg,png,jpeg');
+//			$types = explode(',', $fileTypes);
+//			$displayTypes = '';  // this is what the user sees
+//			$filterTypes = '';  // this is what controls the logic
+//			$firstType = true;
+//
+//			foreach ($types AS $type) {
+//				if (!$firstType) {
+//					$displayTypes .= ', ';
+//					$filterTypes .= '; ';
+//				} else {
+//					$firstType = false;
+//				}
+//
+//				$displayTypes .= '*.' . $type;
+//				$filterTypes .= '*.' . $type;
+//			}
+//
+//			$typeString = '{ \'' . JText::_('COM_MEDIA_FILES', 'true') . ' (' . $displayTypes . ')\': \'' . $filterTypes . '\' }';
+//		}
 
 		
 		if(!empty($listId)) {
@@ -237,7 +237,7 @@ class NewsletterViewList extends MigurView
 		$lid = JRequest::getInt('list_id', false);
 		$isNew = !$lid;
 		
-		$bar = JToolBar::getInstance('multitab-toolbar');
+		$bar = JToolBar::getInstance();
 		if (
 			( $isNew && AclHelper::actionIsAllowed('list.add')) || 
 			(!$isNew && AclHelper::actionIsAllowed('list.edit'))
@@ -245,10 +245,7 @@ class NewsletterViewList extends MigurView
 			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'list.apply', false);
 			$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'list.save', false);
 		}	
-		$bar->appendButton('Link', 'cancel', 'JTOOLBAR_CLOSE', 'index.php?option=com_newsletter&view=close&tmpl=component', false);
-
-		$bar = MigurToolBar::getInstance('import-toolbar');
-		$bar->appendButton('Link', 'export', 'COM_NEWSLETTER_IMPORT_FROM_FILE', '#');
+		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CLOSE', 'list.cancel', false);
 	}
 
 	/**
@@ -266,25 +263,22 @@ class NewsletterViewList extends MigurView
 
 		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
 		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/list.css');
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/uploaders.css');
 
 		$document->addScript(JURI::root() . $this->script);
 		
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
-		$document->addScript(JURI::root() . 'media/system/js/tabs.js');
 
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-min.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.raphael-min.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.line-min.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.pie-min.js');
 		
-		$document->addScript(JURI::root() . "media/system/js/progressbar.js");
-		$document->addScript(JURI::root() . "media/system/js/swf.js");
-		$document->addScript(JURI::root() . 'media/system/js/uploader.js');
+		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/importer.js");
+		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/excluder.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/list.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/submitbutton.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/plugins.js");
-		//$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/eventwidget.js");
+		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/eventwidget.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/models/forms/list.js", true);
 
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/storage.js');
@@ -295,7 +289,6 @@ class NewsletterViewList extends MigurView
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.bar.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-line.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-pie.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/message.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/iterativeajax.js');
 		// Add JS and create namespace for data
 		$document->addScript(JURI::root() . "media/com_newsletter/js/migur/js/support.js");

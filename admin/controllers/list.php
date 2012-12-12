@@ -86,36 +86,6 @@ class NewsletterControllerList extends JControllerForm
 		return false;
 	}
 
-	/**
-	 * Gets the URL arguments to append to an item redirect.
-	 *
-	 * @param	int		$recordId	The primary key id for the item.
-	 * @param	string	$urlVar		The name of the URL variable for the id.
-	 *
-	 * @return	string	The arguments to append to the redirect URL.
-	 * @since	1.0
-	 */
-	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
-	{
-		$tmpl = JRequest::getCmd('tmpl', 'component');
-		$layout = JRequest::getCmd('layout');
-		$append = '';
-
-		// Setup redirect info.
-		if ($tmpl) {
-			$append .= '&tmpl=' . $tmpl;
-		}
-
-		if ($layout) {
-			$append .= '&layout=' . $layout;
-		}
-
-		if ($recordId) {
-			$append .= '&' . $urlVar . '=' . $recordId;
-		}
-
-		return $append;
-	}
 
 	/**
 	 * Is used for standard upload of file.
@@ -124,36 +94,57 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function upload()
 	{
-
-		$listId = JRequest::getInt('list_id', 0);
-		$subtask = JRequest::getString('subtask', 'import');
-
-		if ($listId > 0) {
-
-			$uploader = MigurModel::getInstance('file', 'NewsletterModel');
-			$data = $uploader->upload(array(
-					'overwrite' => true,
-					'filedataName' => 'Filedata-' . $subtask
-				));
-
-			if (!empty($data['file'])) {
-
-				// get the column names from uploaded file
-				$arr = file($data['file']['filepath']);
-
-				$data['fields'] = explode(',', $arr[0]);
-			}
+		$listId = JRequest::getInt('list_id', null);
+		$callback = JRequest::getString('callback', '');
+		
+		if (empty($listId)) {
+			throw new Exception (JText::_('COM_NEWSLETTER_LIST_ID_ABSENT'));
 		}
 
-		if (empty($data)) {
-			$data = array();
-		}
+		$app = JFactory::getApplication();
+		
+		$uploader = MigurModel::getInstance('file', 'NewsletterModel');
+		$data = $uploader->upload(array(
+			'overwrite' => true,
+			'filedataName' => 'Filedata'
+		));
+
+		$msg = $data['error'];
 
 		$sess = JFactory::getSession();
-		$sess->set('list.' . $listId . '.file.uploaded', $data);
-
 		
-		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($listId, 'list_id') . '&subtask=' . $subtask, false));
+		if ($data['status'] == 1 && !empty($data['file'])) {
+
+			$data = array(
+				'status'   => $data['status'],
+				'error'    => $data['error'],
+				'file' => array(
+					'name'     => $data['file']['name'],
+					'type'     => $data['file']['type'],
+					'tmp_name' => $data['file']['tmp_name'],
+					'size'     => $data['file']['size'],
+					'error'    => $data['file']['error'],
+					'filepath' => $data['file']['filepath']
+				)	
+			);
+
+			// These data are for further manipulations with file
+			$sess->set('com_newsletter.list.'.$listId.'.file.uploaded', $data);
+		}	
+
+		// These data will be passed into JS importer onUpload
+		$sess->set('com_newsletter.uploader.file', $data);
+		
+		$this->setRedirect(JRoute::_('index.php?'.implode('&', array(
+			'option=com_newsletter',
+			'view=uploader',
+			'tmpl=component',
+			'params[task]=list.upload',
+			'params[callback]='.$callback,
+			'params[list_id]='.$listId,
+			'message='.$msg
+		)), false));
+		
 		return;
 	}
 
@@ -299,67 +290,6 @@ class NewsletterControllerList extends JControllerForm
 	}
     
     
-    public function importPluginTrigger()
-    {
-        $pGroup = 'list';
-        $pName = JRequest::getString('pluginname', null);
-		$pEvent = JRequest::getString('pluginevent', null);
-
-        JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR, '');
-
-        $manager = NewsletterPluginManager::factory('import');
-
-        // Trigger event for plugin
-        $context = $this->option.'.edit.'.$this->context;
-        $listId = JRequest::getInt('list_id'); 
-        $res = $manager->trigger(
-            array(
-                'name'  => $pName,
-                'group' => $pGroup,
-                'event' => $pEvent),
-            array(
-                $listId,
-                (array) JRequest::getVar('jform')
-        ));
-
-        // In this case we trigger only one plugin then his data is in first element
-        $res = $res[0];
-        
-        
-        // Get VIEW.....
-        // Set layout for event
-        $pEvent = str_replace('onMigurImport', '', $manager->pluginEvent);
-        
-		JRequest::setVar('view', 'list');
-		JRequest::setVar('layout', $pEvent);
-        
-		$view = $this->getView(
-            'list', 'html', '', 
-            array(
-                'base_path' => $this->basePath, 
-                'layout' => 'import_plugin-'.strtolower($pEvent)
-        ));
-
-        // Get all view need...
-        $plg = $manager->getPlugin($pName, $pGroup);
-        $plugin = new stdClass();
-        $plugin->data = (array) $res;
-        $plugin->name = (string) $pName;
-        $plugin->group = (string) $pGroup;
-        $plugin->title = $plg->getTitle();
-        
-        // Complement data
-        $plugin->description = empty($res->description)? $plg->getDescription() : $res['description'];
-        
-        // Set all view need...
-        $view->assignRef('plugin', $plugin);
-        $view->assign('listId', $listId);
-        
-        return $this->display();
-    }
-	
-	
-	
 	/**
 	 * Retrieves only first row(names of columns) of the list
 	 * @since 1.0
@@ -368,17 +298,15 @@ class NewsletterControllerList extends JControllerForm
 	public function gethead()
 	{
 		NewsletterHelper::jsonPrepare();
-		
-		$listId = JRequest::getInt('list_id', 0);
 
+		$data = (array) json_decode(JRequest::getVar('jsondata', '{}'));
+		
 		if (!$settings = $this->_getSettings()) {
 			return;
 		}
 
-		$sess = JFactory::getSession();
-		$data = $sess->get('list.' . $listId . '.file.uploaded', array());
-		if (!empty($data['file']['filepath'])) {
-			if (($handle = fopen($data['file']['filepath'], "r")) !== FALSE) {
+		if (!empty($data['file'])) {
+			if (($handle = fopen($data['file'], "r")) !== FALSE) {
 				$data['fields'] = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
 			} else {
 				NewsletterHelper::jsonError('Cannot open file', $data);
@@ -419,11 +347,18 @@ class NewsletterControllerList extends JControllerForm
 		$mapping = $settings->fields;
 
 		$sess = JFactory::getSession();
-		$file = $sess->get('list.' . $currentList . '.file.uploaded', array());
-
-		$filename = $file['file']['filepath'];
-		$statePath = 'com_newsletter.list.'.$currentList.'import.file.'.$filename;
 		
+		sl_vd($sess->get('registry'));
+		
+		$file = $sess->get('com_newsletter.list.' . $currentList . '.file.uploaded', array());
+
+		
+		$filepath = $file['file']['filepath'];
+		
+		$statePath = 'com_newsletter.list-'.$currentList.'.import.'.md5($filepath);
+
+		//$app->setUserState($statePath.'.trololo101', 'facepalm');
+
 		// If there is no extarnal offset then use internal from session
 		if (!is_numeric($offset)) {
 			$offset = $app->getUserState($statePath.'.offset', 0);
@@ -446,10 +381,10 @@ class NewsletterControllerList extends JControllerForm
 		$added	  = $app->getUserState($statePath.'.added', 0);
 		$updated  =	$app->getUserState($statePath.'.updated', 0);
 		$assigned =	$app->getUserState($statePath.'.assigned', 0);
-		
+
 		
 		// Try to open file
-		if (($handle = fopen($filename, "r")) === FALSE) {
+		if (($handle = fopen($filepath, "r")) === FALSE) {
 			NewsletterHelper::jsonError('Cannot open file');
 		}
 
@@ -488,11 +423,12 @@ class NewsletterControllerList extends JControllerForm
 
 			$total++;
 		}
-		
+
 		// Store seek for further requests and close file
 		$app->setUserState($statePath.'.seek', ftell($handle));
-		fclose($handle);
 
+		
+		
 		// Let's import it all!
 		$list = MigurModel::getInstance('List', 'NewsletterModel');
 		$res = $list->importCollection(
@@ -503,7 +439,7 @@ class NewsletterControllerList extends JControllerForm
 				'autoconfirm' => true,
 				'sendRegmail' => false
 			));
-
+		
 		if (!empty($res['errors'])) {
 			NewsletterHelper::jsonError('Import failed!', array(
 				'fetched'   => $total,
@@ -545,8 +481,8 @@ class NewsletterControllerList extends JControllerForm
 		$app->setUserState($statePath.'.updated', 0);
 		$app->setUserState($statePath.'.assigned', 0);
 
-		unlink($file['file']['filepath']);
-		$sess->clear('list.' . $currentList . '.file.uploaded');
+		//unlink($file['file']['filepath']);
+		//$sess->clear('com_newsletter.list.' . $currentList . '.file.uploaded');
 
 		NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL'), array(
 			'fetched'   => $total,
@@ -623,7 +559,7 @@ class NewsletterControllerList extends JControllerForm
 			$mapping = $settings->fields;
 
 			$sess = JFactory::getSession();
-			$file = $sess->get('list.' . $currentList . '.file.uploaded', array());
+			$file = $sess->get('com_newsletter.list.' . $currentList . '.file.uploaded', array());
 
 
 			
@@ -660,7 +596,6 @@ class NewsletterControllerList extends JControllerForm
 								'absent' => $absent,
 								'total' => $total
 							));
-							return;
 						} else {
 							$processed++;
 						}
@@ -670,14 +605,13 @@ class NewsletterControllerList extends JControllerForm
 				}
 
 				unlink($file['file']['filepath']);
-				$sess->clear('list.' . $currentList . '.file.uploaded');
+				$sess->clear('com_newsletter.list.' . $currentList . '.file.uploaded');
 
 				NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), array(
 					'processed' => $processed,
 					'absent' => $absent,
 					'total' => $total
 				));
-				return;
 			}
 		}
 	}
