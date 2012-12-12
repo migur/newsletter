@@ -65,7 +65,7 @@ class plgSystemMigurlistsync extends JPlugin
 
 		JLoader::import('helpers.plugin', COM_NEWSLETTER_PATH_ADMIN);
 		JLoader::import('models.automailing.manager', COM_NEWSLETTER_PATH_ADMIN);
-		MigurPluginHelper::prepare();
+		NewsletterHelperPlugin::prepare();
 	}
 
 
