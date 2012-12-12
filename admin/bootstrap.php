@@ -9,7 +9,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-class MigurComNewsletterBootstrap 
+class MigurComNewsletterBootstrap
 {
 	
 	/**
@@ -78,5 +78,28 @@ class MigurComNewsletterBootstrap
 		JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'tables');
 		MigurModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models', 'NewsletterModel');
 		MigurModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'entities', 'NewsletterModelEntity');
+	}
+
+
+
+	/**
+	 * Setup J! tools for usage with component's addons
+	 */
+	static public function initJoomlaToolsSite() 
+	{
+		// Add the paths to component's addons for J! tools.
+		JHtml::addIncludePath(
+			COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'html');
+
+//		JToolbar::getInstance()->addButtonPath(
+//			COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
+
+//		JToolbar::addGlobalButtonPath(
+//			COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
+
+		JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'rules');
+		JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'tables');
+		JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models', 'NewsletterModel');
+		JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'entities', 'NewsletterModelEntity');
 	}
 }
