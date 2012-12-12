@@ -21,20 +21,20 @@ require_once JPATH_ROOT
 	.DIRECTORY_SEPARATOR.'com_newsletter'
 	.DIRECTORY_SEPARATOR.'bootstrap.php';
 
+// Run autoloader
+MigurComNewsletterBootstrap::initAutoloading();
+
 try {
 
+	// Setub toolbar, forms and so on...
+	MigurComNewsletterBootstrap::initJoomlaToolsSite();	
+	
 	// Constants, required J! files, so on...
 	MigurComNewsletterBootstrap::initEnvironment();
-
-	// Run autoloader
-	MigurComNewsletterBootstrap::initAutoloading();
 
 	// Setup the cache
 	MigurComNewsletterBootstrap::initCache();
 
-	// Setub toolbar, forms and so on...
-	MigurComNewsletterBootstrap::initJoomlaTools();	
-	
 	// Get an instance of the controller prefixed by Newsletter
 	$controller = MigurController::getInstance('Newsletter');
 
@@ -57,7 +57,7 @@ try {
 	// Add translations used in JavaScript
 	JavascriptHelper::requireTranslations();
 
-	MigurPluginHelper::prepare();
+	NewsletterHelperPlugin::prepare();
 
 	$app = JFactory::getApplication();
 	$app->triggerEvent('onMigurStart');

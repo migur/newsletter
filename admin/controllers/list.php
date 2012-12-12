@@ -290,67 +290,6 @@ class NewsletterControllerList extends JControllerForm
 	}
     
     
-    public function importPluginTrigger()
-    {
-        $pGroup = 'list';
-        $pName = JRequest::getString('pluginname', null);
-		$pEvent = JRequest::getString('pluginevent', null);
-
-        JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR, '');
-
-        $manager = NewsletterPluginManager::factory('import');
-
-        // Trigger event for plugin
-        $context = $this->option.'.edit.'.$this->context;
-        $listId = JRequest::getInt('list_id'); 
-        $res = $manager->trigger(
-            array(
-                'name'  => $pName,
-                'group' => $pGroup,
-                'event' => $pEvent),
-            array(
-                $listId,
-                (array) JRequest::getVar('jform')
-        ));
-
-        // In this case we trigger only one plugin then his data is in first element
-        $res = $res[0];
-        
-        
-        // Get VIEW.....
-        // Set layout for event
-        $pEvent = str_replace('onMigurImport', '', $manager->pluginEvent);
-        
-		JRequest::setVar('view', 'list');
-		JRequest::setVar('layout', $pEvent);
-        
-		$view = $this->getView(
-            'list', 'html', '', 
-            array(
-                'base_path' => $this->basePath, 
-                'layout' => 'import_plugin-'.strtolower($pEvent)
-        ));
-
-        // Get all view need...
-        $plg = $manager->getPlugin($pName, $pGroup);
-        $plugin = new stdClass();
-        $plugin->data = (array) $res;
-        $plugin->name = (string) $pName;
-        $plugin->group = (string) $pGroup;
-        $plugin->title = $plg->getTitle();
-        
-        // Complement data
-        $plugin->description = empty($res->description)? $plg->getDescription() : $res['description'];
-        
-        // Set all view need...
-        $view->assignRef('plugin', $plugin);
-        $view->assign('listId', $listId);
-        
-        return $this->display();
-    }
-	
-	
-	
 	/**
 	 * Retrieves only first row(names of columns) of the list
 	 * @since 1.0

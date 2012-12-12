@@ -1,0 +1,19 @@
+.plugin-cantainer {
+    float: none;
+    clear: both;
+}
+
+.plugin-container {
+    border: 1px solid #CCCCCC !important;
+}
+
+.plugin-container .plugin-description {
+	margin-top: 10px;
+    clear:both;
+	padding: 10px;
+	background-color: #ddd;
+}
+
+.plugin-container label {
+	min-width: 150px;
+}

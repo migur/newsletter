@@ -264,17 +264,8 @@
 .plugin-pane {
     float: none;
     clear: both;
-}
-
-.plugin-pane > fieldset {
-    border: 1px solid #CCCCCC !important;
-}
-
-.plugin-pane .plugin-description {
-	margin-top: 10px;
-    clear:both;
-	padding: 10px;
-	background-color: #ddd;
+	width: 100%;
+	height: 400px;
 }
 
 #plugin-form label {
@@ -314,6 +305,7 @@ div.form-text dl dt {
 #jgroups-pane {
 	max-height: 270px;
 	overflow: auto;
+<<<<<<< HEAD
 }*/
 
 #exclude-uploader,
@@ -340,3 +332,7 @@ div.form-text dl dt {
 #import-toolbar .btn[data-role="import-plugin"] span {
 	padding-left: 45px;
 }
+=======
+}
+
+>>>>>>> f20f31869b59eea5b9b063e6bef73697867f70cf
