@@ -78,6 +78,7 @@
                         <filename>controller.php</filename>
                         <filename>newsletter.php</filename>
                         <filename>constants.php</filename>
+                        <filename>bootstrap.php</filename>
                         <filename>index.html</filename>
 
                         <!-- class files section -->
