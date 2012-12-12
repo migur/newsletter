@@ -33,6 +33,7 @@ class MigurComNewsletterBootstrap
 		JLoader::import('helpers.newsletter', COM_NEWSLETTER_PATH_ADMIN);
 		JLoader::import('helpers.log', COM_NEWSLETTER_PATH_ADMIN);
 		JLoader::import('helpers.support', COM_NEWSLETTER_PATH_ADMIN);
+		JLoader::import('helpers.module', COM_NEWSLETTER_PATH_ADMIN);
 	}
 
 	

@@ -163,7 +163,7 @@ class com_newsletterInstallerScript
 	
 	
 	/**
-	 * Method to run after an install/update/uninstall method
+	 * Method to run after an install/update/discover_install method.
 	 *
 	 * @param  string - type of upgrade
 	 * @param  object - parent
@@ -173,6 +173,17 @@ class com_newsletterInstallerScript
 	 */
 	function postflight($type, $parent)
 	{
+		// As it run only for install/upgrade then at this point all Component's stuff is present...
+		// Let's init it
+		require_once 
+			JPATH_ADMINISTRATOR . 
+			DIRECTORY_SEPARATOR . 'components' . 
+			DIRECTORY_SEPARATOR . 'com_newsletter' . 
+			DIRECTORY_SEPARATOR . 'bootstrap.php';
+		
+		MigurComNewsletterBootstrap::initAutoloading();
+		MigurComNewsletterBootstrap::initEnvironment();
+		
 		// In both cases check if the tables/extension.php is not exists!
 		@unlink(JPATH_ADMINISTRATOR. DIRECTORY_SEPARATOR .'components'. DIRECTORY_SEPARATOR .'com_newsletter'. DIRECTORY_SEPARATOR .'tables'. DIRECTORY_SEPARATOR .'extension.php');
 		//error_reporting(E_ALL);
@@ -217,6 +228,7 @@ class com_newsletterInstallerScript
 			$this->_syncExtensions();
 			
 			$this->_enableJplugin('migurlistsync', 'system');
+			$this->_enableJplugin('miguruserreg', 'system');
 			
             /* Redirect after installation. Make sure the component was installed the last if
                there is package */
