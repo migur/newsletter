@@ -42,20 +42,26 @@ class plgSystemMiguruserreg extends JPlugin
 	 */
 	public function __construct($subject, $config)
 	{
+		parent::__construct($subject, $config);
+
 		// Check if component is present
+		$bootstrap = JPATH_ADMINISTRATOR . 
+			DIRECTORY_SEPARATOR . 'components' . 
+			DIRECTORY_SEPARATOR . 'com_newsletter' . 
+			DIRECTORY_SEPARATOR . 'bootstrap.php';
+		
+		if (!file_exists($bootstrap)) {
+			$this->_disabled = true;
+			return;
+		}	
+		
 		$newsletter = JComponentHelper::getComponent('com_newsletter');
 		if (empty($newsletter)) {
 			$this->_disabled = true;
 			return;
 		}	
-		
-		parent::__construct($subject, $config);
 
-		require_once 
-			JPATH_ADMINISTRATOR . 
-			DIRECTORY_SEPARATOR . 'components' . 
-			DIRECTORY_SEPARATOR . 'com_newsletter' . 
-			DIRECTORY_SEPARATOR . 'bootstrap.php';
+		require_once $bootstrap;
 		
 		MigurComNewsletterBootstrap::initAutoloading();
 		MigurComNewsletterBootstrap::initEnvironment();
