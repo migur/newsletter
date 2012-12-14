@@ -147,10 +147,10 @@ class NewsletterViewAutomailing extends MigurView
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'automailing.cancel', false);
 		
 		$bar = JToolBar::getInstance('series');
-		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailingitem&layout=edit&tmpl=component&automailing_id='.$aid, 400, 200, 0, 0);
+		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailingitem&layout=edit&tmpl=component&automailing_id='.$aid, 420, 210, 0, 0);
 		
 		$bar = JToolBar::getInstance('lists');
-		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailing&tmpl=component', 880, 680, 0, 0);
+		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailing&tmpl=component', 880, 690, 0, 0);
 		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
 	}

@@ -99,7 +99,7 @@ class NewsletterControllerCron extends JControllerForm
 	{
 		NewsletterHelperNewsletter::jsonPrepare();
 		$res = $this->_mailing();
-		NewsletterHelperNewsletter::jsonResponse($res['status'], $res['messages'], $res['data']);
+		NewsletterHelperNewsletter::jsonResponse($res['state'], $res['messages'], $res['data']);
 	}
 
 	
@@ -113,7 +113,7 @@ class NewsletterControllerCron extends JControllerForm
 	{
 		NewsletterHelperNewsletter::jsonPrepare();
 		$res = $this->_processbounced();
-		NewsletterHelperNewsletter::jsonResponse($res['status'], $res['messages'], $res['data']);
+		NewsletterHelperNewsletter::jsonResponse($res['state'], $res['messages'], $res['data']);
 	}
 
 	
@@ -124,7 +124,7 @@ class NewsletterControllerCron extends JControllerForm
 	{
 		NewsletterHelperNewsletter::jsonPrepare();
 		$res = $this->_automailing();
-		NewsletterHelperNewsletter::jsonResponse($res['status'], $res['messages'], $res['data']);
+		NewsletterHelperNewsletter::jsonResponse($res['state'], $res['messages'], $res['data']);
 	}	
 	
 	/**
@@ -435,8 +435,12 @@ class NewsletterControllerCron extends JControllerForm
 				NewsletterHelperLog::CAT_BOUNCES);
 		}
 
-		// Pre check if the isExec is too long
-		if ($isExec && ((time() - $lastExec) > $interval * 10)) {
+		// Let's check if checking is too long.
+		// It means that previous process was hanged up 
+		// or user need to increase bounce checking interval or.
+		// Anyway we should reset the previous and start new one.
+		//var_dump($isExec, time(), ($lastExec + $interval)); die;
+		if ($isExec && (time() > ($lastExec + $interval))) {
 			NewsletterHelperNewsletter::setParam('mailer_cron_bounced_is_executed', 0);
 			$isExec = false;
 			NewsletterHelperLog::addWarning(
@@ -445,7 +449,7 @@ class NewsletterControllerCron extends JControllerForm
 		}
 
 		
-		// If this is a admins request then return 
+		// If this is a admin's request then return 
 		// message and exit
 		if ($isExec) {
 			return array(
