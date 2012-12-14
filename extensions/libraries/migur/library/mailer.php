@@ -417,6 +417,8 @@ class MigurMailer extends JObject
 		
 		$sender = $this->_transport;
 		
+		$sender->reset();
+		
 		$sender->setOptions(array(
 			'keepAlive' => !empty($params['keepAlive']),
 			'doClose'   => !empty($params['doClose'])
