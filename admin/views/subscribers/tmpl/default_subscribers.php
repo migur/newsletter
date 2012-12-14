@@ -97,7 +97,7 @@
 						}
 					?>
 					<a href="<?php echo $href; ?>"
-					   rel="{handler: 'iframe', size: {x: 965, y: 540}}"
+					   rel="{handler: 'iframe', size: {x: 980, y: 540}}"
 					   class="modal" >
 						<?php echo $this->escape($item->name); ?>
 					</a>

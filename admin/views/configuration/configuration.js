@@ -88,7 +88,7 @@ window.addEvent('domready', function() {
                 handler: 'iframe',
                 size: {
                     x: 400,
-                    y: 340
+                    y: 350
                 }
             });
         });

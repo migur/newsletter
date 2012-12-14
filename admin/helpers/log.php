@@ -39,6 +39,8 @@ class NewsletterHelperLog
     
     const CAT_TRACKING = 'tracking';
 	
+	const CAT_MAILBOX = 'mailbox';
+	
 	public static $langIsLoaded = false;
 	
 	/**
