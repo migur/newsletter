@@ -1,47 +1,49 @@
     <div id="tab-container-ovirview">
         <div id="overview1" class="form-text">
-            <dl>
-                <dt>
-                    <?php echo $this->listForm->getLabel('name'); ?>
-                </dt>
-                <dd>
+            
+            <div class="control-group">
+                <label class="control-label"><?php echo $this->listForm->getLabel('name'); ?></label>
+                <div class="controls">
                     <?php echo $this->listForm->getInput('name'); ?>
-                </dd>
-                <dt>
-                    <?php echo $this->listForm->getLabel('description'); ?>
-                </dt>
-                <dd>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label"><?php echo $this->listForm->getLabel('description'); ?></label>
+                <div class="controls">
                     <?php echo $this->listForm->getInput('description'); ?>
-                </dd>
-                <dt>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">
+                    <div class="pull-left"><?php echo $this->listForm->getLabel('smtp_profile_id'); ?></div>
 					<?php echo JHtml::_('migurhelp.link', 'smtpp', 'general', 'smtpp-list'); ?>
-                    <?php echo $this->listForm->getLabel('smtp_profile_id'); ?>
-                </dt>
-                <dd>
+                </label>
+                <div class="controls">
                     <?php echo $this->listForm->getInput('smtp_profile_id'); ?>
-                </dd>
-                <dt></dt>
+                </div>
+            </div>
 
-<?php if (!$this->isNew): ?>
-                <dd id="chart-new-subs">
+            <?php if (!$this->isNew): ?>
+            <div id="chart-new-subs">
 
-<script type="text/javascript">
+                <script type="text/javascript">
 
-	migurLegend = [
-		"<?php echo JText::_("COM_NEWSLETTER_NO_OF_NEW_SUBSCRIBERS"); ?>"
-	];
+                    migurLegend = [
+                        "<?php echo JText::_("COM_NEWSLETTER_NO_OF_NEW_SUBSCRIBERS"); ?>"
+                    ];
 
-	migurData = { subs:[], labels:[] };
-	Object.each(newSubsPerDay, function(item, key){
-		migurData.subs.push(item);
-		migurData.labels.push(key);
-	});
-	var pdRaph = Migur.chart.line("chart-new-subs", migurData.labels, [ migurData.subs ], 300, 100, migurLegend);
+                    migurData = { subs:[], labels:[] };
+                    Object.each(newSubsPerDay, function(item, key){
+                        migurData.subs.push(item);
+                        migurData.labels.push(key);
+                    });
+                    var pdRaph = Migur.chart.line("chart-new-subs", migurData.labels, [ migurData.subs ], 300, 100, migurLegend);
 
-</script>
-</dd>
-<?php endif; ?>
-            </dl>
+                </script>
+            </div>
+            <?php endif; ?>
         </div>
 		
 <?php if (!$this->isNew): ?>

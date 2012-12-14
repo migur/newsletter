@@ -51,3 +51,7 @@
 		float: left;
 	}
 }
+
+#modal-subscriber-new-container iframe {
+	overflow: hidden;
+}

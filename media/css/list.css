@@ -4,49 +4,31 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-.current {
-    min-height: 450px;
-	overflow: hidden;
-}
-
-/* comomn for overview */
-#tab-container-ovirview {
-    width: 900px;
-}
-
 /* overview1 */
+
+
+
+@media(min-width: 1000px) {
+	
+	#import-found-fields,
+	#exclude-found-fields
+	{
+		width: 30%;
+		float: left;
+		margin-right: 5%;
+	}
+
+	#import-fields,
+	#exclude-fields {
+		width: 30%;
+		float: left;
+		margin-right: 5%;
+	}
+}
+
 #overview1 {
-    height: 400px;
     float: left;
-}
-
-#overview1 dl {
-    margin-right: 50px;
-}
-
-#overview1 dd {
-    float: right;
-    width: 200px;
-    padding:0px;
-    margin: 5px;
-}
-
-#overview1 input,
-#overview1 textarea,
-#overview1 select {
-    width:200px;
-}
-
-#overview1 label {
-    width:140px;
-}
-
-#overview1 #jform_description-lbl {
-    margin:4px 0;
-}
-
-#overview1 #jform_list_profile {
-    margin: 18px 2px 2px 2px;
+    width: 45%;
 }
 
 #overview1 #label-chart-new-subs {
@@ -66,45 +48,29 @@
 /* overview2 */
 
 #overview2 {
-    width: 400px;
+    width: 45%;
     float: right;
     height: 500px;
     overflow: auto;
 }
 
-#overview2 dl dt {
-    white-space: nowrap;
-/*  text-align: center;*/
-    float: left;
-    clear: both;
-    margin: 2px;
-    padding: 2px;
-    font-weight: bold;
-}
-
-#overview2 dl dd {
-    text-align: center;
-    float: left;
-    clear: both;
-    margin: 2px;
-    padding: 2px;
-}
-
-#tab-container-unsubscribed {
+/*#tab-container-unsubscribed {
     height: 450px;
     overflow: auto;
-}
+}*/
 
 /* comomn for unsubscribed */
-#tab-container-unsubscribed img {
+/*#tab-container-unsubscribed img {
     float: none;
     margin: 0px;
     padding: 0px;
 }
 
-#tab-container-advanced select {
-    width: 200px;
+*/
+#tab-container-advanced .controls {
+    margin-left: 330px;
 }
+/*
 
 #tab-container-advanced input {
     width: auto;
@@ -116,11 +82,11 @@
 
 #tab-container-advanced dd {
     padding-left: 225px;
-}
+}*/
 
 
 /* Import tab */
-#import-toolbar {
+/*#import-toolbar {
     float: left;
 }
 
@@ -130,10 +96,10 @@
 
 #import-toolbar li a {
     width: 130px;
-}
+}*/
 
 /* Exclude tab */
-#exclude-toolbar {
+/*#exclude-toolbar {
     margin: 10px;
     float: left;
     width: 360px;
@@ -178,77 +144,37 @@
     margin: 10px;
 }
 
-#import-fields div,
-#exclude-fields div {
-    margin: 5px;
-}
 
 
-#import-file,
-#exclude-file {
-    border: 1px solid #cccccc;
-    padding-bottom: 10px;
-	overflow: hidden;
-}
-
-#import-founded-fields,
-#exclude-founded-fields
-{
-    margin: 5px 5px 10px 10px;
-    padding: 0px;
-    border: 1px solid #cccccc;
-    width: 26%;
-    height: 150px;
-    float: left;
-    position: relative;
-}
-
-
-#import-fields,
-#exclude-fields {
-    margin: 5px 0px 10px 5px;
-    padding: 0px;
-    border: 1px solid #cccccc;
-    width: 43%;
-    height: 150px;
-    float: left;
-}
-
-#import-settings,
-#exclude-settings {
-    margin: 5px 10px 0px 0px;
-    padding: 0px;
-    border: 1px solid #cccccc;
-    width: 26%;
-    height: 180px;
-    float: right;
-    position: relative;
-}
+*/
 
 .drag {
-    top: 0px;
-    left: 0px;
-    width: 210px;
-    height: 15px;
-    cursor: move;
+    background-color: #3A87AD;
+    border-radius: 3px 3px 3px 3px;
+    left: 0;
     margin: 5px;
-	padding: 0 5px;
-	overflow: hidden;
-    text-align: center;
-    vertical-align: middle;
-    background: #fafafa;
+    overflow: hidden;
+    padding: 1px 4px 2px;
     position: relative;
-    border: 1px solid #cccccc;
+    text-align: left;
+    top: 0;
+    vertical-align: middle;
+    cursor: move;
+    text-align: center;
+    width: 250px;
+	color: #FFFFFF;
+    font-weight: bold;	
 }
-
 
 #import-fields .drop,
 #exclude-fields .drop {
+    border-radius: 3px 3px 3px 3px;
     border: 1px solid #cccccc;
-    height: 27px;
-    width: 233px;
+    height: 31px;
+    width: 268px;
+	margin-bottom: 15px;
 }
-
+/*
 #import-file-apply,
 #exclude-file-apply {
     width: 100px;
@@ -286,10 +212,12 @@
     margin-left: 20px;
 }
 
+*/
 #import-file-refresh,
 #exclude-file-refresh {
-    margin-left: 10px;
+    margin-bottom: 5px;
 }
+/*
 
 
 #newsletters_total_sent,
@@ -377,5 +305,34 @@ div.form-text dl dt {
 #jgroups-pane {
 	max-height: 270px;
 	overflow: auto;
+<<<<<<< HEAD
+}*/
+
+#exclude-uploader,
+#import-uploader {
+	width: 100%;
+	height: 160px;
 }
 
+#exclude-toolbar,
+#import-toolbar {
+	margin-bottom: 30px;
+}
+
+#import-toolbar .btn[data-role="import-plugin"] {
+	position: relative;
+}
+
+#import-toolbar .btn[data-role="import-plugin"] img {
+	position: absolute;
+	height: 36px;
+	top: 0;
+}
+
+#import-toolbar .btn[data-role="import-plugin"] span {
+	padding-left: 45px;
+}
+=======
+}
+
+>>>>>>> f20f31869b59eea5b9b063e6bef73697867f70cf

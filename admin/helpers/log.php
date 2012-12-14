@@ -38,6 +38,8 @@ class NewsletterHelperLog
 	const CAT_AUTOMAILING = 'automailing';
     
     const CAT_TRACKING = 'tracking';
+
+    const CAT_LIST = 'list';
 	
 	const CAT_MAILBOX = 'mailbox';
 	

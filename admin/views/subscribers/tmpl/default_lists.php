@@ -69,9 +69,8 @@
 				<td>
 				<?php 
 				if (AclHelper::actionIsAllowed('list.edit')) { ?>
-					<a href="<?php echo JRoute::_("index.php?option=com_newsletter&tmpl=component&layout=edit&task=list.edit&list_id=".(int) $item->list_id, false); ?>"
-					   rel="{handler: 'iframe', size: {x: 990, y: 635}}"
-					   class="modal" >
+					<a href="<?php echo JRoute::_("index.php?option=com_newsletter&task=list.edit&list_id=".(int) $item->list_id, false); ?>"
+					>
 						<?php echo $this->escape($item->name); ?>
 					</a>
 				<?php } else { 

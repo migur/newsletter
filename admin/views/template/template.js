@@ -9,7 +9,7 @@
 function jInsertFieldValue(value, id) {
 
     new Request.JSON({
-        url: '?option=com_newsletter&task=file.fileinfo&format=json',
+        url: '?option=com_newsletter&task=file.fileinfo',
         data: {
             filename: migurSiteRoot + value
         },

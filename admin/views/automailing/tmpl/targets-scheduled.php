@@ -4,7 +4,7 @@
 	id="automailingtargetsForm" 
 	action="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&view=automailing&layout='.$this->getLayout().'&automailing_id='.$this->automailingId, false); ?>"
 >
-	<div class="fltrt">
+	<div class="pull-left btn-group">
 		<select name="list_to_subscribe" class="inputbox">
 			<option value=""><?php echo '- ' . JText::_('COM_NEWSLETTER_SELECT_LIST') . ' -'; ?></option>
 			<?php
@@ -14,7 +14,9 @@
 					</option>
 			<?php } ?>
 		</select>
-		<button type="submit"  onclick="return Joomla.submitform('automailing.assignList', $('automailingtargetsForm'));">
+    </div>    
+	<div class="pull-left btn-group">
+		<button class="btn" type="submit"  onclick="return Joomla.submitform('automailing.assignList', $('automailingtargetsForm'));">
 			<?php echo JText::_('COM_NEWSLETTER_ASSIGN'); ?>
 		</button>
 	</div>	
