@@ -16,8 +16,11 @@ JLoader::import('helpers.media', JPATH_COMPONENT_ADMINISTRATOR, '');
 
 class NewsletterControllerFile extends MigurController
 {
+	
 	public function fileinfo()
 	{
+		NewsletterHelperNewsletter::jsonPrepare();
+		
 		$filename = JRequest::getString('filename');
 		$size = @getimagesize($filename);
 		if (empty($size)) {
@@ -26,7 +29,10 @@ class NewsletterControllerFile extends MigurController
 				"mime" => "image"
 			);
 		}
-		jexit(json_encode($size));
+		
+		NewsletterHelperNewsletter::jsonMessage(null, $size);
 	}
 
+	
+	
 }

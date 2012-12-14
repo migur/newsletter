@@ -175,7 +175,7 @@ class NewsletterControllerSubscriber extends JControllerForm
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
 	{
-		$tmpl = JRequest::getCmd('tmpl', 'component');
+		$tmpl = JRequest::getCmd('tmpl', '');
 		$layout = JRequest::getCmd('layout');
 		$append = '';
 

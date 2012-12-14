@@ -123,21 +123,5 @@ class MigurView extends JViewLegacy
 			return JError::raiseError(500, JText::sprintf('JLIB_APPLICATION_ERROR_LAYOUTFILE_NOT_FOUND', $file));
 		}
 	}
-	
-	
-	
-	/**
-	 * Automatic adding the flying message script for popups
-	 */
-	public function display($tpl = null)
-	{
-		if (JRequest::getCmd('tmpl') == 'component') {
-			
-			$doc = JFactory::getDocument();
-			$doc->addScript(JUri::root() . 'media/com_newsletter/js/migur/js/message.js');
-		}	
-		
-		return parent::display($tpl);
-	}
 }
 

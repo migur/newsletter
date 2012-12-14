@@ -47,7 +47,6 @@ class NewsletterModelFile extends MigurModel
 
 		// Get the user
 		$user = JFactory::getUser();
-		$log = JLog::getInstance('upload.error.php');
 
 		// Get some data from the reques
 		$filedataName = !empty($params['filedataName']) ? $params['filedataName'] : 'Filedata';
@@ -58,24 +57,31 @@ class NewsletterModelFile extends MigurModel
 		// Set FTP credentials, if given
 		jimport('joomla.client.helper');
 		JClientHelper::setCredentialsFromRequest('ftp');
+		
+		$remapped = array();
+		foreach($file as $name => $val) {
+			$remapped[$name] = $val[0];
+		}
+		$file = $remapped;
 
 		// Make the filename safe
-		$file['name'] = JFile::makeSafe($file['name']);
+		//$file['name'] = JFile::makeSafe($file['name']);
 
 		if (isset($file['name'])) {
+
 			// The request is valid
 			$err = null;
 
 			$filepath = JPath::clean(JPATH_COMPONENT . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . strtolower($file['name']));
 
-			if (!MediaHelper::canUpload($file, $err)) {
-				$log->addEntry(array('comment' => 'Invalid: ' . $filepath . ': ' . $err));
-				$response = array(
-					'status' => '0',
-					'error' => JText::_($err)
-				);
-				return $response;
-			}
+//			if (!NewsletterHelperMedia::canUpload($file, $err)) {
+//				NewsletterHelperLog::addError('Invalid: ' . $filepath . ': ' . $err, NewsletterHelperLog::CAT_LIST);
+//				$response = array(
+//					'status' => '0',
+//					'error' => JText::_($err)
+//				);
+//				return $response;
+//			}
 
 			// Trigger the onContentBeforeSave event.
 			JPluginHelper::importPlugin('content');
@@ -84,8 +90,10 @@ class NewsletterModelFile extends MigurModel
 			$object_file->filepath = $filepath;
 			$result = $dispatcher->trigger('onContentBeforeSave', array('com_media.file', $object_file));
 			if (in_array(false, $result, true)) {
+				
 				// There are some errors in the plugins
-				$log->addEntry(array('comment' => 'Errors before save: ' . $filepath . ' : ' . implode(', ', $object_file->getErrors())));
+				NewsletterHelperLog::addError('Errors before save: ' . $filepath . ' : ' . implode(', ', $object_file->getErrors()), NewsletterHelperLog::CAT_LIST);
+				
 				$response = array(
 					'status' => '0',
 					'error' => JText::plural('COM_MEDIA_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors))
@@ -95,7 +103,7 @@ class NewsletterModelFile extends MigurModel
 
 			if (JFile::exists($filepath) && empty($params['overwrite'])) {
 				// File exists
-				$log->addEntry(array('comment' => 'File exists: ' . $filepath . ' by user_id ' . $user->id));
+				NewsletterHelperLog::addError('File exists: ' . $filepath . ' by user_id ' . $user->id, NewsletterHelperLog::CAT_LIST);
 				$response = array(
 					'status' => '0',
 					'error' => JText::_('COM_MEDIA_ERROR_FILE_EXISTS')
@@ -103,7 +111,7 @@ class NewsletterModelFile extends MigurModel
 				return $response;
 			} elseif (!$user->authorise('core.create', 'com_media')) {
 				// File does not exist and user is not authorised to create
-				$log->addEntry(array('comment' => 'Create not permitted: ' . $filepath . ' by user_id ' . $user->id));
+				NewsletterHelperLog::addError('Create not permitted: ' . $filepath . ' by user_id ' . $user->id, NewsletterHelperLog::CAT_LIST);
 				$response = array(
 					'status' => '0',
 					'error' => JText::_('COM_MEDIA_ERROR_CREATE_NOT_PERMITTED')
@@ -114,7 +122,7 @@ class NewsletterModelFile extends MigurModel
 			$file = (array) $object_file;
 			if (!JFile::upload($file['tmp_name'], $file['filepath'])) {
 				// Error in upload
-				$log->addEntry(array('comment' => 'Error on upload: ' . $filepath));
+				NewsletterHelperLog::addError('Error on upload: ' . $filepath, NewsletterHelperLog::CAT_LIST);
 				$response = array(
 					'status' => '0',
 					'error' => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE')
@@ -122,8 +130,7 @@ class NewsletterModelFile extends MigurModel
 				return $response;
 			} else {
 				// Trigger the onContentAfterSave event.
-				//$dispatcher->trigger('onContentAfterSave', array('com_media.file', &$object_file), null);
-				$log->addEntry(array('comment' => $folder));
+				NewsletterHelperLog::addDebug(JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', substr($file['filepath'], strlen('COM_MEDIA_BASE'))), NewsletterHelperLog::CAT_LIST);
 				$response = array(
 					'status' => '1',
 					'error' => JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', substr($file['filepath'], strlen('COM_MEDIA_BASE'))),
@@ -133,6 +140,7 @@ class NewsletterModelFile extends MigurModel
 				return $response;
 			}
 		} else {
+			NewsletterHelperLog::addError(JText::_('COM_MEDIA_ERROR_BAD_REQUEST'), NewsletterHelperLog::CAT_LIST);
 			$response = array(
 				'status' => '0',
 				'error' => JText::_('COM_MEDIA_ERROR_BAD_REQUEST')

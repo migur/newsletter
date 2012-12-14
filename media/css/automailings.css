@@ -4,15 +4,29 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+@media(min-width:1000px) {
+
+    #automailing-list {
+        width: 40%;
+        float: left;
+    }
+
+    #automailing-details {
+        width: 55%;
+        float: right;
+    }
+
+}
+
+#preview-container {
+    width: 100%;
+    overflow: auto;
+    min-height: 200px;
+}
 
 .automailingslist td a.search {
     display: block;
     float: right;
     height: 16px;
     width: 16px;
-}
-
-#preview-container {
-	width: 100%;
-	min-height:400px;
 }

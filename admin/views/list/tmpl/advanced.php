@@ -1,28 +1,33 @@
 <div id="tab-container-advanced">
-	<dl>
-		<dt>
-		<label>
-			<?php echo JText::_('COM_NEWSLETTER_AUTOCONFIRM_USERS')//echo $this->listForm->getLabel('autoconfirm'); ?>
-			<?php echo JHtml::_('migurhelp.link', 'subscriber', 'subscription', 'autoconfirm'); ?>
-		</label>	
-		</dt>
-		<dd>
-			<?php echo $this->listForm->getInput('autoconfirm'); ?>
-		</dd>
-		<dt>
-		<?php echo $this->listForm->getLabel('send_at_reg'); ?>
-		</dt>
-		<dd>
-			<?php echo $this->listForm->getInput('send_at_reg'); ?>
-		</dd>
-		<dt>
-		<?php echo $this->listForm->getLabel('send_at_unsubscribe'); ?>
-		</dt>
-		<dd>
-			<?php echo $this->listForm->getInput('send_at_unsubscribe'); ?>
-		</dd>
-	</dl>
 
+    <div class="control-group">
+        <label class="control-label">
+            <div class="pull-left"><?php echo JText::_('COM_NEWSLETTER_AUTOCONFIRM_USERS')//echo $this->listForm->getLabel('autoconfirm'); ?></div>
+			<?php echo JHtml::_('migurhelp.link', 'subscriber', 'subscription', 'autoconfirm'); ?>
+        </label>
+        <div class="controls">
+			<?php echo $this->listForm->getInput('autoconfirm'); ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">
+            <?php echo $this->listForm->getLabel('send_at_reg'); ?>
+        </label>
+        <div class="controls">
+			<?php echo $this->listForm->getInput('send_at_reg'); ?>
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label">
+    		<?php echo $this->listForm->getLabel('send_at_unsubscribe'); ?>
+        </label>
+        <div class="controls">
+			<?php echo $this->listForm->getInput('send_at_unsubscribe'); ?>
+        </div>
+    </div>
+	
 <!--		<input name="jform[events]" value="<?php echo json_encode($this->events); ?>" type="hidden" />-->
 	<div class="clr"></div>
 	
@@ -67,10 +72,10 @@
 						<?php echo $this->escape(JText::_('COM_NEWSLETTER_LIST_ACTION_' . strtoupper($item->action))); ?>
 					</td>
 
-					<td width="110px" align="center">
+					<td width="150px" align="center">
 						<a 
 							class="modal badge badge-info" 
-							rel="{handler: 'iframe', size: {x: 400, y: 190}, onClose: function() {}}"
+							rel="{handler: 'iframe', size: {x: 510, y: 340}, onClose: function() {}}"
 							href="<?php echo JRoute::_("index.php?option=com_newsletter&task=listevent.edit&tmpl=component&le_id=" . (int) $item->le_id . "&list_id=" . (int) $this->list->list_id, false); ?>" 
 							onclick="Cookie.write('migur-tab-active', '.tab-advanced')"
 						>
@@ -102,7 +107,7 @@
 	<div style="text-align: right;">
 		<a 
 			class="modal badge badge-info" 
-			rel="{handler: 'iframe', size: {x: 400, y: 190}, onClose: function() {}}" 
+			rel="{handler: 'iframe', size: {x: 510, y: 340}, onClose: function() {}}" 
 			href="<?php echo JRoute::_('index.php?option=com_newsletter&task=listevent.add&tmpl=component&list_id=' . (int) $this->list->list_id, false); ?>"
 			onclick="Cookie.write('migur-tab-active', '.tab-advanced')"
 		>
