@@ -300,8 +300,15 @@ class NewsletterControllerConfiguration extends MigurController
 
 			$sess->set('com-newsletter-backup', null);
 		}
-
-
-		$this->setRedirect(JRoute::_('index.php?option=com_newsletter', false));
+        
+        
+        // Let's init the reating to read/create row in DB for J! SMTP profile.
+        $smtp = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+        $smtp->load(NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID);
+        
+        
+		// Then go to dash
+        $this->setRedirect(JRoute::_('index.php?option=com_newsletter', false));
 	}
+    
 }
