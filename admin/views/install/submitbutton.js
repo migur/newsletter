@@ -18,6 +18,14 @@ window.addEvent('domready', function() { try {
 		
 	Joomla.submitbutton = function(task, form, element)
 	{
+		if (task == '') return false;
+
+		switch(task) {
+			case 'install.remove': form = document.adminForm; break;
+			case 'install.restore': form = document.installForm; break;
+			default: form = document.adminForm; break;
+		}
+
 			if (
 				task == 'install.remove' &&
 				!confirm(Joomla.JText._('ARE_YOU_REALY_WANT_TO_DELETE_THESE_EXTENSIONS_QM', 'Are you really want to delete these extensions'))
@@ -25,30 +33,8 @@ window.addEvent('domready', function() { try {
 					return false;
 			}
 
-			if (!form) {
-				form = document.subscriberForm
-			}
-
-		if (task == '')
-		{
+			Joomla.submitform(task, form);
 			return false;
-		}
-		else
-			{
-					var action = task.split('.');
-					if ( document.formvalidator.isValid(form) ||
-						 action[1] == 'cancel' ||
-						 action[1] == 'close' ) {
-
-				Joomla.submitform(task, form);
-				return true;
-			}
-			else
-			{
-				//alert(Joomla.JText._('COM_NEWSLETTER_ERROR_UNACCEPTABLE','Some values are unacceptable'));
-				return false;
-			}
-		}
 	}
 
 } catch(e){
