@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 ?>
 <script type="text/javascript">
 	Joomla.submitbuttonInstall = function(pressbutton) {
-		var form = document.getElementById('adminForm');
+		var form = document.getElementById('installForm');
 
 		// do field validation
 		if (form.install_package.value == ""){
@@ -24,7 +24,7 @@ defined('_JEXEC') or die;
 	}
 </script>
 
-<form enctype="multipart/form-data" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=install');?>" method="post" name="adminForm" id="adminForm">
+<form enctype="multipart/form-data" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=install');?>" method="post" name="installForm" id="installForm">
 
 	<div class="width-70 fltlft">
 		<fieldset class="uploadform">

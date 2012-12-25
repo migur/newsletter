@@ -1,8 +1,8 @@
 <div id="installer-manage">
-<form action="<?php echo JRoute::_('index.php?option=com_newsletter&view=install');?>" method="post" name="installForm" id="installForm">
+<form action="<?php echo JRoute::_('index.php?option=com_newsletter&view=install');?>" method="post" name="adminForm" id="adminForm">
 
 <div class="width-30 fltlft" style="margin-top:22px;">
-		<?php echo MigurToolBar::getInstance('install')->render(); ?>
+		<?php echo MigurToolBar::getInstance('extensions')->render(); ?>
 </div>
 
 <div class="clr"></div>
@@ -14,19 +14,19 @@
 					<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
 				</th>
 				<th class="nowrap center">
-					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_TITLE', 'a.title', $this->listDirn, $this->listOrder, null, null, 'installForm'); ?>
+					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_TITLE', 'a.title', $this->listDirn, $this->listOrder, null, null, 'adminForm'); ?>
 				</th>
 				<th class="nowrap center">
-					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_CLASS', 'a.extension', $this->listDirn, $this->listOrder, null, null, 'installForm'); ?>
+					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_CLASS', 'a.extension', $this->listDirn, $this->listOrder, null, null, 'adminForm'); ?>
 				</th>
 				<th class="nowrap center">
-					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_TYPE', 'a.type', $this->listDirn, $this->listOrder, null, null, 'installForm'); ?>
+					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_TYPE', 'a.type', $this->listDirn, $this->listOrder, null, null, 'adminForm'); ?>
 				</th>
 				<th class="nowrap center">
-					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_NAMESPACE', 'a.namespace', $this->listDirn, $this->listOrder, null, null, 'installForm'); ?>
+					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_NAMESPACE', 'a.namespace', $this->listDirn, $this->listOrder, null, null, 'adminForm'); ?>
 				</th>
 				<th class="nowrap center">
-					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_ID', 'a.extension_id', $this->listDirn, $this->listOrder, null, null, 'installForm'); ?>
+					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_ID', 'a.extension_id', $this->listDirn, $this->listOrder, null, null, 'adminForm'); ?>
 				</th>
 			</tr>
 		</thead>
