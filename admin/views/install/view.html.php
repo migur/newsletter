@@ -53,7 +53,7 @@ class NewsletterViewInstall extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_EXTENSION_MANAGER'), 'article.png');
 
-		$bar = MigurToolBar::getInstance('install', null, '', false, array('useDefaultCallback' => true));
+		$bar = MigurToolBar::getInstance('extensions', null, '', false, array('preserveJCallback' => true));
 		
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'install.remove', false);
 		$bar->appendButton('Standard', 'restore', 'COM_NEWSLETTER_RESTORE', 'install.restore', false);
