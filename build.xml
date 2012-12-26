@@ -80,6 +80,7 @@
 
     <target name="_up_component" description="attemps to update files on localhost server with files from working directory">
     	<!-- MAIN COMPONENT -->	
+        <delete dir="${destdir}/administrator/components/com_${cfg.comName}" />
         <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.adminFilesDir}" />
         </copy>
@@ -93,19 +94,27 @@
             <fileset file="${cfg.comDir}/script.php" />
         </copy>
 
+        <delete dir="${destdir}/components/com_${cfg.comName}" />
         <copy todir="${destdir}/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.siteFilesDir}" />
         </copy>
     	<!-- MEDIA FILES -->
+        <delete dir="${destdir}/media/com_${cfg.comName}" />
         <copy todir="${destdir}/media/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.mediaFilesDir}" />
         </copy>
 
     	<!-- LANGUAGE FILES -->
-        <copy todir="${destdir}/administrator/language" preservelastmodified="true" overwrite="true">
+        <delete file="${destdir}/administrator/language/en-GB/en-GB.com_newsletter.ini" />
+        <delete file="${destdir}/administrator/language/en-GB/en-GB.com_newsletter.sys.ini" />
+        <delete file="${destdir}/administrator/language/en-GB/en-GB.com_newsletter_js.ini" />
+        <delete file="${destdir}/administrator/language/en-GB/en-GB.com_newsletter_log.ini" />
+        <copy  todir="${destdir}/administrator/language" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.adminLangDir}" />
         </copy>
-        <copy todir="${destdir}/language" preservelastmodified="true" overwrite="true">
+
+        <delete file="${destdir}/language/en-GB/en-GB.com_newsletter.ini" />
+        <copy  todir="${destdir}/language" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.siteLangDir}" />
         </copy>
 	</target>
@@ -114,6 +123,7 @@
 
     <target name="_up_migur">
         <!-- Copy library MIGUR -->
+        <delete dir="${destdir}/libraries/migur" />
         <copy todir="${destdir}/libraries/migur" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.libFilesDir}/migur" />
         </copy>
@@ -122,13 +132,16 @@
 
 
     <target name="_up_module">
-        <copy todir="${destdir}/modules" preservelastmodified="true" overwrite="true">
+        <delete dir="${destdir}/modules/${ext_name}" />
+        <copy todir="${destdir}/modules/${ext_name}" preservelastmodified="true" overwrite="true">
             <fileset dir="${basedir}/extensions/modules/${ext_name}" />
         </copy>
-        <copy todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
+        <delete file="${destdir}/language/en-GB/en-GB.${ext_name}.ini" />
+		<copy  todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/extensions/modules/${ext_name}/en-GB.${ext_name}.ini" />
         </copy>
-        <copy todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
+        <delete file="${destdir}/language/en-GB/en-GB.${ext_name}.sys.ini" />
+        <copy  todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/extensions/modules/${ext_name}/en-GB.${ext_name}.sys.ini" />
         </copy>
 	</target>	
@@ -136,6 +149,7 @@
 
 
     <target name="_up_plugin">
+        <delete dir="${destdir}/plugins/${group_name}/${ext_name}" />
         <copy todir="${destdir}/plugins/${group_name}/${ext_name}/" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/extensions/plugins/plg_${ext_name}/${ext_name}.xml" />
         </copy>
@@ -145,7 +159,8 @@
         <copy todir="${destdir}/plugins/system/${ext_name}/" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/extensions/plugins/plg_${ext_name}/index.html" />
         </copy>
-        <copy todir="${destdir}/administrator/language/en-GB/" preservelastmodified="true" overwrite="true">
+        <delete file="${destdir}/administrator/language/en-GB/en-GB.plg_${group_name}_${ext_name}.ini" />
+        <copy  todir="${destdir}/administrator/language/en-GB/" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/extensions/plugins/plg_${ext_name}/en-GB.plg_${group_name}_${ext_name}.ini" />
         </copy>
     </target>
