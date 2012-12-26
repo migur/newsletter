@@ -99,6 +99,10 @@ class MigurToolbar extends JToolbar
 	{
 		$html = parent::renderButton($node);
 		$formName = $this->_formName;
+
+		if (!empty($this->_options['preserveJCallback'])) {
+			return $html;
+		}	
 		
 		if (!empty($this->_options['useDefaultCallback'])) {
 			return preg_replace(

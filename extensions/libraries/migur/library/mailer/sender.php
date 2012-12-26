@@ -319,4 +319,15 @@ class MigurMailerSender extends PHPMailer
 		$this->_errors[] = JText::_($msg);
 		return parent::SetError($msg);
 	}
+	
+	public function reset() {
+		parent::ClearAddresses();
+		parent::ClearCCs();
+		parent::ClearBCCs();
+		parent::ClearReplyTos();
+		parent::ClearAllRecipients();
+		parent::ClearAttachments();
+		parent::ClearCustomHeaders();
+	}
+	
 }

@@ -48,7 +48,7 @@ window.addEvent('domready', function() {
 						});
 
 						if (count == 0) {
-							text = Joomla.JText._('THERE_ARE_NO_EMAILS_TO_SEND','There are no emails to send');
+							text = Joomla.JText._('THERE_ARE_NO_EMAILS_TO_SEND','No emails to send.\nMails can not be sent to disabled or inactive subscribers.\nPlease check if some of them are in queue.');
 							alert(text); 
 							return;
 						}
@@ -104,15 +104,22 @@ window.addEvent('domready', function() {
 				
 				var count = 0;
 				var data = parser.getData();
+				
 				Object.each(data, function(el, key){
 					var submsg = (el.errors.length > 0)? 
 						el.errors[0] : 
 						(' '+Joomla.JText._('FOUND', 'found')+' '+el.found+' '+Joomla.JText._('BOUNCED_EMAILS', 'bounced emails'));
-					
+
 					text += '\n' + key + ': ' + submsg;
+					count++;
 				});
 
-				text = Joomla.JText._('BOUNCE_CHECK_COMPLETED', 'Bounce check completed')+text;
+				if (count > 0) {
+					text = Joomla.JText._('BOUNCE_CHECK_COMPLETED', 'Bounce check completed') + text;
+				} else {
+					text = Joomla.JText._('YOU_DONT_HAVE_CONFIGURED_MAILBOXES', 'Nothing to check. \nYou don\'t have mailboxes configured or \nthere are no sent mails for them. \nIf so then go to Configuration panel to configure them.') + text;
+				}	
+
 				alert(text);
 				window.location.reload();
 			}	

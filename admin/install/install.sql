@@ -426,8 +426,8 @@ insert  into `#__newsletter_subscribers`(`subscriber_id`,`name`,`email`,`state`,
 insert  into `#__newsletter_lists`(`list_id`,`name`,`state`,`description`,`smtp_profile_id`,`ordering`,`created_on`,`created_by`,`modified_on`,`modified_by`,`locked_on`,`locked_by`,`send_at_reg`,`send_at_unsubscribe`) values (2,'Doe Family holiday!',1,'The letter for Doe family members about birthday of Baby Doe!',0,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,0,0);
 
 # Data for the table `#__newsletter_sub_list`;
-insert  into `#__newsletter_sub_list`(`sublist_id`,`subscriber_id`,`list_id`,`confirmed`) values (1,2,2,'');
-insert  into `#__newsletter_sub_list`(`sublist_id`,`subscriber_id`,`list_id`,`confirmed`) values (2,1,2,'');
+insert  into `#__newsletter_sub_list`(`sublist_id`,`subscriber_id`,`list_id`,`confirmed`) values (1,2,2,1);
+insert  into `#__newsletter_sub_list`(`sublist_id`,`subscriber_id`,`list_id`,`confirmed`) values (2,1,2,1);
 
 # Data for the table `#__newsletter_newsletters`;
 insert  into `#__newsletter_newsletters`(`newsletter_id`,`name`,`subject`,`alias`,`smtp_profile_id`,`t_style_id`,`plain`,`params`,`ordering`,`language`,`checked_out`,`checked_out_time`,`created`,`sent_started`,`type`) VALUES (1,'Birthday of Baby Doe!','Baby Doe','birthdayofbabydoe',0,6,'Meet the Baby Doe!\nCongratulations for [username]! \n\nTo unsubscribe: [unsubscription link]','{\"newsletter_from_name\":\"John Doe\",\"newsletter_from_email\":\"johndoe@example.com\",\"newsletter_to_name\":\"John Doe\",\"newsletter_to_email\":\"johndoe@example.com\"}',0,'',0,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0);
