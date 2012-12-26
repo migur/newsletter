@@ -65,18 +65,13 @@ try {
 		        '</div>' +
 				'<div style="float:right; min-width:0;" id="process-preloader"></div>' +
 			'</div>' +	
-			'<div style="float:right">' +
-				'<a href="#" class="queue-list">'+Joomla.JText._('PROCESS_QUEUE','Process queue')+'</a><br/>' +
-				'<a href="index.php?option=com_newsletter&view=queues" class="viewqueue-list">'+Joomla.JText._('VIEW_QUEUE', 'View queue')+'</a><br/>' +
-				'<a href="#" class="bounces-list">'+Joomla.JText._('PROCESS_BOUNCES','Process bounces')+'</a>' +
-			'</div>' +
-			'<div style="width: 360px">' +
+			'<div style="width: 250px">' +
 				'<div class="progress-line"></div>' +
 				'<div class="progress-bar"></div>' +
 			'</div>'	
     })
 
-    $$('#toolbar-progress .queue-list')[0].addEvent('click', function(ev){
+    $$('#toolbar-queue .queue-list')[0].addEvent('click', function(ev){
 
 		ev.stop();
 
@@ -134,7 +129,7 @@ try {
 
     });
 
-    $$('#toolbar-progress .bounces-list')[0].addEvent('click', function(ev){
+    $$('#toolbar-queue .bounces-list')[0].addEvent('click', function(ev){
 
 		ev.stop();
 
@@ -193,7 +188,7 @@ try {
 
     var width = (mailsSent / mailsTotal) * $$('.progress-bar')[0].getWidth();
 
-    $$('.progress-line')[0].setStyle('width', width + 'px');
+    $$('#toolbar-progress .progress-line')[0].setStyle('width', width + 'px');
 	
 	
 	// Updater request

@@ -28,7 +28,7 @@ if (!defined('MIGUR')) {
  */
 JToolbar::getInstance()->loadButtonType('help');
 
-class JToolbarButtonMigurHelp extends JButton
+class JButtonMigurHelp extends JButton
 {
 	/**
 	 * @var    string	Button type
@@ -51,7 +51,8 @@ class JToolbarButtonMigurHelp extends JButton
 		$class	= $this->fetchIconClass('help');
 		$doTask	= $this->_getCommand($ref, $com, $override, $component, $width, $height);
 
-		$html = "<a href=\"#\" onclick=\"$doTask\" rel=\"help\" class=\"toolbar btn btn-small\">\n";
+		$html = "<a href=\"#\" onclick=\"$doTask\" rel=\"help\" class=\"toolbar btn\">\n";
+		$html .= "<span class=\"$class\"><i class=\"icon-question-sign\"></i></span>\n";
 		$html .= "$text\n";
 		$html .= "</a>\n";
 
@@ -88,8 +89,15 @@ class JToolbarButtonMigurHelp extends JButton
 		jimport('joomla.language.help');
 		$url = JHelp::createURL($ref, $com, $override, $component);
 		$url = htmlspecialchars($url, ENT_QUOTES);
-		$cmd = "Joomla.popupWindow('$url', '".JText::_('JHELP', true)."', $width, $height, 1)";
+		$cmd = "popupWindow('$url', '".JText::_('JHELP', true)."', $width, $height, 1)";
 
 		return $cmd;
 	}
 }
+
+
+/*
+ * Legacy support
+ */
+class JToolbarButtonMigurHelp extends JButtonMigurHelp 
+{}
