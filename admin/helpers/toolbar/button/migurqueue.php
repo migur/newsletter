@@ -39,9 +39,9 @@ class JToolbarButtonMigurQueue extends JButton
 	{
 
 		$html = 
-			'<a style="display:block" href="#" class="queue-list">' . JText::_('PROCESS_QUEUE') . '</a></br>' .
-			'<a style="display:block" href="index.php?option=com_newsletter&view=queues" class="viewqueue-list">' . JText::_('VIEW_QUEUE') . '</a><br/>' .
-			'<a style="display:block" href="#" class="bounces-list">' . JText::_('PROCESS_BOUNCES') . '</a>';
+			'<a style="clear:both" href="#" class="queue-list">' . JText::_('PROCESS_QUEUE') . '</a></br>' .
+			'<a style="clear:both" href="index.php?option=com_newsletter&view=queues" class="viewqueue-list">' . JText::_('VIEW_QUEUE') . '</a><br/>' .
+			'<a style="clear:both" href="#" class="bounces-list">' . JText::_('PROCESS_BOUNCES') . '</a>';
 		
 		return $html;
 	}
