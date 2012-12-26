@@ -50,7 +50,7 @@ class MigurToolBar extends JToolBar
 
 		$this->_formName = ($form) ? $form : $name . 'Form';
 		
-		$this->addButtonPath(JPATH_LIBRARIES. DIRECTORY_SEPARATOR .'migur'. DIRECTORY_SEPARATOR .'library'. DIRECTORY_SEPARATOR .'button');
+		$this->addButtonPath(COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
 		
 		$this->_actionPrefix = $actionPrefix;
 		
@@ -95,6 +95,10 @@ class MigurToolBar extends JToolBar
 	{
 		$html = parent::renderButton($node);
 		$formName = $this->_formName;
+
+		if (!empty($this->_options['preserveJCallback'])) {
+			return $html;
+		}	
 		
 		if (!empty($this->_options['useDefaultCallback'])) {
 			return preg_replace(
