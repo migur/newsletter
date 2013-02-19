@@ -497,39 +497,7 @@ class MigurMailerDocument extends JDocument
 	 */
 	function repairLinks(&$content)
 	{
-		// Gets all links (href and src attributes has been parsed)
-		preg_match_all("/(?:href[\s\=\"\']+|src[\s\=\"\']+)([^\"\']+)/", $content, $matches);
-		$router = JFactory::getApplication()->getRouter();
-		
-		$withs = array();
-		for($i=0; $i < count($matches[0]); $i++) {
-			
-			$item = $matches[1][$i];
-						
-			// if this link is relative then repair it!
-			if (!empty($item) && substr($item, 0, 4) != 'http') {
-				
-				$pathprefix = JUri::base(true);
-
-				// remove the path prefix from the begin of item
-				if (!empty($pathprefix) && strpos($item, $pathprefix) === 0) {
-					$item = substr($item, strlen($pathprefix));
-				}
-
-				// remove the '/' from the begin of item
-				if (strpos($item, '/') === 0 && strlen($item) > 1) {
-					$item = substr($item, 1);
-				}	
-
-				// Compile link
-				$item = JUri::root() . $item;
-				$item = str_replace('&amp;', '&', $item);
-			}
-
-			$withs[] = str_replace($matches[1][$i], $item, $matches[0][$i]);
-		}
-
-		$content = str_replace($matches[0], $withs, $content);
+		$content = NewsletterHelperContent::pathsToAbsolute($content);
 		return true;
 	}
 	

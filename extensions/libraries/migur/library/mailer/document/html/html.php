@@ -250,27 +250,63 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 	 */
 	function _trackLinks(&$content, $uid, $newsletterId)
 	{
-		// Find all hrefs
-		preg_match_all('/href[\s\=\"\']+([^\"\']+)[\"\']/', $content, $matches);
-		$fullhrefs = array_unique($matches[0]);
-		$urls = array_unique($matches[1]);
+		$allowedSchemes = array('http', 'https');
 		
-		$withs = array();
-		if (!empty($urls)) {
-			foreach($urls as $i => $val) {
+		// Find all ahrefs
+		$pat =
+			'(?:(?:href\s*\=\s*\"\s*)([^\"]+))|'. // Double quoted case
+			'(?:(?:href\s*\=\s*\'\s*)([^\']+))|'. // Single quoted case
+			'(?:(?:href\s*\=\s*)([^\s\<]+))' // Case without quotes
+		;
 
-				$withs[] = str_replace(
-					$val,
-					JRoute::_(
-						'index.php?option=com_newsletter&task=newsletter.track&format=json&action=clicked&uid=' . $uid . '&nid=' . $newsletterId .
-						'&link=' . urlencode(base64_encode($val)), FALSE, 2
-					),
-					$fullhrefs[$i]
-				);	
+		// Make it multiline caseinsensetive ungreedy
+		preg_match_all("/$pat/im", $content, $matches);
+		
+		// Create unique pattern-url pairs for substitution
+		$urls = array();
+		$patterns = $matches[0];
+		for($i=0; $i < count($patterns); $i++) {
+			
+			// Make it unique!
+			if (array_key_exists($patterns[$i], $urls)) {
+				continue;
+			}	
+
+			// Try to get url
+			$url = null;
+			if (!empty($matches[1][$i])) $url = $matches[1][$i];
+			if (!empty($matches[2][$i])) $url = $matches[2][$i];
+			if (!empty($matches[3][$i])) $url = $matches[3][$i];
+
+			// If there is no extracted url then just do not modify it
+			if (!$url) continue;
+				
+			// Check if scheme of url is allowed to be tracked
+			$allowed = false;
+			foreach($allowedSchemes as $scheme) {
+				if (strpos($url, $scheme) === 0) {
+					$allowed = true;
+					break;
+				}	
+			}	
+
+			// If url is not allowed then just skip it
+			if (!$allowed) {
+				continue;
 			}
 
-			$content = str_replace($fullhrefs, $withs, $content);
+			$urls[$patterns[$i]] = str_replace(
+				$url,
+				JRoute::_(
+					'index.php?option=com_newsletter&task=newsletter.track&format=json&action=clicked&uid=' . $uid . '&nid=' . $newsletterId, false, 2
+				).
+					'&link=' . urlencode(base64_encode($url)),
+				$patterns[$i]
+			);	
 		}
+
+		// Finaly replace patterns with allowed processed modifications
+		$content = str_replace(array_keys($urls), array_values($urls), $content);
 			
 		return true;
 	}
