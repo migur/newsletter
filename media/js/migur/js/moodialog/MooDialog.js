@@ -4,7 +4,7 @@ name: MooDialog
 description: The base class of MooDialog
 authors: Arian Stolwijk
 license:  MIT-style license
-requires: [Core/Class, Core/Element, Core/Element.Styles, Core/Element.Event]
+requires: [Core/Class, Core/Element, Core/Element.Style, Core/Element.Event]
 provides: [MooDialog, Element.MooDialog]
 ...
 */
@@ -37,7 +37,9 @@ var MooDialog = new Class({
 		onOpen: function(){},
 		onClose: function(){},
 		onShow: function(){},
-		onHide: function(){}*/
+		onHide: function(){},
+		onInitialize: function(wrapper){},
+		onContentChange: function(content){}*/
 	},
 
 	initialize: function(options){
@@ -97,6 +99,8 @@ var MooDialog = new Class({
 		var type = typeOf(content);
 		if (['string', 'number'].contains(type)) this.content.set('text', content);
 		else this.content.adopt(content);
+
+		this.fireEvent('contentChange', this.content);
 
 		return this;
 	},
