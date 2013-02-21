@@ -4,7 +4,7 @@ name: MooDialog.Fx
 description: Overwrite the default events so the Dialogs are using Fx on open and close
 authors: Arian Stolwijk
 license: MIT-style license
-requires: [Cores/Fx.Tween, Overlay]
+requires: [Core/Fx.Tween, Overlay]
 provides: MooDialog.Fx
 ...
 */
@@ -24,6 +24,10 @@ MooDialog.implement('options', {
 			duration: this.options.duration
 		});
 		if (this.options.closeOnOverlayClick) this.overlay.addEvent('click', this.close.bind(this));
+
+		this.addEvent('hide', function(){
+			if (this.options.destroyOnHide) this.overlay.overlay.destroy();
+		}.bind(this));
 	},
 
 	onBeforeOpen: function(wrapper){
