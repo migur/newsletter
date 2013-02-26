@@ -23,11 +23,11 @@ MooDialog.Alert = new Class({
 	initialize: function(msg, options){
 		this.parent(options);
 
-		var okButton = new Element('button', {
+		var okButton = new Element('input[type=button]', {
 			events: {
 				click: this.close.bind(this)
 			},
-			text: this.options.okText
+			value: this.options.okText
 		});
 
 		this.setContent(
