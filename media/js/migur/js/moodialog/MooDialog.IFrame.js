@@ -10,7 +10,7 @@ provides: MooDialog.IFrame
 */
 
 
-MooDialog.IFrame = new Class({
+MooDialog.Iframe = new Class({
 
 	Extends: MooDialog,
 
