@@ -89,6 +89,22 @@ class NewsletterHelperContent
 		
 		return str_replace(array_keys($urls), array_values($urls), $content);
 	}
+	
+	public static function repairHTML($html)
+	{
+		if (class_exists('DOMDocument')) {
+			
+			$html = utf8_decode($html);
+			$doc = new DOMDocument();
+			@$doc->loadHTML($html);
+			$html = $doc->saveHTML();
+			$html = utf8_encode($html);
+
+			$html = preg_replace(array('/^<!DOCTYPE.*>\s*<html>\s*<body>/', '/<\/body>\s*<\/html>$/im'), array('', ''), $html);
+		}
+		
+		return $html;
+	}
 
 }
 
