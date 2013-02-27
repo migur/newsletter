@@ -13,6 +13,8 @@ if (!defined('MIGUR_COM_NEWSLETTER')) {
 		.DIRECTORY_SEPARATOR.'com_newsletter'
 	);
 
+	define('COM_NEWSLETTER_PATH_ADMIN_EXTENSIONS', COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'extensions');
+	
 	// Defaults section
 	define('SUBSCRIBER_HTML_DEFAULT', true);
 	define('SUBSCRIBER_STATE_DEFAULT', true);
