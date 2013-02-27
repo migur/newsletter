@@ -29,7 +29,57 @@
                     required="true"
                     description="COM_CONTENT_FIELD_SELECT_ARTICLE_DESC"
                 />
-                
+
+                <field 
+                    name="text_mode"
+                    type="list"
+                    label="COM_NEWSLETTER_MOD_ARTICLE_FIELD_TEXT_MODE_LABEL"
+                    required="true"
+                    description="COM_NEWSLETTER_MOD_ARTICLE_FIELD_TEXT_MODE_DESC"
+					default="0"
+				>
+					<option value="0">COM_NEWSLETTER_MOD_ARTICLE_CHARCOUNT</option>
+					<option value="1">COM_NEWSLETTER_MOD_ARTICLE_FULL</option>
+					<option value="2">COM_NEWSLETTER_MOD_ARTICLE_READMORE</option>
+                </field>
+
+                <field 
+                    name="text_amount"
+                    type="text"
+                    label="COM_NEWSLETTER_MOD_ARTICLE_FIELD_TEXT_AMOUNT_LABEL"
+                    description="COM_NEWSLETTER_MOD_ARTICLE_FIELD_TEXT_AMOUNT_DESC"
+					default="200"
+				/>
+
+                <field 
+                    name="strip_tags"
+                    type="list"
+                    label="COM_NEWSLETTER_MOD_ARTICLE_FIELD_STRIP_TAGS_LABEL"
+                    description="COM_NEWSLETTER_MOD_ARTICLE_FIELD_STRIP_TAGS_DESC" 
+					default="0"
+				>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field 
+                    name="show_articlelink"
+                    type="list"
+                    label="COM_NEWSLETTER_MOD_ARTICLE_FIELD_SHOW_ARTICLELINK_LABEL"
+                    description="COM_NEWSLETTER_MOD_ARTICLE_FIELD_SHOW_ARTICLELINK_DESC"
+					default="1"
+				>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+                <field 
+                    name="articlelink_text"
+                    type="text"
+                    label="COM_NEWSLETTER_MOD_ARTICLE_FIELD_ARTICLELINK_TEXT_LABEL"
+                    description="COM_NEWSLETTER_MOD_ARTICLE_FIELD_ARTICLELINK_TEXT_DESC" 
+				/>
+
 			</fieldset>
 		</fields>
 	</config>

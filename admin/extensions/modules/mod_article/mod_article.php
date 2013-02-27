@@ -23,11 +23,32 @@ if (!empty($art)) {
 
 	$params->set('title', $art->title);
 
-	$data = $art->introtext;
-	if (strlen($data) > 200) {
-		$data = substr($data, 0, strpos($data, ' ', 200));
-	}
-	$link = JUri::root() . '?option=com_content&view=article&id=' . $id;
+	$textMode = (int) $params->get('text_mode', 0);
 
-	echo $data . '<a href="' . $link . '"><b>&nbsp;&nbsp;.&nbsp;.&nbsp;.&nbsp;</b></a>';
-}	
+	// If READMORE
+	if ($textMode == 2) {
+		$data = $art->introtext;
+	} else {
+		$data = $art->introtext . $art->fulltext;
+	}
+
+	if ($params->get('strip_tags', 0) != 0) {
+		$data = strip_tags($data, '<br><p>');
+	}
+
+	if ($textMode == 0) {
+		$data = @substr($data, 0, strpos($data, ' ', (int) $params->get('text_amount', '200')));
+	}	
+	
+	$data = NewsletterHelperContent::repairHTML($data);
+	
+	echo $data;
+	
+	if ($params->get('show_articlelink', 1) == 1) {
+		
+		$link = JUri::root() . '?option=com_content&view=article&id=' . $id;
+		$linkTitle = ($params->get('articlelink_text') != '')? JText::_($params->get('articlelink_text')) : '...';
+		$linkTitle = htmlspecialchars($linkTitle);
+		echo '<a class="readmore" href="' . $link . '">' . $linkTitle . '</a>';
+	}
+}
