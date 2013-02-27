@@ -132,6 +132,8 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 */
 	public function rendermodule()
 	{
+		ob_start();
+		
 		$native     = JRequest::getString('native');
 		$id         = JRequest::getString('extension_id');
 		$params     = JRequest::getVar('params', array(), 'post', 'array');
@@ -150,8 +152,12 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$module->title      = $title;
 		$module->showtitle  = $showTitle;
 
-		$content = MigurModuleHelper::renderModule($modules[0]);
+		$content = NewsletterHelperModule::renderModule($modules[0]);
 
+		ob_end_clean();
+		
+		header("Content-Type: text/html; charset=UTF-8");
+		
 		echo $content; die;
 	}
 	/**

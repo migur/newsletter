@@ -63,6 +63,19 @@ class NewsletterViewExtension extends MigurView
 		$lang->load('com_content', JPATH_ADMINISTRATOR, null, false, false);
 
 		$ext = $exts[0];
+
+		// Let's load lang file of a extension
+		$basePath = $native?
+			JPATH_BASE
+			:
+			COM_NEWSLETTER_PATH_ADMIN_EXTENSIONS .
+			DIRECTORY_SEPARATOR . $type . 's' . 
+			DIRECTORY_SEPARATOR . $ext->extension;
+		
+		$lang->load($ext->extension, $basePath) 
+		|| $lang->load($ext->extension, $basePath, $lang->getDefault());
+		
+		
 		$this->info = $ext->xml;
 		if (JRequest::getString('layout') == 'edit') {
 			$model = $this->getModel();
