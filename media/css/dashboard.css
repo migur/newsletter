@@ -23,20 +23,23 @@
     list-style-type: none;
 }
 
-@media (min-width: 1000px) { 
-
-	#dashboard-handlers {
-		width: 60%;
-		float: left;
-	}
-	
-	#dashboard-static {
-		width: 39%;
-		float: right;
-		clear: none;
-	}
+#dashboard-handlers {
+	width: 60%;
+	float: left;
 }
 
+#dashboard-static {
+	width: 39%;
+	float: right;
+	clear: none;
+}
+
+@media (max-width: 1000px) { 
+	#dashboard-static, #dashboard-handlers {
+		width: 100%;
+		float: none;
+	}
+}
 
 #dashboard-handlers fieldset div.toolbar-list {
     margin: auto;
@@ -82,17 +85,6 @@ fieldset .toolbar-list a {
     width: 96%;
     float: right;
     padding: 0;
-}
-
-@media (max-width: 1000px) { 
-
-	#dashboard-handlers {
-		width: 100%;
-	}
-	
-	#dashboard-static {
-		width: 100%;
-	}
 }
 
 #links {

@@ -22,6 +22,8 @@ class NewsletterHelperNewsletter
 
 	public static $_manifest = null;
 	
+	public static $_displayErrors = null;
+	
 	/**
 	 * Configure the Linkbar.
 	 *
@@ -578,6 +580,28 @@ class NewsletterHelperNewsletter
 		$maxMemory  = ini_get('memory_limit');
 		
 		return (($usedMemory / $maxMemory) * 100) < 99;
+	}
+	
+	
+	/**
+	 * Supress all errors and warnings. Stores previous state.
+	 */
+	static public function supressPhpErrors() {
+		if (self::$_displayErrors === null) {
+			self::$_displayErrors = ini_get('display_errors');
+		}	
+		@ini_set('display_errors', 0);
+	}
+
+	
+	/**
+	 * Restore the value of display_errors.
+	 */
+	static public function resolvePhpErrors() {
+		if (self::$_displayErrors !== null) {
+			@ini_set('display_errors', self::$_displayErrors);
+			self::$_displayErrors = null;
+		}	
 	}
 	
 }

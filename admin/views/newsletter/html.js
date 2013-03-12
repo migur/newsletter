@@ -140,10 +140,11 @@ Migur.define('htmlPane', function(){
 			widget.set({'notConfigured': false});
 
 			if (event) event.stop();
-			var href = 0;//$(this).getProperty('href');
-			if ( Migur.moodialogs[href] ) {
-				Migur.moodialogs[href].destroy();
-			}
+			var href = 0;
+			//$(this).getProperty('href');
+//			if ( Migur.moodialogs[href] ) {
+//				Migur.moodialogs[href].destroy();
+//			}
 			Migur.moodialogs[href] = {};
 			Migur.moodialogs[href] = new MooDialog.Iframe(
 			   '', //$(this).getProperty('href'),

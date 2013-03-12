@@ -55,6 +55,11 @@ class NewsletterControllerNewsletter extends JControllerForm
 		 */
 
 		//TODO: Get the admin session...
+
+		// Let's do it quitely unless if debug mode is ON
+		if (NewsletterHelperNewsletter::getParam('debug') == 0) {
+			NewsletterHelperNewsletter::supressPhpErrors();
+		}
 		
 		/*
 		 *  Let's render the newsletter.
@@ -138,7 +143,14 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 */
 	public function rendermodule()
 	{
+<<<<<<< Updated upstream
 		ob_start();
+=======
+		// Let's do it quitely unless if debug mode is ON
+		if (NewsletterHelperNewsletter::getParam('debug') == 0) {
+			NewsletterHelperNewsletter::supressPhpErrors();
+		}
+>>>>>>> Stashed changes
 		
 		$native     = JRequest::getString('native');
 		$id         = JRequest::getString('extension_id');

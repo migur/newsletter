@@ -3,6 +3,7 @@
 defined('_JEXEC') or die;
 ?>
 
+<form name="extensionForm" method="POST" id="extension-container" class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
 <div id="extensions">
 
 	<ul id="tabs-extensions" class="nav nav-tabs">
@@ -18,51 +19,69 @@ defined('_JEXEC') or die;
 
 		<div id="ext-settings" class="tab-pane active">
 
-			<form name="extensionForm" method="POST" id="extension-container" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
 
 				<div id="ext-settings-container">
 
-					<ul class="adminformlist">
-
-						<li><?php echo $this->form->getLabel('title'); ?>
-						<?php echo $this->form->getInput('title'); ?></li>
-
-						<li><?php echo $this->form->getLabel('showtitle'); ?>
-						<?php echo $this->form->getInput('showtitle'); ?></li>
-					</ul>
-
-					<div class="clr"></div>
-
-					<?php echo JHtml::_('sliders.start', 'module-sliders'); ?>
+					<div class="control-group adminformlist">
+						<div class="control-label">
+							<?php echo $this->form->getLabel('title'); ?>
+						</div>
+						<div class="controls">
+							<?php echo $this->form->getInput('title'); ?>
+						</div>	
+					</div>
+					
+					<div class="control-group adminformlist">
+						<div class="control-label">
+							<?php echo $this->form->getLabel('showtitle'); ?>
+						</div>
+						<div class="controls">
+							<?php echo $this->form->getInput('showtitle'); ?>
+						</div>	
+					</div>
+					
+					
+					<div class="accordion pane-sliders" id="module-sliders">
 
 					<?php
 					$fieldSets = $this->form->getFieldsets('params');
 
-					foreach ($fieldSets as $name => $fieldSet) :
-						$label = !empty($fieldSet->label) ? $fieldSet->label : 'COM_MODULES_'.$name.'_FIELDSET_LABEL';
-						echo JHtml::_('sliders.panel',JText::_($label), $name.'-options');
-							if (isset($fieldSet->description) && trim($fieldSet->description)) :
-								echo '<p class="tip">'.$this->escape(JText::_($fieldSet->description)).'</p>';
-							endif;
-							?>
-						<fieldset class="panelform">
-						<?php $hidden_fields = ''; ?>
-						<ul class="adminformlist">
-							<?php foreach ($this->form->getFieldset($name) as $field) : ?>
-							<?php if (!$field->hidden) : ?>
-							<li>
-								<?php echo $field->label; ?>
-								<?php echo $field->input; ?>
-							</li>
-							<?php else : $hidden_fields.= $field->input; ?>
-							<?php endif; ?>
-							<?php endforeach; ?>
-						</ul>
-						<?php echo $hidden_fields; ?>
-						</fieldset>
-					<?php endforeach; ?>
+					foreach ($fieldSets as $name => $fieldSet) : 
+						$label = !empty($fieldSet->label) ? $fieldSet->label : 'COM_MODULES_'.$name.'_FIELDSET_LABEL';	
+						$id = $name . '-options'; ?>
+						
+						<div class="accordion-group panel">
+							<div class="accordion-heading">
+								<a class="accordion-toggle" data-toggle="collapse" data-parent="#module-sliders" href="#<?php echo $id; ?>">
+									<?php echo JText::_($label); ?>
+								</a>
+							</div>
 
-					<?php echo JHtml::_('sliders.end'); ?>
+							<div id="<?php echo $id; ?>" class="accordion-body collapse in" >
+								<div class="accordion-inner">
+									<?php 
+									$hidden_fields = '';
+									$fieldset = $this->form->getFieldset($name);
+									foreach ($fieldset as $field) :
+										if ($field->hidden) {
+											$hidden_fields.= $field->input;
+										} else { ?>
+											<div class="control-group adminformlist">
+												<div class="control-label">
+													<?php echo $field->label; ?>
+												</div>
+												<div class="controls">
+													<?php echo $field->input; ?>
+												</div>	
+											</div>
+										<?php } ?>
+									<?php endforeach; ?>
+									<?php echo $hidden_fields; ?>
+								</div>	
+							</div>
+						</div>	
+					<?php endforeach; ?>
+					</div>
 				</div>
 				<input
 					class="btn btn-success extension-save"
@@ -70,7 +89,6 @@ defined('_JEXEC') or die;
 					value="<?php echo JText::_('JTOOLBAR_APPLY'); ?>"
 					onclick="return Joomla.submitbutton('apply');"
 				>
-			</form>
 
 		</div>	
 
@@ -96,3 +114,5 @@ defined('_JEXEC') or die;
 	</div>	
 
 </div>
+</form>
+	
