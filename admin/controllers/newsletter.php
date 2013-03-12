@@ -199,7 +199,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 * @return void
 	 * @since 1.0
 	 */
-	protected function postSaveHook(JModel &$model, $validData = array())
+	protected function postSaveHook(JModelLegacy &$model, $validData = array())
 	{
 		$this->newsletterId = $model->getState($model->getName() . '.id');
 	}
