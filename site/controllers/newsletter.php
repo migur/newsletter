@@ -144,6 +144,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	public function rendermodule()
 	{
 		ob_start();
+		
 		// Let's do it quitely unless if debug mode is ON
 		if (NewsletterHelperNewsletter::getParam('debug') == 0) {
 			NewsletterHelperNewsletter::supressPhpErrors();
