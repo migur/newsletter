@@ -29,7 +29,7 @@ class NewsletterControllerTemplates extends JControllerAdmin
 
 	/**
 	 * Proxy for getModel.
-	 * @return  JModel model object
+	 * @return  JModelLegacy model object
 	 * @since	1.0
 	 */
 	public function getModel($name = 'Template', $prefix = 'NewsletterModel', $config = array('ignore_request' => true))
