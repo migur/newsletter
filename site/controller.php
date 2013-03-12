@@ -32,7 +32,7 @@ class NewsletterController extends MigurController
 	 * @return object
 	 * @since  1.0
 	 */
-	function display($cachable = false)
+	function display($cachable = false, $urlparams = false)
 	{
 		// set default view if not set
 		JRequest::setVar('view', JRequest::getCmd('view', 'subscribers'));

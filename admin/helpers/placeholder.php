@@ -42,7 +42,7 @@ class NewsletterHelperPlaceholder
 	 * @return string
 	 * @since 1.0
 	 */
-	public function getInstance($name, $namespace)
+	public static function getInstance($name, $namespace)
 	{
 
 		$name = strtolower($name);
@@ -93,7 +93,7 @@ class NewsletterHelperPlaceholder
 	 * @return string
 	 * @since 1.0
 	 */
-	public function render($name, $namespace, $data = null, $default = null)
+	public static function render($name, $namespace, $data = null, $default = null)
 	{
 		$pholder = self::getInstance($name, $namespace);
 
@@ -234,6 +234,7 @@ class NewsletterHelperPlaceholder
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 class PlaceholderHelper extends NewsletterHelperPlaceholder
 {}

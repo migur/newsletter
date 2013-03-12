@@ -91,7 +91,7 @@ abstract class NewsletterHelperPlugin
 	 * 
 	 * @return array - the list of supported modules 
 	 */
-	public function getSupported($params = array(), $namespace = '')
+	public static function getSupported($params = array(), $namespace = '')
 	{
 		$extensions = array_merge(
 				array(),//self::getNativeSupported(),
@@ -137,7 +137,7 @@ abstract class NewsletterHelperPlugin
 	 * 
 	 * @return array - the list of supported modules 
 	 */
-	public function getItem($pid, $native = false)
+	public static function getItem($pid, $native = false)
 	{
 		if ($native) {
 			$item = self::getNativeSupported($pid);
@@ -167,7 +167,7 @@ abstract class NewsletterHelperPlugin
 	 * @return array - list of supported modules
 	 * @since  1.0
 	 */
-	public function getLocallySupported($pid = null)
+	public static function getLocallySupported($pid = null)
 	{
 		// Fetch it
 		$db = JFactory::getDbo();
@@ -201,7 +201,7 @@ abstract class NewsletterHelperPlugin
 	 * @return array - list of supported modules
 	 * @since  1.0
 	 */
-	public function getNativeSupported($pid)
+	public static function getNativeSupported($pid)
 	{
 		// Fetch it
 		$db = JFactory::getDbo();
@@ -462,40 +462,41 @@ abstract class NewsletterHelperPlugin
 		}
 	}
         
-        static function _loadLang($name, $group)
-        {
-            if (!self::$_lang instanceof JLanguage) {
-                self::$_lang = JFactory::getLanguage();
-            }
+	protected static function _loadLang($name, $group)
+	{
+		if (!self::$_lang instanceof JLanguage) {
+			self::$_lang = JFactory::getLanguage();
+		}
 
-            $path = 
-                JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR .
-                'extensions' . DIRECTORY_SEPARATOR .
-                'plugins' . DIRECTORY_SEPARATOR .
-                $group . DIRECTORY_SEPARATOR .
-                $name;
+		$path = 
+			JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR .
+			'extensions' . DIRECTORY_SEPARATOR .
+			'plugins' . DIRECTORY_SEPARATOR .
+			$group . DIRECTORY_SEPARATOR .
+			$name;
 
-            
-            self::$_lang->load($name, $path);
-        }
-		
-		
-		static function getFolder($extension, $namespace)
-		{
-			@list($group) = explode('.', $namespace);
-			
-			return JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 
-			'components' . DIRECTORY_SEPARATOR . 
-			'com_newsletter' . DIRECTORY_SEPARATOR . 
-			'extensions' . DIRECTORY_SEPARATOR . 
-			'plugins' . DIRECTORY_SEPARATOR . 
-			$group . DIRECTORY_SEPARATOR . 
-			$extension;
-		}	
+
+		self::$_lang->load($name, $path);
+	}
+
+
+	protected static function getFolder($extension, $namespace)
+	{
+		@list($group) = explode('.', $namespace);
+
+		return JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 
+		'components' . DIRECTORY_SEPARATOR . 
+		'com_newsletter' . DIRECTORY_SEPARATOR . 
+		'extensions' . DIRECTORY_SEPARATOR . 
+		'plugins' . DIRECTORY_SEPARATOR . 
+		$group . DIRECTORY_SEPARATOR . 
+		$extension;
+	}	
 }
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 abstract class MigurPluginHelper extends NewsletterHelperPlugin 
 {}

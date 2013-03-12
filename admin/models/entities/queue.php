@@ -26,7 +26,7 @@ class NewsletterModelEntityQueue extends MigurModel
 	 * @return	JTable	A database object
 	 * @since	1.0.4
 	 */
-	public function getTable($type = 'Queue', $prefix = 'NewsletterTable')
+	public function getTable($type = 'Queue', $prefix = 'NewsletterTable', $options = array())
 	{
 		return JTable::getInstance($type, $prefix);
 	}

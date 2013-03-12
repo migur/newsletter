@@ -32,11 +32,12 @@ defined('_JEXEC') or die;
 		// module params
 		$filter = JFilterInput::getInstance();
 
-		//  get RSS parsed object
-		$parser = JFactory::getFeedParser($params->rssurl, 0);
+		// Get RSS parsed object.
+		// @ to hide STRICT php warnings of a SimplePie.
+		$parser = @JFactory::getFeedParser($params->rssurl, 0);
 		if ($parser) {
-
-			return RssfeedHelper::_parse($parser, $params);
+			// @ to hide STRICT php warnings of a SimplePie.
+			return @RssfeedHelper::_parse($parser, $params);
 
 		} else {
 			return false;
@@ -113,6 +114,7 @@ defined('_JEXEC') or die;
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 class RssfeedHelper extends NewsletterHelperRssfeed
 {}

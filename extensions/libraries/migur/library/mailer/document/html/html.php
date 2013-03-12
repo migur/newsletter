@@ -36,7 +36,7 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 	 * @return void
 	 * @since 1.0
 	 */
-	public function parse()
+	public function parse($options = array())
 	{
 
 		$this->parsedTags = array();
@@ -254,9 +254,9 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 		
 		// Find all ahrefs
 		$pat =
-			'(?:(?:href\s*\=\s*\"\s*)([^\"]+))|'. // Double quoted case
-			'(?:(?:href\s*\=\s*\'\s*)([^\']+))|'. // Single quoted case
-			'(?:(?:href\s*\=\s*)([^\s\<]+))' // Case without quotes
+			'(?:(?:href\s*\=\s*\"\s*)([^\"]+)\")|'. // Double quoted case
+			'(?:(?:href\s*\=\s*\'\s*)([^\']+)\')|'. // Single quoted case
+			'(?:(?:href\s*\=\s*)([^\s\"\'\<]+))' // Case without quotes
 		;
 
 		// Make it multiline caseinsensetive ungreedy

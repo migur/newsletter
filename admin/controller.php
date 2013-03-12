@@ -19,7 +19,7 @@ class NewsletterController extends MigurController
 	 *
 	 * @return void
 	 */
-	function display($cachable = false)
+	function display($cachable = false, $urlparams = false)
 	{
 		// set default view if not set
 		JRequest::setVar('view', JRequest::getCmd('view', 'dashboard'));

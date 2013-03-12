@@ -83,7 +83,9 @@ class NewsletterHelperMail
 	}
 
 	/**
-	 *
+	 * Deprecated and not used 
+	 * Should be removed after 12.07
+	 * 
 	 * Get all subscribers binded to list with $id.
 	 *
 	 * @param string $name - id of a letter
@@ -132,7 +134,7 @@ class NewsletterHelperMail
 	 *
 	 * @return JObject
 	 */
-	public function getJoomlaProfile()
+	public static function getJoomlaProfile()
 	{
 		JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 		JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
@@ -169,7 +171,7 @@ class NewsletterHelperMail
 	 * @return object - list of subscribers
 	 * @since 1.0
 	 */
-	public function getDefaultSmtp($onlyId = false)
+	public static function getDefaultSmtp($onlyId = false)
 	{
 		$options = JComponentHelper::getComponent('com_newsletter');
 		$options = $options->params->toArray();
@@ -208,7 +210,7 @@ class NewsletterHelperMail
 	 * @return object - list of subscribers
 	 * @since 1.0
 	 */
-	public function getDefaultMailbox($onlyId = false)
+	public static function getDefaultMailbox($onlyId = false)
 	{
 		
 		$options = JComponentHelper::getComponent('com_newsletter');
@@ -236,6 +238,7 @@ class NewsletterHelperMail
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 class MailHelper extends NewsletterHelperMail
 {}

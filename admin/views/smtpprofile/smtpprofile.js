@@ -46,17 +46,17 @@ window.addEvent('domready', function() { try {
 						$$('#smtp-toolbar .preloader')[0].destroy();
 					}	
 					
-					try { res = JSON.decode(res); }
-					catch(e) { res = undefined; }
+					var response = new Migur.jsonResponseParser();
+
+					response.setResponse(res);
+
+					if (response.isError()) {
+						alert(response.getMessagesAsList(Joomla.JText._('CONNECTION_FAILED','Connection failed!')));
+					} else {
+						alert(response.getMessagesAsList(Joomla.JText._('CONNECTION_OK', 'Connection ok!')));
+					}	
 					
-					if (res && res.status == 'ok') {
-						alert(Joomla.JText._('CONNECTION_OK','Connection ok!'));
-						return;
-					}
-					
-					alert(Joomla.JText._('CONNECTION_FAILED','Connection failed!'));
 					return;
-					
 				}
 			}).send();
 				return false;
