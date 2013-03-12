@@ -4,22 +4,24 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-@media (min-width: 900px) { 
-	
-	.left-bar  {
-		float:left;
-		width:73%;
-	}
+.left-bar  {
+	float:left;
+	width:73%;
+}
+
+.right-bar {
+	float: right;
+	width:25%;
+}
  
-	.right-bar {
-		float: right;
-		width:25%;
+ 
+@media (max-width: 900px) { 
+	.right-bar, .left-bar  {
+		float:none;
+		width:100%;
 	}
 }
 
-
-@media (max-width: 1000px) { 
-}
 
 #acc-newsletter {
     /*width: 250px;*/
@@ -82,6 +84,10 @@
     background-color: #3A87AD;	
     border-radius: 3px 3px 3px 3px;
     padding: 1px 4px 2px;	
+}
+
+#html-area .widget.module {
+	position: relative !important;
 }
 
 .widget.module .widget-header,

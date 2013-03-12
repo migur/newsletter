@@ -5,34 +5,22 @@
  */
  
 /* High resolution */
-@media (min-width: 1000px) {
-	
-	#newsletters-list {
-		float: left;
-		width:59%;
-	}
-	
-	#newsletters-statistics {
-		float: right;
-		width:40%;
-	}
-	
+#newsletters-list {
+	float: left;
+	width:59%;
 }
 
-@media (max-width: 1000px) {
-	
-	.newsletters-list {
-		float: left;
-		width:100%;
-	}
-	
-	.newsletters-statistics {
-		float: left;
-		width:100%;
+#newsletters-statistics {
+	float: right;
+	width:40%;
+}
+
+@media (max-width: 1000px) { 
+	.newsletters-statistics, .newsletters-list {
+		float: none !important;
+		width:100% !important;
 	}
 }
- 
- 
 
 #statistics-container {
     width: 440px;

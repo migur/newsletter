@@ -432,3 +432,12 @@ body.component {
 .form-horizontal .control-group > label {
     float: left;
 }
+
+/* IE8 fix */
+.accordion-body.collapse {
+	overflow: hidden;
+}
+.accordion-body.collapse.in {
+	overflow: visible;
+}
+/**/

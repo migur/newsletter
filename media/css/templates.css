@@ -4,29 +4,19 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-@media (min-width: 1000px) {
-	
-	#templates-list {
-		float: left;
-		width:39%;
-	}
-	
-	#templates-preview {
-		float: right;
-		width:60%;
-	}
-	
+#templates-list {
+	float: left;
+	width:40%;
+}
+
+#templates-preview {
+	float: right;
+	width:59%;
 }
 
 @media (max-width: 1000px) {
-	
-	#templates-list {
-		float: left;
-		width:100%;
-	}
-	
-	#templates-preview {
-		float: left;
+	#templates-preview, #templates-list {
+		float: none;
 		width:100%;
 	}
 }

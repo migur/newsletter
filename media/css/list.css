@@ -6,23 +6,30 @@
 
 /* overview1 */
 
+#import-found-fields,
+#exclude-found-fields
+{
+	width: 30%;
+	float: left;
+	margin-right: 5%;
+}
+
+#import-fields,
+#exclude-fields {
+	width: 30%;
+	float: left;
+	margin-right: 5%;
+}
 
 
-@media(min-width: 1000px) {
-	
-	#import-found-fields,
-	#exclude-found-fields
-	{
-		width: 30%;
-		float: left;
-		margin-right: 5%;
-	}
-
+@media(max-width: 1000px) {
 	#import-fields,
-	#exclude-fields {
-		width: 30%;
-		float: left;
-		margin-right: 5%;
+	#exclude-fields,
+	#import-found-fields,
+	#exclude-found-fields {
+		width: 100%;
+		float: none;
+		margin-right: 0;
 	}
 }
 

@@ -26,29 +26,20 @@
 }
 
 
-@media (min-width: 1550px) { 
-
-	.subscribers-container {
-		float: left;
-		width: 59%;
-	}
-
-	.lists-container {
-		float: right;
-		width: 39%;
-	}
+.subscribers-container {
+	float: left;
+	width: 61%;
 }
 
-@media (max-width: 1550px) { 
+.lists-container {
+	float: right;
+	width: 37%;
+}
 
-	.subscribers-container {
+@media (max-width: 1400px) { 
+	.lists-container, .subscribers-container {
 		width: 100%;
-		float: left;
-	}
-
-	.lists-container {
-		width: 100%;
-		float: left;
+		float: none;
 	}
 }
 
