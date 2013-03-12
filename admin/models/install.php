@@ -69,7 +69,7 @@ class NewsletterModelInstall extends MigurModelList
 	 * @return	boolean result of install
 	 * @since	1.5
 	 */
-	function install()
+	public function install()
 	{
 		$this->setState('action', 'install');
 
@@ -130,7 +130,7 @@ class NewsletterModelInstall extends MigurModelList
 	 * @return	boolean	True on success
 	 * @since	1.5
 	 */
-	function remove($eid = array())
+	public function remove($eid = array())
 	{
 		// Initialise variables.
 		$user = JFactory::getUser();
@@ -232,7 +232,7 @@ class NewsletterModelInstall extends MigurModelList
 	 *
 	 * @since	1.6
 	 */
-	protected function populateState()
+	protected function populateState($ordering = null, $direction = null)
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication('administrator');

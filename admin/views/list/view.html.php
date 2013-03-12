@@ -190,7 +190,7 @@ class NewsletterViewList extends MigurView
 
 		
 		if(!empty($listId)) {
-			$this->assignRef('events', $listModel->getEventsCollection($listId));
+			$this->assign('events', $listModel->getEventsCollection($listId));
 		}	
 		
 		/*
@@ -200,10 +200,10 @@ class NewsletterViewList extends MigurView
 		jimport('joomla.client.helper');
 		$ftp = !JClientHelper::hasCredentials('ftp');
 
-		$this->assignRef('session', JFactory::getSession());
 		$this->assignRef('config', $config);
-		$this->assignRef('state', $this->get('state'));
-		$this->assignRef('folderList', $this->get('folderList'));
+		$this->assign('session', JFactory::getSession());
+		$this->assign('state', $this->get('state'));
+		$this->assign('folderList', $this->get('folderList'));
 		$this->assign('require_ftp', $ftp);
 
 		$this->setStatisticsData();

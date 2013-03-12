@@ -72,7 +72,7 @@ class NewsletterControllerMailboxprofile extends JControllerForm
 	 * @return void
 	 * @since 1.0
 	 */
-	public function save()
+	public function save($key = null, $urlVar = null)
 	{
 		parent::save();
 
@@ -126,7 +126,8 @@ class NewsletterControllerMailboxprofile extends JControllerForm
 
 	public function checkConnection()
 	{
-
+		NewsletterHelperNewsletter::jsonPrepare();
+		
 		$options = JRequest::getVar('jform');
 		
 		$mailbox = new MigurMailerMailbox($options);
@@ -154,23 +155,10 @@ class NewsletterControllerMailboxprofile extends JControllerForm
 			}
 		}	
 
-		if (count($errors) == 0) {
-			$status = 'ok';
-		} else {
-			$status = '';
-			foreach($errors as $error) {
-				$status .= "\n" . $error;
-			}
-		}	
-		
 		imap_errors(); 
 		imap_alerts();
 
-		echo json_encode(array(
-			'status' => $status
-		));
-
-		jexit();
+		NewsletterHelperNewsletter::jsonResponse(count($errors) == 0, $errors);
 	}
 	
 }

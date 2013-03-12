@@ -182,6 +182,7 @@ abstract class NewsletterHelperMedia
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 abstract class MediaHelper extends NewsletterHelperMedia
 {}

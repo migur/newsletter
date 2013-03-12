@@ -663,7 +663,7 @@ class NewsletterHelperStatistics
 		return $assoc;
 	}
 
-	protected function _fillDate($startDate, $endDate, &$res)
+	protected static function _fillDate($startDate, $endDate, &$res)
 	{
 		// add absent dates
 		$assoc = array();
@@ -688,6 +688,7 @@ class NewsletterHelperStatistics
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 class StatisticsHelper extends NewsletterHelperStatistics
 {}

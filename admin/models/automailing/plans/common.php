@@ -42,7 +42,7 @@ class NewsletterAutomlailingPlanCommon extends MigurJTable
 	}
 
 	
-	public function createThread() {
+	public function createThread($options = array()) {
 		throw new Exception('Method createThread need to be implemented in child class');
 	}
 	
