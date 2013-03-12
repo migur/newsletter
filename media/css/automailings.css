@@ -4,16 +4,22 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-@media(min-width:1000px) {
+#automailing-list {
+	width: 40%;
+	float: left;
+}
 
-    #automailing-list {
-        width: 40%;
-        float: left;
-    }
+#automailing-details {
+	width: 55%;
+	float: right;
+}
 
-    #automailing-details {
-        width: 55%;
-        float: right;
+ 
+@media(max-width:1000px) {
+
+    #automailing-details, #automailing-list {
+        width: 100%;
+        float: none;
     }
 
 }

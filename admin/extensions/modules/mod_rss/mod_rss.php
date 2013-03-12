@@ -13,13 +13,14 @@ $news = RssfeedHelper::loadFeed(new JObject(
 
 if ($news !== false) {
 
-	echo "<fieldset><legend>" . $news['description'] . "</legend>";
+	//htmlspecialchars($news['description'], ENT_QUOTES | ENT_DISALLOWED | ENT_HTML401, 'UTF-8') 
+	echo "<fieldset>\n<legend>" . $news['description'] . "</legend>\n";
 	if (!empty($news['items'])) {
 		foreach ($news['items'] as $item) {
-			echo "<div>";
+			echo "<div>\n";
 			echo '<a href="' . $item['link'] . '" target="_blank">';
 			echo $item['title'];
-			echo '</a></div>';
+			echo "</a>\n</div>";
 		}
 	}
 	echo "</fieldset>";

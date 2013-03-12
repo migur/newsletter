@@ -56,7 +56,7 @@ class NewsletterHelperEnvironment
 	 * 
 	 * @return array 
 	 */
-	public function getAvailableChecks()
+	public static function getAvailableChecks()
 	{
 		$ref = new ReflectionClass('EnvironmentHelper');
 		$methods = $ref->getMethods();
@@ -193,6 +193,7 @@ class NewsletterHelperEnvironment
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 class EnvironmentHelper extends NewsletterHelperEnvironment
 {}

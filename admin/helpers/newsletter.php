@@ -22,6 +22,8 @@ class NewsletterHelperNewsletter
 
 	public static $_manifest = null;
 	
+	public static $_displayErrors = null;
+	
 	/**
 	 * Configure the Linkbar.
 	 *
@@ -237,7 +239,7 @@ class NewsletterHelperNewsletter
 	 * @param  string $alias assumed alias
 	 * @return string alias should been used
 	 */
-	public function getFreeAlias($alias, $ownNid = null)
+	public static function getFreeAlias($alias, $ownNid = null)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -280,7 +282,7 @@ class NewsletterHelperNewsletter
 	 * @param  string $alias assumed alias
 	 * @return string alias should been used
 	 */
-	public function createAlias($name = '', $ownNid = null)
+	public static function createAlias($name = '', $ownNid = null)
 	{
 		if (empty($name)) {
 			$alias = 'newsletter';
@@ -299,7 +301,7 @@ class NewsletterHelperNewsletter
 	 * @param  string $alias assumed alias
 	 * @return string alias should been used
 	 */
-	public function getByAlias($alias)
+	public static function getByAlias($alias)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -313,8 +315,17 @@ class NewsletterHelperNewsletter
  		return $db->loadAssoc();
 	}
 	
-	public function getMailProfiles($nid)
+	/**
+	 * Deprecated and not used anymore
+	 * will be removed after 12.07
+	 * @param type $nid
+	 * @return array
+	 */
+	public static function getMailProfiles($nid)
 	{
+		JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
+		JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
+		
 		$db = JFactory::getDbo();
 		
 		// Get default SMTP and Mailbox profile ids
@@ -452,15 +463,15 @@ class NewsletterHelperNewsletter
 	 */
 	static public function jsonResponse($status, $messages = array(), $data = null, $exit = true) 
 	{
+		if (!is_array($messages) && !is_object($messages)) {
+			$messages = array($messages);
+		}
+		
 		$serverResponse = ''; $i=0;
 		do {
 			$serverResponse .= ob_get_contents();
 			$i++; // Make sure that it's not neverended cycle
 		} while(@ob_end_clean() && $i < 10);
-		
-		if (!is_array($messages) && !is_object($messages)) {
-			$messages = array($messages);
-		}
 		
 		@header('Content-Type:application/json; charset=utf-8');
 		
@@ -571,10 +582,33 @@ class NewsletterHelperNewsletter
 		return (($usedMemory / $maxMemory) * 100) < 99;
 	}
 	
+	
+	/**
+	 * Supress all errors and warnings. Stores previous state.
+	 */
+	static public function supressPhpErrors() {
+		if (self::$_displayErrors === null) {
+			self::$_displayErrors = ini_get('display_errors');
+		}	
+		@ini_set('display_errors', 0);
+	}
+
+	
+	/**
+	 * Restore the value of display_errors.
+	 */
+	static public function resolvePhpErrors() {
+		if (self::$_displayErrors !== null) {
+			@ini_set('display_errors', self::$_displayErrors);
+			self::$_displayErrors = null;
+		}	
+	}
+	
 }
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 class NewsletterHelper extends NewsletterHelperNewsletter
 {}

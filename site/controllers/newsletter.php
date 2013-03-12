@@ -55,6 +55,11 @@ class NewsletterControllerNewsletter extends JControllerForm
 		 */
 
 		//TODO: Get the admin session...
+
+		// Let's do it quitely unless if debug mode is ON
+		if (NewsletterHelperNewsletter::getParam('debug') == 0) {
+			NewsletterHelperNewsletter::supressPhpErrors();
+		}
 		
 		/*
 		 *  Let's render the newsletter.
@@ -138,6 +143,13 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 */
 	public function rendermodule()
 	{
+		ob_start();
+		
+		// Let's do it quitely unless if debug mode is ON
+		if (NewsletterHelperNewsletter::getParam('debug') == 0) {
+			NewsletterHelperNewsletter::supressPhpErrors();
+		}
+		
 		$native     = JRequest::getString('native');
 		$id         = JRequest::getString('extension_id');
 		$params     = JRequest::getVar('params', array(), 'post', 'array');
@@ -156,8 +168,12 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$module->title      = $title;
 		$module->showtitle  = $showTitle;
 
-		$content = MigurModuleHelper::renderModule($modules[0]);
+		$content = NewsletterHelperModule::renderModule($modules[0]);
 
+		ob_end_clean();
+		
+		header("Content-Type: text/html; charset=UTF-8");
+		
 		echo $content; die;
 	}
 	/**

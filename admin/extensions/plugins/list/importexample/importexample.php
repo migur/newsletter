@@ -19,7 +19,7 @@ class plgListImportexample extends NewsletterPlugin
      * 
      * @return array 
      */
-    public function onMigurImportShowIcon() 
+    public function onMigurImportShowIcon($options = array()) 
     {
         return array(
 			'icon' => JUri::root().'/administrator/components/com_newsletter/extensions/plugins/list/importexample/icon.png',

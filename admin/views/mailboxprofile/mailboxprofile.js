@@ -44,23 +44,17 @@ window.addEvent('domready', function() { try {
 						$$('#mailbox-toolbar .preloader')[0].destroy();
 					}	
 					
-					try { res = JSON.decode(res); }
-					catch (e) { res = false; }
+					var response = new Migur.jsonResponseParser();
+
+					response.setResponse(res);
+
+					if (response.isError()) {
+						alert(response.getMessagesAsList(Joomla.JText._('CONNECTION_FAILED','Connection failed!')));
+					} else {
+						alert(response.getMessagesAsList(Joomla.JText._('CONNECTION_OK', 'Connection ok!')));
+					}	
 					
-					if (res && res.status == 'ok') {
-						alert(Joomla.JText._('CONNECTION_OK', 'Connection ok!'));
-						return;
-					}
-					
-					var text = Joomla.JText._('CONNECTION_FAILED','Connection failed!');
-					
-					if(res.status) {
-						text += "\n" + res.status;
-					}
-						
-					alert(text);
 					return;
-					
 				}
 			}).send();
 				return false;

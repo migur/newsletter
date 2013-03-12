@@ -270,7 +270,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 	 *
 	 * @return	object	The Module object
 	 */
-	public static function getModule($name, $title = null)
+	public static function &getModule($name, $title = null)
 	{
 		$result = null;
 		$modules = self::_load();
@@ -527,6 +527,7 @@ function modChrome_newsletterDefault($module, &$params, &$attribs)
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 abstract class MigurModuleHelper extends NewsletterHelperModule
 {}

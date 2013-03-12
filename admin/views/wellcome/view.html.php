@@ -34,7 +34,7 @@ class NewsletterViewWellcome extends MigurView
 	{
 		// Find out if there are backed up tables.
 		$sess = JFactory::getSession();
-		$this->assignRef('backups', $sess->get('com-newsletter-backup'));
+		$this->assign('backups', $sess->get('com-newsletter-backup'));
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {

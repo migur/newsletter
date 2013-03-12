@@ -52,6 +52,7 @@ Joomla.submitbutton = function(task)
             var href = 0; //document.location.href;
             var dialog = window.parent.Migur.moodialogs[href];
 
+			console.log(obj);
             Object.each(obj, function(val, name){
 
                 // if it is the params field

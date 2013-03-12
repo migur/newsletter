@@ -91,9 +91,10 @@ class MigurDocumentHtmlRendererModule extends JDocumentRenderer
 			$cacheparams->method = 'renderModule';
 			$cacheparams->methodparams = array($module, $attribs);
 
-			$contents = MigurModuleHelper::ModuleCache($module, $params, $cacheparams);
+			// @ to hide strict warnings in some Joomla modules
+			$contents = @MigurModuleHelper::ModuleCache($module, $params, $cacheparams);
 		} else {
-			$contents = MigurModuleHelper::renderModule($module, $attribs);
+			$contents = @MigurModuleHelper::renderModule($module, $attribs);
 		}
 
 		return $contents;

@@ -65,21 +65,20 @@ class NewsletterViewSubscriber extends MigurView
 			$model->load($this->subscriberId);
 			$this->subscriber = $model;
 			
-			$model = $this->setModel(
-					MigurModel::getInstance('lists', 'NewsletterModel')
-			);
+			$listsModel = MigurModel::getInstance('lists', 'NewsletterModel');
+			$model = $this->setModel($listsModel);
+			
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 			$model->setSubscriberQuery();
 
-			$model = $this->setModel(
-					MigurModel::getInstance('sents', 'NewsletterModel')
-			);
+			$sentsModel = MigurModel::getInstance('sents', 'NewsletterModel');
+			$model = $this->setModel($sentsModel);
+			
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 
-
-			$model = $this->setModel(
-					MigurModel::getInstance('history', 'NewsletterModel')
-			);
+			$historyModel = MigurModel::getInstance('history', 'NewsletterModel');
+			$model = $this->setModel($historyModel);
+			
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 
 			$this->listItems = $this->get('Items', 'lists');

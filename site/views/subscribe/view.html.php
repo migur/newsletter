@@ -41,7 +41,7 @@ class NewsletterViewSubscribe extends MigurView
 		$lists = SubscriberHelper::getLists($subscriber->subscription_key);
 
 		$this->assignRef('user', $user);
-		$this->assignRef('subscriber', $subscriber->toObject());
+		$this->assign('subscriber', $subscriber->toObject());
 		$this->assignRef('lists', $lists);
 		$this->assign('uid',   $subscriber->subscription_key);
 		$this->assign('nid',   $nid);

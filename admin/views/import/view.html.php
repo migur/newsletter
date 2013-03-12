@@ -54,7 +54,7 @@ class NewsletterViewImport extends MigurView
 		JHTML::script(JURI::root() . 'media/com_newsletter/js/migur/js/iterativeajax.js');
 		JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/import/import.js");
 
-		$this->assignRef('components', NewsletterModelImportCommon::getSupported());
+		$this->assign('components', NewsletterModelImportCommon::getSupported());
 
 		$this->addToolbar();
 
