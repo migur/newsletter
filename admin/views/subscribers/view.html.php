@@ -51,10 +51,8 @@ class NewsletterViewSubscribers extends MigurView
 		JHTML::script('media/com_newsletter/js/migur/js/search.js');		
 		JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/subscribers/subscribers.js");
 
-
-		$this->setModel(
-			JModel::getInstance('lists', 'NewsletterModel')
-		);
+		$listModel = JModel::getInstance('lists', 'NewsletterModel');
+		$this->setModel($listModel);
 
 		EnvironmentHelper::showWarnings(array(
 			'checkUserConflicts'));
@@ -92,7 +90,7 @@ class NewsletterViewSubscribers extends MigurView
 		);
 		$this->assignRef('lists', $lists);
 
-		$this->assignRef('subscriberModel', JModel::getInstance('Subscriber', 'NewsletterModelEntity'));
+		$this->assign('subscriberModel', JModel::getInstance('Subscriber', 'NewsletterModelEntity'));
 		
 		parent::display($tpl);
 	}

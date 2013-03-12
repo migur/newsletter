@@ -68,7 +68,7 @@ class NewsletterViewAutomailingItem extends MigurView
 		$model = $this->getModel();
 		$item = $model->getItem();
 		$this->assignRef('item', $item);
-		$this->assignRef('form', $this->get('Form', 'automailingitem'));
+		$this->assign('form', $this->get('Form', 'automailingitem'));
 
 		
 		// Set main ID first

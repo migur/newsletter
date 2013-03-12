@@ -88,7 +88,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 * 
 	 * @return type 
 	 */
-	public function save()
+	public function save($key = null, $urlVar = null)
 	{
 		
 		$task = JRequest::getString('task');
@@ -198,7 +198,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 * @return void
 	 * @since 1.0
 	 */
-	protected function postSaveHook($model, $data)
+	protected function postSaveHook(JModel &$model, $validData = array())
 	{
 		$this->newsletterId = $model->getState($model->getName() . '.id');
 	}

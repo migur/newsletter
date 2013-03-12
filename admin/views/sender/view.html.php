@@ -52,14 +52,11 @@ class NewsletterViewSender extends MigurView
 		JHTML::script(JURI::root() . 'media/com_newsletter/js/migur/js/iterativeajax.js');
 		JHTML::script(JURI::root() . 'administrator/components/com_newsletter/views/sender/sender.js');
 
+		$listsModel = JModel::getInstance('lists', 'NewsletterModel');
+		$this->setModel($listsModel);
 
-		$this->setModel(
-			JModel::getInstance('lists', 'NewsletterModel')
-		);
-
-		$this->setModel(
-			JModel::getInstance('newsletters', 'NewsletterModel')
-		);
+		$newslettersModel = JModel::getInstance('newsletters', 'NewsletterModel');
+		$this->setModel($newslettersModel);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {

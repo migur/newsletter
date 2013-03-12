@@ -110,6 +110,7 @@ class NewsletterHelperContent
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 class ContentHelper extends NewsletterHelperContent 
 {}

@@ -49,7 +49,7 @@ class NewsletterViewListevent extends MigurView
 		$model = $this->getModel();
 		$item = $model->getItem();
 		$this->assignRef('item', $item);
-		$this->assignRef('form', $this->get('Form', 'listevent'));
+		$this->assign('form', $this->get('Form', 'listevent'));
 
 		
 		// Set main ID first
