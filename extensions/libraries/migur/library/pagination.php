@@ -29,6 +29,8 @@ jimport('joomla.html.pagination');
  */
 class MigurPagination extends JPagination
 {
+	
+	protected $viewall = null;
 
 	/**
 	 * Creates a dropdown box for selecting how many records to show per page.

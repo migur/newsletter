@@ -31,7 +31,7 @@ class NewsletterViewLog extends MigurView
 	 */
 	public function display($tpl = null)
 	{
-		$this->assignRef('item', $this->getModel()->getItem());
+		$this->assign('item', $this->getModel()->getItem());
 		parent::display($tpl);
 	}
 }

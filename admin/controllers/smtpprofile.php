@@ -107,15 +107,15 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 
 	public function checkConnection()
 	{
+		NewsletterHelperNewsletter::jsonPrepare();
+		
 		$smtpSettings = (object)JRequest::getVar('jform');
 
-		$sender = new MigurMailerSender();
+		$sender = new MigurMailerSender(array('exceptions' => true));
+		
 		$res = $sender->checkConnection($smtpSettings);
 		
-		echo json_encode(array(
-			'status' => $res? 'ok' : 'Unable to connect'
-		));
-		jexit();
+		NewsletterHelperNewsletter::jsonResponse($res, $sender->getErrors());
 	}
 	
 }

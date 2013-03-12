@@ -26,7 +26,7 @@ class NewsletterModelEntityList extends MigurModel
 	 * @return	JTable	A database object
 	 * @since	1.0.4
 	 */
-	public function getTable($type = 'List', $prefix = 'NewsletterTable')
+	public function getTable($type = 'List', $prefix = 'NewsletterTable', $options = array())
 	{
 		return JTable::getInstance($type, $prefix);
 	}
