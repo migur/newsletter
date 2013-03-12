@@ -23,7 +23,7 @@ class NewsletterHelperData
 	 * @return string - the CSV in the string
 	 * @since 1.0
 	 */
-	static function exportListsCSV($headers = null)
+	public static function exportListsCSV($headers = null)
 	{
 		if (empty($heders)) {
 			$headers = array(
@@ -56,7 +56,7 @@ class NewsletterHelperData
 	 * @return array - the array of the objects(subscriber - list)
 	 * @since 1.0
 	 */
-	static function exportLists()
+	public static function exportLists()
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -192,7 +192,7 @@ class NewsletterHelperData
 	 * @param type $array
 	 * @param type $colName 
 	 */
-	public function getColumnData($array, $colName)
+	public static function getColumnData($array, $colName)
 	{
 		$res = array();
 		foreach($array as $item) {
@@ -225,6 +225,7 @@ class NewsletterHelperData
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 class DataHelper extends NewsletterHelperData
 {}

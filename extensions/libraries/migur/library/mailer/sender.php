@@ -25,7 +25,7 @@ jimport('joomla.error.log');
  */
 class MigurMailerSender extends PHPMailer
 {
-	protected $_errors;
+	protected $_errors = array();
 	
 	/**
 	 * The constructor of a class
@@ -289,6 +289,7 @@ class MigurMailerSender extends PHPMailer
 		try {
 			$res = $this->SmtpConnect();
 		} catch(Exception $e) {
+			$this->setError($e->getMessage());
 			$res = false;
 		}	
 

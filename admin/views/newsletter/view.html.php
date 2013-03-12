@@ -112,7 +112,7 @@ class NewsletterViewNewsletter extends MigurView
 		
 		// get the SmtpProfiles data
 		$smtpprofilesManager = JModel::getInstance('smtpprofiles', 'NewsletterModel');
-		$this->assignRef('smtpprofiles', $smtpprofilesManager->getAllItems('withDefault'));
+		$this->assign('smtpprofiles', $smtpprofilesManager->getAllItems('withDefault'));
 
 		// get all the Extensions
 		$this->modules = MigurModuleHelper::getSupported(array('withoutInfo'=>true));
@@ -123,9 +123,8 @@ class NewsletterViewNewsletter extends MigurView
 		$this->usedExts = $model->getExtensionsBy($nId);
 		
 		// Get a list of all templates
-		$this->setModel(
-			JModel::getInstance('templates', 'NewsletterModel')
-		);
+		$templateModel = JModel::getInstance('templates', 'NewsletterModel');
+		$this->setModel($templateModel);
 		$model = $this->getModel('templates');
 		$templs = $model->getItems();
 		$path = JPATH_COMPONENT . '/extensions/templates/';

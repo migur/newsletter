@@ -21,7 +21,7 @@ class NewsletterHelperDownload
 	 * @return mixed  - bool false on fail, the array of objects of success
 	 * @since  1.0
 	 */
-	static function getByNewsletterId($nId)
+	public static function getByNewsletterId($nId)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -48,7 +48,7 @@ class NewsletterHelperDownload
 	 * @return boolean - sucsess
 	 * @since  1.0
 	 */
-	static function getAttributes($item)
+	public static function getAttributes($item)
 	{
 		$prefix = JPATH_ROOT;
 		$file = $prefix . DIRECTORY_SEPARATOR . $item->filename;
@@ -69,6 +69,7 @@ class NewsletterHelperDownload
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 class DownloadHelper extends NewsletterHelperDownload 
 {}

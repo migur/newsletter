@@ -160,7 +160,7 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	 * @return	JTable	A database object
 	 * @since	1.0.4
 	 */
-	public function getTable($type = 'Subscriber', $prefix = 'NewsletterTable')
+	public function getTable($type = 'Subscriber', $prefix = 'NewsletterTable', $options = array())
 	{
 		return JTable::getInstance($type, $prefix);
 	}

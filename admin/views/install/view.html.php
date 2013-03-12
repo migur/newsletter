@@ -28,10 +28,10 @@ class NewsletterViewInstall extends MigurView
 	public function display($tpl = null)
 	{
 		$model = $this->getModel();
-		$this->assignRef('items', $model->getItems());
-		$this->assignRef('listOrder', $model->getState('list.ordering'));
-		$this->assignRef('listDirn', $model->getState('list.direction'));
-		$this->assignRef('pagination', $model->getPagination());
+		$this->assign('items', $model->getItems());
+		$this->assign('listOrder', $model->getState('list.ordering'));
+		$this->assign('listDirn', $model->getState('list.direction'));
+		$this->assign('pagination', $model->getPagination());
 
 		$this->addToolbar();
 		
