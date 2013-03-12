@@ -10,7 +10,7 @@ class NewsletterPluginManager extends JDispatcher
 
     public $pluginEvent = null;
     
-    public function factory($group)
+    public static function factory($group)
     {
         include_once(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . 'manager' . DIRECTORY_SEPARATOR . $group . '.php');
         $class = 'NewsletterPluginManager'.ucfirst($group);

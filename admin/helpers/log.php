@@ -269,6 +269,7 @@ class NewsletterHelperLog
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 class LogHelper extends NewsletterHelperLog
 {}

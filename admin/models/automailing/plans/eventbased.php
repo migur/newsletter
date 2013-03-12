@@ -44,7 +44,7 @@ class NewsletterAutomlailingPlanEventbased extends NewsletterAutomlailingPlanCom
 	 * 
 	 * @return NewsletterAutomlailingThreadCommon 
 	 */
-	public function createThread($options)
+	public function createThread($options = array())
 	{
 		if (empty($options['targets']['type']) || empty($options['targets']['ids'])) {
 			throw new Exception('Cant create chread. Type or id is empty.');

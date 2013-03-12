@@ -182,7 +182,7 @@ class NewsletterHelperSubscriber
 		return $items;
 	}
 
-	public function getFbMe($app_id, $app_secret)
+	public static function getFbMe($app_id, $app_secret)
 	{
 		$args = array();
 		parse_str(trim($_COOKIE['fbs_' . $app_id], '\\"'), $args);
@@ -205,6 +205,7 @@ class NewsletterHelperSubscriber
 
 /**
  * Legacy support for class name
+ * Should be removed after 12.07
  */
 class SubscriberHelper extends NewsletterHelperSubscriber
 {}
