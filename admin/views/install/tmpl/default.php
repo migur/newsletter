@@ -7,9 +7,13 @@
  * @since		1.5
  */
 
-	// no direct access
-	defined('_JEXEC') or die;
-	echo $this->loadTemplate('form'); 
-	
-	echo $this->loadTemplate('manage'); 
-?>
+// no direct access
+defined('_JEXEC') or die;
+
+echo JHtml::_('layout.wrapper');
+
+echo $this->loadTemplate('form'); 
+
+echo $this->loadTemplate('manage'); 
+
+echo JHtml::_('layout.wrapperEnd');

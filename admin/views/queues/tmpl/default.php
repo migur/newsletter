@@ -1,6 +1,9 @@
 <fieldset>
 <legend><?php echo JText::_('Queues'); ?></legend>
 <form id="form-queueslist" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=queues');?>" method="post" name="adminForm" >
+	
+<?php echo JHtml::_('layout.wrapper'); ?>
+	
 	<fieldset id="filter-bar" >
             <?php echo JToolBar::getInstance('queues')->render(); ?>
             <div id="queues-filter-panel-control" class="filter-panel-control"></div>
@@ -84,5 +87,8 @@
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $this->listDirn; ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
+	
+<?php echo JHtml::_('layout.wrapperEnd'); ?>
+	
 </form>
 </fieldset>
