@@ -8,6 +8,8 @@ JHtml::_('dropdown.init');
 JHtml::_('formbehavior.chosen');
 ?>
 
+<?php echo JHtml::_('layout.wrapper'); ?>
+
 <div>
 	<div class="subscribers-container">
 		<?php echo $this->loadTemplate('subscribers'); ?>
@@ -16,3 +18,5 @@ JHtml::_('formbehavior.chosen');
 		<?php echo $this->loadTemplate('lists'); ?>
 	</div>
 </div>
+
+<?php echo JHtml::_('layout.wrapperEnd'); ?>
