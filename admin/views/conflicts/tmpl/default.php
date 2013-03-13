@@ -1,6 +1,9 @@
 <?php $filterList = $this->state->get('filter.list'); ?>
 
 <form id="form-subscribers" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=conflicts&form=conflicts');?>" method="post" name="adminForm" >
+
+	<?php echo JHtml::_('layout.wrapper'); ?>
+	
     <fieldset id="wrapper">
         <legend><?php echo JText::_('COM_NEWSLETTER_CONFLICT_TITLE'); ?></legend>
 		<?php //echo JToolbar::getInstance()->render(); ?>
@@ -77,4 +80,7 @@
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
     </fieldset>
+	
+	<?php echo JHtml::_('layout.wrapperEnd'); ?>
+	
 </form>

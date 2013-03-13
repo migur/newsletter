@@ -120,7 +120,7 @@ class NewsletterViewDashboard extends MigurView
 		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', SupportHelper::getResourceUrl('mailing', 'general'));
 		$bar->appendButton('Separator');
 		
-		$bar->appendButton('MigurSendProgress', 'progress', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
+		$bar->appendButton('SendProgress', 'progress', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
 
 		$bar->appendButton('Link', 'view', 'COM_NEWSLETTER_VIEW_QUEUE', 'index.php?option=com_newsletter&view=queues');
 		$bar->appendButton('Link', 'queue', 'COM_NEWSLETTER_PROCESS_QUEUE', '#');

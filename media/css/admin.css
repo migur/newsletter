@@ -440,4 +440,11 @@ body.component {
 .accordion-body.collapse.in {
 	overflow: visible;
 }
+
+.btn-group label.pull-left {
+	line-height: 26px;
+	margin-left: 20px;
+	margin-right: 10px;
+	min-width: 50px;
+}
 /**/

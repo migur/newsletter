@@ -34,32 +34,32 @@ class NewsletterHelperNewsletter
 	 */
 	public static function addSubmenu($vName)
 	{
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_NEWSLETTER_SUBMENU_DASHBOARD'),
 				'index.php?option=com_newsletter&view=dashboard',
 				$vName == 'dashboard'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_NEWSLETTER_SUBMENU_NEWSLETTERS'),
 				'index.php?option=com_newsletter&view=newsletters',
 				$vName == 'newsletters'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_NEWSLETTER_SUBMENU_TEMPLATES'),
 				'index.php?option=com_newsletter&view=templates',
 				$vName == 'templates'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_NEWSLETTER_SUBMENU_SUBSCRIBERS'),
 				'index.php?option=com_newsletter&view=subscribers',
 				$vName == 'subscribers'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_NEWSLETTER_SUBMENU_AUTOMAILING'),
 				'index.php?option=com_newsletter&view=automailings',
-				$vName == 'automailing'
+				$vName == 'automailings'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_NEWSLETTER_SUBMENU_CONFIGURATION'),
 				'index.php?option=com_newsletter&view=configuration',
 				$vName == 'configuration'
