@@ -441,10 +441,10 @@ body.component {
 	overflow: visible;
 }
 
-.btn-group label {
-	line-height: 30px;
+.btn-group label.pull-left {
+	line-height: 26px;
 	margin-left: 20px;
 	margin-right: 10px;
-	min-width: 60px;
+	min-width: 50px;
 }
 /**/
