@@ -32,8 +32,10 @@ class NewsletterHelperNewsletter
 	 * @return	void
 	 * @since	1.0
 	 */
-	public static function addSubmenu($vName)
+	public static function addSubmenu($vName = null)
 	{
+		if ($vName == null) $vName = JRequest::getString('view');
+		
 		JHtmlSidebar::addEntry(
 				JText::_('COM_NEWSLETTER_SUBMENU_DASHBOARD'),
 				'index.php?option=com_newsletter&view=dashboard',

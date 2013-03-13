@@ -6,7 +6,7 @@
 			Create Newsletter
 		</a>
 		
-		<a class="btn" rel="{handler: 'iframe', size: {x: 920, y: 450}, onClose: function() {}}" href="http://migur.woody.rhino.nixsolutions.com/dev/joomla/administrator/index.php?option=com_newsletter&amp;view=sender&amp;tmpl=component" class="modal">
+		<a class="btn" rel="{handler: 'iframe', size: {x: 920, y: 450}, onClose: function() {}}" href="<?php echo JRoute::_('index.php?option=com_newsletter&view=sender', false); ?>" class="modal">
 			<span>Send Newsletter</span>
 		</a>
 	</div> 
@@ -14,10 +14,10 @@
     <div class="span6">
         <legend>Subscribers</legend>
 		
-		<a class="btn btn-success" rel="{handler: 'iframe', size: {x: 400, y: 220}, onClose: function() {}}" href="http://migur.woody.rhino.nixsolutions.com/dev/joomla/administrator/index.php?option=com_newsletter&amp;view=subscriber&amp;tmpl=component" class="modal">
+		<a class="btn btn-success" rel="{handler: 'iframe', size: {x: 400, y: 220}, onClose: function() {}}" href="<?php echo JRoute::_('index.php?option=com_newsletter&task=subscriber.add', false); ?>" class="modal">
 			Create Subscriber
 		</a>
-		<a class="btn btn-success" rel="{handler: 'iframe', size: {x: 1000, y: 600}, onClose: function() {}}" href="http://migur.woody.rhino.nixsolutions.com/dev/joomla/administrator/index.php?option=com_newsletter&amp;view=list&amp;tmpl=component" class="modal">
+		<a class="btn btn-success" rel="{handler: 'iframe', size: {x: 1000, y: 600}, onClose: function() {}}" href="<?php echo JRoute::_('index.php?option=com_newsletter&task=list.add', false); ?>" class="modal">
 			Create List
 		</a>
 	</div>	
@@ -33,11 +33,11 @@
 		
 		<legend>Configuration &amp; Installation</legend>
 		
-		<a class="btn" rel="{handler: 'iframe', size: {x: 350, y: 150}, onClose: function() {}}" href="http://migur.woody.rhino.nixsolutions.com/dev/joomla/administrator/index.php?option=com_newsletter&amp;view=extension&amp;layout=install&amp;tmpl=component" class="modal">
+		<a class="btn" rel="{handler: 'iframe', size: {x: 350, y: 150}, onClose: function() {}}" href="<?php echo JRoute::_('index.php?option=com_newsletter&view=extensions&layout=install'); ?>" class="modal">
 			Install Extensions
 		</a>
 		
-		<a class="btn" href="index.php?option=com_newsletter&amp;view=configuration">
+		<a class="btn" href="<?php echo JRoute::_('index.php?option=com_newsletter&view=configuration'); ?>">
 			Configuration
 		</a>
 	</div>
