@@ -447,4 +447,12 @@ body.component {
 	margin-right: 10px;
 	min-width: 50px;
 }
+
+.inline-info {
+	margin-bottom: 20px;
+}
+
+.text-info {
+	color: #3a87ad;
+}	
 /**/

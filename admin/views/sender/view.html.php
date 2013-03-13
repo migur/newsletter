@@ -78,13 +78,21 @@ class NewsletterViewSender extends MigurView
 				'listDirn' => $modelLists->getState('list.direction')
 		);
 		
-		JavascriptHelper::addStringVar('defaultMailbox', MailHelper::getDefaultMailbox('idOnly'));
+		$defaultMailbox = MailHelper::getDefaultMailbox('idOnly');
+		
+		JavascriptHelper::addStringVar('defaultMailbox', $defaultMailbox);
 
+		if ($defaultMailbox < 1){
+			JFactory::getApplication()->enqueueMessage(JText::_('DEFAULT_MAILBOX_PROFILE_UNDEFINED'), 'warning');
+		}
+		
 		$modelLists->setState('limit', $limit);
 
 		$this->assignRef('lists', $lists);
 
 		$this->addToolbar();
+
+		NewsletterHelper::addSubmenu();
 
 		parent::display($tpl);
 	}
@@ -97,7 +105,7 @@ class NewsletterViewSender extends MigurView
 	 */
 	protected function addToolbar()
 	{
+		JToolBarHelper::title(JText::_('COM_NEWSLETTER_SENDMAIL_TITLE'), 'article.png');
 		$bar = JToolBar::getInstance('sender');
-		$bar->appendButton('Link', 'export', 'COM_NEWSLETTER_NEWSLETTER_SEND', '#');
 	}
 }

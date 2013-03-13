@@ -8,21 +8,11 @@
 
 window.addEvent('domready', function() {
 try {
+	
+	var controlSendButton = $('control-button-send');
+	var controlNewsletterList = $$('select')[0];
 
-	if (defaultMailbox < 1){
-		
-		alert(Joomla.JText._(
-			'DEFAULT_MAILBOX_PROFILE_UNDEFINED', 
-			'Default mailbox profile is undefined. \n'+
-			'If you are going to mail newsletters that uses Joomla! standard SMTP profile \n'+
-			'then you probably cant use the "Process bounces" feature'
-		));
-	}
-
-    historyPaginator = new Migur.lists.paginator($$('.sslist')[0]);
-    Migur.lists.sortable.setup($$('.sslist')[0]);
-
-    $$('#sender-export a')[0].addEvent('click', function(event){
+    controlSendButton.addEvent('click', function(event){
 
         event.stop();
 
@@ -30,11 +20,11 @@ try {
 			return false;
 		}
 
-        var newsletterId = $$('select')[0].get('value');
+        var newsletterId = controlNewsletterList.get('value');
 
-        if ( !newsletterId ) {
+        if ( newsletterId < 1) {
             alert(Joomla.JText._('PLEASE_SELECT_NEWSLETTER_FIRST','Please selct newsletter first'));
-            return;
+            return false;
         }
 
         var lists = [];
@@ -46,7 +36,7 @@ try {
 
         if ( lists.length == 0 ) {
             alert(Joomla.JText._('PLEASE_SELECT_AT_LEAST_ONE_LIST','Please selct at least one list'));
-            return;
+            return false;
         }
 
 
@@ -72,7 +62,7 @@ try {
 				// all in one step
 				onComplete: function(messages, data){
 
-					$$('#sender-export a')[0].removeClass('disabled');
+					controlSendButton.removeClass('disabled');
 
 					this.showAlert(
 
@@ -84,14 +74,17 @@ try {
 						Joomla.JText._('ERRORS', 'Errors') + ": " + data.errors + "\n"
 					);
 
-					document.location.reload();
+					//document.location.reload();
 				}
 				
             }).start();
 			
-			$$('#sender-export a')[0].addClass('disabled');
+			controlSendButton.addClass('disabled');
         }
     });
+
+    new Migur.lists.paginator($$('.sslist')[0]);
+    Migur.lists.sortable.setup($$('.sslist')[0]);
 
 
     

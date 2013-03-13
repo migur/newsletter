@@ -1,6 +1,11 @@
 <fieldset id="lists-fieldset">
 <legend><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></legend>
 
+	<div class="inline-info">
+		<span class="label label-info">#2</span>
+		<span class="text-info"><?php echo JText::_('COM_NEWSLETTER_SENDMAIL_STEP2'); ?></span>
+	</div>	
+
     <form id="lists-form" name="listsForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=sender&tmpl=component'); ?>" method="post">
         <div id="sender-container">
             <table class="sslist adminlist  table table-striped" width="100%">
