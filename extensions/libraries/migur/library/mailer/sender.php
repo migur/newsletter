@@ -261,7 +261,7 @@ class MigurMailerSender extends PHPMailer
 //		$result = "Date: Thu, 20 Oct 2011 18:52:09 +0300\r\nReturn-Path:andreyalek-ru@mail.ru\r\nReturn-Receipt-To:andreyalek-ru@mail.ru\r\n".
 //					"To:andreyalek-ru@mail.ru\r\nFrom: Andrey <august-ru@mail.ru>\r\n".
 //					"Reply-to: Andrey <august-ru@mail.ru>\r\nSubject: Baby Doe\r\n".
-//					"Message-ID: <d10f643bf3f7b3bb1303d279ff28f526@migur.woody.php.nixsolutions.com>\r\n".
+//					"Message-ID: <d10f643bf3f7b3bb1303d279ff28f526@migur.woody.php.........com>\r\n".
 //					"X-Priority: 3\r\nX-Mailer: PHPMailer 5.1 (phpmailer.sourceforge.net)\r\n".
 //					"Email-Name: Birthday of Baby Doe!(copy)\r\nSubscriber-ID: 8316\r\n".
 //					"MIME-Version: 1.0\r\nContent-Type: multipart/mixed;boundary=\"b1_d10f643bf3f7b3bb1303d279ff28f526\"\r\n";
@@ -270,7 +270,7 @@ class MigurMailerSender extends PHPMailer
 //		$result = "Date: Thu, 20 Oct 2011 18:52:09 +0300\r\nReturn-Path:august-ru@mail.ru\r\nReturn-Receipt-To:august-ru@mail.ru\r\n".
 //					"To: Woody woody <bounced@nobodydomaintr.com>\r\nFrom: Andrey <andreyalek@gmail.com>\r\n".
 //					"Reply-to: Andrey <andreyalek@gmail.com>\r\nSubject: Baby Doe\r\n".
-//					"Message-ID: <d10f643bf3f7b3bb1303d279ff28f526@migur.woody.php.nixsolutions.com>\r\n".
+//					"Message-ID: <d10f643bf3f7b3bb1303d279ff28f526@migur.woody.php.........com>\r\n".
 //					"X-Priority: 3\r\nX-Mailer: PHPMailer 5.1 (phpmailer.sourceforge.net)\r\n".
 //					"Email-Name: Birthday of Baby Doe!(copy)\r\nSubscriber-ID: 8316\r\n".
 //					"MIME-Version: 1.0\r\nContent-Type: multipart/mixed;boundary=\"b1_d10f643bf3f7b3bb1303d279ff28f526\"\r\n";
