@@ -54,11 +54,6 @@ class NewsletterViewLogs extends MigurView
 			return false;
 		}
 
-		// We don't need toolbar in the modal window.
-		if ($this->getLayout() !== 'modal') {
-			$this->addToolbar();
-		}
-
 		// Let's work with model 'logs' !
 		$model = $this->getModel('logs');
 		$items = $model->getItems();
@@ -77,6 +72,15 @@ class NewsletterViewLogs extends MigurView
 		$this->assignRef('saveOrder', $saveOrder);
 		$this->assignRef('categories', $categories);
 		$this->assignRef('priorities', $priorities);
+
+		
+		// We don't need toolbar in the modal window.
+		if ($this->getLayout() !== 'modal') {
+			$this->addToolbar();
+			$this->addSidebar();
+			$this->sidebar = JHtmlSidebar::render();
+		}
+
 		
 		parent::display($tpl);
 	}
@@ -91,11 +95,28 @@ class NewsletterViewLogs extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_LOG_TITLE'), 'article.png');
 
-		$bar = JToolBar::getInstance('logs');
+		$bar = JToolBar::getInstance();
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'logs.delete', false);
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+	}
+	
+	protected function addSidebar() 
+	{
+		JHtmlSidebar::setAction('index.php?option=com_newsletter&view=logs');
+
+		JHtmlSidebar::addFilter(
+			JText::_('COM_NEWSLETTER_FILTER_ON_CATEGORY'),
+			'filter_category',
+			JHtml::_('select.options', JHtml::_('multigrid.generalOptions', $this->categories, null), 'value', 'text', $this->state->get('filter.category'), true)
+		);
+
+		JHtmlSidebar::addFilter(
+			JText::_('COM_NEWSLETTER_FILTER_ON_TYPES'),
+			'filter_priority',
+			JHtml::_('select.options', JHtml::_('multigrid.generalOptions', $this->priorities), 'value', 'text', $this->state->get('filter.priority'), true)
+		);
 	}
 
 }
