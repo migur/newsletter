@@ -3,6 +3,8 @@
 defined('_JEXEC') or die;
 ?>
 
+<?php echo JHtml::_('layout.wrapper'); ?>
+
 <div id="templates-list" class="pull-left">
 	<form id="form-templates" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=templates&form=templates');?>" method="post" name="templatesForm" >
 		
@@ -106,3 +108,5 @@ defined('_JEXEC') or die;
 		</div>	
 	</div>	
 </div>	
+
+<?php echo JHtml::_('layout.wrapperEnd'); ?>

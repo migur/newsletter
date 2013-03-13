@@ -9,6 +9,8 @@ JHtml::_('formbehavior.chosen');
 
 $showFull = AclHelper::canConfigureComponent(); 
 
+echo JHtml::_('layout.wrapper'); 
+
 ?>
 
 <fieldset id="config-extensions" <?php if (!$showFull) { ?> style="width:98%" <?php } ?>>
@@ -97,4 +99,10 @@ $showFull = AclHelper::canConfigureComponent();
 		</div>	
 	</form>
 </fieldset>
-<?php } ?>
+<?php 
+
+} 
+echo JHtml::_('layout.wrapperEnd');
+
+
+?>

@@ -99,8 +99,5 @@ class NewsletterViewSender extends MigurView
 	{
 		$bar = JToolBar::getInstance('sender');
 		$bar->appendButton('Link', 'export', 'COM_NEWSLETTER_NEWSLETTER_SEND', '#');
-
-		// Load the submenu.
-		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
 	}
 }
