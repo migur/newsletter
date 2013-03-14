@@ -1,11 +1,3 @@
 
 Component menu on left side of a page.
 
-Is created by JHtmlSidebar. See NewsletterHelperNewsletter.
-To use it you need to add "echo JHtmlSidebar::render()" into view layout.
-JHtmlSidebar can contains menu items and filters.
-Use 
-	echo JHtml::_('layout.wrapper');
-		{content of a page}
-	echo JHtml::_('layout.wrapperEnd');
-in view layout to quickly render a menu and filters on the left side of a page. 
