@@ -22,6 +22,15 @@
     min-height: 400px;
 }
 
+@media(max-width: 1050px) {
+	#config-extensions,
+	#config-config {
+		width: 100%;
+		float: none;
+		margin: 0;
+	}
+}
+
 td fieldset {
     background-color: transparent;
 }
