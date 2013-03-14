@@ -5,40 +5,87 @@ defined('_JEXEC') or die;
 
 <fieldset id="tabs">
     <legend><?php echo JText::_('COM_NEWSLETTER_TEMPLATE_CONFIG'); ?></legend>
-    <form name="templateForm" method="POST" id="form-template" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
-		
-        <?php echo JToolBar::getInstance('multitab-toolbar')->render(); ?>
+    <form name="templateForm" method="POST" id="form-template" class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
+
+		<ul id="tabs-template" class="nav nav-tabs">
+			<li class="active">
+				<a data-toggle="tab" href="#tab-params"><?php echo JText::_('COM_NEWSLETTER_PARAMS'); ?></a>
+			</li>
+
+			<li>
+				<a data-toggle="tab" href="#tab-info"><?php echo JText::_('COM_NEWSLETTER_INFO'); ?></a>
+			</li>	
+		</ul>
+
+		<div class="tab-content">
+			<div id="tab-params" class="tab-pane active">
+
+				<div id="ctrl-title" class="control-group">
+					<label for="jform_title" class="control-label"><?php echo JText::_('COM_NEWSLETTER_NAME'); ?></label>
+					<div class="controls">
+						<?php echo $this->tplForm->getInput('title'); ?>
+					</div>	
+				</div>
+
+				<div class="accordion pane-sliders" id="slider-template">
+
+					<div class="accordion-group panel">
+
+						<div class="accordion-heading" id="slider-dimensions">
+							<a class="accordion-toggle" data-toggle="collapse" data-parent="#slider-template" href="#collapse-slider-dimensions">
+								<?php echo JText::_('COM_NEWSLETTER_DIMENSIONS'); ?>
+							</a>
+						</div>
+
+						<div id="collapse-slider-dimensions" class="accordion-body collapse" >
+							<div class="accordion-inner pane-container">
+								<?php echo $this->loadTemplate('dimensions', ''); ?>
+							</div>
+						</div>
+					</div>
 
 
-		<?php
-		echo JHtml::_('tabs.start', 'tabs-template');
-		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PARAMS'), 'tab-params'); ?>
+					<div class="accordion-group panel">
 
-		<div class="form-text info-title">
-		<label for="jform_title"><?php echo JText::_('COM_NEWSLETTER_NAME'); ?></label>
-		<?php echo $this->tplForm->getInput('title'); ?>
-		</div>
+						<div class="accordion-heading" id="slider-images">
+							<a class="accordion-toggle" data-toggle="collapse" data-parent="#slider-template" href="#collapse-slider-images">
+								<?php echo JText::_('COM_NEWSLETTER_IMAGES'); ?>
+							</a>
+						</div>
 
-		<?php
-		echo JHtml::_('sliders.start', 'slider-template');
-		echo JHtml::_('sliders.panel', JText::_('COM_NEWSLETTER_DIMENSIONS'), 'slider-dimensions');
-		echo $this->loadTemplate('dimensions', '');
-		echo JHtml::_('sliders.panel', JText::_('COM_NEWSLETTER_IMAGES'), 'slider-images');
-		//echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_IMAGES'), 'tab-images');
-		echo $this->loadTemplate('images', '');
-		echo JHtml::_('sliders.panel', JText::_('COM_NEWSLETTER_COLORS'), 'slider-colors');
-		//echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_COLORS'), 'tab-colors');
-		echo $this->loadTemplate('colors', '');
-		echo JHtml::_('sliders.end'); ?>
+						<div id="collapse-slider-images" class="accordion-body collapse" >
+							<div class="accordion-inner pane-container">
+								<?php echo $this->loadTemplate('images', ''); ?>
+							</div>
+						</div>
+					</div>
 
-		<?php
-		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_INFO'), 'tab-info');
-		echo $this->loadTemplate('info', '');
-		echo JHtml::_('tabs.end'); ?>
+					<div class="accordion-group panel">
+
+						<div class="accordion-heading" id="slider-colors">
+							<a class="accordion-toggle" data-toggle="collapse" data-parent="#slider-template" href="#collapse-slider-colors">
+								<?php echo JText::_('COM_NEWSLETTER_COLORS'); ?>
+							</a>
+						</div>
+
+						<div id="collapse-slider-colors" class="accordion-body collapse" >
+							<div class="accordion-inner pane-container">
+								<?php echo $this->loadTemplate('colors', ''); ?>
+							</div>
+						</div>
+					</div>
+				</div>	
+			</div>	
+
+			<div id="tab-info" class="tab-pane">
+				<?php echo $this->loadTemplate('info', ''); ?>
+			</div>	
+		</div>	
 		
         <?php echo $this->tplForm->getInput('t_style_id'); ?>
         <input type="hidden" name="t_style_id" value="<?php echo $this->tplForm->getValue('t_style_id'); ?>" />
         <input type="hidden" name="task" value="" />
         <?php echo JHtml::_('form.token'); ?>
+		
     </form>
 </fieldset>

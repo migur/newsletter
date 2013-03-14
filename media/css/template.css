@@ -1,0 +1,34 @@
+
+#tab-container-dimensions {
+	overflow: hidden;
+}
+
+#ctrl-title {
+	margin-left: 20px;
+}
+#ctrl-title .controls {
+	margin-left: 60px;
+}
+
+#tab-container-dimensions > div {
+	float:left;
+	margin-right: 20px;
+}
+
+#tab-container-dimensions > div .controls {
+	margin-left: 60px;
+}
+
+#images-top, #images-bottom {
+	overflow: hidden;
+}
+
+#images-top > div, #images-bottom > div {
+	float:left;
+	margin-right: 20px;
+}
+
+#images-top > div.dimensions .controls,
+#images-bottom > div.dimensions .controls {
+	margin-left: 60px;
+}	

@@ -1,6 +1,6 @@
     <div id="tab-container-info">
 
-        <div id="info2" class="form-text">
+        <div id="info2">
             <dl>
                 <dt>
                     <?php echo JText::_('COM_NEWSLETTER_AUTHOR'); ?>
@@ -24,7 +24,7 @@
         </div>
 
 
-        <div id="info3" class="form-text">
+        <div id="info3">
             <dl>
                 <dt>
                     <?php echo JText::_('COM_NEWSLETTER_AUTHOR_EMAIL'); ?>
@@ -48,7 +48,7 @@
         </div>
 
 
-        <div id="info4" class="form-text">
+        <div id="info4">
             <dl>
                 <dt>
                     <?php echo JText::_('COM_NEWSLETTER_DESCRIPTION'); ?>
