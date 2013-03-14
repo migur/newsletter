@@ -13,34 +13,6 @@ echo JHtml::_('layout.wrapper');
 
 ?>
 
-<fieldset id="config-extensions" <?php if (!$showFull) { ?> style="width:98%" <?php } ?>>
-	
-	<div style="float:right;margin:5px 15px 0 0">
-		<a href="<?php echo JRoute::_('index.php?option=com_newsletter&view=install', false); ?>"><?php echo JText::_('COM_NEWSLETTER_MANAGE_EXTENSIONS'); ?></a>
-	</div>
-	
-	<legend><?php echo JText::_('COM_NEWSLETTER_INSTALLED_EXTESIONS'); ?></legend>
-	
-	<ul id="tabs-extensions" class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="#tabext-modules"><?php echo JText::_('COM_NEWSLETTER_MODULES'); ?></a></li>	
-		<li><a data-toggle="tab" href="#tabext-plugins"><?php echo JText::_('COM_NEWSLETTER_PLUGINS'); ?></a></li>	
-		<li><a data-toggle="tab" href="#tabext-templates"><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></a></li>	
-	</ul>
-	
-	<div class="tab-content">
-		
-		<div id="tabext-modules" class="tab-pane active">
-			<?php echo $this->loadTemplate('modules', 'extensions'); ?></div>	
-			
-		<div id="tabext-plugins" class="tab-pane">
-			<?php echo $this->loadTemplate('plugins', 'extensions'); ?></div>	
-		
-		<div id="tabext-templates" class="tab-pane">
-			<?php echo $this->loadTemplate('templates', 'extensions'); ?></div>	
-	</div>	
-	
-</fieldset>
-
 <?php if ($showFull) { ?>
 <fieldset id="config-config">
 	<legend><?php echo JText::_('COM_NEWSLETTER_GLOBAL_CONFIG'); ?></legend>
@@ -99,10 +71,35 @@ echo JHtml::_('layout.wrapper');
 		</div>	
 	</form>
 </fieldset>
-<?php 
+<?php } ?>
 
-} 
-echo JHtml::_('layout.wrapperEnd');
+<fieldset id="config-extensions" <?php if (!$showFull) { ?> style="width:98%" <?php } ?>>
+	
+	<div style="float:right;margin:5px 15px 0 0">
+		<a href="<?php echo JRoute::_('index.php?option=com_newsletter&view=install', false); ?>"><?php echo JText::_('COM_NEWSLETTER_MANAGE_EXTENSIONS'); ?></a>
+	</div>
+	
+	<legend><?php echo JText::_('COM_NEWSLETTER_INSTALLED_EXTESIONS'); ?></legend>
+	
+	<ul id="tabs-extensions" class="nav nav-tabs">
+		<li class="active"><a data-toggle="tab" href="#tabext-modules"><?php echo JText::_('COM_NEWSLETTER_MODULES'); ?></a></li>	
+		<li><a data-toggle="tab" href="#tabext-plugins"><?php echo JText::_('COM_NEWSLETTER_PLUGINS'); ?></a></li>	
+		<li><a data-toggle="tab" href="#tabext-templates"><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></a></li>	
+	</ul>
+	
+	<div class="tab-content">
+		
+		<div id="tabext-modules" class="tab-pane active">
+			<?php echo $this->loadTemplate('modules', 'extensions'); ?></div>	
+			
+		<div id="tabext-plugins" class="tab-pane">
+			<?php echo $this->loadTemplate('plugins', 'extensions'); ?></div>	
+		
+		<div id="tabext-templates" class="tab-pane">
+			<?php echo $this->loadTemplate('templates', 'extensions'); ?></div>	
+	</div>	
+	
+</fieldset>
 
 
-?>
+<?php echo JHtml::_('layout.wrapperEnd'); ?>
