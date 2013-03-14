@@ -4,10 +4,10 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-#main-container {
+/*#main-container {
     max-height: 550px;
     overflow: auto;
-}
+}*/
 
 #stat-letters {
     width: 23%;
@@ -17,6 +17,19 @@
 #stat-clicks {
     width: 76%;
     float: right;
+}
+
+
+@media(max-width: 979px) {
+	#stat-letters {
+		width: 100%;
+		float: none;
+	}
+
+	#stat-clicks {
+		width: 100%;
+		float: none;
+	}
 }
 
 #stat_total_sent,
@@ -56,7 +69,13 @@ dd {
     margin: 0 !important;
 }
 
-#all-in-one {
-	margin-left: 30px;
-	margin-bottom: 20px;
+#stat-clicks > div {
+	margin-bottom: 40px;
 }
+
+#cntrl-rangeselect {
+	width: 595px;
+	margin-top: -75px;
+	text-align: right;
+}
+

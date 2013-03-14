@@ -1,13 +1,9 @@
 <div id="stat-letters">
-	<dl>
-		<dt><b><?php echo JText::_('COM_NEWSLETTER_OPENED_NEWSLETTERS'); ?></b></dt>
-		<dd id="stat-opened"></dd>
-		<dt><b><?php echo JText::_('COM_NEWSLETTER_ACTIVE_SUBSCRIBERS'); ?></b></dt>
-		<dd id="stat-active-subscribers"></dd>
-	</dl>
-
+		<legend><?php echo JText::_('COM_NEWSLETTER_OPENED_NEWSLETTERS'); ?></legend>
+		<div id="stat-opened"></div>
+		<legend><?php echo JText::_('COM_NEWSLETTER_ACTIVE_SUBSCRIBERS'); ?></legend>
+		<div id="stat-active-subscribers"></div>
         <div id="holder"></div>
-
 </div>
 
 

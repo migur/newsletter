@@ -66,6 +66,12 @@ class NewsletterViewStatistic extends MigurView
 		}
 
 		$this->setStatisticsData();
+		
+		// Load the submenu.
+		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+		
+		JToolBarHelper::title(JText::_('COM_NEWSLETTER_NEWSLETTERS_STATS'), 'article.png');
+		
 		parent::display($tpl);
 	}
 

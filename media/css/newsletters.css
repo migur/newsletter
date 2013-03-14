@@ -15,8 +15,8 @@
 	width:40%;
 }
 
-@media (max-width: 1000px) { 
-	.newsletters-statistics, .newsletters-list {
+@media (max-width: 979px) { 
+	#newsletters-statistics, #newsletters-list {
 		float: none !important;
 		width:100% !important;
 	}

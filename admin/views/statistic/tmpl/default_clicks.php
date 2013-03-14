@@ -1,33 +1,31 @@
 <div id="stat-clicks">
-	<dl>
-		<dt><b>Sents, Clicks, Bounces, Views</b></dt>
-		<dd><div id="all-in-one"></div></dd>
-		
-		<dt>
-			<b>Number of clicks and views per day</b>
-			<div class="fltrt">
-				<div id="days-label"><?php echo JText::_('COM_NEWSLETTER_SELECT_RANGE'); ?></div>
-				<select name="days">
-					<?php echo JHtml::_('select.options', array(
-						'5'  => '5 '   . JText::_('COM_NEWSLETTER_DAYS'),
-						'10' => '10 '  . JText::_('COM_NEWSLETTER_DAYS'),
-						'15' => '15 '  . JText::_('COM_NEWSLETTER_DAYS'),
-						'30' => '30 '  . JText::_('COM_NEWSLETTER_DAYS'),
-						'45' => '45 '  . JText::_('COM_NEWSLETTER_DAYS'),
-						'60' => '60 '  . JText::_('COM_NEWSLETTER_DAYS'),
-					), 'value', 'text', array($this->days)); ?>
-				</select>
-			</div>	
-		</dt>
-		<dd><div id="stat-clicks-per-day"></div></dd>
-		
-		<dt><b>Number of clicks and views per hour (last 24 hours)</b></dt>
-		<dd>
-			<div id="stat-clicks-per-hour"></div>
-		</dd>
-	</dl>
+	<div>
+		<legend>Sents, Clicks, Bounces, Views</legend>
+		<div id="all-in-one"></div>
+	</div>
 
+	<div>
+		<legend>Number of clicks and views per day</legend>
+		<div id="stat-clicks-per-day"></div>
+		<div id="cntrl-rangeselect">
+			<span><?php echo JText::_('COM_NEWSLETTER_SELECT_RANGE'); ?></span>
+			<select class="input-small" name="days">
+				<?php echo JHtml::_('select.options', array(
+					'5'  => '5 '   . JText::_('COM_NEWSLETTER_DAYS'),
+					'10' => '10 '  . JText::_('COM_NEWSLETTER_DAYS'),
+					'15' => '15 '  . JText::_('COM_NEWSLETTER_DAYS'),
+					'30' => '30 '  . JText::_('COM_NEWSLETTER_DAYS'),
+					'45' => '45 '  . JText::_('COM_NEWSLETTER_DAYS'),
+					'60' => '60 '  . JText::_('COM_NEWSLETTER_DAYS'),
+				), 'value', 'text', array($this->days)); ?>
+			</select>
+		</div>	
+	</div>	
+	<div>
+		<legend>Number of clicks and views per hour (last 24 hours)</legend>
+		<div id="stat-clicks-per-hour"></div>
         <div id="holder"></div>
+	</div>	
 
 </div>
 
