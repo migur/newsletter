@@ -14,7 +14,7 @@
 	width:59%;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1150px) {
 	#templates-preview, #templates-list {
 		float: none;
 		width:100%;
