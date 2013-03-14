@@ -312,7 +312,6 @@ div.form-text dl dt {
 #jgroups-pane {
 	max-height: 270px;
 	overflow: auto;
-<<<<<<< HEAD
 }*/
 
 #exclude-uploader,
@@ -339,7 +338,3 @@ div.form-text dl dt {
 #import-toolbar .btn[data-role="import-plugin"] span {
 	padding-left: 45px;
 }
-=======
-}
-
->>>>>>> f20f31869b59eea5b9b063e6bef73697867f70cf
