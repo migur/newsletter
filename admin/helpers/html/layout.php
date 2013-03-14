@@ -27,4 +27,20 @@ abstract class JHtmlLayout
 	{
 		return '</div></div>';
 	}	
+	
+	public static function controlgroup($label, $controls, $options = array(), $renderLabelWrapper = false) 
+	{
+		$label = preg_replace('/(class\=\"[^\"]+)(\")/mui', "$1 control-label $2", $label);
+		
+		$controls = (array) $controls;
+		
+		
+		return '<div class="control-group">' .
+					($renderLabelWrapper? '<label class="control-label">' : '').
+						JText::_($label).
+					($renderLabelWrapper? '</label>':'').
+					'<div class="controls">'.implode("\n", $controls).'</div>'.
+				'</div>';
+	}	
+	
 }

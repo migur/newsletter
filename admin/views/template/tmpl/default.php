@@ -9,7 +9,7 @@ defined('_JEXEC') or die;
     <tr>
         <td width="45%" style="vertical-align: top;">
 
-		    <form name="templateForm" method="POST" id="form-template" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
+		    <form name="templateForm" method="POST" id="form-template" class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
                 <fieldset class="standard-fieldset">
                 <legend><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></legend>
 

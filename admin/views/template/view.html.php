@@ -96,7 +96,7 @@ class NewsletterViewTemplate extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('multitab-toolbar');
+		$bar = JToolBar::getInstance();
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'template.save', false);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
 	}
@@ -110,11 +110,11 @@ class NewsletterViewTemplate extends MigurView
 	protected function setDocument()
 	{
 		$isNew = (!JRequest::get('template_id', false) );
+		$title = $isNew ? JText::_('COM_NEWSLETTER_TEMPLATE_CREATING') : JText::_('COM_NEWSLETTER_TEMPLATE_EDITING');
+		JToolbarHelper::title($title);
 		$document = JFactory::getDocument();
-		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_TEMPLATE_CREATING') : JText::_('COM_NEWSLETTER_TEMPLATE_EDITING'));
-
 		$document->addStylesheet(JURI::root() . '/media/com_newsletter/css/admin.css');
-		$document->addStylesheet(JURI::root() . '/media/com_newsletter/css/templates.css');
+		$document->addStylesheet(JURI::root() . '/media/com_newsletter/css/template.css');
 
 		$document->addScript(JURI::root() . '/media/com_newsletter/js/migur/js/core.js');
 		$document->addScript(JURI::root() . '/media/com_newsletter/js/migur/js/message.js');
