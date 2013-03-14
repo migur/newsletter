@@ -3,30 +3,16 @@
 		<form id="form-newsletterslist" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters');?>" method="post" name="adminForm" >
 
 		<div class="filter-bar">
-			<div class="row-fluid">
-				<div class="pull-right">
-					<?php echo JToolBar::getInstance('newsletters')->render(); ?>
-				</div>	
-
-				<div id="newsletters-filter-panel-control" class="pull-left filter-panel-control" data-role="ctrl-container"></div>
-			</div>
-
-			<br/>
-
-			<div id="newsletters-filter-panel" class="row-fluid filter-panel <?php echo !empty($filterList)? 'opened' : ''; ?>" data-role="panel-container">
-				<div class="filter-panel-inner" data-role="panel-container-inner">
-					<div class="pull-left btn-group">
-						<input class="migur-search" type="text" name="newsletters_filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
-					</div>	
-					<div class="pull-left btn-group">
-						<button type="submit" class="btn migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-						<button type="button" class="btn btn-danger" onclick="document.id('newsletters_filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
-					</div>
-				</div>	
+			<div class="pull-left btn-group">
+				<input class="migur-search" type="text" name="newsletters_filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
+			</div>	
+			<div class="pull-left btn-group">
+				<button type="submit" class="btn migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
+				<button type="button" class="btn btn-danger" onclick="document.id('newsletters_filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 			</div>
 		</div>
 
-		<table class="sslist adminlist  table table-striped" width="100%">
+		<table id="container-newsletters" class="adminlist  table table-striped" width="100%">
 			<thead>
 				<tr>
 					<th width="1%">

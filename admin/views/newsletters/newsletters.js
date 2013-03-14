@@ -9,12 +9,10 @@
 window.addEvent('domready', function() {
     try {
 
-        $$('#newsletters-default button')[0].addEvent('click', function(ev){
-
-            ev.stop();
+        $('ctrl-showstats').addEvent('click', function(ev){
 
             var listIds = [];
-            $$('#adminForm [name=cid[]]').each(function(el){
+            $$('#container-newsletters [name=cid[]]').each(function(el){
 
                 if( $(el).getProperty('checked') ) {
 
@@ -24,7 +22,8 @@ window.addEvent('domready', function() {
 
             if (listIds.length < 1) {
                 alert(Joomla.JText._('PLEASE_SELECT_THE_NEWSLETTERS',"Please select the newsletters"));
-                return;
+				ev.stop();
+                return false;
             }
 
             /**
@@ -33,13 +32,10 @@ window.addEvent('domready', function() {
              *
              * The second argument sets additional options.
              */
-            var href = $$('#newsletters-default a').getProperty('href');
+            var href = $(this).getProperty('href');
 
             var url = href + '&newsletters=' + listIds.toString();
-            SqueezeBox.open(url, {
-                    handler: 'iframe',
-                    size: {x: 900, y: 600}
-            });
+			document.location.href = url;
         });
 
     } catch(e) {

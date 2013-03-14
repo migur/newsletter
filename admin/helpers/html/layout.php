@@ -18,12 +18,13 @@ abstract class JHtmlLayout
 			$sidebar = JHtmlSidebar::render();
 		}
 		return 
+			'<div>'.
 			'<div id="j-sidebar-container" class="span2">'.$sidebar.'</div>'.
 			'<div id="j-main-container" class="span10">';
 	}	
 
 	public static function wrapperEnd() 
 	{
-		return '</div>';
+		return '</div></div>';
 	}	
 }

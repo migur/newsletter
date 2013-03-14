@@ -28,7 +28,7 @@ if (!defined('MIGUR')) {
  */
 JToolbar::getInstance()->loadButtonType('help');
 
-class JToolbarButtonSendProgress extends JButton
+class JToolbarButtonSendProgress extends JToolbarButton
 {
 	/**
 	 * @var    string	Button type
