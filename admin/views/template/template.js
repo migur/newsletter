@@ -6,86 +6,49 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-function jInsertFieldValue(value, id) {
-
-    new Request.JSON({
-        url: '?option=com_newsletter&task=file.fileinfo',
-        data: {
-            filename: migurSiteRoot + value
-        },
-
-        onComplete: function(res){
-            
-            $(id).setProperty('value', migurSiteRoot + value);
-
-            if (res.mime.substr(0,5) == 'image') {
-				
-				if (typeof res['0'] != 'undefined') {
-					res['0'] += 'px';
-				} else {
-					res['0'] = 'auto';
-				}
-
-				if (typeof res['1'] != 'undefined') {
-					res['1'] += 'px';
-				} else {
-					res['1'] = 'auto';
-				}
-
-                $(id+'_width').setProperty('value', res['0']);
-                $(id+'_height').setProperty('value', res['1']);
-            }
-        }
-    }).send();
-
-
-}
-
 window.addEvent('domready', function() {
-try {
 
-    $$('#multitab-toolbar-cancel a')
-        .removeProperty('onclick')
-        .addEvent('click', function(){
-            if (window && window.parent && window.parent.SqueezeBox) {
-                window.parent.SqueezeBox.close();
-            }
-            return false;
-        });
+	var previewControls = $$('.templateslist .icon');
+
+	var update = function(){
+
+		var id = $(this).getParent('tr').getElements('[name=cid[]]')[0].get('value');
 		
-		
-	if(typeof $$('.templateslist .search')[0] != 'undefined') {	
-		
-		tplTransport = null;
-		$$('.templateslist .search').addEvent('click', function(){
+		new Request.JSON({
+			url: '?option=com_newsletter&task=template.getparsed&shownames=1&format=html',
+			data: {
+				t_style_id: id,
+				tagsRenderMode: 'schematic',
+				type: 'html' 
+			},
 
-			var id = $(this).getParent('tr').getElements('[name=cid[]]')[0].get('value');
+			onComplete: function(res){
+				$('container-preloader').removeClass('preloader');
+				render(res.data);
+			}
+			
+		}).send();
 
-			delete tplTransport;
-			tplTransport = new Request.JSON({
-				url: '?option=com_newsletter&task=template.getparsed&shownames=1&format=html',
-				data: {
-					t_style_id: id,
-					tagsRenderMode: 'schematic',
-					type: 'html' },
+		$('container-preloader').addClass('preloader');
+		render({});
 
-				onComplete: function(res){
+		return false;
+	}
 
-					$('preview-container').set('html', res.data.content);
-					$('tpl-title').set('text', res.data.information.name);
-					$('tpl-name').set('text', res.data.information.author);
-					$('tpl-email').set('text', res.data.information.authorEmail);
-				}
-			}).send();
+	var render = function(data){
+		$('preview-container').set('html', data.content || '');
+		$('tpl-title').set('text', (data.information && data.information.name) || '');
+		$('tpl-name').set('text',  (data.information && data.information.author) || '');
+		$('tpl-email').set('text', (data.information && data.information.authorEmail) || '');
+	}
 
-			return false;
-		});
+	// Init
+	if(previewControls.length > 0) {	
 
-		$$('.templateslist .search')[0].fireEvent('click');
+		previewControls.addEvent('click', update);
+
+		update.apply(previewControls[0]);
 	}	
-
-} catch(e){
-    if (console && console.log) console.log(e);
-}
+	
 });
 

@@ -54,13 +54,6 @@ class NewsletterControllerTemplate extends JControllerForm
 		JRequest::setVar('jform', $jform, 'post');
 
 		if (parent::save()) {
-			// Set the redirect based on the task.
-			switch ($this->getTask()) {
-				case 'save':
-					$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
-					break;
-			}
-
 			return true;
 		} else {
 			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($recordId, $key) . '&tmpl=component', false));
@@ -88,7 +81,7 @@ class NewsletterControllerTemplate extends JControllerForm
 			'title' => $standard->information['name'] . ' (custom)',
 			'params' => '{}'
 		));
-		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
 	}
 	
 	

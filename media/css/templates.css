@@ -191,7 +191,6 @@ dl#prewiew {
     position: relative;
     margin: 0;
     padding: 0;
-    height: 280px;
     width: auto;
     border-top: 1px solid #CCCCCC;
     overflow: auto;
@@ -210,7 +209,7 @@ dl#prewiew {
 
 #preview-container table,
 #preview-container tbody {
-    width: 100%;
+    width: 99.9%;
     height: 100%;
     position: relative;
 }

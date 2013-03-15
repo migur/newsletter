@@ -98,7 +98,7 @@ class NewsletterViewTemplate extends MigurView
 	{
 		$bar = JToolBar::getInstance();
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'template.save', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
+		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'template.cancel', false);
 	}
 
 	/**
@@ -111,16 +111,20 @@ class NewsletterViewTemplate extends MigurView
 	{
 		$isNew = (!JRequest::get('template_id', false) );
 		$title = $isNew ? JText::_('COM_NEWSLETTER_TEMPLATE_CREATING') : JText::_('COM_NEWSLETTER_TEMPLATE_EDITING');
+		$layout = JRequest::getString('layout');
 		JToolbarHelper::title($title);
 		$document = JFactory::getDocument();
 		$document->addStylesheet(JURI::root() . '/media/com_newsletter/css/admin.css');
+		
 		$document->addStylesheet(JURI::root() . '/media/com_newsletter/css/template.css');
 
-		$document->addScript(JURI::root() . '/media/com_newsletter/js/migur/js/core.js');
-		$document->addScript(JURI::root() . '/media/com_newsletter/js/migur/js/message.js');
-		$document->addScript(JURI::root() . '/administrator/components/com_newsletter/views/template/template.js');
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/template/submitbutton.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/models/forms/template.js");
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/message.js');
+
+		$jsName = ($layout == 'edit'? '_edit' : '');
+		$document->addScript(JURI::root() . 'administrator/components/com_newsletter/views/template/template'.$jsName.'.js');
+		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/template/submitbutton.js");
+		$document->addScript(JURI::root() . "administrator/components/com_newsletter/models/forms/template.js");
 
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}
