@@ -6,9 +6,7 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-window.addEvent('domready', 
-
-	function() {
+window.addEvent('domready', function() {
 	
 		var edit  = $$('#templates-edit > button');
 		var trash = $$('#templates-trash > button');
@@ -61,32 +59,45 @@ window.addEvent('domready',
 			});
 		});
 
+		var render = function(data){
+			$('preview-container').set('html', data.content || '');
+			$('tpl-title').set('text', (data.information && data.information.name) || '');
+			$('tpl-name').set('text',  (data.information && data.information.author) || '');
+			$('tpl-email').set('text', (data.information && data.information.authorEmail) || '');
+		}
+
 		// Add AJAX preview functionality to glasses
-		glasses.addEvent('click', function(){
+		if (glasses.length > 0) {
+			glasses.addEvent('click', function(){
 
-			var id = $(this).getParent('tr').getElements('[name=cid[]]')[0].get('value');
+				var id = $(this).getParent('tr').getElements('[name=cid[]]')[0].get('value');
 
-			new Request.JSON({
-				url: '?option=com_newsletter&task=template.getparsed&shownames=1&format=html',
-				data: {
-					t_style_id: id,
-					tagsRenderMode: 'schematic',
-					type: 'html' },
+				new Request.JSON({
+					url: '?option=com_newsletter&task=template.getparsed&shownames=1&format=html',
+					data: {
+						t_style_id: id,
+						tagsRenderMode: 'schematic',
+						type: 'html' },
 
-				onComplete: function(res){
+					onComplete: function(res){
+						
+						$('container-preloader').removeClass('preloader');
+						
+						render(res.data)
+						$('preview-container').set('html', res.data.content);
+						$('tpl-title').set('text', res.data.information.name);
+						$('tpl-name').set('text', res.data.information.author);
+						$('tpl-email').set('text', res.data.information.authorEmail);
+					}
+				}).send();
 
-					$('preview-container').set('html', res.data.content);
-					$('tpl-title').set('text', res.data.information.name);
-					$('tpl-name').set('text', res.data.information.author);
-					$('tpl-email').set('text', res.data.information.authorEmail);
-				}
-			}).send();
+				$('container-preloader').addClass('preloader');
+				render({});
 
-			return false;
-		});
+				return false;
+			});
 
 
-		glasses[0].fireEvent('click');
-
-	}
-);
+			glasses[0].fireEvent('click');
+		}	
+});
