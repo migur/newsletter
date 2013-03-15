@@ -8,6 +8,13 @@
 
 window.addEvent('domready', function() { try {
 
+//	$$('.subscriber-item').addEvent('click', function(ev){
+//		ev.stop();
+//		var url = $(this).getProperty('href');
+//		$$('#modal-subscriberedit iframe').setProperty('src', url);
+//		jQuery('#modal-subscriberedit').modal('show');
+//		
+//	});
 
     $$('#subscribers-copy a, #subscribers-cancel a').addEvent('click', function(ev){
         

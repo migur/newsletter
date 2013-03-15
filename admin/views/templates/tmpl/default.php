@@ -6,7 +6,7 @@ defined('_JEXEC') or die;
 <?php echo JHtml::_('layout.wrapper'); ?>
 
 <div id="templates-list" class="pull-left">
-	<form id="form-templates" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=templates&form=templates');?>" method="post" name="templatesForm" >
+	<form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=templates&form=templates');?>" method="post" name="adminForm" >
 		
 		<legend><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></legend>
 
@@ -25,7 +25,7 @@ defined('_JEXEC') or die;
 										<input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
 								</th>
 								<th class="left">
-										<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_TEMPLATE', 'a.title', $this->templates->listDirn, $this->templates->listOrder, null, null, 'templatesForm'); ?>
+										<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_TEMPLATE', 'a.title', $this->templates->listDirn, $this->templates->listOrder, null, null, 'adminForm'); ?>
 								</th>
 						</tr>
 				</thead>
@@ -44,7 +44,7 @@ defined('_JEXEC') or die;
 								<td class="center">
 									<?php
 										$idx = $item->t_style_id;
-										echo JHtml::_('multigrid.id', $i, $idx, false, 'cid', 'templatesForm');
+										echo JHtml::_('multigrid.id', $i, $idx, false, 'cid', 'adminForm');
 									?>
 								</td>
 								<td>
@@ -77,6 +77,7 @@ defined('_JEXEC') or die;
 	</ul>
 
 	<div class="tab-content">
+		<div id="container-preloader"></div>
 		<div id="tabconf-general" class="tab-pane active">
 			<div><b><span id="tpl-title"></span></b></div>
 			<br />

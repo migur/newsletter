@@ -48,8 +48,8 @@ class NewsletterViewTemplates extends MigurView
 		JHTML::stylesheet('media/com_newsletter/css/templates.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
 		JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/templates/templates.js");
-		JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
-		JHTML::script('media/com_newsletter/js/migur/js/search.js');		
+		//JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
+		//JHTML::script('media/com_newsletter/js/migur/js/search.js');		
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
@@ -90,8 +90,9 @@ class NewsletterViewTemplates extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_TEMPLATES_TITLE'), 'article.png');
 
 		$bar = JToolBar::getInstance();
-		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=template&tmpl=component', 880, 680, 0, 0);
-		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
+		//$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=template&tmpl=component', 880, 680, 0, 0);
+		$bar->appendButton('Link', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=template');
+		$bar->appendButton('Standard', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
 
 		// Load the submenu.

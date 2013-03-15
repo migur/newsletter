@@ -21,9 +21,40 @@
 
 #subscriber-edit-newsletters {
     float: right;
-    width: 30%;
+    width: 34%;
 }
 
 #subscriber-edit-history {
 	clear:both;
+}
+
+@media(max-width:1120px) {
+	#subscriber-edit-main {
+		float: left;
+		width: 45%;
+		margin-right:0;
+	}
+
+	#subscriber-edit-lists {
+		float: right;
+		width: 50%;
+	}
+
+	#subscriber-edit-newsletters {
+		float: right;
+		width: 100%;
+	}
+}
+
+@media(max-width:700px) {
+	#subscriber-edit-main {
+		float: none;
+		width: 100%;
+		margin-right:0;
+	}
+
+	#subscriber-edit-lists {
+		float: none;
+		width: 100%;
+	}
 }

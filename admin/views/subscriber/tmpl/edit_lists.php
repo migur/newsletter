@@ -3,7 +3,7 @@ $listDirn  = 'a.name';
 $listOrder = 'asc';
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_newsletter&view=subscriber&tmpl=component&layout=') . $this->getLayout(); ?>" method="POST" name="listForm" id="listForm">
+<form action="<?php echo JRoute::_('index.php?option=com_newsletter&view=subscriber&layout=') . $this->getLayout(); ?>" method="POST" name="listForm" id="listForm">
     <select name="list_to_subscribe" class="inputbox">
         <option value=""><?php echo '- ' . JText::_('COM_NEWSLETTER_SELECT_LIST') . ' -'; ?></option>
         <?php

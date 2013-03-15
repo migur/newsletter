@@ -187,7 +187,7 @@ class NewsletterModelTemplates extends MigurModelList
 		$customs = $this->getItems();
 		$standards = $this->getStandardTemplates();
 
-		$orderDirn = $this->state->get('list.direction');
+		$orderDirn = $this->getState('list.direction');
 		$search = $this->getState('filter.search');
 		$type = $this->getState('filter.published');
 
