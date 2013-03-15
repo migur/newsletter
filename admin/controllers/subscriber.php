@@ -156,7 +156,7 @@ class NewsletterControllerSubscriber extends JControllerForm
 			// Set the redirect based on the task.
 			switch ($this->getTask()) {
 				case 'save':
-					$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
+					$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
 					break;
 			}
 			return true;

@@ -115,7 +115,7 @@ class NewsletterViewSubscriber extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('subscriber-toolbar', 'subscriberForm');
+		$bar = JToolBar::getInstance();
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'subscriber.cancel', false);
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'subscriber.save', false);
 	}
@@ -129,8 +129,8 @@ class NewsletterViewSubscriber extends MigurView
 	protected function setDocument()
 	{
 		$isNew = (!JRequest::get('subscriber_id', false) );
+		JToolbarHelper::title($isNew ? JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER') : JText::_('COM_NEWSLETTER_SUBSCRIBER_EDITING'));
 		$document = JFactory::getDocument();
-		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER') : JText::_('COM_NEWSLETTER_SUBSCRIBER_EDITING'));
 		$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/subscriber/submitbutton.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/subscriber/subscriber.js");

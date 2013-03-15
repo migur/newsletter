@@ -100,25 +100,17 @@
 				<td class="subscriber-name">
 					<?php 
 						if (!$subscriber->subscriber_id) { 
-							$href = JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&user_id='.$subscriber->user_id, false);
+							$href = JRoute::_('index.php?option=com_newsletter&layout=edit&task=subscriber.edit&user_id='.$subscriber->user_id, false);
 						} else {
-							$href = JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&subscriber_id='.$subscriber->subscriber_id, false);
+							$href = JRoute::_('index.php?option=com_newsletter&layout=edit&task=subscriber.edit&subscriber_id='.$subscriber->subscriber_id, false);
 						}
 					?>
 					<a 
 						href="<?php echo $href; ?>"
-						rel="{handler: 'iframe', size: {x: 1100, y: 700}}"
-						class="modal" 
+						class="subscriber-item" 
 					>
 						<?php echo $this->escape($item->name); ?>
 					</a>
-					
-<!--					
-					<a data-target="#modal-subscriber-edit-<?php echo $subscriber->subscriber_id; ?>" data-toggle="modal" class="modal">
-						<?php echo $this->escape($item->name); ?>
-					</a>					
-					<?php echo JHtml::_('bootstrap.renderModal', 'modal-subscriber-edit-'. $subscriber->subscriber_id, array('width' => 1100, 'height' => 400, 'url' => $href, 'title' => "Edit")); ?>
--->					
 					
 					<div class="<?php echo $subscriber->isJoomlaUserType()? 'juser-type-icon' : 'subscriber-type-icon'; ?>"></div>
 				</td>
@@ -149,3 +141,4 @@
 	</div>
     </fieldset>
 </form>
+
