@@ -1,4 +1,4 @@
-<fieldset class="plugin-container plugin-import">
+<div class="plugin-container plugin-import">
     <legend><?php echo JText::_($this->plugin->title); ?></legend>
     <form id="plugin-form" action="<?php echo JUri::current(); ?>" method="post">
 		
@@ -46,4 +46,4 @@
         <?php echo JText::_($this->plugin->description); ?>
     </div>
     
-</fieldset>
+</div>

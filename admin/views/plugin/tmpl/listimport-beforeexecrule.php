@@ -1,4 +1,4 @@
-<fieldset class="plugin-container plugin-import">
+<div class="plugin-container plugin-import">
     <legend><?php echo JText::_($this->plugin->title); ?></legend>
 	
 	<?php if (!empty($this->plugin->data['helpText'])) { ?>
@@ -83,4 +83,4 @@
         <?php echo JText::_($this->plugin->description); ?>
     </div>
     
-</fieldset>
+</div>

@@ -3,10 +3,6 @@
     clear: both;
 }
 
-.plugin-container {
-    border: 1px solid #CCCCCC !important;
-}
-
 .plugin-container .plugin-description {
 	margin-top: 10px;
     clear:both;

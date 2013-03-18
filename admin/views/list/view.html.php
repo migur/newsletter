@@ -236,6 +236,7 @@ class NewsletterViewList extends MigurView
 	{
 		$lid = JRequest::getInt('list_id', false);
 		$isNew = !$lid;
+		JToolbarHelper::title($isNew? JText::_('COM_NEWSLETTER_TITLE_CREATE_LIST') : JText::sprintf('COM_NEWSLETTER_TITLE_EDIT_LIST', '"'.$this->list->name.'"'));
 		
 		$bar = JToolBar::getInstance();
 		if (
@@ -267,6 +268,8 @@ class NewsletterViewList extends MigurView
 		$document->addScript(JURI::root() . $this->script);
 		
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
+
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/modal.js');
 
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-min.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.raphael-min.js');

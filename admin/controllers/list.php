@@ -64,30 +64,6 @@ class NewsletterControllerList extends JControllerForm
 
 	
 	/**
-	 * Save the configuration
-	 * @return	boolean
-	 * @since	1.0
-	 */
-	function save()
-	{
-		if (parent::save()) {
-			// Set the redirect based on the task.
-			switch ($this->getTask()) {
-				case 'save':
-					$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
-					break;
-			}
-
-			return true;
-		} else {
-			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($recordId, $key), false));
-		}
-
-		return false;
-	}
-
-
-	/**
 	 * Is used for standard upload of file.
 	 * @since  1.0
 	 * @return void
