@@ -25,7 +25,6 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
-JHTML::_('behavior.modal');
 
 /**
  * Class of the automailing view. Displays the model data.
@@ -146,9 +145,6 @@ class NewsletterViewAutomailing extends MigurView
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'automailing.save', false);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'automailing.cancel', false);
 		
-		$bar = JToolBar::getInstance('series');
-		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailingitem&layout=edit&tmpl=component&automailing_id='.$aid, 400, 200, 0, 0);
-		
 		$bar = JToolBar::getInstance('lists');
 		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailing&tmpl=component', 880, 680, 0, 0);
 		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
@@ -181,6 +177,7 @@ class NewsletterViewAutomailing extends MigurView
 		$document->addScript(JURI::root()."/administrator/components/com_newsletter/views/automailing/submitbutton.js");
 		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/core.js');
 		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/ajax.js');
+		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/modal.js');
 
 		JText::script('COM_NEWSLETTER_AUTOMAILING_ERROR_UNACCEPTABLE');
 	}

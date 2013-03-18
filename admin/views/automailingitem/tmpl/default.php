@@ -3,10 +3,7 @@
 defined('_JEXEC') or die;
 ?>
 
-<fieldset class="automailing-new">
-<legend><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_ITEM'); ?></legend>	
-
-
+<div>
 	<form name="adminForm" method="POST" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
 
 		<?php 
@@ -58,4 +55,4 @@ defined('_JEXEC') or die;
 		
 	</form>
 
-</fieldset>
+</div>

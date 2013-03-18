@@ -11,24 +11,14 @@ defined('_JEXEC') or die;
 		<fieldset>
 			<legend><?php echo JText::_('COM_NEWSLETTER_AUTOMAILINGS'); ?></legend>
 
-			<fieldset class="filter-bar" >
-				<div class="pull-left">
-					<?php echo JToolBar::getInstance('automailings')->render(); ?>
-				</div>	
-				<div class="btn-toolbar pull-right">
-					<a class="btn" data-target="#automailings-filter-panel" data-toggle="collapse">Filter: <span class="caret"></span></a>
+			<div>
+				<div class="filter-search btn-group pull-left">
+					<input type="text" name="filter_search" id="automailing_filter_search" class="migur-search" value="<?php echo $this->escape($this->automailings->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" placeholder="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>"/>
 				</div>
-			</fieldset>
-			<div id="automailings-filter-panel" class="collaps collapse">
-				<div class="filter-select well">
-					<div class="filter-search btn-group pull-left">
-						<input type="text" name="filter_search" id="automailing_filter_search" class="migur-search" value="<?php echo $this->escape($this->automailings->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" placeholder="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>"/>
-					</div>
-					<div class="btn-group pull-left">
-						<button type="submit" class="btn tip migur-search-submit" data-original-title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-						<button rel="tooltip" onclick="document.id('automailing_filter_search').value='';this.form.submit();" type="button" class="btn tip" data-original-title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
-					</div>
-				</div>	
+				<div class="btn-group pull-left">
+					<button type="submit" class="btn tip migur-search-submit" data-original-title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
+					<button rel="tooltip" onclick="document.id('automailing_filter_search').value='';this.form.submit();" type="button" class="btn tip" data-original-title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+				</div>
 			</div>
 
 			<table class="automailingslist adminlist  table table-striped" width="100%">

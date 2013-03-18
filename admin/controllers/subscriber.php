@@ -153,15 +153,10 @@ class NewsletterControllerSubscriber extends JControllerForm
 	public function save()
 	{
 		if (parent::save()) {
-			// Set the redirect based on the task.
-			switch ($this->getTask()) {
-				case 'save':
-					$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
-					break;
+			if(!JRequest::getInt('subscriber_id')) {
+				$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=close&tmpl=component', false));
 			}
-			return true;
 		}
-		return false;
 	}
 
 	/**

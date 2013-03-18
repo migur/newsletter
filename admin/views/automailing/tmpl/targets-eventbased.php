@@ -2,7 +2,7 @@
 	method="POST" 
 	name="automailingtargetsForm" 
 	id="automailingtargetsForm" 
-	action="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&view=automailing&layout='.$this->getLayout().'&automailing_id='.$this->automailingId, false); ?>"
+	action="<?php echo JRoute::_('index.php?option=com_newsletter&view=automailing&layout='.$this->getLayout().'&automailing_id='.$this->automailingId, false); ?>"
 >
 	
 	<fieldset class="adminform" style="margin:0 5px 10px;" id="jform_adminform">

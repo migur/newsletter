@@ -27,7 +27,7 @@
 #preview-container {
     width: 100%;
     overflow: auto;
-    min-height: 200px;
+    min-height: 400px;
 }
 
 .automailingslist td a.search {

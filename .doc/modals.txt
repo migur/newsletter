@@ -1,20 +1,44 @@
 
 Modal windows.
 
-Add JHtml::_('behavior.modal'); first.
-
 Some ways to create modals:
-1. Twitter's modal. As a toolbar control
+
+1.  One window for many links. URL for iframe will be taken from link's href.
+	Add JURI::root().'/media/com_newsletter/js/migur/js/modal.js'
+	Add the template of a modal window
+	
+				<div id="modal-{modalName}" class="modal hide fade">
+					<div class="modal-header">
+						<button data-dismiss="modal" class="close" type="button">?</button>
+						<h3><?php echo JText::_({TITLE}); ?></h3>
+					</div>
+					<div class="modal-body"></div>
+				</div>
+				
+	Create some links
+				
+				<a
+					data-toggle="migurmodal" 
+					data-target="#modal-{modalName}"
+					href="{url for modal's iframe}"
+				>
+					<?php echo JText::_({Link's text}); ?>
+				</a>
+	
+	Enjoy!
+
+2. Twitter's modal. As a toolbar control. One window - one link with hardcoded URL.
+	Add JHtml::_('behavior.modal'); first.
 	$bar = JToolBar::getInstance();
 	$bar->appendButton('Popup', 'default', {title}, {url}, {width}, {height}, ... );
 	See ...libraries\cms\toolbar\button\popup.php
 
-2. Twitter's modal.
+3. Twitter's modal.
 	echo JHtml::_('bootstrap.renderModal', {id}, {params}, {footer})
 	See ...libraries\cms\html\bootstrap.php
 
-3. Twitter's modal. Inline HTML markup (see TB doc)
+4. Twitter's modal. Inline HTML markup (see TB doc)
 
-4. SqueezeBox.
+5. SqueezeBox.
 	SqueezeBox.fromElement(this, {handler:\'iframe\', size: {x: 600, y: 450}, url:\''.JRoute::_('index.php?option=com_menus&view=menutypes&tmpl=component&recordId='.$recordId).'\'})
     See ...libraries/cms/form/fields/media

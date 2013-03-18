@@ -18,7 +18,7 @@ window.addEvent('domready', function() { try {
                 window.parent.SqueezeBox.close();
             }
 			
-			if (window && window.parent && window.parent.jQuery('.modal.in')) {
+			if (window && window.parent && window.parent.jQuery && window.parent.jQuery('.modal.in')) {
 				window.parent.jQuery('.modal.in').data('modal').hide();
 			}
 			

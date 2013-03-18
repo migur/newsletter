@@ -23,29 +23,11 @@ class NewsletterControllerAutomailing extends JControllerForm
 	 */
 	function save()
 	{
-		$aid = JRequest::getInt('automailing_id');
-
-		$isNew = empty($aid);
-		JRequest::setVar('layout', (($isNew)? 'default' : 'edit'));
-
-		
 		if (parent::save()) {
-			
-			// Set the redirect based on the task.
-			switch ($this->getTask()) {
-				case 'save':
-					$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=close&tmpl=component', false));
-					break;
+			if (!JRequest::getInt('automailing_id')) {
+				$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=close&tmpl=component', false));
 			}
-
-			return true;
-			
-		} else {
-			
-			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&tmpl=component&view=' . $this->view_item . $this->getRedirectToItemAppend($aid, 'automailing_id'), false));
 		}
-
-		return false;
 	}
 	
 	
