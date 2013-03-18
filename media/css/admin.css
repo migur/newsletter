@@ -464,5 +464,6 @@ body.component {
 @media (max-width: 767px){
 	.modal.fade.in {
 		top: 20px !important;
+		margin-top: 0px !important;
 	}
 }

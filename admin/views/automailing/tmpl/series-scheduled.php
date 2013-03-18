@@ -2,19 +2,25 @@
 	method="POST" 
 	name="automailingitemsForm" 
 	id="automailingitemsForm" 
-	action="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&view=automailing&layout='.$this->getLayout().'&automailing_id='.$this->automailingId, false); ?>"
+	action="<?php echo JRoute::_('index.php?option=com_newsletter&view=automailing&layout='.$this->getLayout().'&automailing_id='.$this->automailingId, false); ?>"
 >
-	<div class="fltrt">
+	<div class="pull-right">
 	<?php 
-		if (!$this->automailing->finished) {
-			echo JToolBar::getInstance('series')->render(); 
-		} else { ?>
+		if (!$this->automailing->finished) { ?>
+			<a
+				class="ctrl-seriesitem-new btn btn-success" 
+				data-toggle="migurmodal" 
+				data-target="#modal-seriesitem"
+				href="<?php echo JRoute::_('index.php?option=com_newsletter&view=automailingitem&layout=edit&tmpl=component&automailing_id=' . (int) $this->automailingId, false); ?>"
+			>
+				<?php echo JText::_('JTOOLBAR_NEW'); ?>
+			</a>
+		<?php } else { ?>
 			<span><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_FINISHED'); ?></span>
 			<br/>&nbsp;
 		<?php } ?>
 	</div>	
 	
-	<div class="clr"></div>
 	<?php 
 	foreach($this->automailingItems->items as $idx => $serie) { 
 		$editable = ($serie->status == 0 || $this->automailing->automailing_type == 'eventbased');
@@ -22,7 +28,14 @@
 	<div class="<?php echo ($editable)? 'item' : 'item-processed'; ?>">
 			
 			<?php if ($editable) { ?>
-				<a href="#" class="edit"><?php echo JText::_('COM_NEWSLETTER_EDIT'); ?></a>
+				<a
+					class="edit" 
+					data-toggle="migurmodal" 
+					data-target="#modal-seriesitem"
+					href="<?php echo JRoute::_('index.php?option=com_newsletter&task=automailingitem.edit&tmpl=component&series_id=' . (int) $serie->series_id, false); ?>"
+				>
+					<?php echo JText::_('COM_NEWSLETTER_EDIT'); ?>
+				</a>
 				<a href="#" class="close"></a>
 			<?php } ?>	
 			<div class="date"><?php echo $this->escape($serie->time_verbal); ?></div>

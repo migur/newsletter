@@ -15,7 +15,8 @@ jimport('joomla.application.component.controllerform');
 
 class NewsletterControllerList extends JControllerForm
 {
-
+	protected $view_list = 'subscribers';
+	
 	/**
 	 *
 	 * Class Constructor

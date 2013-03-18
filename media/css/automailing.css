@@ -4,6 +4,29 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+#pane-params{}
+
+#pane-series {
+	width: 50%;
+	float: left;
+}
+
+#pane-lists {
+	width: 45%;
+	float: right;
+}
+
+@media(max-width: 767px) {
+	#pane-series {
+		width: 100%;
+		float: none;
+	}
+
+	#pane-lists {
+		width: 100%;
+		float: none;
+	}
+}
 
 #am-targets span {
     background-color: #D9EAF9;
@@ -35,7 +58,6 @@
 
 #series-container, 
 #lists-container {
-	height:325px;
 	overflow: auto;
 }
 
@@ -52,6 +74,8 @@
     padding: 3px 5px;
 	position: relative; 
 	max-width: 280px;
+	margin-left: -146px;
+	left: 50%;
 }
 
 #series-container .item-processed {
@@ -129,4 +153,12 @@ input.inputbox {
 
 #jform_scope input {
 	clear: left;
+}
+
+#modal-seriesitem.modal {
+	margin-top: -200px
+}
+
+#modal-seriesitem.modal .modal-body iframe {
+	height: 260px
 }

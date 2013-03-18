@@ -3,25 +3,16 @@
 defined('_JEXEC') or die;
 ?>
 
-<fieldset class="automailing-new">
-<legend><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING'); ?></legend>	
-
+<div class="automailing-new">
+	
 	<form name="automailingForm" method="POST" id="form-automailing" class="form-horizontal form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
 
-			<div class="control-group">
-				<label class="control-label"><?php echo $this->form->getLabel('automailing_name'); ?></label>
-                <div class="controls">
-                    <?php echo $this->form->getInput('automailing_name'); ?>
-                </div>    
-			</div>
+		<?php echo JHtml::_('layout.controlgroup', $this->form->getLabel('automailing_name'), $this->form->getInput('automailing_name')); ?>
 
-			<div class="control-group">
-				<label class="control-label"><?php echo $this->form->getLabel('automailing_event'); ?></label>
-				<div class="controls">
-                    <?php echo $this->form->getInput('automailing_event'); ?>
-                </div>    
-			</div>
-
+		<?php echo JHtml::_('layout.controlgroup', $this->form->getLabel('automailing_event'), $this->form->getInput('automailing_event')); ?>
+		
+		<input type="hidden" name="tmpl" value="component" />
+		<input type="hidden" name="layout" value="default" />
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="automailing_id" value="0" />
 		<?php echo JHtml::_('form.token'); ?>
@@ -31,4 +22,4 @@ defined('_JEXEC') or die;
         </div>	
     </form>
 
-</fieldset>
+</div>

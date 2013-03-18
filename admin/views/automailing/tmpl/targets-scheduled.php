@@ -2,7 +2,7 @@
 	method="POST" 
 	name="automailingtargetsForm" 
 	id="automailingtargetsForm" 
-	action="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&view=automailing&layout='.$this->getLayout().'&automailing_id='.$this->automailingId, false); ?>"
+	action="<?php echo JRoute::_('index.php?option=com_newsletter&view=automailing&layout='.$this->getLayout().'&automailing_id='.$this->automailingId, false); ?>"
 >
 	<div class="pull-left btn-group">
 		<select name="list_to_subscribe" class="inputbox">

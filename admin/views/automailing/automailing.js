@@ -1,8 +1,7 @@
 
 window.addEvent('domready', function() {
-try {	
 	
-
+	// Functionality for default.php layout
 	if (isNew == 0) {
 
 		$("form-automailing").grab(
@@ -17,23 +16,9 @@ try {
 		}	
 	}
 	
-    var glasses = $$('.automailingslist .search')
-
-    // Add AJAX preview functionality to glasses
-    glasses.addEvent('click', function(){
-
-        var id = $('preview-container').getProperty(
-            'src', 
-            '?option=com_newsletter&layout=details&view=automailing&tmpl=component&automailing_id='+id
-        );
-
-        return false;
-    });
-
-
-    glasses[0].fireEvent('click');
-
-
+	/**
+	 * Event handler for close buttons of series' items
+	 */
 	$$('.item .close').addEvent('click', function(ev){
 		
 		ev.stop();
@@ -53,34 +38,6 @@ try {
 	});
 	
 	
-	$$('.item .edit').addEvent('click', function(ev){
-		
-		ev.stop();
-
-		var form = $('automailingitemsForm');
-		
-		var id = $(this).getParent('.item').getElements('[name=cid[]]')[0].getProperty('value');
-		var href = "index.php?option=com_newsletter&task=automailingitem.edit&tmpl=component&series_id="+id;
-		
-		SqueezeBox.open(href, {
-			handler: 'iframe',
-			size: {
-				x: 400,
-				y: 200
-			}
-		});
-	});
-	
-	
-	$$('#automailing-cancel a')
-	.removeProperty('onclick')
-	.addEvent('click', function(){
-		if (window && window.parent && window.parent.SqueezeBox) {
-			window.parent.SqueezeBox.close();
-		}
-		return false;
-	});
-	
 	if($$('#jform_scope input').length > 0) {
 	
 		$$('#jform_scope input').addEvent('click', function(){
@@ -92,9 +49,4 @@ try {
 		var checked = $('jform_scope0').getProperty('checked')
 		$('scope-container').setStyle('display', checked? 'none' : 'block');
 	}
-
-
-} catch(e) {
-	console.log(e);
-}	
 });
