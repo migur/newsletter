@@ -4,8 +4,6 @@ defined('_JEXEC') or die;
 ?>
 
 <div class="automailing-new">
-<legend><?php echo JText::_('COM_NEWSLETTER_LIST_EVENT'); ?></legend>	
-
 
 	<form name="adminForm" method="POST" class="form-horizontal form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component'); ?>">
 

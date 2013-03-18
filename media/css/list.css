@@ -21,6 +21,17 @@
 	margin-right: 5%;
 }
 
+#overview1 {
+    float: left;
+	width: 400px;
+}
+
+
+#overview2 {
+    width: 45%;
+    float: right;
+    overflow: auto;
+}
 
 @media(max-width: 1000px) {
 	#import-fields,
@@ -33,9 +44,15 @@
 	}
 }
 
-#overview1 {
-    float: left;
-    width: 45%;
+@media(max-width: 850px) {
+	#overview1 {
+		float: none;
+	}	
+	
+	#overview2 {
+		width: 100%;
+		float: none;
+	}	
 }
 
 #overview1 #label-chart-new-subs {
@@ -52,108 +69,9 @@
     padding: 5px;
 }
 
-/* overview2 */
-
-#overview2 {
-    width: 45%;
-    float: right;
-    height: 500px;
-    overflow: auto;
-}
-
-/*#tab-container-unsubscribed {
-    height: 450px;
-    overflow: auto;
-}*/
-
-/* comomn for unsubscribed */
-/*#tab-container-unsubscribed img {
-    float: none;
-    margin: 0px;
-    padding: 0px;
-}
-
-*/
 #tab-container-advanced .controls {
     margin-left: 330px;
 }
-/*
-
-#tab-container-advanced input {
-    width: auto;
-}
-
-#tab-container-advanced dt {
-    width: 220px;
-}
-
-#tab-container-advanced dd {
-    padding-left: 225px;
-}*/
-
-
-/* Import tab */
-/*#import-toolbar {
-    float: left;
-}
-
-#import-toolbar li {
-    margin: 10px;
-}
-
-#import-toolbar li a {
-    width: 130px;
-}*/
-
-/* Exclude tab */
-/*#exclude-toolbar {
-    margin: 10px;
-    float: left;
-    width: 360px;
-}
-
-#exclude-toolbar li {
-    margin: 10px;
-}
-
-#exclude-toolbar li a {
-    width: 130px;
-}
-
-#exclude-tab-container {
-    height: 360px;
-    clear: both;
-}
-
-#exclude-tab-scroller {
-    height: 320px;
-    overflow: auto;
-}
-
-#exclude-tab-button {
-    float: right;
-    margin: 15px 5px;
-    width: 100px;
-}
-
-#tab-container-advanced input {
-    width: 200px;
-    float: left;
-}
-
-.invisible {
-    display: none;
-}
-
-#tab-container-unsubscribed label,
-#tab-container-unsubscribed input {
-    min-width: 0px;
-    margin: 10px;
-}
-
-
-
-*/
 
 .drag {
     background-color: #3A87AD;
@@ -181,138 +99,12 @@
     width: 268px;
 	margin-bottom: 15px;
 }
-/*
-#import-file-apply,
-#exclude-file-apply {
-    width: 100px;
-    margin-right: 10px;
-    float: right;
-}
 
-#import-delimiter,
-#import-delimiter-custom,
-#import-enclosure,
-#import-enclosure-custom,
-#import-escape,
-#import-escape-custom {
-    width : 60px;
-    margin: 5px 20px;
-    float : left;
-}
-
-#import-del-toggle-button,
-#import-enc-toggle-button,
-#import-esc-toggle-button {
-    width : 80px;
-    margin: 5px 10px;
-    float : left;
-}
-
-#import-upload-file {
-    float: left;
-}
-
-#import-upload-submit,
-#exclude-upload-submit {
-    width: 100px;
-    float: left;
-    margin-left: 20px;
-}
-
-*/
 #import-file-refresh,
 #exclude-file-refresh {
     margin-bottom: 5px;
 }
-/*
 
-
-#newsletters_total_sent,
-#newsletters_opened,
-#newsletters_active_subscribers {
-
-    height: 170px;
-    width: 200px;
-}
-
-#subscribers-list {
-    overflow: auto;
-    height: 450px;
-}
-
-#usertype-selector {
-	line-height: 20px;
-	float: right;
-}
-
-#usertype-selector div {
-	margin-right: 20px;
-}
-
-.button img {
-    width: 32px;
-    height: 32px;
-    margin: 0;
-}
-
-.tabs .import {
-	max-height:505px;
-	overflow: auto;
-}
-
-.tabs .import .toolbar-list {
-    float: left;
-}
-
-.tabs .import .toolbar-list li {
-    margin: 10px;
-}
-
-.plugin-pane {
-    float: none;
-    clear: both;
-	width: 100%;
-	height: 400px;
-}
-
-#plugin-form label {
-	font: inherit;
-}
-
-#plugin-form .helptext {
-	display:inline-block;
-	margin-bottom: 10px; 
-}
-
-#import-message {
-	line-height: 24px;
-}
-
-#import-preloader {
-	margin-top: 2px;
-}
-
-.upload-queue {
-	padding:0 !important;
-	margin:0 !important;
-}
-
-#import-file-html-default {
-	float: none !important;
-}
-
-div.form-text dl dt {
-	width: auto !important;
-}
-
-#listevents-toolbar-popup-new a {
-	width: 150px;
-}
-
-#jgroups-pane {
-	max-height: 270px;
-	overflow: auto;
-}*/
 
 #exclude-uploader,
 #import-uploader {
@@ -337,4 +129,22 @@ div.form-text dl dt {
 
 #import-toolbar .btn[data-role="import-plugin"] span {
 	padding-left: 45px;
+}
+
+.plugin-pane {
+	width: 99%;
+	height: 500px;
+}
+
+.migurhelp-link {
+	float: left;
+}
+
+
+#modal-listevent .modal-body iframe {
+	min-height: 360px;
+}
+
+.table td.container-eventlist-rowcontrols {
+	text-align: right;
 }

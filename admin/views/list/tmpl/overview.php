@@ -1,29 +1,14 @@
     <div id="tab-container-ovirview">
         <div id="overview1" class="form-text">
             
-            <div class="control-group">
-                <label class="control-label"><?php echo $this->listForm->getLabel('name'); ?></label>
-                <div class="controls">
-                    <?php echo $this->listForm->getInput('name'); ?>
-                </div>
-            </div>
+			<?php echo JHtml::_('layout.controlgroup', $this->listForm->getLabel('name'), $this->listForm->getInput('name')); ?>
 
-            <div class="control-group">
-                <label class="control-label"><?php echo $this->listForm->getLabel('description'); ?></label>
-                <div class="controls">
-                    <?php echo $this->listForm->getInput('description'); ?>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">
-                    <div class="pull-left"><?php echo $this->listForm->getLabel('smtp_profile_id'); ?></div>
-					<?php echo JHtml::_('migurhelp.link', 'smtpp', 'general', 'smtpp-list'); ?>
-                </label>
-                <div class="controls">
-                    <?php echo $this->listForm->getInput('smtp_profile_id'); ?>
-                </div>
-            </div>
+			<?php echo JHtml::_('layout.controlgroup', $this->listForm->getLabel('description'), $this->listForm->getInput('description')); ?>
+			
+			<?php echo JHtml::_('layout.controlgroup', 
+				$this->listForm->getLabel('smtp_profile_id') . JHtml::_('migurhelp.link', 'smtpp', 'general', 'smtpp-list'), 
+				$this->listForm->getInput('smtp_profile_id')
+			); ?>
 
             <?php if (!$this->isNew): ?>
             <div id="chart-new-subs">

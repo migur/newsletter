@@ -7,8 +7,20 @@ $isAuthorised =
 			(!$this->isNew && AclHelper::actionIsAllowed('list.edit'));
 ?>
 
+	
+<div id="modal-listevent" class="modal hide fade">
+	<div class="modal-header">
+		<button data-dismiss="modal" class="close" type="button">×</button>
+		<h3><?php echo JText::_('COM_NEWSLETTER_LIST_EVENT'); ?></h3>
+	</div>
+	<div class="preloader-container"></div>
+	<div class="modal-body"></div>
+</div>
+
+
+
 <div id="tabs">
-    <form class="form-horizontal form-validate" method="POST" action="<?php echo JURI::base(); ?>index.php?option=com_newsletter&view=list&tmpl=component&<?php echo $this->session->getName().'='.$this->session->getId(); ?>&<?php //echo JUtility::getToken();?>=1" enctype="multipart/form-data" id="listForm" name="listForm">
+    <form class="form-horizontal form-validate" method="POST" action="<?php echo JURI::base(); ?>index.php?<?php echo $this->session->getName().'='.$this->session->getId(); ?>&<?php //echo JUtility::getToken();?>=1" enctype="multipart/form-data" id="listForm" name="listForm">
 
         <ul class="nav nav-tabs">
             <li class="active">
@@ -64,6 +76,8 @@ $isAuthorised =
 
         </div>
 
+        <input type="hidden" name="option" value="com_newsletter" />
+        <input type="hidden" name="view" value="list" />
         <input type="hidden" name="list_id" value="<?php echo $this->listForm->getValue('list_id'); ?>" />
         <input type="hidden" name="task" value="" />
         <input type="hidden" name="subtask" value="" />

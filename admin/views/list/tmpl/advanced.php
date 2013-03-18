@@ -72,25 +72,27 @@
 						<?php echo $this->escape(JText::_('COM_NEWSLETTER_LIST_ACTION_' . strtoupper($item->action))); ?>
 					</td>
 
-					<td width="150px" align="center">
-						<a 
-							class="modal badge badge-info" 
-							rel="{handler: 'iframe', size: {x: 510, y: 340}, onClose: function() {}}"
+					<td class="container-eventlist-rowcontrols" width="150px" align="right">
+						
+						<a
+							data-target="#modal-listevent" 
+							data-toggle="migurmodal"
+							class="btn btn-small"
 							href="<?php echo JRoute::_("index.php?option=com_newsletter&task=listevent.edit&tmpl=component&le_id=" . (int) $item->le_id . "&list_id=" . (int) $this->list->list_id, false); ?>" 
 							onclick="Cookie.write('migur-tab-active', '.tab-advanced')"
 						>
+							<i class="icon-out-2"></i>
 							<?php echo JText::_('COM_NEWSLETTER_EDIT'); ?>
 						</a>
-							
-						&nbsp;&nbsp;&nbsp;&nbsp;
+						
 						<?php $url = 
 							JRoute::_("index.php?option=com_newsletter&task=listevent.delete&tmpl=component&", false) .
 							"le_id=" . (int) $item->le_id . 
 							"&" . JSession::getFormToken() . "=1" .
 							"&returnUrl=" . urlencode(base64_encode($_SERVER['REQUEST_URI'] . '&activetab=5'));
 						?>
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<a href="<?php echo $url; ?>" class="badge badge-important">
+						&nbsp;&nbsp;
+						<a href="<?php echo $url; ?>" class="btn btn-small btn-danger">
 							<?php echo JText::_('JTOOLBAR_DELETE'); ?>
 						</a>
 					</td>
@@ -100,64 +102,23 @@
 
 		</tbody>				
 	</table>
+
+		
+	
 	</div>
 
 	<br/>
 	
 	<div style="text-align: right;">
-		<a 
-			class="modal badge badge-info" 
-			rel="{handler: 'iframe', size: {x: 510, y: 340}, onClose: function() {}}" 
+		<a id="ctrl-listevent-new"
+			data-toggle="migurmodal" 
+			data-target="#modal-listevent"
+			class="btn btn-small btn-success" 
 			href="<?php echo JRoute::_('index.php?option=com_newsletter&task=listevent.add&tmpl=component&list_id=' . (int) $this->list->list_id, false); ?>"
-			onclick="Cookie.write('migur-tab-active', '.tab-advanced')"
+			onclick="Cookie.write('migur-tab-active', '.tab-advanced');"
 		>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo JText::_('JTOOLBAR_NEW'); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		</a>
 	</div>
-	
-	<!--		<div id="list-events-pane">
-				<h3><?php echo JText::_('COM_NEWSLETTER_LISTS_EVENTS'); ?></h3>
-				<table class="adminlist  table table-striped">
-					<thead>
-						<tr>
-							<th><?php echo JText::_('COM_NEWSLETTER_EVENT'); ?></th>
-							<th><?php echo JText::_('COM_NEWSLETTER_GROUP'); ?></th>
-							<th><?php echo JText::_('COM_NEWSLETTER_ACTION'); ?></th>
-							<th></th>
-						</tr>
-					</thead>	
-					<tbody data-role="items-list" class="items-list">
-					<tbody>				
-					<tfoot>
-						<tr data-role="item-template" class="hide">
-							<td>
-								<input data-value="" data-type="le_id" type="hidden" />
-								<span data-value="" data-type="event"></span>
-							</td>
-							<td><span data-value="" data-type="group_id"></span></td>
-							<td><span data-value="" data-type="action"></span></td>
-							<td>
-								<a href="#" data-role="item-edit">Edit</a>
-								<a href="#" data-role="item-delete">Delete</a>
-							</td>
-						</tr>
-						<tr data-role="item-manage-pane">
-							<td>
-								<input type="text" data-type="event" />
-								<input type="hidden" data-type="le_id" />
-							</td>
-							<td><input type="text" data-type="group_id" /></td>
-							<td><input type="text" data-type="action" /></td>
-							<td>
-								<a href="#" data-role="item-add" class="btn">Add</a>
-								<a href="#" data-role="item-apply" class="btn">Apply</a>
-								<a href="#" data-role="item-cancel" class="btn ">Cancel</a>
-							</td>
-	<?php //JFormHelper::loadFieldClass('juserevents'); ?>
-						</tr>	
-					<tfoot>	
-				</table>
-				<input type="button" data-role="item-new" value="New Item" />
-			</div>	-->
 	<?php } ?>
 </div>
