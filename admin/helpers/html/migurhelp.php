@@ -19,6 +19,6 @@ abstract class JHtmlMigurhelp
 		
 		$link   = SupportHelper::getResourceUrl($category, $name, $anchor, $version, $options);
 		
-		return "<a target=\"$target\" href=\"$link\">$text</a>";
+		return "<a class=\"migurhelp-link\" target=\"$target\" href=\"$link\">$text</a>";
 	}
 }

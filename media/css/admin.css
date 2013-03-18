@@ -280,6 +280,10 @@ textarea.invalid {
 	float: right;
 }
 
+.modal .modal-body.preloader {
+	background-position: 15px 15px;
+}
+
 .icon-32-messaging {
     background-image: url("../images/icon-32-messaging.png");
 }
@@ -455,4 +459,10 @@ body.component {
 .text-info {
 	color: #3a87ad;
 }	
-/**/
+
+/* Missed styles from bootstrap */
+@media (max-width: 767px){
+	.modal.fade.in {
+		top: 20px !important;
+	}
+}
