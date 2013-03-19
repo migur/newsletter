@@ -47,3 +47,11 @@ td fieldset {
 label {
 	min-width: 0px !important;
 }
+
+#modal-smtpprofile .modal-body iframe {
+	height: 1100px;
+}
+
+#modal-mailboxprofile .modal-body iframe {
+	height: 600px;
+}

@@ -4,38 +4,5 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-#mailboxprofile-form dd {
-    width: 200px;
-    float: right;
-    margin: 0;
-    height: 26px;
-}
-
-
-#mailboxprofile-form dt {
-    width: 150px;
-    float: left;
-    margin: 0;
-    height: 26px;
-}
-
-
-#mailboxprofile-form input {
-    width: 200px;
-}
-
-
-#mailboxprofile-form {
-    width: 350px;
-}
-
-#mailboxprofile-form [type="checkbox"] {
-	width: auto;
-}
-
-.buttons-container {
-    float: right;
-    margin: 5px 0 15px;
-}
 
 

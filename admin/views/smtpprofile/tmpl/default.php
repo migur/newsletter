@@ -3,74 +3,50 @@
 defined('_JEXEC') or die;
 ?>
 
-<fieldset>
-<legend><?php echo JText::_('COM_NEWSLETTER_SMTP_PROFILE'); ?></legend>	
-    <form id="smtpprofile-form" class="form-validate" name="smtpprofileForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
-        <dl>
-			<dt><?php echo $this->ssForm->getLabel('smtp_profile_name'); ?></dt>
-			<dd><?php echo $this->ssForm->getInput('smtp_profile_name'); ?></dd>
+<form id="smtpprofile-form" class="form-validate form-horizontal" name="smtpprofileForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
 
-			<dt><?php echo $this->ssForm->getLabel('from_name'); ?></dt>
-			<dd><?php echo $this->ssForm->getInput('from_name'); ?></dd>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('smtp_profile_name'), $this->ssForm->getInput('smtp_profile_name')); ?>
 
-			<dt><?php echo $this->ssForm->getLabel('from_email'); ?></dt>
-			<dd><?php echo $this->ssForm->getInput('from_email'); ?></dd>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('from_name'), $this->ssForm->getInput('from_name')); ?>
 
-			<dt><?php echo $this->ssForm->getLabel('reply_to_name'); ?></dt>
-			<dd><?php echo $this->ssForm->getInput('reply_to_name'); ?></dd>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('from_email'), $this->ssForm->getInput('from_email')); ?>
 
-			<dt><?php echo $this->ssForm->getLabel('reply_to_email'); ?></dt>
-			<dd><?php echo $this->ssForm->getInput('reply_to_email'); ?></dd>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('reply_to_name'), $this->ssForm->getInput('reply_to_name')); ?>
 
-			<dt><?php echo $this->ssForm->getLabel('smtp_server'); ?></dt>
-			<dd><?php echo $this->ssForm->getInput('smtp_server'); ?></dd>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('reply_to_email'), $this->ssForm->getInput('reply_to_email')); ?>
 
-			<dt><?php echo $this->ssForm->getLabel('smtp_port'); ?></dt>
-			<dd><?php echo $this->ssForm->getInput('smtp_port'); ?></dd>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('smtp_server'), $this->ssForm->getInput('smtp_server')); ?>
 
-			<dt><?php echo $this->ssForm->getLabel('username'); ?></dt>
-			<dd><?php echo $this->ssForm->getInput('username'); ?></dd>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('smtp_port'), $this->ssForm->getInput('smtp_port')); ?>
 
-			<dt><?php echo $this->ssForm->getLabel('password'); ?></dt>
-			<dd><?php echo $this->ssForm->getInput('password'); ?></dd>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('username'), $this->ssForm->getInput('username')); ?>
 
-			<dt><?php echo $this->ssForm->getLabel('is_ssl'); ?></dt>
-			<dd><?php echo $this->ssForm->getInput('is_ssl'); ?></dd>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('password'), $this->ssForm->getInput('password')); ?>
 
-			<dt><?php echo $this->ssForm->getLabel('mailbox_profile_id'); ?></dt>
-			<dd><?php echo $this->ssForm->getInput('mailbox_profile_id'); ?></dd>
-			
-			<div class="clr"></div>
-			
-			<fieldset class="period-conf">
-				<legend><?php echo JText::_('COM_NEWSLETTER_MAILING_PERIOD_CONFIGURATION'); ?></legend>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('is_ssl'), $this->ssForm->getInput('is_ssl')); ?>
 
-				<p><?php echo $this->ssForm->getLabel('sentsPerPeriodLimit', 'params'); ?></p>
-				<dd><?php echo $this->ssForm->getInput('sentsPerPeriodLimit', 'params'); ?></dd>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('mailbox_profile_id'), $this->ssForm->getInput('mailbox_profile_id')); ?>
 
-				<p><?php echo $this->ssForm->getLabel('periodLength', 'params'); ?></p>
-				<dd><?php echo $this->ssForm->getInput('periodLength', 'params'); ?></dd>
+	<legend><?php echo JText::_('COM_NEWSLETTER_MAILING_PERIOD_CONFIGURATION'); ?></legend>
 
-				<?php echo $this->ssForm->getInput('inProcess', 'params'); ?>
-				<?php echo $this->ssForm->getInput('periodStartTime', 'params'); ?>
-				<?php echo $this->ssForm->getInput('sentsPerLastPeriod', 'params'); ?>
-				
-			</fieldset>	
-        </dl>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('sentsPerPeriodLimit', 'params'), $this->ssForm->getInput('sentsPerPeriodLimit', 'params')); ?>
 
-			<?php echo $this->ssForm->getInput('smtp_profile_id'); ?>
-        <div class="clr"></div>
+	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('periodLength', 'params'), $this->ssForm->getInput('periodLength', 'params')); ?>
 
-        <div class="buttons-container">
-                <?php echo JToolBar::getInstance('smtp-toolbar')->render(); ?>
-        </div>
+	<?php echo JHtml::_('layout.controlgroup', '', $this->ssForm->getInput('inProcess', 'params')); ?>
 
+	<?php echo JHtml::_('layout.controlgroup', '', $this->ssForm->getInput('periodStartTime', 'params')); ?>
 
-        <div>
-                <input type="hidden" name="smtp_profile_id" value="<?php echo $this->ssForm->getValue('smtp_profile_id'); ?>" />
-                <input type="hidden" name="task" value="" />
-                <?php echo JHtml::_('form.token'); ?>
-        </div>
+	<?php echo JHtml::_('layout.controlgroup', '', $this->ssForm->getInput('sentsPerLastPeriod', 'params')); ?>
+		
+	<?php echo JHtml::_('layout.controlgroup', '', $this->ssForm->getInput('smtp_profile_id')); ?>
+	
+	<div class="form-actions">
+		<?php echo JToolBar::getInstance('smtp-toolbar')->render(); ?>
+	</div>
 
-    </form>
-</fieldset>
+	<input type="hidden" name="smtp_profile_id" value="<?php echo $this->ssForm->getValue('smtp_profile_id'); ?>" />
+	<input type="hidden" name="task" value="" />
+	<?php echo JHtml::_('form.token'); ?>
+
+</form>

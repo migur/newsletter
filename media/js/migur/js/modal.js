@@ -4,7 +4,11 @@ window.addEvent('domready', function() {
 	// We need jQuery and bootstrap's modal here.
 	(function($){
 		$('[data-toggle="migurmodal"]').bind('click', function(ev){
+			
 			ev.preventDefault();
+			
+			if ($(this).hasClass('disabled')) return;
+			
 			var popup = $(this).attr('data-target');
 			var href = $(this).attr('href');
 			var body = $(popup).find('.modal-body');
