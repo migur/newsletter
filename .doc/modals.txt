@@ -4,18 +4,18 @@ Modal windows.
 Some ways to create modals:
 
 1.  One window for many links. URL for iframe will be taken from link's href.
-	Add JURI::root().'/media/com_newsletter/js/migur/js/modal.js'
-	Add the template of a modal window
+	I   Add JURI::root().'/media/com_newsletter/js/migur/js/modal.js'
+	II  Add the template of a modal window
 	
 				<div id="modal-{modalName}" class="modal hide fade">
 					<div class="modal-header">
-						<button data-dismiss="modal" class="close" type="button">?</button>
+						<button data-dismiss="modal" class="close" type="button">x</button>
 						<h3><?php echo JText::_({TITLE}); ?></h3>
 					</div>
 					<div class="modal-body"></div>
 				</div>
 				
-	Create some links
+	III Create some links
 				
 				<a
 					data-toggle="migurmodal" 
@@ -25,6 +25,7 @@ Some ways to create modals:
 					<?php echo JText::_({Link's text}); ?>
 				</a>
 	
+	IV  Customize popup with CSS (height/width, negative margin-top/left).
 	Enjoy!
 
 2. Twitter's modal. As a toolbar control. One window - one link with hardcoded URL.

@@ -25,7 +25,6 @@
 
 
 window.addEvent('domready', function() {
-    try {
 
         // Add events to controls
         $$('[name=newsletter_clear_db]')[0].addEvent('click', function(){
@@ -45,80 +44,30 @@ window.addEvent('domready', function() {
             }
         });
 
-        // Add events to controls
-        $$('[name=newsletter_smtp_create]')[0].addEvent('click', function(ev)
-		{
-            ev.stop();
-            var href = "index.php?option=com_newsletter&view=smtpprofile&tmpl=component";
+		
+		/**
+		 * Just change a URL of a EDIT button on changing a smtp profile in select list
+		 */
 
-            SqueezeBox.open(href, {
-                handler: 'iframe',
-                size: {
-                    x: 400,
-                    y: 590
-                }
-            });
-        });
-
-        $$('[name=newsletter_smtp_edit]')[0].addEvent('click', function(ev)
-		{
-            ev.stop();
+		var smtpSelectList = $('jform_general_smtp_default');
+		var smtpEditButton = $('ctrl-smtpprofile-edit');
+		
+		var _ctrlSmtpProfileEditHandler = function(ev) {
 			
-			var id = $('jform_general_smtp_default').getProperty('value');
+            ev && ev.stop();
 			
-            var href = "index.php?option=com_newsletter&task=smtpprofile.edit&tmpl=component&smtp_profile_id="+id;
-
-            SqueezeBox.open(href, {
-                handler: 'iframe',
-                size: {
-                    x: 400,
-                    y: 590
-                }
-            });
-        });
-
-
-        // Add events to controls
-        $$('[name=newsletter_mailbox_create]')[0].addEvent('click', function(ev)
-		{
-            ev.stop();
-            var href = "index.php?option=com_newsletter&view=mailboxprofile&tmpl=component";
-
-            SqueezeBox.open(href, {
-                handler: 'iframe',
-                size: {
-                    x: 400,
-                    y: 340
-                }
-            });
-        });
-
-        $$('[name=newsletter_mailbox_edit]')[0].addEvent('click', function(ev)
-		{
-            ev.stop();
+			var id = smtpSelectList.getProperty('value');
 			
-			var id = $('jform_general_mailbox_default').getProperty('value');
-			
-			if (id < 1) {
-				alert(Joomla.JText._('PLEASE_SELET_PROFILE','Please selet profile'));
-				return;
-			}
-			
-            var href = "index.php?option=com_newsletter&task=mailboxprofile.edit&tmpl=component&mailbox_profile_id="+id;
+			smtpEditButton.setProperty('href', smtpEditButton.getProperty('data-href')+id);
+        }
 
-            SqueezeBox.open(href, {
-                handler: 'iframe',
-                size: {
-                    x: 400,
-                    y: 340
-                }
-            });
-        });
+        smtpSelectList.addEvent('change', _ctrlSmtpProfileEditHandler);
+		_ctrlSmtpProfileEditHandler();
 
 
-        $$('[name=newsletter_smtp_delete]')[0].addEvent('click', function(ev){
+        $('ctrl-smtpprofile-delete').addEvent('click', function(ev){
 			
-			if (!confirm('Are you sure?')) { 
+			if (!confirm(Joomla.JText._('ARE_YOU_SURE_QM', 'Are you sure?'))) { 
 				return false;
 			}
 			
@@ -126,10 +75,36 @@ window.addEvent('domready', function() {
             $$('[name=adminForm]')[0].submit();
         });
 
-        $$('[name=newsletter_mailbox_delete]')[0].addEvent('click', function(ev){
+
+		/**
+		 * Just change a URL of a EDIT button on changing a mailbox profile in select list
+		 */
+		var mailboxSelectList = $('jform_general_mailbox_default');
+		var mailboxEditButton = $('ctrl-mailboxprofile-edit');
+
+		var _ctrlMailboxProfileEditHandler = function(ev) {
+			
+            ev && ev.stop();
+			
+			var id = mailboxSelectList.getProperty('value');
+
+			(id < 1)? 
+				mailboxEditButton.addClass('disabled') : 
+				mailboxEditButton.removeClass('disabled');
+
+			mailboxEditButton.setProperty('href', mailboxEditButton.getProperty('data-href')+id);
+        }
+
+        mailboxSelectList.addEvent('change', _ctrlMailboxProfileEditHandler);
+		_ctrlMailboxProfileEditHandler();
+
+
+        $('ctrl-mailboxprofile-delete').addEvent('click', function(ev){
+			
+            ev && ev.stop();
 			
 			if (!confirm(Joomla.JText._('ARE_YOU_SURE_QM', 'Are you sure?'))) { 
-				return false;
+				return;
 			}
 			
             $$('[name=task]')[0].setProperty('value', 'mailboxprofiles.delete');
@@ -141,13 +116,5 @@ window.addEvent('domready', function() {
             $$('[name=task]')[0].setProperty('value', 'configuration.export');
             $$('[name=adminForm]')[0].submit();
         });
-
-
-		// Manage accessibility to subject/body with autoconfirm flag
-//		Migur.app.autoconfirmManager.init();
-
-    } catch(e){
-        if (console && console.log) console.log(e);
-    }
 });
 

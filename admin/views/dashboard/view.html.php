@@ -116,6 +116,7 @@ class NewsletterViewDashboard extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_DASHBOARD_TITLE'), 'article.png');
 		$bar = JToolBar::getInstance();
+		$bar->addButtonPath(COM_NEWSLETTER_PATH_ADMIN . '/helpers/toolbar/button');
 		$bar->appendButton('Link', 'warning', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
 		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', SupportHelper::getResourceUrl('mailing', 'general'));
 		$bar->appendButton('Separator');

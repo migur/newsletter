@@ -9,9 +9,26 @@ JHtml::_('formbehavior.chosen');
 
 $showFull = AclHelper::canConfigureComponent(); 
 
-echo JHtml::_('layout.wrapper'); 
-
 ?>
+
+<div id="modal-smtpprofile" class="modal hide fade">
+	<div class="modal-header">
+		<button data-dismiss="modal" class="close" type="button">x</button>
+		<h3><?php echo JText::_('COM_NEWSLETTER_SMTP_PROFILE'); ?></h3>
+	</div>
+	<div class="modal-body"></div>
+</div>
+
+<div id="modal-mailboxprofile" class="modal hide fade">
+	<div class="modal-header">
+		<button data-dismiss="modal" class="close" type="button">x</button>
+		<h3><?php echo JText::_('COM_NEWSLETTER_MAILBOX_PROFILE'); ?></h3>
+	</div>
+	<div class="modal-body"></div>
+</div>
+
+
+<?php echo JHtml::_('layout.wrapper'); ?>
 
 <?php if ($showFull) { ?>
 <fieldset id="config-config">
