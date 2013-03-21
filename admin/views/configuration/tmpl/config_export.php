@@ -12,9 +12,12 @@
 		<label><?php echo JText::_('COM_NEWSLETTER_IMPORT_FROM_COMPONENTS'); ?></label>
 	</div>
 	<div class="controls offset4">
-		<a href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import'); ?>"
-			rel="{handler:'iframe',size:{x: 500, y: 320}}"
-			class="modal btn" >
+		<a 
+			href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&view=import'); ?>"
+			data-toggle="migurmodal"
+			data-target="#modal-import"
+			class="btn"
+		>
 			<?php echo JText::_('COM_NEWSLETTER_IMPORT_DATA'); ?>
 		</a>
 	</div>	

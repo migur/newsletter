@@ -4,18 +4,15 @@
 	
 <?php echo JHtml::_('layout.wrapper'); ?>
 	
-	<fieldset id="filter-bar" >
-            <?php echo JToolBar::getInstance('queues')->render(); ?>
-            <div id="queues-filter-panel-control" class="filter-panel-control"></div>
-            <div class="clr"></div>
-            <div id="queues-filter-panel" class="filter-panel">
-				<div class="pull-left">
-					<input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
-					<button type="submit" class="btn migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-					<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
-				</div>
-            </div>
-	</fieldset>
+	<div class="nofloat">
+		<div class="btn-group pull-left">
+			<input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
+		</div>	
+		<div class="btn-group pull-left">
+			<button type="submit" class="btn migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
+			<button type="button" class="btn btn-danger" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+		</div>
+	</div>
 
 	<div class="queueslist-container">
         <table class="queueslist adminlist  table table-striped" width="100%">

@@ -11,14 +11,6 @@ $showFull = AclHelper::canConfigureComponent();
 
 ?>
 
-<div id="modal-smtpprofile" class="modal hide fade">
-	<div class="modal-header">
-		<button data-dismiss="modal" class="close" type="button">x</button>
-		<h3><?php echo JText::_('COM_NEWSLETTER_SMTP_PROFILE'); ?></h3>
-	</div>
-	<div class="modal-body"></div>
-</div>
-
 <div id="modal-mailboxprofile" class="modal hide fade">
 	<div class="modal-header">
 		<button data-dismiss="modal" class="close" type="button">x</button>
@@ -27,6 +19,37 @@ $showFull = AclHelper::canConfigureComponent();
 	<div class="modal-body"></div>
 </div>
 
+<div id="modal-smtpprofile" class="modal hide fade">
+	<div class="modal-header">
+		<button data-dismiss="modal" class="close" type="button">x</button>
+		<h3><?php echo JText::_('COM_NEWSLETTER_SMTP_PROFILE'); ?></h3>
+	</div>
+	<div class="modal-body"></div>
+</div>
+
+<div id="modal-extensioninfo" class="modal hide fade">
+	<div class="modal-header">
+		<button data-dismiss="modal" class="close" type="button">x</button>
+		<h3><?php echo JText::_('COM_NEWSLETTER_INFO'); ?></h3>
+	</div>
+	<div class="modal-body"></div>
+</div>
+
+<div id="modal-import" class="modal hide fade">
+	<div class="modal-header">
+		<button data-dismiss="modal" class="close" type="button">x</button>
+		<h3><?php echo JText::_('COM_NEWSLETTER_IMPORT_FROM_COMPONENTS'); ?></h3>
+	</div>
+	<div class="modal-body"></div>
+</div>
+
+<div id="modal-maintainance" class="modal hide fade">
+	<div class="modal-header">
+		<button data-dismiss="modal" class="close" type="button">x</button>
+		<h3><?php echo JText::_('COM_NEWSLETTER_MAINTAINANCE'); ?></h3>
+	</div>
+	<div class="modal-body"></div>
+</div>
 
 <?php echo JHtml::_('layout.wrapper'); ?>
 

@@ -34,10 +34,8 @@ class NewsletterViewInstall extends MigurView
 		$this->assign('pagination', $model->getPagination());
 
 		$this->addToolbar();
-		
-		$document = JFactory::getDocument();
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
-		$document->addScript(JURI::root() . 'administrator/components/com_newsletter/views/install/submitbutton.js');
+
+		$this->setDocument();
 		
 		parent::display($tpl);
 	}
@@ -53,7 +51,7 @@ class NewsletterViewInstall extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_EXTENSION_MANAGER'), 'article.png');
 
-		$bar = MigurToolBar::getInstance('extensions', null, '', false, array('preserveJCallback' => true));
+		$bar = JToolBar::getInstance();
 		
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'install.remove', false);
 		$bar->appendButton('Standard', 'restore', 'COM_NEWSLETTER_RESTORE', 'install.restore', false);
@@ -63,6 +61,14 @@ class NewsletterViewInstall extends MigurView
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+	}
+	
+	public function setDocument()
+	{
+		$document = JFactory::getDocument();
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
+		$document->addScript(JURI::root() . 'administrator/components/com_newsletter/views/install/submitbutton.js');
+
 	}
 	
 }

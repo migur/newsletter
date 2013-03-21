@@ -7,16 +7,12 @@
 }
 
 .check-pane {
-	border: 1px solid #eee;
-	margin: 10px;
 	padding: 0 10px 10px;
-	overflow: hidden;
 	display: none;
 }
 
 .check-pane .status {
 	overflow: hidden;
-	border-bottom: 1px solid #eee;
 }
 
 .preloader-container {
@@ -59,8 +55,3 @@
 	line-height: 20px;
 }
 
-#maintainance-pane-checks {
-    height: 620px;
-    margin: 0;
-    overflow: auto;
-}	
