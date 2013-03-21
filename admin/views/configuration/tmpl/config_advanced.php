@@ -38,8 +38,9 @@
 	<div class="controls offset4">
 	
 		<a 
-			class="btn modal"
-			rel="{handler: 'iframe', size: {x: 700, y: 700}, onClose: function() {}}" 
+			class="btn"
+			data-toggle="migurmodal"
+			data-target="#modal-import"
 			href="<?php echo JRoute::_('index.php?option=com_newsletter&view=maintainance&tmpl=component', true); ?>">
 
 			<?php echo JText::_('COM_NEWSLETTER_MAINTAINANCE'); ?>	

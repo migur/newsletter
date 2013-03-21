@@ -13,15 +13,11 @@ iframe {
 
 .modal-body iframe {
     width: 100%;
+	height: 400px;
 }
 
 div.toolbar-list li a span {
     margin-bottom: 3px;
-}
-
-form #filter-bar
-{
-    height: auto !important;
 }
 
 .icon-16-slide-up {
@@ -68,9 +64,7 @@ fieldset {
 }
 
 fieldset.filter-bar {
-/*3.0    border-color: -moz-use-text-color -moz-use-text-color #D5D5D5;
-    border-style: none none solid;
-    border-width: 0 0 1px;*/
+    height: auto !important;
 }
 
 #form-subscribers .filter-search .btn,

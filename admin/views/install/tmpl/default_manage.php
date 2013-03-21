@@ -1,31 +1,26 @@
-<div id="installer-manage">
+
 <form action="<?php echo JRoute::_('index.php?option=com_newsletter&view=install');?>" method="post" name="adminForm" id="adminForm">
-
-<div class="width-30 pull-left" style="margin-top:22px;">
-		<?php echo MigurToolBar::getInstance('extensions')->render(); ?>
-</div>
-
-<div class="clr"></div>
+	
 	<?php if (count($this->items)) : ?>
-	<table class="adminlist">
+	<table class="adminlist table table-striped">
 		<thead>
 			<tr>
 				<th width="10">
 					<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.Joomla.checkAll(this)" />
 				</th>
-				<th class="nowrap center">
+				<th>
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_TITLE', 'a.title', $this->listDirn, $this->listOrder, null, null, 'adminForm'); ?>
 				</th>
-				<th class="nowrap center">
+				<th>
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_CLASS', 'a.extension', $this->listDirn, $this->listOrder, null, null, 'adminForm'); ?>
 				</th>
-				<th class="nowrap center">
+				<th>
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_TYPE', 'a.type', $this->listDirn, $this->listOrder, null, null, 'adminForm'); ?>
 				</th>
-				<th class="nowrap center">
+				<th>
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_NAMESPACE', 'a.namespace', $this->listDirn, $this->listOrder, null, null, 'adminForm'); ?>
 				</th>
-				<th class="nowrap center">
+				<th>
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_ID', 'a.extension_id', $this->listDirn, $this->listOrder, null, null, 'adminForm'); ?>
 				</th>
 			</tr>
@@ -49,7 +44,7 @@
 				<td>
 						<?php echo $this->escape($item->extension); ?>
 				</td>
-				<td class="center">
+				<td>
 					<?php echo JText::_('COM_NEWSLETTER_EXTENSION_TYPE_' . $item->type); ?>
 				</td>
 				<td>
@@ -72,4 +67,3 @@
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->listDirn; ?>" />
 	<?php echo JHtml::_('form.token'); ?>
 </form>
-</div>

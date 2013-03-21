@@ -26,15 +26,12 @@ defined('_JEXEC') or die;
 
 <form enctype="multipart/form-data" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=install');?>" method="post" name="installForm" id="installForm">
 
-	<div class="width-70 pull-left">
-		<fieldset class="uploadform">
-			<legend><?php echo JText::_('COM_NEWSLETTER_UPLOAD_PACKAGE_FILE'); ?></legend>
-			<label for="install_package"><?php echo JText::_('COM_NEWSLETTER_PACKAGE_FILE'); ?></label>
-			<input class="input_box" id="install_package" name="install_package" type="file" size="57" />
-			<input class="button" type="button" value="<?php echo JText::_('COM_NEWSLETTER_UPLOAD_AND_INSTALL'); ?>" onclick="Joomla.submitbuttonInstall('install.install', this.form)" />
-		</fieldset>
-		<input type="hidden" name="installtype" value="upload" />
-		<input type="hidden" name="task" value="install.install" />
-		<?php echo JHtml::_('form.token'); ?>
-	</div>
+	<legend><?php echo JText::_('COM_NEWSLETTER_UPLOAD_PACKAGE_FILE'); ?></legend>
+
+	<input class="input_box" id="install_package" name="install_package" type="file" size="57" />
+	<input class="btn btn-success" type="button" value="<?php echo JText::_('COM_NEWSLETTER_UPLOAD_AND_INSTALL'); ?>" onclick="Joomla.submitbuttonInstall('install.install', this.form)" />
+
+	<input type="hidden" name="installtype" value="upload" />
+	<input type="hidden" name="task" value="install.install" />
+	<?php echo JHtml::_('form.token'); ?>
 </form>

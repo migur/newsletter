@@ -55,3 +55,15 @@ label {
 #modal-mailboxprofile .modal-body iframe {
 	height: 600px;
 }
+
+#modal-extensioninfo .modal-body iframe {
+	height: 400px;
+}
+
+#modal-import .modal-body iframe {
+	height: 330px;
+}
+
+#modal-maintainance .modal-body iframe {
+	height: 400px;
+}

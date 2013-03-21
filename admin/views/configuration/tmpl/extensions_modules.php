@@ -22,9 +22,11 @@
 				<?php echo $this->escape($item->xml->author); ?>
 				</td>
 				<td>
-					<a href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&view=extension&extension_id=' . (int) $item->extension_id . '&native=' . (int) $item->native); ?>"
-					   rel="{ handler: 'iframe', size: {x: 820, y: 370} }"
-					   class="modal" >
+					<a 
+					   data-toggle="migurmodal"
+					   data-target="#modal-extensioninfo"
+					   href="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&view=extension&extension_id=' . (int) $item->extension_id . '&native=' . (int) $item->native); ?>"
+					>
 
 					<?php echo JText::_('COM_NEWSLETTER_INFO'); ?>
 				</a>
