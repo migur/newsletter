@@ -10,6 +10,8 @@ defined('_JEXEC') or die; ?>
 
 <?php if (!empty($list)) { ?>
 
+<?php if (!empty($userEmail)) echo '<!--{emailcloak=off}-->'; ?>
+
 <?php if ($showFb) { ?>
 	<div id="fb-root"></div>
 	<script src="http://connect.facebook.net/en_US/all.js"></script>
