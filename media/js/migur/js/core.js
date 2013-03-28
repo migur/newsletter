@@ -629,7 +629,9 @@ Migur.validator = {
 
 		// Reset styles for each tab
 		tabs.each(function(el){
-			el.getElement(tabElement).removeClass(markerClass);
+			if (el.getElement(tabElement)) {
+				el.getElement(tabElement).removeClass(markerClass);
+			}	
 		});
 
 		// Set styles
