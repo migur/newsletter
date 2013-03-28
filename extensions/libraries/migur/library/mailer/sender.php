@@ -170,7 +170,8 @@ class MigurMailerSender extends PHPMailer
 			$this->CharSet = $this->letter->encoding;
 		}	
 		
-		$this->Body = JMailHelper::cleanText($this->letter->content);
+		$this->Body = wordwrap(JMailHelper::cleanText($this->letter->content), 16370, "\r\n");
+		
 		foreach($this->attach as $item) {
 			$parts = explode(DS, $item->filename);
 			$full  = JPATH_ROOT. DIRECTORY_SEPARATOR .$item->filename;
