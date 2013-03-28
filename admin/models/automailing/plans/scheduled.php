@@ -38,7 +38,7 @@ class NewsletterAutomlailingPlanScheduled extends NewsletterAutomlailingPlanComm
 		   Check the date */
 		$series = $this->getSeries();
 		
-		if (count($series) == 0 || mktime() < $series[0]->time_start) {
+		if (count($series) == 0 || time() < $series[0]->time_start) {
 			return false;
 		}
 			
@@ -85,7 +85,7 @@ class NewsletterAutomlailingPlanScheduled extends NewsletterAutomlailingPlanComm
 			'target_type' => $targets[0]->target_type,
 			'params'    => array(
 				'step'      => 0, 
-				'timeCreated' => mktime())
+				'timeCreated' => time())
 		));
 		
 		return $thread;

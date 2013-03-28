@@ -44,7 +44,7 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 	 */
 	public function isNeedNewPeriod()
 	{
-		return (mktime() - $this->params->periodStartTime) > ($this->params->periodLength * 60);
+		return (time() - $this->params->periodStartTime) > ($this->params->periodLength * 60);
 	}
 
 	
@@ -61,7 +61,7 @@ class NewsletterModelEntitySmtpprofile extends MigurModel
 	
 	public function startNewPeriod()
 	{
-		$this->params->periodStartTime = mktime();
+		$this->params->periodStartTime = time();
 		$this->params->sentsPerLastPeriod = 0;
 		$this->params->inProcess = 0;
 		return $this->save();
