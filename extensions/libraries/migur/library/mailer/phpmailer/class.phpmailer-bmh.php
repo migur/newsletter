@@ -619,7 +619,7 @@ class BounceMailHandler {
    */
   function globalDelete() {
     $dateArr = split('-', $this->deleteMsgDate); // date format is yyyy-mm-dd
-    $delDate = mktime(0, 0, 0, $dateArr[1], $dateArr[2], $dateArr[0]);
+    $delDate = time(0, 0, 0, $dateArr[1], $dateArr[2], $dateArr[0]);
 
     $port  = $this->port . '/' . $this->service . '/' . $this->service_option;
     $mboxt = imap_open('{'.$this->mailhost.":".$port.'}',$this->mailbox_username,$this->mailbox_password,OP_HALFOPEN);
