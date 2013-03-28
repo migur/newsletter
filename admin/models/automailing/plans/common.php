@@ -27,7 +27,9 @@ class NewsletterAutomlailingPlanCommon extends MigurJTable
 	
 	public function __construct($data = array()) {
 
-		parent::__construct('#__newsletter_automailings', 'automailing_id', JFactory::getDbo());
+		$dbo = JFactory::getDbo();
+		
+		parent::__construct('#__newsletter_automailings', 'automailing_id', $dbo);
 		
 		if (!empty($data)) {
 			foreach($data as $key => $value) {

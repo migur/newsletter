@@ -288,7 +288,7 @@ class MigurMailerMailbox
 				break;
 			}
 
-			$time = mktime();
+			$time = time();
 			// Think 5 minutes to retrive 1 message is more than enough
 			set_time_limit(300);
 
@@ -338,7 +338,7 @@ class MigurMailerMailbox
 						$processed = $this->processBounce($x, 'BODY', $c_total);
 					}
 
-					LogHelper::addDebug('Mailbox.Mail processed.Position:' . $x . ',time:' . (string) (mktime() - $time) . ',id:' . $messageId . ',date:' . $date, LogHelper::CAT_BOUNCES);
+					LogHelper::addDebug('Mailbox.Mail processed.Position:' . $x . ',time:' . (string) (time() - $time) . ',id:' . $messageId . ',date:' . $date, LogHelper::CAT_BOUNCES);
 				} else {
 
 					LogHelper::addDebug('Mailbox.Mail in cache.Position:' . $x . ',id:' . $messageId, LogHelper::CAT_BOUNCES);
@@ -384,10 +384,10 @@ class MigurMailerMailbox
 	 */
 	function processBounce($pos, $type, $totalFetched)
 	{
-		$time = mktime();
+		$time = time();
 		//var_dump('process bounce ' . $pos .'-'.  $type .'-'.  $totalFetched);
 		$header = $this->protocol->getMessageHeaders($pos, FT_UID); //imap_header
-		//var_dump('headers ' . (mktime() - $time));
+		//var_dump('headers ' . (time() - $time));
 
 		if (!empty($header->subject)) {
 			$subject = strip_tags($header->subject);
@@ -406,11 +406,11 @@ class MigurMailerMailbox
 
 		if ($type == 'DSN') {
 			// first part of DSN (Delivery Status Notification), human-readable explanation
-			//var_dump('getMessageBody ' . (mktime() - $time));
+			//var_dump('getMessageBody ' . (time() - $time));
 			$dsn_msg = $this->protocol->getMessageBody($pos, "1", FT_UID);
-			//var_dump('getMessageBody(end) ' . (mktime() - $time));
+			//var_dump('getMessageBody(end) ' . (time() - $time));
 			$dsn_msg_structure = $this->protocol->getMessageBodyStruct($pos, "1", FT_UID);
-			//var_dump('getMessageBodyStruct(end) ' . (mktime() - $time));
+			//var_dump('getMessageBodyStruct(end) ' . (time() - $time));
 
 			if ($dsn_msg_structure->encoding == 4) {
 				$dsn_msg = quoted_printable_decode($dsn_msg);
@@ -420,21 +420,21 @@ class MigurMailerMailbox
 
 			// second part of DSN (Delivery Status Notification), delivery-status
 			$dsn_report = $this->protocol->getMessageBody($pos, "2", FT_UID); //imap_fetchbody($this->_mailbox_link, $pos, "2");
-			//var_dump('getMessageBody(pos2)-end ' . (mktime() - $time));
+			//var_dump('getMessageBody(pos2)-end ' . (time() - $time));
 			// process bounces by rules
 			$result = bmhDSNRules($dsn_msg, $dsn_report, $this->debug_dsn_rule);
 		} elseif ($type == 'BODY') {
 
-			//var_dump('getMessageBodyStructure ' . (mktime() - $time));
+			//var_dump('getMessageBodyStructure ' . (time() - $time));
 			$structure = $this->protocol->getMessageBodyStructure($pos, FT_UID); // imap_fetchstructure($this->_mailbox_link, $pos);
-			//var_dump('getMessageBodyStructure-end ' . (mktime() - $time));
+			//var_dump('getMessageBodyStructure-end ' . (time() - $time));
 
 			switch ($structure->type) {
 				case 0: // Content-type = text
 				case 1: // Content-type = multipart
-					//var_dump('getMessageBody2 ' . (mktime() - $time));
+					//var_dump('getMessageBody2 ' . (time() - $time));
 					$body = $this->protocol->getMessageFetchedBody($pos, "1", FT_UID); //imap_fetchbody($this->_mailbox_link, $pos, "1");
-					//var_dump('getMessageBody2-end ' . (mktime() - $time));
+					//var_dump('getMessageBody2-end ' . (time() - $time));
 					// Detect encoding and decode - only base64
 					if (!empty($structure->parts[0]->encoding) && $structure->parts[0]->encoding == 4) {
 						$body = quoted_printable_decode($body);
@@ -442,15 +442,15 @@ class MigurMailerMailbox
 						$body = base64_decode($body);
 					}
 
-					//var_dump('bmhBodyRules ' . (mktime() - $time) . ' body length ' . strlen($body));
+					//var_dump('bmhBodyRules ' . (time() - $time) . ' body length ' . strlen($body));
 					$result = bmhBodyRules($body, $structure);
-					//var_dump('bmhBodyRules-end ' . (mktime() - $time));
+					//var_dump('bmhBodyRules-end ' . (time() - $time));
 					break;
 				case 2: // Content-type = message
-					//var_dump('getMessageBody3 ' . (mktime() - $time));
+					//var_dump('getMessageBody3 ' . (time() - $time));
 
 					$body = $this->protocol->getMessageBody($pos, FT_UID); //imap_body($this->_mailbox_link, $pos);
-					//var_dump('getMessageBody3-end ' . (mktime() - $time));
+					//var_dump('getMessageBody3-end ' . (time() - $time));
 
 					if ($structure->encoding == 4) {
 						$body = quoted_printable_decode($body);
@@ -458,9 +458,9 @@ class MigurMailerMailbox
 						$body = base64_decode($body);
 					}
 					$body = substr($body, 0, 1000);
-					//var_dump('bmhBodyRules ' . (mktime() - $time));
+					//var_dump('bmhBodyRules ' . (time() - $time));
 					$result = bmhBodyRules($body, $structure);
-					//var_dump('bmhBodyRules-end ' . (mktime() - $time));
+					//var_dump('bmhBodyRules-end ' . (time() - $time));
 					break;
 				default: // unsupport Content-type
 					$this->output('Msg #' . $pos . ' is unsupported Content-Type:' . $structure->type, VERBOSE_REPORT);
@@ -500,7 +500,7 @@ class MigurMailerMailbox
 			return call_user_func_array(array($this, 'callbackAction'), $params);
 		}
 
-		//var_dump('process bounce-end ' . (mktime() - $time));
+		//var_dump('process bounce-end ' . (time() - $time));
 		return true;
 	}
 

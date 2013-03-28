@@ -26,7 +26,9 @@ class NewsletterAutomlailingThreadCommon extends MigurJTable
 		
 		$data = (array)$data;
 		
-		parent::__construct('#__newsletter_threads', 'thread_id', JFactory::getDbo());
+		$dbo = JFactory::getDbo();
+		
+		parent::__construct('#__newsletter_threads', 'thread_id', $dbo);
 		
 		/** Populate the entity */
 		foreach($data as $key => &$value) {
@@ -107,7 +109,7 @@ class NewsletterAutomlailingThreadCommon extends MigurJTable
 	 */
 	public function process($serie)
 	{
-		if (mktime() < $serie->time_absolute) {
+		if (time() < $serie->time_absolute) {
 			return false;
 		}
 		
