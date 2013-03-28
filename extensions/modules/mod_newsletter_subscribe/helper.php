@@ -18,7 +18,7 @@ abstract class modNewsletterSubscribeHelper
 	public static function addHeadData()
 	{
 		// Get documnet
-		$doc = & JFactory::getDocument();
+		$doc = JFactory::getDocument();
 		// Add stylesheet
 		$doc->addStyleSheet("modules/mod_newsletter_subscribe/css/styles.css");
 		// Add script
