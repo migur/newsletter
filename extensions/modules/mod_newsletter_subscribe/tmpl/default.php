@@ -8,7 +8,7 @@
 // no direct access
 defined('_JEXEC') or die; ?>
 
-<? if (!empty($list)) { ?>
+<?php if (!empty($list)) { ?>
 
 <?php if ($showFb) { ?>
 	<div id="fb-root"></div>
