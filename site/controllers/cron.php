@@ -640,7 +640,9 @@ class NewsletterControllerCron extends JControllerForm
 		// Phase #1
 		$response = array('plansStarted' => 0);
 		
-		$plans = NewsletterAutomailingManager::getScheduledPlans();
+		$manager = new NewsletterAutomailingManager();
+		
+		$plans = $manager->getScheduledPlans();
 		
 		if (!empty($plans)) {
 			foreach($plans as $plan) {
@@ -655,7 +657,7 @@ class NewsletterControllerCron extends JControllerForm
 		}
 		
 		// Phase #2
-		$threads = NewsletterAutomailingManager::getAutomailingThreads();
+		$threads = $manager->getAutomailingThreads();
 		
 		if (!empty($threads)) {
 			foreach($threads as $thread) {
