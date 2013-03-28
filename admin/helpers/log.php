@@ -178,8 +178,9 @@ class NewsletterHelperLog
 			//@JLog::add($logEntry);
 			
 			// To avoid infinit looping if something wrong with JTable::getInstance()
+			$dbo = JFactory::getDbo();
 			require_once(COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR .'tables'. DIRECTORY_SEPARATOR .'log.php');
-			$table = new NewsletterTableLog(JFactory::getDbo());
+			$table = new NewsletterTableLog($dbo);
 			
 			// Type conversion
 			if ($data instanceof Exception) {
