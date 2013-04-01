@@ -201,7 +201,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 
 		$query = $db->getQuery(true);
 		$query->select(
-			'newsletters_ext_id as id, ne.title, extension as module, position, NULL as content, ne.showtitle, ne.params as params, e.params as params_default, NULL as menuid, 0 as native');
+			'newsletters_ext_id as id, ne.title, extension as module, position, NULL as content, ne.showtitle, ne.params as params, e.params as params_default, NULL as menuid, 0 as native, ne.ordering');
 		$query->from('#__newsletter_extensions AS e');
 		$query->join('', '#__newsletter_newsletters_ext AS ne ON e.extension_id = ne.extension_id');
 		$query->where('type = 1');
@@ -216,7 +216,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 		$query->select(
 			'newsletters_ext_id AS id, ne.title, element AS module, position, '
 			. 'NULL AS content, ne.showtitle, ne.params AS params, '
-			. 'e.params AS params_default, NULL AS menuid, 1 AS native'
+			. 'e.params AS params_default, NULL AS menuid, 1 AS native, ne.ordering'
 		);
 		$query->from('#__extensions AS e');
 		$query->join('', '#__newsletter_newsletters_ext AS ne ON e.extension_id = ne.extension_id');
