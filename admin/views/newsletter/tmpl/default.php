@@ -2,6 +2,15 @@
 // no direct access
 defined('_JEXEC') or die;
 ?>
+
+<div id="modal-attachment" class="modal hide fade">
+	<div class="modal-header">
+		<button data-dismiss="modal" class="close" type="button">x</button>
+		<h3><?php echo JText::_('COM_NEWSLETTER_UPLOAD'); ?></h3>
+	</div>
+	<div class="modal-body"></div>
+</div>
+
 <div id="tabs">
     <legend id="tabs-legend"><?php echo JFactory::getDocument()->getTitle(); ?></legend>
 	

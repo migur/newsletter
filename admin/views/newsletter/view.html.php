@@ -253,6 +253,7 @@ class NewsletterViewNewsletter extends MigurView
 		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
 		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/newsletter.css');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/modal.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/autosaver.js');
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/widgets.js');
 		

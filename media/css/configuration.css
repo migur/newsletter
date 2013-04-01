@@ -57,7 +57,7 @@ label {
 }
 
 #modal-extensioninfo .modal-body iframe {
-	height: 400px;
+	height: 395px;
 }
 
 #modal-import .modal-body iframe {
@@ -65,5 +65,5 @@ label {
 }
 
 #modal-maintainance .modal-body iframe {
-	height: 400px;
+	height: 395px;
 }
