@@ -357,3 +357,19 @@ textarea.focused {
 	width: 100%;
 	height: 100%;
 }
+
+#modal-attachment {
+	width: 700px;
+	height: auto;
+	margin-top: -330px;
+}
+
+#modal-attachment .modal-body {
+	max-height: 2000px;
+	height: auto;
+}
+
+#modal-attachment .modal-body iframe {
+	width: 670px;
+	height: 570px;
+}

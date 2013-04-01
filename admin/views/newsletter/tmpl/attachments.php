@@ -1,12 +1,13 @@
     <div id="attachments" class="form-text">
         <div id="att-controls" class="btn-toolbar">
             <div class="btn-group">   
-                <button
-                    class="button btn"
-                    id="newsletter_upload">
-
-                    <?php  echo JText::_('COM_NEWSLETTER_UPLOAD'); ?>
-                </button>
+				<a 
+					id="newsletter_upload"
+					class="btn"
+					href="<?php echo JRoute::_('index.php?option=com_newsletter&view=media&tmpl=component&asset=&author=&fieldid=fileattach&folder=', false); ?>"
+				>
+					<?php echo JText::_('COM_NEWSLETTER_UPLOAD'); ?>	
+				</a>	
              </div>   
         </div>
         <input type="hidden" id="fileattach" name="fileattach" />

@@ -8,7 +8,6 @@
 
 
 window.addEvent('domready', function() {
-try {
 
 	Migur.fileRemoveClickHandler = function(event){
 
@@ -94,38 +93,26 @@ try {
         });
     }
 
+
 	$('newsletter_upload').addEvent('click', function(ev){
 
 		ev.stop();
 
-		var nid = $$('[name=newsletter_id]')[0].getProperty('value');
+		var nid = parseInt($$('[name=newsletter_id]')[0].getProperty('value'));
 
-		if (nid == '' || nid < 1) {
+		if (nid < 1) {
 			alert(Joomla.JText._('PLEASE_SAVE_THE_NEWSLETTER_FIRST', "Please save the newsletter first!"));
 			return false;
 		}
+		
+		window.migurFieldId = 'fileattach';
 
-
-		var href = migurSiteRoot + "administrator/index.php?option=com_newsletter&view=media&tmpl=component&asset=&author=&fieldid=fileattach&folder=";
-
-		window.migurFieldId = 'fileattach'
-
-		SqueezeBox.open(href, {
-			handler: 'iframe',
-			size: {
-				x: 800,
-				y: 700
-			}
-		});
-
-
-		return true;
+		Migur.modal.show('#modal-attachment', {type: 'iframe', href: $(this).getProperty('href')});
 	});
 
 
+	// Check if this letter is not saved yet and block the button
+	
 
-} catch(e){
-    if (console && console.log) console.log(e);
-}
 
 });
