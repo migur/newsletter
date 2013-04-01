@@ -4,7 +4,7 @@ Migur.define("autosaver", function() {
 	var docstateElement = $$('#toolbar-docstate > span')[0];
 
 	/* Start the autosaver */
-	var autosaver = new Migur.ajax.autosaver({
+	var autosaver = new Migur.autosaver({
 		options: {
 			repeat: true,
 			timeout: 3000,
@@ -82,22 +82,14 @@ Migur.define("autosaver", function() {
 
 			var isChanged = this.isChanged(data);
 			
-			if (isChanged) {
-				docstateElement
-					.set('html', Joomla.JText._('CHANGES_ARENT_SAVED', 'Changes aren\'t saved'))
-					.setStyle('color', 'red');
-			} else {
-				docstateElement
-					.set('html', Joomla.JText._('ALL_CHANGES_SAVED', 'All changes saved'))
-					.setStyle('color', 'black');
-			}
+			this.setMessage(isChanged);
 			
 			var form = $$('form.form-validate')[0];
 			var res = document.formvalidator.isValid(form);
 
 			Migur.validator.tabIndicator(
-				'#tabs-sub-container',
-				'span h3 a',
+				'#tabs-newsletter',
+				'li a',
 				'tab-invalid',
 				'.invalid'
 				);
@@ -109,8 +101,22 @@ Migur.define("autosaver", function() {
 			return isChanged;
 		}, 
 
+		setMessage: function(isChanged) {
+			if (isChanged) {
+				docstateElement
+					.set('html', Joomla.JText._('CHANGES_ARENT_SAVED', 'Changes aren\'t saved'))
+					.setStyle('color', 'red');
+			} else {
+				docstateElement
+					.set('html', Joomla.JText._('ALL_CHANGES_SAVED', 'All changes saved'))
+					.setStyle('color', 'black');
+			}
+
+		},
+
 		update: function(){
-	        this.controller(this.getter());
+			var data = this.getter();
+	        this.setMessage(this.isChanged(data));
 		}	
 
 	});
