@@ -41,7 +41,22 @@ class MigurDocumentHtmlRendererModules extends JDocumentRenderer
 			$post = '</div>';
 		}
 
-		foreach (MigurModuleHelper::getModules($position) as $mod) {
+		$modules = MigurModuleHelper::getModules($position);
+		
+		// Sort the modules by ordering
+		$total = count($modules);
+		for ($i = 0; $i < $total; $i++) {
+			for ($k = $i+1; $k < $total; $k++) {
+				
+				if ($modules[$k]->ordering < $modules[$i]->ordering) {
+					$buff = $modules[$k];
+					$modules[$k] = $modules[$i];
+					$modules[$i] = $buff;
+				}
+			}	
+		}
+		
+		foreach ($modules as $mod) {
 
 			// The default behavior
 			$renderer = $this->_doc->loadRenderer('module', $mod->native);
