@@ -78,6 +78,20 @@ class NewsletterTableNewsletterext extends MigurJTable
 		$modulesNat = $db->loadAssocList();
 
 		$res = array_merge($modulesCom, $modulesNat);
+		
+		// Sort modules by ordering value
+		$total = count($res);
+		for ($i = 0; $i < $total; $i++) {
+			for ($k = $i+1; $k < $total; $k++) {
+				
+				if ($res[$k]['ordering'] < $res[$i]['ordering']) {
+					$buff = $res[$k];
+					$res[$k] = $res[$i];
+					$res[$i] = $buff;
+				}
+			}	
+		}
+		
 
 		foreach ($res as $idx => $item) {
 			if (!empty($item['params']) && is_string($item['params'])) {

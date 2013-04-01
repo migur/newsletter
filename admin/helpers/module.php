@@ -189,11 +189,13 @@ abstract class NewsletterHelperModule extends JModuleHelper
 			return self::$clean;
 		}
 
+		/*
+		 * TODO: It is duplication of 
+		 * NewsletterTableNewsletterext::getExtensionsBy
+		 * functionality. 
+		 * Need to use model's method to retrieve a list of extensions
+		 */
 		$app = JFactory::getApplication();
-		$user = JFactory::getUser();
-		$groups = implode(',', $user->getAuthorisedViewLevels());
-		$lang = JFactory::getLanguage()->getTag();
-		$clientId = (int) $app->getClientId();
 
 		$db = JFactory::getDbo();
 
@@ -238,8 +240,6 @@ abstract class NewsletterHelperModule extends JModuleHelper
 		}
 
 		// Apply negative selections and eliminate duplicates
-		$negId = self::$itemId ? -(int) self::$itemId : false;
-		$dupes = array();
 		for ($i = 0, $n = count($modules); $i < $n; $i++) {
 			$module = &$modules[$i];
 			//determine if this is a custom module
