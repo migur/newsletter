@@ -10,7 +10,9 @@ window.addEvent('domready', function() {
      * Create the slide message from the standard J! one.
      * TODO: Refactor to widget
      */
-    var smDom = $('system-message');
+
+// For J!2.0
+	var smDom = $('system-message');
     if (smDom) {
 
         smDom.setStyles({
@@ -43,4 +45,39 @@ window.addEvent('domready', function() {
 
         smDom.fireEvent('click');
     }
+
+
+// For J!3.0
+	if ($$('body.component #system-message-container').length) {
+		
+		var msgContainer = $$('body.component #system-message-container')[0];
+
+		msgContainer.setStyles({
+			'position': 'absolute',
+			'width': '100%'
+		});
+
+		var hidding = false;
+
+		var hideMessages = function(){
+			msgContainer.set('html', '');
+			hidding = false;
+		}
+
+
+		msgContainer.addEvent('click', hideMessages);
+		
+		// Poll for changes in messages container
+		setInterval(function(){
+			
+			if(msgContainer.get('html') != '' && hidding == false) {
+				// If container is not empty then clear it after small pause
+				hidding = true;
+				setTimeout(hideMessages, 3000);
+			}
+			
+		}, 500)
+	}
+	
+
 });
