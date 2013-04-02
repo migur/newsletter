@@ -191,17 +191,19 @@ abstract class NewsletterHelperModule extends JModuleHelper
 			return self::$clean;
 		}
 
+		/*
+		 * TODO: It is duplication of 
+		 * NewsletterTableNewsletterext::getExtensionsBy
+		 * functionality. 
+		 * Need to use model's method to retrieve a list of extensions
+		 */
 		$app = JFactory::getApplication();
-		$user = JFactory::getUser();
-		$groups = implode(',', $user->getAuthorisedViewLevels());
-		$lang = JFactory::getLanguage()->getTag();
-		$clientId = (int) $app->getClientId();
 
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true);
 		$query->select(
-			'newsletters_ext_id as id, ne.title, extension as module, position, NULL as content, ne.showtitle, ne.params as params, e.params as params_default, NULL as menuid, 0 as native');
+			'newsletters_ext_id as id, ne.title, extension as module, position, NULL as content, ne.showtitle, ne.params as params, e.params as params_default, NULL as menuid, 0 as native, ne.ordering');
 		$query->from('#__newsletter_extensions AS e');
 		$query->join('', '#__newsletter_newsletters_ext AS ne ON e.extension_id = ne.extension_id');
 		$query->where('type = 1');
@@ -216,7 +218,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 		$query->select(
 			'newsletters_ext_id AS id, ne.title, element AS module, position, '
 			. 'NULL AS content, ne.showtitle, ne.params AS params, '
-			. 'e.params AS params_default, NULL AS menuid, 1 AS native'
+			. 'e.params AS params_default, NULL AS menuid, 1 AS native, ne.ordering'
 		);
 		$query->from('#__extensions AS e');
 		$query->join('', '#__newsletter_newsletters_ext AS ne ON e.extension_id = ne.extension_id');
@@ -240,8 +242,6 @@ abstract class NewsletterHelperModule extends JModuleHelper
 		}
 
 		// Apply negative selections and eliminate duplicates
-		$negId = self::$itemId ? -(int) self::$itemId : false;
-		$dupes = array();
 		for ($i = 0, $n = count($modules); $i < $n; $i++) {
 			$module = &$modules[$i];
 			//determine if this is a custom module
