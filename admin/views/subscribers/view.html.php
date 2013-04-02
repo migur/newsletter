@@ -109,8 +109,8 @@ class NewsletterViewSubscribers extends MigurView
 		$bar = MigurToolBar::getInstance('subscribers', null, '');
 		
 		if (AclHelper::actionIsAllowed('list.edit')) {
-			$bar->appendButton('Link', 'cancel', 'COM_NEWSLETTER_REMOVE_FROM_LIST', 'list.unbindgroup', false);
-			$bar->appendButton('Link', 'copy', 'COM_NEWSLETTER_ASSIGN_TO_LIST', 'list.assigngroup', false);
+			$bar->appendButton('Basic', 'COM_NEWSLETTER_REMOVE_FROM_LIST', array('id' => 'subscribers-unbind', 'data-task' => 'list.unbindgroup'), array('class' => 'icon-cancel'));
+			$bar->appendButton('Basic', 'COM_NEWSLETTER_ASSIGN_TO_LIST', array('id' => 'subscribers-assign', 'data-task' => 'list.assigngroup'), array('class' => 'icon-copy'));
 		}
 		
 		$bar->appendButton('Popup', 'subscriber-new', JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER'), 'index.php?option=com_newsletter&task=subscriber.add&tmpl=component', 530, 235, 0, 0);
@@ -122,7 +122,7 @@ class NewsletterViewSubscribers extends MigurView
 		$bar = MigurToolBar::getInstance('lists');
 		
 		if (AclHelper::actionIsAllowed('list.add')) {
-			$bar->appendButton('Popup', 'list-new', JText::_('COM_NEWSLETTER_NEW_LIST_CREATE'), 'index.php?option=com_newsletter&view=list&tmpl=component', 1000, 600, 0, 0);
+			$bar->appendButton('Standard', 'new', 'COM_NEWSLETTER_NEW_LIST_CREATE', 'list.add', false);
 		}
 		
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'lists.delete', false);

@@ -6,30 +6,12 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-window.addEvent('domready', function() { try {
+window.addEvent('domready', function(){
 
-
-	
-    $$('#subscriber-toolbar-cancel button')
-        .removeProperty('onclick')
-        .addEvent('click', function(){
-			
-            if (window && window.parent && window.parent.SqueezeBox) {
-                window.parent.SqueezeBox.close();
-            }
-			
-			if (window && window.parent && window.parent.jQuery && window.parent.jQuery('.modal.in')) {
-				window.parent.jQuery('.modal.in').data('modal').hide();
-			}
-			
-            return false;
-        });
-
-    if ( $$('.sshistory')[0] ) {
-        historyPaginator = new Migur.lists.paginator($$('.sshistory')[0]);
-        Migur.lists.sortable.setup($$('.sshistory')[0]);
+    if ( $('history-list') ) {
+        Migur.lists.sortable.setup($('history-list'));
+        historyPaginator = new Migur.lists.paginator($('history-list'));
     }
 
-} catch(e){
-    if (console && console.log) console.log(e);
-} });
+	Migur.lists.sortable.setup($('table-subs'));
+});

@@ -36,3 +36,7 @@
     height: 16px;
     width: 16px;
 }
+
+#modal-new iframe {
+	height: 220px;
+}

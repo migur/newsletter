@@ -49,11 +49,11 @@ label {
 }
 
 #modal-smtpprofile .modal-body iframe {
-	height: 1100px;
+	height: 900px;
 }
 
 #modal-mailboxprofile .modal-body iframe {
-	height: 600px;
+	height: 490px;
 }
 
 #modal-extensioninfo .modal-body iframe {

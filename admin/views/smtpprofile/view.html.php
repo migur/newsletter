@@ -6,12 +6,12 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 // No direct access to this file
-JHtml::_('behavior.formvalidation');
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.form.helper');
 jimport('migur.library.toolbar');
 jimport('joomla.html.pagination');
 JHtml::_('behavior.framework', true);
+JHtml::_('behavior.formvalidation');
 
 // import Joomla view library
 
@@ -32,10 +32,6 @@ class NewsletterViewSmtpprofile extends MigurView
 	 */
 	public function display($tpl = null)
 	{
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/smtpprofile.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-
 		$this->ssForm = $this->get('Form', 'smtpprofile');
 		
 		$model = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
@@ -69,11 +65,11 @@ class NewsletterViewSmtpprofile extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('smtp-toolbar', 'smtpprofileForm');
+		$bar = JToolBar::getInstance();
 		$bar->addButtonPath(COM_NEWSLETTER_PATH_ADMIN . '/helpers/toolbar/button');
 		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', SupportHelper::getResourceUrl('smtpp', 'general'));
-		$bar->appendButton('Standard', 'publish', 'COM_NEWSLETTER_CHECK', 'smtpprofile.checkconnection', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
+		$bar->appendButton('Basic', 'COM_NEWSLETTER_CHECK', array('id' => 'smtp-toolbar-publish'));
+		$bar->appendButton('Basic', 'JTOOLBAR_CANCEL', array('id' => 'smtp-toolbar-cancel'));
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'smtpprofile.save', false);
 	}
 
@@ -88,6 +84,10 @@ class NewsletterViewSmtpprofile extends MigurView
 		$isNew = (!JRequest::get('smtp_profile_id', false) );
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_SMTP_CREATING') : JText::_('COM_NEWSLETTER_SMTP_EDITING'));
+		$document->addStyleSheet(JURI::root() . "media/com_newsletter/css/admin.css");
+		$document->addStyleSheet(JURI::root() . "media/com_newsletter/css/smtpprofile.css");
+		$document->addScript(JURI::root() . "media/com_newsletter/js/migur/js/core.js");
+		$document->addScript(JURI::root() . "media/com_newsletter/js/migur/js/message.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/smtpprofile/submitbutton.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/smtpprofile/smtpprofile.js");
 		JText::script('COM_NEWSLETTER_MAILBOX_ERROR_UNACCEPTABLE');
