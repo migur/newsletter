@@ -58,3 +58,14 @@
 		width: 100%;
 	}
 }
+
+
+#sslist-container {
+	max-height: 250px;
+	overflow: auto;
+}
+
+#nllist-container {
+	max-height: 250px;
+	overflow: auto;
+}

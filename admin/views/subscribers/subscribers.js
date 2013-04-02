@@ -8,104 +8,86 @@
 
 window.addEvent('domready', function() { try {
 
-//	$$('.subscriber-item').addEvent('click', function(ev){
-//		ev.stop();
-//		var url = $(this).getProperty('href');
-//		$$('#modal-subscriberedit iframe').setProperty('src', url);
-//		jQuery('#modal-subscriberedit').modal('show');
-//		
-//	});
-
-    $$('#subscribers-copy a, #subscribers-cancel a').addEvent('click', function(ev){
+    $('subscribers-unbind').addEvent('click', function(ev){
         
         ev.stop();
 
-        var task = $(this).getProperty('href');
-        var type = (task.indexOf('assign') > 0)? 'assign' : 'remove';
+        if ( $$('#form-subscribers [name=boxchecked]')[0].get('value') < 1 ) {
+			alert(Joomla.JText._(
+				'PLEASE_SELECT_THE_SUBSCRIBERS_TO_REMOVE_FROM_LISTS',
+				"Please select the subscribers to remove from lists"
+			));
+            return;
+        }
 
         var listIds = [];
         $$('#form-lists [name=cid[]]').each(function(el){
-
             if( $(el).getProperty('checked') ) {
-
                 listIds.push($(el).get('value'));
             }
         });
+		
+        if (listIds.length == 0) {
+			alert(Joomla.JText._(
+				'IN_THE_TABLE_WITH_LISTS_ON_THE_RIGHT_SELECT_FROM',
+				'In the table with "Lists" on the right, select at least one list to remove the selected subscriber(s) from.'
+			));
+            return;
+        }
+
+		$$('#form-subscribers [name=list_id]')[0].set('value', JSON.encode(listIds));
+
+        Joomla.submitform($(this).getProperty('data-task'), document.subscribersForm);
+    });
+
+
+	$('subscribers-assign').addEvent('click', function(ev){
+        
+        ev.stop();
 
         if ( $$('#form-subscribers [name=boxchecked]')[0].get('value') < 1 ) {
-            if (type == 'assign') {
                 alert(Joomla.JText._(
 					'PLEASE_SELECT_THE_SUBSCRIBERS_TO_ASSIGN_TO_LIS',
 					"Please select the subscribers to assign to list"
 				));
-            } else {
-                alert(Joomla.JText._(
-					'PLEASE_SELECT_THE_SUBSCRIBERS_TO_REMOVE_FROM_LISTS',
-					"Please select the subscribers to remove from lists"
-				));
-            }
             return;
         }
+		
+        var listIds = [];
+        $$('#form-lists [name=cid[]]').each(function(el){
+            if( $(el).getProperty('checked') ) {
+                listIds.push($(el).get('value'));
+            }
+        });
 
         if (listIds.length == 0) {
-            if (type == 'assign') {
                 alert(Joomla.JText._(
 					'IN_THE_TABLE_WITH_LISTS_ON_THE_RIGHT_SELECT',
 					'In the table with "Lists" on the right, select at least one list to assign the selected subscriber(s) to.'
 				));
-            } else {
-                alert(Joomla.JText._(
-					'IN_THE_TABLE_WITH_LISTS_ON_THE_RIGHT_SELECT_FROM',
-					'In the table with "Lists" on the right, select at least one list to remove the selected subscriber(s) from.'
-				));
-            }
             return;
         }
-/*
-        if (listIds.length > 1) {
-            alert("Please select only one list");
-            return;
-        }
-*/
+		
         $$('#form-subscribers [name=list_id]')[0].set('value', JSON.encode(listIds));
 
-        var task = $(this).getProperty('href');
-        Joomla.submitform(task, document.subscribersForm);
-    });
-
-
-
-
+        Joomla.submitform($(this).getProperty('data-task'), document.subscribersForm);
+	});	
 
 
     $('form-subscribers').getElements('[name=cid[]], [name=checkall-toggle]').addEvent('click', function(){
 
+		console.log($$('#form-subscribers [name=boxchecked]')[0].get('value'));
         if ($$('#form-subscribers [name=boxchecked]')[0].get('value') == 0) {
-            $$('#subscribers-copy span')[0].addClass('disabled');
-            $$('#subscribers-cancel span')[0].addClass('disabled');
+            $('subscribers-assign').addClass('disabled');
+            $('subscribers-unbind').addClass('disabled');
         } else {
-            $$('#subscribers-copy span')[0].removeClass('disabled');
-            $$('#subscribers-cancel span')[0].removeClass('disabled');
+            $('subscribers-assign').removeClass('disabled');
+            $('subscribers-unbind').removeClass('disabled');
         }
     });
 
-    $$('#subscribers-copy span')[0].addClass('disabled');
-    $$('#subscribers-cancel span')[0].addClass('disabled');
-
-
-//	if ($('conflict-resolver-link')) {
-//			
-//		$('conflict-resolver-link').addEvent('click', function(ev){
-//			ev.stop();
-//			
-//			var url = migurSiteRoot + 'administrator/index.php?option=com_newsletter&view=conflicts&tmpl=component';
-//			
-//			SqueezeBox.open(url, {
-//				handler: 'iframe',
-//				size: {x: 900, y: 600}
-//			});
-//		});
-//	}	
+    $('subscribers-assign').addClass('disabled');
+    $('subscribers-unbind').addClass('disabled');
 
 } catch(e) {
     if (console && console.log) console.log(e);

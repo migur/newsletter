@@ -58,7 +58,7 @@ abstract class JHtmlMultigrid
 	{
 		//TODO: Need to create the way to work with multiform page via only one point - submitbutton.js
 		$direction = strtolower($direction);
-		$images = array('sort_asc.png', 'sort_desc.png');
+		$images = array('icon-arrow-up-3', 'icon-arrow-down-3');
 		$index = intval($direction == 'desc');
 
 		if ($order != $selected) {
@@ -75,7 +75,7 @@ abstract class JHtmlMultigrid
 		$html .= JText::_($title);
 
 		if ($order == $selected) {
-			$html .= JHTML::_('image', 'system/' . $images[$index], '', NULL, true);
+			$html .= '<i class="'.$images[$index].'"></i>';
 		}
 
 		$html .= '</a>';

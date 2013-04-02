@@ -16,7 +16,12 @@ if (!defined('MIGUR')) {
 }
 
 /**
- * Renders a help popup window button
+ * Usage:
+ *		$bar->appendButton(
+ *			'Basic', 
+ *			'COM_NEWSLETTER_SHOW_STATISTICS', 
+ *			array('id' => 'ctrl-showstats', 'href' => JRoute::_('index.php?option=com_newsletter&view=statistic'))
+ *		);
  *
  * @package     Joomla.Platform
  * @subpackage  HTML
@@ -78,28 +83,7 @@ class JToolbarButtonBasic extends JToolbarButton
 	 */
 	public function fetchId()
 	{
-		return $this->_parent->getName().'-'."help";
+		return $this->_parent->getName().'-'."basic";
 	}
 
-	/**
-	 * Get the JavaScript command for the button
-	 *
-	 * @param   string   $ref		The name of the help screen (its key reference).
-	 * @param   boolean  $com		Use the help file in the component directory.
-	 * @param   string   $override	Use this URL instead of any other.
-	 * @param   string   $component	Name of component to get Help (null for current component)
-	 *
-	 * @return  string   JavaScript command string
-	 * @since   11.1
-	 */
-	protected function _getCommand($ref, $com, $override, $component, $width, $height)
-	{
-		// Get Help URL
-		jimport('joomla.language.help');
-		$url = JHelp::createURL($ref, $com, $override, $component);
-		$url = htmlspecialchars($url, ENT_QUOTES);
-		$cmd = "Joomla.popupWindow('$url', '".JText::_('JHELP', true)."', $width, $height, 1)";
-
-		return $cmd;
-	}
 }

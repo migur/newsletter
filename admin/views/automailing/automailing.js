@@ -1,6 +1,7 @@
 
 window.addEvent('domready', function() {
 	
+	
 	// Functionality for default.php layout
 	if (isNew == 0) {
 
@@ -14,6 +15,15 @@ window.addEvent('domready', function() {
 		if ($("jform_automailing_event")) {
 			$("jform_automailing_event").setProperty('disabled', true);
 		}	
+		
+	} else {
+		
+		$$('#toolbar-cancel button')[0]
+			.removeProperty('onclick')
+			.addEvent('click', function(ev){
+				ev.stop();
+				Migur.closeModal();
+			})
 	}
 	
 	/**

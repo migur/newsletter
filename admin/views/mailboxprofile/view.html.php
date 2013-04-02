@@ -56,9 +56,9 @@ class NewsletterViewMailboxprofile extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('mailbox-toolbar', 'mailboxprofileForm');
-		$bar->appendButton('Standard', 'publish', 'COM_NEWSLETTER_CHECK', 'mailboxprofile.checkconnection', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
+		$bar = JToolBar::getInstance();
+		$bar->appendButton('Basic', 'COM_NEWSLETTER_CHECK', array('id' => 'mailbox-toolbar-publish'));
+		$bar->appendButton('Basic', 'JTOOLBAR_CANCEL', array('id' => 'mailbox-toolbar-cancel'));
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'mailboxprofile.save', false);
 	}
 
@@ -77,6 +77,7 @@ class NewsletterViewMailboxprofile extends MigurView
 		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/mailboxprofile.css');
 
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/message.js');
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/models/forms/mailboxprofile.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/mailboxprofile/submitbutton.js");
 		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/mailboxprofile/mailboxprofile.js");

@@ -4,7 +4,7 @@ $listOrder = 'desc';
 ?>
 
 <div id="history-container">
-    <table class="sshistory adminlist  table table-striped" width="100%">
+    <table id="history-list" class="sshistory adminlist  table table-striped" width="100%">
         <thead>
             <tr>
                 <th width="30px" class="left">
@@ -24,13 +24,6 @@ $listOrder = 'desc';
                 </th>
             </tr>
         </thead>
-        <tfoot>
-            <tr>
-                <td colspan="5">
-                    <?php echo $this->historyPagination->getListFooter(); ?>
-                </td>
-            </tr>
-        </tfoot>
         <tbody>
         <?php foreach ($this->historyItems as $i => $item) :
             $item->max_ordering = 0; //??

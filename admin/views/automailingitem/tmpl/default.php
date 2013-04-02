@@ -4,11 +4,10 @@ defined('_JEXEC') or die;
 ?>
 
 <div>
-	<form name="adminForm" method="POST" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
+	<form name="adminForm" method="POST" class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
 
 		<?php 
-		echo $this->form->getLabel('newsletter_id');
-		echo $this->form->getInput('newsletter_id');
+		echo JHtml::_('layout.controlgroup', $this->form->getLabel('newsletter_id'), $this->form->getInput('newsletter_id'));
 
 		if ($this->automailing->automailing_type == 'eventbased') {
 
@@ -20,9 +19,7 @@ defined('_JEXEC') or die;
 				echo '<div class="labeled">'.JText::_('COM_NEWSLETTER_FROM_SUBSCRIPTION_DATE').'</div>';
 
 			} else {
-				
-				echo $this->form->getLabel('time_offset');
-				echo $this->form->getInput('time_offset');
+				echo JHtml::_('layout.controlgroup', $this->form->getLabel('time_offset'), $this->form->getInput('time_offset'));
 			}
 			
 		} else {
@@ -31,14 +28,12 @@ defined('_JEXEC') or die;
 			if (empty($this->allItems[0]->series_id) || $this->allItems[0]->series_id == $this->seriesId) {
 
 				// And first item. Show the element to set time_stat
-				echo $this->form->getLabel('time_start');
-				echo $this->form->getInput('time_start');
-
+				echo JHtml::_('layout.controlgroup', $this->form->getLabel('time_start'), $this->form->getInput('time_start'));
+				
 			} else {
 				
 				// And first item. Show the element to set time_stat
-				echo $this->form->getLabel('time_offset');
-				echo $this->form->getInput('time_offset');
+				echo JHtml::_('layout.controlgroup', $this->form->getLabel('time_offset'), $this->form->getInput('time_offset'));			
 			}
 		}	
 		?>
@@ -50,8 +45,9 @@ defined('_JEXEC') or die;
 		<?php echo $this->form->getInput('series_id'); ?>
 		<?php echo JHtml::_('form.token'); ?>
 		
-		<div class="clr"></div>
-		<?php echo JToolBar::getInstance('amitem')->render(); ?>
+		<div class="form-actions">
+			<?php echo JToolBar::getInstance('amitem')->render(); ?>
+		</div>	
 		
 	</form>
 

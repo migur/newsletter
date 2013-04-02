@@ -828,3 +828,18 @@ Migur.define = function(id, factory) {
 	
 	Migur.modules[id] = factory;
 }
+
+
+/**
+ * Use to close THIS modal iframe window
+ */
+Migur.closeModal = function(){
+	
+	if (window && window.parent && window.parent.SqueezeBox) {
+		window.parent.SqueezeBox.close();
+	}
+
+	if (window && window.parent && window.parent.jQuery && window.parent.jQuery('.modal.in')) {
+		window.parent.jQuery('.modal.in').data('modal').hide();
+	}
+}

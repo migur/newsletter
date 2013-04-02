@@ -41,8 +41,11 @@ defined('_JEXEC') or die;
 		
 	<?php echo JHtml::_('layout.controlgroup', '', $this->ssForm->getInput('smtp_profile_id')); ?>
 	
-	<div class="form-actions">
-		<?php echo JToolBar::getInstance('smtp-toolbar')->render(); ?>
+	<div class="form-actions" style="padding-right:0;">
+		<div class="pull-left"><?php echo JToolBar::getInstance()->render(); ?></div>
+		<div class="pull-left" style="margin: 12px 0 0 10px;">
+			<div id="preloader-container"></div>
+		</div>	
 	</div>
 
 	<input type="hidden" name="smtp_profile_id" value="<?php echo $this->ssForm->getValue('smtp_profile_id'); ?>" />

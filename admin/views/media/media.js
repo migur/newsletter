@@ -25,17 +25,30 @@ try {
 
 			var checkboxes = $(itemsDoc).getElements('.manager [name=rm[]]');
 
-			Array.some(checkboxes, function(item){
+			var someChecked = false;
+
+			Array.each(checkboxes, function(item){
 				
 				if(item.checked) {
+					
 					var fullname = (folder? folder+'/' : '') + item.value;
 					topWin.parent.jInsertFieldValue(fullname, topWin.parent.migurFieldId);
-					topWin.parent.SqueezeBox.close();
-					return true;
+					
+					someChecked = true;
 				}	
 				
 				return false
 			});
+			
+			if (someChecked) {
+				if (topWin && topWin.parent && topWin.parent.SqueezeBox) {
+					topWin.parent.SqueezeBox.close();
+				}
+
+				if (topWin && topWin.parent && topWin.parent.jQuery && topWin.parent.jQuery('.modal.in')) {
+					topWin.parent.jQuery('.modal.in').data('modal').hide();
+				}
+			}
 	});
 
 } catch(e){
