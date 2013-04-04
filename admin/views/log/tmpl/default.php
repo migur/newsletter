@@ -1,5 +1,4 @@
 <h3><?php echo JText::_('COM_NEWSLETTER_LOG_ITEM') . ": " . $this->item->date . ' - ' . $this->item->message; ?></h3>
-<div style="height:650px;overflow: auto">
 <table class="adminlist  table table-striped">
 	<tbody>
 		<?php 
@@ -15,4 +14,3 @@
 		<?php endforeach; ?>
 	</tbody>
 </table>
-</div>

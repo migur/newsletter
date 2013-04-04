@@ -103,11 +103,12 @@ class NewsletterViewQueues extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_QUEUE_TITLE'), 'article.png');
 
 		$bar = JToolBar::getInstance();
-		$bar->appendButton('Custom', '', 'preloader', '');
-		$bar->appendButton('Link', 'messaging', 'COM_NEWSLETTER_PROCESS_QUEUE', '#');
-		$bar->appendButton('Link', 'alert', 'COM_NEWSLETTER_PROCESS_BOUNCES', '#');
+		$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_PROCESS_QUEUE', array('id' => 'toolbar-queue', 'class' => 'btn btn-small btn-success'));
+		$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_PROCESS_BOUNCES', array('id' => 'toolbar-bounces', 'icon-class' => 'icon-refresh'));
 		$bar->appendButton('Separator', null, '30');
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'queues.delete', false);
+		$bar->appendButton('Separator', null, '30');
+		$bar->appendButton('MigurPreloader');
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));

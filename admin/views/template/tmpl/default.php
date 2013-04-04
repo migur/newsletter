@@ -3,7 +3,7 @@
 defined('_JEXEC') or die;
 ?>
 
-<form name="templateForm" method="POST" id="form-template" class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=template', false); ?>">
+<form name="templateForm" method="POST" id="adminForm" class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=template', false); ?>">
 	<div id="container-list">
 		<legend><?php echo JText::_('COM_NEWSLETTER_SELECT_STANDARD_TEMPLATE'); ?></legend>	
 

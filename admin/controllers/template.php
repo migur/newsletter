@@ -39,6 +39,15 @@ class NewsletterControllerTemplate extends JControllerForm
 		return true;
 	}
 
+	
+	public function add() {
+		
+		$this->input->set('layout', 'defailt');
+		
+		return parent::add();
+	}
+	
+	
 	/**
 	 * Save the configuration
 	 *

@@ -38,16 +38,6 @@ class NewsletterViewLogs extends MigurView
 	 */
 	public function display($tpl = null)
 	{
-
-		//TODO: Need to move css/js to SetDocument
-
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/logs.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		//JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
-		JHTML::script('media/com_newsletter/js/migur/js/search.js');
-		JHTML::script(JURI::root() . "/administrator/components/com_newsletter/views/logs/logs.js");
-
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
 			JError::raiseError(500, implode("\n", $errors));
@@ -81,6 +71,7 @@ class NewsletterViewLogs extends MigurView
 			$this->sidebar = JHtmlSidebar::render();
 		}
 
+		$this->setDocument();
 		
 		parent::display($tpl);
 	}
@@ -119,4 +110,18 @@ class NewsletterViewLogs extends MigurView
 		);
 	}
 
+	protected function setDocument() 
+	{
+		$doc = JFactory::getDocument();
+		
+		$doc->addStyleSheet(JUri::root() . 'media/com_newsletter/css/admin.css');
+		$doc->addStyleSheet(JUri::root() . 'media/com_newsletter/css/logs.css');
+		
+		$doc->addScript(JUri::root() . 'media/com_newsletter/js/migur/js/core.js');
+		$doc->addScript(JUri::root() . 'media/com_newsletter/js/migur/js/modal.js');
+		$doc->addScript(JUri::root() . 'media/com_newsletter/js/migur/js/search.js');
+		
+		$doc->addScript(JUri::root() . 'administrator/components/com_newsletter/views/logs/logs.js');
+	}
+	
 }

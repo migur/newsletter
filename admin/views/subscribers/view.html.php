@@ -42,22 +42,11 @@ class NewsletterViewSubscribers extends MigurView
 	 */
 	public function display($tpl = null)
 	{
-		JHTML::_('behavior.modal');
-		//TODO: Need to move css/js to SetDocument
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/subscribers.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
-		JHTML::script('media/com_newsletter/js/migur/js/search.js');		
-		JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/subscribers/subscribers.js");
-
-
 		$listModel = MigurModel::getInstance('lists', 'NewsletterModel');
 		$this->setModel($listModel);
 
 		EnvironmentHelper::showWarnings(array(
 			'checkUserConflicts'));
-		
 		
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
@@ -65,6 +54,8 @@ class NewsletterViewSubscribers extends MigurView
 			return false;
 		}
 
+		$this->setDocument();
+		
 		// We don't need toolbar in the modal window.
 		if ($this->getLayout() !== 'modal') {
 			$this->addToolbar();
@@ -107,16 +98,32 @@ class NewsletterViewSubscribers extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_SUBSCRIBERS_TITLE'), 'article.png');
 
 		$bar = MigurToolBar::getInstance('subscribers', null, '');
+
+		$bar->appendButton('MigurModal', 'COM_NEWSLETTER_NEW_SUBSCRIBER', array(
+			'url' => 'index.php?option=com_newsletter&task=subscriber.add&tmpl=component',
+			'modal' => '#modal-subscriber',
+			'class' => 'btn btn-small btn-success',
+			'icon-class' => 'icon-new'
+		));
 		
-		if (AclHelper::actionIsAllowed('list.edit')) {
-			$bar->appendButton('Basic', 'COM_NEWSLETTER_REMOVE_FROM_LIST', array('id' => 'subscribers-unbind', 'data-task' => 'list.unbindgroup'), array('class' => 'icon-cancel'));
-			$bar->appendButton('Basic', 'COM_NEWSLETTER_ASSIGN_TO_LIST', array('id' => 'subscribers-assign', 'data-task' => 'list.assigngroup'), array('class' => 'icon-copy'));
-		}
-		
-		$bar->appendButton('Popup', 'subscriber-new', JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER'), 'index.php?option=com_newsletter&task=subscriber.add&tmpl=component', 530, 235, 0, 0);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'subscribers.delete', false);
 		$bar->appendButton('Standard', 'unpublish', 'JTOOLBAR_DISABLE', 'subscribers.unpublish', false);
 		$bar->appendButton('Standard', 'publish', 'JTOOLBAR_ENABLE', 'subscribers.publish', false);
+		
+		if (AclHelper::actionIsAllowed('list.edit')) {
+			$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_REMOVE_FROM_LIST', array(
+				'id' => 'subscribers-unbind', 
+				'data-task' => 'list.unbindgroup',
+				'icon-class' => 'icon-cancel'
+			));
+			
+			$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_ASSIGN_TO_LIST', array(
+				'id' => 'subscribers-assign', 
+				'data-task' => 'list.assigngroup',
+				'icon-class' => 'icon-copy'
+			));
+		}
+		
 		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', SupportHelper::getResourceUrl('subscriber'));
 
 		$bar = MigurToolBar::getInstance('lists');
@@ -136,6 +143,19 @@ class NewsletterViewSubscribers extends MigurView
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+	}
+	
+	public function setDocument() 
+	{
+		$doc = JFactory::getDocument();
+		
+		$doc->addStyleSheet(JURI::root() . 'media/com_newsletter/css/admin.css');
+		$doc->addStyleSheet(JURI::root() . 'media/com_newsletter/css/subscribers.css');
+		$doc->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
+		$doc->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/modal.js');
+		$doc->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/filterpanel.js');
+		$doc->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/search.js');		
+		$doc->addScript(JURI::root() . 'administrator/components/com_newsletter/views/subscribers/subscribers.js');
 	}
 
 }

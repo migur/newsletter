@@ -44,20 +44,6 @@ class NewsletterViewDashboard extends MigurView
 	 */
 	public function display($tpl = null)
 	{
-
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/dashboard.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script('media/com_newsletter/js/migur/js/raphael-min.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.raphael-min.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.line-min.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.raphael.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.line.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.pie.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.bar.js');
-		JHTML::script('media/com_newsletter/js/migur/js/raphael-migur-line.js');
-
-
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
 			JError::raiseError(500, implode("\n", $errors));
@@ -68,8 +54,6 @@ class NewsletterViewDashboard extends MigurView
 			'checkJoomla',
 			'checkImap',
 			'checkLogs'));
-
-		$this->addToolbar();
 
 		$stat = MigurModel::getInstance('Queues', 'NewsletterModel')->getSummary();
 		$sent = 0;
@@ -100,10 +84,13 @@ class NewsletterViewDashboard extends MigurView
 		$sess = JFactory::getSession();
 		JavascriptHelper::addStringVar('sessname', $sess->getName());
 
-		parent::display($tpl);
-
 		// Set the document
 		$this->setDocument();
+
+		$this->addToolbar();
+		
+		parent::display($tpl);
+
 	}
 
 	/**
@@ -116,33 +103,15 @@ class NewsletterViewDashboard extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_DASHBOARD_TITLE'), 'article.png');
 		$bar = JToolBar::getInstance();
-		$bar->addButtonPath(COM_NEWSLETTER_PATH_ADMIN . '/helpers/toolbar/button');
+		
+		$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_PROCESS_QUEUE', array('id' => 'toolbar-queue', 'class' => 'btn btn-small btn-success'));
+		$bar->appendButton('SendProgress');
+
+		$bar->appendButton('Link', 'list', 'COM_NEWSLETTER_VIEW_QUEUE', 'index.php?option=com_newsletter&view=queues');
+		$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_PROCESS_BOUNCES', array('id' => 'toolbar-bounces', 'icon-class' => 'icon-refresh'));
+
 		$bar->appendButton('Link', 'warning', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
 		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', SupportHelper::getResourceUrl('mailing', 'general'));
-		$bar->appendButton('Separator');
-		
-		$bar->appendButton('SendProgress', 'progress', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
-
-		$bar->appendButton('Link', 'view', 'COM_NEWSLETTER_VIEW_QUEUE', 'index.php?option=com_newsletter&view=queues');
-		$bar->appendButton('Link', 'queue', 'COM_NEWSLETTER_PROCESS_QUEUE', '#');
-		$bar->appendButton('Link', 'bounces', 'COM_NEWSLETTER_PROCESS_BOUNCES', '#');
-
-
-//		$bar = MigurToolBar::getInstance('newsletters-toolbar');
-//		$bar->appendButton('Link', 'new', 'COM_NEWSLETTER_NEWSLETTER_CREATE', 'index.php?option=com_newsletter&amp;view=newsletter');
-//		$bar->appendButton('Popup', 'export', 'COM_NEWSLETTER_NEWSLETTER_SEND', 'index.php?option=com_newsletter&amp;view=sender&amp;tmpl=component', 920, 450, 0, 0);
-//
-//		$bar = MigurToolBar::getInstance('subscribers-toolbar');
-//		$bar->appendButton('Popup', 'new', 'COM_NEWSLETTER_SUBSCRIBER_CREATE', 'index.php?option=com_newsletter&amp;view=subscriber&amp;tmpl=component', 400, 220, 0, 0);
-//		$bar->appendButton('Popup', 'new', 'COM_NEWSLETTER_LIST_CREATE', 'index.php?option=com_newsletter&amp;view=list&amp;tmpl=component', 1000, 600, 0, 0);
-//
-//		$bar = MigurToolBar::getInstance('config-toolbar');
-//		$bar->appendButton('Popup', 'export', 'COM_NEWSLETTER_EXTENSIONS_INSTALL', 'index.php?option=com_newsletter&amp;view=extension&amp;layout=install&amp;tmpl=component', 350, 150, 0, 0);
-//		$bar->appendButton('Link', 'options', 'COM_NEWSLETTER_CONFIGURATION', 'index.php?option=com_newsletter&amp;view=configuration');
-//
-//		$bar = MigurToolBar::getInstance('help-toolbar');
-//		$bar->appendButton('Popup', 'publish', 'COM_NEWSLETTER_ABOUT', 'http://migur.com/products/newsletter', 800, 600, 0, 0);
-//		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter');
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
@@ -158,8 +127,23 @@ class NewsletterViewDashboard extends MigurView
 	{
 		$document = JFactory::getDocument();
 		//$document->setTitle('COM_NEWSLETTER_DASHBOARD_TITLE');
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/subscriber/submitbutton.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/dashboard/dashboard.js");
+		$document->addStyleSheet(JURI::root() . 'media/com_newsletter/css/admin.css');
+		$document->addStyleSheet(JURI::root() . 'media/com_newsletter/css/dashboard.css');
+		
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/modal.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-min.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.raphael-min.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.line-min.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.raphael.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.line.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.pie.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.bar.js');
+		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-line.js');
+
+		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/subscriber/submitbutton.js");
+		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/dashboard/dashboard.js");
+		
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}
 

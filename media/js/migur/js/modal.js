@@ -7,8 +7,11 @@ window.addEvent('domready', function() {
 		Migur.modal = {
 			show: function(target, options) {
 				
-				if (options.type && options.type == 'iframe') {
-					
+				options.type || (options.type = 'iframe');
+				
+				
+				if (options.type == 'iframe') {
+
 					var body = $(target).find('.modal-body');
 
 					body
@@ -25,7 +28,7 @@ window.addEvent('domready', function() {
 			
 			ev.preventDefault();
 			
-			if ($(this).hasClass('disabled')) return;
+			if ($(this).hasClass('disabled')) return false;
 			
 			var popup = $(this).attr('data-target');
 			var href = $(this).attr('href') || '#';
@@ -35,6 +38,8 @@ window.addEvent('domready', function() {
 				'type' : type,
 				'href' : href
 			});
+			
+			return false;
 		})
 		
 	})(jQuery, Migur)	

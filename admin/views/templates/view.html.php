@@ -90,9 +90,8 @@ class NewsletterViewTemplates extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_TEMPLATES_TITLE'), 'article.png');
 
 		$bar = JToolBar::getInstance();
-		//$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=template&tmpl=component', 880, 680, 0, 0);
-		$bar->appendButton('Link', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=template');
-		$bar->appendButton('Standard', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
+		$bar->appendButton('Standard', 'new', 'JTOOLBAR_NEW', 'template.add', false);
+		//$bar->appendButton('Standard', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
 
 		// Load the submenu.

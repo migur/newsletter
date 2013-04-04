@@ -11,11 +11,11 @@
 defined('_JEXEC') or die('Restricted access');
 
 // import view library
-JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
+jimport('joomla.form.helper');
 JHtml::_('behavior.framework', true);
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
-jimport('joomla.application.component.view');
+
 /**
  * Class of the template view. Displays the model data.
  *

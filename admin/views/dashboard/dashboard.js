@@ -115,6 +115,7 @@ try {
 
     });
 
+	// Bounces button
     $('toolbar-bounces').addEvent('click', function(ev){
 
 		ev.stop();
@@ -143,7 +144,7 @@ try {
 					}
 
 					alert(text);
-					return;
+					return false;
 				}
 				
 				var count = 0;

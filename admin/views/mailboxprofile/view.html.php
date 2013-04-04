@@ -6,13 +6,12 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 // No direct access to this file
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('behavior.formvalidation');
 defined('_JEXEC') or die('Restricted access');
-jimport('joomla.form.helper');
+
 jimport('migur.library.toolbar');
-jimport('joomla.html.pagination');
+jimport('joomla.form.helper');
 JHtml::_('behavior.framework', true);
+JHtml::_('behavior.formvalidation');
 
 // import Joomla view library
 
@@ -57,8 +56,8 @@ class NewsletterViewMailboxprofile extends MigurView
 	protected function addToolbar()
 	{
 		$bar = JToolBar::getInstance();
-		$bar->appendButton('Basic', 'COM_NEWSLETTER_CHECK', array('id' => 'mailbox-toolbar-publish'));
-		$bar->appendButton('Basic', 'JTOOLBAR_CANCEL', array('id' => 'mailbox-toolbar-cancel'));
+		$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_CHECK', array('id' => 'mailbox-toolbar-publish'));
+		$bar->appendButton('MigurBasic', 'JTOOLBAR_CANCEL', array('id' => 'mailbox-toolbar-cancel'));
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'mailboxprofile.save', false);
 	}
 
