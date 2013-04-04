@@ -104,17 +104,18 @@ class NewsletterViewNewsletters extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_NEWSLETTERS_TITLE'), 'article.png');
 
 		$bar = JToolBar::getInstance();
-		$bar->appendButton(
-			'Basic', 
-			'COM_NEWSLETTER_SHOW_STATISTICS', 
-			array('id' => 'ctrl-showstats', 'href' => JRoute::_('index.php?option=com_newsletter&view=statistic'))
-		);
-		
 		if (AclHelper::actionIsAllowed('newsletter.add')) {
 			$bar->appendButton('Standard', 'new', 'JTOOLBAR_NEW', 'newsletter.add', false);
 			$bar->appendButton('Standard', 'copy', 'JTOOLBAR_SAVE_AS_COPY', 'newsletter.save2copy', false);
 		}	
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'newsletters.delete', false);
+
+		$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_SHOW_STATISTICS', array(
+			'id' => 'ctrl-showstats', 
+			'href' => JRoute::_('index.php?option=com_newsletter&view=statistic', false),
+			'icon-class' => 'icon-asterisk'
+		));
+		
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));

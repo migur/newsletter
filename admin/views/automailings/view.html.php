@@ -81,8 +81,14 @@ class NewsletterViewAutomailings extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_AUTOMAILINGS_TITLE'), 'article.png');
 
 		$bar = JToolBar::getInstance();
-		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailing&tmpl=component', 400, 300, 0, 0);
-		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'automailing.edit', false);
+		$bar->appendButton('MigurModal', 'JTOOLBAR_NEW', array(
+			'url' => 'index.php?option=com_newsletter&view=automailing&tmpl=component', 
+			'modal' => '#modal-automailing',
+			'class' => 'btn btn-small btn-success',
+			'icon-class' => 'icon-new'
+		));
+//		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailing&tmpl=component', 400, 300, 0, 0);
+//		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'automailing.edit', false);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'automailings.delete', false);
 
 		// Load the submenu.
@@ -101,6 +107,7 @@ class NewsletterViewAutomailings extends MigurView
 		JHTML::stylesheet('media/com_newsletter/css/admin.css');
 		JHTML::stylesheet('media/com_newsletter/css/automailings.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
+		JHTML::script('media/com_newsletter/js/migur/js/modal.js');
 		JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/automailings/automailings.js");
 		JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
 		JHTML::script('media/com_newsletter/js/migur/js/search.js');		

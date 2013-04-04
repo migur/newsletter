@@ -1,7 +1,13 @@
-<fieldset>
-<legend><?php echo JText::_('logs'); ?></legend>
 
-<form id="form-logslist" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=logs');?>" method="post" name="adminForm" >
+<div id="modal-details" class="modal hide fade">
+	<div class="modal-header">
+		<button data-dismiss="modal" class="close" type="button">x</button>
+		<h3><?php echo JText::_('COM_NEWSLETTER_LOG'); ?></h3>
+	</div>
+	<div class="modal-body"></div>
+</div>
+
+<form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=logs');?>" method="post" name="adminForm" >
 
 	<?php echo JHtml::_('layout.wrapper'); ?>
 	
@@ -104,7 +110,7 @@
 					$data = json_decode(str_replace('\u0000', '', $item->params)); 
 				?>
 					<label 
-						class="search icon-16-search hasTip" 
+						class="icon-list hasTip control-details" 
 						style="width:16px;height:16px;cursor:pointer" 
 						title="<?php echo $this->escape(JHtml::_('multigrid.renderObject', $data, 0, 'black', array('maxLength' => 100, 'maxLengthMessage' => 'See full log...'))); ?>">
 					</label>	

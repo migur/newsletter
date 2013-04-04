@@ -96,15 +96,13 @@ class NewsletterViewSubscriber extends MigurView
 			return false;
 		}
 
-		// We don't need toolbar in the modal window.
-		if ($this->getLayout() !== 'modal') {
-			$this->addToolbar();
-		}
+		$this->addToolbar();
+		
+		// Set the document
+		$this->setDocument();
 
 		parent::display($tpl);
 
-		// Set the document
-		$this->setDocument();
 	}
 
 	/**

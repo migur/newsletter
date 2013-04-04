@@ -18,9 +18,9 @@ if (!defined('MIGUR')) {
 /**
  * Usage:
  *		$bar->appendButton(
- *			'Basic', 
+ *			'Migurbasic', 
  *			'COM_NEWSLETTER_SHOW_STATISTICS', 
- *			array('id' => 'ctrl-showstats', 'href' => JRoute::_('index.php?option=com_newsletter&view=statistic'))
+ *			array('id' => 'ctrl-showstats', 'url' => JRoute::_('index.php?option=com_newsletter&view=statistic'))
  *		);
  *
  * @package     Joomla.Platform
@@ -28,12 +28,13 @@ if (!defined('MIGUR')) {
  * @since       11.1
  */
 
-class JToolbarButtonBasic extends JToolbarButton
+class JToolbarButtonMigurbasic extends JToolbarButton
 {
 	/**
 	 * @var    string	Button type
 	 */
-	protected $_name = 'Basic';
+	protected $_name = 'MigurBasic';
+	protected $_defaults = array('class' => 'btn btn-small');
 
 	/**
 	 * @param   string   $type		Unused string.
@@ -48,28 +49,37 @@ class JToolbarButtonBasic extends JToolbarButton
 	public function fetchButton()
 	{
 		$args = func_get_args();
-		$text = !empty($args[1])? $args[1] : '';
-		$btnProps = !empty($args[2])? $args[2] : array();
-		$spanProps = !empty($args[3])? $args[3] : array();
-		
-		$btnProps = array_merge(array('class' => 'btn btn-small'), $btnProps);
-		
-		$strBtnProps = '';
-		foreach ($btnProps as $name => $val) {
-			$strBtnProps .= $name . '="' . $val . '" ';
-		}
+		return $this->_getHtml(
+			$this->_getParams($args)
+		);
+	}
 
-		$strSpanProps = '';
-		foreach ($spanProps as $name => $val) {
-			$strSpanProps .= $name . '="' . $val . '" ';
+	protected function _getParams($args)
+	{
+		$this->_text = !empty($args[1])? $args[1] : '';
+		$params = !empty($args[2])? $args[2] : array();
+		
+		return array_merge($this->_defaults, $params);
+	}
+	
+	protected function _getHtml($params)
+	{
+		$strBtnProps = '';
+		$strIconProps = '';
+		foreach ($params as $name => $val) {
+			if (strpos($name, 'icon-') !== false) {
+				$strIconProps .= str_replace('icon-', '', $name) . '="' . $val . '" ';
+			} else {
+				$strBtnProps .= $name . '="' . $val . '" ';
+			}
 		}
 
 		$html = "<button $strBtnProps>\n";
-		$html .= "<span $strSpanProps>\n";
+		$html .= "<span $strIconProps>\n";
 		$html .= "</span>\n";
-		$html .= JText::_($text) . "\n";
+		$html .= JText::_($this->_text) . "\n";
 		$html .= "</button>\n";
-
+		
 		return $html;
 	}
 	
@@ -83,7 +93,6 @@ class JToolbarButtonBasic extends JToolbarButton
 	 */
 	public function fetchId()
 	{
-		return $this->_parent->getName().'-'."basic";
+		return $this->_parent->getName().'-'."migurbasic";
 	}
-
 }

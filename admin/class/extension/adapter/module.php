@@ -130,6 +130,7 @@ class NewsletterClassExtensionAdapterModule extends JAdapterInstance
 				}
 
 				$client = (string) $this->manifest->attributes()->client;
+				if (empty($client)) $client = 'administrator';
 				$lang->load($extension . '.sys', $source, null, false, false)
 					|| $lang->load($extension . '.sys', constant('JPATH_' . strtoupper($client)), null, false, false)
 					|| $lang->load($extension . '.sys', $source, $lang->getDefault(), false, false)
@@ -234,15 +235,14 @@ class NewsletterClassExtensionAdapterModule extends JAdapterInstance
 		// Check that this is either an issue where its not overwriting or it is
 		// set to upgrade anyway
 
-		if (file_exists($this->parent->getPath('extension_root')) && (!$this->parent->getOverwrite() || $this->parent->getUpgrade()))
+		if (file_exists($this->parent->getPath('extension_root')) && (!$this->parent->isOverwrite() || $this->parent->isUpgrade()))
 		{
 			// Look for an update function or update tag
 			$updateElement = $this->manifest->update;
-			// Upgrade manually set or
-			// Update function available or
-			// Update tag detected
-			if ($this->parent->getUpgrade() || ($this->parent->manifestClass && method_exists($this->parent->manifestClass, 'update'))
-				|| is_a($updateElement, 'JXMLElement'))
+
+			// Upgrade manually set or update function available or update tag detected
+			if ($this->parent->isUpgrade() || ($this->parent->manifestClass && method_exists($this->parent->manifestClass, 'update'))
+				|| $updateElement)
 			{
 				// Force this one
 				$this->parent->setOverwrite(true);
@@ -254,7 +254,7 @@ class NewsletterClassExtensionAdapterModule extends JAdapterInstance
 					$this->route = 'Update';
 				}
 			}
-			elseif (!$this->parent->getOverwrite())
+			elseif (!$this->parent->isOverwrite())
 			{
 				// Overwrite is set
 				// We didn't have overwrite set, find an update function or find an update tag so lets call it safe
@@ -515,13 +515,15 @@ class NewsletterClassExtensionAdapterModule extends JAdapterInstance
 	public function uninstall($id)
 	{
 		// Initialise variables.
-		$row = null;
 		$retval = true;
 		$db = $this->parent->getDbo();
 
 		// First order of business will be to load the module object table from the database.
 		// This should give us the necessary information to proceed.
 		$row = JTable::getInstance('NExtension', 'NewsletterTable');
+		if (!isset($row->client_id)) $row->client_id = 1;
+		if (!isset($row->protected)) $row->protected = false;
+		
 
 		if (!$row->load((int) $id) || !strlen($row->extension))
 		{
@@ -539,7 +541,6 @@ class NewsletterClassExtensionAdapterModule extends JAdapterInstance
 
 		// Get the extension root path
 		$element = $row->extension;
-		$client = 1;
 
 		$this->parent->setPath('extension_root', $this->_extPath . DIRECTORY_SEPARATOR . $element);
 
@@ -553,47 +554,7 @@ class NewsletterClassExtensionAdapterModule extends JAdapterInstance
 		// Attempt to load the language file; might have uninstall strings
 		$this->loadLanguage(($row->client_id ? JPATH_ADMINISTRATOR : JPATH_SITE)  . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $element);
 
-		// If there is an manifest class file, let's load it
-//		$this->scriptElement = $this->manifest->scriptfile;
-//		$manifestScript = (string) $this->manifest->scriptfile;
-//
-//		if ($manifestScript)
-//		{
-//			$manifestScriptFile = $this->parent->getPath('extension_root') . '/' . $manifestScript;
-//
-//			if (is_file($manifestScriptFile))
-//			{
-//				// Load the file
-//				include_once $manifestScriptFile;
-//			}
-//
-//			// Set the class name
-//			$classname = $element . 'InstallerScript';
-//
-//			if (class_exists($classname))
-//			{
-//				// Create a new instance
-//				$this->parent->manifestClass = new $classname($this);
-//				// And set this so we can copy it later
-//				$this->set('manifest_script', $manifestScript);
-//
-//				// Note: if we don't find the class, don't bother to copy the file
-//			}
-//		}
-//
-//		ob_start();
-//		ob_implicit_flush(false);
-//
-//		// Run uninstall if possible
-//		if ($this->parent->manifestClass && method_exists($this->parent->manifestClass, 'uninstall'))
-//		{
-//			$this->parent->manifestClass->uninstall($this);
-//		}
-//
-//		$msg = ob_get_contents();
-//		ob_end_clean();
-
-		if (!($this->manifest instanceof JXMLElement))
+		if (!($this->manifest instanceof JXMLElement) && !($this->manifest instanceof SimpleXMLElement))
 		{
 			// Make sure we delete the folders
 			JFolder::delete($this->parent->getPath('extension_root'));

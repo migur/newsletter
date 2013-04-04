@@ -3,7 +3,15 @@
 defined('_JEXEC') or die;
 ?>
 
-<form id="form-automailings" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=automailings&form=automailings');?>" method="post" name="automailingsForm" >
+<div id="modal-automailing" class="modal hide fade">
+	<div class="modal-header">
+		<button data-dismiss="modal" class="close" type="button">x</button>
+		<h3><?php echo JText::_('JTOOLBAR_NEW'); ?></h3>
+	</div>
+	<div class="modal-body"></div>
+</div>
+
+<form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=automailings&form=automailings');?>" method="post" name="automailingsForm" >
 
 	<?php echo JHtml::_('layout.wrapper'); ?>
 	

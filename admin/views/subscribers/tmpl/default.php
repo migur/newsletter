@@ -8,15 +8,14 @@ JHtml::_('dropdown.init');
 JHtml::_('formbehavior.chosen');
 ?>
 
-<!--<div id="modal-subscriberedit" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Modal header</h3>
-  </div>
-  <div class="modal-body">
-	  <iframe></iframe>
-  </div>
-</div>-->
+<div id="modal-subscriber" class="modal hide fade">
+	<div class="modal-header">
+		<button data-dismiss="modal" class="close" type="button">x</button>
+		<h3><?php echo JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER'); ?></h3>
+	</div>
+	<div class="modal-body"></div>
+</div>
+
 
 <?php echo JHtml::_('layout.wrapper'); ?>
 

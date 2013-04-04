@@ -255,7 +255,7 @@ abstract class JHtmlMultigrid
 		return $html;
 	}
 	
-	static function renderObject($data, $level = 0, $color = 'black', $options = array()) 
+	static function renderObject($data, $level = 0, $style = '', $options = array()) 
 	{
 		$spaces = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 		$res = '';
@@ -276,22 +276,19 @@ abstract class JHtmlMultigrid
 
 				if (!is_numeric($key)) {
 
+					$style = '';
 					switch(strtolower($key)) {
 
 						case 'error':
 						case 'errors':
-							$color = 'red';
-							break;
-
-						default: 
-							$color = 'black';
+							$style = 'style="color:red"';
 							break;
 					}
-					$res .= substr($spaces, 0, $level*12) . '<span style="color:'.$color.'">'.$key.'</span>' . ':';
+					$res .= substr($spaces, 0, $level*12) . "<span $style>$key</span>:";
 					$res .= (is_array($value) || is_object($value))? '<br/>' : '';
 				}
 
-				$res .= self::renderObject($value, $level+1, $color, $options);
+				$res .= self::renderObject($value, $level+1, $style, $options);
 			}
 				
 		} else {
@@ -300,7 +297,7 @@ abstract class JHtmlMultigrid
 				$data = !empty($options['maxLengthMessage'])? $options['maxLengthMessage'] : '...';
 			}
 			
-			$res .= '<span style="color:'.$color.'">' . substr($spaces, 0, $level*12) . $data . '</span><br/>';
+			$res .= "<span $style>" . substr($spaces, 0, $level*12) . $data . "</span><br/>";
 		}
 		
 		return $res;

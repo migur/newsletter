@@ -9,19 +9,11 @@
 window.addEvent('domready', function() {
     try {
 
-		$$('table.logslist label.search').addEvent('click', function(){
+		$$('table.logslist label.control-details').addEvent('click', function(){
 			
 			var id = $(this).getParent('.item').getElements('[name=cid[]]')[0].getProperty('value');
-			var href = "index.php?option=com_newsletter&view=log&tmpl=component&log_id="+id;
 
-			SqueezeBox.open(href, {
-				handler: 'iframe',
-				size: {
-					x: 700,
-					y: 700
-				}
-			});
-			
+			Migur.modal.show('#modal-details', { 'href': migurSiteRoot + 'administrator/index.php?option=com_newsletter&view=log&tmpl=component&log_id='+id } )
 		});
 
     } catch(e) {

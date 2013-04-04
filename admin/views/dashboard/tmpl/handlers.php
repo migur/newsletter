@@ -14,11 +14,16 @@
     <div class="span6">
         <legend>Subscribers</legend>
 		
-		<a class="btn btn-success" rel="{handler: 'iframe', size: {x: 400, y: 220}, onClose: function() {}}" href="<?php echo JRoute::_('index.php?option=com_newsletter&task=subscriber.add', false); ?>" class="modal">
-			Create Subscriber
+		<a 
+			class="btn btn-success" 
+			href="<?php echo JRoute::_('index.php?option=com_newsletter&task=subscriber.add&tmpl=component', false); ?>"
+			data-toggle="migurmodal"
+			data-target="#modal-subscriber"
+		>	
+			<?php echo JText::_('COM_NEWSLETTER_SUBSCRIBER_CREATE'); ?>
 		</a>
-		<a class="btn btn-success" rel="{handler: 'iframe', size: {x: 1000, y: 600}, onClose: function() {}}" href="<?php echo JRoute::_('index.php?option=com_newsletter&task=list.add', false); ?>" class="modal">
-			Create List
+		<a class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_newsletter&task=list.add', false); ?>">
+			<?php echo JText::_('COM_NEWSLETTER_CREATE_LIST'); ?>
 		</a>
 	</div>	
 	
@@ -33,7 +38,7 @@
 		
 		<legend>Configuration &amp; Installation</legend>
 		
-		<a class="btn" rel="{handler: 'iframe', size: {x: 350, y: 150}, onClose: function() {}}" href="<?php echo JRoute::_('index.php?option=com_newsletter&view=extensions&layout=install'); ?>" class="modal">
+		<a class="btn" rel="{handler: 'iframe', size: {x: 350, y: 150}, onClose: function() {}}" href="<?php echo JRoute::_('index.php?option=com_newsletter&view=install'); ?>" class="modal">
 			Install Extensions
 		</a>
 		
@@ -44,11 +49,11 @@
 
 	<div class="span6">
 		<legend>Help &amp; About</legend>
-		<a class="btn" rel="{handler: 'iframe', size: {x: 800, y: 600}, onClose: function() {}}" href="http://migur.com/products/newsletter" class="modal">
+		<a class="btn" target="_blank" href="http://migur.com/products/newsletter">
 			About
 		</a>
 
-		<a class="btn" rel="help" onclick="Joomla.popupWindow('http://migur.com/support/documentation/newsletter', 'Help', 980, 600, 1)" href="#">
+		<a class="btn" target="_blank" href="http://migur.com/support/documentation/newsletter">
 			Help
 		</a>
 	</div>

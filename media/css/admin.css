@@ -133,6 +133,11 @@ fieldset th {
     height: 30px;
 }
 
+.btn-toolbar .preloader-container {
+	display: inline-block;
+	vertical-align: middle;
+}
+
 div.form-text {
     text-align: right;
 }

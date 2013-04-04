@@ -47,13 +47,6 @@
 	overflow: hidden;
 }
 
-/*#modal-subscriberedit {
-	width: 960px;
-	height: 700px;
+#modal-subscriber .modal-body iframe {
+	height: 250px;
 }
-
-#modal-subscriberedit iframe {
-	width: 960px;
-	height: 700px;
-	overflow: 
-}*/

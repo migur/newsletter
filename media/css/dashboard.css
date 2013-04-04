@@ -138,3 +138,7 @@ fieldset .toolbar-list a {
     z-index:101;
     background: url('../images/bar.gif') no-repeat top left scroll;
 }
+
+#modal-subscriber iframe {
+	height: 240px;
+}
