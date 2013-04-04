@@ -52,6 +52,7 @@ class JToolbarButtonMigurHelp extends JButton
 		$doTask	= $this->_getCommand($ref, $com, $override, $component, $width, $height);
 
 		$html = "<a href=\"#\" onclick=\"$doTask\" rel=\"help\" class=\"toolbar btn btn-small\">\n";
+		$html .= "<i class=\"icon-question-sign\"></i>\n";
 		$html .= "$text\n";
 		$html .= "</a>\n";
 
