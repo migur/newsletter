@@ -485,8 +485,8 @@ class NewsletterControllerList extends JControllerForm
 		$currentList = JRequest::getInt('list_id', 0);
 
 		if ($currentList < 1) {
-			echo json_encode(array('status' => '0', 'error' => 'No list Id'));
-			return false;
+			NewsletterHelper::jsonError('No list id');
+			return;
 		}
 
 		if ($subtask == 'lists') {
@@ -514,9 +514,7 @@ class NewsletterControllerList extends JControllerForm
 
 				if (!$res) {
 
-					NewsletterHelper::jsonError('COM_NEWSLETTER_EXCLUSION_FAILED', array(
-						'total' => $total
-					));
+					NewsletterHelper::jsonError('COM_NEWSLETTER_EXCLUSION_FAILED');
 					return;
 				}
 			}

@@ -189,9 +189,9 @@ class NewsletterViewList extends MigurView
 //		}
 
 		
-		if(!empty($listId)) {
-			$this->assign('events', $listModel->getEventsCollection($listId));
-		}	
+//		if(!empty($listId)) {
+//			$this->assign('events', $listModel->getEventsCollection($listId));
+//		}	
 		
 		/*
 		 * Display form for FTP credentials?

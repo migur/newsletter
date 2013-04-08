@@ -74,7 +74,7 @@ class NewsletterViewListevent extends MigurView
 		$bar = JToolBar::getInstance('listevent');
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'listevent.save', false);
 		$bar->appendButton('Standard', 'save-new', 'JTOOLBAR_SAVE_AND_NEW', 'listevent.save2new', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'listevent.cancelpopup', false);
+		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'listevent.cancel', false);
 	}
 
 	/**
