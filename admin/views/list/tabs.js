@@ -1,8 +1,9 @@
 window.addEvent('domready', function() {
 
+	var tabs = $$('ul.nav.nav-tabs a');
+
 	var activeTab = Cookie.read('migur-tab-active');
-	if (activeTab) {
-		$$(activeTab)[0].fireEvent('click');
-		Cookie.write('migur-tab-active', null);
+	if (activeTab !== undefined && tabs[activeTab] !== undefined) {
+		tabs[activeTab].fireEvent('click');
 	}
 });

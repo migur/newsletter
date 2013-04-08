@@ -7,175 +7,125 @@
  */
 
 // Thus we dont use any templater we assume that template exist in view script
-Migur.classes.listEventsManager = function(domContainer, dataElement) {
+Migur.classes.listEventsManager = function(domContainer, options) {
 
 	var obj = this;
 	
-	this.storage = [];
-	
-	this.init = function(domContainer, dataElement) {
+	this.init = function(domContainer, options) {
 		
+		obj.template = 
+		'<tr>'+
+			'<td width="30%">{{event}}</td>'+
+			'<td>{{title}}</td>'+
+			'<td width="30%">{{action}}</td>'+
+			'<td class="container-eventlist-rowcontrols" width="150px" align="right">'+						
+				'<a href="#" data-role="control-edit" data-id="{{le_id}}" class="btn btn-small">'+
+					'<i class="icon-out-2"></i>'+
+					'Edit'+
+				'</a>&nbsp;&nbsp;'+
+				'<a href="#" data-role="control-delete" data-id="{{le_id}}" class="btn btn-small btn-danger" >'+
+					'Delete'+
+				'</a>'+
+			'</td>'+
+		'</tr>';
+
+		obj.options = options;
 		obj.domContainer = $(domContainer);
-		obj.dataElement  = dataElement;
-		obj.pkey = "le_id";
+		obj.rowsContainer = $(domContainer).getElement('tbody');
 		
-		var base = obj.domContainer;
+		obj.url = migurSiteRoot + "administrator/index.php?option=com_newsletter&tmpl=component&list_id="+obj.options.listId;
 		
-		base.getElements('[data-role=item-new]').addEvent('click', this.showAddItem);
-		base.getElements('[data-role=item-edit]').addEvent('click', this.showEditItem);
-		base.getElements('[data-role=item-delete]').addEvent('click', this.deleteItem);
-		base.getElements('[data-role=item-add]').addEvent('click', this.addItem);
-		base.getElements('[data-role=item-apply]').addEvent('click', this.applyItem);
-		base.getElements('[data-role=item-cancel]').addEvent('click', this.cancelItem);
-
-		
-		obj.storage = JSON.decode(dataElement.value);
-
-		obj.hidePanel();
+		obj.refresh();
 	}
 	
-	this.hidePanel = function(){
-		obj.domContainer.getElement('[data-role=item-manage-pane]').addClass('hide');
+	this.editItem = function(id){
+
+		Migur.modal.show('#modal-listevent', {
+			href: obj.url + "&task=listevent.edit&le_id="+id
+		});
 	}
 
-	this.showPanel = function(){
-		obj.domContainer.getElement('[data-role=item-manage-pane]').removeClass('hide');
-	}
+	this.deleteItem = function(id){
 
-	this.showAddItem = function(){
-		
-		var base = obj.domContainer;
-		var panel = base.getElement('[data-role=item-manage-pane]');
-		
-		$$('[data-role="items-list"]')[0].grab(panel, 'bottom');
-
-		panel.getElement('[data-role=item-add]').removeClass('hide');
-		panel.getElement('[data-role=item-apply]').addClass('hide');
-		panel.removeClass('hide');
-	}
-
-	this.addItem = function(){
-
-		var base = obj.domContainer;
-		var panel = base.getElement('[data-role=item-manage-pane]');
-		var template = base.getElement('[data-role=item-template]').clone(true);
-
-		// Get data from manage panel
-		var data = obj._getPanelData(panel);
-		obj.updateStorage(data);
-		obj.refresh();
-	}
-
-
-	this.deleteItem = function(){
-
-		var parent = $(this).getParent('[data-role=item-container]'); 
-		var idx = parent.getElement('[data-type=le_id]').value;
-		// Get data from manage panel
-		obj.deleteFromStorage(idx);
-		obj.refresh();
+		new Request({
+			url: obj.url + "&task=listevent.delete&le_id="+id,
+			onComplete: function(){
+				obj.refresh();
+			}
+		}).send();
 	}
 
 	/**
 	 * Refresh all rows in grid
 	 */
 	this.refresh = function() {
-		
-		var base = obj.domContainer;
-		
-		var items = base.getElement('[data-role=items-list]').getElements('[data-role=item-container]');
-		
-		Array.each(items, function(el){
-			el.destroy();
-		});
-		
-		Array.each(obj.storage, function(item){
-			var template = base.getElement('[data-role=item-template]').clone(true);
-			template.removeClass('hide');
-			template.setProperty('data-role', 'item-container');
-			obj._renderRow(template, item);
-			base.getElements('[data-role=items-list]').grab(template, 'bottom');
-		});
 
-		obj.hidePanel();
-	}
+		new Request.JSON({
+			url: obj.url + "&task=listevents.getItems",
+			data: {},
+			onComplete: function(res){
 
-
-	/**
-	 * Gets the data from children of domContainer Dom element 
-	 * that have a data-type property
-	 */
-	this._getPanelData = function(domContainer){
-		var dataElements = domContainer.getElements('[data-type]');
-		var res = {};
-		
-		Array.each(dataElements, function(el){
-			
-			var text;
-
-			if (el.get('tag') == 'select') {
-				text = el.options[el.options.selectedindex].get('html');
-			} else {
-				text = el.value;
+				var parser = new Migur.jsonResponseParser(res);
+				if (parser.isError()) return;
+				
+				var data = parser.getData();
+				obj._render(data);
+				
+				$(obj.rowsContainer).getElements('[data-role="control-delete"]')
+					.addEvent('click', function(ev){
+						ev.stop();
+						obj.deleteItem($(this).getProperty('data-id'));
+					})
+					
+				$(obj.rowsContainer).getElements('[data-role="control-edit"]')
+					.addEvent('click', function(ev){
+						ev.stop();
+						var id = $(this).getProperty('data-id');
+						obj.editItem(id);
+					});
 			}
-		
-			res[el.getProperty('data-type')] = {
-				'value': el.value,
-				'text':  text
-			};
-			
-		});
-		return res;
+		}).send();
 	}
 
 	/**
 	 * Gets the data from children of domContainer Dom element 
 	 * that have a data-type property
 	 */
-	this._renderRow = function(domContainer, data){
+	this._render = function(data){
 		
-		Object.each(data, function(el, key){
-
-			var domEl = domContainer.getElement('[data-type='+key+']');
-			if (domEl) {
-				domEl.setProperty('data-value', el.value);
-				domEl.set('html', el.text);
-			}	
+		var html = '';
+		Array.each(data, function(row){
+			row.title || (row.title = '---');
+			row.event = Joomla.JText._('COM_NEWSLETTER_LIST_EVENT_' + row.event.toUpperCase());
+			row.action = Joomla.JText._('COM_NEWSLETTER_LIST_ACTION_' + row.action.toUpperCase());
+			html += obj.replace(obj.template, row);
 		});
-	}
-	
-	this.updateStorage = function(data) {
 		
-		var idx = data[obj.pkey];
-		
-		if (!data[obj.pkey]) {
-			data[obj.pkey] = Math.random() * 100000 + '-' + Math.random() * 100000;
-			obj.storage.push(data);
-		} else {
-			obj.storage[idx] = data;
-		}
-		
-		obj.dataElement.value = JSON.encode(obj.storage);
+		$(obj.rowsContainer).set('html', html);
 	}
 
-	this.deleteFromStorage = function(idx) {
-		
-		Array.each(obj.storage, function(row){
-			if (row[obj.pkey] == idx) {
-				delete(row);
-				return;
-			}
-		});
-		obj.dataElement.value = JSON.encode(obj.storage);
-	}
+	this.replace = function(tmpl, data){
+			var pattern = new RegExp(/{{([^}]+)}}/igm);
+            return tmpl.replace(pattern, function(m){ return data[arguments[1]] || m });
+    };
 
-
-	this.init(domContainer, dataElement);
+	this.init(domContainer, options);
 }
 
 
 window.addEvent('domready', function() {
 
-	Migur.app.listEventsManager = new Migur.classes.listEventsManager($('list-events-pane'), $$('[name=jform[events]]')[0]);
+	Migur.app.listEventsManager = new Migur.classes.listEventsManager(
+		$('eventslist-container'), 
+		{ 'listId': $$('[name="list_id"]')[0].getProperty('value') }
+	);
+
+	// This method will be called when save or cancel 
+	// will be invoked in popup window.
+	// In that way we will get to know that we need to 
+	// refresh events list
+	window.popupCloseCallback = function(){
+		Migur.app.listEventsManager.refresh();
+	}
 
 });

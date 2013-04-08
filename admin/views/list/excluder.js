@@ -183,12 +183,7 @@ Migur.define('excluder', function(){
 					
 						messages,
 						
-						Joomla.JText._('TOTAL','Total')+": " + data.total + "\n"+
-						Joomla.JText._('SKIPPED','Skipped')+": " + data.skipped + "\n"+
-						Joomla.JText._('ERRORS', 'Errors')+": " + data.errors + "\n"+
-						Joomla.JText._('ADDED', 'Added')+": " + data.added + "\n"+
-						Joomla.JText._('UPDATED', 'Updated')+": " + data.updated + "\n"+
-						Joomla.JText._('ASSIGNED', 'Assigned')+": " + data.assigned + "\n"
+						Joomla.JText._('TOTAL','Total')+": " + (data.total || 0) + "\n"
 					);
 						
                     document.location.reload();

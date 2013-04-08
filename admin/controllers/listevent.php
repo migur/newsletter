@@ -41,12 +41,19 @@ class NewsletterControllerListevent extends JControllerForm
 			// Set the redirect based on the task.
 			switch ($this->getTask()) {
 				case 'save':
-					$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=close&tmpl=component', false));
+					$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=listevent&layout=close', false));
 					return;
 			}
 		}
 	}
 
+	
+	public function cancel()
+	{
+		$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=listevent&layout=close', false));
+	}
+
+	
 	/**
 	 * Removes an item.
 	 *
@@ -57,7 +64,7 @@ class NewsletterControllerListevent extends JControllerForm
 	public function delete()
 	{
 		// Check for request forgeries
-		JRequest::checkToken('get') or die(JText::_('JINVALID_TOKEN'));
+		//JRequest::checkToken('get') or die(JText::_('JINVALID_TOKEN'));
 
 		// Get items to remove from the request.
 		$cid = (array) JRequest::getInt('le_id', null);
@@ -89,12 +96,6 @@ class NewsletterControllerListevent extends JControllerForm
 			JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false);
 
 		$this->setRedirect($url);
-	}
-
-	public function cancelpopup()
-	{
-		$this->view_list = 'close';
-		parent::cancel();
 	}
 
 	/**
