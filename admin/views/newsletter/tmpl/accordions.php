@@ -25,7 +25,7 @@
 	                    <div class="drag module" id="<?php echo $this->escape($item->extension); ?>">
 							<div class="widget-header"><?php echo $this->escape($item->title); ?>
 								<?php
-									if ($item->extension == 'mod_img') {
+									if (0 && $item->extension == 'mod_img') {
 										$href = "?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=&amp;author=&amp;fieldid=jform_params_imageurl&amp;folder=";
 									} else {
 										$href = JRoute::_('index.php?option=com_newsletter') . '&view=extension&layout=edit&tmpl=component&extension_id=' . $this->escape($item->extension_id) . '&native=' . $this->escape($item->native);
@@ -57,7 +57,7 @@
 	                    <div class="drag module" id="<?php echo $this->escape($item->extension); ?>">
 							<div class="widget-header"><?php echo $this->escape($item->title); ?>
 								<?php
-									if ($item->extension == 'mod_img') {
+									if (0 && $item->extension == 'mod_img') {
 										$href = "?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=&amp;author=&amp;fieldid=jform_params_imageurl&amp;folder=";
 									} else {
 										$href = JRoute::_('index.php?option=com_newsletter') . '&view=extension&layout=edit&tmpl=component&type=module&extension_id=' . $this->escape($item->extension_id) . '&native=' . $this->escape($item->native);
