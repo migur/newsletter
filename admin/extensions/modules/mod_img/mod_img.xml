@@ -21,8 +21,74 @@
 				<field
 					name="img"
 					type="media"
-					label=""
-					description="" />
+					label="COM_NEWSLETTER_MOD_IMG_IMAGE"
+					description="COM_NEWSLETTER_MOD_IMG_IMAGE_DESC"
+					width="100px"
+					height="100px"
+				/>
+				<field
+					type="text"
+					name="img_alt"
+					default=""
+					label="COM_NEWSLETTER_MOD_IMG_IMAGE_ALT"
+					description="COM_NEWSLETTER_MOD_IMG_IMAGE_ALT_DESC"
+					class="inputbox validate-img_alt"
+					required="false"
+					validate="text"
+				/>
+				<field
+					type="text"
+					name="img_width"
+					default="auto"
+					label="COM_NEWSLETTER_MOD_IMG_IMAGE_WIDTH"
+					description="COM_NEWSLETTER_MOD_IMG_IMAGE_WIDTH_DESC"
+					class="inputbox validate-img_width"
+					required="false"
+					validate="cssdimension"
+				/>
+				<field
+					type="text"
+					name="img_height"
+					default="auto"
+					label="COM_NEWSLETTER_MOD_IMG_IMAGE_HEIGHT"
+					description="COM_NEWSLETTER_MOD_IMG_IMAGE_HEIGHT_DESC"
+					class="inputbox validate-img_height"
+					required="false"
+					validate="cssdimension"
+				/>
+				<field
+					type="radio"
+					name="img_linkable"
+					label="COM_NEWSLETTER_MOD_IMG_IMAGE_LINKABLE"
+					description="COM_NEWSLETTER_MOD_IMG_IMAGE_LINKABLE_DESC"
+					class="inputbox validate-img_linkable"
+					default="0"
+					required="false"
+				 >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field
+					type="text"
+					name="img_link_url"
+					default=""
+					label="COM_NEWSLETTER_MOD_IMG_IMAGE_LINK_URL"
+					description="COM_NEWSLETTER_MOD_IMG_IMAGE_LINK_URL_DESC"
+					class="inputbox validate-img__link_url"
+					required="false"
+				/>
+				<field
+					type="radio"
+					name="img_link_target"
+					default="1"
+					label="COM_NEWSLETTER_MOD_IMG_IMAGE_LINK_TARGET"
+					description="COM_NEWSLETTER_MOD_IMG_IMAGE_LINK_TARGET_DESC"
+					class="inputbox validate-img__link_url"
+					required="false"
+				>	
+					<option value="0">COM_NEWSLETTER_MOD_IMG_LINK_SAME_WINDOW</option>
+					<option value="1">COM_NEWSLETTER_MOD_IMG_LINK_NEW_WINDOW</option>
+				</field>
 			</fieldset>
 		</fields>
 	</config>
