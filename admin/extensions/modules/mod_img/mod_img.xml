@@ -28,11 +28,11 @@
 				/>
 				<field
 					type="text"
-					name="img_alt"
+					name="img_title"
 					default=""
-					label="COM_NEWSLETTER_MOD_IMG_IMAGE_ALT"
-					description="COM_NEWSLETTER_MOD_IMG_IMAGE_ALT_DESC"
-					class="inputbox validate-img_alt"
+					label="COM_NEWSLETTER_MOD_IMG_IMAGE_TITLE"
+					description="COM_NEWSLETTER_MOD_IMG_IMAGE_TITLE_DESC"
+					class="inputbox validate-img_title"
 					required="false"
 					validate="text"
 				/>
