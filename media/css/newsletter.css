@@ -15,6 +15,11 @@ iframe {
     width: 100%;
 }
 
+.MooDialog.myDialog {
+	width: 870px;
+	height: 550px;
+}
+
 .MooDialog iframe {
     overflow: hidden !important;
 }
