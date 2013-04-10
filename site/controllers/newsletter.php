@@ -168,8 +168,10 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$module->title      = $title;
 		$module->showtitle  = $showTitle;
 
-		$content = NewsletterHelperModule::renderModule($modules[0]);
-
+		$content = NewsletterHelperContent::pathsToAbsolute(
+			NewsletterHelperModule::renderModule($modules[0])
+		);	
+		
 		ob_end_clean();
 		
 		header("Content-Type: text/html; charset=UTF-8");
