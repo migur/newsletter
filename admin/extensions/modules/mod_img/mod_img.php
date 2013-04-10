@@ -18,8 +18,8 @@ $h = $params->get('img_height', '');
 $height = (empty($h) || strpos($h, 'auto'))? '' : 
 	' height="' . (is_numeric($h)? ($h.'px') : $h) .'" ';
 
-$a = $params->get('img_alt', '');
-$alt = (!empty($a))? ' alt="'.JText::_($a).'" ' : '';
+$a = $params->get('img_title', '');
+$title = (!empty($a))? ' title="'.JText::_($a).'" ' : '';
 
 $linkable = $params->get('img_linkable', '0') == '1';
 
@@ -33,7 +33,7 @@ if ($linkable) {
 	echo '<a href="'.$url.'"'.$target.'>'."\n";
 }
 
-echo '<img src="'.$img.'"'.$width.$height.$alt.'/>'."\n";
+echo '<img src="'.$img.'"'.$width.$height.$title.'/>'."\n";
 
 if ($linkable) {
 	echo '</a>';
