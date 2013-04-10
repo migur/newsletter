@@ -14,6 +14,10 @@
 	width:25%;
 }
  
+.MooDialog.myDialog {
+	width: 870px;
+	height: 560px;
+}
  
 @media (max-width: 900px) { 
 	.right-bar, .left-bar  {

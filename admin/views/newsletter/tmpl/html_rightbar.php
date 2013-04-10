@@ -31,15 +31,7 @@
 						if ($item->native == '1') : ?>
 	                    <div class="drag module widget" id="<?php echo $this->escape($item->extension); ?>">
 							<div class="widget-header"><span><?php echo $this->escape($item->title); ?></span>
-								<?php
-									if ($item->extension == 'mod_img') {
-										$href = "?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=&amp;author=&amp;fieldid=jform_params_imageurl&amp;folder=";
-									} else {
-										$href = JRoute::_('index.php?option=com_newsletter') . '&view=extension&layout=edit&tmpl=component&extension_id=' . $this->escape($item->extension_id) . '&native=' . $this->escape($item->native);
-									}
-									//  echo $href;
-								?>
-
+								<?php $href = JRoute::_('index.php?option=com_newsletter') . '&view=extension&layout=edit&tmpl=component&extension_id=' . $this->escape($item->extension_id) . '&native=' . $this->escape($item->native); ?>
 								<a class="settings icon-pencil" href="<?php echo $href ?>"></a>
 							</div>
 							<div class="widget-content"></div>
@@ -66,15 +58,7 @@
 						if ($item->native == '0') : ?>
 	                    <div class="drag module widget" id="<?php echo $this->escape($item->extension); ?>">
 							<div class="widget-header"><span><?php echo $this->escape($item->title); ?></span>
-								<?php
-									if ($item->extension == 'mod_img') {
-										$href = "?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=&amp;author=&amp;fieldid=jform_params_imageurl&amp;folder=";
-									} else {
-										$href = JRoute::_('index.php?option=com_newsletter') . '&view=extension&layout=edit&tmpl=component&type=module&extension_id=' . $this->escape($item->extension_id) . '&native=' . $this->escape($item->native);
-									}
-									//  echo $href;
-								?>
-
+								<?php $href = JRoute::_('index.php?option=com_newsletter') . '&view=extension&layout=edit&tmpl=component&type=module&extension_id=' . $this->escape($item->extension_id) . '&native=' . $this->escape($item->native); ?>
 								<a class="settings icon-pencil" href="<?php echo $href ?>"></a>
 							</div>
 							<div class="widget-content"></div>
