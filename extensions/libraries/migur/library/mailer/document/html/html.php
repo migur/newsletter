@@ -274,9 +274,13 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 
 			// Try to get url
 			$url = null;
-			if (!empty($matches[1][$i])) $url = $matches[1][$i];
-			if (!empty($matches[2][$i])) $url = $matches[2][$i];
-			if (!empty($matches[3][$i])) $url = $matches[3][$i];
+			
+			do {
+				if (!empty($matches[1][$i])) { $url = $matches[1][$i]; break; }
+				if (!empty($matches[2][$i])) { $url = $matches[2][$i]; break; }
+				if (!empty($matches[3][$i])) { $url = $matches[3][$i]; break; }
+				break;
+			} while(false);	
 
 			// If there is no extracted url then just do not modify it
 			if (!$url) continue;
