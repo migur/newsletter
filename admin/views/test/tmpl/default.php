@@ -27,7 +27,7 @@ defined('_JEXEC') or die;
 			<td><select class="test-method"><option value="get">GET</option><option selected value="post">POST</option></td>
 			<td><input class="test-url" value="<?php echo 'index.php?option=com_newsletter&task=subscribe.subscribe'; ?>" size="60"/></td>
 			<td><input class="test-params" value="<?php echo 'newsletter-name=NameOfUser&newsletter-email=email@ofuser.com&newsletter-html=1&newsletter-lists=&fbenabled=0'; ?>" size="80" /></td>
-			<td><input class="test-other" value="<?php echo JUtility::getToken(); ?>=1" size="60" /></td>
+			<td><input class="test-other" value="<?php echo JSession::getFormToken(); ?>=1" size="60" /></td>
 		</tr>
 		<tr class="row1">
 			<td><a class="test-title" href="#">Unsubscription</a></td>
@@ -102,7 +102,7 @@ defined('_JEXEC') or die;
 	</tbody>
 </table>
 
-<input type="button" id="result-type" value="HTML/TEXT" />
+<input type="button" id="result-type" value="HTML/TEXT" class="btn" />
 
 <div class="test-result test-html" style="height:600px; background-color: #111111; color: #00FF00; padding: 10px; font-size: 12px; overflow: auto;"></div>
 <textarea class="test-text" style="height:600px; width:98%; background-color: #111111; color: #00FF00; padding: 10px; font-size: 12px; overflow: auto; display: none;"></textarea>

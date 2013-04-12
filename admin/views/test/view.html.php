@@ -34,6 +34,8 @@ class NewsletterViewTest extends MigurView
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/test/test.js");		
 		$document->addStylesheet(JURI::root() . '/media/com_newsletter/css/admin.css');
 		
+		JToolbarHelper::title('Test console');
+		
 		parent::display($tpl);
 	}
 }
