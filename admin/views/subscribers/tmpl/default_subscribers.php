@@ -82,7 +82,13 @@
 		<tfoot>
 			<tr>
 				<td class="left" colspan="6">
-					<?php echo $this->subscribers->pagination->getListFooter(); ?>
+					<div class="pull-left">
+						<?php echo $this->subscribers->pagination->getListFooter(); ?>
+					</div>	
+					<div class="pull-right">
+						<label for="limit" class="pull-left buttongroup-label"><?php echo JText::_('COM_NEWSLETTER_LIMIT'); ?></label>
+						<?php echo $this->subscribers->pagination->getLimitBox(); ?>
+					</div>					
 				</td>
 			</tr>
 		</tfoot>

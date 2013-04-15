@@ -459,6 +459,13 @@ body.component {
 	color: #3a87ad;
 }	
 
+.buttongroup-label {
+	line-height: 28px;
+	margin-bottom: 9px;
+	padding: 0 9px;
+	height: 28px;
+}
+
 /* Missed styles from bootstrap */
 @media (max-width: 767px){
 	.modal.fade.in {
@@ -466,3 +473,4 @@ body.component {
 		margin-top: 0px !important;
 	}
 }
+

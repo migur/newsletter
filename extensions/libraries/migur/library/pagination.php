@@ -59,9 +59,9 @@ class MigurPagination extends JPagination
 		$formName = $this->model->getName() . 'Form';
 		// Build the select list.
 		if ($app->isAdmin()) {
-			$html = JHtml::_('select.genericlist', $limits, $this->prefix . 'limit', 'class="inputbox" size="1" onchange="Joomla.submitform(\'\', document.' . $formName . ');"', 'value', 'text', $selected);
+			$html = JHtml::_('select.genericlist', $limits, $this->prefix . 'limit', 'class="inputbox input-mini" size="1" onchange="Joomla.submitform(\'\', document.' . $formName . ');"', 'value', 'text', $selected);
 		} else {
-			$html = JHtml::_('select.genericlist', $limits, $this->prefix . 'limit', 'class="inputbox" size="1" onchange="this.form.submit()"', 'value', 'text', $selected);
+			$html = JHtml::_('select.genericlist', $limits, $this->prefix . 'limit', 'class="inputbox input-mini" size="1" onchange="this.form.submit()"', 'value', 'text', $selected);
 		}
 
 		return $html;
@@ -172,7 +172,6 @@ class MigurPagination extends JPagination
 	{
 		$html = parent::getPagesLinks();
 		$formName = $this->model->getName() . 'Form';
-
 		$html = str_replace('adminForm', $formName, $html);
 		return str_replace(
 			'Joomla.submitform()',
