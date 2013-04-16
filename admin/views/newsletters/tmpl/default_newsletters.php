@@ -12,7 +12,7 @@
 			</div>
 		</div>
 
-		<table id="container-newsletters" class="adminlist  table table-striped" width="100%">
+		<table id="container-newsletters" class="adminlist  table table-striped pull-left" width="100%">
 			<thead>
 				<tr>
 					<th width="1%">
