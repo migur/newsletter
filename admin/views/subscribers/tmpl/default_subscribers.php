@@ -18,7 +18,7 @@
 			<div class="filter-panel-inner" data-role="panel-container-inner">
 				<div class="pull-left btn-group">
 					<!--<label><?php echo JText::_('COM_NEWSLETTER_STATE'); ?></label>-->
-					<select name="filter_published" class="input-small" onchange="this.form.submit()">
+					<select name="filter_published" class="input-medium" onchange="this.form.submit()">
 							<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
 							<?php echo JHtml::_('select.options', JHtml::_('multigrid.enabledOptions'), 'value', 'text', $this->subscribers->state->get('filter.published'), true);?>
 					</select>

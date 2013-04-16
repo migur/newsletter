@@ -21,4 +21,10 @@ JHtml::_('behavior.formvalidation');
  */
 class NewsletterViewError extends MigurView
 {
+	public function display($tpl = null)
+	{
+		JToolbarHelper::title(JText::_('COM_NEWSLETTER_SOMETHING_WENT_WRONG'));
+		
+		parent::display($tpl);
+	}
 }
