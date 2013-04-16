@@ -61,7 +61,13 @@
 		<tfoot>
 			<tr>
 				<td colspan="5">
-					<?php echo $this->pagination->getListFooter(); ?>
+					<div class="pull-left">
+						<?php echo $this->pagination->getListFooter(); ?>
+					</div>	
+					<div class="pull-right">
+						<label for="limit" class="pull-left buttongroup-label"><?php echo JText::_('COM_NEWSLETTER_LIMIT'); ?></label>
+						<?php echo $this->pagination->getLimitBox(); ?>
+					</div>					
 				</td>
 			</tr>
 		</tfoot>
