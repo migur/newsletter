@@ -88,6 +88,7 @@ table td {
         </td>
     </tr>
     <tr><td valign="top" colspan="3" align="center">To unsubscribe or change subscriber options visit [unsubscription link]</td></tr>
+	<tr><td valign="top" colspan="2" align="center">Powered by Migur <a href="http://migur.com/">Newsletter</a></td></tr>
 </table>
 ]]>
     </template>

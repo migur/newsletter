@@ -114,6 +114,6 @@
 
         <!-- Note: No spaces or linebreaks allowed between the server tags -->
         <updateservers>
-            <server type="extension" priority="1" name="Migur">http://license-update.migur.com/newsletter.xml</server>
+            <server type="extension" priority="1" name="Migur">http://update.migur.com/newsletter.xml</server>
         </updateservers>
 </extension>
