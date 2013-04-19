@@ -82,7 +82,7 @@ defined('_JEXEC') or die;
         <td style="vertical-align: top;">
             <?php echo JHtml::_('tabs.start', 'prewiew'); ?>
             <?php echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PREVIEW'), 'tab-preview'); ?>
-                <iframe id="preview-container"></iframe>
+                <iframe id="preview-container" frameBorder="0"></iframe>
             <?php echo JHtml::_('tabs.end'); ?>
         </td>
     </tr>
