@@ -2,7 +2,7 @@
 
 	<?php if(in_array('width_column1', $this->columns) || in_array('height_column1', $this->columns)) { ?>
 	<div id="dimensions1">
-		<legend><?php echo JText::_('COM_NEWSLETTER_COLUMN') . ' 1'; ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_COLUMN') . ' 1'; ?></div>
 		<?php 
 			if(in_array('width_column1', $this->columns)) {
 				echo JHtml::_('layout.controlgroup', $this->tplForm->getLabel('width_column1'), $this->tplForm->getInput('width_column1'));
@@ -17,7 +17,7 @@
 
 	<?php if(in_array('width_column2', $this->columns) || in_array('height_column2', $this->columns)) { ?>
 	<div id="dimensions2">
-		<legend><?php echo JText::_('COM_NEWSLETTER_COLUMN') . ' 2'; ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_COLUMN') . ' 2'; ?></div>
 		<?php 
 			if(in_array('width_column2', $this->columns)) {
 				echo JHtml::_('layout.controlgroup', $this->tplForm->getLabel('width_column2'), $this->tplForm->getInput('width_column2'));
@@ -32,7 +32,7 @@
 
 	<?php if(in_array('width_column3', $this->columns) || in_array('height_column3', $this->columns)) { ?>
 	<div id="dimensions3">
-		<legend><?php echo JText::_('COM_NEWSLETTER_COLUMN') . ' 3'; ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_COLUMN') . ' 3'; ?></div>
 		<?php 
 			if(in_array('width_column3', $this->columns)) {
 				echo JHtml::_('layout.controlgroup', $this->tplForm->getLabel('width_column3'), $this->tplForm->getInput('width_column3'));

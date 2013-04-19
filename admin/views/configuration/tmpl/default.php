@@ -55,7 +55,7 @@ $showFull = AclHelper::canConfigureComponent();
 
 <?php if ($showFull) { ?>
 <fieldset id="config-config">
-	<legend><?php echo JText::_('COM_NEWSLETTER_GLOBAL_CONFIG'); ?></legend>
+	<div class="legend"><?php echo JText::_('COM_NEWSLETTER_GLOBAL_CONFIG'); ?></div>
 	
 	<form id="adminForm" name="adminForm" method="POST" class="form-horizontal form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
 	
@@ -119,7 +119,7 @@ $showFull = AclHelper::canConfigureComponent();
 		<a href="<?php echo JRoute::_('index.php?option=com_newsletter&view=install', false); ?>"><?php echo JText::_('COM_NEWSLETTER_MANAGE_EXTENSIONS'); ?></a>
 	</div>
 	
-	<legend><?php echo JText::_('COM_NEWSLETTER_INSTALLED_EXTESIONS'); ?></legend>
+	<div class="legend"><?php echo JText::_('COM_NEWSLETTER_INSTALLED_EXTESIONS'); ?></div>
 	
 	<ul id="tabs-extensions" class="nav nav-tabs">
 		<li class="active"><a data-toggle="tab" href="#tabext-modules"><?php echo JText::_('COM_NEWSLETTER_MODULES'); ?></a></li>	

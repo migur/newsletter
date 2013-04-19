@@ -26,7 +26,7 @@ defined('_JEXEC') or die;
 
 <div id="maintainance-pane-checks">
 	<fieldset id="environment-check-pane" class="check-pane">
-		<legend><?php echo JText::_('COM_NEWSLETTER_ENVIRONMENT_CHECK'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_ENVIRONMENT_CHECK'); ?></div>
 		<div class="status">
 			<span class="status-verbal"></span>		
 			<span class="preloader-container"></span>
@@ -40,7 +40,7 @@ defined('_JEXEC') or die;
 
 
 	<fieldset id="db-check-pane" class="check-pane">
-		<legend><?php echo JText::_('COM_NEWSLETTER_DB_CHECK'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_DB_CHECK'); ?></div>
 		<div class="status">
 			<span class="status-verbal"></span>		
 			<span class="preloader-container"></span>
@@ -54,7 +54,7 @@ defined('_JEXEC') or die;
 
 
 	<fieldset id="smtp-check-pane" class="check-pane">
-		<legend><?php echo JText::_('COM_NEWSLETTER_SMTP_CHECK'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_SMTP_CHECK'); ?></div>
 		<div class="status">
 			<span class="status-verbal"></span>		
 			<span class="preloader-container"></span>
@@ -68,7 +68,7 @@ defined('_JEXEC') or die;
 
 
 	<fieldset id="mailbox-check-pane" class="check-pane">
-		<legend><?php echo JText::_('COM_NEWSLETTER_MAILBOX_CHECK'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_MAILBOX_CHECK'); ?></div>
 		<div class="status">
 			<span class="status-verbal"></span>		
 			<span class="preloader-container"></span>
@@ -81,7 +81,7 @@ defined('_JEXEC') or die;
 	</fieldset>
 
 	<fieldset id="license-check-pane" class="check-pane">
-		<legend><?php echo JText::_('COM_NEWSLETTER_LICENSE_CHECK'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_LICENSE_CHECK'); ?></div>
 		<div class="status">
 			<span class="status-verbal"></span>		
 			<span class="preloader-container"></span>
@@ -93,7 +93,7 @@ defined('_JEXEC') or die;
 		<div class="suggestions"></div>
 	</fieldset>
 	<fieldset id="extensions-check-pane" class="check-pane">
-		<legend><?php echo JText::_('COM_NEWSLETTER_MAINTAINANCE_CHECKEXTENSIONS'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_MAINTAINANCE_CHECKEXTENSIONS'); ?></div>
 		<div class="status">
 			<span class="status-verbal"></span>		
 			<span class="preloader-container"></span>
@@ -105,7 +105,7 @@ defined('_JEXEC') or die;
 		<div class="suggestions"></div>
 	</fieldset>
 	<fieldset id="generalsysinfo-check-pane" class="check-pane">
-		<legend><?php echo JText::_('COM_NEWSLETTER_GENERALSYSINFO_CHECK'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_GENERALSYSINFO_CHECK'); ?></div>
 		<div class="status">
 			<span class="status-verbal"></span>		
 			<span class="preloader-container"></span>
@@ -117,7 +117,7 @@ defined('_JEXEC') or die;
 		<div class="suggestions"></div>
 	</fieldset>
 	<fieldset id="jdirectories-check-pane" class="check-pane">
-		<legend><?php echo JText::_('COM_NEWSLETTER_JDIRECTORIES_CHECK'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_JDIRECTORIES_CHECK'); ?></div>
 		<div class="status">
 			<span class="status-verbal"></span>		
 			<span class="preloader-container"></span>
@@ -129,7 +129,7 @@ defined('_JEXEC') or die;
 		<div class="suggestions"></div>
 	</fieldset>
 	<fieldset id="phpsettings-check-pane" class="check-pane">
-		<legend><?php echo JText::_('COM_NEWSLETTER_PHPSETTINGS_CHECK'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_PHPSETTINGS_CHECK'); ?></div>
 		<div class="status">
 			<span class="status-verbal"></span>		
 			<span class="preloader-container"></span>

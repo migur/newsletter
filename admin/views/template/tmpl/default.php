@@ -5,7 +5,7 @@ defined('_JEXEC') or die;
 
 <form name="templateForm" method="POST" id="adminForm" class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=template', false); ?>">
 	<div id="container-list">
-		<legend><?php echo JText::_('COM_NEWSLETTER_SELECT_STANDARD_TEMPLATE'); ?></legend>	
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_SELECT_STANDARD_TEMPLATE'); ?></div>	
 
 		<table class="templateslist adminlist  table table-striped" width="100%">
 			<tfoot>
@@ -33,7 +33,7 @@ defined('_JEXEC') or die;
 			</table>
 	</div>
 	<div id="container-preview">
-		<legend><?php echo JText::_('COM_NEWSLETTER_PREVIEW'); ?></legend>	
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_PREVIEW'); ?></div>	
 		<div id="container-preloader"></div>
 		<div><b><span id="tpl-title"></span></b></div>
 		<br />

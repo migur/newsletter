@@ -1,5 +1,5 @@
 <fieldset>
-	<legend><?php echo JText::_('Statistics'); ?></legend>
+	<div class="legend"><?php echo JText::_('Statistics'); ?></div>
 	
 	<ul id="prewiew" class="nav nav-tabs">
 		<li class="active">

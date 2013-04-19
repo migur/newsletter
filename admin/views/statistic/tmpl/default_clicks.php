@@ -1,11 +1,11 @@
 <div id="stat-clicks">
 	<div>
-		<legend>Sents, Clicks, Bounces, Views</legend>
+		<div class="legend">Sents, Clicks, Bounces, Views</div>
 		<div id="all-in-one"></div>
 	</div>
 
 	<div>
-		<legend>Number of clicks and views per day</legend>
+		<div class="legend">Number of clicks and views per day</div>
 		<div id="stat-clicks-per-day"></div>
 		<div id="cntrl-rangeselect">
 			<span><?php echo JText::_('COM_NEWSLETTER_SELECT_RANGE'); ?></span>
@@ -22,7 +22,7 @@
 		</div>	
 	</div>	
 	<div>
-		<legend>Number of clicks and views per hour (last 24 hours)</legend>
+		<div class="legend">Number of clicks and views per hour (last 24 hours)</div>
 		<div id="stat-clicks-per-hour"></div>
         <div id="holder"></div>
 	</div>	

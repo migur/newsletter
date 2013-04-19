@@ -6,7 +6,7 @@
 >
 	
 	<fieldset class="adminform" style="margin:0 5px 10px;" id="jform_adminform">
-		<legend><?php echo $this->form->getField('scope')->title; ?></legend>
+		<div class="legend"><?php echo $this->form->getField('scope')->title; ?></div>
 
 		<?php echo $this->form->getInput('scope'); ?>
 		

@@ -8,7 +8,7 @@ defined('_JEXEC') or die;
 <div id="templates-list" class="pull-left">
 	<form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=templates&form=templates');?>" method="post" name="adminForm" >
 		
-		<legend><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></div>
 
 		<div class="pull-left btn-group">
 			<input type="text" name="filter_search" id="template_filter_search" class="migur-search" value="<?php echo $this->escape($this->templates->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
@@ -72,7 +72,6 @@ defined('_JEXEC') or die;
 						<input type="hidden" name="filter_order_Dir" value="<?php echo $this->templates->listDirn; ?>" />
 						<?php echo JHtml::_('form.token'); ?>
 				</div>
-		</fieldset>
 	</form>
 </div>	
 

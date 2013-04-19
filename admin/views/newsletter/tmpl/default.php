@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 </div>
 
 <div id="tabs">
-    <legend id="tabs-legend"><?php echo JFactory::getDocument()->getTitle(); ?></legend>
+    <div id="tabs-legend"><?php echo JFactory::getDocument()->getTitle(); ?></div>
 	
 	<form name="newsletterForm" method="POST" id="tabs-sub-container" class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
 

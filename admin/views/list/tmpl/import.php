@@ -37,7 +37,7 @@
 			</iframe>
 
 			<fieldset id="import-found-fields" class="drop">
-				<legend>
+				<div class="legend">
 					<span><?php echo JText::_('COM_NEWSLETTER_IMPORT_FOUNDED_FIELDS'); ?></span>
 					<input
 						class="btn btn-info"
@@ -47,11 +47,11 @@
 						id="import-file-refresh"
 						value="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_FILE_REFRESH'); ?>"
 					/>
-				</legend>
+				</div>
 			</fieldset>
 
 			<fieldset id="import-fields">
-				<legend><?php echo JText::_('COM_NEWSLETTER_IMPORT_DND_FIELDS'); ?></legend>
+				<div class="legend"><?php echo JText::_('COM_NEWSLETTER_IMPORT_DND_FIELDS'); ?></div>
 				<div><?php echo JText::_('COM_NEWSLETTER_USE_FIELD') . JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('COM_NEWSLETTER_SUBSCRIBER_NAME'); ?></div>
 				<div class="drop" rel="username"></div>
 				<div><?php echo JText::_('COM_NEWSLETTER_USE_FIELD') . JText::_('COM_NEWSLETTER_AS') . ' ' . JText::_('JGLOBAL_EMAIL'); ?></div>
@@ -68,7 +68,7 @@
 			</fieldset>
 
 			<fieldset id="import-settings">
-				<legend><?php echo JText::_('COM_NEWSLETTER_IMPORT_SETTINGS'); ?></legend>
+				<div class="legend"><?php echo JText::_('COM_NEWSLETTER_IMPORT_SETTINGS'); ?></div>
 				
 				<div class="control-group">
 					<label class="control-label">

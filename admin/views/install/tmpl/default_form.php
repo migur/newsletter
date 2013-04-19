@@ -26,7 +26,7 @@ defined('_JEXEC') or die;
 
 <form enctype="multipart/form-data" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=install');?>" method="post" name="installForm" id="installForm">
 
-	<legend><?php echo JText::_('COM_NEWSLETTER_UPLOAD_PACKAGE_FILE'); ?></legend>
+	<div class="legend"><?php echo JText::_('COM_NEWSLETTER_UPLOAD_PACKAGE_FILE'); ?></div>
 
 	<input class="input_box" id="install_package" name="install_package" type="file" size="57" />
 	<input class="btn btn-success" type="button" value="<?php echo JText::_('COM_NEWSLETTER_UPLOAD_AND_INSTALL'); ?>" onclick="Joomla.submitbuttonInstall('install.install', this.form)" />

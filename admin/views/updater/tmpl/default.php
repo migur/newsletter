@@ -4,7 +4,7 @@ defined('_JEXEC') or die;
 ?>
 
 <fieldset>
-<legend><?php echo JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER'); ?></legend>
+<div class="legend"><?php echo JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER'); ?></div>
 <form id="subscriber-form" class="form-validate" name="subscriberForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
     <dl>
         <dt>

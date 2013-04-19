@@ -27,7 +27,7 @@ defined('_JEXEC') or die;
 
 	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('mailbox_profile_id'), $this->ssForm->getInput('mailbox_profile_id')); ?>
 
-	<legend><?php echo JText::_('COM_NEWSLETTER_MAILING_PERIOD_CONFIGURATION'); ?></legend>
+	<div class="legend"><?php echo JText::_('COM_NEWSLETTER_MAILING_PERIOD_CONFIGURATION'); ?></div>
 
 	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('sentsPerPeriodLimit', 'params'), $this->ssForm->getInput('sentsPerPeriodLimit', 'params')); ?>
 

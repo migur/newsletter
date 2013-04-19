@@ -4,7 +4,7 @@ defined('_JEXEC') or die;
 ?>
 
 <fieldset>
-<legend><?php echo JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER'); ?></legend>
+<div class="legend"><?php echo JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER'); ?></div>
 <form id="uninstall-form" class="form-validate" name="subscriberForm" action="<?php echo JRoute::_('index.php?option=com_installer') ?>" method="post">
 
 	<h1><span style="color:red">			

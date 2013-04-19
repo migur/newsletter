@@ -1,7 +1,7 @@
         <div id="tab-container-images">
 
             <div id="images-top">
-				<legend><?php echo JText::_('COM_NEWSLETTER_IMAGE_TOP'); ?></legend>
+				<div class="legend"><?php echo JText::_('COM_NEWSLETTER_IMAGE_TOP'); ?></div>
 				<div>
 					<?php echo JHtml::_('layout.controlgroup', $this->tplForm->getLabel('image_top'), $this->tplForm->getInput('image_top')); ?>
 					<?php echo JHtml::_('layout.controlgroup', $this->tplForm->getLabel('image_top_alt'), $this->tplForm->getInput('image_top_alt')); ?>
@@ -12,7 +12,7 @@
 				</div>
             </div>
             <div id="images-bottom">
-				<legend><?php echo JText::_('COM_NEWSLETTER_IMAGE_BOTTOM'); ?></legend>
+				<div class="legend"><?php echo JText::_('COM_NEWSLETTER_IMAGE_BOTTOM'); ?></div>
 				<div>
 					<?php echo JHtml::_('layout.controlgroup', $this->tplForm->getLabel('image_bottom'), $this->tplForm->getInput('image_bottom')); ?>
 					<?php echo JHtml::_('layout.controlgroup', $this->tplForm->getLabel('image_bottom_alt'), $this->tplForm->getInput('image_bottom_alt')); ?>

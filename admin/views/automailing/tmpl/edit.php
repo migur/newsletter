@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
 
 
 <div class="automailing-new">
-	<legend><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING'); ?></legend>	
+	<div class="legend"><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING'); ?></div>	
 
 	<div id="pane-params">
 
@@ -38,7 +38,7 @@ defined('_JEXEC') or die;
 	</div>				
 
 	<div id="pane-series">
-		<legend><?php echo JText::_('COM_NEWSLETTER_SERIES'); ?></legend>	
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_SERIES'); ?></div>	
 		<div id="series-container">
 			<?php 
 				$type = ($this->automailing->automailing_type == "scheduled")?
@@ -48,7 +48,7 @@ defined('_JEXEC') or die;
 		</div>	
 	</div>	
 	<div id="pane-lists">
-		<legend><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></div>
 		<div id="lists-container">
 			<?php 
 				$type = ($this->automailing->automailing_type == "scheduled")?

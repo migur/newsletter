@@ -2,7 +2,7 @@
 
 <form id="form-subscribers" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=subscribers&form=subscribers');?>" method="post" name="subscribersForm" >
     <fieldset>
-        <legend><?php echo JText::_('COM_NEWSLETTER_SUBSCRIBERS'); ?></legend>
+        <div class="legend"><?php echo JText::_('COM_NEWSLETTER_SUBSCRIBERS'); ?></div>
 	<fieldset class="filter-bar">
 		<div class="row-fluid">
 			<div class="pull-right">
