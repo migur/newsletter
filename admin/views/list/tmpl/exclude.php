@@ -64,7 +64,9 @@
 
 	<iframe 
 		id="exclude-uploader" 
-		src="<?php echo JRoute::_("index.php?option=com_newsletter&tmpl=component&view=uploader&params[task]=list.upload&params[callback]=MigurExcludeUploadCallback&params[list_id]=". $this->listForm->getValue('list_id'), false); ?>">
+		src="<?php echo JRoute::_("index.php?option=com_newsletter&tmpl=component&view=uploader&params[task]=list.upload&params[callback]=MigurExcludeUploadCallback&params[list_id]=". $this->listForm->getValue('list_id'), false); ?>"
+		frameBorder="0"		
+	>
 	</iframe>
 	
     <fieldset id="exclude-found-fields" class="drop">

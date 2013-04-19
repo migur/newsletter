@@ -26,7 +26,8 @@ defined('_JEXEC') or die;
 		name="imageframe" 
 		src="index.php?option=com_media&amp;view=media&amp;tmpl=component&amp;folder=&amp;asset=&amp;author="
 		width="800px"
-		height="530px" 
+		height="530px"
+		frameBorder="0"
 	/>
 	
 </form>	

@@ -21,7 +21,7 @@
 	<div class="import-content">
 
 		<div class="plugin-preloader"></div>
-		<iframe class="plugin-pane" src="" scrolling="auto"></iframe>
+		<iframe class="plugin-pane" src="" scrolling="auto" frameBorder="0"></iframe>
 
 		<div class="clr"></div>
 		<div id="import-file" class="file-form hide">
@@ -33,7 +33,9 @@
 			
 			<iframe 
 				id="import-uploader" 
-				src="<?php echo JRoute::_("index.php?option=com_newsletter&tmpl=component&view=uploader&params[task]=list.upload&params[callback]=MigurImportUploadCallback&params[list_id]=". $this->listForm->getValue('list_id'), false); ?>">
+				src="<?php echo JRoute::_("index.php?option=com_newsletter&tmpl=component&view=uploader&params[task]=list.upload&params[callback]=MigurImportUploadCallback&params[list_id]=". $this->listForm->getValue('list_id'), false); ?>"
+				frameBorder="0"
+			>
 			</iframe>
 
 			<fieldset id="import-found-fields" class="drop">

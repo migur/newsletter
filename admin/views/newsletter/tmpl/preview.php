@@ -27,7 +27,7 @@
         </ul>
         <div class="tab-content span9 pull-left">
             <div id="tab-preview-html" class="tab-pane active">    
-                <iframe src="" id="tab-preview-html-container"></iframe>
+                <iframe src="" id="tab-preview-html-container" frameBorder="0"></iframe>
             </div>
             <div id="tab-preview-plain" class="tab-pane">    
                 <div id="tab-preview-plain-container"></div>
