@@ -90,7 +90,7 @@ defined('_JEXEC') or die;
 
 		<div class="tab-content">
 			<div id="details" class="tab-pane active">
-				<iframe id="preview-container"></iframe>
+				<iframe id="preview-container" frameBorder="0"></iframe>
 			</div>	
 		</div>
 
