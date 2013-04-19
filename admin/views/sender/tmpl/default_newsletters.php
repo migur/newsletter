@@ -1,5 +1,5 @@
 <fieldset id="newsletters-fieldset">
-<legend><?php echo JText::_('COM_NEWSLETTER_NEWSLETTER'); ?></legend>
+<div class="legend"><?php echo JText::_('COM_NEWSLETTER_NEWSLETTER'); ?></div>
 	<div class="inline-info">
 		<span class="label label-info">#1</span>
 		<span class="text-info"><?php echo JText::_('COM_NEWSLETTER_SENDMAIL_STEP1'); ?></span>

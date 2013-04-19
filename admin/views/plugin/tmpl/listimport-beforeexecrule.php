@@ -1,5 +1,5 @@
 <div class="plugin-container plugin-import">
-    <legend><?php echo JText::_($this->plugin->title); ?></legend>
+    <div class="legend"><?php echo JText::_($this->plugin->title); ?></div>
 	
 	<?php if (!empty($this->plugin->data['helpText'])) { ?>
 		<span class="helptext">

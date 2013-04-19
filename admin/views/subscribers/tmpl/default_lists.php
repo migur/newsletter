@@ -1,6 +1,6 @@
 <form id="form-lists" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=subscribers&form=lists', false);?>" method="post" name="listsForm">
     <fieldset>
-        <legend><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></legend>
+        <div class="legend"><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></div>
     	<fieldset class="filter-bar">
 			<div class="row-fluid">
 				<div class="pull-right">

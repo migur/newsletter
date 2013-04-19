@@ -19,7 +19,7 @@
 <!-- For later versions
 
 		<fieldset id="config">
-			<legend><?php //echo JText::_('COM_NEWSLETTER_CONFIG_SCORE') . "<br />"; ?></legend>
+			<div class="legend"><?php //echo JText::_('COM_NEWSLETTER_CONFIG_SCORE') . "<br />"; ?></div>
 			<div class="center blue margin-5"><?php //echo "75 / 100"; ?></div>
 		</fieldset>
 -->

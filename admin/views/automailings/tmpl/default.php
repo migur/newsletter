@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
 	
 	<div id="automailing-list">
 		<fieldset>
-			<legend><?php echo JText::_('COM_NEWSLETTER_AUTOMAILINGS'); ?></legend>
+			<div class="legend"><?php echo JText::_('COM_NEWSLETTER_AUTOMAILINGS'); ?></div>
 
 			<div>
 				<div class="filter-search btn-group pull-left">

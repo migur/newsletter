@@ -1,5 +1,5 @@
 <fieldset>
-<legend><?php echo JText::_('Queues'); ?></legend>
+<div class="legend"><?php echo JText::_('Queues'); ?></div>
 <form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=queues');?>" method="post" name="adminForm" >
 	
 <?php echo JHtml::_('layout.wrapper'); ?>

@@ -139,4 +139,3 @@
 	<?php echo JHtml::_('layout.wrapperEnd'); ?>
 	
 </form>
-</fieldset>

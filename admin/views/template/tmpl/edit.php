@@ -4,7 +4,7 @@ defined('_JEXEC') or die;
 ?>
 
 <fieldset id="tabs">
-    <legend><?php echo JText::_('COM_NEWSLETTER_TEMPLATE_CONFIG'); ?></legend>
+    <div class="legend"><?php echo JText::_('COM_NEWSLETTER_TEMPLATE_CONFIG'); ?></div>
     <form name="templateForm" method="POST" id="adminForm" class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
 
 		<ul id="tabs-template" class="nav nav-tabs">

@@ -1,5 +1,5 @@
 <div>
-	<legend><?php echo JText::_('MOD_UPDATER_INFORMATION'); ?></legend>
+	<div class="legend"><?php echo JText::_('MOD_UPDATER_INFORMATION'); ?></div>
     <table class="adminlist  table table-striped">
         <tbody>
             <tr class="row0">

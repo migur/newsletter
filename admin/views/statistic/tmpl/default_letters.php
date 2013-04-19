@@ -1,7 +1,7 @@
 <div id="stat-letters">
-		<legend><?php echo JText::_('COM_NEWSLETTER_OPENED_NEWSLETTERS'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_OPENED_NEWSLETTERS'); ?></div>
 		<div id="stat-opened"></div>
-		<legend><?php echo JText::_('COM_NEWSLETTER_ACTIVE_SUBSCRIBERS'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_ACTIVE_SUBSCRIBERS'); ?></div>
 		<div id="stat-active-subscribers"></div>
         <div id="holder"></div>
 </div>

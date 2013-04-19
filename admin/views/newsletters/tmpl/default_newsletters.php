@@ -1,5 +1,5 @@
 <fieldset>
-		<legend><?php echo JText::_('COM_NEWSLETTER_NEWSLETTERS'); ?></legend>
+		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_NEWSLETTERS'); ?></div>
 		<form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters');?>" method="post" name="adminForm" >
 
 		<div class="filter-bar">

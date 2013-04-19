@@ -1,6 +1,6 @@
 <div class="row-fluid">
 	<div class="span6">
-        <legend>Newsletters</legend>
+        <div class="legend">Newsletters</div>
 		
 		<a class="btn btn-success" href="index.php?option=com_newsletter&amp;view=newsletter">
 			Create Newsletter
@@ -12,7 +12,7 @@
 	</div> 
 
     <div class="span6">
-        <legend>Subscribers</legend>
+        <div class="legend">Subscribers</div>
 		
 		<a 
 			class="btn btn-success" 
@@ -36,7 +36,7 @@
 
 	<div class="span6">
 		
-		<legend>Configuration &amp; Installation</legend>
+		<div class="legend">Configuration &amp; Installation</div>
 		
 		<a class="btn" rel="{handler: 'iframe', size: {x: 350, y: 150}, onClose: function() {}}" href="<?php echo JRoute::_('index.php?option=com_newsletter&view=install'); ?>" class="modal">
 			Install Extensions
@@ -48,7 +48,7 @@
 	</div>
 
 	<div class="span6">
-		<legend>Help &amp; About</legend>
+		<div class="legend">Help &amp; About</div>
 		<a class="btn" target="_blank" href="http://migur.com/products/newsletter">
 			About
 		</a>
@@ -64,7 +64,7 @@
 <br/>
 
 <div id="statistic">
-	<legend><?php echo JText::_('COM_NEWSLETTER_STATISTICS'); ?></legend>
+	<div class="legend"><?php echo JText::_('COM_NEWSLETTER_STATISTICS'); ?></div>
 	<div id="dashboard-statistic-chart"></div>
 </div>
 

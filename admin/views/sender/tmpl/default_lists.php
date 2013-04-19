@@ -1,5 +1,5 @@
 <fieldset id="lists-fieldset">
-<legend><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></legend>
+<div class="legend"><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></div>
 
 	<div class="inline-info">
 		<span class="label label-info">#2</span>

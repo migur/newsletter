@@ -474,3 +474,14 @@ body.component {
 	}
 }
 
+.legend {
+	display: block !important;
+	width: 100% !important;
+	padding: 0 !important;
+	margin-bottom: 18px !important;
+	font-size: 19.5px !important;
+	line-height: 36px !important;
+	color: #333 !important;
+	border: 0 !important;
+	border-bottom: 1px solid #e5e5e5 !important;
+}	

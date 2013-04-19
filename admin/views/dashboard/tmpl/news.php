@@ -1,5 +1,5 @@
 <div id="news">
-    <legend><?php echo JText::_('COM_NEWSLETTER_LATEST_NEWS'); ?></legend>
+    <div class="legend"><?php echo JText::_('COM_NEWSLETTER_LATEST_NEWS'); ?></div>
 
     <ul>
 		<?php 
