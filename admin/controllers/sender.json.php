@@ -57,7 +57,7 @@ class NewsletterControllerSender extends JControllerForm
 			JRequest::getString('lists')
 		);
 		
-		$statePath = 'com_newsletter.addtoqueue.' . $requestId;
+		$statePath = 'com_newsletter.'.md5('addtoqueue.' . $requestId);
 		
 		$app = JFactory::getApplication();
 		

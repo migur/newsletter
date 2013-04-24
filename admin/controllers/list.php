@@ -361,7 +361,7 @@ class NewsletterControllerList extends JControllerForm
 		$file = $sess->get('list.' . $currentList . '.file.uploaded', array());
 
 		$filename = $file['file']['filepath'];
-		$statePath = 'com_newsletter.list.'.$currentList.'import.file.'.$filename;
+		$statePath = 'com_newsletter.'.md5('list.'.$currentList.'import.file.'.$filename);
 		
 		// If there is no extarnal offset then use internal from session
 		if (!is_numeric($offset)) {
