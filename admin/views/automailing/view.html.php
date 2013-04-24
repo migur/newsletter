@@ -170,7 +170,7 @@ class NewsletterViewAutomailing extends MigurView
 		
 		$document = JFactory::getDocument();
 		
-		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_AUTOMAILING_CREATING') : JText::_('COM_NEWSLETTER_AUTOMAILING_EDITING'));
+		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_AUTOMAILING_CREATING') : JText::_('COM_NEWSLETTER_AUTOMAILING_EDIT_TITLE'));
 		
 		$document->addstylesheet(JURI::root().'/media/com_newsletter/css/admin.css');
 		$document->addstylesheet(JURI::root().'/media/com_newsletter/css/automailing.css');
