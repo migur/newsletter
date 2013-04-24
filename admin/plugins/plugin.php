@@ -78,11 +78,11 @@ class NewsletterPlugin extends JPlugin
      * Use it to store all variables you need in future
      * 
      * @param string $key
-     * @param type $value 
+     * @param type $value
      */
     public function setState($key, $value) 
     {
-        $key = $this->_statePrefix . $this->getType() . '.' . $this->getName() . '.' . $key;
+        $key = 'com_newsletter.'.md5($this->_statePrefix . $this->getType() . '.' . $this->getName() . '.' . $key);
         JFactory::getApplication()->setUserState($key, $value);
     }
   
@@ -95,7 +95,7 @@ class NewsletterPlugin extends JPlugin
      */
     public function getState($key) 
     {
-        $key = $this->_statePrefix . $this->getType() . '.' . $this->getName() . '.' . $key;
+        $key = 'com_newsletter.'.md5($this->_statePrefix . $this->getType() . '.' . $this->getName() . '.' . $key);
         return JFactory::getApplication()->getUserState($key);
     }
 

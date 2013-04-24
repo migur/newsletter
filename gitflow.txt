@@ -39,16 +39,16 @@ Branch for Free J!2 code.
 
 RELEASING
 --------------
-Do not toch versions in DEVELOPMENT or DEV/J*/COMMON branches!
+Do not touch versions in DEVELOPMENT or DEV/J*/COMMON branches!
 Swith to branch of version you want to release (DEV/J*/FREE or DEV/J*/PREM]).
 Create temporary branch for releasing RELEASE/XX.XX-JX or something like that.
 Change versions in manifests and all other stuff for releasing. 
 Create tag and merge it back.
 
 Releasing is made by tagging in  
-	DEV/J3/FREE
-	DEV/J3/PREM	
+	DEV/J3/COMMON
+	DEV/J3/FREE	
+	DEV/J2/COMMON
 	DEV/J2/FREE
-	DEV/J2/PREM
 branches.
 	
