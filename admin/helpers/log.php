@@ -40,6 +40,8 @@ class NewsletterHelperLog
     const CAT_TRACKING = 'tracking';
 	
 	const CAT_MAILBOX = 'mailbox';
+
+	const CAT_UPLOAD = 'upload';
 	
 	public static $langIsLoaded = false;
 	
