@@ -42,6 +42,8 @@ class NewsletterHelperLog
     const CAT_LIST = 'list';
 	
 	const CAT_MAILBOX = 'mailbox';
+
+	const CAT_UPLOAD = 'upload';
 	
 	public static $langIsLoaded = false;
 	
