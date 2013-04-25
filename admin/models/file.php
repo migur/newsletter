@@ -47,7 +47,6 @@ class NewsletterModelFile extends JModel
 
 		// Get the user
 		$user = JFactory::getUser();
-		$log = JLog::getInstance('upload.error.php');
 
 		// Get some data from the reques
 		$filedataName = !empty($params['filedataName']) ? $params['filedataName'] : 'Filedata';
@@ -69,7 +68,11 @@ class NewsletterModelFile extends JModel
 			$filepath = JPath::clean(JPATH_COMPONENT . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . strtolower($file['name']));
 
 			if (!MediaHelper::canUpload($file, $err)) {
-				$log->addEntry(array('comment' => 'Invalid: ' . $filepath . ': ' . $err));
+				NewsletterHelperLog::addError(
+					'COM_NEWSLETTER_ERROR_CANNOT_UPLOAD_FILE', 
+					NewsletterHelperLog::CAT_UPLOAD,
+					array('file' => $filepath, 'error' => $err)
+				);
 				$response = array(
 					'status' => '0',
 					'error' => JText::_($err)
@@ -85,28 +88,43 @@ class NewsletterModelFile extends JModel
 			$result = $dispatcher->trigger('onContentBeforeSave', array('com_media.file', $object_file));
 			if (in_array(false, $result, true)) {
 				// There are some errors in the plugins
-				$log->addEntry(array('comment' => 'Errors before save: ' . $filepath . ' : ' . implode(', ', $object_file->getErrors())));
+				NewsletterHelperLog::addError(
+					'COM_NEWSLETTER_ERROR_BEFORE_SAVE', 
+					NewsletterHelperLog::CAT_UPLOAD,
+					array('file' => $filepath, 'errors' => implode(', ', $object_file->getErrors()))
+				);
+				
 				$response = array(
 					'status' => '0',
-					'error' => JText::plural('COM_MEDIA_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors))
+					'error' => JText::plural('COM_NEWSLETTER_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors))
 				);
 				return $response;
 			}
 
 			if (JFile::exists($filepath) && empty($params['overwrite'])) {
 				// File exists
-				$log->addEntry(array('comment' => 'File exists: ' . $filepath . ' by user_id ' . $user->id));
+				NewsletterHelperLog::addError(
+					'COM_NEWSLETTER_ERROR_FILE_EXISTS', 
+					NewsletterHelperLog::CAT_UPLOAD,
+					array('file' => $filepath,  'user_id' => $user->id)
+				);
+				
 				$response = array(
 					'status' => '0',
-					'error' => JText::_('COM_MEDIA_ERROR_FILE_EXISTS')
+					'error' => JText::_('COM_NEWSLETTER_ERROR_FILE_EXISTS')
 				);
 				return $response;
 			} elseif (!$user->authorise('core.create', 'com_media')) {
 				// File does not exist and user is not authorised to create
-				$log->addEntry(array('comment' => 'Create not permitted: ' . $filepath . ' by user_id ' . $user->id));
+				NewsletterHelperLog::addError(
+					'COM_NEWSLETTER_ERROR_CREATE_NOT_PERMITTED', 
+					NewsletterHelperLog::CAT_UPLOAD,
+					array('file' => $filepath,  'user_id' => $user->id)
+				);
+
 				$response = array(
 					'status' => '0',
-					'error' => JText::_('COM_MEDIA_ERROR_CREATE_NOT_PERMITTED')
+					'error' => JText::_('COM_NEWSLETTER_ERROR_CREATE_NOT_PERMITTED')
 				);
 				return $response;
 			}
@@ -114,19 +132,26 @@ class NewsletterModelFile extends JModel
 			$file = (array) $object_file;
 			if (!JFile::upload($file['tmp_name'], $file['filepath'])) {
 				// Error in upload
-				$log->addEntry(array('comment' => 'Error on upload: ' . $filepath));
+				NewsletterHelperLog::addError(
+					'COM_NEWSLETTER_ERROR_UNABLE_TO_UPLOAD_FILE', 
+					NewsletterHelperLog::CAT_UPLOAD,
+					array('file' => $filepath)
+				);
 				$response = array(
 					'status' => '0',
-					'error' => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE')
+					'error' => JText::_('COM_NEWSLETTER_ERROR_UNABLE_TO_UPLOAD_FILE')
 				);
 				return $response;
 			} else {
-				// Trigger the onContentAfterSave event.
-				//$dispatcher->trigger('onContentAfterSave', array('com_media.file', &$object_file), null);
-				$log->addEntry(array('comment' => $folder));
+				NewsletterHelperLog::addDebug(
+					'COM_NEWSLETTER_UPLOAD_COMPLETE', 
+					NewsletterHelperLog::CAT_UPLOAD,
+					array('file' => $filepath)
+				);
+
 				$response = array(
 					'status' => '1',
-					'error' => JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', substr($file['filepath'], strlen('COM_MEDIA_BASE'))),
+					'error' => JText::sprintf('COM_NEWSLETTER_UPLOAD_COMPLETE', substr($file['filepath'], strlen('COM_NEWSLETTER_BASE'))),
 					'file' => $file
 				);
 
@@ -135,7 +160,7 @@ class NewsletterModelFile extends JModel
 		} else {
 			$response = array(
 				'status' => '0',
-				'error' => JText::_('COM_MEDIA_ERROR_BAD_REQUEST')
+				'error' => JText::_('COM_NEWSLETTER_ERROR_BAD_REQUEST')
 			);
 
 			return $response;
