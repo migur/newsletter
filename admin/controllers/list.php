@@ -329,10 +329,8 @@ class NewsletterControllerList extends JControllerForm
 		
 		$file = $sess->get('com_newsletter.list.' . $currentList . '.file.uploaded', array());
 
-		
-		$filepath = $file['file']['filepath'];
-		
-		$statePath = 'com_newsletter.list-'.$currentList.'.import.'.md5($filepath);
+		$filename = $file['file']['filepath'];
+		$statePath = 'com_newsletter.'.md5('list.'.$currentList.'import.file.'.$filename);
 
 		//$app->setUserState($statePath.'.trololo101', 'facepalm');
 
