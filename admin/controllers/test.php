@@ -137,6 +137,30 @@ class NewsletterControllerTest extends JControllerForm
 		die;
 	}
 	
+
+	/**
+	 * Used only for development.
+	 *
+	 * @return void
+	 * @since 1.0
+	 */
+	function confirmSubscribers()
+	{
+		$listId = JRequest::getInt('list_id');
+
+		if (empty($listId)) {
+			die("\n No list id");
+		}	
+		
+		$dbo = JFactory::getDbo();
+		
+		$dbo->setQuery('UPDATE #__newsletter_sub_list SET confirmed=1 WHERE list_id = '.$listId);
+		$res = $dbo->query();
+
+		die("\n Complete");
+	}
+	
+	
 	
 	/**
 	 * Save the configuration
