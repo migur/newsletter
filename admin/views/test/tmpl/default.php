@@ -106,6 +106,13 @@ defined('_JEXEC') or die;
 			<td><input class="test-params" value='list_id=' size="80" /></td>
 			<td><input class="test-other" value="" size="60" /></td>
 		</tr>
+		<tr class="row0">
+			<td><a class="test-title" href="#" onClick="">Dry run mode</a></td>
+			<td><select class="test-method"><option selected value="get">GET</option></td>
+			<td><input class="test-url" value="<?php echo 'administrator/index.php?option=com_newsletter&task=test.setDryrun'; ?>" size="60"/></td>
+			<td><input class="test-params" value='mode=0' size="80" /></td>
+			<td><input class="test-other" value="Affects only if DEBUG is turned on" size="60" /></td>
+		</tr>
 	</tbody>
 </table>
 
