@@ -179,6 +179,24 @@ class NewsletterControllerTest extends JControllerForm
 		
 		die("\n Complete");
 	}
-	
+
+	/**
+	 * Turn on/off dry run mode
+	 *
+	 * @return void
+	 * @since 1.0
+	 */
+	function setDryrun()
+	{
+		$mode = JRequest::getInt('mode');
+		
+		if ($mode === null) {
+			die("\n Mode is absent");
+		}
+		
+		NewsletterHelperNewsletter::setParam('dryrun_mailing', (int) $mode);
+		
+		die("\n Complete");
+	}
 }
 

@@ -197,11 +197,13 @@ class MigurMailerSender extends PHPMailer
 		
 		try {
 			
+			$dryrun = false;
 			if(class_exists('JComponentHelper')) {
 				$config = JComponentHelper::getParams('com_newsletter');
+				$dryrun = $config->get('debug', false) && $config->get('dryrun_mailing', false);
 			}
 			
-			if(!$config->get('dryrun_mailing', false)) {
+			if(!$dryrun) {
 			
 				if (!parent::Send()) {
 					throw new Exception();
@@ -215,6 +217,10 @@ class MigurMailerSender extends PHPMailer
 				}
 				
 			} else {
+
+				// Let's generate a small pause. It's like time of mailing of a letter.
+				$pause = rand(50, 200);
+				usleep($pause);
 				
 				// Do full debug of all properties of this class
 				$ref = new ReflectionClass('PhpMailer');
