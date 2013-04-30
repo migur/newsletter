@@ -34,8 +34,7 @@ class NewsletterControllerTest extends JControllerForm
 		$dbo->setQuery('SET foreign_key_checks=0');
 		$dbo->query();
 		
-		$dbo->setQuery('SET autocommit=0;');
-		$dbo->query();
+		$dbo->transactionStart();
 
 		for($i=$start; $i < $start + $count; $i++) {
 			$name = str_replace(' ', '_', $prefix.$i);
@@ -47,8 +46,7 @@ class NewsletterControllerTest extends JControllerForm
 			echo "\n".$name.' - '.($res?'ok':'fail');
 		}
 		
-		$dbo->setQuery('COMMIT;');
-		$dbo->query();
+		$dbo->transactionCommit();
 		
 		$dbo->setQuery('SET foreign_key_checks=1');
 		$dbo->query();
@@ -75,8 +73,7 @@ class NewsletterControllerTest extends JControllerForm
 		$dbo->setQuery('SET foreign_key_checks=0;');
 		$dbo->query();
 
-		$dbo->setQuery('SET autocommit=0;');
-		$dbo->query();
+		$dbo->transactionStart();
 		
 		for($i=$start; $i < $start + $count; $i++) {
 			$name = $prefix.$i;
@@ -87,8 +84,7 @@ class NewsletterControllerTest extends JControllerForm
 			echo "\n".$name.' - '.($res?'ok':'fail');
 		}
 		
-		$dbo->setQuery('COMMIT;');
-		$dbo->query();
+		$dbo->transactionCommit();
 
 		$dbo->setQuery('SET foreign_key_checks=1;');
 		$dbo->query();

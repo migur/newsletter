@@ -74,12 +74,17 @@ class NewsletterModelImportCommon
 		$listManager = MigurModel::getInstance('List', 'NewsletterModel');
 		$listTable = JTable::getInstance('List', 'NewsletterTable');
 		
-		// Start transaction
+		$isTransaction = false;
 		$transactionItemsCount = 0;
-		$db->transactionStart();
 		
 		foreach ($list as $item) {
 
+			// Let's Speeeeeed up this script in at least 50 times!
+			if (!$isTransaction) {
+				$db->transactionStart();
+				$isTransaction = true;
+			}
+			
 			NewsletterHelper::setTimeLimit(30);
 			
 			$lists[$item['list_name']] = 0;
@@ -181,16 +186,19 @@ class NewsletterModelImportCommon
 			// Handle the transaction
 			// Commit each 100 items
 			$transactionItemsCount++;
-			
-			if ($transactionItemsCount > 500) {
+
+			if ($transactionItemsCount > 500 && $isTransaction) {
 				$db->transactionCommit();
 				$transactionItemsCount = 0;
-			}	
+				$isTransaction = false;
+			}
 		}
 
 		// Commit it all!
-		$db->transactionCommit();
-		
+		if ($isTransaction) {
+			$db->transactionCommit();
+		}
+
 		return array(
 			'added'    => $added,
 			'assigned' => $assigned,

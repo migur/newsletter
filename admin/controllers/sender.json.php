@@ -93,11 +93,16 @@ class NewsletterControllerSender extends JControllerForm
 
 			$table = JTable::getInstance('queue', 'NewsletterTable');
 
-			// Let's Speeeeeed up this script!
+			$isTransaction = false;
 			$transactionItemsCount = 0;
-			$dbo->transactionStart();
 
 			foreach ($subs as $item) {
+				
+				// Let's Speeeeeed up this script in at least 50 times!
+				if (!$isTransaction) {
+					$db->transactionStart();
+					$isTransaction = true;
+				}
 
 				$table->reset();
 				$table->queue_id = null;
@@ -126,17 +131,20 @@ class NewsletterControllerSender extends JControllerForm
 				// Commit each 100 items
 				$transactionItemsCount++;
 
-				if ($transactionItemsCount > 500) {
-					
-					$dbo->transactionCommit();
+				if ($transactionItemsCount > 500 && $isTransaction) {
+					$db->transactionCommit();
 					$transactionItemsCount = 0;
+					$isTransaction = false;
 				}
 
 				$processed++;
 			}
 
 			// Commit it all!
-			$dbo->transactionCommit();
+			if ($isTransaction) {
+				$db->transactionCommit();
+			}
+
 		}
 
 		// Store offsets and stats
