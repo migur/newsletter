@@ -116,17 +116,23 @@ class NewsletterModelList extends JModelAdmin
 		$updated = 0;
 		$assigned = 0;
 		$skipped = 0;
+		$alreadyInList = 0;
 
 		$errorOnFail = isset($options['errorOnFail']) ? (bool) $options['errorOnFail'] : false;
 
-		// Let's Speeeeeed up this script in at least 50 times!
 		$db = JFactory::getDbo();
+		
+		$isTransaction = false;
 		$transactionItemsCount = 0;
-		$db->setQuery('SET AUTOCOMMIT=0;');
-		$db->query();
-
+		
 		foreach ($collection as $row) {
 
+			// Let's Speeeeeed up this script in at least 50 times!
+			if (!$isTransaction) {
+				$db->transactionStart();
+				$isTransaction = true;
+			}
+			
 			foreach ($row as &$value) {
 				$value = trim($value);
 			}
@@ -170,17 +176,16 @@ class NewsletterModelList extends JModelAdmin
 				// TODO: In future need to add the sending of a confirmation mail here
 				// If user is not exists then add it!
 				// Can create ONLY subscribers, NOT J!USERS.
-				if ($success = $subscriber->save($row)) {
+				$success = $subscriber->save($row);
+				if ($success) {
 					$added++;
 				}
 			} else {
 
 				// If user is present and we can update it
 				// Then do it but not for J! Users
-				if (!empty($options['overwrite']) &&
-					!$subscriber->isJoomlaUserType() &&
-					$success = $subscriber->save($row)
-				) {
+				$success = $subscriber->save($row);
+				if (!empty($options['overwrite']) && !$subscriber->isJoomlaUserType() && $success) {
 					$updated++;
 				}
 			}
@@ -216,13 +221,16 @@ class NewsletterModelList extends JModelAdmin
 
 						// Finaly all ok!
 						$assigned++;
+						
 					} catch (Exception $e) {
-
 						$errors++;
 					}
+					
+				} else {
+					$alreadyInList++;
 				}
+				
 			} else {
-
 				$errors++;
 			}
 
@@ -230,26 +238,25 @@ class NewsletterModelList extends JModelAdmin
 			// Commit each 100 items
 			$transactionItemsCount++;
 
-			if ($transactionItemsCount > 500) {
-				$db->setQuery('COMMIT;');
-				$db->query();
+			if ($transactionItemsCount > 500 && $isTransaction) {
+				$db->transactionCommit();
 				$transactionItemsCount = 0;
+				$isTransaction = false;
 			}
 		}
 
 		// Commit it all!
-		$db->setQuery('COMMIT;');
-		$db->query();
-
-		$db->setQuery('SET AUTOCOMMIT=0;');
-		$db->query();
+		if ($isTransaction) {
+			$db->transactionCommit();
+		}
 
 		return array(
 			'errors' => $errors,
 			'added' => $added,
 			'updated' => $updated,
 			'assigned' => $assigned,
-			'skipped' => $skipped
+			'skipped' => $skipped,
+			'alreadyInList' => $alreadyInList
 		);
 	}
 
