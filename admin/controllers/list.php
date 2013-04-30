@@ -376,6 +376,7 @@ class NewsletterControllerList extends JControllerForm
 			$app->setUserState($statePath.'.added', 0);
 			$app->setUserState($statePath.'.updated', 0);
 			$app->setUserState($statePath.'.assigned', 0);
+			$app->setUserState($statePath.'.alreadyInList', 0);
 		}
 		
 		// Restore previous state
@@ -385,6 +386,7 @@ class NewsletterControllerList extends JControllerForm
 		$added	  = $app->getUserState($statePath.'.added', 0);
 		$updated  =	$app->getUserState($statePath.'.updated', 0);
 		$assigned =	$app->getUserState($statePath.'.assigned', 0);
+		$alreadyInList = $app->getUserState($statePath.'.alreadyInList', 0);
 		
 		
 		// Try to open file
@@ -451,7 +453,8 @@ class NewsletterControllerList extends JControllerForm
 				'errors'    => $errors   + $res['errors'],
 				'added'     => $added    + $res['added'],
 				'updated'   => $updated  + $res['updated'],
-				'assigned'  => $assigned + $res['assigned']));
+				'assigned'  => $assigned + $res['assigned'],
+				'alreadyInList' => $alreadyInList  + $res['alreadyInList']));
 		}
 
 		// Check if this is not the end
@@ -464,6 +467,7 @@ class NewsletterControllerList extends JControllerForm
 			$app->setUserState($statePath.'.added', $added + $res['added']);
 			$app->setUserState($statePath.'.updated', $updated + $res['updated']);
 			$app->setUserState($statePath.'.assigned', $assigned + $res['assigned']);
+			$app->setUserState($statePath.'.alreadyInList', $alreadyInList + $res['alreadyInList']);
 
 			NewsletterHelper::jsonMessage('ok', array(
 				'fetched'   => $total,
@@ -472,7 +476,8 @@ class NewsletterControllerList extends JControllerForm
 				'errors'    => $errors   + $res['errors'],
 				'added'     => $added    + $res['added'],
 				'updated'   => $updated  + $res['updated'],
-				'assigned'  => $assigned + $res['assigned']));
+				'assigned'  => $assigned + $res['assigned'],
+				'alreadyInList' => $alreadyInList + $res['alreadyInList']));
 		}
 
 		// This is the end
@@ -483,11 +488,12 @@ class NewsletterControllerList extends JControllerForm
 		$app->setUserState($statePath.'.added', 0);
 		$app->setUserState($statePath.'.updated', 0);
 		$app->setUserState($statePath.'.assigned', 0);
+		$app->setUserState($statePath.'.alreadyInList', 0);
 
 		unlink($file['file']['filepath']);
 		$sess->clear('list.' . $currentList . '.file.uploaded');
 
-		NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL'), array(
+		$res = array(
 			'fetched'   => $total,
 			'total'     => $offset + $total,
 			'skipped'   => $skipped,
@@ -495,7 +501,17 @@ class NewsletterControllerList extends JControllerForm
 			'errors'    => $errors   + $res['errors'],
 			'added'     => $added    + $res['added'],
 			'updated'   => $updated  + $res['updated'],
-			'assigned'  => $assigned + $res['assigned']));
+			'assigned'  => $assigned + $res['assigned'],
+			'alreadyInList' => $alreadyInList + $res['alreadyInList']);
+		
+		
+		NewsletterHelperLog::addDebug(
+			'Import successfull. List ID is '.$currentList, 
+			NewsletterHelperLog::CAT_IMPORT, 
+			$res
+		);
+		
+		NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL'), $res);
 	}
 
 	
