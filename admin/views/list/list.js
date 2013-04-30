@@ -394,7 +394,8 @@ try {
 						Joomla.JText._('ERRORS', 'Errors')+": " + data.errors + "\n"+
 						Joomla.JText._('ADDED', 'Added')+": " + data.added + "\n"+
 						Joomla.JText._('UPDATED', 'Updated')+": " + data.updated + "\n"+
-						Joomla.JText._('ASSIGNED', 'Assigned')+": " + data.assigned + "\n"
+						Joomla.JText._('ASSIGNED', 'Assigned')+": " + data.assigned + "\n" +
+						Joomla.JText._('DUPLICATED_IN_LIST', 'Duplicated in list')+": " + data.alreadyInList + "\n"
 					);
 						
                     document.location.reload();
