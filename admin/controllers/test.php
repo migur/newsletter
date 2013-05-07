@@ -167,11 +167,9 @@ class NewsletterControllerTest extends JControllerForm
 	function removeFakeSubscribers()
 	{
 		$dbo = JFactory::getDbo();
-		for($i=$start; $i < $start + $count; $i++) {
-			$dbo->setQuery('DELETE FROM #__newsletter_subscribers WHERE name LIKE "zFake%"');
-			//echo $dbo->getQuery();
-			$dbo->query();
-		}
+		$dbo->setQuery('DELETE FROM #__newsletter_subscribers WHERE name LIKE "zFake%"');
+		//echo $dbo->getQuery();
+		$dbo->query();
 		
 		die("\n Complete");
 	}

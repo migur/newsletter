@@ -1,7 +1,9 @@
 <?php
 
 /**
- * Migur Ajax Search Plugin
+ * Migur Joomla plugin for synchronisation 
+ * J!'s user groups and Migur's lists of subscribers.
+ * 
  * 
  * @version		$Id: migursearch.php $
  * @package		Joomla
@@ -33,8 +35,6 @@ class plgSystemMigurlistsync extends JPlugin
 	protected $_rules = array();
 	
 	/**
-	 * Plugin that enhances the core Joomla! Search field and gives Ajax results
-	 * 
 	 * @param $subject
 	 * @param $config - array - config data of plugin
 	 * 
@@ -97,7 +97,7 @@ class plgSystemMigurlistsync extends JPlugin
 		// Not fair that we do it BEFORE J! process but we cannot do it another way.
 		if ($this->_task == 'user.batch') {
 			
-			$users = JRequest::getVar('cid', array());
+			$userIds = JRequest::getVar('cid', array());
 			$form = JRequest::getVar('batch', array());
 			$groupId = !empty($form['group_id'])? $form['group_id'] : '';
 			$event = !empty($form['group_action'])? $form['group_action'] : '';
@@ -108,20 +108,23 @@ class plgSystemMigurlistsync extends JPlugin
 				->select('DISTINCT u.*, GROUP_CONCAT(DISTINCT um.group_id SEPARATOR ",") AS groups')
 				->from('#__users AS u')
 				->join('left', '#__user_usergroup_map AS um ON u.id = um.user_id')
-				->where('u.id IN (' . implode(',', $users) . ')')
+				->where('u.id IN (' . implode(',', $userIds) . ')')
 				->group('u.id');
 			$dbo->setQuery($query);
 			
 			$users = $dbo->loadObjectList();
 			
-			// Let's speed up this script!
-			$db = JFactory::getDbo();
+			$isTransaction = false;
 			$transactionItemsCount = 0;
-			$db->setQuery('SET AUTOCOMMIT=0;');
-			$db->query();
-			
+
 			foreach($users as $user) {
-				
+			
+				// Let's Speeeeeed up this script in at least 50 times!
+				if (!$isTransaction) {
+					$dbo->transactionStart();
+					$isTransaction = true;
+				}
+			
 				$userGroupsBefore = explode(',', $user->groups);
 
 				switch($event) {
@@ -144,13 +147,22 @@ class plgSystemMigurlistsync extends JPlugin
 				if (!empty($acquireds) || !empty($losses)) {
 					$this->_processUser($user, false, $acquireds, $losses);
 				}	
+				
+				// Handle the transaction
+				// Commit each 500 items
+				$transactionItemsCount++;
+
+				if ($transactionItemsCount > 500 && $isTransaction) {
+					$dbo->transactionCommit();
+					$transactionItemsCount = 0;
+					$isTransaction = false;
+				}
 			}
 			
 			// Commit it all!
-			$db->setQuery('COMMIT;');
-			$db->query();
-			$db->setQuery('SET AUTOCOMMIT=1;');
-			$db->query();
+			if ($isTransaction) {
+				$dbo->transactionCommit();
+			}
 		}	
 	}
 	
