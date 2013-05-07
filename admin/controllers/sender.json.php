@@ -100,7 +100,7 @@ class NewsletterControllerSender extends JControllerForm
 				
 				// Let's Speeeeeed up this script in at least 50 times!
 				if (!$isTransaction) {
-					$db->transactionStart();
+					$dbo->transactionStart();
 					$isTransaction = true;
 				}
 
@@ -128,11 +128,11 @@ class NewsletterControllerSender extends JControllerForm
 				}
 
 				// Handle the transaction
-				// Commit each 100 items
+				// Commit each 500 items
 				$transactionItemsCount++;
 
 				if ($transactionItemsCount > 500 && $isTransaction) {
-					$db->transactionCommit();
+					$dbo->transactionCommit();
 					$transactionItemsCount = 0;
 					$isTransaction = false;
 				}
@@ -142,7 +142,7 @@ class NewsletterControllerSender extends JControllerForm
 
 			// Commit it all!
 			if ($isTransaction) {
-				$db->transactionCommit();
+				$dbo->transactionCommit();
 			}
 
 		}
