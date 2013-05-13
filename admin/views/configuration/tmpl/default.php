@@ -57,11 +57,13 @@ $showFull = AclHelper::canConfigureComponent();
 		<?php }	
 		echo JHtml::_('tabs.end');
 		?>
-		<div>
-			<input type="hidden" name="task" value="" />
-			<input type="hidden" name="returnurl" value="<?php echo base64_encode(JRoute::_('index.php?option=com_newsletter&view=configuration', false)); ?>" />
-			<?php echo JHtml::_('form.token'); ?>
-		</div>
+		
+		<input type="hidden" name="jform[dryrun_mailing]" value="<?php echo $this->form->getValue('dryrun_mailing'); ?>" />
+
+		<input type="hidden" name="task" value="" />
+		<input type="hidden" name="returnurl" value="<?php echo base64_encode(JRoute::_('index.php?option=com_newsletter&view=configuration', false)); ?>" />
+		<?php echo JHtml::_('form.token'); ?>
+		
 	</form>
 </fieldset>
 <?php } ?>
