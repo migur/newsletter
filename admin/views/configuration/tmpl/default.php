@@ -99,17 +99,17 @@ $showFull = AclHelper::canConfigureComponent();
 					<center>
 					<?php echo JText::_('COM_NEWSLETTER_YOU_CANT_CHANGE_COMPONENT_PERMISSIONS'); ?>
 					</center>
-				<?php }	
-				echo JHtml::_('tabs.end');
-				?>
+				<?php }	?>
 				
-				<input type="hidden" name="jform[dryrun_mailing]" value="<?php echo $this->form->getValue('dryrun_mailing'); ?>" />
-				
-				<input type="hidden" name="task" value="" />
-				<input type="hidden" name="returnurl" value="<?php echo base64_encode(JRoute::_('index.php?option=com_newsletter&view=configuration', false)); ?>" />
-				<?php echo JHtml::_('form.token'); ?>
 			</div>	
 		</div>	
+				
+		<input type="hidden" name="jform[dryrun_mailing]" value="<?php echo $this->form->getValue('dryrun_mailing'); ?>" />
+
+		<input type="hidden" name="task" value="" />
+		<input type="hidden" name="returnurl" value="<?php echo base64_encode(JRoute::_('index.php?option=com_newsletter&view=configuration', false)); ?>" />
+		<?php echo JHtml::_('form.token'); ?>
+		
 	</form>
 </fieldset>
 <?php } ?>
