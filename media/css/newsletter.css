@@ -223,7 +223,8 @@ div.form-text ul li {
     text-align: left;
     vertical-align: middle;
 	background: #fafafa;
-	position: relative;
+	/* !important is fix for IE8 */
+	position: relative !important;
     border: 1px solid #cccccc;
     padding: 2px 0 0 0;
     overflow: hidden;

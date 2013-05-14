@@ -146,9 +146,9 @@ avatarSetSettings = function(avatar) {
 
         if (event) event.stop();
         var href = 0;//$(this).getProperty('href');
-        if ( Migur.moodialogs[href] ) {
+        /*if ( Migur.moodialogs[href] ) {
             Migur.moodialogs[href].destroy();
-        }
+        }*/
         Migur.moodialogs[href] = {};
         Migur.moodialogs[href] = new MooDialog.Iframe(
            '', //$(this).getProperty('href'),
