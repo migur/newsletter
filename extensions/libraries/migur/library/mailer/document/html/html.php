@@ -259,7 +259,8 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 			'(?:(?:href\s*\=\s*)([^\s\"\'\<]+))' // Case without quotes
 		;
 
-		// Make it multiline caseinsensetive ungreedy
+		// Make it multiline caseinsensetive
+		$matches = array();
 		preg_match_all("/$pat/im", $content, $matches);
 		
 		// Create unique pattern-url pairs for substitution
