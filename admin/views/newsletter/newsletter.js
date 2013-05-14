@@ -645,6 +645,8 @@ window.addEvent('domready', function() {
 								' [name=' + el.position + ']'
 							)[0];
 
+							/* Fix for IE8 */
+							avatar.setProperty('style', 'left: 0px; top: 0px; position: relative; z-index: auto;');
 							avatar.inject(position);
 						}
 					});
