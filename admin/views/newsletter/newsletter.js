@@ -34,7 +34,7 @@ function jInsertFieldValue(value, id) {
 
 
 //TODO: BAAAD!!! Ned to insert into module widget
-Migur.dnd.makeAvatar = function(el, droppables){
+Migur.dnd.makeAvatar = function(el, droppables, htmlWidget){
 
     var avatar = el.clone();
     avatar.cloneEvents(el);
@@ -47,8 +47,17 @@ Migur.dnd.makeAvatar = function(el, droppables){
         onBeforeStart: function(draggable, droppable){
 
             var coords = draggable.getCoordinates($$('body')[0]);
-            $(draggable).store('source', draggable.getParent('div'));
-            $$('body').grab(draggable);
+			
+			var draggableParent = draggable.getParent('div');
+            $(draggable).store('source', draggableParent);
+			
+			// Workaround for unwanted saving of a newsletter when we just drag out a module.
+			// Just "lock" the html widget so it will return the same data as it has before dragging
+			if (draggableParent) {
+				htmlWidget.locked = true;
+			}
+			
+			$$('body').grab(draggable);
             draggable.setStyles({
                 left: coords.left + 'px',
                 top:  coords.top  + 'px',
@@ -62,6 +71,7 @@ Migur.dnd.makeAvatar = function(el, droppables){
         },
 
         onCancel: function(draggable, droppable){
+			htmlWidget.locked = false;
             return $(draggable).retrieve('dragger').$events.drop[0](draggable, droppable);
         },
 
@@ -70,6 +80,8 @@ Migur.dnd.makeAvatar = function(el, droppables){
         },
 
         onDrop: function(draggable, droppable){
+
+			htmlWidget.locked = false;
                 
             if (!draggable) return false;
 			
@@ -119,6 +131,8 @@ Migur.dnd.makeAvatar = function(el, droppables){
                 }
 
                 droppable.removeClass('overdropp');
+
+				$(droppable).fireEvent('dropped', draggable);
 
                 $('html-area').fireEvent('drop');
             }
@@ -402,7 +416,7 @@ window.addEvent('domready', function() {
                             }
 
 
-                            var avatar = Migur.dnd.makeAvatar(this, $$('#html-area .modules, #trashcan-container'));
+                            var avatar = Migur.dnd.makeAvatar(this, $$('#html-area .modules, #trashcan-container'), widgetHtmlArea);
 
                             var w = Migur.createWidget(
                                 avatar,
@@ -437,7 +451,7 @@ window.addEvent('domready', function() {
                             var trgt = (typeof(event.event.target) == 'undefined')?
                             event.target : event.event.target;
                             if ( $(trgt).hasClass('settings') ) {
-                        }
+							}
                         }
                     }
                 }
@@ -577,8 +591,11 @@ window.addEvent('domready', function() {
                         html: this.data.template
                         });
                     $$('form [name=jform[t_style_id]]').set('value', this.data.t_style_id);
-						
+					
 					var locThis = this;
+
+//					this.droppables = $(this.domEl).getElements('.modules');
+//					this._initDroppables();
 
 					// If nothing to render
                     if (!this.data.extensions) {
@@ -615,7 +632,7 @@ window.addEvent('domready', function() {
 						var module = $$('#' + el.extension)[0];
 						if (module) {
 
-							var avatar = Migur.dnd.makeAvatar(module, $$('#html-area .modules, #trashcan-container'));
+							var avatar = Migur.dnd.makeAvatar(module, $$('#html-area .modules, #trashcan-container'), widgetHtmlArea);
 							// Create the new Widget from element
 							var widget = Migur.getWidget(module);
 							var newW = Migur.createWidget(
@@ -659,6 +676,13 @@ window.addEvent('domready', function() {
          * return this data in JSON format
          **/
             parse: function() {
+				
+				// Workaround for unwanted saving of a newsletter when we just drag out a module.
+				// Just "lock" the html widget so it will return the same data as it has before dragging
+				if (widgetHtmlArea.locked == true) {
+					return widgetHtmlArea.dataCache;
+				}
+				
                 // all of dropable areas
                 var dt = [this.data].clone()[0];
                 if (!dt) dt = {};
@@ -683,8 +707,19 @@ window.addEvent('domready', function() {
                     }
 				);
 					
+				widgetHtmlArea.dataCache = res;
                 return res;
             }
+			
+			// Good practice but it needs total refactoring of all this code.
+			
+//			_initDroppables: function() {
+//				Array.each(this.droppables, function(item){
+//					item.addEvent('dropped', function(droppedItem){
+//						console.log(droppedItem);
+//					})
+//				});
+//			}
         });
 
         /*  Main tabs -> click-handlers  */
