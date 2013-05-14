@@ -286,15 +286,16 @@ class MigurMailerDocument extends JDocument
 			$this->_parseTemplate();
 			$this->_template->content = $this->_renderTemplate();
 
+			// Set absolute links
+			// TODO: Need to move it in mailer. Because this is a scope of letter creation not template.
+			$this->repairLinks($this->_template->content);
+
 			if (!empty($params['newsletter_id'])) {
 				$this->dispatcher->trigger('onMigurAfterNewsletterRender', array(
 					&$this->_template->content, 
 					array('newsletter_id' => $params['newsletter_id'])
 				));
 			}
-			// Set absolute links
-			// TODO: Need to move it in mailer. Because this is a scope of letter creation not template.
-			$this->repairLinks($this->_template->content);
 
 			// Add tracking by com_newsletter
 			// TODO: Need to move it in mailer. Because this is a scope of letter creation not template.
