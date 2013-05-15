@@ -35,6 +35,7 @@ iframe {
 #tabs {
 /*    width: 850px;*/
 /*    height: 370px;*/
+	padding: 20px;
 	background-color: #FFFFFF;
 	border: 1px solid #CCCCCC;
     margin-bottom: 10px;
@@ -43,7 +44,7 @@ iframe {
 }
 
 #tabs-legend {
-    margin: -15px 0 15px -10px;
+    margin: 0 0 5px 0;
 }
 
 #tabs-sub-container
@@ -409,7 +410,6 @@ div.form-text ul li {
 #trashcan-container {
     height: 50px;
     width:  110px;
-    margin-top: -20px;
 }
 
 #email-container {

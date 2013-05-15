@@ -15,7 +15,11 @@ background-color: #ffffff;
 }
 
 #tabs-template {
-    width: 500px;
+	margin-top:42px;
+}
+
+#tabs {
+	margin-bottom: 0;
 }
 
 #tabs .current {

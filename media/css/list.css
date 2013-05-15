@@ -337,7 +337,7 @@
 
 .tabs .import {
 	max-height:505px;
-	overflow: auto;
+	/*overflow: auto;*/
 }
 
 .tabs .import .toolbar-list {
@@ -346,6 +346,14 @@
 
 .tabs .import .toolbar-list li {
     margin: 10px;
+}
+
+#tabs {
+	margin-bottom: 0;
+}
+
+#tabs-list {
+	margin-top: 42px;
 }
 
 .plugin-pane {
@@ -393,8 +401,4 @@ div.form-text dl dt {
 #jgroups-pane {
 	max-height: 270px;
 	overflow: auto;
-}
-
-#tabs {
-	padding: 20px 10px 10px !important;
 }
