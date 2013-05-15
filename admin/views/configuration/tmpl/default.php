@@ -7,8 +7,8 @@ $showFull = AclHelper::canConfigureComponent();
 ?>
 
 <fieldset id="config-extensions" <?php if (!$showFull) { ?> style="width:98%" <?php } ?>>
-	
 	<legend><?php echo JText::_('COM_NEWSLETTER_INSTALLED_EXTESIONS'); ?></legend>
+
 	<?php
 	echo JHtml::_('tabs.start', 'tabs-extensions');
 	echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_MODULES'), 'tab-modules');

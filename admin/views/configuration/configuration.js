@@ -54,7 +54,7 @@ window.addEvent('domready', function() {
             SqueezeBox.open(href, {
                 handler: 'iframe',
                 size: {
-                    x: 400,
+                    x: 420,
                     y: 590
                 }
             });
@@ -71,7 +71,7 @@ window.addEvent('domready', function() {
             SqueezeBox.open(href, {
                 handler: 'iframe',
                 size: {
-                    x: 400,
+                    x: 420,
                     y: 590
                 }
             });
@@ -87,7 +87,7 @@ window.addEvent('domready', function() {
             SqueezeBox.open(href, {
                 handler: 'iframe',
                 size: {
-                    x: 400,
+                    x: 420,
                     y: 350
                 }
             });
@@ -109,7 +109,7 @@ window.addEvent('domready', function() {
             SqueezeBox.open(href, {
                 handler: 'iframe',
                 size: {
-                    x: 400,
+                    x: 420,
                     y: 340
                 }
             });

@@ -3,7 +3,6 @@
 defined('_JEXEC') or die;
 ?>
 <div id="tabs">
-    <legend id="tabs-legend"><?php echo JFactory::getDocument()->getTitle(); ?></legend>
     <table width="100%">
         <tr>
             <td>
