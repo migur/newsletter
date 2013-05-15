@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>henrik@migur.com</authorEmail>
 	<authorUrl>www.migur.com</authorUrl>
-	<version>13.05</version>
+	<version>13.05a</version>
 	<description>Plugin to synchronise users during registration</description>
 
 	<files>
