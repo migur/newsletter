@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 2 or later; see	LICENSE.txt</license>
 	<authorEmail>henrik@migur.com</authorEmail>
 	<authorUrl>www.migur.com</authorUrl>
-	<version>1.0.0</version>
+	<version>13.05</version>
 	<description>PLG_MIGUR_NEWSLETTER_IMPORT_EXAMPLE</description>
     <namespace>list.import</namespace>
 	
