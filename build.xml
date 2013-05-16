@@ -34,7 +34,8 @@
     <!-- auto values but should be checked -->
     <property name="cfg.comName" value="${cfg.name}" />
     <property name="cfg.comDir" value="${basedir}" />
-    <property name="cfg.buildVersionDir" value="${cfg.buildDir}" />
+    <property name="cfg.buildVersionDir" value="${cfg.buildDir}/pkg_newsletter.${cfg.version}-j2-premium" />
+    <property name="cfg.packageName" value="pkg_newsletter.${cfg.version}-j2-premium" />
     <property name="cfg.adminFilesDir" location="${cfg.comDir}/admin" />
     <property name="cfg.libFilesDir" location="${basedir}/extensions/libraries" />
     <property name="cfg.siteFilesDir" location="${cfg.comDir}/site" />
@@ -238,9 +239,9 @@
         <copy todir="${cfg.buildVersionDir}" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/pkg_newsletter_script.php" />
         </copy>
-        <delete  file="${cfg.buildVersionDir}/pkg_newsletter.zip" />
-        <zip destfile="${cfg.buildVersionDir}/pkg_newsletter.zip" basedir="${cfg.buildVersionDir}" />
-		<chmod file="${cfg.buildVersionDir}/pkg_newsletter.zip" perm="ugo+rwx" />
+        <delete  file="${cfg.buildVersionDir}/../${cfg.packageName}.zip" />
+        <zip destfile="${cfg.buildVersionDir}/../${cfg.packageName}.zip" basedir="${cfg.buildVersionDir}" />
+		<chmod file="${cfg.buildVersionDir}/../${cfg.packageName}.zip" perm="ugo+rwx" />
 
     </target>
 
