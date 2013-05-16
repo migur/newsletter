@@ -34,8 +34,8 @@
     <!-- auto values but should be checked -->
     <property name="cfg.comName" value="${cfg.name}" />
     <property name="cfg.comDir" value="${basedir}" />
-    <property name="cfg.buildVersionDir" value="${cfg.buildDir}/pkg_newsletter.${cfg.version}-j2-premium" />
-    <property name="cfg.packageName" value="pkg_newsletter.${cfg.version}-j2-premium" />
+    <property name="cfg.buildVersionDir" value="${cfg.buildDir}/pkg_newsletter.${cfg.version}-j3-premium" />
+    <property name="cfg.packageName" value="pkg_newsletter.${cfg.version}-j3-premium" />
     <property name="cfg.adminFilesDir" location="${cfg.comDir}/admin" />
     <property name="cfg.libFilesDir" location="${basedir}/extensions/libraries" />
     <property name="cfg.siteFilesDir" location="${cfg.comDir}/site" />
