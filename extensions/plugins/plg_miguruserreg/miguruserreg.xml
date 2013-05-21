@@ -48,8 +48,4 @@
 			</fieldset>
 		</fields>
 	</config>
-		
-	<updateservers>
-		<server type="extension" priority="1" name="Migur Update Site">http://update.migur.com/plg-miguruserreg.xml</server>
-	</updateservers>
 </extension>
