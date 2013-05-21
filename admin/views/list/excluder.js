@@ -186,7 +186,7 @@ Migur.define('excluder', function(){
 						Joomla.JText._('TOTAL','Total')+": " + (data.total || 0) + "\n"
 					);
 						
-                    document.location.reload();
+                    //document.location.reload();
                 }
             });
 				

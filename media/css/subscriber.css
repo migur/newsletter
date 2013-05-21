@@ -4,9 +4,13 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
- #subscriber-form .controls {
-	 margin-left: 100px;
- }
+body.contentpane.component {
+	overflow: hidden;
+}
+ 
+#subscriber-form .controls {
+	margin-left: 100px;
+}
  
 #subscriber-edit-main {
     float: left;

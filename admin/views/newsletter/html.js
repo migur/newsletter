@@ -25,7 +25,7 @@ Migur.define('htmlPane', function(){
 
 
 	//TODO: BAAAD!!! Ned to insert into module widget
-	Migur.dnd.makeAvatar = function(el, droppables){
+	Migur.dnd.makeAvatar = function(el, droppables, htmlWidget){
 
 		var avatar = el.clone();
 		avatar.cloneEvents(el);
@@ -37,10 +37,16 @@ Migur.define('htmlPane', function(){
 
 			onBeforeStart: function(draggable, droppable){
 
-
 				var coords = draggable.getCoordinates($$('body')[0]);
-				$(draggable).store('source', draggable.getParent('div'));
-				$(draggable).store('source', draggable.getParent('div'));
+				var draggableParent = draggable.getParent('div');
+				$(draggable).store('source', draggableParent);
+			
+				// Workaround for unwanted saving of a newsletter when we just drag out a module.
+				// Just "lock" the html widget so it will return the same data as it has before dragging
+				if (draggableParent) {
+					htmlWidget.locked = true;
+				}
+
 				$(draggable).setStyle('width', coords.width);
 				$$('body').grab(draggable);
 				draggable.setStyles({
@@ -56,6 +62,7 @@ Migur.define('htmlPane', function(){
 			},
 
 			onCancel: function(draggable, droppable){
+				htmlWidget.locked = false;
 				return $(draggable).retrieve('dragger').$events.drop[0](draggable, droppable);
 			},
 
@@ -64,6 +71,8 @@ Migur.define('htmlPane', function(){
 			},
 
 			onDrop: function(draggable, droppable){
+
+				htmlWidget.locked = false;
 
 				if (!draggable) return false;
 
@@ -373,7 +382,7 @@ Migur.define('htmlPane', function(){
 						}
 
 
-						var avatar = Migur.dnd.makeAvatar(this, $$('#html-area .modules, #trashcan-container'));
+						var avatar = Migur.dnd.makeAvatar(this, $$('#html-area .modules, #trashcan-container'), widgetHtmlArea);
 
 						var w = Migur.createWidget(
 							avatar,
@@ -585,7 +594,7 @@ Migur.define('htmlPane', function(){
 					var module = $$('#' + el.extension)[0];
 					if (module) {
 
-						var avatar = Migur.dnd.makeAvatar(module, $$('#html-area .modules, #trashcan-container'));
+						var avatar = Migur.dnd.makeAvatar(module, $$('#html-area .modules, #trashcan-container'), widgetHtmlArea);
 						// Create the new Widget from element
 						var widget = Migur.getWidget(module);
 						var newW = Migur.createWidget(
@@ -629,6 +638,13 @@ Migur.define('htmlPane', function(){
 		* return this data in JSON format
 		**/
 		parse: function() {
+			
+			// Workaround for unwanted saving of a newsletter when we just drag out a module.
+			// Just "lock" the html widget so it will return the same data as it has before dragging
+			if (widgetHtmlArea.locked == true) {
+				return widgetHtmlArea.dataCache;
+			}
+			
 			// all of dropable areas
 			var dt = [this.data].clone()[0];
 			if (!dt) dt = {};
@@ -653,6 +669,7 @@ Migur.define('htmlPane', function(){
 				}
 			);
 
+			widgetHtmlArea.dataCache = res;
 			return res;
 		}
 	});

@@ -1,6 +1,13 @@
 
 window.addEvent('domready', function() {
 	
+	// Fix for IE8. Because IE triggers native submit when 
+	// clicking on <button> that is placed INSIDE of a form.
+	// So we need to prevent that default unwanted action.
+	$$('form button').each(function(el){
+	var onClick = el.getProperty('onclick');
+	if (onClick) el.setProperty('onclick', 'event.returnValue = false; ' + onClick + '; return false;');
+	})
 	
 	// Functionality for default.php layout
 	if (isNew == 0) {
@@ -46,17 +53,42 @@ window.addEvent('domready', function() {
 		
 		form.submit();
 	});
-	
-	
-	if($$('#jform_scope input').length > 0) {
-	
-		$$('#jform_scope input').addEvent('click', function(){
+
+
+	var toggle = function() {
 			var value = $(this).get('value');
-			$('scope-container').setStyle('display', (value=='all')? 'none' : 'block');
+			var disp = (value=='all')? 'none' : 'block';
+			$('scope-container').setStyle('display', disp);
+			$('jf_scope').set('value', value);
+	}
+
+	if($$('#jform_scope input').length > 0) {
+
+		$$('#jform_scope input').addEvents({
+			'click': function() {
+				return toggle.apply(this);
+			}, 
+			/* change is needed for IE8 */
+			'change': function(){
+				return toggle.apply(this);
+			}
+		});
+/*
+		$('jform_scope').addEvent('click', function(ev){
+			
+			console.log(ev.target, ev.target.target);
+			if (!ev.target.getProperty('id')) return;
+		
+			var el = ev.target;
+			
+			var value = el.get('value');
+			var disp = (value=='all')? 'none' : 'block';
+			$('scope-container').setStyle('display', disp);
 			$('jf_scope').set('value', value);
 		});
-
+*/
 		var checked = $('jform_scope0').getProperty('checked')
-		$('scope-container').setStyle('display', checked? 'none' : 'block');
+		var disp = checked? 'none' : 'block';
+		$('scope-container').setStyle('display', disp);
 	}
 });

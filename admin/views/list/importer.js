@@ -212,7 +212,7 @@ Migur.define('importer', function(){
 						Joomla.JText._('DUPLICATED_IN_LIST', 'Duplicated in list')+": " + data.alreadyInList + "\n"
 					);
 						
-                    document.location.reload();
+                    //document.location.reload();
                 }
             });
 				

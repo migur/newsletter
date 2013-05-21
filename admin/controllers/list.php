@@ -325,8 +325,6 @@ class NewsletterControllerList extends JControllerForm
 
 		$sess = JFactory::getSession();
 		
-		sl_vd($sess->get('registry'));
-		
 		$file = $sess->get('com_newsletter.list.' . $currentList . '.file.uploaded', array());
 
 		$filename = $file['file']['filepath'];
@@ -361,7 +359,7 @@ class NewsletterControllerList extends JControllerForm
 		
 		
 		// Try to open file
-		if (($handle = fopen($filepath, "r")) === FALSE) {
+		if (($handle = fopen($filename, "r")) === FALSE) {
 			NewsletterHelper::jsonError('Cannot open file');
 		}
 
@@ -594,7 +592,7 @@ class NewsletterControllerList extends JControllerForm
 				}
 
 				unlink($file['file']['filepath']);
-				$sess->clear('com_newsletter.list.' . $currentList . '.file.uploaded');
+				//$sess->clear('com_newsletter.list.' . $currentList . '.file.uploaded');
 
 				NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), array(
 					'processed' => $processed,

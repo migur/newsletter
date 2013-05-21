@@ -1,6 +1,6 @@
 <?php $filterList = $this->state->get('filter.list'); ?>
 
-<form id="form-subscribers" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=conflicts&form=conflicts');?>" method="post" name="adminForm" >
+<form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=conflicts&form=conflicts');?>" method="post" name="adminForm" >
 
 	<?php echo JHtml::_('layout.wrapper'); ?>
 	

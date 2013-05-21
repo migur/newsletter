@@ -76,10 +76,6 @@ class NewsletterViewNewsletter extends MigurView
 
 		$nId = JRequest::getInt('newsletter_id');
 
-		$script = $this->get('Script');
-		$this->script = $script;
-
-
 		// Get main form and data for newsletter
 		$this->form = $this->get('Form', 'newsletter');
 		$this->newsletter = $this->get('Item');
@@ -270,9 +266,6 @@ class NewsletterViewNewsletter extends MigurView
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/guide.js');
 		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/guide.css');
 		
-		
-		
-		$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/html.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/plain.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/preview.js");

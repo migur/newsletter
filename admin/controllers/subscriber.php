@@ -152,8 +152,12 @@ class NewsletterControllerSubscriber extends JControllerForm
 	 */
 	public function save()
 	{
+		$isNew = JRequest::getInt('subscriber_id') == 0;
+		
+		if ($isNew) JRequest::setVar('tmpl', 'component');
+		
 		if (parent::save()) {
-			if(!JRequest::getInt('subscriber_id')) {
+			if($isNew) {
 				$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=close&tmpl=component', false));
 			}
 		}

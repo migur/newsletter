@@ -3,7 +3,7 @@
 defined('_JEXEC') or die;
 ?>
 
-<form id="subscriber-form" class="form-horizontal form-validate" name="subscriberForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
+<form id="subscriber-form" class="form-horizontal form-validate" name="subscriberForm" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>" method="post">
 
 	<div class="control-group">
 		<label class="control-label" for="jform-name"><?php echo $this->ssForm->getLabel('name'); ?></label>
@@ -34,7 +34,7 @@ defined('_JEXEC') or die;
 	<?php echo JHtml::_('form.token'); ?>
 
 	<div class="form-actions">
-			<?php echo JToolBar::getInstance()->render(); ?>
+		<?php echo JToolBar::getInstance()->render(); ?>
 	</div>
 
 </form>

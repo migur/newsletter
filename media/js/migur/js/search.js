@@ -27,19 +27,17 @@ window.addEvent('domready', function() {
         })
     });
 
-    $$('form').each(function(el) {
+    $$('form.migursearch').each(function(form) {
 
-        el.nativeSubmit = el.submit;
-        el.submit = function(){
+        form.nativeSubmit = form.submit;
+        form.submit = function(){
 
             $$('.migur-search').each(function(el){
                 el.fireEvent('focus');
             });
 
-            el.nativeSubmit();
+            return form.nativeSubmit();
         }
-        
-        el.addEvent('submit', el.submit);
     });
 
     $$('.migur-search').each(function(el) {

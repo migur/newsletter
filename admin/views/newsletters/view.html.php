@@ -47,8 +47,6 @@ class NewsletterViewNewsletters extends MigurView
 		JHTML::stylesheet('media/com_newsletter/css/admin.css');
 		JHTML::stylesheet('media/com_newsletter/css/newsletters.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
-		JHTML::script('media/com_newsletter/js/migur/js/search.js');
 		JHTML::script('media/com_newsletter/js/migur/js/raphael-min.js');
 		JHTML::script('media/com_newsletter/js/migur/js/g.raphael.js');
 		JHTML::script('media/com_newsletter/js/migur/js/g.pie.js');

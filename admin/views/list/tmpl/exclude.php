@@ -186,9 +186,10 @@
 			value="<?php  echo JText::_('COM_NEWSLETTER_EXCLUDE_FILE_APPLY'); ?>"
 		/>
 
-		<div class="pull-right">
-			<span id="exclude-message"></span>&nbsp;&nbsp;&nbsp;
-			<div id="exclude-preloader" class="fltrt"></div>
+		<div id="exclude-status-container" class="pull-right">
+			<div id="exclude-message" class="pull-left"></div>
+			<div class="pull-left">&nbsp;&nbsp;&nbsp;</div>
+			<div id="exclude-preloader" class="pull-left"></div>
 		</div>
 
 	</div>	

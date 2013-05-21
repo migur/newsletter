@@ -154,7 +154,6 @@ class NewsletterViewSubscribers extends MigurView
 		$doc->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
 		$doc->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/modal.js');
 		$doc->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/filterpanel.js');
-		$doc->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/search.js');		
 		$doc->addScript(JURI::root() . 'administrator/components/com_newsletter/views/subscribers/subscribers.js');
 	}
 

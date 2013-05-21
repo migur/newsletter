@@ -109,7 +109,5 @@ class NewsletterViewAutomailings extends MigurView
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
 		JHTML::script('media/com_newsletter/js/migur/js/modal.js');
 		JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/automailings/automailings.js");
-		JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
-		JHTML::script('media/com_newsletter/js/migur/js/search.js');		
 	}
 }

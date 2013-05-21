@@ -15,7 +15,7 @@ window.addEvent('domready', function() {
 					var body = $(target).find('.modal-body');
 
 					body
-						.html('<iframe class="modal-iframe" src="'+options.href+'" onLoad="jQuery(this).parent().removeClass(\'preloader\')"></iframe>')
+						.html('<iframe frameBorder="0" class="modal-iframe" src="'+options.href+'" onLoad="jQuery(this).parent().removeClass(\'preloader\')"></iframe>')
 						.addClass('preloader');
 
 					jQuery(target).modal('show');

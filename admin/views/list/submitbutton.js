@@ -50,7 +50,6 @@ Joomla.submitbutton = function(task)
 		}
 		else
 		{
-			alert(Joomla.JText._('COM_NEWSLETTER_ERROR_UNACCEPTABLE','Some values are unacceptable'));
 			return false;
 		}
 	}

@@ -95,12 +95,7 @@ class NewsletterViewList extends MigurView
 		
 		JavaScriptHelper::addStringVar('subtask', $subtask);
 
-
-		$script = $this->get('Script');
-		$this->script = $script;
-
 		$this->listForm = $this->get('Form', 'list');
-
 
 		$sess = JFactory::getSession();
 		$data = $sess->get('list.' . $listId . '.file.uploaded');
@@ -265,8 +260,6 @@ class NewsletterViewList extends MigurView
 		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
 		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/list.css');
 
-		$document->addScript(JURI::root() . $this->script);
-		
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
 
 		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/modal.js');
