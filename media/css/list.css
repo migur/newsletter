@@ -148,3 +148,11 @@
 .table td.container-eventlist-rowcontrols {
 	text-align: right;
 }
+
+#import-status-container {
+	margin-top: 10px;
+}
+
+#exclude-status-container {
+	margin-top: 10px;
+}

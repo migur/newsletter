@@ -116,8 +116,8 @@ $showFull = AclHelper::canConfigureComponent();
 
 <fieldset id="config-extensions" <?php if (!$showFull) { ?> style="width:98%" <?php } ?>>
 	
-	<div style="float:right;margin:5px 15px 0 0">
-		<a href="<?php echo JRoute::_('index.php?option=com_newsletter&view=install', false); ?>"><?php echo JText::_('COM_NEWSLETTER_MANAGE_EXTENSIONS'); ?></a>
+	<div style="float:right;margin:4px 0 0">
+		<a class="btn btn-info" href="<?php echo JRoute::_('index.php?option=com_newsletter&view=install', false); ?>"><?php echo JText::_('COM_NEWSLETTER_MANAGE_EXTENSIONS'); ?></a>
 	</div>
 	
 	<div class="legend"><?php echo JText::_('COM_NEWSLETTER_INSTALLED_EXTESIONS'); ?></div>

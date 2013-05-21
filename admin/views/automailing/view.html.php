@@ -175,7 +175,6 @@ class NewsletterViewAutomailing extends MigurView
 		$document->addstylesheet(JURI::root().'/media/com_newsletter/css/admin.css');
 		$document->addstylesheet(JURI::root().'/media/com_newsletter/css/automailing.css');
 		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/core.js');
-		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/ajax.js');
 		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/modal.js');
 		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/message.js');
 		$document->addScript(JURI::root()."/administrator/components/com_newsletter/views/automailing/automailing.js");

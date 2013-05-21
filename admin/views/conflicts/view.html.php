@@ -44,9 +44,6 @@ class NewsletterViewConflicts extends MigurView
 		JHTML::stylesheet('media/com_newsletter/css/admin.css');
 		JHTML::stylesheet('media/com_newsletter/css/conflicts.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		//JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
-		JHTML::script('media/com_newsletter/js/migur/js/search.js');
-		JHTML::script(JURI::root() . "/administrator/components/com_newsletter/views/conflicts/conflicts.js");
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {

@@ -78,7 +78,7 @@ class MigurPagination extends JPagination
 				isset($this->viewall)? $this->viewall : null;
 	}	
 	
-	protected function _item_active(&$item)
+	protected function _item_active(JPaginationObject $item)
 	{
 		$formName = $this->model->getName() . 'Form';
 		$app = JFactory::getApplication();

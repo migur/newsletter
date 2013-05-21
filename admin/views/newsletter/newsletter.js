@@ -202,7 +202,7 @@ if (isNew == 1) {
 	
     setTimeout(
 		function(){
-			guide.start.apply(guide.migurGuide)
+			guide.start.apply(guide)
 		}, 
 		'1000'
 	);

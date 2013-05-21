@@ -48,8 +48,6 @@ class NewsletterViewTemplates extends MigurView
 		JHTML::stylesheet('media/com_newsletter/css/templates.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
 		JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/templates/templates.js");
-		//JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
-		//JHTML::script('media/com_newsletter/js/migur/js/search.js');		
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {

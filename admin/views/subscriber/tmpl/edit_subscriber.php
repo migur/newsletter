@@ -4,43 +4,30 @@ defined('_JEXEC') or die;
 ?>
 
 <form id="subscriber-form" class="form-validate form-horizontal" name="subscriberForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
+
 	
-	<div class="control-group">
-		<label class="control-label" for="jform-name"><?php echo $this->ssForm->getLabel('name'); ?></label>
-		<div class="controls">
-			<?php 
-			if ($this->subscriber->isJoomlaUserType()) { 
-				$name = $this->ssForm->getField('name');
-			?>
-				<span class="inputtext-replacer"><?php echo $name->value; ?></span>
-				<input type="hidden" value="<?php echo $name->value; ?>" name="<?php echo $name->name; ?>">
-			<?php } else { 
-				echo $this->ssForm->getInput('name'); 
-			} ?>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<label class="control-label" for="jform-email"><?php echo $this->ssForm->getLabel('email'); ?></label>
-		<div class="controls">
-			<?php 
-			if ($this->subscriber->isJoomlaUserType()) { 
-				$email = $this->ssForm->getField('email');
-			?>
-				<span class="inputtext-replacer"><?php echo $email->value; ?></span>
-				<input type="hidden" value="<?php echo $email->value; ?>" name="<?php echo $email->name; ?>">
-			<?php } else { 
-				echo $this->ssForm->getInput('email'); 
-			} ?>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<label class="control-label" for="jform-html"><?php echo $this->ssForm->getLabel('html'); ?></label>
-		<div class="controls">
-			<?php echo $this->ssForm->getInput('html'); ?>
-		</div>
-	</div>
+	<?php 
+	if (!$this->subscriber->isJoomlaUserType()) { 
+		echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('name'), $this->ssForm->getInput('name'));
+		echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('email'), $this->ssForm->getInput('email'));
+	} else { 
+		$name = $this->ssForm->getField('name');
+		echo JHtml::_(
+			'layout.controlgroup', 
+			$this->ssForm->getLabel('name'), 
+			'<span class="inputtext-replacer">'.$name->value.'</span><input type="hidden" value="'.$name->value.'" name="'.$name->name.'">'
+		);
+		$email = $this->ssForm->getField('email');
+		echo JHtml::_(
+			'layout.controlgroup', 
+			$this->ssForm->getLabel('email'), 
+			'<span class="inputtext-replacer">'.$email->value.'</span><input type="hidden" value="'.$email->value.'" name="'.$email->name.'">'
+		);
+	}
+	
+	echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('html'), $this->ssForm->getInput('html'));
+	
+	?>
 	
 	<div id="usertype-container">
 		

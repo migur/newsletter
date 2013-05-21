@@ -38,7 +38,7 @@ class NewsletterControllerConfiguration extends MigurController
 	 *  @return void
 	 *  @since  1.0
 	 */
-	function save()
+	public function save($data = array())
 	{
 		// Check for request forgeries.
 		JRequest::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
@@ -144,7 +144,8 @@ class NewsletterControllerConfiguration extends MigurController
 	 */
 	public function export()
 	{
-
+		ob_end_clean();
+		
 		$data = DataHelper::exportListsCSV();
 
 		header("Content-Type: application/octet-stream");

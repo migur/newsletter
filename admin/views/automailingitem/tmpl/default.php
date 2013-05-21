@@ -15,8 +15,7 @@ defined('_JEXEC') or die;
 			if (empty($this->allItems[0]->series_id) || $this->allItems[0]->series_id == $this->seriesId) {
 
 				// And first item. Dont allow to change the date
-				echo $this->form->getLabel('time_start');
-				echo '<div class="labeled">'.JText::_('COM_NEWSLETTER_FROM_SUBSCRIPTION_DATE').'</div>';
+				echo JHtml::_('layout.controlgroup', $this->form->getLabel('time_start'), '<span class="inputtext-replacer">'.JText::_('COM_NEWSLETTER_FROM_SUBSCRIPTION_DATE').'</span>');
 
 			} else {
 				echo JHtml::_('layout.controlgroup', $this->form->getLabel('time_offset'), $this->form->getInput('time_offset'));

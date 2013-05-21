@@ -15,20 +15,20 @@
  */
 Joomla.submitbutton = function(task, form)
 {
-        if (!form) {
-            form = document.subscriberForm
-        }
+	if (!form) {
+		form = document.subscriberForm
+	}
 
 	if (task == '')
 	{
 		return false;
 	}
 	else
-        {
-                var action = task.split('.');
-                if ( document.formvalidator.isValid(form) ||
-                     action[1] == 'cancel' ||
-                     action[1] == 'close' ) {
+	{
+		var action = task.split('.');
+		if ( document.formvalidator.isValid(form) ||
+			 action[1] == 'cancel' ||
+			 action[1] == 'close' ) {
                      
 			Joomla.submitform(task, form);
 			return true;

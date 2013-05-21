@@ -172,9 +172,10 @@
 					value="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_FILE_APPLY'); ?>"
 				/>
 								
-				<div class="pull-right">
-					<span id="import-message"></span>&nbsp;&nbsp;&nbsp;
-					<div id="import-preloader" class="fltrt"></div>
+				<div id="import-status-container" class="pull-right">
+					<div id="import-message" class="pull-left"></div>
+					<div id="import-message" class="pull-left">&nbsp;&nbsp;&nbsp;</div>
+					<div id="import-preloader" class="pull-left"></div>
 				</div>
 
 			</div>	
