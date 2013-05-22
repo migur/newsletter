@@ -1,29 +1,56 @@
-form.mod-newsletter div {
-    margin: 10px 0;
-    text-align: center;
+.mod-newsletter-subscribe-container {
+	overflow: hidden;
 }
-form.mod-newsletter fieldset {
-    margin: 10px;
-    text-align: center;
-    padding: 0;
+
+form.mod-newsletter {
+	margin: 0;
+}
+
+form.mod-newsletter .newsletter-name,
+form.mod-newsletter .newsletter-email {
+	width: 130px;
+}	
+
+form.mod-newsletter .newsletter-html-container label {
+	text-align: left;
+	float: left;
+	padding-top: 5px;
+	overflow: hidden;
+	margin-left: 20px;
+}	
+
+form.mod-newsletter .newsletter-html-container label:first-child {
+	margin-left: 0;
+}
+
+form.mod-newsletter select {
+	width: 145px;
 }
 
 #mod-subscriber-termslink {
     font-weight: bold;
 }
 
-#newsletter-terms-container {
-	border: 1px solid transparent;
-	display: inline;
-	padding: 3px 3px 0;
-	margin: 0px;
+#newsletter-terms {
+	margin: 10px 0 10px;
+}
+
+#newsletter-terms.invalid a.modal {
+	border-bottom: 1px solid #9d261d;
+}
+
+#newsletter-submit-container {
+	text-align: right;
+	margin-top: 10px;
 }
 
 .preloader {
-	background: url('../../../media/com_newsletter/images/preloader.gif') right top no-repeat;
+	background: url('../../../media/com_newsletter/images/preloader.gif') left top no-repeat;
 	line-height: 18px;
 	color: #888;
 	min-height: 18px;
 	min-width: 18px;
 	display: block;
 }
+
+
