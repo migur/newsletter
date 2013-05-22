@@ -33,9 +33,9 @@ window.addEvent('domready', function() {
 
 				value = $$('[name=newsletter-terms]')[0].getProperty('checked');
 				if (!value) {
-					$('newsletter-terms-container').setStyle('border', '1px solid red');
+					$('newsletter-terms').addClass('invalid');
 				} else {
-					$('newsletter-terms-container').setStyle('border', '1px solid transparent');
+					$('newsletter-terms').removeClass('invalid');
 				}
 
 				return value;

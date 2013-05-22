@@ -35,50 +35,50 @@ defined('_JEXEC') or die; ?>
 	<form class="mod-newsletter" action="?option=com_newsletter" method="POST" name="subscribe-form">
         
         <?php if ($params->get('textabovename', '') != '') { ?>
-        <div class="newsletter-text-name">
+        <div class="mod-newsletter-subscribe-container newsletter-text-name">
             <?php echo $params->get('textabovename', ''); ?>
         </div>
         <?php } ?>
 
-        <div>
+        <div class="mod-newsletter-subscribe-container">
 			<input class="required validate-newsletter-name inputbox newsletter-name" name="newsletter-name" type="text" size="20" value="<?php echo $userName; ?>" />
 		</div>
         
         <?php if ($params->get('textaboveemail', '') != '') { ?>
-        <div class="newsletter-text-email-above">
+        <div class="mod-newsletter-subscribe-container newsletter-text-email-above">
             <?php echo $params->get('textaboveemail', ''); ?>
         </div>
         <?php } ?>
         
-		<div>
+		<div class="mod-newsletter-subscribe-container">
 			<input class="required validate-newsletter-email inputbox newsletter-email" name="newsletter-email" type="text" size="20" value="<?php echo $userEmail; ?>" />
 		</div>
 
         <?php if ($params->get('textunderemail', '') != '') { ?>
-        <div class="ewsletter-text-email-under">
+        <div class="mod-newsletter-subscribe-container ewsletter-text-email-under">
             <?php echo $params->get('textunderemail', ''); ?>
         </div>
         <?php } ?>
 
 		<?php if($showFb) { ?>
-		<div>
+		<div class="mod-newsletter-subscribe-container">
 			<fb:login-button perms="email"></fb:login-button>
 		</div>
 		<?php } ?>
 			
         <?php if ($params->get('showmailtype', 1) == 1) { ?>
-		<fieldset>
-			<label for="newsletter-html"><?php echo JText::_('MOD_NEWSLETTER_RECIEVE'); ?></label>
+		<div class="mod-newsletter-subscribe-container newsletter-html-container">
+			<h4><?php echo JText::_('MOD_NEWSLETTER_RECIEVE'); ?></h4>
 			<?php echo JHTML::_('select.radiolist', $radios, 'newsletter-html', array('class' => 'required'), 'value', 'text', $params->get('defaultmailtype', 1)); ?>
-		</fieldset>
+		</div>
         <?php } else { ?>
             <input type="hidden" name="newsletter-html" value="<?php echo $params->get('defaultmailtype', 1); ?>" />
         <?php } ?>
         
-		<div>
+		<div class="mod-newsletter-subscribe-container">
 			<?php if (count($list) > 1) { ?>
-			<label for="newsletter-lists"><?php echo JText::_('MOD_NEWSLETTER_SELECT_LIST_TO_SUBSCRIBE'); ?></label>
-				<select name="newsletter-lists[]" multiple size="5" class="inputbox required">
+			<h4 for="newsletter-lists"><?php echo JText::_('MOD_NEWSLETTER_SELECT_LIST_TO_SUBSCRIBE'); ?></h4>
+				<select name="newsletter-lists[]" class="inputbox required">
 					<?php echo JHtml::_('select.options', $list, 'value', 'text', 0, true);?>
 				</select>
 			<?php } else { ?>
@@ -91,29 +91,32 @@ defined('_JEXEC') or die; ?>
 		</div>
 		
 		<?php if ($params->get('showtermslink', false)) { ?>
-		<div>
-			<fieldset id="newsletter-terms" class="required checkboxes">
-				<div id="newsletter-terms-container"><input id="newsletter-terms0" class="validate-newsletter-terms" name="newsletter-terms" type="checkbox" /></div>
-				<a	rel="{handler: 'iframe', size: {x: 820, y: 400} }"
-					class="modal"
-					href="<?php echo $termslink; ?>"
-				>
-					<?php echo JText::_('MOD_NEWSLETTER_TERMS_AND_CONDITIONS'); ?>
-				</a>
-			</fieldset>
+		<div class="mod-newsletter-subscribe-container">
+			<div id="newsletter-terms" class="required checkboxes">
+				<label id="newsletter-terms-container" class="checkbox">
+					<input id="newsletter-terms0" class="validate-newsletter-terms" name="newsletter-terms" type="checkbox" />
+					<a	rel="{handler: 'iframe', size: {x: 820, y: 400} }"
+						class="modal"
+						href="<?php echo $termslink; ?>"
+					>
+						<?php echo JText::_('MOD_NEWSLETTER_TERMS_AND_CONDITIONS'); ?>
+					</a>
+				</label>	
+			</div>
 		</div>
 		<?php } ?>
 		
-		<div id="newsletter-submit-container">
+		<div id="newsletter-submit-container" class="mod-newsletter-subscribe-container">
 			<input
 				type="button"
 				value="<?php echo JText::_('MOD_NEWSLETTER_SUBSCRIBE'); ?>"
 				onClick="modNewsletterSubmit(this)"
+				class="btn btn-success"
 			/>
 		</div>
 
         <?php if ($params->get('textappend', '') != '') { ?>
-        <div class="newsletter-append-text">
+        <div class="mod-newsletter-subscribe-container newsletter-append-text">
             <?php echo $params->get('textappend', ''); ?>
         </div>
         <?php } ?>
