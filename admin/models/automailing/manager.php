@@ -65,7 +65,9 @@ class NewsletterAutomailingManager
 							'type' => 'subscriber',
 							'ids' => array(
 								$sid
-					))));
+						)),
+						'lists' => $lids
+					));
 
 					// Cant run there. 
 					// This is issue of a cron.
