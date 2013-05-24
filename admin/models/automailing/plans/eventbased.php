@@ -63,7 +63,8 @@ class NewsletterAutomlailingPlanEventbased extends NewsletterAutomlailingPlanCom
 			'target_type'=> $options['targets']['type'],
 			'params'    => array(
 				'step'  => 0,
-				'timeCreated' => time()				
+				'timeCreated' => time(),
+				'lists' => $lids
 		)));
 		
 		return $thread;
