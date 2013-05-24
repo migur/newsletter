@@ -119,20 +119,25 @@ class NewsletterAutomlailingThreadCommon extends MigurJTable
 			
 		}
 		
-		$list = $this->getTargetItems();
-		
-		foreach($list as $sid) {
-			
-			$queue = JTable::getInstance('Queue', 'NewsletterTable');
-			$queue->save(array(
-				'newsletter_id' => $serie->newsletter_id,
-				'subscriber_id' => $sid,
-				'list_id'       => 0,
-				'created'       => date('Y-m-d H:i:s'),
-				'state'			=> 1
-			));
-			unset($queue);
+		$targetItems = $this->getTargetItems();
 
+		$lids = !empty($this->params['lists'])? $this->params['lists'] : array(0);
+		
+		foreach($targetItems as $sid) {
+
+			foreach($lids as $lid) {
+			
+				$queue = JTable::getInstance('Queue', 'NewsletterTable');
+				$queue->save(array(
+					'newsletter_id' => $serie->newsletter_id,
+					'subscriber_id' => $sid,
+					'list_id'       => $lid,
+					'created'       => date('Y-m-d H:i:s'),
+					'state'			=> 1
+				));
+				unset($queue);
+			}	
+				
 			$sents++;
 		}
 		
