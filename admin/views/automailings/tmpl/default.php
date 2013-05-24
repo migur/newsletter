@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 	<div class="modal-body"></div>
 </div>
 
-<form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=automailings&form=automailings');?>" method="post" name="automailingsForm" >
+<form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=automailings&form=automailings');?>" method="post" name="adminForm" >
 
 	<?php echo JHtml::_('layout.wrapper'); ?>
 	
@@ -36,7 +36,7 @@ defined('_JEXEC') or die;
 											<input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
 									</th>
 									<th class="left">
-											<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_AUTOMAILING', 'a.title', $this->automailings->listDirn, $this->automailings->listOrder, null, null, 'automailingsForm'); ?>
+											<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_AUTOMAILING', 'a.title', $this->automailings->listDirn, $this->automailings->listOrder, null, null, 'adminForm'); ?>
 									</th>
 							</tr>
 					</thead>
@@ -55,7 +55,7 @@ defined('_JEXEC') or die;
 								<td class="center">
 									<?php
 										$idx = $item->automailing_id;
-										echo JHtml::_('multigrid.id', $i, $idx, false, 'cid', 'automailingsForm');
+										echo JHtml::_('multigrid.id', $i, $idx, false, 'cid', 'adminForm');
 									?>
 								</td>
 								<td>

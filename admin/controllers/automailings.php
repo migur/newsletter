@@ -11,14 +11,13 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.controlleradmin');
-
 /**
  * automailings controller class.
  *
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterControllerAutomailings extends JControllerAdmin
+class NewsletterControllerAutomailings extends MigurControllerAdmin
 {
 
 	/**
