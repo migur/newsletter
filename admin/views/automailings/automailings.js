@@ -17,58 +17,8 @@ window.addEvent('domready',
 
 	function() {
 	
-		var edit  = $$('#automailings-edit > button');
-		var trash = $$('#automailings-trash > button');
 		var glasses = $$('.automailingslist .search')
-		var checkboxes = $$('.automailingslist [type=checkbox]');
 		
-		var buttons = [edit, trash];
-
-		// Manipulates with access to a buttons depending on checkboxes
-		var updateBtnState = function() {
-			
-			checkboxes.some(function(el){ return el.get('checked') })? 
-
-				buttons.each(function(el){
-					 el.removeClass('disabled');
-				 }) :
-
-				 buttons.each(function(el){
-					 el.addClass('disabled');
-				});
-		}
-		
-		checkboxes.addEvent('click', updateBtnState);
-		buttons.each(function(el) { el.removeProperty('onclick'); });
-		updateBtnState();
-
-		/* Expand the functionality of the delete button */
-		trash.addEvent('click', function() {
-			if (
-				$(this).hasClass('disabled') == false && 
-				confirm('One or more newsletters may use this template(s). Do you want to delete?') 
-			) {
-				Joomla.submitform('templates.delete', $$('[name=templatesForm]')[0]);
-			};
-			
-			return false;
-		});
-
-
-
-		/* Expand the functionality of the edit button */
-		edit.addEvent('click', function(ev){
-
-			ev.stop();
-
-			checkboxes.each(function(el){
-				if(el.getProperty('checked')) {
-					el.getParent('tr').getElements('.modal').fireEvent('click');
-				}
-			});
-		});
-
-
 		// Add AJAX preview functionality to glasses
 		glasses.addEvent('click', function(){
 
@@ -77,7 +27,6 @@ window.addEvent('domready',
 
 			return false;
 		});
-
 
 		glasses[0].fireEvent('click');
 
