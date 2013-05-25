@@ -358,9 +358,11 @@ class NewsletterControllerSubscribe extends JController
 				$db->query();
 
 				// Add to history
+				$newsletterId = !empty($nid)? $db->quote((int) $nid) : "NULL";
+				
 				$db->setQuery(
 					"INSERT IGNORE INTO #__newsletter_sub_history SET " .
-					" newsletter_id=" . $db->quote((int) $nid) . ", " .
+					" newsletter_id = " . $newsletterId . ", " .
 					" subscriber_id=" . $db->quote((int) $subscriber->subscriber_id) . ", " .
 					" list_id=" . $db->quote((int) $list) . ", " .
 					" date=" . $db->quote(date('Y-m-d H:i:s')) . ", " .
