@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>info@migur.com</authorEmail>
 	<authorUrl>http://migur.com/</authorUrl>
-	<version>13.05a</version>
+	<version>13.05</version>
 	<description>The simplest rss module</description>
 	<files>
 		<filename
