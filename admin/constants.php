@@ -21,4 +21,6 @@ if (!defined('MIGUR_COM_NEWSLETTER')) {
 	
 	// At last define the flag for com_newsletter component
 	define('MIGUR_COM_NEWSLETTER', true);
+	
+	define('MIGUR_LICENSE_SERVICE_URL', 'http://migur.com/monster/service/check/license');
 }

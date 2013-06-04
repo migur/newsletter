@@ -83,10 +83,10 @@ try {
 	if ( JRequest::getString('tmpl') != 'component') {
 
 		// Get license data (may be cached data)
-		$info = NewsletterHelperNewsletter::getCommonInfo();
+		$status = NewsletterHelperNewsletter::getLicenseStatus();
 
 		// If it has no valid license then show the RED message
-		if ($info->is_valid == "JNO") {
+		if (!$status->isValid) {
 			$app->enqueueMessage(JText::_('COM_NEWSLETTER_LICENSE_INVALID'), 'error');
 		}
 	}

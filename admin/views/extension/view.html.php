@@ -41,6 +41,8 @@ class NewsletterViewExtension extends MigurView
 	 */
 	public function display($tpl = null)
 	{
+		require_once COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'fields' . DIRECTORY_SEPARATOR . 'modulelayout.php';
+		
 		JHTML::stylesheet('media/com_newsletter/css/admin.css');
 		JHTML::stylesheet('media/com_newsletter/css/extension.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
