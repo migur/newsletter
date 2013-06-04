@@ -52,7 +52,9 @@ class NewsletterViewNewsletter extends MigurView
 	 */
 	public function display($tpl = null)
 	{
-		$isNew = (!JRequest::getInt('newsletter_id', false) );
+		$nId = JRequest::getInt('newsletter_id');
+
+		$isNew = empty($nId);
 		
 		if (
 			( $isNew && !AclHelper::actionIsAllowed('newsletter.add')) ||
@@ -66,20 +68,24 @@ class NewsletterViewNewsletter extends MigurView
 			return;
 		}	
 		
+		// Get main form and data for newsletter
+		$newsletterModel = MigurModel::getInstance('Newsletter', 'NewsletterModel');
+		$newsletter = $newsletterModel->getItem($nId);
 		
-		//TODO: Bulk-code. Need to refactor.
-
+		$this->assignRef('newsletter', $newsletter);
+		$this->assign('form', $this->get('Form', 'newsletter'));
+		
+		$isUpdateAllowed = $newsletterModel->isUpdateAllowed($newsletter);
+		
+		$this->assign('isUpdateAllowed', $isUpdateAllowed);
+		
+		JavascriptHelper::addStringVar('isUpdateAllowed', (int) $isUpdateAllowed);
+		
 		JavascriptHelper::addObject(
 				'comParams',
 				JComponentHelper::getParams('com_newsletter')->toArray() //array('autosaver' => array('on' => true))
 		);
-
-		$nId = JRequest::getInt('newsletter_id');
-
-		// Get main form and data for newsletter
-		$this->form = $this->get('Form', 'newsletter');
-		$this->newsletter = $this->get('Item');
-
+		
 		$smtpModel = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity'); 
 		
 		// Let's add J! profile
@@ -205,26 +211,47 @@ class NewsletterViewNewsletter extends MigurView
 		$isNew = (!JRequest::getInt('newsletter_id', false) );
 		JToolBarHelper::title($isNew? 
 			JText::_('COM_NEWSLETTER_NEWSLETTERS_ADD_TITLE') : 
-			JText::_('COM_NEWSLETTER_NEWSLETTERS_EDIT_TITLE'), 
+			($this->isUpdateAllowed? 
+				JText::sprintf('COM_NEWSLETTER_NEWSLETTERS_EDIT_TITLE', $this->newsletter->name) :
+				JText::sprintf('COM_NEWSLETTER_NEWSLETTERS_REVIEW_TITLE', $this->newsletter->name)
+			), 
 		'article.png');
 
 		$bar = JToolBar::getInstance('toolbar');
 		
-		if (
-			( $isNew && AclHelper::actionIsAllowed('newsletter.add' )) ||
-			(!$isNew && AclHelper::actionIsAllowed('newsletter.edit')) 
+		if ($this->isUpdateAllowed && (
+				( $isNew && AclHelper::actionIsAllowed('newsletter.add' )) ||
+				(!$isNew && AclHelper::actionIsAllowed('newsletter.edit'))
+			) 
 		) {
-			$bar->appendButton('Link', 'apply', 'JTOOLBAR_APPLY', '#', false);
+			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'newsletter.apply', false);
 			$bar->appendButton('Standard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
 		}
 		
-		$helpLink = 'http://migur.com/support/documentation/newsletter/' . NewsletterHelper::getManifest()->version . '/newsletters';
-        $bar->appendButton('Popup', 'default', 'COM_NEWSLETTER_TUTORIAL', $helpLink, 1000, 600, 0, 0);
+		try {
+			$status = NewsletterHelperNewsletter::getLicenseStatus();
+		
+			// We show tutorials only for users with valid license
+			if ($status->isValid) {
+				$helpLink = 'http://migur.com/support/documentation/migur-newsletter/newsletters?version=' . NewsletterHelper::getManifest()->version;
+				$bar->appendButton(
+					'Custom', 
+					'<a class="btn btn-small" href="'.$helpLink.'" target="_blank">'.
+					'<span class="icon-asterisk"></span>'.JText::_('COM_NEWSLETTER_TUTORIAL').'</a>'
+				);
+			}	
+		
+		} catch(Exception $e) {
+			NewsletterHelperLog::addError($e->getMessage());
+		}
+
+		
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
 
-		if (
-			( $isNew && AclHelper::actionIsAllowed('newsletter.add' )) ||
-			(!$isNew && AclHelper::actionIsAllowed('newsletter.edit')) 
+		if ($this->isUpdateAllowed && (
+				( $isNew && AclHelper::actionIsAllowed('newsletter.add' )) ||
+				(!$isNew && AclHelper::actionIsAllowed('newsletter.edit')) 
+			)
 		) {
 			$bar->appendButton('Separator', null, '50');
 			$bar->appendButton('Custom', '<button class="btn btn-small" id="autosaver-switch"><span id="autosaver-icon"></span><span id="content-state"></span></button>', 'autosaver', '', false);
@@ -244,7 +271,7 @@ class NewsletterViewNewsletter extends MigurView
 		$isNew = (!JRequest::getInt('newsletter_id', false) );
 		JavascriptHelper::addStringVar('isNew', (int)$isNew);
 		$document = JFactory::getDocument();
-		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_NEWSLETTER_CREATING') : JText::_('COM_NEWSLETTER_NEWSLETTER_EDITING'));
+		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_NEWSLETTER_CREATING') : JText::sprintf('COM_NEWSLETTER_NEWSLETTERS_EDIT_TITLE', $this->newsletter->name));
 		
 		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
 		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/newsletter.css');
@@ -275,6 +302,7 @@ class NewsletterViewNewsletter extends MigurView
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/newsletter.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/downloads.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/submitbutton.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/models/forms/newsletter.js");
 		JText::script('COM_NEWSLETTER_NEWSLETTER_ERROR_UNACCEPTABLE');
 	}
 

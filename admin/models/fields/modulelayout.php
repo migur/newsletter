@@ -38,7 +38,6 @@ class JFormFieldModuleLayout extends JFormField
 	protected function getInput()
 	{
 		// Initialize variables.
-
 		// Get the client id.
 		$clientName = $this->element['client_id'];
 
@@ -147,8 +146,8 @@ class JFormFieldModuleLayout extends JFormField
 //
 					$template = new JObject(array(
 						'element' => 'newsletter',
-						'name'    => 'newsletter',
-						'path'    => '../administrator/components/com_newsletter/extensions/templates'
+						'name'    => 'Migur Newsletter',
+						'path'    => '../administrator/components/com_newsletter/extensions/overrides'
 					));
 
 					// Load language file
@@ -157,7 +156,7 @@ class JFormFieldModuleLayout extends JFormField
 					||	$lang->load('tpl_'.$template->element.'.sys', $client->path, $lang->getDefault(), false, false)
 					||	$lang->load('tpl_'.$template->element.'.sys', $client->path.'/templates/'.$template->element, $lang->getDefault(), false, false);
 
-					$template_path = JPath::clean(JPATH_COMPONENT_ADMINISTRATOR.'/extensions/templates/html/'.$module);
+					$template_path = JPath::clean(JPATH_COMPONENT_ADMINISTRATOR.'/extensions/overrides/'.$module);
 
 					// Add the layout options from the template path.
 					if (is_dir($template_path) && ($files = JFolder::files($template_path, '^[^_]*\.php$'))) {

@@ -117,13 +117,12 @@
 			type="textarea"
 			label="COM_NEWSLETTER_PLAIN"
 			description="COM_NEWSLETTER_PLAIN"
-			class="inputbox validate-newsletter_plain autosaverable"
+			class="inputbox validate-plain autosaverable"
 			cols="50"
 			rows="20"
-			id="plain-area"
+			id="plain"
 			default=""
 			required="true"
-			validate=""
             filter="raw"
 		 />
 		<field name="newsletter_attachment"
@@ -146,7 +145,13 @@
 				validate=""
 		 />
 
-		 <field name="t_style_id" type="hidden" required="true"/>
+		 <field 
+			 name="t_style_id" 
+			 type="list" 
+			 label="COM_NEWSLETTER_HTML_TEMPLATE" 
+			 required="true" 
+		 />
+
 		 <field name="newsletter_id" type="hidden" />
 	</fieldset>
 </form>

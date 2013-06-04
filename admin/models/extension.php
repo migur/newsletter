@@ -73,6 +73,10 @@ class NewsletterModelExtension extends JModelAdmin
 		if (empty($form)) {
 			return false;
 		}
+		
+		
+		$form->setFieldAttribute('layout', 'module', $module, 'params');
+		//var_dump($form->getField('layout', 'params')); die;
 		return $form;
 	}
 
