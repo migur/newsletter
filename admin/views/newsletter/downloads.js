@@ -9,6 +9,17 @@
 
 window.addEvent('domready', function() {
 
+	// Add observer to ATACHMENTS tab
+	// to notify user if letter is not saved yet.
+	$$('#tabs-newsletter li')[3].addEvent('click', function(){
+		var nid = $$('[name=newsletter_id]')[0].getProperty('value');
+
+		if (nid == '' || nid < 1) {
+			alert(Joomla.JText._('PLEASE_SAVE_THE_NEWSLETTER_FIRST', "Please save the newsletter first!"));
+			return false;
+		}
+	});
+
 	Migur.fileRemoveClickHandler = function(event){
 
 		event.stop();
@@ -94,25 +105,21 @@ window.addEvent('domready', function() {
     }
 
 
-	$('newsletter_upload').addEvent('click', function(ev){
+	if ($('newsletter_upload')) {
+		$('newsletter_upload').addEvent('click', function(ev){
 
-		ev.stop();
+			ev.stop();
 
-		var nid = parseInt($$('[name=newsletter_id]')[0].getProperty('value'));
+			var nid = parseInt($$('[name=newsletter_id]')[0].getProperty('value'));
 
-		if (nid < 1) {
-			alert(Joomla.JText._('PLEASE_SAVE_THE_NEWSLETTER_FIRST', "Please save the newsletter first!"));
-			return false;
-		}
-		
-		window.migurFieldId = 'fileattach';
+			if (nid < 1) {
+				alert(Joomla.JText._('PLEASE_SAVE_THE_NEWSLETTER_FIRST', "Please save the newsletter first!"));
+				return;
+			}
 
-		Migur.modal.show('#modal-attachment', {type: 'iframe', href: $(this).getProperty('href')});
-	});
+			window.migurFieldId = 'fileattach';
 
-
-	// Check if this letter is not saved yet and block the button
-	
-
-
+			Migur.modal.show('#modal-attachment', {type: 'iframe', href: $(this).getProperty('href')});
+		});
+	}	
 });

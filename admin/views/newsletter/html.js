@@ -128,7 +128,9 @@ Migur.define('htmlPane', function(){
 					$('html-area').fireEvent('drop');
 				}
 
-				Migur.app.autosaver.update();
+				if (Migur.app.autosaver) {
+					Migur.app.autosaver.update();
+				}	
 			}
 		});
 		return avatar;
@@ -279,7 +281,7 @@ Migur.define('htmlPane', function(){
 
 
 	// Create wigets for each template control
-	Migur.createWidget('templates-container', {
+	Migur.createWidget('jform_t_style_id', {
 
 		data: null,
 
@@ -535,7 +537,9 @@ Migur.define('htmlPane', function(){
 					
 					$this._render();
 
-					Migur.app.autosaver.update();
+					if (Migur.app.autosaver) {
+						Migur.app.autosaver.update();	
+					}	
 				}
 			}).send();
 
@@ -554,8 +558,7 @@ Migur.define('htmlPane', function(){
 				domEl.setStyle('border', (this.data.template == "")? '1px solid #ff0000' : '0');
 				domEl.set({
 					html: this.data.template
-					});
-				$$('form [name=jform[t_style_id]]').set('value', this.data.t_style_id);
+				});
 
 				var locThis = this;
 
