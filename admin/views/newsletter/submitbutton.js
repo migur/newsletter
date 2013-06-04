@@ -34,19 +34,14 @@ Joomla.submitbutton = function(task)
 					break;
 				}
 			}
-
-            Migur.validator.tabIndicator(
-                '#tabs-sub-container',
-                'span h3 a',
-                'tab-invalid',
-                '.invalid'
-            );
 		}
 	
 		if (isValid)
 		{
 			// To set jform[htmlTpl] and jform[plugins] fields
-			Migur.app.autosaver.getter();
+			if (Migur.app.autosaver) {
+				Migur.app.autosaver.getter();
+			}	
 			Joomla.submitform(task, document.newsletterForm);
 			return true;
 		}

@@ -166,8 +166,7 @@ class NewsletterModelConfiguration extends JModelForm
 		}
 
 		// Clean the cache.
-		$cache = JFactory::getCache('_system');
-		$cache->clean();
+		JFactory::getCache('com_newsletter')->clean('com_newsletter');
 
 		return true;
 	}

@@ -12,8 +12,6 @@ defined('_JEXEC') or die;
 </div>
 
 <div id="tabs">
-    <div id="tabs-legend"><?php echo JFactory::getDocument()->getTitle(); ?></div>
-	
 	<form name="newsletterForm" method="POST" id="tabs-sub-container" class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
 
 		<ul id="tabs-newsletter" class="nav nav-tabs" data-mnc-role="tab-header-container">
@@ -58,7 +56,6 @@ defined('_JEXEC') or die;
 
 		<input type="hidden" name="newsletter_id" value="<?php echo $this->form->getValue('newsletter_id'); ?>" />
 		<?php echo $this->form->getInput('newsletter_id'); ?>
-		<?php echo $this->form->getInput('t_style_id'); ?>
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="jform[htmlTpl]" value="" />
 		<input type="hidden" name="jform[plugins]" value="" />

@@ -204,28 +204,23 @@
             label="COM_NEWSLETTER_CONFIG_PRODUCT">
         </field>
 
-        <field
-            name="monster_url"
-            type="hidden"
-            default="migur.com/monster"
-            size="50"
-            label="COM_NEWSLETTER_MONSTER_URL">
-        </field>
-        <field
+		<field
             name="fbappid"
             type="text"
             default=""
             size="50"
             label="COM_NEWSLETTER_FACEBOOK_APID">
         </field>
-        <field
+
+		<field
             name="fbsecret"
             type="text"
             default=""
             size="50"
             label="COM_NEWSLETTER_FACEBOOK_SECRET">
         </field>
-        <field
+
+		<field
             name="debug"
             type="radio"
 			class="btn-group"
@@ -234,12 +229,14 @@
             <option value="1">JYES</option>
             <option value="0">JNO</option>
         </field>
-        <field
+
+		<field
             name="dryrun_mailing"
             type="hidden"
             default="0">
         </field>
-        <field
+
+		<field
             name="rawurls"
             type="radio"
 			class="btn-group"
@@ -250,6 +247,7 @@
             <option value="1">JYES</option>
             <option value="0">JNO</option>
         </field>
+
     </fieldset>
 
 	<fieldset 

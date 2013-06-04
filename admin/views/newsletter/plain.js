@@ -7,7 +7,7 @@ Migur.define("plain", function(){
 			
 				ev.stop();
 				
-                $('jform_plain_area').insertAtCursor($(this).getProperty('data-value'), false);
+                $('jform_plain').insertAtCursor($(this).getProperty('data-value'), false);
 				
                 return false;
         });

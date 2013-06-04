@@ -9,11 +9,7 @@ Migur.define("autosaver", function() {
 			repeat: true,
 			timeout: 3000,
 			observable: $('tabs-sub-container'),
-			url: '?option=com_newsletter&context=json'
-		},
-
-		beforeSend: function(){
-				$$('form [name=task]').set('value','newsletter.apply');
+			url: '?option=com_newsletter&context=json&task=newsletter.apply'
 		},
 
 		getter: function(){
@@ -35,19 +31,20 @@ Migur.define("autosaver", function() {
 
 			$$("[name=jform[htmlTpl]]")[0].setProperty('value', obj["jform[htmlTpl]"]);
 			$$("[name=jform[plugins]]")[0].setProperty('value', obj["jform[plugins]"]);
+			obj['task'] = null;
 
 			return obj.toQueryString();
 		},
 
 		// On success
 		onSuccess: function(res){
-			
+
 			var parser = new Migur.jsonResponseParser(res);
 
 			var data = parser.getData();
 
 			if (parser.isError()) {
-				
+
 				var switcher = Migur.getWidget('autosaver-switch');
 				if (autosaver.messageCannotsave === undefined || switcher.data == 'off') {
 					alert( parser.getMessagesAsList(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured!')) );
@@ -68,12 +65,12 @@ Migur.define("autosaver", function() {
 					.set('html', Joomla.JText._('ALL_CHANGES_SAVED', 'All changes saved'))
 					.setStyle('color', 'black');
 
-				//Migur.getWidget('autosaver-switch').render();
-				autosaver.options.observState = autosaver.getter();
+				autosaver.options.observState = autosaver.savedData;
 			}
 		},
 
 		controller: function(data) {
+
 			// If the HTML constructor is not ready yet the we cant get data from it...
 			var htmlConstructor = Migur.getWidget('html-area');
 			if (!htmlConstructor.initialised) {
@@ -81,23 +78,24 @@ Migur.define("autosaver", function() {
 			}
 
 			var isChanged = this.isChanged(data);
-			
+
 			this.setMessage(isChanged);
-			
-			var form = $$('form.form-validate')[0];
-			var res = document.formvalidator.isValid(form);
 
-			Migur.validator.tabIndicator(
-				'#tabs-newsletter',
-				'li a',
-				'tab-invalid',
-				'.invalid'
-				);
+			var isValid=true;
+			var forms = $$('form.form-validate');
+			for (var i=0;i<forms.length;i++)
+			{
+				if (!document.formvalidator.isValid(forms[i]))
+				{
+					isValid = false;
+					break;
+				}
+			}
 
-			if (!res) {
+			if (!isValid) {
 				return false;
 			}
-			
+
 			return isChanged;
 		}, 
 
@@ -116,51 +114,15 @@ Migur.define("autosaver", function() {
 
 		update: function(){
 			var data = this.getter();
-	        this.setMessage(this.isChanged(data));
+			this.setMessage(this.isChanged(data));
 		}	
 
 	});
 
 	Migur.app.autosaver = autosaver;
-
-	$$('input, select, textarea').addEvent('blur', function(){
-		Migur.validator.tabIndicator(
-			'#tabs-sub-container',
-			'span h3 a',
-			'tab-invalid',
-			'.invalid'
-			);
-	});
-
-
-	$$('#toolbar-apply > *')[0].addEvent('click', function(ev){
-
-		ev.stop();
-
-		var res = autosaver.send(false, 'use controller');
-
-		if (res) {
-			// Hide the message (0008255: Ability to configure autosave)
-			autosaver.prompt = 'already';
-
-			if (typeof(autosaver.prompt) == 'undefined') {
-				autosaver.prompt = 'already';
-				var conf = confirm(Joomla.JText._('DO_YOU_WANT_TO_TURN_ON_AUTO_SAVE_INSTEAD_QM','Do you want to turn on "Auto save" instead?'));
-				if (conf) {
-					Migur.getWidget('autosaver-switch').turnOn();
-				}
-			}
-
-		} else {
-			alert(Joomla.JText._(
-				'AN_ERROR_OCCURED_DURING_SAVE_PLEASE_TRY_TURNING_ON_AUTOSAVE_INSTEAD',
-				'An error occured during save, please try turning on autosave instead.'
-			));
-		}
-	});
-
-
+	
 	/* Autosaver switch onclick-handler */
+		
 	$$('#toolbar-autosaver > *')[0].setProperty('id', 'autosaver-switch');
 
 	var control = Migur.createWidget('autosaver-switch', {
@@ -173,18 +135,7 @@ Migur.define("autosaver", function() {
 				this.data = 'off';
 				this.turnOff();
 			}
-		//this.data = null;
 		},
-
-//		render: function() {
-//			$(this.domEl).set({
-//				html:
-//				'<span id="autosaver-icon"></span>'+
-//			'<span id="content-state"></span>'
-//			});
-//			this.update('saved');
-//			(this.data == 'on')? this.turnOn() : this.turnOff();
-//		},
 
 		turnOn: function() {
 			var el = $(this.domEl);
@@ -193,7 +144,9 @@ Migur.define("autosaver", function() {
 				.addClass('icon-save');
 			el.getElements('#content-state')[0].
 				set('html', Joomla.JText._('AUTOSAVE_IS_ON', 'Autosave is on'));
-			
+
+			docstateElement.setStyle('display', 'block');
+
 			autosaver.start();
 			this.data = 'on';
 		},
@@ -206,19 +159,21 @@ Migur.define("autosaver", function() {
 			el.getElements('#content-state')[0].
 				set('html', Joomla.JText._('AUTOSAVE_IS_OFF', 'Autosave is off'));
 
+			docstateElement.setStyle('display', 'none');
+
 			autosaver.stop();
 			this.data = 'off';
 		},
-		
+
 		change: function() {
-			
+
 			if (this.data == 'off') {
 				this.turnOn();
-			}else {
+			} else {
 				this.turnOff();
 			}
 		},
-		
+
 		events: {
 			'click': function(){
 				Migur.getWidget(this).change();
@@ -240,6 +195,11 @@ Migur.define("autosaver", function() {
 	$$('#tabs textarea').addEvent('keyup', function() {
 		autosaver.update();
 	});
+
+	var tid = $$('[name="jform[t_style_id]"]')[0].getProperty('value');
+	if (!tid) {
+		autosaver.update();
+	}
 
 	return autosaver;
 

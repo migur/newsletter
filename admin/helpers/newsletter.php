@@ -189,6 +189,53 @@ class NewsletterHelperNewsletter
 		return $res;
 	}
 
+	public static function getLicenseStatus($noCache = false)
+	{
+		$params = JComponentHelper::getParams('com_newsletter');
+		$lkey = $params->get('license_key');
+
+		$obj = self::getManifest();
+		$product = $obj->monsterName;
+		
+		$domain = $_SERVER['SERVER_NAME'];
+		
+		$url = MIGUR_LICENSE_SERVICE_URL . '/license_key/' . urlencode($lkey) . '/product/' . urlencode($product) . '/domain/' . urlencode($domain);
+
+		if (!$noCache) {
+            $cache = JFactory::getCache('com_newsletter');
+			$monster = $cache->call(array('NewsletterHelperNewsletter', '_getLicenseStatus'), $url);
+        } else {
+			$monster = self::_getLicenseStatus($url);
+        }   
+
+		if (empty($monster)) {
+			throw new Exception('Can not get license status');
+		}
+		
+		return (object) array(
+			'isValid'       => !empty($monster->is_valid) && ($monster->is_valid == 1),
+			'domainName'    => !empty($monster->domain_name)? $monster->domain_name : null,
+			'latestVersion' => !empty($monster->latest_version)? trim($monster->latest_version) : null,
+			'error'         => !empty($monster->error)? $monster->error : null,
+			'code'          => !empty($monster->code)? $monster->code : null
+		);
+	}	
+	
+	public static function _getLicenseStatus($url) 
+	{
+		$xml = @simplexml_load_file($url);
+		$res = new stdClass;
+		
+		if ($xml) {
+			foreach($xml as $key => $val) {
+				$res->$key = (string) $val;
+			}
+		}	
+		
+		return $res;
+	}
+	
+	
 	static public function getManifest()
 	{
 		if (!self::$_manifest) {

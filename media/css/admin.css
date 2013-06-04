@@ -253,8 +253,8 @@ textarea.invalid {
     background-position: left bottom;
 }
 
-.tab-invalid {
-    color: red !important;
+.nav-tabs li a.invalid {
+	color: #9d261d;
     font-weight: bold;
 }
 

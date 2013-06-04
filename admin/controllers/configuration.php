@@ -131,7 +131,7 @@ class NewsletterControllerConfiguration extends MigurController
 				break;
 		}
 
-		JFactory::getCache('com_newsletter')->clean();
+		JFactory::getCache('com_newsletter')->clean('com_newsletter');
 		$this->licDontCheck = true;
 		return true;
 	}

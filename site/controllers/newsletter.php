@@ -101,6 +101,9 @@ class NewsletterControllerNewsletter extends JControllerForm
 			return;
 		}
 
+		// Load newseltter language
+		JFactory::getLanguage()->load('com_newsletter_modules', JPATH_ADMINISTRATOR);
+		
 		$mailer = new MigurMailer();
 		
 		// emulate user environment
@@ -168,6 +171,9 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$module->title      = $title;
 		$module->showtitle  = $showTitle;
 
+		// Load newseltter language
+		JFactory::getLanguage()->load('com_newsletter_modules', JPATH_ADMINISTRATOR);
+		
 		$content = NewsletterHelperContent::pathsToAbsolute(
 			NewsletterHelperModule::renderModule($modules[0])
 		);	

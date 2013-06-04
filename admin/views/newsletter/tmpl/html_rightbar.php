@@ -1,21 +1,25 @@
 <div id="acc-newsletter">
 
-	<div id="trashcan-container" class="drop trashcan">
-		<span><?php echo JText::_('COM_NEWSLETTER_TRASH_MODULES_HERE'); ?></span>
-	</div>
+	<div><?php echo $this->form->getLabel('t_style_id'); ?></div>
 	
-    <select id="templates-container">
+    <select id="jform_t_style_id" name="jform[t_style_id]" class="required">
             <option value=""><?php echo JText::_('COM_NEWSLETTER_SELECT_TEMPLATE');?></option>
-            <?php foreach($this->templates->items as $item) : ?>
-                <option value="<?php echo $this->escape($item->t_style_id); ?>">
+            <?php foreach($this->templates->items as $item) : 
+				$selected = ($this->form->getValue('t_style_id') == $item->t_style_id)? ' selected="selected" ' : ''
+			?>
+				
+                <option value="<?php echo $this->escape($item->t_style_id); ?>" <?php echo $selected ?>>
                         <?php echo $this->escape($item->title); ?>
                 </option>
              <?php endforeach; ?>
 
     </select>
 
-
 	<div class="accordion pane-sliders" id="acc-extensions" style="display: block;">
+
+		<div class="page-header">
+			<?php echo JText::_('COM_NEWSLETTER_DND_MODULES_INTO_TEMPLATE'); ?>
+		</div>
 		
 		<div class="accordion-group panel">
 			
@@ -96,5 +100,8 @@
 		</div>
 		
 	</div>
-
+	
+	<div id="trashcan-container" class="drop trashcan">
+		<span><?php echo JText::_('COM_NEWSLETTER_TRASH_MODULES_HERE'); ?></span>
+	</div>
 </div>

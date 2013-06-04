@@ -140,9 +140,12 @@
 	float: left;
 }
 
+#modal-listevent .modal-body {
+	height: 270px;
+}
 
 #modal-listevent .modal-body iframe {
-	min-height: 360px;
+	height: 260px;
 }
 
 .table td.container-eventlist-rowcontrols {

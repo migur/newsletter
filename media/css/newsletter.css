@@ -34,6 +34,7 @@
 
 #acc-extensions {
 	margin-top: 30px;
+	margin-bottom: 30px;
 }
 
 #acc-extensions .pane-container {
@@ -145,7 +146,7 @@
     overflow: auto;
 }
 
-#jform_plain_area {
+#jform_plain {
     width: 99.9%;
 }
 
@@ -376,4 +377,12 @@ textarea.focused {
 #modal-attachment .modal-body iframe {
 	width: 670px;
 	height: 570px;
+}
+
+#tabs {
+	padding-top: 0;
+}
+
+#tabs-legend {
+	margin: 20px 0;
 }

@@ -22,11 +22,11 @@ Migur.define("guide", function() {
                 }
             }, {
                 target:  {
-                    dom: '#templates-container',
+                    dom: '#jform_t_style_id',
                     event: 'change'
                 },
                 needle:  {
-                    dom: '#templates-container'
+                    dom: '#jform_t_style_id'
                 },
                 overlay: {
                     content: Joomla.JText._('CHOOSE_A_TEMPLATE_FIRST','Choose a template first!')

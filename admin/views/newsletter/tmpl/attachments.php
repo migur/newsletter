@@ -1,4 +1,6 @@
     <div id="attachments" class="form-text">
+		
+		<?php if ($this->isUpdateAllowed) { ?>
         <div id="att-controls" class="btn-toolbar">
             <div class="btn-group">   
 				<a 
@@ -11,7 +13,8 @@
              </div>   
         </div>
         <input type="hidden" id="fileattach" name="fileattach" />
-
+		<?php } ?>
+		
         <div id="attlist-container">
         <table class="attlist adminlist  table table-striped" width="100%">
             <thead>
@@ -44,12 +47,14 @@
                             <?php echo $this->escape($item->type); ?>
                     </td>
                     <td class="center">
+						<?php if ($this->isUpdateAllowed) { ?>
                         <a href="#" class="remove-link" rel="<?php echo $item->downloads_id; ?>" >
                             <img
                                 border="0" style="margin:0;"
                                 alt="<?php echo JText::_('COM_NEWSLETTER_REMOVE'); ?>"
                                 src="<?php echo JURI::root() . 'media/media/images/remove.png' ?>">
                         </a>
+						<?php } ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

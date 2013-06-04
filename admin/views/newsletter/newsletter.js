@@ -13,7 +13,7 @@ Cookie.write('jpanetabs_tabs-newsletter', 0);
 
 window.addEvent('domready', 
 
-function() { try {
+function() {
 
         $('tabs-sub-container').getElements('input, textarea')
         .addEvent('focus', function(ev){
@@ -127,10 +127,10 @@ function() { try {
 			setup: function(){
 				
 				// Adding handler to a DOM element
-				this.domEl.addEvent('keyup', function(){
-					var wdgt = Migur.getWidget('jform_alias');
-					wdgt.update();
-				});
+//				this.domEl.addEvent('keyup', function(){
+//					var wdgt = Migur.getWidget('jform_alias');
+//					wdgt.update();
+//				});
 				
 				this.update();
 			},
@@ -163,8 +163,9 @@ function() { try {
 			}
 		 });	
 
-
-		new Migur.modules.autosaver;
+		if (isUpdateAllowed == 1) {
+			new Migur.modules.autosaver;
+		}	
 
 		
         $('jform_newsletter_preview_email').addEvent('focus', function(){
@@ -181,40 +182,51 @@ function() { try {
         $('jform_newsletter_preview_email').fireEvent('blur');
 
 
-    $('templates-container').set( 'value', $$('[name=jform[t_style_id]]')[0].get('value') );
-    $('templates-container').fireEvent('change');
+    $('jform_t_style_id').set( 'value', $$('[name=jform[t_style_id]]')[0].get('value') );
+    $('jform_t_style_id').fireEvent('change');
 
 
 
-new Migur.modules.plain;
+	new Migur.modules.plain;
 
-// Create autocompleter module
-//var autocompleterModule = new Migur.modules.autocompleter;
+	// Create autocompleter module
+	//var autocompleterModule = new Migur.modules.autocompleter;
 
-// Create preview module
-new Migur.modules.preview({
-	//'autocompleter': autocompleterModule
-});
+	// Create preview module
+	new Migur.modules.preview({
+		//'autocompleter': autocompleterModule
+	});
 
-if (isNew == 1) {
+	//if (isNew == 1) {
+	//
+	//	var guide = new Migur.modules.guide;
+	//	
+	//    setTimeout(
+	//		function(){
+	//			guide.start.apply(guide)
+	//		}, 
+	//		'1000'
+	//	);
+	//		
+	//}
 
-	var guide = new Migur.modules.guide;
-	
-    setTimeout(
-		function(){
-			guide.start.apply(guide)
-		}, 
-		'1000'
-	);
-		
-}
+	setInterval(function(){
+
+		$$('.nav-tabs li a').removeClass('invalid');
+
+		var invalidFields = $$('.invalid');
+		invalidFields.each(function(element){
+			var pane = element.getParent('.tab-pane');
+			if (!pane) return;
+			var id = pane.getProperty('id');
+			$$('[href="#'+id+'"]').addClass('invalid');
+		})
+	}, 1000);
 
 
-
-
-
-} catch(e){
-    if (console && console.log) console.log(e);
-}
+	// Check if newsletter is unabled to save
+	if (isUpdateAllowed == 0) { 
+		alert(Joomla.JText._('COM_NEWSLETTER_CANNOT_SAVE_NEWSLETTER', "You cannot change this newsletter. Probably it is used in mailing process."));
+	}
 
 });

@@ -1,6 +1,19 @@
 
 Migur.define("preview", function(options) {
 
+
+	// Add observer to PEVIEW tab
+	// to notify user if letter is not saved yet.
+	$$('#tabs-newsletter li')[4].addEvent('click', function(){
+		var nid = $$('[name=newsletter_id]')[0].getProperty('value');
+
+		if (nid == '' || nid < 1) {
+			alert(Joomla.JText._('PLEASE_SAVE_THE_NEWSLETTER_FIRST', "Please save the newsletter first!"));
+			return false;
+		}
+	});
+
+
 	var self = this;
 
 	this.autocompleter = null;
@@ -24,7 +37,6 @@ Migur.define("preview", function(options) {
 	this.update = function(bit) {
 
 		if ( !$$('[name=newsletter_id]')[0].get('value') ) {
-			alert(Joomla.JText._('PLEASE_SAVE_THE_NEWSLETTER_FIRST', "Please save the newsletter first!"));
 			return;
 		}
 

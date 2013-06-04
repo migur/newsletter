@@ -86,7 +86,7 @@
 			}
 		},
 
-		beforeSend: function(){},
+		beforeSend: function(options){},
 
 		/* Sand data only once
 		 * @param useController - if you want use the controller method before sending
@@ -102,6 +102,8 @@
 			if (!options.data) {
 				options.data = this.getter();
 			}
+
+			this.savedData = options.data;
 
 			if ( !useController || this.controller(options.data) ) {
 
