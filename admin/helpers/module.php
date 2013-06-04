@@ -516,12 +516,21 @@ abstract class NewsletterHelperModule extends JModuleHelper
  */
 function modChrome_newsletterDefault($module, &$params, &$attribs)
 {
+	if (empty($module->content)) {
+		// If we have no translate string for this module
+		if (JText::_('COM_NEWSLETTER_NO_CONTENT_' . strtoupper($module->module)) == 'COM_NEWSLETTER_NO_CONTENT_' . strtoupper($module->module)) {
+			$module->content = JText::_('COM_NEWSLETTER_NO_CONTENT');
+		} else {
+			$module->content = JText::_('COM_NEWSLETTER_NO_CONTENT_' . strtoupper($module->module));
+		}
+	}	
+		
 	if (!empty($module->content)) {
-
 		echo '<div>';
 		if ($module->showtitle) {
 			echo "<h1><span> $module->title </span></h1>";
 		}
+		
 		echo $module->content;
 		echo '</div>';
 	}

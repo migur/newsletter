@@ -264,6 +264,9 @@ class MigurMailerDocument extends JDocument
 	{
 		try {
 			
+			// Load newseltter language
+			JFactory::getLanguage()->load('com_newsletter_modules', JPATH_ADMINISTRATOR);
+			
 			// Set the mode of rendering of URLs
 			if(!empty($this->useRawUrls) || !empty($params['useRawUrls'])) {
 				// Set mode for the global router to RAW

@@ -115,4 +115,29 @@ class NewsletterModelNewsletter extends JModelAdmin
 		}
 		return $res;
 	}
+	
+	/**
+	 * Tells us if we can update (save) the newsletter.
+	 * We can save it if it is static or if it has not sent earlier.
+	 * 
+	 * @param JObject|int $newsletter
+	 * 
+	 * @return	boolean
+	 */
+	public function isUpdateAllowed($newsletter) 
+	{
+		if (!is_object($newsletter) && !is_numeric($newsletter)) {
+			throw new Exception('isUpdateAllowed. Invalid newsletter identifacation');
+		}
+		
+		if (is_numeric($newsletter)) {
+			$newsletter = $this->getItem((int)$newsletter)->newsletter_id;
+		}
+
+		if (empty($newsletter)) {
+			throw new Exception('isUpdateAllowed. Newsletter absent');
+		}
+		
+		return (empty($newsletter->newsletter_id) || $newsletter->type == 1/*Static newsletter*/ || $newsletter->sent_started == '0000-00-00 00:00:00');
+	}
 }
