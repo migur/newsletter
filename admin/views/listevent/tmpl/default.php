@@ -28,16 +28,11 @@ defined('_JEXEC') or die;
             </div>
         </div>
 
-        <div class="control-group">
-            <label class="control-label"><?php echo $this->form->getInput('list_id'); ?></label>
-            <div class="controls">
-                <?php echo $this->form->getInput('le_id'); ?>
-            </div>
-        </div>
-
 		<input type="hidden" name="task" value="" />
+		<?php echo $this->form->getInput('le_id'); ?>
 		<input type="hidden" name="le_id" value="<?php echo $this->form->getValue('le_id'); ?>" />
 		<input type="hidden" name="list_id" value="<?php echo JRequest::getInt('list_id', ''); ?>" />
+		<input type="hidden" name="jform[list_id]" value="<?php echo JRequest::getInt('list_id', ''); ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 		
     	<div class="form-actions">
