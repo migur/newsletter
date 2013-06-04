@@ -59,8 +59,7 @@ window.addEvent('domready', function() {
 
     document.formvalidator.setHandler('plain',
         function (value) {
-            regex=/^[.]{1,5000}$/;
-            return regex.test(value);
+			return value.length > 0
         });
 
     document.formvalidator.setHandler('alias',
