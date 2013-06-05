@@ -114,10 +114,10 @@ class NewsletterViewLogs extends MigurView
 	{
 		$doc = JFactory::getDocument();
 		
-		$doc->addStyleSheet(JUri::root() . 'media/com_newsletter/css/admin.css');
-		$doc->addStyleSheet(JUri::root() . 'media/com_newsletter/css/logs.css');
-		$doc->addScript(JUri::root() . 'media/com_newsletter/js/migur/js/core.js');
-		$doc->addScript(JUri::root() . 'administrator/components/com_newsletter/views/logs/logs.js');
+		$docNewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		$docNewsletterHelperView::addStyleSheet('media/com_newsletter/css/logs.css');
+		$docNewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		$docNewsletterHelperView::addScript('administrator/components/com_newsletter/views/logs/logs.js');
 	}
 	
 }

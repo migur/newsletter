@@ -44,10 +44,10 @@ class NewsletterViewQueues extends MigurView
 
 		//TODO: Need to move css/js to SetDocument
 
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/queues.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script(JURI::root() . "/administrator/components/com_newsletter/views/queues/queues.js");
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/queues.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript("/administrator/components/com_newsletter/views/queues/queues.js");
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {

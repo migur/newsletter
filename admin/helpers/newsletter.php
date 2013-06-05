@@ -23,6 +23,8 @@ class NewsletterHelperNewsletter
 	public static $_manifest = null;
 	
 	public static $_displayErrors = null;
+
+	protected static $_componentVersion = null;
 	
 	/**
 	 * Configure the Linkbar.
@@ -244,13 +246,31 @@ class NewsletterHelperNewsletter
 			if (file_exists($path)) {
 				self::$_manifest = simplexml_load_file($path);
 			} else {
-				self::$_manifest = new JObject();
+				throw new Exception('Cannot load manifest');
 			}
 		}
 
 		return self::$_manifest;
 	}
 
+	static public function getVersion() 
+	{
+		if (self::$_componentVersion === null) {
+			$manifest = self::getManifest();
+			if (!$manifest) {
+				throw new Exception('Cannot load manifest');
+			}
+
+			if (empty($manifest->version)) {
+				throw new Exception('Cannot find version in manifest');
+			}
+
+			self::$_componentVersion = $manifest->version;
+		}	
+		
+		return self::$_componentVersion;
+	}
+	
 	/**
 	 * Get the extended info for a newsletter identified by id.
 	 *

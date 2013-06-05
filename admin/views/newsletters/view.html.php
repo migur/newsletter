@@ -44,14 +44,14 @@ class NewsletterViewNewsletters extends MigurView
 
 		//TODO: Need to move css/js to SetDocument
 
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/newsletters.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script('media/com_newsletter/js/migur/js/raphael-min.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.raphael.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.pie.js');
-		JHTML::script('media/com_newsletter/js/migur/js/raphael-migur-pie.js');
-		JHTML::script(JURI::root() . "/administrator/components/com_newsletter/views/newsletters/newsletters.js");
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/newsletters.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-min.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.raphael.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.pie.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-migur-pie.js');
+		NewsletterHelperView::addScript("/administrator/components/com_newsletter/views/newsletters/newsletters.js");
 
 		$listModel = MigurModel::getInstance('lists', 'NewsletterModel');
 		$this->setModel($listModel);

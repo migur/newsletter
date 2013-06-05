@@ -127,22 +127,22 @@ class NewsletterViewDashboard extends MigurView
 	{
 		$document = JFactory::getDocument();
 		//$document->setTitle('COM_NEWSLETTER_DASHBOARD_TITLE');
-		$document->addStyleSheet(JURI::root() . 'media/com_newsletter/css/admin.css');
-		$document->addStyleSheet(JURI::root() . 'media/com_newsletter/css/dashboard.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/dashboard.css');
 		
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/modal.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-min.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.raphael-min.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.line-min.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.raphael.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.line.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.pie.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.bar.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-line.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/modal.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-min.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.raphael-min.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.line-min.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.raphael.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.line.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.pie.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.bar.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-migur-line.js');
 
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/subscriber/submitbutton.js");
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/dashboard/dashboard.js");
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/subscriber/submitbutton.js");
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/dashboard/dashboard.js");
 		
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}

@@ -74,6 +74,6 @@ class NewsletterViewWellcome extends MigurView
 	{
 		$document = JFactory::getDocument();
 		$document->setTitle(JText::_('COM_NEWSLETTER_WELCOME_TITLE'));
-		$document->addStylesheet(JURI::root() . '/media/com_newsletter/css/wellcome.css');
+		NewsletterHelperView::addStyleSheet('/media/com_newsletter/css/wellcome.css');
 	}
 }

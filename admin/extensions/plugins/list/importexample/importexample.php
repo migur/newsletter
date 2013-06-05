@@ -22,7 +22,7 @@ class plgListImportexample extends NewsletterPlugin
     public function onMigurImportShowIcon($options = array()) 
     {
         return array(
-			'icon' => JUri::root().'/administrator/components/com_newsletter/extensions/plugins/list/importexample/icon.png',
+			'icon' => JUri::root().'administrator/components/com_newsletter/extensions/plugins/list/importexample/icon.png',
 			'title' => JText::_('PLG_MIGUR_IMPORTEXAMPLE_TITLE'),
 			'name' => $this->getName()
 		);

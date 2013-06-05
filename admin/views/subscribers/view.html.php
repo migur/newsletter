@@ -149,12 +149,12 @@ class NewsletterViewSubscribers extends MigurView
 	{
 		$doc = JFactory::getDocument();
 		
-		$doc->addStyleSheet(JURI::root() . 'media/com_newsletter/css/admin.css');
-		$doc->addStyleSheet(JURI::root() . 'media/com_newsletter/css/subscribers.css');
-		$doc->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
-		$doc->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/modal.js');
-		$doc->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/filterpanel.js');
-		$doc->addScript(JURI::root() . 'administrator/components/com_newsletter/views/subscribers/subscribers.js');
+		$docNewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		$docNewsletterHelperView::addStyleSheet('media/com_newsletter/css/subscribers.css');
+		$docNewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		$docNewsletterHelperView::addScript('media/com_newsletter/js/migur/js/modal.js');
+		$docNewsletterHelperView::addScript('media/com_newsletter/js/migur/js/filterpanel.js');
+		$docNewsletterHelperView::addScript('administrator/components/com_newsletter/views/subscribers/subscribers.js');
 	}
 
 }
