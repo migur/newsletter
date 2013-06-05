@@ -122,12 +122,12 @@ class NewsletterViewSubscriber extends MigurView
 		$isNew = (!JRequest::get('subscriber_id', false) );
 		JToolbarHelper::title($isNew ? JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER') : JText::_('COM_NEWSLETTER_SUBSCRIBER_EDITING'));
 		$document = JFactory::getDocument();
-		$document->addScript(JURI::root() . "/media/com_newsletter/js/migur/js/core.js");
-		$document->addScript(JURI::root() . "/media/com_newsletter/js/migur/js/message.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/subscriber/submitbutton.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/subscriber/subscriber.js");
-		$document->addStyleSheet(JURI::root() . "/media/com_newsletter/css/admin.css");
-		$document->addStyleSheet(JURI::root() . "/media/com_newsletter/css/subscriber.css");
+		NewsletterHelperView::addScript("/media/com_newsletter/js/migur/js/core.js");
+		NewsletterHelperView::addScript("/media/com_newsletter/js/migur/js/message.js");
+		NewsletterHelperView::addScript("/administrator/components/com_newsletter/views/subscriber/submitbutton.js");
+		NewsletterHelperView::addScript("/administrator/components/com_newsletter/views/subscriber/subscriber.js");
+		NewsletterHelperView::addStyleSheet(JURI::root() . "/media/com_newsletter/css/admin.css");
+		NewsletterHelperView::addStyleSheet(JURI::root() . "/media/com_newsletter/css/subscriber.css");
 		
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}

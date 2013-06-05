@@ -89,13 +89,13 @@ class NewsletterViewListevent extends MigurView
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_ADD_LISTEVENT') : JText::_('COM_NEWSLETTER_EDIT_LISTEVENT'));
 
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/listevent.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/listevent.css');
 
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
-		$document->addScript(JURI::root() . 'administrator/components/com_newsletter/views/listevent/listevent.js');
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/listevent/submitbutton.js");
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/models/forms/listevent.js");
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/listevent/listevent.js');
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/listevent/submitbutton.js");
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/models/forms/listevent.js");
 
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}

@@ -273,36 +273,36 @@ class NewsletterViewNewsletter extends MigurView
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_NEWSLETTER_CREATING') : JText::sprintf('COM_NEWSLETTER_NEWSLETTERS_EDIT_TITLE', $this->newsletter->name));
 		
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/newsletter.css');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/modal.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/autosaver.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/widgets.js');
+		NewsletterHelperView::addStylesheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStylesheet('media/com_newsletter/css/newsletter.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/modal.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/autosaver.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/widgets.js');
 		
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/moodialog/MooDialog.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/moodialog/MooDialog.Request.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/moodialog/MooDialog.IFrame.js');
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/js/migur/js/moodialog/css/MooDialog.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/moodialog/MooDialog.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/moodialog/MooDialog.Request.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/moodialog/MooDialog.IFrame.js');
+		NewsletterHelperView::addStylesheet('media/com_newsletter/js/migur/js/moodialog/css/MooDialog.css');
 
-		//$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/autocompleter/Observer.js');
-		//$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/autocompleter/Autocompleter.js');
-		//$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/autocompleter/Autocompleter.Local.js');
-		//$document->addStylesheet(JURI::root() . 'media/com_newsletter/js/migur/js/autocompleter/css/Autocompleter.css');
+		//NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/autocompleter/Observer.js');
+		//NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/autocompleter/Autocompleter.js');
+		//NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/autocompleter/Autocompleter.Local.js');
+		//NewsletterHelperView::addStylesheet('media/com_newsletter/js/migur/js/autocompleter/css/Autocompleter.css');
 
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/guide.js');
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/guide.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/guide.js');
+		NewsletterHelperView::addStylesheet('media/com_newsletter/css/guide.css');
 		
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/html.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/plain.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/preview.js");
-		//$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/autocompleter.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/autosaver.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/guide.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/newsletter.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/downloads.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/newsletter/submitbutton.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/models/forms/newsletter.js");
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/html.js");
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/plain.js");
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/preview.js");
+		//NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/autocompleter.js");
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/autosaver.js");
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/guide.js");
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/newsletter.js");
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/downloads.js");
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/submitbutton.js");
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/models/forms/newsletter.js");
 		JText::script('COM_NEWSLETTER_NEWSLETTER_ERROR_UNACCEPTABLE');
 	}
 

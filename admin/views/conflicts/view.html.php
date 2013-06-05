@@ -41,9 +41,9 @@ class NewsletterViewConflicts extends MigurView
 
 		//TODO: Need to move css/js to SetDocument
 
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/conflicts.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/conflicts.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {

@@ -39,8 +39,8 @@ class NewsletterViewUploader extends MigurView
 //		
 //		if ($config->get('enable_flash', 1)) {
 //
-//			JHTML::stylesheet('media/com_newsletter/css/uploaders.css');
-//			JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/list/uploaders.js");
+//			NewsletterHelperView::addStyleSheet('media/com_newsletter/css/uploaders.css');
+//			NewsletterHelperView::addScript("administrator/components/com_newsletter/views/list/uploaders.js");
 //
 //
 //			$fileTypes = $config->get('image_extensions', 'bmp,gif,jpg,png,jpeg');
@@ -80,8 +80,8 @@ class NewsletterViewUploader extends MigurView
 	protected function setDocument()
 	{
 		$document = JFactory::getDocument();
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/uploader/uploader.js");
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/uploader/uploader.js");
 		
 	}
 

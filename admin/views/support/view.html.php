@@ -39,7 +39,7 @@ class NewsletterViewSupport extends MigurView
 		
 		// Add JS and create namespace for data
 		$document = JFactory::getDocument();
-		$document->addStyleSheet(JURI::root() . "media/com_newsletter/css/support.css");
+		NewsletterHelperView::addStyleSheet(JURI::root() . "media/com_newsletter/css/support.css");
 
 		
 		return parent::display($tpl);
