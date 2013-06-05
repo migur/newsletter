@@ -276,7 +276,7 @@ class NewsletterControllerList extends JControllerForm
 	{
 		NewsletterHelper::jsonPrepare();
 
-		$data = (array) json_decode(JRequest::getVar('jsondata', '{}'));
+		$data = NewsletterHelperData::jsonDecode(JRequest::getVar('jsondata', '{}'), true);
 		
 		if (!$settings = $this->_getSettings()) {
 			return;
@@ -612,8 +612,7 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	protected function _getSettings()
 	{
-
-		$json = json_decode(JRequest::getString('jsondata', ''));
+		$json = NewsletterHelperData::jsonDecode(JRequest::getString('jsondata', ''));
 
 		if (empty($json->enclosure) || $json->enclosure == 'no') {
 			$json->enclosure = "\0";
