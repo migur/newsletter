@@ -42,7 +42,6 @@ class NewsletterViewLogs extends MigurView
 		//TODO: Need to move css/js to SetDocument
 
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
-		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/logs.css');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 		//NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/filterpanel.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/search.js');
