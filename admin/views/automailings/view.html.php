@@ -98,12 +98,11 @@ class NewsletterViewAutomailings extends MigurView
 	 */
 	protected function setDocument()
 	{
-		$document = JFactory::getDocument();
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/automailings.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/automailings/automailings.js");
-		JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
-		JHTML::script('media/com_newsletter/js/migur/js/search.js');		
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/automailings.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/automailings/automailings.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/filterpanel.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/search.js');		
 	}
 }

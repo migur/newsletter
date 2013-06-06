@@ -36,8 +36,8 @@ class NewsletterViewInstall extends MigurView
 		$this->addToolbar();
 		
 		$document = JFactory::getDocument();
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
-		$document->addScript(JURI::root() . 'administrator/components/com_newsletter/views/install/submitbutton.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/install/submitbutton.js');
 		
 		parent::display($tpl);
 	}

@@ -32,9 +32,9 @@ class NewsletterViewSmtpprofile extends MigurView
 	 */
 	public function display($tpl = null)
 	{
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/smtpprofile.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/smtpprofile.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 
 		$this->ssForm = $this->get('Form', 'smtpprofile');
 		
@@ -88,8 +88,8 @@ class NewsletterViewSmtpprofile extends MigurView
 		$isNew = (!JRequest::get('smtp_profile_id', false) );
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_SMTP_CREATING') : JText::_('COM_NEWSLETTER_SMTP_EDITING'));
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/smtpprofile/submitbutton.js");
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/smtpprofile/smtpprofile.js");
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/smtpprofile/submitbutton.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/smtpprofile/smtpprofile.js');
 		JText::script('COM_NEWSLETTER_MAILBOX_ERROR_UNACCEPTABLE');
 	}
 

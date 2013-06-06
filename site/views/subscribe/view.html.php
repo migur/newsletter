@@ -52,7 +52,6 @@ class NewsletterViewSubscribe extends JView
 	}
 
 	function setDocument(){
-		$document = JFactory::getDocument();
-		$document->addStyleSheet('media/com_newsletter/css/unsubscribe.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/unsubscribe.css');
 	}
 }
