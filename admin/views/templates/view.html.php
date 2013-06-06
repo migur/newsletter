@@ -47,7 +47,7 @@ class NewsletterViewTemplates extends MigurView
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/templates.css');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/templates/templates.js");
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/templates/templates.js');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {

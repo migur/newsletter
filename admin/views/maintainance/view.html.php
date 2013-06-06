@@ -63,7 +63,7 @@ class NewsletterViewMaintainance extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/widgets.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/widgets/ajaxchecker.js');
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/maintainance/maintainance.js");
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/maintainance/maintainance.js');
 
 		JText::script('COM_NEWSLETTER_AUTOMAILING_ERROR_UNACCEPTABLE');
 	}

@@ -30,9 +30,8 @@ class NewsletterViewTest extends MigurView
 	 */
 	function display($tpl = null)
 	{
-		$document = JFactory::getDocument();
-		NewsletterHelperView::addScript("/administrator/components/com_newsletter/views/test/test.js");		
-		NewsletterHelperView::addStyleSheet('/media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/test/test.js');		
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
 		
 		JToolbarHelper::title('Test console');
 		

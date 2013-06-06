@@ -46,7 +46,7 @@ class NewsletterViewExtension extends MigurView
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/extension.css');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
-		NewsletterHelperView::addScript("/administrator/components/com_newsletter/views/extension/submitbutton.js");
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/extension/submitbutton.js');
 
 		$type        = JRequest::getString('type', '');
 		$native      = JRequest::getInt('native', null);

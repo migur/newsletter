@@ -47,9 +47,9 @@ class NewsletterViewPlugin extends MigurView
 	public function display($tpl = null)
 	{
 		$doc = JFactory::getDocument();
-		$docNewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
-		$docNewsletterHelperView::addStyleSheet('media/com_newsletter/css/plugin.css');
-		$docNewsletterHelperView::addScript('administrator/components/com_newsletter/views/plugin/plugin.js');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/plugin.css');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/plugin/plugin.js');
 		
 		parent::display($tpl);
 	}

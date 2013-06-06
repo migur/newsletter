@@ -293,16 +293,16 @@ class NewsletterViewNewsletter extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/guide.js');
 		NewsletterHelperView::addStylesheet('media/com_newsletter/css/guide.css');
 		
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/html.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/plain.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/preview.js");
-		//NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/autocompleter.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/autosaver.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/guide.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/newsletter.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/downloads.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/newsletter/submitbutton.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/models/forms/newsletter.js");
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/html.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/plain.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/preview.js');
+		//NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/autocompleter.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/autosaver.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/guide.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/newsletter.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/downloads.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/submitbutton.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/forms/newsletter.js');
 		JText::script('COM_NEWSLETTER_NEWSLETTER_ERROR_UNACCEPTABLE');
 	}
 
