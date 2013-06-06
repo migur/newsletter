@@ -70,7 +70,7 @@ class JFormFieldTimeinterval extends JFormField
 
 
 		// Initialize JavaScript field attributes.
-		JFactory::getDocument()->addScript(JUri::root().'administrator/components/com_newsletter/models/fields/timeinterval.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/fields/timeinterval.js');
 
 		
 		// Create a regular list.
