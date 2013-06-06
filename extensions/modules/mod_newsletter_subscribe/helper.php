@@ -20,9 +20,9 @@ abstract class modNewsletterSubscribeHelper
 		// Get documnet
 		$doc = JFactory::getDocument();
 		// Add stylesheet
-		$doc->addStyleSheet("modules/mod_newsletter_subscribe/css/styles.css");
+		$doc->addStyleSheet("modules/mod_newsletter_subscribe/css/styles.css?ver=13.05");
 		// Add script
-		$doc->addScript('modules/mod_newsletter_subscribe/scripts/subscribe.js');
+		$doc->addScript('modules/mod_newsletter_subscribe/scripts/subscribe.js?ver=13.05');
 	}
 
 	public static function getSendToURL(&$params)

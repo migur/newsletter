@@ -175,12 +175,12 @@ class NewsletterViewAutomailing extends MigurView
 		
 		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_AUTOMAILING_CREATING') : JText::_('COM_NEWSLETTER_AUTOMAILING_EDITING'));
 		
-		$document->addstylesheet(JURI::root().'/media/com_newsletter/css/admin.css');
-		$document->addstylesheet(JURI::root().'/media/com_newsletter/css/automailing.css');
-		$document->addScript(JURI::root()."/administrator/components/com_newsletter/views/automailing/automailing.js");
-		$document->addScript(JURI::root()."/administrator/components/com_newsletter/views/automailing/submitbutton.js");
-		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/core.js');
-		$document->addScript(JURI::root().'/media/com_newsletter/js/migur/js/ajax.js');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/automailing.css');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/automailing/automailing.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/automailing/submitbutton.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/ajax.js');
 
 		JText::script('COM_NEWSLETTER_AUTOMAILING_ERROR_UNACCEPTABLE');
 	}
