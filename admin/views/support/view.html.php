@@ -37,10 +37,7 @@ class NewsletterViewSupport extends MigurView
 		$ltName = $this->getLayoutFileName($this->category, $this->name, $this->version);
 		$this->assign('layout', $ltName);
 		
-		// Add JS and create namespace for data
-		$document = JFactory::getDocument();
-		$document->addStyleSheet(JURI::root() . "media/com_newsletter/css/support.css");
-
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/support.css');
 		
 		return parent::display($tpl);
 	}

@@ -43,20 +43,20 @@ class NewsletterViewStatistic extends MigurView
 	{
 		//TODO: Need to move css/js to SetDocument
 
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/statistic.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
-		JHTML::script('media/com_newsletter/js/migur/js/search.js');		
-		JHTML::script('media/com_newsletter/js/migur/js/raphael-min.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.raphael.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.line.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.pie.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.bar.js');
-		JHTML::script('media/com_newsletter/js/migur/js/raphael-migur-line.js');
-		JHTML::script('media/com_newsletter/js/migur/js/raphael-migur-pie.js');
-		JHTML::script('administrator/components/com_newsletter/views/statistic/hlines.js');
-		JHTML::script('administrator/components/com_newsletter/views/statistic/statistic.js');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/statistic.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/filterpanel.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/search.js');		
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-min.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.raphael.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.line.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.pie.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.bar.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-migur-line.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-migur-pie.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/statistic/hlines.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/statistic/statistic.js');
 
 
 		// Check for errors.

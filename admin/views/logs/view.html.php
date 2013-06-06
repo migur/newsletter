@@ -41,12 +41,12 @@ class NewsletterViewLogs extends MigurView
 
 		//TODO: Need to move css/js to SetDocument
 
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/logs.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		//JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
-		JHTML::script('media/com_newsletter/js/migur/js/search.js');
-		JHTML::script(JURI::root() . "/administrator/components/com_newsletter/views/logs/logs.js");
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/logs.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		//NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/filterpanel.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/search.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/logs/logs.js');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
