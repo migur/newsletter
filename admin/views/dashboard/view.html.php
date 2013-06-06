@@ -141,8 +141,8 @@ class NewsletterViewDashboard extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.bar.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-migur-line.js');
 
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/subscriber/submitbutton.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/dashboard/dashboard.js");
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/subscriber/submitbutton.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/dashboard/dashboard.js');
 		
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}

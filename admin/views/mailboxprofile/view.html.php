@@ -77,9 +77,9 @@ class NewsletterViewMailboxprofile extends MigurView
 
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/message.js');
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/models/forms/mailboxprofile.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/mailboxprofile/submitbutton.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/mailboxprofile/mailboxprofile.js");
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/forms/mailboxprofile.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/mailboxprofile/submitbutton.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/mailboxprofile/mailboxprofile.js');
 		
 		JText::script('COM_NEWSLETTER_MAILBOX_ERROR_UNACCEPTABLE');
 	}

@@ -94,8 +94,8 @@ class NewsletterViewListevent extends MigurView
 
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/listevent/listevent.js');
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/listevent/submitbutton.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/models/forms/listevent.js");
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/listevent/submitbutton.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/forms/listevent.js');
 
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}

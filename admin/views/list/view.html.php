@@ -159,7 +159,7 @@ class NewsletterViewList extends MigurView
 //		if ($config->get('enable_flash', 1)) {
 //
 //			NewsletterHelperView::addStyleSheet('media/com_newsletter/css/uploaders.css');
-//			NewsletterHelperView::addScript("administrator/components/com_newsletter/views/list/uploaders.js");
+//			NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/uploaders.js');
 //
 //
 //			$fileTypes = $config->get('image_extensions', 'bmp,gif,jpg,png,jpeg');
@@ -269,13 +269,13 @@ class NewsletterViewList extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.line-min.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.pie-min.js');
 		
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/list/importer.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/list/excluder.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/list/list.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/list/submitbutton.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/list/plugins.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/list/eventwidget.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/models/forms/list.js", true);
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/importer.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/excluder.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/list.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/submitbutton.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/plugins.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/eventwidget.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/forms/list.js', true);
 
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/storage.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-min.js');
@@ -287,7 +287,7 @@ class NewsletterViewList extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-migur-pie.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/iterativeajax.js');
 		// Add JS and create namespace for data
-		NewsletterHelperView::addScript("media/com_newsletter/js/migur/js/support.js");
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/support.js');
 
 		$document->addScriptDeclaration('var urlRoot = "' . JURI::root(true) . '";');
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');

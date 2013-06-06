@@ -52,7 +52,7 @@ class NewsletterViewImport extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/message.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/iterativeajax.js');
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/import/import.js");
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/import/import.js');
 
 		$this->assign('components', NewsletterModelImportCommon::getSupported());
 

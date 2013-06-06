@@ -55,7 +55,7 @@ class NewsletterViewConfiguration extends MigurView
 		
 		// Add JS and create namespace for data
 		//$document = JFactory::getDocument();
-		//NewsletterHelperView::addScript("media/com_newsletter/js/migur/js/support.js");
+		//NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/support.js');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {

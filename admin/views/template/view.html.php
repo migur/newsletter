@@ -114,17 +114,17 @@ class NewsletterViewTemplate extends MigurView
 		$layout = JRequest::getString('layout');
 		JToolbarHelper::title($title);
 		$document = JFactory::getDocument();
-		NewsletterHelperView::addStyleSheet('/media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
 		
-		NewsletterHelperView::addStyleSheet('/media/com_newsletter/css/template.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/template.css');
 
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/message.js');
 
 		$jsName = ($layout == 'edit'? '_edit' : '');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/template/template'.$jsName.'.js');
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/views/template/submitbutton.js");
-		NewsletterHelperView::addScript("administrator/components/com_newsletter/models/forms/template.js");
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/template/submitbutton.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/forms/template.js');
 
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}
