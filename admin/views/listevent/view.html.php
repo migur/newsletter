@@ -90,8 +90,6 @@ class NewsletterViewListevent extends MigurView
 		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_ADD_LISTEVENT') : JText::_('COM_NEWSLETTER_EDIT_LISTEVENT'));
 
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
-		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/listevent.css');
-
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/listevent/listevent.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/listevent/submitbutton.js');
