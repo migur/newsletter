@@ -47,14 +47,14 @@ class NewsletterViewConfiguration extends MigurView
 	public function display($tpl = null)
 	{
 		JHTML::_('behavior.modal');
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/configuration.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script('administrator/components/com_newsletter/views/configuration/configuration.js');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/configuration.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/configuration/configuration.js');
 		
 		// Add JS and create namespace for data
 		//$document = JFactory::getDocument();
-		//$document->addScript(JURI::root() . "media/com_newsletter/js/migur/js/support.js");
+		//NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/support.js');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
