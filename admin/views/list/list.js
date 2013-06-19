@@ -89,6 +89,7 @@ try {
 
     Uploader.getHead = function(target, type) {
         var settings = Uploader.getSettings(type) || {};
+		settings.file = uploadData.file.filepath;
         Uploader.uploadControl = target;
         var id = $$('[name=list_id]')[0].get('value');
         new Request.JSON({
