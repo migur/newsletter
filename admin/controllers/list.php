@@ -281,15 +281,15 @@ class NewsletterControllerList extends JControllerForm
 			$jsonData = stripslashes($jsonData);
 		}
 		
-		$data = NewsletterHelperData::jsonDecode($jsonData, true);
+		$data = NewsletterHelperData::jsonDecode($jsonData);
 		
 		if (!$settings = $this->_getSettings($data)) {
 			return;
 		}
 
-		if (!empty($data['file'])) {
-			if (($handle = fopen($data['file'], "r")) !== FALSE) {
-				$data['fields'] = fgetcsv($handle, 1000, $settings['delimiter'], $settings['enclosure']);
+		if (!empty($data->file)) {
+			if (($handle = fopen($data->file, "r")) !== FALSE) {
+				$data->fields = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
 			} else {
 				NewsletterHelper::jsonError('Cannot open file', $data);
 			}
@@ -322,7 +322,14 @@ class NewsletterControllerList extends JControllerForm
             NewsletterHelper::jsonError('No list Id');
 		}
 
-		if (!$settings = $this->_getSettings()) {
+		$jsonData = JRequest::getString('jsondata', '{}');
+		if (get_magic_quotes_gpc()) {
+			$jsonData = stripslashes($jsonData);
+		}
+		
+		$data = NewsletterHelperData::jsonDecode($jsonData);
+		
+		if (!$settings = $this->_getSettings($data)) {
             NewsletterHelper::jsonError('No settings');
 		}
 
@@ -506,9 +513,14 @@ class NewsletterControllerList extends JControllerForm
 			return;
 		}
 
+		$jsonData = JRequest::getString('jsondata', '{}');
+		if (get_magic_quotes_gpc()) {
+			$jsonData = stripslashes($jsonData);
+		}
+		
+		$data = NewsletterHelperData::jsonDecode($jsonData);
+		
 		if ($subtask == 'lists') {
-
-			$data = json_decode(JRequest::getString('jsondata', ''));
 
 			$list = MigurModel::getInstance('list', 'newsletterModel');
 
@@ -544,7 +556,7 @@ class NewsletterControllerList extends JControllerForm
 
 		if ($subtask == 'parse') {
 
-			if (!$settings = $this->_getSettings()) {
+			if (!$settings = $this->_getSettings($data)) {
 				return;
 			}
 			
@@ -596,7 +608,7 @@ class NewsletterControllerList extends JControllerForm
 					}
 				}
 
-				unlink($file['file']['filepath']);
+				//unlink($file['file']['filepath']);
 				//$sess->clear('com_newsletter.list.' . $currentList . '.file.uploaded');
 
 				NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), array(
@@ -604,6 +616,8 @@ class NewsletterControllerList extends JControllerForm
 					'absent' => $absent,
 					'total' => $total
 				));
+			} else {
+				NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_EXCLUSION_FAILED') . '. ' . JText::_('COM_NEWSLETTER_FILE_NOT_FOUND'));
 			}
 		}
 	}
@@ -617,22 +631,24 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	protected function _getSettings($data)
 	{
-		if (empty($data['enclosure']) || $data['enclosure'] == 'no') {
-			$data['enclosure'] = "\0";
+		$data = (object) $data;
+		
+		if (empty($data->enclosure) || $data->enclosure == 'no') {
+			$data->enclosure = "\0";
 		}
 
 
-		if (empty($data['delimiter'])) {
+		if (empty($data->delimiter)) {
 			echo json_encode(array('status' => '0', 'error' => 'Some settings are absent'));
 			return false;
 		}
 
-		switch ($data['delimiter']) {
+		switch ($data->delimiter) {
 			case 'tab':
-				$data['delimiter'] = "\t";
+				$data->delimiter = "\t";
 				break;
 			case 'space':
-				$data['delimiter'] = " ";
+				$data->delimiter = " ";
 				break;
 		}
 
