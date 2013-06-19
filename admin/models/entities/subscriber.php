@@ -383,7 +383,7 @@ class NewsletterModelEntitySubscriber extends MigurModel
 	/**
 	 * Used to get id for juser/subscriber.
 	 * Return subscriber_id if this is a subscriber
-	 * or 'j[#__users.id]' if this entity is the wrapper for J! user via subscriber entity
+	 * or -'j[#__users.id]' (with "minus" sign) if this entity is the wrapper for J! user via subscriber entity
 	 * 
 	 * @return string
 	 */
