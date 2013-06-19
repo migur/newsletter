@@ -54,13 +54,6 @@ class NewsletterViewSubscribers extends MigurView
 			return false;
 		}
 
-		$this->setDocument();
-		
-		// We don't need toolbar in the modal window.
-		if ($this->getLayout() !== 'modal') {
-			$this->addToolbar();
-		}
-
 		$modelSubs = $this->getModel('subscribers');
 		$modelLists = $this->getModel('lists');
 
@@ -82,7 +75,16 @@ class NewsletterViewSubscribers extends MigurView
 		);
 		$this->assignRef('lists', $lists);
 
+		$this->assign('activationIsAllowed', $modelSubs->getState()->get('filter.list') > 0);		
+		
 		$this->assign('subscriberModel', MigurModel::getInstance('Subscriber', 'NewsletterModelEntity'));
+		
+		// We don't need toolbar in the modal window.
+		if ($this->getLayout() !== 'modal') {
+			$this->addToolbar();
+		}
+
+		$this->setDocument();
 		
 		parent::display($tpl);
 	}
@@ -107,8 +109,12 @@ class NewsletterViewSubscribers extends MigurView
 		));
 		
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'subscribers.delete', false);
+		$bar->appendButton('Standard', 'unblock', 'JTOOLBAR_ENABLE', 'subscribers.publish', false);
 		$bar->appendButton('Standard', 'unpublish', 'JTOOLBAR_DISABLE', 'subscribers.unpublish', false);
-		$bar->appendButton('Standard', 'publish', 'JTOOLBAR_ENABLE', 'subscribers.publish', false);
+		
+		if ($this->activationIsAllowed) {
+			$bar->appendButton('Standard', 'publish', 'COM_NEWSLETTER_ACTIVATE', 'lists.activate', false);
+		}
 		
 		if (AclHelper::actionIsAllowed('list.edit')) {
 			$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_REMOVE_FROM_LIST', array(
