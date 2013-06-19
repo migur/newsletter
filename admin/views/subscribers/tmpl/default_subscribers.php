@@ -74,9 +74,11 @@
 				<th class="left" width="12%">
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ENABLED', 'a.state', $this->subscribers->listDirn, $this->subscribers->listOrder, NULL, 'desc', 'subscribersForm'); ?>
 				</th>
+				<?php if ($this->activationIsAllowed): ?>
 				<th class="left" width="12%">
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ACTIVATED', 'a.confirmed', $this->subscribers->listDirn, $this->subscribers->listOrder, NULL, 'desc', 'subscribersForm'); ?>
 				</th>
+				<?php endif; ?>
 			</tr>
 		</thead>
 		<tfoot>
@@ -129,9 +131,11 @@
 				<td class="center">
 					<?php echo JHtml::_('multigrid.enabled', $subscriber->state, $i, 'tick.png', 'publish_x.png', 'subscribers.', 'subscribersForm'); ?>
 				</td>
+				<?php if ($this->activationIsAllowed): ?>
 				<td class="center">
-					<?php echo JHtml::_('multigrid.confirmed', $subscriber->confirmed, $i, 'tick.png', 'publish_x.png', 'subscribers.', 'subscribersForm'); ?>
+					<?php echo JHtml::_('multigrid.confirmed', $subscriber->confirmed, $i, 'tick.png', 'publish_x.png', 'lists.', 'subscribersForm'); ?>
 				</td>
+				<?php endif; ?>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>
