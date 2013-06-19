@@ -308,17 +308,20 @@ class NewsletterControllerList extends JControllerForm
 	{
 		NewsletterHelper::jsonPrepare();
 
-		$listId = JRequest::getInt('list_id', 0);
-
-		if (!$settings = $this->_getSettings()) {
+		$jsonData = JRequest::getString('jsondata', '{}');
+		if (get_magic_quotes_gpc()) {
+			$jsonData = stripslashes($jsonData);
+		}
+		
+		$data = NewsletterHelperData::jsonDecode($jsonData, true);
+		
+		if (!$settings = $this->_getSettings($data)) {
 			return;
 		}
 
-		$sess = JFactory::getSession();
-		$data = $sess->get('list.' . $listId . '.file.uploaded', array());
-		if (!empty($data['file']['filepath'])) {
-			if (($handle = fopen($data['file']['filepath'], "r")) !== FALSE) {
-				$data['fields'] = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
+		if (!empty($data['file'])) {
+			if (($handle = fopen($data['file'], "r")) !== FALSE) {
+				$data['fields'] = fgetcsv($handle, 1000, $settings['delimiter'], $settings['enclosure']);
 			} else {
 				NewsletterHelper::jsonError('Cannot open file', $data);
 			}
@@ -644,30 +647,28 @@ class NewsletterControllerList extends JControllerForm
 	 * @return object - data
 	 * @since 1.0
 	 */
-	protected function _getSettings()
+	protected function _getSettings($data)
 	{
-		$json = NewsletterHelperData::jsonDecode(JRequest::getString('jsondata', ''));
-
-		if (empty($json->enclosure) || $json->enclosure == 'no') {
-			$json->enclosure = "\0";
+		if (empty($data['enclosure']) || $data['enclosure'] == 'no') {
+			$data['enclosure'] = "\0";
 		}
 
 
-		if (empty($json->delimiter)) {
+		if (empty($data['delimiter'])) {
 			echo json_encode(array('status' => '0', 'error' => 'Some settings are absent'));
 			return false;
 		}
 
-		switch ($json->delimiter) {
+		switch ($data['delimiter']) {
 			case 'tab':
-				$json->delimiter = "\t";
+				$data['delimiter'] = "\t";
 				break;
 			case 'space':
-				$json->delimiter = " ";
+				$data['delimiter'] = " ";
 				break;
 		}
 
-		return $json;
+		return $data;
 	}
 }
 

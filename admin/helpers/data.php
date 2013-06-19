@@ -233,9 +233,54 @@ class NewsletterHelperData
 		if(substr($json, 0, 3) == pack("CCC", 0xEF, 0xBB, 0xBF)) {
 			$json = substr($json, 3);
 		}
-	
+
 		return json_decode($json, $assoc, $depth);
 	}
+	
+	public static function remotePost($url, array $post = NULL, array $options = array()) 
+	{ 
+
+		$postArray = $post;
+		if (!empty($post)) {
+			$postArray = array();
+			foreach ($post as $key => $value) {
+				ob_start();
+				if (is_object($value) || is_array($value)) {
+					var_dump($value);
+				} elseif (is_string($value)) {
+					echo "string '".$value."'";
+				} else {
+					echo $value;
+				}
+				
+				$postArray[$key] = trim(ob_get_contents(), "\n");
+				ob_end_clean();
+					
+			}
+		}
+		
+		
+		$defaults = array( 
+			CURLOPT_POST => 1, 
+			CURLOPT_HEADER => 0, 
+			CURLOPT_URL => $url, 
+			CURLOPT_FRESH_CONNECT => 1, 
+			CURLOPT_REFERER => $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
+			CURLOPT_RETURNTRANSFER => 1, 
+			CURLOPT_FORBID_REUSE => 1, 
+			CURLOPT_TIMEOUT => 4, 
+			CURLOPT_POSTFIELDS => http_build_query($postArray) 
+		); 
+
+		$ch = curl_init(); 
+		curl_setopt_array($ch, ($options + $defaults)); 
+		if( ! $result = curl_exec($ch)) 
+		{ 
+			trigger_error(curl_error($ch)); 
+		} 
+		curl_close($ch); 
+		return $result; 
+	} 
 }
 
 /**

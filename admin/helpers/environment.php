@@ -157,7 +157,20 @@ class NewsletterHelperEnvironment
 		$asset = JTable::getInstance('asset');
 		return $asset->loadByName('com_newsletter');
 	}
+
 	
+	public static function checkMagicQUotes()
+	{
+		if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+			return false;
+		}
+
+		if (function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime()) {
+			return false;
+		}
+		
+		return true;
+	}
 	
 	
 	public static function getConflictsCount()
