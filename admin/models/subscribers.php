@@ -131,21 +131,26 @@ class NewsletterModelSubscribers extends MigurModelList
 	 */
 	public function setDefaultQuery()
 	{
+		$lid = (int) $this->getState('filter.list');
+
 		// Create a new query object.
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 
 		// SQL-query for gettting the users-subscibers list.
-		$query->select('a.*');
+		$query->select(
+			'a.*, ' . ( empty($lid)? '0 AS confirmed ' : 'sl.confirmed AS confirmed ' )
+		);
+		
 		$query->from(
-			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id, COALESCE(s.confirmed, u.activation = "") AS confirmed
+			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id 
 			FROM #__newsletter_subscribers AS s
 			LEFT JOIN #__users AS u ON (s.user_id = u.id)
 			WHERE s.user_id = 0 OR u.id IS NOT NULL OR s.email != ""
 			
 			UNION
 
-			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id, s.confirmed AS confirmed
+			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id 
 			FROM #__newsletter_subscribers AS s
 			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS a');
 		
@@ -157,10 +162,9 @@ class NewsletterModelSubscribers extends MigurModelList
 		unset($this->filtering);
 
 		// Filter by list state
-		$list = $this->getState('filter.list');
-		if (!empty($list)) {
+		if (!empty($lid)) {
 			$query->leftJoin("#__newsletter_sub_list AS sl ON a.subscriber_id=sl.subscriber_id");
-			$query->where('sl.list_id = ' . (int) $list);
+			$query->where('sl.list_id = ' . (int) $lid);
 		}
 
 		// Filter by list state
