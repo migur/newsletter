@@ -245,13 +245,25 @@ abstract class JHtmlMultigrid
 	static function confirmed($value, $i, $img1 = 'tick.png', $img0 = 'publish_x.png', $prefix='', $form = null)
 	{
 		$img = ($value == 1? $img1 : $img0);
-		$alt = $value ? JText::_('COM_NEWSLETTER_CONFIRMED') : JText::_('COM_NEWSLETTER_UNCONFIRMED');
+		$alt = $value ? JText::_('COM_NEWSLETTER_ACTIVE') : JText::_('COM_NEWSLETTER_INACTIVE');
+		$task = 'activate';
+		$action = JText::_('COM_NEWSLETTER_ACTIVATE');
 
-		$html = 
-			'<a href="javascript:void(0);">' .
-				JHTML::_('image', 'admin/' . $img, $alt, array('border' => 0), true) . 
-			'</a>';
+		$args = "'cb{$i}','$prefix$task'";
+		if (!empty($form)) {
+			$args .= ",'{$form}'";
+		}
 
+		if ($value == 1) {
+			$html = 
+				'<span>' .
+					JHTML::_('image', 'admin/' . $img, $alt, array('border' => 0), true) . 
+				'</span>';
+		} else {	
+			$html = '<a href="javascript:void(0);" onclick="return Migur.lists.listItemTask(' . $args . ')" title="' . $action . '">' .
+				JHTML::_('image', 'admin/' . $img, $alt, array('border' => 0), true) . '</a>';
+		}
+		
 		return $html;
 	}
 	
