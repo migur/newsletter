@@ -159,3 +159,11 @@
 #exclude-status-container {
 	margin-top: 10px;
 }
+
+#excludelists-control-panel > * {
+	float: left;
+}
+
+#excludelists-control-panel .preloader-container {
+	margin: 5px 0 0 10px;
+}
