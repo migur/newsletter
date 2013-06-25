@@ -153,6 +153,8 @@ try {
             url: '?option=com_newsletter&task=list.exclude&subtask=lists&format=html',
             onComplete: function(res){
 				
+				$$('#excludelists-control-panel .preloader-container').removeClass('preloader');
+				
 				var parser = new Migur.jsonResponseParser();
 				parser.setResponse(res);
 
@@ -170,6 +172,8 @@ try {
 				window.location.reload();
             }
         }).send('&list_id=' + id + '&jsondata='+JSON.encode(data));
+		
+		$$('#excludelists-control-panel .preloader-container').addClass('preloader');
     });
 
     if ($$('[name=list_id]')[0].get('value')) {

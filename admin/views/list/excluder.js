@@ -179,14 +179,15 @@ Migur.define('excluder', function(){
 				
                 onComplete: function(messages, data){
 					
-                    this.showAlert(
+					this.showAlert(
 					
 						messages,
 						
-						Joomla.JText._('TOTAL','Total')+": " + (data.total || 0) + "\n"
+						Joomla.JText._('TOTAL','Total')+": " + data.total + "\n"+
+						Joomla.JText._('SKIPPED','Skipped')+": " + data.skipped + "\n"+
+						Joomla.JText._('ERRORS', 'Errors')+": " + data.errors + "\n"+
+						Joomla.JText._('UNBOUND', 'Unbound')+": " + data.unbound + "\n"
 					);
-						
-                    //document.location.reload();
                 }
             });
 				

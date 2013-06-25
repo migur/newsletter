@@ -630,8 +630,8 @@ class NewsletterControllerList extends JControllerForm
             $app->setUserState($statePath.'.seek', ftell($handle));
             fclose($handle);
 
-            $subscriber = JModel::getInstance('subscriber', 'newsletterModel');
-            $mList = JModel::getInstance('List', 'NewsletterModel');
+            $subscriber = MigurModel::getInstance('subscriber', 'newsletterModel');
+            $mList = MigurModel::getInstance('List', 'NewsletterModel');
 
 			$dbo = JFactory::getDbo();
 			$dbo->transactionStart();
