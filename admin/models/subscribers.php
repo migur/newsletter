@@ -139,7 +139,7 @@ class NewsletterModelSubscribers extends MigurModelList
 
 		// SQL-query for gettting the users-subscibers list.
 		$query->select(
-			'a.*, ' . ( empty($lid)? '0 AS confirmed ' : 'sl.confirmed AS confirmed ' )
+			'a.name, a.email, a.state, a.registerDate, a.user_id, ' . ( empty($lid)? '0 AS confirmed ' : 'sl.confirmed AS confirmed ' )
 		);
 		
 		$query->from(
@@ -150,7 +150,7 @@ class NewsletterModelSubscribers extends MigurModelList
 			
 			UNION
 
-			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id 
+			SELECT   s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id 
 			FROM #__newsletter_subscribers AS s
 			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS a');
 		
@@ -216,7 +216,7 @@ class NewsletterModelSubscribers extends MigurModelList
 		}
 		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
-		//echo nl2br(str_replace('#__','jos_',$query)); die;
+		//echo nl2br(str_replace('#__','php53_',$query)); die;
 		$this->query = $query;
 	}
 
