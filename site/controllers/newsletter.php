@@ -215,7 +215,6 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		
 		// Process list of emails....
-		$messagesSkipped = array();
 		$subscriber = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		foreach ($emails as $email) {
 			
@@ -223,11 +222,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 			if ($subscriber->load(array('email' => $email[1]))) {
 				
 				// If subscriber is allowed to send to then add him to list.
-				if ($subscriber->isConfirmed()) {
-					$data['subscribers'][] = $subscriber->toObject();
-				} else {
-					$messagesSkipped[] = JText::sprintf('COM_NEWSLETTER_EMAIL_IS_DISABLED', $email[1]);
-				}
+				$data['subscribers'][] = $subscriber->toObject();
 				
 			} else {
 
@@ -239,10 +234,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		// If list is empty then finish with it.
 		if(empty($data['subscribers'])) {
-			NewsletterHelper::jsonError(array_merge(
-				array(JText::_('COM_NEWSLETTER_NO_EMAILS_TO_SEND')), 
-				$messagesSkipped
-			));
+			NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_NO_EMAILS_TO_SEND'));
 		}
 		
 		// Send mails.....
@@ -266,7 +258,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 			array('Emails' => $emails));
 		
 		
-		NewsletterHelper::jsonMessage($messagesSkipped, $emails);
+		NewsletterHelper::jsonMessage('COM_NEWSLETTER_PREVIEW_SENT_SUCCESSFULLY', $emails);
 	}
 }
 
