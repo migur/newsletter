@@ -94,6 +94,7 @@
         <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset file="${cfg.comDir}/script.php" />
         </copy>
+		<chmod dir="${destdir}/administrator/components/com_${cfg.comName}/data" perm="ugo+rwx" />
 
         <delete dir="${destdir}/components/com_${cfg.comName}" />
         <copy todir="${destdir}/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
