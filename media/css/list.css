@@ -1,6 +1,6 @@
 /**
  * @version	   $Id:  $
- * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
+ * @copyright  Copyright (C) 201 Migur Ltd. All rights reserved.
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -158,8 +158,6 @@
 }
 
 #exclude-tab-button {
-    float: right;
-    margin: 15px 5px;
     width: 100px;
 }
 
@@ -401,4 +399,13 @@ div.form-text dl dt {
 #jgroups-pane {
 	max-height: 270px;
 	overflow: auto;
+}
+
+#excludelists-control-panel {
+    margin: 15px 5px;
+}
+
+#excludelists-control-panel > * {
+	float: right;
+	margin-top: 5px;
 }
