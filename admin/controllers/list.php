@@ -504,13 +504,19 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function exclude()
 	{
-
+		NewsletterHelper::jsonPrepare();
+		
+		$app = JFactory::getApplication();
+		
 		$subtask = JRequest::getString('subtask', '');
-		$currentList = JRequest::getInt('list_id', 0);
-
+		$lids = (array) JRequest::getVar('list_id', 0);
+        $currentList = (int) $lids[0];
+        
+		$limit = JRequest::getInt('limit', 1000);
+		$offset = JRequest::getVar('offset', '');
+		
 		if ($currentList < 1) {
-			NewsletterHelper::jsonError('No list id');
-			return;
+            NewsletterHelper::jsonError('No list Id');
 		}
 
 		$jsonData = JRequest::getString('jsondata', '{}');
@@ -538,9 +544,13 @@ class NewsletterControllerList extends JControllerForm
 			$mList = MigurModel::getInstance('List', 'NewsletterModel');
 			$total = count($subscribers);
 			
+			$dbo = JFactory::getDbo();
+			$dbo->transactionStart();
+			
 			foreach ($subscribers as $item) {
+				
 				$res = $mList->unbindSubscriber($currentList, $item);
-
+				
 				if (!$res) {
 
 					NewsletterHelper::jsonError('COM_NEWSLETTER_EXCLUSION_FAILED');
@@ -548,6 +558,8 @@ class NewsletterControllerList extends JControllerForm
 				}
 			}
 
+			$dbo->transactionCommit();
+			
 			NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), array(
 				'total' => $total
 			));
@@ -555,70 +567,147 @@ class NewsletterControllerList extends JControllerForm
 		}
 
 		if ($subtask == 'parse') {
+            
+            if (!$settings = $this->_getSettings($data)) {
+                NewsletterHelper::jsonError('No settings');
+            }
 
-			if (!$settings = $this->_getSettings($data)) {
-				return;
-			}
-			
-			$mapping = $settings->fields;
+            $mapping = $settings->fields;
 
 			$sess = JFactory::getSession();
 			$file = $sess->get('com_newsletter.list.' . $currentList . '.file.uploaded', array());
 
+            $filename = $file['file']['filepath'];
+            $statePath = 'com_newsletter.'.md5('list.'.$currentList.'exclude.file.'.$filename);
 
+            // If there is no extarnal offset then use internal from session
+            if (!is_numeric($offset)) {
+                $offset = $app->getUserState($statePath.'.offset', 0);
+            }	
+
+            // If this is a start then init session variables
+            if ($offset == 0) {
+                $app->setUserState($statePath.'.seek', 0);
+                $app->setUserState($statePath.'.skipped', 0);
+                $app->setUserState($statePath.'.errors', 0);
+                $app->setUserState($statePath.'.unbound', 0);
+            }
+
+            // Restore previous state
+            $seek     = $app->getUserState($statePath.'.seek', 0);
+            $skipped  = $app->getUserState($statePath.'.skipped', 0);
+            $errors   = $app->getUserState($statePath.'.errors', 0);
+            $unbound  = $app->getUserState($statePath.'.unbound', 0);
+
+            // Try to open file
+            if (($handle = fopen($filename, "r")) === FALSE) {
+                NewsletterHelper::jsonError('Cannot open file');
+            }
+
+            //get the header and seek to previous position
+            if ($settings->skipHeader) {
+                fgetcsv($handle, 0, $settings->delimiter, $settings->enclosure);
+            }	
+
+            // Seek only if SEEK is not on the start to prevent inserting the HEADER into DB
+            if ($seek > 0) {
+                fseek($handle, $seek);
+            }	
+
+            $total = 0;
 			
-			if (($handle = fopen($file['file']['filepath'], "r")) !== FALSE) {
+            while (
+                ($limit == 0 || $total < $limit) &&
+                ($data = fgetcsv($handle, 0, $settings->delimiter, $settings->enclosure)) !== FALSE
+            ) {
+                $emails[] = array(
+                    'email' => $data[$mapping->email->mapped],
+                );
+				$total++;
+            }
+            
+            // Store seek for further requests and close file
+            $app->setUserState($statePath.'.seek', ftell($handle));
+            fclose($handle);
 
-				//get the header
-				if ($settings->skipHeader) {
-					fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
-				}	
+            $subscriber = JModel::getInstance('subscriber', 'newsletterModel');
+            $mList = JModel::getInstance('List', 'NewsletterModel');
 
-				while (($data = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure)) !== FALSE) {
-					$res[] = array(
-						'email' => $data[$mapping->email->mapped],
-					);
-				}
-				fclose($handle);
+			$dbo = JFactory::getDbo();
+			$dbo->transactionStart();
+			
+            foreach ($emails as $row) {
 
-				$subscriber = MigurModel::getInstance('subscriber', 'newsletterModel');
-				$mList = MigurModel::getInstance('List', 'NewsletterModel');
+                $user = $subscriber->getItem(array('email' => $row['email']));
 
-				$total = count($res);
-				$absent = 0;
-				$processed = 0;
-				foreach ($res as $row) {
+                if ($user) {
+                    if($mList->unbindSubscriber($currentList, $user['subscriber_id'])) {
+                        $res['unbound']++;
+                    } else {
+                        $res['errors']++;
+                    }
+                } else {
+                    $res['skipped']++;
+                }
+            }
 
-					$user = $subscriber->getItem(array('email' => $row['email']));
+			$dbo->transactionCommit();
+			
+            if (!empty($res['errors'])) {
+                NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_EXCLUSION_FAILED'), array(
+                    'fetched'   => $total,
+                    'total'     => $offset   + $total,
+                    'skipped'   => $skipped,
+                    'errors'    => $errors   + $res['errors'],
+                    'unbound'   => $unbound  + $res['unbound']
+                ));
+            }
 
-					if ($user) {
-						$res = $mList->unbindSubscriber($currentList, $user['subscriber_id']);
+            // Check if this is not the end
+            if ($total > 0) {
 
-						if (!$res) {
-							NewsletterHelper::jsonError('COM_NEWSLETTER_EXCLUSION_FAILED', array(
-								'processed' => $processed,
-								'absent' => $absent,
-								'total' => $total
-							));
-						} else {
-							$processed++;
-						}
-					} else {
-						$absent++;
-					}
-				}
+                // Store offsets and stats
+                $app->setUserState($statePath.'.offset', $offset + $total);
+                $app->setUserState($statePath.'.skipped', $skipped);
+                $app->setUserState($statePath.'.errors', $errors + $res['errors']);
+                $app->setUserState($statePath.'.unbound', $unbound + $res['unbound']);
 
-				//unlink($file['file']['filepath']);
-				//$sess->clear('com_newsletter.list.' . $currentList . '.file.uploaded');
+                NewsletterHelper::jsonMessage('ok', array(
+                    'fetched'   => $total,
+                    'total'     => $offset   + $total,
+                    'skipped'   => $skipped,
+                    'errors'    => $errors + $res['errors'],
+                    'unbound'   => $unbound  + $res['unbound'],
+                ));
+            }
 
-				NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), array(
-					'processed' => $processed,
-					'absent' => $absent,
-					'total' => $total
-				));
-			} else {
-				NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_EXCLUSION_FAILED') . '. ' . JText::_('COM_NEWSLETTER_FILE_NOT_FOUND'));
-			}
+            // This is the end
+            $app->setUserState($statePath.'.seek', 0);
+            $app->setUserState($statePath.'.offset', 0);
+            $app->setUserState($statePath.'.skipped', 0);
+            $app->setUserState($statePath.'.errors', 0);
+            $app->setUserState($statePath.'.unbound', 0);
+
+            unlink($file['file']['filepath']);
+            $sess->clear('list.' . $currentList . '.file.uploaded');
+
+            $res = array(
+                'fetched'   => $total,
+                'total'     => $offset + $total,
+                'skipped'   => $skipped,
+                'total'     => $offset + $total,
+                'errors'    => $errors + $res['errors'],
+                'unbound'   => $unbound  + $res['unbound']
+            );
+
+
+            NewsletterHelperLog::addDebug(
+                'Import successfull. List ID is '.$currentList, 
+                NewsletterHelperLog::CAT_EXCLUDE, 
+                $res
+            );
+
+            NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), $res);        
 		}
 	}
 
