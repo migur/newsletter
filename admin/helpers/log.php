@@ -44,7 +44,9 @@ class NewsletterHelperLog
 	const CAT_UPLOAD = 'upload';
 
 	const CAT_IMPORT = 'import';
-	
+
+    const CAT_EXCLUDE = 'exclude';
+
 	public static $langIsLoaded = false;
 	
 	/**
