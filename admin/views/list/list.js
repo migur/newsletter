@@ -278,7 +278,9 @@ try {
         new Request.JSON({
             url: '?option=com_newsletter&task=list.exclude&subtask=lists&format=html',
             onComplete: function(res){
-				
+
+				$$('#excludelists-control-panel .preloader-container').removeClass('preloader');
+
 				var parser = new Migur.jsonResponseParser();
 				parser.setResponse(res);
 
@@ -296,6 +298,8 @@ try {
 				window.location.reload();
             }
         }).send('&list_id=' + id + '&jsondata='+JSON.encode(data));
+		
+		$$('#excludelists-control-panel .preloader-container').addClass('preloader');
     });
 
 
@@ -443,31 +447,62 @@ try {
         if (notEnough == true) {
             alert(Joomla.JText._('PLEASE_FILL_ALL_REQUIRED_FIELDS','Please fill all required fields'));
         } else {
+            
             $$('[name=subtask]').set('value', 'exclude-file-apply');
             var id = $$('[name=list_id]').get('value');
 
-            //$$('#exclude-del-cont .active')
-
-            new Request.JSON({
-                url: '?option=com_newsletter&task=list.exclude&subtask=parse&format=html',
-                onComplete: function(res){
+			var excludeMan = new Migur.iterativeAjax({
+				
+                url: '?option=com_newsletter&task=list.exclude&subtask=parse',
+				
+				data: {
+					jsondata: JSON.encode(res),
+					list_id: id
+				},
+				
+				limit: 1000,
+				
+				messagePath: '#exclude-file #exclude-message',
+				preloaderPath: '#exclude-file #exclude-preloader',
+				
+                onComplete: function(messages, data){
 					
-					var parser = new Migur.jsonResponseParser();
-					parser.setResponse(res);
-
-					var data = parser.getData();
-
-					if (parser.isError()) {
-						alert(
-							parser.getMessagesAsList(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured!'))
-						);
-						return;	
-					}
-
-                    alert(parser.getMessagesAsList() + "\n\n"+Joomla.JText._('PROCESSED', 'Processed')+": " + data.processed + "\n"+Joomla.JText._('ABSENT', 'Absent')+": " + data.absent + "\n" + Joomla.JText._('TOTAL','Total')+": " + data.total);
+                    this.showAlert(
+					
+						messages,
+						
+						Joomla.JText._('TOTAL','Total')+": " + data.total + "\n"+
+						Joomla.JText._('SKIPPED','Skipped')+": " + data.skipped + "\n"+
+						Joomla.JText._('ERRORS', 'Errors')+": " + data.errors + "\n"+
+						Joomla.JText._('UNBOUND', 'Unbound')+": " + data.unbound + "\n"
+					);
+						
                     document.location.reload();
                 }
-            }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res) );
+            });
+				
+			excludeMan.start();
+
+//            new Request.JSON({
+//                url: '?option=com_newsletter&task=list.exclude&subtask=parse&format=html',
+//                onComplete: function(res){
+//					
+//					var parser = new Migur.jsonResponseParser();
+//					parser.setResponse(res);
+//
+//					var data = parser.getData();
+//
+//					if (parser.isError()) {
+//						alert(
+//							parser.getMessagesAsList(Joomla.JText._('AN_UNKNOWN_ERROR_OCCURED', 'An unknown error occured!'))
+//						);
+//						return;	
+//					}
+//
+//                    alert(parser.getMessagesAsList() + "\n\n"+Joomla.JText._('PROCESSED', 'Processed')+": " + data.processed + "\n"+Joomla.JText._('ABSENT', 'Absent')+": " + data.absent + "\n" + Joomla.JText._('TOTAL','Total')+": " + data.total);
+//                    document.location.reload();
+//                }
+//            }).send( '&list_id=' + id + '&jsondata=' + JSON.encode(res) );
         }
     });
 
