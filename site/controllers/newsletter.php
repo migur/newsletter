@@ -241,7 +241,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 			array('Emails' => $emails));
 		
 		
-		NewsletterHelper::jsonMessage('COM_NEWSLETTER_PREVIEW_SENT_SUCCESSFULLY', $emails);
+		NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_PREVIEW_SENT_SUCCESSFULLY'), $emails);
 	}
 }
 
