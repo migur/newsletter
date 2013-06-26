@@ -217,26 +217,19 @@ class NewsletterViewNewsletter extends MigurView
 
 		$bar = JToolBar::getInstance('toolbar');
 		
-		if ($this->isUpdateAllowed && (
-				( $isNew && AclHelper::actionIsAllowed('newsletter.add' )) ||
-				(!$isNew && AclHelper::actionIsAllowed('newsletter.edit'))
-			) 
-		) {
-			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'newsletter.apply', false);
-			$bar->appendButton('Standard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
-		}
-		
 		try {
 			$status = NewsletterHelperNewsletter::getLicenseStatus();
 		
 			// We show tutorials only for users with valid license
 			if ($status->isValid) {
+				
 				$helpLink = 'http://migur.com/support/documentation/migur-newsletter/newsletters?version=' . NewsletterHelper::getManifest()->version;
 				$bar->appendButton(
 					'Custom', 
 					'<a class="btn btn-small" href="'.$helpLink.'" target="_blank">'.
-					'<span class="icon-asterisk"></span>'.JText::_('COM_NEWSLETTER_TUTORIAL').'</a>'
+					'<span class="icon-32-default"></span>'.JText::_('COM_NEWSLETTER_TUTORIAL').'</a>'
 				);
+				$bar->appendButton('Separator', null, '25');
 			}	
 		
 		} catch(Exception $e) {
@@ -244,18 +237,24 @@ class NewsletterViewNewsletter extends MigurView
 		}
 
 		
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
 
 		if ($this->isUpdateAllowed && (
 				( $isNew && AclHelper::actionIsAllowed('newsletter.add' )) ||
 				(!$isNew && AclHelper::actionIsAllowed('newsletter.edit')) 
 			)
 		) {
-			$bar->appendButton('Separator', null, '50');
-			$bar->appendButton('Custom', '<button class="btn btn-small" id="autosaver-switch"><span id="autosaver-icon"></span><span id="content-state"></span></button>', 'autosaver', '', false);
+			$bar->appendButton('Link', 'autosaver', '', '#', false);
 			$bar->appendButton('Separator', null, '25');
-			$bar->appendButton('Custom', '<span></span>', 'docstate', '', false);
+			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'newsletter.apply', false);
+			$bar->appendButton('Standard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
+
+//			$bar->appendButton('Separator', null, '50');
+//			$bar->appendButton('Custom', '<button class="btn btn-small" id="autosaver-switch"><span id="autosaver-icon"></span><span id="content-state"></span></button>', 'autosaver', '', false);
+//			$bar->appendButton('Separator', null, '25');
+//			$bar->appendButton('Custom', '<span></span>', 'docstate', '', false);
 		}	
+		
+		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
 	}
 
 	/**
@@ -274,8 +273,8 @@ class NewsletterViewNewsletter extends MigurView
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/newsletter.css');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
-		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/modal.js');
-		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/autosaver.js');
+//		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/modal.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/ajax.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/widgets.js');
 		
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/moodialog/MooDialog.js');
@@ -283,25 +282,23 @@ class NewsletterViewNewsletter extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/moodialog/MooDialog.IFrame.js');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/js/migur/js/moodialog/css/MooDialog.css');
 
-		//NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/autocompleter/Observer.js');
-		//NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/autocompleter/Autocompleter.js');
-		//NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/autocompleter/Autocompleter.Local.js');
-		//NewsletterHelperView::addStyleSheet('media/com_newsletter/js/migur/js/autocompleter/css/Autocompleter.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/autocompleter/Observer.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/autocompleter/Autocompleter.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/autocompleter/Autocompleter.Local.js');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/js/migur/js/autocompleter/css/Autocompleter.css');
 
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/guide.js');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/guide.css');
 		
-		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/html.js');
-		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/plain.js');
-		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/preview.js');
-		//NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/autocompleter.js');
-		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/autosaver.js');
-		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/guide.js');
+//		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/html.js');
+//		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/plain.js');
+//		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/preview.js');
+//		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/autosaver.js');
+//		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/guide.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/newsletter.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/downloads.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/submitbutton.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/forms/newsletter.js');
-		JText::script('COM_NEWSLETTER_NEWSLETTER_ERROR_UNACCEPTABLE');
 	}
 
 }
