@@ -1200,8 +1200,7 @@ window.addEvent('domready', function() {
 				
                 var text;
                 if (res && res.state == true) {
-                    text = Joomla.JText._('THE_PREVIEWS_WERE_SUCCESFULLY_MAILED',"The previews were succesfully mailed") + "\n" +
-							res.messages.join("\n");
+                    text = res.messages.join("\n");
                 } else {
                     text = Joomla.JText._('AN_ERROR_OCCURED', "An error occured!") + "\n" +
 							res.messages.join("\n");
