@@ -137,8 +137,10 @@ Migur.dnd.makeAvatar = function(el, droppables, htmlWidget){
                 $('html-area').fireEvent('drop');
             }
 
-            Migur.getWidget('autosaver-switch').update(
-                (autosaver.isChanged(autosaver.getter()))? 'unsaved' : 'saved');
+			if (window.isUpdateAllowed == 1) {
+				Migur.getWidget('autosaver-switch').update(
+					(autosaver.isChanged(autosaver.getter()))? 'unsaved' : 'saved');
+			}		
         }
     });
     return avatar;
@@ -291,7 +293,6 @@ avatarSetSettings = function(avatar) {
 
 
 window.addEvent('domready', function() {
-    try {
 
         $('tabs-sub-container').getElements('input, textarea')
         .addEvent('focus', function(ev){
@@ -314,7 +315,7 @@ window.addEvent('domready', function() {
         /**
      * Create wigets for each template control
      **/
-        Migur.createWidget('templates-container', {
+        Migur.createWidget('jform_t_style_id', {
 
             data: null,
 
@@ -513,9 +514,10 @@ window.addEvent('domready', function() {
                             data.params.active = $(trgt).getProperty('checked');
                             widget.set(data);
 							
-							Migur.getWidget('autosaver-switch').update(
-								(autosaver.isChanged(autosaver.getter()))? 'unsaved' : 'saved');
-							
+							if (window.autosaver) {
+								Migur.getWidget('autosaver-switch').update(
+									(autosaver.isChanged(autosaver.getter()))? 'unsaved' : 'saved');
+							}		
                         }
                     }
                 }
@@ -821,223 +823,239 @@ window.addEvent('domready', function() {
         /* "Plain text" tab -> "Dynamic data" -> click-handlers */
         // add dynamic data
         $$('#dynamic-data-container a').each(function(el){
-            el.setProperty('href', el.getProperty('rel'));
             el.addEvent('click', function(){
-                $('jform_plain_area').insertAtCursor($(this).getProperty('href'), false);
+                $('jform_plain').insertAtCursor($(this).getProperty('data-placeholder'), false);
                 return false;
             });
         });
 
+		if (isUpdateAllowed == 0) {
+			$('jform_plain').setProperty('readonly', 'readonly');
+		}
+
 
         /* Start the autosaver */
-        autosaver = new Migur.ajax.autosaver({
-            options: {
-                repeat: true,
-                timeout: 3000,
-                observable: $('tabs-sub-container'),
-                url: '?option=com_newsletter&context=json&format=html'
-            },
+		if (isUpdateAllowed != 0) {
+			autosaver = new Migur.ajax.autosaver({
+				options: {
+					repeat: true,
+					timeout: 3000,
+					observable: $('tabs-sub-container'),
+					url: '?option=com_newsletter&context=json&format=html'
+				},
 
-            beforeSend: function(){
-                    $$('form [name=task]').set('value','newsletter.apply');
-            },
+				beforeSend: function(){
+						$$('form [name=task]').set('value','newsletter.apply');
+				},
 
-            getter: function(){
-				
-				var htmlConstructor = Migur.getWidget('html-area');
-                var htmlTpl = htmlConstructor.parse();
-                var inputs  = $('tabs-sub-container').toQueryString();
-                
-                // Get the all data from all plugins!
-                var plugins = [];
-                $$('.plugin').each(function(el) {
-                    plugins.push( Migur.getWidget(el).get() );
-                });
-                var obj = new Hash(inputs.parseQueryString());
-				
-                obj["jform[newsletter_preview_email]"] = "";
-                obj["jform[htmlTpl]"] = JSON.encode(htmlTpl);
-                obj["jform[plugins]"] = JSON.encode(plugins);
-				
-				$$("[name=jform[htmlTpl]]")[0].setProperty('value', obj["jform[htmlTpl]"]);
-				$$("[name=jform[plugins]]")[0].setProperty('value', obj["jform[plugins]"]);
-				
-                return obj.toQueryString();
-            },
-        
-            // On success
-            onSuccess: function(res){
-                if (res.state == 'ok') {
-                    if (res.newsletter_id > 0) {
-						
-						// Update value
-                        $$('[name=newsletter_id]').set('value', res.newsletter_id);
-						
-						// Update alias and newsletter link 
-						Migur.getWidget('jform_alias').update(res.alias);
-						
-                        Migur.getWidget('autosaver-switch').render();
-                        autosaver.options.observState = autosaver.getter();
-                    }
-                } else {
-					
-					var switcher = Migur.getWidget('autosaver-switch');
-					if (autosaver.messageCannotsave === undefined || switcher.data == 'off') {
-						alert(res.state);
-						autosaver.messageCannotsave = true;
-					}	
+				getter: function(){
+
+					var htmlConstructor = Migur.getWidget('html-area');
+					var htmlTpl = htmlConstructor.parse();
+					var inputs  = $('tabs-sub-container').toQueryString();
+
+					// Get the all data from all plugins!
+					var plugins = [];
+					$$('.plugin').each(function(el) {
+						plugins.push( Migur.getWidget(el).get() );
+					});
+					var obj = new Hash(inputs.parseQueryString());
+
+					obj["jform[newsletter_preview_email]"] = "";
+					obj["jform[htmlTpl]"] = JSON.encode(htmlTpl);
+					obj["jform[plugins]"] = JSON.encode(plugins);
+
+					$$("[name=jform[htmlTpl]]")[0].setProperty('value', obj["jform[htmlTpl]"]);
+					$$("[name=jform[plugins]]")[0].setProperty('value', obj["jform[plugins]"]);
+
+					return obj.toQueryString();
+				},
+
+				// On success
+				onSuccess: function(res){
+					if (res.state == 'ok') {
+						if (res.newsletter_id > 0) {
+
+							// Update value
+							$$('[name=newsletter_id]').set('value', res.newsletter_id);
+
+							// Update alias and newsletter link 
+							Migur.getWidget('jform_alias').update(res.alias);
+
+							Migur.getWidget('autosaver-switch').render();
+							autosaver.options.observState = autosaver.getter();
+						}
+					} else {
+
+						var switcher = Migur.getWidget('autosaver-switch');
+						if (autosaver.messageCannotsave === undefined || switcher.data == 'off') {
+							alert(res.state);
+							autosaver.messageCannotsave = true;
+						}	
+					}
+				},
+
+				controller: function(data) {
+
+					var form = $$('form.form-validate')[0];
+					var res = document.formvalidator.isValid(form);
+
+					Migur.validator.tabIndicator(
+						'#tabs-sub-container',
+						'span h3 a',
+						'tab-invalid',
+						'.invalid'
+						);
+
+					if (!res) {
+						return false;
+					}
+
+					// If the HTML constructor is not ready yet the we cant get data from it...
+					var htmlConstructor = Migur.getWidget('html-area');
+					if (!htmlConstructor.initialised) {
+						return false;
+					}
+
+					return this.isChanged(data);
 				}
-            },
+			});
 
-            controller: function(data) {
-				
-                var form = $$('form.form-validate')[0];
-                var res = document.formvalidator.isValid(form);
 
-                Migur.validator.tabIndicator(
-                    '#tabs-sub-container',
-                    'span h3 a',
-                    'tab-invalid',
-                    '.invalid'
-                    );
+			$$('input, select, textarea').addEvent('blur', function(){
+				Migur.validator.tabIndicator(
+					'#tabs-sub-container',
+					'span h3 a',
+					'tab-invalid',
+					'.invalid'
+					);
+			});
 
-                if (!res) {
-                    return false;
-                }
 
-				// If the HTML constructor is not ready yet the we cant get data from it...
-				var htmlConstructor = Migur.getWidget('html-area');
-				if (!htmlConstructor.initialised) {
-					return false;
+			$$('#toolbar-apply a')[0].addEvent('click', function(ev){
+
+				ev.stop();
+
+				var res = autosaver.send(false, 'use controller');
+
+				if (res) {
+					// Hide the message (0008255: Ability to configure autosave)
+					autosaver.prompt = 'already';
+
+					if (typeof(autosaver.prompt) == 'undefined') {
+						autosaver.prompt = 'already';
+						var conf = confirm(Joomla.JText._('DO_YOU_WANT_TO_TURN_ON_AUTO_SAVE_INSTEAD_QM','Do you want to turn on "Auto save" instead?'));
+						if (conf) {
+							Migur.getWidget('autosaver-switch').turnOn();
+						}
+					}
+
+				} else {
+					alert(Joomla.JText._(
+						'AN_ERROR_OCCURED_DURING_SAVE_PLEASE_TRY_TURNING_ON_AUTOSAVE_INSTEAD',
+						'An error occured during save, please try turning on autosave instead.'
+					));
 				}
-
-                return this.isChanged(data);
-            }
-        });
+			});
 
 
-        $$('input, select, textarea').addEvent('blur', function(){
-            Migur.validator.tabIndicator(
-                '#tabs-sub-container',
-                'span h3 a',
-                'tab-invalid',
-                '.invalid'
-                );
-        });
+			/* Autosaver switch onclick-handler */
+			$$('#toolbar-autosaver a')[0].setProperty('id', 'autosaver-switch');
 
+			Migur.createWidget('autosaver-switch', {
 
-        $$('#toolbar-apply a')[0].addEvent('click', function(ev){
+				setup: function(){
+					if (typeof (comParams.autosaver_enabled) != 'undefined' && comParams.autosaver_enabled == '1') {
+						this.data = 'on';
+					} else {
+						this.data = 'off';
+					}
+				//this.data = null;
+				},
 
-            ev.stop();
-        
-            var res = autosaver.send(false, 'use controller');
+				render: function() {
+					$(this.domEl).set({
+						html:
+						'<span id="autosaver-icon"></span>'+
+					'<span id="content-state"></span>'
+					});
+					this.update('saved');
+					(this.data == 'on')? this.turnOn() : this.turnOff();
+				},
 
-            if (res) {
-                // Hide the message (0008255: Ability to configure autosave)
-                autosaver.prompt = 'already';
-            
-                if (typeof(autosaver.prompt) == 'undefined') {
-                    autosaver.prompt = 'already';
-                    var conf = confirm(Joomla.JText._('DO_YOU_WANT_TO_TURN_ON_AUTO_SAVE_INSTEAD_QM','Do you want to turn on "Auto save" instead?'));
-                    if (conf) {
-                        Migur.getWidget('autosaver-switch').turnOn();
-                    }
-                }
+				update: function(data) {
+					var text, color;
+					if (data == 'saved') {
+						text = 'Saved';
+						color = 'green';
+					} else {
+						text = 'Not Saved';
+						color = 'red';
+					}
 
-            } else {
-                alert(Joomla.JText._(
-					'AN_ERROR_OCCURED_DURING_SAVE_PLEASE_TRY_TURNING_ON_AUTOSAVE_INSTEAD',
-					'An error occured during save, please try turning on autosave instead.'
-				));
-            }
-        });
+					$('content-state').set('text', text).set('styles', {
+						color: color
+					});
 
+				},
 
-        /* Autosaver switch onclick-handler */
-        $$('#toolbar-autosaver a')[0].setProperty('id', 'autosaver-switch');
+				turnOn: function() {
+					$(this.domEl).getElementById('autosaver-icon')
+					.addClass('icon-32-autosave-on')
+					.removeClass('icon-32-autosave-off');
+					autosaver.start();
+					this.data = 'on';
+				},
 
-        Migur.createWidget('autosaver-switch', {
+				turnOff: function() {
+					$(this.domEl).getElementById('autosaver-icon')
+					.addClass('icon-32-autosave-off')
+					.removeClass('icon-32-autosave-on');
+					autosaver.stop();
+					this.data = 'off';
+				},
+				change: function() {
+					if (this.data == 'off') {
+						this.turnOn();
+					}else {
+						this.turnOff();
+					}
 
-            setup: function(){
-                if (typeof (comParams.autosaver_enabled) != 'undefined' && comParams.autosaver_enabled == '1') {
-                    this.data = 'on';
-                } else {
-                    this.data = 'off';
-                }
-            //this.data = null;
-            },
+				},
+				events: {
+					'click': function(){
+						Migur.getWidget(this).change();
+						return false;
+					}
+				}
+			});
 
-            render: function() {
-                $(this.domEl).set({
-                    html:
-                    '<span id="autosaver-icon"></span>'+
-                '<span id="content-state"></span>'
-                });
-                this.update('saved');
-                (this.data == 'on')? this.turnOn() : this.turnOff();
-            },
+			/* Unsaved data warning handler */
+			$$('#html-area, form textarea, form input, form select').addEvent('keyup', function() {
+				Migur.getWidget('autosaver-switch').update(
+					(autosaver.isChanged(autosaver.getter()))? 'unsaved' : 'saved');
+			});
 
-            update: function(data) {
-                var text, color;
-                if (data == 'saved') {
-                    text = 'Saved';
-                    color = 'green';
-                } else {
-                    text = 'Not Saved';
-                    color = 'red';
-                }
+			$$('form select').addEvent('change', function() {
+				Migur.getWidget('autosaver-switch').update(
+					(autosaver.isChanged(autosaver.getter()))? 'unsaved' : 'saved');
+			});
+		}	
 
-                $('content-state').set('text', text).set('styles', {
-                    color: color
-                });
-
-            },
-
-            turnOn: function() {
-                $(this.domEl).getElementById('autosaver-icon')
-                .addClass('icon-32-autosave-on')
-                .removeClass('icon-32-autosave-off');
-                autosaver.start();
-                this.data = 'on';
-            },
-
-            turnOff: function() {
-                $(this.domEl).getElementById('autosaver-icon')
-                .addClass('icon-32-autosave-off')
-                .removeClass('icon-32-autosave-on');
-                autosaver.stop();
-                this.data = 'off';
-            },
-            change: function() {
-                if (this.data == 'off') {
-                    this.turnOn();
-                }else {
-                    this.turnOff();
-                }
-
-            },
-            events: {
-                'click': function(){
-                    Migur.getWidget(this).change();
-                    return false;
-                }
-            }
-        });
-
-        /* "Subject" input -> keyup-handler */
+		/* Newsletter link widget */
 		 Migur.createWidget('jform_alias', {
 
 			setup: function(){
-				
+
 				// Adding handler to a DOM element
 				this.domEl.addEvent('keyup', function(){
 					var wdgt = Migur.getWidget('jform_alias');
 					wdgt.update();
 				});
-				
+
 				this.update();
 			},
-			
+
 			update: function(data){
 
 				// If we have new data then set it into control
@@ -1049,10 +1067,10 @@ window.addEvent('domready', function() {
 				if (!data) {
 					data = this.domEl.getProperty('value');
 				}
-				
-	            var link = $('link-website');
+
+				var link = $('link-website');
 				var linkPrompt = $('link-website-prompt');
-				
+
 				if (data == '') {
 					link.addClass('hide');
 					linkPrompt.removeClass('hide');
@@ -1066,17 +1084,7 @@ window.addEvent('domready', function() {
 			}
 		 });	
 
-		
-        /* Unsaved data warning handler */
-        $$('#html-area, form textarea, form input, form select').addEvent('keyup', function() {
-            Migur.getWidget('autosaver-switch').update(
-                (autosaver.isChanged(autosaver.getter()))? 'unsaved' : 'saved');
-        });
 
-        $$('form select').addEvent('change', function() {
-            Migur.getWidget('autosaver-switch').update(
-                (autosaver.isChanged(autosaver.getter()))? 'unsaved' : 'saved');
-        });
 
         $('jform_newsletter_preview_email').addEvent('focus', function(){
             //TODO: Add to translations
@@ -1206,8 +1214,8 @@ window.addEvent('domready', function() {
     });
 
 
-    $('templates-container').set( 'value', $$('[name=jform[t_style_id]]')[0].get('value') );
-    $('templates-container').fireEvent('change');
+    //$('jform_t_style_id').set( 'value', $$('[name=jform[t_style_id]]')[0].get('value') );
+    $('jform_t_style_id').fireEvent('change');
 
     // You want the request dialog instance to set the onRequest message,
     // so you have to do it in two steps.
@@ -1237,11 +1245,11 @@ window.addEvent('domready', function() {
                 }
             }, {
                 target:  {
-                    dom: '#templates-container',
+                    dom: '#jform_t_style_id',
                     event: 'change'
                 },
                 needle:  {
-                    dom: '#templates-container'
+                    dom: '#jform_t_style_id'
                 },
                 overlay: {
                     content: Joomla.JText._('CHOOSE_A_TEMPLATE_FIRST','Choose a template first!')
@@ -1296,8 +1304,14 @@ window.addEvent('domready', function() {
 }
 
 
-} catch(e){
-    if (console && console.log) console.log(e);
+// Check if newsletter is unabled to save
+if (isUpdateAllowed == 0) { 
+	setTimeout(function(){
+		alert(Joomla.JText._('COM_NEWSLETTER_CANNOT_SAVE_NEWSLETTER', "You cannot change this newsletter. Probably it is used in mailing process."))
+	},
+	1000);
+		
 }
+
 
 });

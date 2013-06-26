@@ -1,4 +1,7 @@
     <div id="attachments" class="form-text">
+		
+		<?php if ($this->isUpdateAllowed) : ?>
+
         <dl id="att-controls">
             <div class="fltrt">
 				<a
@@ -12,6 +15,8 @@
 				<input type="hidden" id="fileattach" name="fileattach" />
             </div>
         </dl>
+		
+		<?php endif; ?>
 
         <div id="attlist-container">
         <table class="attlist adminlist  table table-striped" width="100%">
@@ -26,33 +31,39 @@
                     <th width="30px" class="left">
                             <?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_FILETYPE', 'a.type', $this->attItemslistDirn, $this->attItemslistOrder, null, null, 'attForm'); ?>
                     </th>
+					
+					<?php if ($this->isUpdateAllowed) : ?>
                     <th width="15px">
                     </th>
+					<?php endif; ?>
+					
                 </tr>
             </thead>
             <tfoot>
             </tfoot>
             <tbody>
 				<?php foreach ($this->downloads as $i => $item) : ?>
-                <tr class="row<?php echo $i % 2; ?>">
-                    <td>
-                            <?php echo $this->escape($item->filename); ?>
-                    </td>
-                    <td>
-                            <?php echo JHtml::_('file.size', $item->size, 'kb/mb'); ?>
-                    </td>
-                    <td>
-                            <?php echo $this->escape($item->type); ?>
-                    </td>
-                    <td class="center">
-                        <a href="#" class="remove-link" rel="<?php echo $item->downloads_id; ?>" >
-                            <img
-                                border="0" style="margin:0;"
-                                alt="<?php echo JText::_('COM_NEWSLETTER_REMOVE'); ?>"
-                                src="<?php echo JURI::root() . 'media/media/images/remove.png' ?>">
-                        </a>
-                    </td>
-                </tr>
+					<tr class="row<?php echo $i % 2; ?>">
+						<td>
+								<?php echo $this->escape($item->filename); ?>
+						</td>
+						<td>
+								<?php echo JHtml::_('file.size', $item->size, 'kb/mb'); ?>
+						</td>
+						<td>
+								<?php echo $this->escape($item->type); ?>
+						</td>
+						<?php if ($this->isUpdateAllowed) : ?>
+						<td class="center">
+							<a href="#" class="remove-link" rel="<?php echo $item->downloads_id; ?>" >
+								<img
+									border="0" style="margin:0;"
+									alt="<?php echo JText::_('COM_NEWSLETTER_REMOVE'); ?>"
+									src="<?php echo JURI::root() . 'media/media/images/remove.png' ?>">
+							</a>
+						</td>
+						<?php endif; ?>
+					</tr>
                 <?php endforeach; ?>
             </tbody>
         </table>

@@ -1,14 +1,18 @@
 <div id="acc-newsletter">
 
-    <select id="templates-container">
+    <select id="jform_t_style_id" name="jform[t_style_id]" class="required" <?php if (!$this->isUpdateAllowed) echo 'disabled="disabled"'; ?>>
             <option value=""><?php echo JText::_('COM_NEWSLETTER_SELECT_TEMPLATE');?></option>
-            <?php foreach($this->templates->items as $item) : ?>
-                <option value="<?php echo $this->escape($item->t_style_id); ?>">
+            <?php foreach($this->templates->items as $item) : 
+				$selected = ($this->form->getValue('t_style_id') == $item->t_style_id)? ' selected="selected" ' : ''
+			?>
+				
+                <option value="<?php echo $this->escape($item->t_style_id); ?>" <?php echo $selected ?>>
                         <?php echo $this->escape($item->title); ?>
                 </option>
              <?php endforeach; ?>
 
     </select>
+	
     <div class="pane-sliders" style="display: block;">
 
         <div class="panel">
@@ -108,8 +112,9 @@
 
 
 <div class="pane-sliders" id="acc2-newsletter" style="display: block;">
-
-    
+	
+	<?php if ($this->isUpdateAllowed): ?>
+	
     <div class="panel">
         <h3 id="acc2-dynamicdata" class="title pane-toggler-down">
             <a href="javascript:void(0);">
@@ -121,25 +126,14 @@
                 <div id="dynamic-data-container">
                     <?php foreach ($this->dynamicData as $name => $item) { ?>
                         <div class="data">
-                            <a href="<?php echo $item; ?>" rel="<?php echo $item; ?>"><?php echo $name; ?> +</a>
+                            <a href="#" data-placeholder="<?php echo $item; ?>"><?php echo $name; ?> +</a>
                         </div>
                     <?php } ?>
                 </div>
             </div>
         </div>
     </div>
-
-
-<!--    <div class="panel">
-        <h3 id="acc2-plugins" class="pane-toggler title">
-            <a href="javascript:void(0);">
-                <span>Plugins</span>
-            </a>
-        </h3>
-        <div class="pane-slider content pane-down" style="padding-top: 0px; border-top: medium none; padding-bottom: 0px; border-bottom: medium none; overflow: hidden; height: 0px;">
-            <div class="pane-container"> plugins </div>
-        </div>
-    </div>-->
-
-    
+	
+	<?php endif; ?>
+	
 </div>

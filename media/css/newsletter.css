@@ -24,7 +24,7 @@ iframe {
     overflow: hidden !important;
 }
 
-#tabs-sub-container > .current {
+#tabs-sub-container .current {
 /*    width: 600px;*/
     min-height: 300px;
     z-index: 0;
@@ -269,6 +269,10 @@ div.form-text ul li {
     height: 300px;
 }
 
+#jform_plain {
+    width: 99.2%;
+}
+
 #tab-preview-container {
     width: 100%;
     overflow: auto;
@@ -419,7 +423,7 @@ div.form-text ul li {
     overflow: hidden;
 }
 
-div select#templates-container {
+div select#jform_t_style_id {
     float: none;
     width: 100%;
     margin: 0;
