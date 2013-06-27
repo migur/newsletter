@@ -566,7 +566,12 @@ class NewsletterControllerMaintainance extends JControllerForm
 	public function getReport()
 	{
 		$form = JRequest::getVar('jform');
-		$data = json_decode($form['data']);
+        
+        if (get_magic_quotes_gpc()) {
+			$form['data'] = stripslashes($form['data']);
+		}
+		
+		$data = NewsletterHelperData::jsonDecode($form['data']);
 		$document = $this->_renderObject($data);
 
 		header("Content-Type: application/octet-stream");
