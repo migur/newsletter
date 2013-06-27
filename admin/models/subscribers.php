@@ -139,7 +139,7 @@ class NewsletterModelSubscribers extends MigurModelList
 
 		// SQL-query for gettting the users-subscibers list.
 		$query->select(
-			'a.name, a.email, a.state, a.registerDate, a.user_id, ' . ( empty($lid)? '0 AS confirmed ' : 'sl.confirmed AS confirmed ' )
+			'a.subscriber_id, a.name, a.email, a.state, a.registerDate, a.user_id, ' . ( empty($lid)? '0 AS confirmed ' : 'sl.confirmed AS confirmed ' )
 		);
 		
 		$query->from(
