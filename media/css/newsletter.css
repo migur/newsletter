@@ -482,3 +482,7 @@ textarea.focused {
 .autocompleter-item span {
 	line-height: 18px;
 }
+
+#htmlconstructor-sidebar.fixed {
+    position: fixed;
+}
