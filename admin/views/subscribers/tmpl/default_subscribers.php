@@ -11,7 +11,7 @@
 				<div class="fltlft">
 					<div class="label"><?php echo JText::_('COM_NEWSLETTER_STATE'); ?></div>
 					<select name="filter_published" class="inputbox fltlt" onchange="this.form.submit()">
-							<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
+							<option value="">- <?php echo JText::_('COM_NEWSLETTER_SELECT_STATE');?> -</option>
 							<?php echo JHtml::_('select.options', JHtml::_('multigrid.enabledOptions'), 'value', 'text', $this->subscribers->state->get('filter.published'), true);?>
 					</select>
 				</div>
@@ -62,12 +62,12 @@
 				<th class="left" width="120px">
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_REGISTRATION_DATE', 'a.registerDate', $this->subscribers->listDirn, $this->subscribers->listOrder, null, null, 'subscribersForm'); ?>
 				</th>
-				<th width="8%" class="left">
+				<th width="9%" class="left">
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ENABLED', 'a.state', $this->subscribers->listDirn, $this->subscribers->listOrder, NULL, 'desc', 'subscribersForm'); ?>
 				</th>
 				<?php if ($this->activationIsAllowed): ?>
-				<th width="8%" class="left">
-					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ACTIVATED', 'a.confirmed', $this->subscribers->listDirn, $this->subscribers->listOrder, NULL, 'desc', 'subscribersForm'); ?>
+				<th width="10%" class="left">
+					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ACTIVATED', 'confirmed', $this->subscribers->listDirn, $this->subscribers->listOrder, NULL, 'desc', 'subscribersForm'); ?>
 				</th>
 				<?php endif; ?>
 			</tr>
