@@ -214,6 +214,12 @@ class NewsletterModelSubscribers extends MigurModelList
 		if ($orderCol == 'a.ordering' || $orderCol == 'a.name') {
 			$orderCol = 'name';
 		}
+
+		//var_dump($orderCol); die;
+		if ($orderCol == 'confirmed') {
+			$orderCol = 'sl.confirmed';
+		}
+		
 		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
 		//echo nl2br(str_replace('#__','php53_',$query)); die;
