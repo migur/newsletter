@@ -19,7 +19,7 @@
 				<div class="pull-left btn-group">
 					<!--<label><?php echo JText::_('COM_NEWSLETTER_STATE'); ?></label>-->
 					<select name="filter_published" class="input-medium" onchange="this.form.submit()">
-							<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
+							<option value="">- <?php echo JText::_('COM_NEWSLETTER_SELECT_STATE');?> -</option>
 							<?php echo JHtml::_('select.options', JHtml::_('multigrid.enabledOptions'), 'value', 'text', $this->subscribers->state->get('filter.published'), true);?>
 					</select>
 				</div>
@@ -76,7 +76,7 @@
 				</th>
 				<?php if ($this->activationIsAllowed): ?>
 				<th class="left" width="12%">
-					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ACTIVATED', 'a.confirmed', $this->subscribers->listDirn, $this->subscribers->listOrder, NULL, 'desc', 'subscribersForm'); ?>
+					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_ACTIVATED', 'confirmed', $this->subscribers->listDirn, $this->subscribers->listOrder, NULL, 'desc', 'subscribersForm'); ?>
 				</th>
 				<?php endif; ?>
 			</tr>
