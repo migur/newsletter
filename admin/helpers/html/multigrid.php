@@ -98,10 +98,10 @@ abstract class JHtmlMultigrid
 		// Build the active state filter options.
 		$options = array();
 		if (!array_key_exists('published', $config) || $config['published']) {
-			$options[] = JHtml::_('select.option', '1', 'COM_NEWSLETTER_ACTIVE');
+			$options[] = JHtml::_('select.option', '1', 'COM_NEWSLETTER_ENABLED');
 		}
 		if (!array_key_exists('unpublished', $config) || $config['unpublished']) {
-			$options[] = JHtml::_('select.option', '0', 'COM_NEWSLETTER_INACTIVE');
+			$options[] = JHtml::_('select.option', '0', 'COM_NEWSLETTER_DISABLED');
 		}
 		if (!array_key_exists('all', $config) || $config['all']) {
 			$options[] = JHtml::_('select.option', '*', 'JALL');
