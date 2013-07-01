@@ -130,7 +130,7 @@ class NewsletterViewSubscribers extends MigurView
 			));
 		}
 		
-		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', SupportHelper::getResourceUrl('subscriber'));
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', SupportHelper::getResourceUrl('subscribers'));
 
 		$bar = MigurToolBar::getInstance('lists');
 		
@@ -145,7 +145,7 @@ class NewsletterViewSubscribers extends MigurView
 			$bar->appendButton('Standard', 'publish', 'JTOOLBAR_ENABLE', 'lists.publish', false);
 		}	
 
-		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', SupportHelper::getResourceUrl('subscriber'));
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', SupportHelper::getResourceUrl('lists'));
 
 		// Load the submenu.
 		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
