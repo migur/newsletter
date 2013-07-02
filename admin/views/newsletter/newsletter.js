@@ -931,34 +931,6 @@ window.addEvent('domready', function() {
 					);
 			});
 
-
-			$$('#toolbar-apply a')[0].addEvent('click', function(ev){
-
-				ev.stop();
-
-				var res = autosaver.send(false, 'use controller');
-
-				if (res) {
-					// Hide the message (0008255: Ability to configure autosave)
-					autosaver.prompt = 'already';
-
-					if (typeof(autosaver.prompt) == 'undefined') {
-						autosaver.prompt = 'already';
-						var conf = confirm(Joomla.JText._('DO_YOU_WANT_TO_TURN_ON_AUTO_SAVE_INSTEAD_QM','Do you want to turn on "Auto save" instead?'));
-						if (conf) {
-							Migur.getWidget('autosaver-switch').turnOn();
-						}
-					}
-
-				} else {
-					alert(Joomla.JText._(
-						'AN_ERROR_OCCURED_DURING_SAVE_PLEASE_TRY_TURNING_ON_AUTOSAVE_INSTEAD',
-						'An error occured during save, please try turning on autosave instead.'
-					));
-				}
-			});
-
-
 			/* Autosaver switch onclick-handler */
 			$$('#toolbar-autosaver a')[0].setProperty('id', 'autosaver-switch');
 
