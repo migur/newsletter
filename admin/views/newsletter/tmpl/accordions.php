@@ -1,6 +1,11 @@
 <div id="htmlconstructor-sidebar">
+    
     <div id="acc-newsletter">
 
+		<div class="page-header">
+            <?php echo $this->form->getLabel('t_style_id'); ?>
+        </div>
+        
         <select id="jform_t_style_id" name="jform[t_style_id]" class="required" <?php if (!$this->isUpdateAllowed) echo 'disabled="disabled"'; ?>>
                 <option value=""><?php echo JText::_('COM_NEWSLETTER_SELECT_TEMPLATE');?></option>
                 <?php foreach($this->templates->items as $item) : 
@@ -14,6 +19,10 @@
 
         </select>
 
+		<div class="page-header">
+			<label><?php echo JText::_('COM_NEWSLETTER_DND_MODULES_INTO_TEMPLATE'); ?></label>
+		</div>
+		
         <div class="pane-sliders" style="display: block;">
 
             <div class="panel">
@@ -104,6 +113,12 @@
                 </div>
             </div>
         </div>
+        
+        <div id="trashcan-container" class="toolbar-list drop trashcan">
+            <span class="icon-32-trash"></span>
+            <?php echo JText::_('COM_NEWSLETTER_TRASH_MODULES_HERE'); ?>
+        </div>
+        
     </div>
 </div>
 

@@ -3,14 +3,24 @@ window.addEvent('domready',
     function() {
         var 
             sidebar = $('htmlconstructor-sidebar'),
-            viewport = window,
-            treshold = sidebar.getPosition().y - 50;
+            viewport = $(window),
+            treshold = sidebar.getPosition().y - 20;
 
         var fixSidebar = function(){
+            
+            if (sidebar.hasClass('fixed')) return;
+            
             sidebar.addClass('fixed');
+//            var pos    = sidebar.getPosition(), 
+//                scroll = viewport.getScroll();
+//            
+//            sidebar.setStyle('top', scroll.y - pos.y);
         }
 
         var releaseSidebar = function(){
+
+            if (!sidebar.hasClass('fixed')) return;
+            
             sidebar.removeClass('fixed');
         }
 
