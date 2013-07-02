@@ -5,7 +5,7 @@ defined('_JEXEC') or die;
 
 <div class="content">
 <h1>Subscribers - Help page</h1>
-<br/><br/>
+<br/>
     <p>The Administrator manages Subscribers and subscription Lists on the Subscribers page. There you find all the Subscribers and the Lists that the Subscribers can be associated with.
 Subscribers are the main target of the component.
 There are two types of Subscribers: (represented by different icons)
@@ -16,7 +16,7 @@ There are two types of Subscribers: (represented by different icons)
     <p>The definition key of a Subscriber is his email address.
 All users are automatically Enabled by the system. Activation on a list can be set to autoconfirmation or require the Subscriber to confirm their request to a list via email verification. Also administrator can activate the Subscriber manually for particular list.
 <h4>Toolbar</h4>
-<br/><b>Remove from list</b> button removes the selected Subscriber(s) from the List(s) selected in "Lists" panel. At least one Subscriber and one List must be checked.
+<b>Remove from list</b> button removes the selected Subscriber(s) from the List(s) selected in "Lists" panel. At least one Subscriber and one List must be checked.
 <br/><b>Add to list</b> button adds the selected Subscriber(s) to the List(s) selected in "Lists" panel. At least one Subscriber and one List must be checked.
 <br/><b>New</b> button allows you to create new Migur subscriber filling its name and email. To create Joomla! user please use Joomla! user manager. They will automatically be added to this list.
 <br/><b>Delete</b> button allows you to delete Migur subscriber. To delete Joomla! user please use Joomla! user manager.
