@@ -1,10 +1,20 @@
 .content {
 	margin: 20px;
 	padding: 20px;
-	font-size:18px;
-	line-height: 32px;
+	font-size:15px;
+	line-height: 22px;
 }
 
 .content p {
-	text-indent: 20px;
+	text-indent: 22px;
+}
+
+.content li {
+    line-height: 22px;
+}
+
+.content h2,
+.content h3,
+.content h4  {
+    margin-top: 22px;
 }
