@@ -4,44 +4,38 @@ defined('_JEXEC') or die;
 ?>
 
 <div class="content">
-<h1>Subscriber list - Help page</h1>
-<br/><br/>
-Subscribers are main target of a component. 
-There are 2 types of subscribers:
-<ul>
-<li>Migur subscriber</li>
-<li>Joomla! user</li>
-</ul>
-The definition key of a subscriber is his email. Admin can manage the list of subscribers on a subscribers page. The subscribers list allows administrator to look through and manage subscribers. Also it allows to manage the inclusion of subscribers into subscribers lists. There you can see and use both Joomla!users and Migur subscribers. Joomla! user is standard Joomla! user that you can manage via Joomla! user manager.
+<h1>Subscribers - Help page</h1>
+<br/>
+    <p>The Administrator manages Subscribers and subscription Lists on the Subscribers page. There you find all the Subscribers and the Lists that the Subscribers can be associated with.
+Subscribers are the main target of the component.
+There are two types of Subscribers: (represented by different icons)
+<ul><li>Joomla! user</li>
+<li>Migur subscriber</li></ul>
+<b>Joomla! user</b> is the standard Joomla! user that is managed via Joomla! User Manager. All Joomla! users are automatically listed in the list of Subscribers. Disabling a Joomla! user in Migur does not disable them in Joomla! and disabling them in Joomla! does not disable them in Migur.
+<b>Migur subscribers</b> are added to the Migur Subscription list through subscription registration modules, imported lists or manually adding a subscriber.
+    <p>The definition key of a Subscriber is his email address.
+All users are automatically Enabled by the system. Activation on a list can be set to autoconfirmation or require the Subscriber to confirm their request to a list via email verification. Also administrator can activate the Subscriber manually for particular list.
 <h4>Toolbar</h4>
-<p><b>Remove from list</b> button allows you to remove selected subscriber(s) from list(s) selected in "Lists" panel.
-<p><b>Add to list</b> button allows you to add selected subscriber(s) to list(s) selected in "Lists" panel.
-<p><b>New</b> button allows you to create new Migur subscriber filling its name and email. To create Joomla! user please use Joomla! user manager.
-<p><b>Delete</b> button allows you to delete Migur subscriber. To delete Joomla! user please use Joomla! user manager.
-<p><b>Enable</b> button allows you to enable subscriber/Joomla! user. See below.
-<p><b>Disable</b> button allows you to disable subscriber/Joomla! user. See below.
-<p><b>Activate</b> button appears only if you are looking through subscribers of particular list (particular list is selected in "List" filter). This button allows you to activate a subscription of a subscriber to a selected list manually.
-<p><b>Help</b> button opens this help page.</p>
-
-<a name="enebling"></a>
+<b>Remove from list</b> button removes the selected Subscriber(s) from the List(s) selected in "Lists" panel. At least one Subscriber and one List must be checked.
+<br/><b>Add to list</b> button adds the selected Subscriber(s) to the List(s) selected in "Lists" panel. At least one Subscriber and one List must be checked.
+<br/><b>New</b> button allows you to create new Migur subscriber filling its name and email. To create Joomla! user please use Joomla! user manager. They will automatically be added to this list.
+<br/><b>Delete</b> button allows you to delete Migur subscriber. To delete Joomla! user please use Joomla! user manager.
+<br/><b>Enable</b> button allows you to enable a subscriber/Joomla! user. See below.
+<br/><b>Disable</b> button allows you to disable a subscriber/Joomla! user. See below.
+<br/><b>Activate</b> button appears only if you are viewing subscribers of a particular list (the particular list is selected in "List" filter). This button allows you to activate the subscription of the Subscriber to that selected List manually.
 <h4>Subscriber enabling/disabling</h4>
-This feature is similar to enabling/disabling feature in Joomla! user manager. 
-The disabling of a subscriber means that no emails will be sent to him from all 
-lists he subscribed or added by admin. It has nothing to do with disabling Joomla! user. 
-All the subscribers are enabled by default. Administrator can disable subscribers for some 
-reason (see Activation and disabling in mailing process).
-
-<a name="activation"></a>
+    <p>This feature is similar (but not connected) to enabling/disabling feature in Joomla! user manager. The disabling of a Subscriber means that no emails will be sent to him from any list he is subscribed or added to by admin. It has nothing to do with disabling Joomla! user. All the subscribers are enabled by default. Administrator need to be able to disable subscribers for some reason (see Activation and disabling in mailing process).
 <h4>Subscriber activation</h4>
-Activation is the process of confirmation subscriber’s subscription to particular list. Subscriber becomes activated for particular list when he:
-<ul>
-	<li>confirm a subscription via email</li>
-	<li>subscribed to a list with autoconfirmation</li>
-</ul>	
-It is similar to activation feature in Joomla! user manager. But Migur activation is not for all system but for particular list. It is the main difference. Subscriber does not confirm himself or his email. He confirms his subscription to a list. It has nothing to do with activation of Joomla! user. Does not matter if Joomla! user is active or not. Only activation of a subscriber to a particular list has sense. Inactive status shows us that user did a subscription but just not proved it with help of email yet. Admin may want to activate it himself to be able to send something to that subscriber.
+    <p>Activation is the process of confirming a Subscriber’s subscription to particular list. The Subscriber becomes activated for a particular List when he:
+<ul><li>confirm a subscription via email</li>
+<li>subscribed to a list with autoconfirmation</li>
+<li>the administrator can also activate the Subscriber manually if necessary</li>
+</ul>
 
-<h4>Activation and disabling in mailing process</h4>
-When administrator invokes the mailing a newsletter to some list then all the subscribers from that list are added to mailing queue along with inactive or disabled ones. But newsletters will be sent to only enabled subscribers that activated for that list. Queue items that related to disabled or inactive subscribers will be pended till appropriate subscribers will be enabled or confirm their subscription for appropriate list. So we can say that admin can activate a subscriber manually to be able to send to him something and can disable him to prevent the mailing to him.
-Let’s consider an example:
-Once administrator mailed (added to queue) a newsletter to a list that has some both inactive and disabled subscribers. After that administrator enabled some disabled subscribers from that list. After that action mailer will send a newsletter to these subscribers. In addition if some subscribers will confirm their subscriptions to that list then they will receive their newsletters too.
-</div>
+It is similar to the activation feature in the Joomla! User Manager. However Migur activation is not related to the whole Joomla! system but only to a particular mailing List in Migur. This is the main difference. A Subscriber does not confirm himself or his email, he confirms (activates) his subscription to a list. It has nothing to do with the activation of a Joomla! user. It does not matter if the Joomla! user is active or not. Only the activation of a subscriber to a particular List. Inactive status shows us that the Subscriber registered for a subscription but has not approved it via email yet. The administrator can and may want to activate it himself to be able to send something to that Subscriber.
+<h4>Activation and enabling during the mailing process</h4>
+    <p>When the administrator invokes the mailing of a Newsletter to a List, all the Subscribers from that list are added to a mailing queue including the inactive or disabled Subscribers. However, newsletters will only be sent to the enabled subscribers that are activated for that list. Queued items that are disabled or inactive subscribers will have a status of pended until they are enabled or their subscription to the list becomes confirmed (activated). So we can say that the Administrator can activate a subscriber manually to be able to mail him something, and can disable him to prevent any mailing to him.
+    <p>Let’s consider an example:
+    <p>Lets say the administrator invokes the mailing of a newsletter to a list (which starts by sending ALL the subscribers on that list to the mail queue) and that list has both inactive and disabled subscribers on it. The mailer will send the newsletter to all the Enabled and Activated Subscribers and leave the status of the others as Pending.
+Later, if the administrator enables a disabled subscriber from that list, the mailer will now send a newsletter to that newly enabled subscriber.
+Also, if a subscriber confirms (activates) their subscription to that list, the mailer will now send a newsletter to that newly activated subscriber.
