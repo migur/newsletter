@@ -108,6 +108,7 @@
                         <language tag="en-GB">language/en-GB/en-GB.com_newsletter_js.ini</language>
                         <language tag="en-GB">language/en-GB/en-GB.com_newsletter_log.ini</language>
                         <language tag="en-GB">language/en-GB/en-GB.com_newsletter.sys.ini</language>
+                        <language tag="en-GB">language/en-GB/en-GB.com_newsletter_modules.ini</language>
                 </languages>
 
         </administration>
