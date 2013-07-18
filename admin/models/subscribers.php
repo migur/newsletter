@@ -300,7 +300,18 @@ class NewsletterModelSubscribers extends MigurModelList
 		// Select the required fields from the table.
 		$query->select('a.*, h.date, h.text');
 
-		$query->from('#__newsletter_subscribers AS a');
+		$query->from(
+			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, u.id AS user_id, s.confirmed
+			FROM #__newsletter_subscribers AS s
+			LEFT JOIN #__users AS u ON (s.user_id = u.id)
+			WHERE s.user_id = 0 OR u.id IS NOT NULL OR s.email != ""
+
+			UNION
+
+			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, u.id AS user_id, s.confirmed
+			FROM #__newsletter_subscribers AS s
+			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS a');
+		
 		$query->join('', "#__newsletter_sub_history AS h ON a.subscriber_id=h.subscriber_id AND h.list_id='" . intval($params['list_id']) . "'");
 		$query->where("action='" . intval(NewsletterTableHistory::ACTION_UNSUBSCRIBED) . "'");
 
