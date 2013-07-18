@@ -25,40 +25,57 @@ defined('_JEXEC') or die;
 class NewsletterHelperSupport
 {
 	static public $resourceUrl = 'administrator/index.php?option=com_newsletter&view=support';
-	
-	public static function getResourceUrl($category, $name = null, $anchor = null, $version = null, $options = array())
+
+    static public $resourceUrlRemote = COM_NEWSLETTER_SUPPORT_REMOTE_URL;
+
+	public static function getResourceUrl($category, $name, $anchor = null, $version = null, $options = array())
 	{
 		$resourceUrl = '';
-		
-		if (!empty($category)) {
-			$resourceUrl .= '&category='.$category;
-		}	
+	
+        if (empty($category) || empty($name)) {
+            throw new Exception('Required parameters are missed.');
+        }
+        
+        if (!empty($options['lotal'])) {
+        
+            if (!empty($category)) {
+                $resourceUrl .= '&category='.$category;
+            }	
 
-		if (!empty($name)) {
-			$resourceUrl .= '&name='.$name;
-		}	
+            if (!empty($name)) {
+                $resourceUrl .= '&name='.$name;
+            }	
 
-		if (!empty($version)) {
-			$resourceUrl .= '&version='.$category;
-		}	
+            if (!empty($version)) {
+                $resourceUrl .= '&version='.$category;
+            }	
 
-		// Add some params (dafault or provided)
-		$params = empty($options['params'])? array() : (array) $options['params'];
-		
-		if (empty($params['tmpl'])) {
-			$params['tmpl'] = 'component';
-		}	
-		
-		foreach($params as $name => $val) {
-			$resourceUrl .= '&'.$name.'='.$val;
-		}
-		
-		if (!empty($anchor)) {
-			$resourceUrl .= '#'.$anchor;
-		}	
-		
-		return JUri::root(). self::$resourceUrl . $resourceUrl;
+            // Add some params (dafault or provided)
+            $params = empty($options['params'])? array() : (array) $options['params'];
+
+            if (empty($params['tmpl'])) {
+                $params['tmpl'] = 'component';
+            }	
+
+            foreach($params as $name => $val) {
+                $resourceUrl .= '&'.$name.'='.$val;
+            }
+
+            if (!empty($anchor)) {
+                $resourceUrl .= '#'.$anchor;
+            }	
+
+            return JUri::root(). self::$resourceUrl . $resourceUrl;
+            
+        } else {
+            $resourceUrl = 
+                !empty()preg_replace('/[^0-9a-z]+/', '-', strtolower($category))
+        }    
 	}	
+    
+    function buildRemoteHelpPageRoute() {
+        
+    }
 }
 
 /**
