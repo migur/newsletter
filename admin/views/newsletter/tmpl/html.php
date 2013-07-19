@@ -2,6 +2,6 @@
 	<div id="html-area"></div>
 </div>
 	
-<div class="right-bar">
+<div id="htmlconstructor-sidebar" class="right-bar">
 	<?php echo $this->loadTemplate('html_rightbar', ''); ?>
 </div>
