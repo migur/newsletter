@@ -29,13 +29,6 @@ defined('_JEXEC') or die;
 						<?php echo JHtml::_('form.token'); ?>
 				</td>
 				<td width="250px">
-					<div id="trashcan-container" class="toolbar-list drop trashcan">
-						<ul class="hide"><li>
-						<span class="icon-32-trash">
-						</span>
-							Trash modules here!
-						</li></ul>
-					</div>
 					<?php echo $this->loadTemplate('accordions', ''); ?>
 				</td>
 			</tr>

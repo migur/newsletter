@@ -727,12 +727,10 @@ window.addEvent('domready', function() {
         /*  Main tabs -> click-handlers  */
         $$('#tabs-newsletter > dt').addEvent('click', function (event) {
 
-            $$('#trashcan-container ul').addClass('hide');
             if ( $(this).match('.tab-html') ) {
                 $('acc-newsletter').set('styles', {
                     display:'block'
                 } );
-                $$('#trashcan-container ul').removeClass('hide');
             } else {
                 $('acc-newsletter').set('styles', {
                     display:'none'
