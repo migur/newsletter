@@ -302,6 +302,7 @@ class NewsletterViewNewsletter extends MigurView
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/newsletter.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/downloads.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/submitbutton.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/sidebar.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/forms/newsletter.js');
 		JText::script('COM_NEWSLETTER_NEWSLETTER_ERROR_UNACCEPTABLE');
 	}

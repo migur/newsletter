@@ -11,7 +11,7 @@
 
 .right-bar {
 	float: right;
-	width:25%;
+	width: 25%;
 }
  
 .MooDialog.myDialog {
@@ -21,8 +21,9 @@
  
 @media (max-width: 900px) { 
 	.right-bar, .left-bar  {
-		float:none;
-		width:100%;
+		float: none;
+		width: 100% !important;
+		position: static !important;
 	}
 }
 
@@ -140,7 +141,7 @@
     position: relative;
     margin: 0;
     padding: 0;
-    max-height: 1000px;
+    /*max-height: 1000px;*/
     width: auto;
     border: none;
     overflow: auto;
@@ -385,4 +386,14 @@ textarea.focused {
 
 #tabs-legend {
 	margin: 20px 0;
+}
+
+#htmlconstructor-sidebar.fixed {
+	position: fixed;
+	top: 110px;
+	right: 43px;
+}	
+
+#htmlconstructor-sidebar.fixed #acc-newsletter {
+	margin-left: 22px;
 }
