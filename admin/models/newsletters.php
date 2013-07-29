@@ -222,7 +222,7 @@ class NewsletterModelNewsletters extends JModelList
 		$ids = array();
 		foreach($spids as $spid){
 			
-			$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+			$model = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 			$model->load($spid);
 			
 			if (!in_array($model->getId(), $ids)) {

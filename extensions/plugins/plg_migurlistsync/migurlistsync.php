@@ -308,8 +308,8 @@ class plgSystemMigurlistsync extends JPlugin
 	protected function _addUserToList($user, $lid)
 	{
 		// Get models
-		$subscriberModel = JModel::getInstance('Subscriber', 'NewsletterModel');
-		$listModel = JModel::getInstance('List', 'NewsletterModel');
+		$subscriberModel = MigurModel::getInstance('Subscriber', 'NewsletterModel');
+		$listModel = MigurModel::getInstance('List', 'NewsletterModel');
 		
 		// Just for creation of a uid-sid relation 
 		$subscriber = $subscriberModel->getItem(array('email' => $user->email));
@@ -354,8 +354,8 @@ class plgSystemMigurlistsync extends JPlugin
 	protected function _removeUserFromList($user, $lid)
 	{
 		// Get models
-		$subscriberModel = JModel::getInstance('Subscriber', 'NewsletterModel');
-		$listModel = JModel::getInstance('List', 'NewsletterModel');
+		$subscriberModel = MigurModel::getInstance('Subscriber', 'NewsletterModel');
+		$listModel = MigurModel::getInstance('List', 'NewsletterModel');
 		
 		// Just for cration of a uid-sid relation 
 		$subscriber = $subscriberModel->getItem(array('email' => $user->email));

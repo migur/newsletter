@@ -51,7 +51,7 @@ class NewsletterViewSubscribers extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/search.js');		
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/subscribers/subscribers.js');
 
-		$listModel = JModel::getInstance('lists', 'NewsletterModel');
+		$listModel = MigurModel::getInstance('lists', 'NewsletterModel');
 		$this->setModel($listModel);
 
 		EnvironmentHelper::showWarnings(array(
@@ -87,7 +87,7 @@ class NewsletterViewSubscribers extends MigurView
 
 		$this->assign('activationIsAllowed', $modelSubs->getState()->get('filter.list') > 0);
 		
-		$this->assign('subscriberModel', JModel::getInstance('Subscriber', 'NewsletterModelEntity'));
+		$this->assign('subscriberModel', MigurModel::getInstance('Subscriber', 'NewsletterModelEntity'));
 
 		// We don't need toolbar in the modal window.
 		if ($this->getLayout() !== 'modal') {

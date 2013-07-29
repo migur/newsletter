@@ -540,14 +540,14 @@ class com_newsletterInstallerScript
 				'NewsletterTable'	
 			);
 
-			JModel::addIncludePath(
+			MigurModel::addIncludePath(
 				JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_newsletter' . DIRECTORY_SEPARATOR . 'models', 
 				'NewsletterModel'
 			);
 
 			JLoader::import('migur.migur', JPATH_LIBRARIES);
 
-			$model = JModel::getInstance('Install', 'NewsletterModel');
+			$model = MigurModel::getInstance('Install', 'NewsletterModel');
 			$model->restore();
 		
 		} catch(Extension $e) {}	

@@ -72,7 +72,7 @@ class NewsletterViewDashboard extends MigurView
 		
 		$this->addToolbar();
 
-		$stat = JModel::getInstance('Queues', 'NewsletterModel')->getSummary();
+		$stat = MigurModel::getInstance('Queues', 'NewsletterModel')->getSummary();
 		$sent = 0;
 		$toSend = 0;
 		$total = 0;

@@ -67,10 +67,10 @@ class NewsletterModelImportCommon
 		$assigned = 0;
 		$errors = 0;
 		
-		$subManager = JModel::getInstance('Subscriber', 'NewsletterModel');
+		$subManager = MigurModel::getInstance('Subscriber', 'NewsletterModel');
 		$subTable = $subManager->getTable();
 		
-		$listManager = JModel::getInstance('List', 'NewsletterModel');
+		$listManager = MigurModel::getInstance('List', 'NewsletterModel');
 		$listTable = JTable::getInstance('List', 'NewsletterTable');
 		
 		$isTransaction = false;

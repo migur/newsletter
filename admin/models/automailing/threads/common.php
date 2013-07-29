@@ -142,7 +142,7 @@ class NewsletterAutomlailingThreadCommon extends MigurJTable
 		}
 		
 		// Update the count of sent items and state of Item
-		$serieModel = JModel::getInstance('AutomailingItem', 'NewsletterModel');
+		$serieModel = MigurModel::getInstance('AutomailingItem', 'NewsletterModel');
 		$serie->sent += $sents;
 		$serie->status++;
 		$serieModel->save((array)$serie);

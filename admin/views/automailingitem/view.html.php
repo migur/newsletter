@@ -78,13 +78,13 @@ class NewsletterViewAutomailingItem extends MigurView
 
 		
 		// All items of parent (siblings)
-		$amItemsModel = JModel::getInstance('AutomailingItems', 'NewsletterModel');
+		$amItemsModel = MigurModel::getInstance('AutomailingItems', 'NewsletterModel');
 		$amItems = $amItemsModel->getAllItems($aid);
 		$this->assignRef('allItems', $amItems);
 		
 		
 		// Automailig entity
-		$amItemsModel = JModel::getInstance('Automailing', 'NewsletterModel');
+		$amItemsModel = MigurModel::getInstance('Automailing', 'NewsletterModel');
 		$am = $amItemsModel->getItem($aid);
 		$this->assignRef('automailing', $am);
 		
