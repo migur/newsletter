@@ -24,13 +24,16 @@ defined('_JEXEC') or die;
  */
 class NewsletterHelperSupport
 {
-	static public $resourceUrl = 'administrator/index.php?option=com_newsletter&view=support';
+
+    static public $resourceUrl = 'administrator/index.php?option=com_newsletter&view=support';
 
     static public $resourceUrlRemote = COM_NEWSLETTER_SUPPORT_REMOTE_URL;
 
 	public static function getResourceUrl($category, $name, $anchor = null, $version = null, $options = array())
 	{
 		$resourceUrl = '';
+
+	return '';
 	
         if (empty($category) || empty($name)) {
             throw new Exception('Required parameters are missed.');
@@ -69,7 +72,7 @@ class NewsletterHelperSupport
             
         } else {
             $resourceUrl = 
-                !empty()preg_replace('/[^0-9a-z]+/', '-', strtolower($category))
+                preg_replace('/[^0-9a-z]+/', '-', strtolower($category));
         }    
 	}	
     
