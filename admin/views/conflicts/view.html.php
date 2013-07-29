@@ -70,7 +70,7 @@ class NewsletterViewConflicts extends MigurView
 		$this->assignRef('listOrder', $listOrder);
 		$this->assignRef('listDirn', $listDirn);
 		$this->assignRef('saveOrder', $saveOrder);
-		$this->assign('subscriberModel', JModel::getInstance('Subscriber', 'NewsletterModelEntity'));
+		$this->assign('subscriberModel', MigurModel::getInstance('Subscriber', 'NewsletterModelEntity'));
 		
 		parent::display($tpl);
 	}

@@ -55,7 +55,7 @@ class NewsletterViewNewsletters extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-migur-pie.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletters/newsletters.js');
 
-		$listModel = JModel::getInstance('lists', 'NewsletterModel');
+		$listModel = MigurModel::getInstance('lists', 'NewsletterModel');
 		$this->setModel($listModel);
 
 		// Check for errors.

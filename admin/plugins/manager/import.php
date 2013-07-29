@@ -17,7 +17,7 @@ class NewsletterPluginManagerImport extends NewsletterPluginManager
         
         $listId = $data[0];
         
-        $list = JModel::getInstance('List', 'NewsletterModel');
+        $list = MigurModel::getInstance('List', 'NewsletterModel');
         
         // Check if collection of objects is in LIST subarray
         if (isset($collection['list']) && is_array($collection['list'])) {

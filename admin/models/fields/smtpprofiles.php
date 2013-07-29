@@ -41,7 +41,7 @@ class JFormFieldSmtpprofiles extends JFormFieldList
 		$options = array();
 
 		// Just to be sure that record for Joomla profile is exist
-		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$model = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$model->load(0);
 		
 		$db = JFactory::getDbo();

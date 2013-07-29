@@ -29,7 +29,7 @@ class NewsletterViewSubscribe extends JView
 
 		$user = JFactory::getUser();
 		
-		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$subscriber = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
 		if (!empty($uid)) {
 			$subscriber->load(array('subscription_key' => $uid));

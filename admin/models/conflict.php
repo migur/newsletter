@@ -95,9 +95,9 @@ class NewsletterModelConflict extends JModelAdmin
 		$res = $dbo->loadObjectList();
 		
 		// Process each row.
-		$user = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$user = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		
-		$sub = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$sub = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		
 		foreach($res as $row) {
 			
@@ -192,9 +192,9 @@ class NewsletterModelConflict extends JModelAdmin
 		$res = $dbo->loadObjectList();
 		
 		// Process each row.
-		$user = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$user = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		
-		$sub = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$sub = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
 		foreach($res as $row) {
 			
@@ -293,7 +293,7 @@ class NewsletterModelConflict extends JModelAdmin
 		$res = $dbo->loadObjectList();
 		
 		// Process each row.
-		$sub = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$sub = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		
 		foreach($res as $row) {
 			
