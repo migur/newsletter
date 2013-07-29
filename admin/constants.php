@@ -23,4 +23,5 @@ if (!defined('MIGUR_COM_NEWSLETTER')) {
 	define('MIGUR_COM_NEWSLETTER', true);
 	
 	define('MIGUR_LICENSE_SERVICE_URL', 'http://migur.com/monster/service/check/license');
+	define('COM_NEWSLETTER_SUPPORT_REMOTE_URL', 'http://migur.com/remotesupport');
 }

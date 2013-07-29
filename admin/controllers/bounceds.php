@@ -43,7 +43,7 @@ class NewsletterControllerBounceds extends JControllerForm
 			return false;
 		}
 		
-		$queues = JModel::getInstance('Queues', 'NewsletterModel');
+		$queues = MigurModel::getInstance('Queues', 'NewsletterModel');
 		
 		foreach($cids as $cid) {
 			

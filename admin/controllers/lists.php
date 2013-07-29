@@ -83,8 +83,8 @@ class NewsletterControllerLists extends JControllerAdmin
 		}	
 		
 		// If needed create rows in SUBSCRIBERS for J! user
-		$modelSubscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
-		$modelList = JModel::getInstance('List', 'NewsletterModel');
+		$modelSubscriber = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$modelList = MigurModel::getInstance('List', 'NewsletterModel');
 		
 		
 		$dbo = JFactory::getDbo();

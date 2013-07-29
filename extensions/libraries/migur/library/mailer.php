@@ -64,7 +64,7 @@ class MigurMailer extends JObject
 		// First let's create brand new dispatcher...
 		unset($this->dispatcher); 
 		$this->dispatcher = new JDispatcher();
-		$plugins = JModel::getInstance('Newsletter', 'NewsletterModel')
+		$plugins = MigurModel::getInstance('Newsletter', 'NewsletterModel')
 				->getUsedPlugins($params['newsletter_id'], 'newsletter.'.$params['type']);
 		MigurPluginHelper::importPluginCollection($plugins, $this->dispatcher);
 
@@ -196,7 +196,7 @@ class MigurMailer extends JObject
 		}
 
 		// Load newsletter...
-		$letter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$letter = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
 		
 		if (!$letter->load($params['newsletter_id'])) {
 			$msg = 'Loading letter error or newsletter_id is not defined. Id:'.$params['newsletter_id'];
@@ -205,7 +205,7 @@ class MigurMailer extends JObject
 		}
 		
 		// Load newsletter's SMTP profile...
-		$smtpProfile = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$smtpProfile = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		if (!$smtpProfile->load($letter->smtp_profile_id)) {
 			$msg = 'Cant load SMTP profile with id: ' . $letter->smtp_profile_id;
 			$this->setError($msg);
@@ -377,7 +377,7 @@ class MigurMailer extends JObject
 		}
 
 		// Load newsletter...
-		$letter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$letter = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
 		if (!$letter->load($params['newsletter_id'])) {
 			$msg = 'Loading letter error or newsletter_id is not defined. Id:'.$params['newsletter_id'];
 			$this->setError($msg);
@@ -385,7 +385,7 @@ class MigurMailer extends JObject
 		}
 
 		// Load newsletter's SMTP profile...
-		$smtpProfile = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$smtpProfile = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		if (!$smtpProfile->load($letter->smtp_profile_id)) {
 			$msg = 'Cant load SMTP profile with id: ' . $letter->smtp_profile_id;
 			$this->setError($msg);
@@ -393,7 +393,7 @@ class MigurMailer extends JObject
 		}
 
 		// Load mailbox profile bound to loaded SMTP profile...
-		$mailboxProfile = JModel::getInstance('Mailboxprofile', 'NewsletterModelEntity');
+		$mailboxProfile = MigurModel::getInstance('Mailboxprofile', 'NewsletterModelEntity');
 		if (!$mailboxProfile->load($smtpProfile->mailbox_profile_id)) {
 			
 			LogHelper::addWarning(

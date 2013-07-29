@@ -50,9 +50,9 @@ class NewsletterViewList extends MigurView
 		
 		$isNew = (!JRequest::getInt('list_id', false) );
 		
-		$model =            JModel::getInstance('lists', 'NewsletterModel');
-		$listModel =        JModel::getInstance('List', 'NewsletterModel');
-		$subscribersModel = JModel::getInstance('subscribers', 'NewsletterModel');
+		$model =            MigurModel::getInstance('lists', 'NewsletterModel');
+		$listModel =        MigurModel::getInstance('List', 'NewsletterModel');
+		$subscribersModel = MigurModel::getInstance('subscribers', 'NewsletterModel');
 		
 		$this->setModel($subscribersModel);
 		

@@ -69,7 +69,7 @@ class NewsletterViewAutomailing extends MigurView
 		
 		
 		// Get item list (series)
-		$itemsModel = JModel::getInstance('AutomailingItems', 'NewsletterModel');
+		$itemsModel = MigurModel::getInstance('AutomailingItems', 'NewsletterModel');
 		$itemsModel->automailingId = $aid;
 		$amList = (object) array(
 				'items' => $itemsModel->getNormalizedItems($aid),
@@ -90,13 +90,13 @@ class NewsletterViewAutomailing extends MigurView
 		}
 		
 		// Get targets list
-		$targetsModel = JModel::getInstance('AutomailingTargets', 'NewsletterModel');
+		$targetsModel = MigurModel::getInstance('AutomailingTargets', 'NewsletterModel');
 		$targetsModel->automailingId = $aid;
 		
 		if ($tpl != 'details') {	
 			
 			// Get ids for all available lists
-			$listsModel = JModel::getInstance('Lists', 'NewsletterModel');
+			$listsModel = MigurModel::getInstance('Lists', 'NewsletterModel');
 			$allLists = $listsModel->getAllActive();
 			
 			// Find all used lists

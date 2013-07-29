@@ -416,7 +416,7 @@ class NewsletterModelSubscriber extends JModelAdmin
 		$pks		= (array) $pks;
 		$table		= $this->getTable();
 		$jUser		= JTable::getInstance('user');
-		$model		= JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$model		= MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
 		
 		// Include the content plugins for the on delete events.
