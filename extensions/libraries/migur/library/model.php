@@ -26,7 +26,11 @@ jimport('joomla.application.component.modellist');
  * 
  * @deprecated since 12.05
  */
-class MigurModel extends JModel
+if (!class_exists('JModelLegacy')) {
+	class JModelLegacy extends JModel {}
+}
+
+class MigurModel extends JModelLegacy
 {
 	
 	protected $_defaults = array();
