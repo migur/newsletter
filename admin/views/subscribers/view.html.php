@@ -117,8 +117,8 @@ class NewsletterViewSubscribers extends MigurView
 		$bar->appendButton('Standard', 'unpublish', 'JTOOLBAR_DISABLE', 'subscribers.unpublish', false);
 		if ($this->activationIsAllowed) {
 			$bar->appendButton('Standard', 'publish', 'COM_NEWSLETTER_ACTIVATE', 'lists.activate', false);
-		}	
-		
+		}
+
 		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', NewsletterHelperSupport::getResourceUrl('subscribers'));
 
 		$bar = MigurToolBar::getInstance('lists');
