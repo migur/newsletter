@@ -27,7 +27,7 @@ window.addEvent('domready',
 
         $(viewport).addEvent('scroll', function(){
 
-	console.log(sidebar, viewport, treshold);
+        	console.log(sidebar, viewport, treshold);
             var scroll = viewport.getScroll();
 
             if (scroll.y > treshold) {

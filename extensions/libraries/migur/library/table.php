@@ -25,7 +25,7 @@ jimport('joomla.database.table');
  * @package Migur.Newsletter
  */
 
-class MigurJTable extends JTable
+class MigurTable extends JTable
 {
 
 	/**

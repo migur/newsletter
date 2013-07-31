@@ -21,7 +21,7 @@ class NewsletterViewMedia extends MigurView
 {
 	function display($tpl = null)
 	{
-		JavascriptHelper::addStringVar('migurFieldId', JRequest::getString('fieldId', 'insertField'));
+		NewsletterHelperJavascript::addStringVar('migurFieldId', JRequest::getString('fieldId', 'insertField'));
 		
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/media/media.js');
 		

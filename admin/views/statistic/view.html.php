@@ -89,23 +89,23 @@ class NewsletterViewStatistic extends MigurView
 
 		$ids = (!empty($ids)) ? explode(',', $ids) : null;
 
-		$data = StatisticsHelper::totalSent($ids);
-		JavascriptHelper::addObject('statTotalSent', $data);
+		$data = NewsletterHelperStatistics::totalSent($ids);
+		NewsletterHelperJavascript::addObject('statTotalSent', $data);
 
 
-		$data = StatisticsHelper::openedActionsCount($ids);
-		JavascriptHelper::addObject('statOpenedCount', $data);
+		$data = NewsletterHelperStatistics::openedActionsCount($ids);
+		NewsletterHelperJavascript::addObject('statOpenedCount', $data);
 
 
-		$data = StatisticsHelper::openedNewslettersCount($ids);
+		$data = NewsletterHelperStatistics::openedNewslettersCount($ids);
 		$res = array(
 			'newsletters' => empty($data['newsletters']) ? 0 : $data['newsletters'],
 			'subscribers' => empty($data['subscribers']) ? 0 : $data['subscribers'],
 		);
-		JavascriptHelper::addObject('statActiveCount', $res);
+		NewsletterHelperJavascript::addObject('statActiveCount', $res);
 
-		$data = StatisticsHelper::totalClicks($ids);
-		JavascriptHelper::addObject('statTotalClicks', $data);
+		$data = NewsletterHelperStatistics::totalClicks($ids);
+		NewsletterHelperJavascript::addObject('statTotalClicks', $data);
 
 		$previousDay = date('Y-m-d 00:00:00', strtotime("-1 day", time()));
 		$thisDay = date('Y-m-d 00:00:00');
@@ -117,8 +117,8 @@ class NewsletterViewStatistic extends MigurView
 		$thisHour =  date('Y-m-d H:00:00');
 		$oneDayBefore = date('Y-m-d H:00:00', strtotime("-1 day", time()));
 		
-		JavascriptHelper::addObject('clicksPerDay',
-			StatisticsHelper::activityPerDay(
+		NewsletterHelperJavascript::addObject('clicksPerDay',
+			NewsletterHelperStatistics::activityPerDay(
 				$fiewDaysBefore,
 				$thisDay,
 				$ids,
@@ -126,8 +126,8 @@ class NewsletterViewStatistic extends MigurView
 			)
 		);
 
-		JavascriptHelper::addObject('viewsPerDay',
-			StatisticsHelper::activityPerDay(
+		NewsletterHelperJavascript::addObject('viewsPerDay',
+			NewsletterHelperStatistics::activityPerDay(
 				$fiewDaysBefore,
 				$thisDay,
 				$ids,
@@ -135,8 +135,8 @@ class NewsletterViewStatistic extends MigurView
 			)
 		);
 
-		JavascriptHelper::addObject('clicksPerHour',
-			StatisticsHelper::activityPerHour(
+		NewsletterHelperJavascript::addObject('clicksPerHour',
+			NewsletterHelperStatistics::activityPerHour(
 				$oneDayBefore,
 				$thisHour,
 				$ids,
@@ -144,8 +144,8 @@ class NewsletterViewStatistic extends MigurView
 			)
 		);
 
-		JavascriptHelper::addObject('viewsPerHour',
-			StatisticsHelper::activityPerHour(
+		NewsletterHelperJavascript::addObject('viewsPerHour',
+			NewsletterHelperStatistics::activityPerHour(
 				$oneDayBefore,
 				$thisHour,
 				$ids,

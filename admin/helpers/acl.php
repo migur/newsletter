@@ -182,10 +182,3 @@ class NewsletterHelperAcl
 	}
 	
 }
-
-/**
- * Legacy support for class name
- * Should be removed after 12.07
- */
-class AclHelper extends NewsletterHelperAcl
-{}

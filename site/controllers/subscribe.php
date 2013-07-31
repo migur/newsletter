@@ -54,7 +54,7 @@ class NewsletterControllerSubscribe extends MigurController
 		$name = JRequest::getString('newsletter-name', null);
 		$email = JRequest::getString('newsletter-email', null);
 		$html = (int) JRequest::getInt('newsletter-html', null);
-		$listsIds = DataHelper::toArrayOfInts(JRequest::getVar('newsletter-lists', array()));
+		$listsIds = NewsletterHelperData::toArrayOfInts(JRequest::getVar('newsletter-lists', array()));
 		$fbenabled = JRequest::getInt('fbenabled', array());
 		//$sendto = JRequest::getVar('sendto');
 		// Check token, d_i_e on error.
@@ -64,8 +64,8 @@ class NewsletterControllerSubscribe extends MigurController
 
 			$msg = JText::_('COM_NEWSLETTER_PARAMETERS_NOT_FOUND');
 
-			LogHelper::addDebug(
-				$msg, LogHelper::CAT_SUBSCRIPTION, array(
+			NewsletterHelperLog::addDebug(
+				$msg, NewsletterHelperLog::CAT_SUBSCRIPTION, array(
 				'name' => $name,
 				'email' => $email,
 				'is html' => $html,
@@ -83,7 +83,7 @@ class NewsletterControllerSubscribe extends MigurController
 		$fbAppId = $comParams->get('fbappid');
 		$fbSecret = $comParams->get('fbsecret');
 		if (!empty($fbAppId) && !empty($fbSecret) && !empty($fbenabled)) {
-			$me = SubscriberHelper::getFbMe($fbAppId, $fbSecret);
+			$me = NewsletterHelperSubscriber::getFbMe($fbAppId, $fbSecret);
 			if (!empty($me->email) && $me->email == $email) {
 				$trusted = true;
 			}
@@ -107,7 +107,7 @@ class NewsletterControllerSubscribe extends MigurController
 
 			// Check if the registration is disabled then 
 			// there is nothing to do.
-			if (NewsletterHelper::getParam('general_reg_disable') == '1') {
+			if (NewsletterHelperNewsletter::getParam('general_reg_disable') == '1') {
 				jexit(JText::_('COM_NEWSLETTER_REGISTRATION_IS_DISABLED'));
 			}
 
@@ -233,7 +233,7 @@ class NewsletterControllerSubscribe extends MigurController
 
 		// Check if the registration is disabled then 
 		// there is nothing to do.
-		if (NewsletterHelper::getParam('general_reg_disable') == '1') {
+		if (NewsletterHelperNewsletter::getParam('general_reg_disable') == '1') {
 			$message = JText::_('COM_NEWSLETTER_REGISTRATION_IS_DISABLED');
 			$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid=' . $subKey, $message, 'error');
 			return true;
@@ -278,8 +278,8 @@ class NewsletterControllerSubscribe extends MigurController
 		if (empty($uid) || empty($nid)) {
 
 			// Log about trouble
-			LogHelper::addError(
-				'COM_NEWSLETTER_UNSUBSCRIPTION_FAILED_PARAMETERS_NOT_FOUND', LogHelper::CAT_SUBSCRIPTION, array(
+			NewsletterHelperLog::addError(
+				'COM_NEWSLETTER_UNSUBSCRIPTION_FAILED_PARAMETERS_NOT_FOUND', NewsletterHelperLog::CAT_SUBSCRIPTION, array(
 				'Newsletter id' => $nid,
 				'Subscriber\'s key' => $uid));
 
@@ -390,8 +390,8 @@ class NewsletterControllerSubscribe extends MigurController
 			// Log about this incedent
 			$msg = $e->getMessage();
 
-			LogHelper::addError(
-				$msg, LogHelper::CAT_SUBSCRIPTION, array(
+			NewsletterHelperLog::addError(
+				$msg, NewsletterHelperLog::CAT_SUBSCRIPTION, array(
 				'Newsletter id' => $nid,
 				'Subscriber id' => $uid,
 				'Lists ids' => $lists));
@@ -404,8 +404,8 @@ class NewsletterControllerSubscribe extends MigurController
 
 
 		// Logging for debug
-		LogHelper::addDebug(
-			'Unsubscription complete.', LogHelper::CAT_SUBSCRIPTION, array(
+		NewsletterHelperLog::addDebug(
+			'Unsubscription complete.', NewsletterHelperLog::CAT_SUBSCRIPTION, array(
 			'Newsletter id' => $nid,
 			'Subscriber id' => $uid,
 			'Lists ids' => $lists));

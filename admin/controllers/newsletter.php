@@ -46,7 +46,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 			/* newsletter.add have no similar with core.create
 			   because it is not inheritance of J! core.create */
 			/* parent::allowAdd($data) && */
-			AclHelper::actionIsAllowed('newsletter.add');
+			NewsletterHelperAcl::actionIsAllowed('newsletter.add');
 	}
 
 
@@ -60,7 +60,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	{
 		return 
 			/* parent::allowEdit($data, $key) && */
-			AclHelper::actionIsAllowed('newsletter.edit');
+			NewsletterHelperAcl::actionIsAllowed('newsletter.edit');
 	}
 
 	
@@ -74,7 +74,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	public function preview()
 	{
 		$data = JRequest::get();
-		$mailer = new MigurMailer();
+		$mailer = new NewsletterClassMailer();
 		echo $mailer->render($data);
 	}
 	
@@ -113,10 +113,10 @@ class NewsletterControllerNewsletter extends JControllerForm
 			if (!empty($nsid)) {
 
 				// Get newsletter's extended info 
-				$nl = NewsletterHelper::get($nsid);
+				$nl = NewsletterHelperNewsletter::get($nsid);
 
 				if (empty($data['alias'])) {
-					$data['alias'] = NewsletterHelper::createAlias($data['name'], $nsid);
+					$data['alias'] = NewsletterHelperNewsletter::createAlias($data['name'], $nsid);
 				}
 				
 				if (!$nl['type_changeable']) {
@@ -143,7 +143,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 			} else {
 
 				if (empty($data['alias'])) {
-					$data['alias'] = NewsletterHelper::createAlias($data['name']);
+					$data['alias'] = NewsletterHelperNewsletter::createAlias($data['name']);
 				}
 			}
 
@@ -238,7 +238,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 				unset($data['newsletter_id']);
 				$data['name'] .= '(copy)';
 				$data['sent_started'] = '';
-				$data['alias'] = NewsletterHelper::createAlias($data['alias']);
+				$data['alias'] = NewsletterHelperNewsletter::createAlias($data['alias']);
 
 				// bind
 				if (!$table->bind($data)) {

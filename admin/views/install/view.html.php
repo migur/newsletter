@@ -60,7 +60,7 @@ class NewsletterViewInstall extends MigurView
 		$bar->appendButton('MigurHelp', 'question-sign', 'COM_NEWSLETTER_HELP', SupportHelper::getResourceUrl('extension', 'manager'));
 
 		// Load the submenu.
-		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
 	
 	public function setDocument()

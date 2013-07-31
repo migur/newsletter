@@ -191,7 +191,7 @@ class NewsletterModelTemplate extends JModelAdmin
 			'renderMode' => $mode
 		);
 
-		$document = MigurMailerDocument::getInstance('html', $params);
+		$document = NewsletterClassMailerDocument::getInstance('html', $params);
 		$template = $document->parse($params);
 		$template['content'] = $document->render(false, $params);
 		return $template;
@@ -207,7 +207,7 @@ class NewsletterModelTemplate extends JModelAdmin
 	 */
 	public function getColumnPlaceholders($content) 
 	{
-		$placeholders = PlaceholderHelper::fetchFromString($content);
+		$placeholders = NewsletterHelperPlaceholder::fetchFromString($content);
 
 		$res = array();
 		// Let's find column placeholders

@@ -93,7 +93,7 @@ class NewsletterViewAutomailings extends MigurView
 		
 
 		// Load the submenu.
-		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
 	
 	/**

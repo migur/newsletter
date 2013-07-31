@@ -282,10 +282,3 @@ class NewsletterHelperData
 		return $result; 
 	} 
 }
-
-/**
- * Legacy support for class name
- * Should be removed after 12.07
- */
-class DataHelper extends NewsletterHelperData
-{}

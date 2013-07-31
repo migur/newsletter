@@ -96,7 +96,7 @@ class NewsletterModelBounceds extends MigurModelList
 	 */
 	protected function _getList($query, $limitstart=0, $limit=0)
 	{
-		$list = MailHelper::getBouncedList($limitstart=0, $limit=0);
+		$list = NewsletterHelperMail::getBouncedList($limitstart=0, $limit=0);
 		return $list;
 	}
 	
@@ -143,8 +143,8 @@ class NewsletterModelBounceds extends MigurModelList
 		$db = JFactory::getDbo();
 		
 		// Get default SMTP and Mailbox profile ids
-		$smtpId = MailHelper::getDefaultSmtp('idOnly');
-		$mailboxId = MailHelper::getDefaultMailbox('idOnly');
+		$smtpId = NewsletterHelperMail::getDefaultSmtp('idOnly');
+		$mailboxId = NewsletterHelperMail::getDefaultMailbox('idOnly');
 		
 		
 		// Get mailbox ids with start mailing date

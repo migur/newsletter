@@ -55,7 +55,7 @@ class NewsletterViewQueues extends MigurView
 			return false;
 		}
 
-		EnvironmentHelper::showWarnings(array(
+		NewsletterHelperEnvironment::showWarnings(array(
 			'checkJoomla',
 			'checkImap',
 			'checkLogs'));
@@ -85,7 +85,7 @@ class NewsletterViewQueues extends MigurView
 		$this->assignRef('saveOrder', $saveOrder);
 
 		$sess = JFactory::getSession();
-		JavascriptHelper::addStringVar('sessname', $sess->getName());
+		NewsletterHelperJavascript::addStringVar('sessname', $sess->getName());
 
 		parent::display($tpl);
 	}
@@ -109,7 +109,7 @@ class NewsletterViewQueues extends MigurView
 		$bar->appendButton('MigurPreloader');
 
 		// Load the submenu.
-		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
 
 }

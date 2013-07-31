@@ -55,7 +55,7 @@ class NewsletterViewExtension extends MigurView
 		if ($type == 'plugin') {
 			$exts = array(MigurPluginHelper::getItem($extensionId, $native));
 		} else {
-			$exts = MigurModuleHelper::getSupported(array(
+			$exts = NewsletterHelperModule::getSupported(array(
 				'extension_id' => $extensionId,
 				'native'       => $native
 			));

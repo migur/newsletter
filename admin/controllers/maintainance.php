@@ -238,8 +238,7 @@ class NewsletterControllerMaintainance extends JControllerForm
 
 		if (!empty($manager)) {
 
-			jimport('migur.library.mailer.sender');
-			$sender = new MigurMailerSender();
+			$sender = new NewsletterClassMailerSender();
 			$model = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 
 			foreach ($smtpps as $smtpp) {
@@ -287,7 +286,7 @@ class NewsletterControllerMaintainance extends JControllerForm
 				$text = '';
 
 				$mailboxSettings = (array) $mailboxSettings;
-				$mailbox = new MigurMailerMailbox($mailboxSettings);
+				$mailbox = new NewsletterClassMailerMailbox($mailboxSettings);
 
 				$errors = array();
 

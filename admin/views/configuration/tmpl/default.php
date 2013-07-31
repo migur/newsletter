@@ -7,7 +7,7 @@ JHtml::_('behavior.multiselect');
 JHtml::_('dropdown.init');
 JHtml::_('formbehavior.chosen');
 
-$showFull = AclHelper::canConfigureComponent(); 
+$showFull = NewsletterHelperAcl::canConfigureComponent();
 
 ?>
 

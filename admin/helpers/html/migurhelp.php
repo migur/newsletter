@@ -17,7 +17,7 @@ abstract class JHtmlMigurhelp
 		$text   = JArrayHelper::getValue($options, 'text', '(?)');
 		$target = JArrayHelper::getValue($options, 'target', '_blank');
 		
-		$link   = SupportHelper::getResourceUrl($category, $name, $anchor, $version, $options);
+		$link   = NewsletterHelperSupport::getResourceUrl($category, $name, $anchor, $version, $options);
 		
 		return "<a class=\"migurhelp-link\" target=\"$target\" href=\"$link\">$text</a>";
 	}

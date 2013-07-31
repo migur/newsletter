@@ -56,8 +56,8 @@ class NewsletterControllerConfiguration extends MigurController
 		$option = "com_newsletter";
 
 		// Check if the user is authorized to do this.
-		if (!AclHelper::canConfigureComponent()) {
-			AclHelper::redirectToAccessDenied();
+		if (!NewsletterHelperAcl::canConfigureComponent()) {
+			NewsletterHelperAcl::redirectToAccessDenied();
 			return;
 		}
 
@@ -146,7 +146,7 @@ class NewsletterControllerConfiguration extends MigurController
 	{
 		ob_end_clean();
 		
-		$data = DataHelper::exportListsCSV();
+		$data = NewsletterHelperData::exportListsCSV();
 
 		header("Content-Type: application/octet-stream");
 		header("Accept-Ranges: bytes");
@@ -175,10 +175,10 @@ class NewsletterControllerConfiguration extends MigurController
 		
 		if ($iterative) {
 
-			NewsletterHelper::jsonPrepare();
+			NewsletterHelperNewsletter::jsonPrepare();
 			
 			if (empty($com) || empty($type)) {
-				NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_RUQUIRED_MISSING'));
+				NewsletterHelperNewsletter::jsonError(JText::_('COM_NEWSLETTER_RUQUIRED_MISSING'));
 			}
 
 			$component = NewsletterModelImportCommon::getInstance($com);
@@ -197,13 +197,13 @@ class NewsletterControllerConfiguration extends MigurController
 			}	
 			
 			if ($arr === false) {
-				NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_IMPORT_ERROR'));
+				NewsletterHelperNewsletter::jsonError(JText::_('COM_NEWSLETTER_IMPORT_ERROR'));
 			}
 
 			$res = $component->importLists($arr);
 
 			if ($res === false) {
-				NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_IMPORT_ERROR'));
+				NewsletterHelperNewsletter::jsonError(JText::_('COM_NEWSLETTER_IMPORT_ERROR'));
 			}
 
 			// Part imported ok. Let's save pointer for future.
@@ -214,7 +214,7 @@ class NewsletterControllerConfiguration extends MigurController
 			);
 
 			// Send responce and finish
-			NewsletterHelper::jsonMessage(
+			NewsletterHelperNewsletter::jsonMessage(
 				JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL'), array(
 					'limit'   => $limit,
 					'offset'  => $offset,

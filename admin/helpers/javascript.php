@@ -74,10 +74,3 @@ class NewsletterHelperJavascript
 		}	
 	}
 }
-
-/**
- * Legacy support for class name
- * Should be removed after 12.07
- */
-class JavascriptHelper extends NewsletterHelperJavascript
-{}

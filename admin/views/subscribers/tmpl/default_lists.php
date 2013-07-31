@@ -73,8 +73,8 @@
                                     <?php echo JHtml::_('multigrid.id', $i, $item->list_id, false, 'cid', 'listsForm'); ?>
 				</td>
 				<td>
-				<?php 
-				if (AclHelper::actionIsAllowed('list.edit')) { ?>
+				<?php
+                if (NewsletterHelperAcl::actionIsAllowed('list.edit')) { ?>
 					<a href="<?php echo JRoute::_("index.php?option=com_newsletter&task=list.edit&list_id=".(int) $item->list_id, false); ?>"
 					>
 						<?php echo $this->escape($item->name); ?>

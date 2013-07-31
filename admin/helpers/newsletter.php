@@ -100,9 +100,9 @@ class NewsletterHelperNewsletter
         if (!$noCache) {
             //$res = self::_getCommonInfo($url, $domain, $lkey);
             $cache = JFactory::getCache('com_newsletter');
-            $res = $cache->call(array('NewsletterHelper', '_getCommonInfo'), $url, $domain, $lkey);
+            $res = $cache->call(array('NewsletterHelperNewsletter', '_getCommonInfo'), $url, $domain, $lkey);
         } else {
-            $res = NewsletterHelper::_getCommonInfo($url, $domain, $lkey);
+            $res = NewsletterHelperNewsletter::_getCommonInfo($url, $domain, $lkey);
         }   
 		
 		$res->current_version = (string) $obj->version;
@@ -398,8 +398,8 @@ class NewsletterHelperNewsletter
 		$db = JFactory::getDbo();
 		
 		// Get default SMTP and Mailbox profile ids
-		$smtpId = MailHelper::getDefaultSmtp('idOnly');
-		$mailboxId = MailHelper::getDefaultMailbox('idOnly');
+		$smtpId = NewsletterHelperMail::getDefaultSmtp('idOnly');
+		$mailboxId = NewsletterHelperMail::getDefaultMailbox('idOnly');
 		
 		$newsletter = JTable::getInstance('Newsletter', 'NewsletterTable');
 		$newsletter->load($nid);
@@ -407,8 +407,8 @@ class NewsletterHelperNewsletter
 		// The default profile is the SMTP profile
 		if ($newsletter->smtp_profile_id == 0) {
 			
-			$smtp = (array)MailHelper::getJoomlaProfile();
-			$mailbox = (array)MailHelper::getDefaultMailbox();
+			$smtp = (array)NewsletterHelperMail::getJoomlaProfile();
+			$mailbox = (array)NewsletterHelperMail::getDefaultMailbox();
 			
 			$smtp['mailbox_profile_id'] = !empty($mailbox['mailbox_profile_id'])?
 				$mailbox['mailbox_profile_id'] : 0;
@@ -506,7 +506,7 @@ class NewsletterHelperNewsletter
 	static public function logMessage($msg, $filename = null, $force = false) 
 	{
 		$arr = explode('/', $filename);
-		return LogHelper::addDebug($msg, $arr[0]);
+		return NewsletterHelperLog::addDebug($msg, $arr[0]);
 	}
 
 	
@@ -674,10 +674,3 @@ class NewsletterHelperNewsletter
 	}
 	
 }
-
-/**
- * Legacy support for class name
- * Should be removed after 12.07
- */
-class NewsletterHelper extends NewsletterHelperNewsletter
-{}

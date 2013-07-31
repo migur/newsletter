@@ -3,8 +3,8 @@
 defined('_JEXEC') or die;
 
 $isAuthorised =
-			( $this->isNew && AclHelper::actionIsAllowed('list.add')) || 
-			(!$this->isNew && AclHelper::actionIsAllowed('list.edit'));
+			( $this->isNew && NewsletterHelperAcl::actionIsAllowed('list.add')) ||
+			(!$this->isNew && NewsletterHelperAcl::actionIsAllowed('list.edit'));
 ?>
 
 	
@@ -75,6 +75,7 @@ $isAuthorised =
             </div>
 
         </div>
+
 
         <input type="hidden" name="option" value="com_newsletter" />
         <input type="hidden" name="view" value="list" />

@@ -49,7 +49,7 @@ class NewsletterControllerSender extends JControllerForm
 		
 		if (empty($newsletterId) || empty($lists)) {
 			$this->setError('Required data is absent');
-			NewsletterHelper::jsonError(JText::_('Required data is absent'));
+			NewsletterHelperNewsletter::jsonError(JText::_('Required data is absent'));
 		}
 
 		$requestId = md5(
@@ -163,10 +163,10 @@ class NewsletterControllerSender extends JControllerForm
 		);
 		
 		if ($errors > 0) {
-			NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_AN_ERROR_OCCURED'), $data);
+			NewsletterHelperNewsletter::jsonError(JText::_('COM_NEWSLETTER_AN_ERROR_OCCURED'), $data);
 		}
 		
-		NewsletterHelper::jsonMessage('ok', $data);
+		NewsletterHelperNewsletter::jsonMessage('ok', $data);
 	}
 }
 

@@ -99,9 +99,9 @@ class NewsletterControllerTemplate extends JControllerForm
 	 */
 	public function getparsed()
 	{
-		NewsletterHelper::jsonPrepare();
+		NewsletterHelperNewsletter::jsonPrepare();
 
-		$mailer = new MigurMailer();
+		$mailer = new NewsletterClassMailer();
 		$data = $mailer->getTemplate(array(
 			'type' => JRequest::getString('type'),
 			't_style_id' => JRequest::getString('t_style_id'),
@@ -125,7 +125,7 @@ class NewsletterControllerTemplate extends JControllerForm
 			)
 		);
 		
-		NewsletterHelper::jsonResponse((bool) $data, $error, $data);
+		NewsletterHelperNewsletter::jsonResponse((bool) $data, $error, $data);
 	}
 }
 
