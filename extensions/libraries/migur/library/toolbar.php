@@ -25,10 +25,8 @@ if (!defined('MIGUR')) {
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurToolbar extends JToolbar
+class MigurToolBar extends JToolbar
 {
-	static public $globalButtonPath = array();
-
 	protected $_formName = '';
 	
 	protected $_actionPrefix = '';
@@ -50,7 +48,8 @@ class MigurToolbar extends JToolbar
 		parent::__construct($name);
 
 		$this->_formName = ($form) ? $form : $name . 'Form';
-		
+
+        $this->addButtonPath(COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
 		$this->addButtonPath(JPATH_LIBRARIES. DIRECTORY_SEPARATOR .'migur'. DIRECTORY_SEPARATOR .'library'. DIRECTORY_SEPARATOR .'button');
 		
 		$this->_actionPrefix = $actionPrefix;
@@ -58,11 +57,6 @@ class MigurToolbar extends JToolbar
 		$this->_useAcl = $useAcl;
 		
 		$this->_options = (array) $options;
-		
-		// Populate each MigurToolbar instance with global paths
-		foreach(self::$globalButtonPath as $path) {
-			array_push($this->_buttonPath, $path);
-		}
 	}
 
 	/**

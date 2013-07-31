@@ -1,15 +1,7 @@
 <?php
 
 /**
-<<<<<<< HEAD
-<<<<<<< HEAD
- * The extended version of JModelList.
-=======
  * The extended version of JController.
->>>>>>> development
-=======
- * The extended version of JController.
->>>>>>> development
  *
  * @version	   $Id:  $
  * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
