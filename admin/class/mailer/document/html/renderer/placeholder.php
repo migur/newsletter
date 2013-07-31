@@ -29,6 +29,6 @@ class MigurDocumentHtmlRendererPlaceholder extends JDocumentRenderer
 	 */
 	public function render($name, $attribs = array(), $content = null)
 	{
-		return PlaceholderHelper::render($name, 'html');
+		return NewsletterHelperPlaceholder::render($name, 'html');
 	}
 }

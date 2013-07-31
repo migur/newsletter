@@ -18,7 +18,7 @@ JLoader::import('models.automailing.threads.common', COM_NEWSLETTER_PATH_ADMIN, 
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterAutomlailingPlanCommon extends MigurJTable
+class NewsletterAutomlailingPlanCommon extends MigurTable
 {
 	public $_threads = null;
 	

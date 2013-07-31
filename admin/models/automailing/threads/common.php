@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterAutomlailingThreadCommon extends MigurJTable
+class NewsletterAutomlailingThreadCommon extends MigurTable
 {
 	public $_series = null;
 

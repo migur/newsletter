@@ -22,13 +22,13 @@ class NewsletterMailerDocumentPlainTest extends TestCaseDatabaseMysql
 //		JLoader::import('joomla.library.mailer');
 //		JLoader::import('helpers.log', JPATH_COMPONENT_ADMINISTRATOR);
 //		
-//		$mailer = new MigurMailer();
+//		$mailer = new NewsletterClassMailer();
 
-//		class_exists('MigurMailerSender');
-//		$sender = $this->getMock('MigurMailerSender', array('send'))
+//		class_exists('NewsletterClassMailerSender');
+//		$sender = $this->getMock('NewsletterClassMailerSender', array('send'))
 //			->expects($this->once())
 //			->method('send')
-//			->will($this->returnCallback(array($this, '_MigurMailerSender_send_return')));
+//			->will($this->returnCallback(array($this, '_NewsletterClassMailerSender_send_return')));
 //		
 //		TestReflection::setValue($mailer, '_transport', $sender);
 		
@@ -50,7 +50,7 @@ class NewsletterMailerDocumentPlainTest extends TestCaseDatabaseMysql
 		));
 		
 		
-		$document = MigurMailerDocument::factory('plain', array(
+		$document = NewsletterClassMailerDocument::factory('plain', array(
 			'useRawUrls' => true,
 			'tracking'   => true,
 			'template' => (object) array(
@@ -63,7 +63,7 @@ class NewsletterMailerDocumentPlainTest extends TestCaseDatabaseMysql
 		);
 	}
 	
-	public function _MigurMailerSender_send_return()
+	public function _NewsletterClassMailerSender_send_return()
 	{
 		echo func_get_args();
 	}

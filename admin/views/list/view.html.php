@@ -59,8 +59,8 @@ class NewsletterViewList extends MigurView
 		$this->assign('list', $listModel->getItem());
 		
 		if (
-			( $isNew && !AclHelper::actionIsAllowed('list.add')) ||
-			(!$isNew && !AclHelper::actionIsAllowed('list.edit'))
+			( $isNew && !NewsletterHelperAcl::actionIsAllowed('list.add')) ||
+			(!$isNew && !NewsletterHelperAcl::actionIsAllowed('list.edit'))
 		) {
 			$msg = $isNew? 'JLIB_APPLICATION_ERROR_CREATE_RECORD_NOT_PERMITTED' : 'JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED';
 			JFactory::getApplication()->redirect(
@@ -93,7 +93,7 @@ class NewsletterViewList extends MigurView
 		
 		$this->assign('activeTab', $activeTab);
 		
-		JavaScriptHelper::addStringVar('subtask', $subtask);
+		NewsletterHelperJavascript::addStringVar('subtask', $subtask);
 
 
 		$script = $this->get('Script');
@@ -105,7 +105,7 @@ class NewsletterViewList extends MigurView
 		$sess = JFactory::getSession();
 		$data = $sess->get('list.' . $listId . '.file.uploaded');
 		if ($data) {
-			JavaScriptHelper::addObject('uploadData', $data);
+			NewsletterHelperJavascript::addObject('uploadData', $data);
 		}
 
 		$modelSubs = new NewsletterModelSubscribers();
@@ -239,8 +239,8 @@ class NewsletterViewList extends MigurView
 		
 		$bar = JToolBar::getInstance('multitab-toolbar');
 		if (
-			( $isNew && AclHelper::actionIsAllowed('list.add')) || 
-			(!$isNew && AclHelper::actionIsAllowed('list.edit'))
+			( $isNew && NewsletterHelperAcl::actionIsAllowed('list.add')) ||
+			(!$isNew && NewsletterHelperAcl::actionIsAllowed('list.edit'))
 		) {
 			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'list.apply', false);
 			$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'list.save', false);
@@ -312,31 +312,31 @@ class NewsletterViewList extends MigurView
 	 */
 	protected function setStatisticsData()
 	{
-		$data = StatisticsHelper::totalSent();
+		$data = NewsletterHelperStatistics::totalSent();
 		$res = array(
 			'no' => empty($data['no']) ? 0 : $data['no'],
 			'soft' => empty($data['soft']) ? 0 : $data['soft'],
 			'hard' => empty($data['hard']) ? 0 : $data['hard'],
 			'total' => empty($data['total']) ? 0 : $data['total']
 		);
-		JavascriptHelper::addObject('statTotalSent', $res);
+		NewsletterHelperJavascript::addObject('statTotalSent', $res);
 
 
-		$data = StatisticsHelper::openedActionsCount();
+		$data = NewsletterHelperStatistics::openedActionsCount();
 		$res = array(
 			'other' => empty($data['other']) ? 0 : $data['other'],
 			'opened' => empty($data['opened']) ? 0 : $data['opened'],
 			'total' => empty($data['total']) ? 0 : $data['total']
 		);
-		JavascriptHelper::addObject('statOpenedCount', $res);
+		NewsletterHelperJavascript::addObject('statOpenedCount', $res);
 
 
-		$data = StatisticsHelper::openedNewslettersCount();
+		$data = NewsletterHelperStatistics::openedNewslettersCount();
 		$res = array(
 			'newsletters' => empty($data['newsletters']) ? 0 : $data['newsletters'],
 			'subscribers' => empty($data['subscribers']) ? 0 : $data['subscribers'],
 		);
-		JavascriptHelper::addObject('statActiveSubscribersCount', $res);
+		NewsletterHelperJavascript::addObject('statActiveSubscribersCount', $res);
 
 		$theHour = 3600;
 		$theDay = $theHour * 24;
@@ -344,8 +344,8 @@ class NewsletterViewList extends MigurView
 		$previousDay    = date('Y-m-d 00:00:00', time() - $theDay);
 		$fiewDaysBefore = date('Y-m-d 00:00:00', time() - $theDay * $days);
 
-		JavascriptHelper::addObject('newSubsPerDay',
-			StatisticsHelper::newSubscribersPerDay(
+		NewsletterHelperJavascript::addObject('newSubsPerDay',
+			NewsletterHelperStatistics::newSubscribersPerDay(
 				$fiewDaysBefore,
 				$previousDay
 			)

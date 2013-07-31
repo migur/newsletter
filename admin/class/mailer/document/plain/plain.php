@@ -24,7 +24,7 @@ jimport('joomla.document.document');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurMailerDocumentPlain extends MigurMailerDocument
+class NewsletterClassMailerDocumentPlain extends NewsletterClassMailerDocument
 {
 
 	public $directory;

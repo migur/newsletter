@@ -175,7 +175,7 @@ class NewsletterModelExtensions extends MigurModelList
 		$extensions = $this->getItems();
 		foreach ($extensions as $item) {
 			if ($item->type == NewsletterTableNextension::TYPE_MODULE) {
-				$item->xml = MigurModuleHelper::getInfo($item->extension);
+				$item->xml = NewsletterHelperModule::getInfo($item->extension);
 				$res[] = $item;
 			}
 		}

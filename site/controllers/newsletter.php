@@ -71,7 +71,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$model = MigurModel::getInstance('Newsletter', 'NewsletterModel');
 		
 		if (!empty($alias)) {
-			$newsletter = NewsletterHelper::getByAlias($alias);
+			$newsletter = NewsletterHelperNewsletter::getByAlias($alias);
 		}
 		
 		if (!empty($newsletterId)) {
@@ -99,21 +99,21 @@ class NewsletterControllerNewsletter extends JControllerForm
 		// Load newseltter language
 		JFactory::getLanguage()->load('com_newsletter_modules', JPATH_ADMINISTRATOR);
 		
-		$mailer = new MigurMailer();
+		$mailer = new NewsletterClassMailer();
 		
 		// emulate user environment
-		SubscriberHelper::saveRealUser();
-		SubscriberHelper::emulateUser(array('email' => $email));
+		NewsletterHelperSubscriber::saveRealUser();
+		NewsletterHelperSubscriber::emulateUser(array('email' => $email));
 
 		
 		// render the content of letter for each user
 		$html = $mailer->render(array(
 			'type' => $type,
 			'newsletter_id' => $newsletterId,
-			'useRawUrls' => NewsletterHelper::getParam('rawurls') == '1'
+			'useRawUrls' => NewsletterHelperNewsletter::getParam('rawurls') == '1'
 		));
 
-		SubscriberHelper::restoreRealUser();
+		NewsletterHelperSubscriber::restoreRealUser();
 
 		echo $html; die;
 	}
@@ -142,7 +142,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$title      = JRequest::getString('title');
 		$showTitle  = JRequest::getString('showtitle');
 
-		$modules = MigurModuleHelper::getSupported(array(
+		$modules = NewsletterHelperModule::getSupported(array(
 			'extension_id' => $id,
 			'native'       => $native
 		));
@@ -175,25 +175,25 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 */
 	public function sendPreview()
 	{
-		NewsletterHelper::jsonPrepare();
+		NewsletterHelperNewsletter::jsonPrepare();
 		
 		$emails = JRequest::getVar('emails', array());
 		$newsletterId = JRequest::getVar('newsletter_id');
 		$type = JRequest::getVar('type');
 
 		if (empty($type) || empty($newsletterId)) {
-			NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_RUQUIRED_MISSING'));
+			NewsletterHelperNewsletter::jsonError(JText::_('COM_NEWSLETTER_RUQUIRED_MISSING'));
 		}
 
 		if (empty($emails)) {
-			NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_ADD_EMAILS'));
+			NewsletterHelperNewsletter::jsonError(JText::_('COM_NEWSLETTER_ADD_EMAILS'));
 		}
 		
 		$data = array(
 			'newsletter_id' => $newsletterId,
 			'type' => $type,
 			'tracking' => true,
-			'useRawUrls' => NewsletterHelper::getParam('rawurls') == '1'
+			'useRawUrls' => NewsletterHelperNewsletter::getParam('rawurls') == '1'
 		);
 
 		
@@ -217,31 +217,31 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		// If list is empty then finish with it.
 		if(empty($data['subscribers'])) {
-			NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_NO_EMAILS_TO_SEND'));
+			NewsletterHelperNewsletter::jsonError(JText::_('COM_NEWSLETTER_NO_EMAILS_TO_SEND'));
 		}
 		
 		// Send mails.....
-		$mailer = new MigurMailer();
+		$mailer = new NewsletterClassMailer();
 		if(!$mailer->sendToList($data)) {
 
 			$errors = $mailer->getErrors();
 			
-			LogHelper::addDebug('Sending of preview was failed.', 
-				LogHelper::CAT_MAILER,
+			NewsletterHelperLog::addDebug('Sending of preview was failed.',
+				NewsletterHelperLog::CAT_MAILER,
 				array(
 					'Errors' => $errors,
 					'Emails' => $emails));
 			
-			NewsletterHelper::jsonError($errors, $emails);
+			NewsletterHelperNewsletter::jsonError($errors, $emails);
 		}
 		
 		// Some debugging
-		LogHelper::addDebug('Preview was sent successfully.', 
-			LogHelper::CAT_MAILER,
+		NewsletterHelperLog::addDebug('Preview was sent successfully.',
+			NewsletterHelperLog::CAT_MAILER,
 			array('Emails' => $emails));
 		
 		
-		NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_PREVIEW_SENT_SUCCESSFULLY'), $emails);
+		NewsletterHelperNewsletter::jsonMessage(JText::_('COM_NEWSLETTER_PREVIEW_SENT_SUCCESSFULLY'), $emails);
 	}
 }
 

@@ -36,7 +36,7 @@ try {
 	MigurComNewsletterBootstrap::initCache();
 
 	// Get an instance of the controller prefixed by Newsletter
-	$controller = JController::getInstance('Newsletter');
+	$controller = MigurController::getInstance('Newsletter');
 
 	// ACL
 		$resource = JRequest::getString('view','') .'.'. JRequest::getString('layout','default');
@@ -55,7 +55,7 @@ try {
 		}
 
 	// Add translations used in JavaScript
-	JavascriptHelper::requireTranslations();
+	NewsletterHelperJavascript::requireTranslations();
 
 	NewsletterHelperPlugin::prepare();
 

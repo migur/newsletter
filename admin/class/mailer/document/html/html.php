@@ -25,7 +25,7 @@ JLoader::import('helpers.placeholder', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurMailerDocumentHTML extends MigurMailerDocument
+class NewsletterClassMailerDocumentHTML extends NewsletterClassMailerDocument
 {
 
 	/**
@@ -97,8 +97,8 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 			);
 
 			// Override some placeholders
-			PlaceholderHelper::setPlaceholder('table_background', null, '#FFFFFF');
-			PlaceholderHelper::setPlaceholder('text_color', null, '#000000');
+			NewsletterHelperPlaceholder::setPlaceholder('table_background', null, '#FFFFFF');
+			NewsletterHelperPlaceholder::setPlaceholder('text_color', null, '#000000');
 			
 			// Don't parse any IMG
 		}
@@ -185,7 +185,7 @@ class MigurMailerDocumentHTML extends MigurMailerDocument
 			return false;
 		}
 		$template->params = $this->_mapParams($template->params);
-		PlaceholderHelper::setPlaceholders($template->params);
+		NewsletterHelperPlaceholder::setPlaceholders($template->params);
 
 		return $template;
 	}

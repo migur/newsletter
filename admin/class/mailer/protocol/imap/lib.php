@@ -1,6 +1,6 @@
 <?php
 
-class MigurMailerProtocolImapLib extends BounceMailHandler 
+class NewsletterClassMailerProtocolImapLib extends BounceMailHandler
 {
 	
 	public $errors = array();

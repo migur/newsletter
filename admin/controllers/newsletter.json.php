@@ -28,7 +28,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 */
 	public function autocomplete()
 	{
-		echo json_encode(AutocompleterHelper::getSubscribers());
+		echo json_encode(NewsletterHelperAutocompleter::getSubscribers());
 		jexit();
 	}
 
@@ -100,7 +100,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		$mediaParams = JComponentHelper::getParams('com_media');
 		$filename = $mediaParams->get('file_path') . DIRECTORY_SEPARATOR . $filename;
-		$filename = str_replace('/', DS, $filename);
+		$filename = str_replace('/', DIRECTORY_SEPARATOR, $filename);
 		
 		$table = JTable::getInstance('downloads', 'NewsletterTable');
 		$res = $table->save(array('filename' => $filename, 'newsletter_id' => $nId));
@@ -111,7 +111,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 			$file->downloads_id = $table->downloads_id;
 			$file->newsletter_id = $nId;
 			$file->filename = $filename;
-			DownloadHelper::getAttributes($file);
+			NewsletterHelperDownload::getAttributes($file);
 			$file->size = JHtml::_('file.size', $file->size, 'kb/mb');
 		}
 		echo json_encode(array(

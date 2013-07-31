@@ -29,7 +29,7 @@ jimport('joomla.error.log');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurMailer extends JObject
+class NewsletterClassMailer extends JObject
 {
 	protected $_transport;
 	
@@ -70,7 +70,7 @@ class MigurMailer extends JObject
 
 		// Create ALWAYS NEW instance
 		$params['dispatcher'] = $this->dispatcher;
-		$document = MigurMailerDocument::factory($params['type'], $params);
+		$document = NewsletterClassMailerDocument::factory($params['type'], $params);
 		
 		// Trigger before
 		$data = '';
@@ -93,7 +93,7 @@ class MigurMailer extends JObject
 	 */
 	public function renderModules($params)
 	{
-		MigurModuleHelper::renderModule($module);
+		NewsletterHelperModule::renderModule($module);
 
 		// If can't determine the type of doc...
 		if (empty($params['type']) || !in_array($params['type'], array('html', 'plain'))) {
@@ -101,7 +101,7 @@ class MigurMailer extends JObject
 			return false;
 		}
 
-		$document = MigurMailerDocument::factory($params['type'], $params);
+		$document = NewsletterClassMailerDocument::factory($params['type'], $params);
 		$data = $document->render(false, $params);
 		unset($document);
 
@@ -126,7 +126,7 @@ class MigurMailer extends JObject
 			'tracking' => false);
 		
 		// Create ALWAYS NEW instance
-		$document = MigurMailerDocument::factory('plain', $params);
+		$document = NewsletterClassMailerDocument::factory('plain', $params);
 		return $document->render();
 	}
 	
@@ -156,7 +156,7 @@ class MigurMailer extends JObject
 		if (empty($params['renderMode'])) {
 			$params['renderMode'] = 'schematic';
 		}	
-		$document = MigurMailerDocument::factory($params['type'], $params);
+		$document = NewsletterClassMailerDocument::factory($params['type'], $params);
 		$document->render(false, $params);
 		$tpl = $document->getTemplate();
 		unset($document);
@@ -212,12 +212,12 @@ class MigurMailer extends JObject
 			throw new Exception($msg);
 		}
 
-		$sender = new MigurMailerSender();
+		$sender = new NewsletterClassMailerSender();
 
-		SubscriberHelper::saveRealUser();
+		NewsletterHelperSubscriber::saveRealUser();
 
 		// Get attachments
-		$atts = DownloadHelper::getByNewsletterId($params['newsletter_id']);
+		$atts = NewsletterHelperDownload::getByNewsletterId($params['newsletter_id']);
 		
 		// Main mailing cycle
 		$res = true;
@@ -225,11 +225,11 @@ class MigurMailer extends JObject
 
 			$this->set('_errors', array());
 
-			$type = MailHelper::filterType(
+			$type = NewsletterHelperMail::filterType(
 					!empty($params['type']) ? $params['type'] : null
 			);
 			if (!$type) {
-				if (!($type = MailHelper::filterType(
+				if (!($type = NewsletterHelperMail::filterType(
 						!is_null($item->html) ? (($item->html == 1) ? 'html' : 'plain') : null)
 					)) {
 					$this->setError('The type "' . $type . '" is not supported');
@@ -239,13 +239,13 @@ class MigurMailer extends JObject
 			}
 
 			// emulate user environment
-			if (!SubscriberHelper::emulateUser(array('email' => $item->email))) {
+			if (!NewsletterHelperSubscriber::emulateUser(array('email' => $item->email))) {
 				$this->setError('The user "' . $item->email . '" is absent');
 				$res = false;
 				break;
 			}
 			
-			PlaceholderHelper::setPlaceholder('newsletter id', $letter->newsletter_id);
+			NewsletterHelperPlaceholder::setPlaceholder('newsletter id', $letter->newsletter_id);
 			
 			// render the content of letter for each user
 			$letter->content = $this->render(array(
@@ -336,7 +336,7 @@ class MigurMailer extends JObject
 			}	
 		}
 
-		SubscriberHelper::restoreRealUser();
+		NewsletterHelperSubscriber::restoreRealUser();
 		return $res;
 	}
 
@@ -396,9 +396,9 @@ class MigurMailer extends JObject
 		$mailboxProfile = MigurModel::getInstance('Mailboxprofile', 'NewsletterModelEntity');
 		if (!$mailboxProfile->load($smtpProfile->mailbox_profile_id)) {
 			
-			LogHelper::addWarning(
+			NewsletterHelperLog::addWarning(
 				'COM_NEWSLETTER_CANT_LOAD_MAILBOX_CANT_SET_SOME_HEADERS', 
-				LogHelper::CAT_MAILER,
+				NewsletterHelperLog::CAT_MAILER,
 				array(
 					'Mailbox profile id' => $smtpProfile->mailbox_profile_id,
 					'SMTP profile' => $smtpProfile->smtp_profile_name
@@ -412,7 +412,7 @@ class MigurMailer extends JObject
 		
 		// Use the phpMailer exceptions
 		if (!$this->_transport) {
-			$this->_transport = new MigurMailerSender(array('exceptions' => true));
+			$this->_transport = new NewsletterClassMailerSender(array('exceptions' => true));
 		}	
 		
 		$sender = $this->_transport;
@@ -425,7 +425,7 @@ class MigurMailer extends JObject
 		));
 
 		$subscriber = $params['subscriber'];
-		$type = MailHelper::filterType(!empty($params['type']) ? $params['type'] : null);
+		$type = NewsletterHelperMail::filterType(!empty($params['type']) ? $params['type'] : null);
 		if (!$type) {
 			$msg = 'The type "' . $type . '" is not supported';
 			$this->setError($msg);
@@ -434,15 +434,15 @@ class MigurMailer extends JObject
 
 
 		// emulate user environment
-		SubscriberHelper::saveRealUser();
+		NewsletterHelperSubscriber::saveRealUser();
 		
-		if (!SubscriberHelper::emulateUser(array('email' => $subscriber->email))) {
+		if (!NewsletterHelperSubscriber::emulateUser(array('email' => $subscriber->email))) {
 			$msg = 'The user "' . $subscriber->email . '" is absent';
 			$this->setError($msg);
 			throw new Exception ($msg);
 		}
 
-		PlaceholderHelper::setPlaceholder('newsletter id', $letter->newsletter_id);
+		NewsletterHelperPlaceholder::setPlaceholder('newsletter id', $letter->newsletter_id);
 
 		
 		// render the content of letter for each user
@@ -457,7 +457,7 @@ class MigurMailer extends JObject
 		$letter->subject = $this->renderSubject($letter->subject);
 		$letter->encoding = $letter->getEncoding();
 		
-		SubscriberHelper::restoreRealUser();
+		NewsletterHelperSubscriber::restoreRealUser();
 
 		// Result object
 		$res = new StdClass();
@@ -484,13 +484,13 @@ class MigurMailer extends JObject
 		}	
 		
 		// Add info about newsleerter and subscriber
-		$sender->AddCustomHeader(MailHelper::APPLICATION_HEADER);
-		$sender->AddCustomHeader(MailHelper::EMAIL_NAME_HEADER    . ':' . $letter->name);
-		$sender->AddCustomHeader(MailHelper::NEWSLETTER_ID_HEADER . ':' . $params['newsletter_id']);
-		$sender->AddCustomHeader(MailHelper::SUBSCRIBER_ID_HEADER . ':' . $subscriber->subscriber_id);
+		$sender->AddCustomHeader(NewsletterHelperMail::APPLICATION_HEADER);
+		$sender->AddCustomHeader(NewsletterHelperMail::EMAIL_NAME_HEADER    . ':' . $letter->name);
+		$sender->AddCustomHeader(NewsletterHelperMail::NEWSLETTER_ID_HEADER . ':' . $params['newsletter_id']);
+		$sender->AddCustomHeader(NewsletterHelperMail::SUBSCRIBER_ID_HEADER . ':' . $subscriber->subscriber_id);
 		
 		// Get attachments
-		$atts = DownloadHelper::getByNewsletterId($params['newsletter_id']);
+		$atts = NewsletterHelperDownload::getByNewsletterId($params['newsletter_id']);
 		
 		if (!$smtpProfile->isJoomlaProfile()) {
 			$fromName  = $smtpProfile->from_name;
@@ -509,9 +509,9 @@ class MigurMailer extends JObject
 		// Check if we dan determine all parameters...
 		if (empty($fromName) || empty($fromEmail) || empty($toName) || empty($toEmail)) {
 
-			LogHelper::addWarning(
+			NewsletterHelperLog::addWarning(
 				'COM_NEWSLETTER_MAILER_CANT_DETERMINE SOME FROMTO', 
-				LogHelper::CAT_MAILER, 
+				NewsletterHelperLog::CAT_MAILER,
 				array(
 					'From name'      => $fromName,
 					'From email'     => $fromEmail,
@@ -557,9 +557,9 @@ class MigurMailer extends JObject
 			
 			$res->errors[] = $e->getMessage();
 			
-			LogHelper::addError(
+			NewsletterHelperLog::addError(
 				'COM_NEWSLETTER_MAILER_SEND_ERROR', 
-				LogHelper::CAT_MAILER, 
+				NewsletterHelperLog::CAT_MAILER,
 				array(
 					'Error'        => $e->getMessage(),
 					'Email'        => $subscriber->email,
@@ -571,9 +571,9 @@ class MigurMailer extends JObject
 			return $res;
 		}
 		
-		LogHelper::addDebug(
+		NewsletterHelperLog::addDebug(
 			'Newsletter successfully sent', 
-			LogHelper::CAT_MAILER, 
+			NewsletterHelperLog::CAT_MAILER,
 			array(
 				'Spent time'   => floor((microtime(true) - $timeComplete) * 1000).'ms',
 				'Sending time' => $timeSending,

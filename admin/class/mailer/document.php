@@ -23,7 +23,7 @@ JLoader::import('helpers.placeholder', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurMailerDocument extends JDocument
+class NewsletterClassMailerDocument extends JDocument
 {
 
 	protected $_template;
@@ -134,7 +134,7 @@ class MigurMailerDocument extends JDocument
 			}
 
 			// Determine the path and class
-			$class = 'MigurMailerDocument' . $type;
+			$class = 'NewsletterClassMailerDocument' . $type;
 			if (!class_exists($class)) {
 				$path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'document' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $type . '.php';
 				if (file_exists($path)) {
@@ -171,7 +171,7 @@ class MigurMailerDocument extends JDocument
 		$signature = serialize(array($type, $attributes));
 		
 		// Determine the path and class
-		$class = 'MigurMailerDocument' . $type;
+		$class = 'NewsletterClassMailerDocument' . $type;
 		if (!class_exists($class)) {
 			$path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'document' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $type . '.php';
 			if (file_exists($path)) {
@@ -193,11 +193,11 @@ class MigurMailerDocument extends JDocument
 	 */
 	public function loadLetter($id = false)
 	{
-		$letter = MailHelper::loadLetter($id);
+		$letter = NewsletterHelperMail::loadLetter($id);
 
 		// set the letter id for the Helper
-		MigurModuleHelper::$itemId = $letter->newsletter_id;
-		MigurModuleHelper::$clean = null;
+		NewsletterHelperModule::$itemId = $letter->newsletter_id;
+		NewsletterHelperModule::$clean = null;
 
 		return $letter;
 	}
@@ -305,7 +305,7 @@ class MigurMailerDocument extends JDocument
 			if (!empty($this->tracking) && !empty($params['newsletter_id'])) {
 				$this->track(
 					$this->_template->content,
-					PlaceholderHelper::getPlaceholder('subscription key'),
+					NewsletterHelperPlaceholder::getPlaceholder('subscription key'),
 					$params['newsletter_id']
 				);
 			}

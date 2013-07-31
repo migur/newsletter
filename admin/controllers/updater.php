@@ -20,7 +20,7 @@ class NewsletterControllerUpdater extends JControllerForm
 	 */
 	public function getUpdates()
 	{
-		NewsletterHelper::jsonPrepare();
+		NewsletterHelperNewsletter::jsonPrepare();
 		
 		$scope = (array) JRequest::getVar('scope', array('com_newsletter'));
 		
@@ -36,15 +36,15 @@ class NewsletterControllerUpdater extends JControllerForm
 				
 				
 //				$data[$element] = $cache->call(
-//					array('NewsletterHelper', 'findUpdate'),
+//					array('NewsletterHelperNewsletter', 'findUpdate'),
 //					$ext->extension_id
 //				);
 				
-				$data[$element] = NewsletterHelper::findUpdate($ext->extension_id);
+				$data[$element] = NewsletterHelperNewsletter::findUpdate($ext->extension_id);
 			}	
 		}
 		
-		NewsletterHelper::jsonMessage('', $data);	
+		NewsletterHelperNewsletter::jsonMessage('', $data);
 	}
 }
 

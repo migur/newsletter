@@ -37,7 +37,7 @@ class MigurDocumentHtmlRendererModule extends JDocumentRenderer
 		if (!is_object($module)) {
 			$title = isset($attribs['title']) ? $attribs['title'] : null;
 
-			$module = MigurModuleHelper::getModule($module, $title);
+			$module = NewsletterHelperModule::getModule($module, $title);
 			if (!is_object($module)) {
 				if (is_null($content)) {
 					return '';
@@ -92,9 +92,9 @@ class MigurDocumentHtmlRendererModule extends JDocumentRenderer
 			$cacheparams->methodparams = array($module, $attribs);
 
 			// @ to hide strict warnings in some Joomla modules
-			$contents = @MigurModuleHelper::ModuleCache($module, $params, $cacheparams);
+			$contents = @NewsletterHelperModule::ModuleCache($module, $params, $cacheparams);
 		} else {
-			$contents = @MigurModuleHelper::renderModule($module, $attribs);
+			$contents = @NewsletterHelperModule::renderModule($module, $attribs);
 		}
 
 		return $contents;

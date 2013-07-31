@@ -41,7 +41,7 @@ class NewsletterAutomailingManager
 	{
 		// Check required parameters
 		if (empty($sid)) {
-			LogHelper::addError('COM_NEWSLETTER_AUTOMAILING_SUBSCRIPTION_SUBSCRIBER_ID_ABSENT', LogHelper::CAT_AUTOMAILING);
+			NewsletterHelperLog::addError('COM_NEWSLETTER_AUTOMAILING_SUBSCRIPTION_SUBSCRIBER_ID_ABSENT', NewsletterHelperLog::CAT_AUTOMAILING);
 			return false;
 		}
 	
@@ -78,7 +78,7 @@ class NewsletterAutomailingManager
 		} catch (Exception $e) {
 			
 			$this->setError($e->getMessage());
-			LogHelper::addError('COM_NEWSLETTER_AUTOMAILING_ERROR', LogHelper::CAT_AUTOMAILING, array('Message' => $e->getMessage()));
+			NewsletterHelperLog::addError('COM_NEWSLETTER_AUTOMAILING_ERROR', NewsletterHelperLog::CAT_AUTOMAILING, array('Message' => $e->getMessage()));
 			return false;
 		}
 		
@@ -95,7 +95,7 @@ class NewsletterAutomailingManager
 	{
 		// Check required parameters
 		if (empty($sid)) {
-			LogHelper::addError('COM_NEWSLETTER_AUTOMAILING_UNSUBSCRIPTION_SUBSCRIBER_ID_ABSENT', LogHelper::CAT_AUTOMAILING);
+			NewsletterHelperLog::addError('COM_NEWSLETTER_AUTOMAILING_UNSUBSCRIPTION_SUBSCRIBER_ID_ABSENT', NewsletterHelperLog::CAT_AUTOMAILING);
 			return false;
 		}
 		
@@ -128,7 +128,7 @@ class NewsletterAutomailingManager
 	{
 		// Check required parameters
 		if (empty($sid)) {
-			LogHelper::addError('COM_NEWSLETTER_AUTOMAILING_DELETE_SUBSCRIBER_ID_ABSENT', LogHelper::CAT_AUTOMAILING);
+			NewsletterHelperLog::addError('COM_NEWSLETTER_AUTOMAILING_DELETE_SUBSCRIBER_ID_ABSENT', NewsletterHelperLog::CAT_AUTOMAILING);
 			return false;
 		}
 		

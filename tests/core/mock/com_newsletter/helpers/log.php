@@ -16,7 +16,7 @@ require_once JPATH_NS_COMPONENT.'/admin/helpers/log.php';
  * @package		Joomla.UnitTest
  * @subpackage  Log
  */
-class TestMockLogHelper extends LogHelper
+class TestMockLogHelper extends NewsletterHelperLog
 {
     public static $logs = array();
     

@@ -318,7 +318,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 		$position = strtolower($position);
 		$result = array();
 
-		$modules = MigurModuleHelper::_load();
+		$modules = NewsletterHelperModule::_load();
 
 		$total = count($modules);
 		for ($i = 0; $i < $total; $i++) {
@@ -349,7 +349,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 
 			// Add the info about module
 			if (!isset($params['withoutInfo'])) {
-				$item->xml = MigurModuleHelper::getInfo($item->extension, $item->native);
+				$item->xml = NewsletterHelperModule::getInfo($item->extension, $item->native);
 			}
 
 			if (empty($item->params)) {
@@ -535,10 +535,3 @@ function modChrome_newsletterDefault($module, &$params, &$attribs)
 		echo '</div>';
 	}
 }
-
-/**
- * Legacy support for class name
- * Should be removed after 12.07
- */
-abstract class MigurModuleHelper extends NewsletterHelperModule
-{}
