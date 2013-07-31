@@ -4,9 +4,14 @@ window.addEvent('domready',
         var 
             sidebar = $('htmlconstructor-sidebar'),
             viewport = $(window),
+<<<<<<< HEAD
             treshold = sidebar.getPosition().y + 100;
 
 	
+=======
+            treshold = sidebar.getPosition().y - 20;
+
+>>>>>>> development
         var fixSidebar = function(){
             
             if (sidebar.hasClass('fixed')) return;
@@ -27,7 +32,10 @@ window.addEvent('domready',
 
         $(viewport).addEvent('scroll', function(){
 
+<<<<<<< HEAD
         	console.log(sidebar, viewport, treshold);
+=======
+>>>>>>> development
             var scroll = viewport.getScroll();
 
             if (scroll.y > treshold) {

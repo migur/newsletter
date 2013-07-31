@@ -2,7 +2,11 @@
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
  * The extended version of JModelList.
+=======
+ * The extended version of JController.
+>>>>>>> development
 =======
  * The extended version of JController.
 >>>>>>> development

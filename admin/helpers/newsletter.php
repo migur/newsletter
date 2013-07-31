@@ -651,7 +651,7 @@ class NewsletterHelperNewsletter
 		return (($usedMemory / $maxMemory) * 100) < 99;
 	}
 	
-	
+
 	/**
 	 * Supress all errors and warnings. Stores previous state.
 	 */

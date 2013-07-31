@@ -94,6 +94,13 @@ class NewsletterViewList extends MigurView
 		$this->assign('activeTab', $activeTab);
 		
 		NewsletterHelperJavascript::addStringVar('subtask', $subtask);
+<<<<<<< HEAD
+=======
+
+
+		$script = $this->get('Script');
+		$this->script = $script;
+>>>>>>> development
 
 		$this->listForm = $this->get('Form', 'list');
 
