@@ -18,9 +18,9 @@ JLoader::import('tables.smtpprofile', COM_NEWSLETTER_PATH_ADMIN);
  * Content component helper.
  * 
  * To test:
- * LogHelper::addDebug('Newsletter bebug', 'test', array('name1' => 'value1'));
- * LogHelper::addMessage('Newsletter message', 'test', array('name2' => 'value2'));
- * LogHelper::addError('Newsletter error', 'test', array('name3' => 'value3'));
+ * NewsletterHelperLog::addDebug('Newsletter bebug', 'test', array('name1' => 'value1'));
+ * NewsletterHelperLog::addMessage('Newsletter message', 'test', array('name2' => 'value2'));
+ * NewsletterHelperLog::addError('Newsletter error', 'test', array('name3' => 'value3'));
  * JError::raiseError(501, 'Joomla error');
  * JError::raiseNotice(501, 'notice'); // onto screen
  *
@@ -65,7 +65,7 @@ class NewsletterHelperLog
 		JError::setErrorHandling(
 			E_ERROR, 
 			'callback', 
-			array('LogHelper', 'addJError'));
+			array('NewsletterHelperLog', 'addJError'));
 
 		// Now we log all the troubles into our LOGS table.
 		JLog::addLogger(
@@ -273,10 +273,3 @@ class NewsletterHelperLog
 		return $lang->load('com_newsletter_log', JPATH_ADMINISTRATOR);
 	}
 }
-
-/**
- * Legacy support for class name
- * Should be removed after 12.07
- */
-class LogHelper extends NewsletterHelperLog
-{}

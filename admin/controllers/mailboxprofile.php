@@ -130,7 +130,7 @@ class NewsletterControllerMailboxprofile extends JControllerForm
 		
 		$options = JRequest::getVar('jform');
 		
-		$mailbox = new MigurMailerMailbox($options);
+		$mailbox = new NewsletterClassMailerMailbox($options);
 		
 		$errors = array();
 		

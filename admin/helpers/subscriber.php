@@ -71,7 +71,7 @@ class NewsletterHelperSubscriber
 
 
 		// fetch the dynamic data for placeholders
-		PlaceholderHelper::setPlaceholders(array(
+		NewsletterHelperPlaceholder::setPlaceholders(array(
 				'username' => $user->name,
 				'useremail' => $user->email,
 				'userid' => !empty($subscriber->subscriber_id) ? $user->subscriber_id : null,
@@ -202,10 +202,3 @@ class NewsletterHelperSubscriber
 		);
 	}
 }
-
-/**
- * Legacy support for class name
- * Should be removed after 12.07
- */
-class SubscriberHelper extends NewsletterHelperSubscriber
-{}

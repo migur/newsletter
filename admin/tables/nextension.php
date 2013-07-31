@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterTableNExtension extends MigurJTable
+class NewsletterTableNExtension extends MigurTable
 {
 	/**
 	 * The meaning of values in "type" table field.

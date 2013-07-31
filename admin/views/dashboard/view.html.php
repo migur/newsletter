@@ -65,7 +65,7 @@ class NewsletterViewDashboard extends MigurView
 			return false;
 		}
 
-		EnvironmentHelper::showWarnings(array(
+		NewsletterHelperEnvironment::showWarnings(array(
 			'checkJoomla',
 			'checkImap',
 			'checkLogs'));
@@ -81,25 +81,25 @@ class NewsletterViewDashboard extends MigurView
 			$total += $row['total'];
 		}
 
-		JavascriptHelper::addStringVar('mailsSent', $sent);
-		JavascriptHelper::addStringVar('mailsToSend', $total - $sent);
-		JavascriptHelper::addStringVar('mailsTotal', $total);
-		JavascriptHelper::addStringVar('newslettersSent', count($stat));
+		NewsletterHelperJavascript::addStringVar('mailsSent', $sent);
+		NewsletterHelperJavascript::addStringVar('mailsToSend', $total - $sent);
+		NewsletterHelperJavascript::addStringVar('mailsTotal', $total);
+		NewsletterHelperJavascript::addStringVar('newslettersSent', count($stat));
 
 		$cache = JFactory::getCache('com_newsletter');
 		$this->news = $cache->call(
-			array('RssfeedHelper', 'loadFeed'),
+			array('NewsletterHelperRssfeed', 'loadFeed'),
 			new JObject(
 					array('rssurl' => JRoute::_('http://migur.com/blog?format=feed&type=rss'))
 			)
 		);
 		
-		$this->info = NewsletterHelper::getCommonInfo();
+		$this->info = NewsletterHelperNewsletter::getCommonInfo();
 
 		$this->setStatisticsData();
 
 		$sess = JFactory::getSession();
-		JavascriptHelper::addStringVar('sessname', $sess->getName());
+		NewsletterHelperJavascript::addStringVar('sessname', $sess->getName());
 
 		parent::display($tpl);
 
@@ -119,10 +119,9 @@ class NewsletterViewDashboard extends MigurView
 		$bar = JToolBar::getInstance();
 		$bar->appendButton('Link', 'alert', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
 		$bar->appendButton('Separator');
-		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', SupportHelper::getResourceUrl('mailing', 'general'));
+		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', NewsletterHelperSupport::getResourceUrl('mailing', 'general'));
 		JToolBarHelper::custom('', 'progress', '', '', false);
 		$bar->appendButton('MigurQueue', 'queue');
-
 
 		$bar = MigurToolBar::getInstance('newsletters-toolbar');
 		$bar->appendButton('Link', 'new', 'COM_NEWSLETTER_NEWSLETTER_CREATE', 'index.php?option=com_newsletter&amp;view=newsletter');
@@ -141,7 +140,7 @@ class NewsletterViewDashboard extends MigurView
 		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter');
 
 		// Load the submenu.
-		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
 
 	/**
@@ -167,15 +166,15 @@ class NewsletterViewDashboard extends MigurView
 		$previousDay = date('Y-m-d 00:00:00', strtotime("-1 day", time()));
 		$fiewDaysBefore = date('Y-m-d 00:00:00', strtotime("-30 Days", time()));
 
-		JavascriptHelper::addObject('opensPerDay',
-				StatisticsHelper::openedNewslettersPerDay(
+		NewsletterHelperJavascript::addObject('opensPerDay',
+				NewsletterHelperStatistics::openedNewslettersPerDay(
 					$fiewDaysBefore,
 					$previousDay,
 					null
 				)
 		);
-		JavascriptHelper::addObject('subsPerDay',
-				StatisticsHelper::activeSubscribersPerDay(
+		NewsletterHelperJavascript::addObject('subsPerDay',
+				NewsletterHelperStatistics::activeSubscribersPerDay(
 					$fiewDaysBefore,
 					$previousDay,
 					null

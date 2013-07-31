@@ -5,7 +5,10 @@
 
  // Set flag that this is a parent file
 define('_JEXEC', 1);
-define('DS', DIRECTORY_SEPARATOR);
+
+if(!defined('DS')){
+    define('DS', DIRECTORY_SEPARATOR);
+}
 
 // Maximise error reporting.
 error_reporting(E_ALL & ~E_STRICT);

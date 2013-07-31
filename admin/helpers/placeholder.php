@@ -44,7 +44,6 @@ class NewsletterHelperPlaceholder
 	 */
 	public static function getInstance($name, $namespace)
 	{
-
 		$name = strtolower($name);
 		$namespace = strtolower($namespace);
 
@@ -63,13 +62,13 @@ class NewsletterHelperPlaceholder
 			return self::$_instances[$namespace][$class];
 		}
 
-		$path = 'migur' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'mailer' . DIRECTORY_SEPARATOR . 'document' . DIRECTORY_SEPARATOR .
+		$path = 'class' . DIRECTORY_SEPARATOR . 'mailer' . DIRECTORY_SEPARATOR . 'document' . DIRECTORY_SEPARATOR .
 			$namespace . DIRECTORY_SEPARATOR . 'renderer' . DIRECTORY_SEPARATOR . 'placeholder' . DIRECTORY_SEPARATOR;
 
-		if (!JLoader::import($path . $class, JPATH_LIBRARIES)) {
+		if (!JLoader::import($path . $class, COM_NEWSLETTER_PATH_ADMIN)) {
 
 			$class = 'simple';
-			if (!JLoader::import($path . $class, JPATH_LIBRARIES)) {
+			if (!JLoader::import($path . $class, COM_NEWSLETTER_PATH_ADMIN)) {
 
 				JError::raiseError(500, 'File or class not found for ' . $class . ', ' . $namespace);
 			}
@@ -231,10 +230,3 @@ class NewsletterHelperPlaceholder
 		return array_values(array_unique($matches[1]));
 	}
 }
-
-/**
- * Legacy support for class name
- * Should be removed after 12.07
- */
-class PlaceholderHelper extends NewsletterHelperPlaceholder
-{}

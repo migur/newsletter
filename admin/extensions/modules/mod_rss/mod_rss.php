@@ -7,7 +7,7 @@
  * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
-$news = RssfeedHelper::loadFeed(new JObject(
+$news = NewsletterHelperRssfeed::loadFeed(new JObject(
 			array('rssurl' => $params->get('feed_url')))
 );
 

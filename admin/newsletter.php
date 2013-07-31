@@ -28,10 +28,10 @@ try {
 
 	// First check if user has access to the component.
 	if (
-		!AclHelper::canAccessComponent() /*|| 
-		!AclHelper::actionIsAllowed(JRequest::getCmd('task'))*/
+		!NewsletterHelperAcl::canAccessComponent() /*||
+		!NewsletterHelperAcl::actionIsAllowed(JRequest::getCmd('task'))*/
 	) {
-		AclHelper::redirectToAccessDenied();
+		NewsletterHelperAcl::redirectToAccessDenied();
 	}
 
 	// Setup the cache
@@ -55,8 +55,8 @@ try {
 	}
 
 	// Add the site root and user's ACL to JS
-	JavascriptHelper::addStringVar('migurSiteRoot', JUri::root());
-	JavascriptHelper::addObject('migurUserAcl', AclHelper::toArray());
+	NewsletterHelperJavascript::addStringVar('migurSiteRoot', JUri::root());
+	NewsletterHelperJavascript::addObject('migurUserAcl', NewsletterHelperAcl::toArray());
 
 	// Get an instance of the controller
 	// Here we get full task and preserve it from exploding

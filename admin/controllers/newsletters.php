@@ -44,7 +44,7 @@ class NewsletterControllerNewsletters extends JControllerAdmin
 			
 			
 			foreach($cids as $idx => $cid) {
-				$newsletter = NewsletterHelper::get($cid);
+				$newsletter = NewsletterHelperNewsletter::get($cid);
 				if ($newsletter['used_as_static'] == 1 || !$newsletter['saveable']) {
 					$unsets[] = $cids[$idx];
 					unset($cids[$idx]);

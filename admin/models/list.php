@@ -137,7 +137,7 @@ class NewsletterModelList extends JModelAdmin
 				$value = trim($value);
 			}
 
-			NewsletterHelper::setTimeLimit(30);
+			NewsletterHelperNewsletter::setTimeLimit(30);
 
 			$row = (array) $row;
 
@@ -316,11 +316,11 @@ class NewsletterModelList extends JModelAdmin
 		// Let's send wellcoming letter
 		try {
 
-			PlaceholderHelper::setPlaceholder('listname', $list->name);
-			PlaceholderHelper::setPlaceholder('list id', $list->list_id);
+			NewsletterHelperPlaceholder::setPlaceholder('listname', $list->name);
+			NewsletterHelperPlaceholder::setPlaceholder('list id', $list->list_id);
 
 			if (!$this->_mailer) {
-				$this->_mailer = new MigurMailer();
+				$this->_mailer = new NewsletterClassMailer();
 			}
 
 			$res = $this->_mailer->send(array(
@@ -328,18 +328,18 @@ class NewsletterModelList extends JModelAdmin
 				'subscriber' => (object) $subscriber,
 				'newsletter_id' => $newsletter->newsletter_id,
 				'tracking' => isset($options['tracking']) ? $options['tracking'] : true,
-				'useRawUrls' => isset($options['useRawUrls']) ? $options['useRawUrls'] : NewsletterHelper::getParam('rawurls') == '1'
+				'useRawUrls' => isset($options['useRawUrls']) ? $options['useRawUrls'] : NewsletterHelperNewsletter::getParam('rawurls') == '1'
 				));
 
 			if (!$res->state) {
 				throw new Exception(json_encode($res->errors));
 			}
 
-			LogHelper::addMessage(
-				'COM_NEWSLETTER_WELLCOMING_NEWSLETTER_SENT_SUCCESSFULLY', LogHelper::CAT_SUBSCRIPTION, array('Email' => $subscriber['email'], 'Newsletter' => $newsletter->name));
+			NewsletterHelperLog::addMessage(
+				'COM_NEWSLETTER_WELLCOMING_NEWSLETTER_SENT_SUCCESSFULLY', NewsletterHelperLog::CAT_SUBSCRIPTION, array('Email' => $subscriber['email'], 'Newsletter' => $newsletter->name));
 		} catch (Exception $e) {
-			LogHelper::addError(
-				'COM_NEWSLETTER_WELCOMING_SEND_FAILED', LogHelper::CAT_SUBSCRIPTION, array(
+			NewsletterHelperLog::addError(
+				'COM_NEWSLETTER_WELCOMING_SEND_FAILED', NewsletterHelperLog::CAT_SUBSCRIPTION, array(
 				'Error' => $e->getMessage(),
 				'Email' => $subscriber['email'],
 				'Newsletter' => $newsletter->name));
@@ -378,7 +378,7 @@ class NewsletterModelList extends JModelAdmin
 
 		// Determine the confirmed value
 		if (!isset($options['confirmed'])) {
-			$options['confirmed'] = DataHelper::getDefault('confirmed', 'sublist');
+			$options['confirmed'] = NewsletterHelperData::getDefault('confirmed', 'sublist');
 		}
 
 		// If passed or default is false then 

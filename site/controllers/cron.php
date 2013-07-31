@@ -170,7 +170,7 @@ class NewsletterControllerCron extends JControllerForm
 			$subscriber   = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 			$newsletter   = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
 
-			$mailer = new MigurMailer();
+			$mailer = new NewsletterClassMailer();
 
 			// For time estimation purposes. Only for debug
 			global $fullSentStart;
@@ -492,7 +492,7 @@ class NewsletterControllerCron extends JControllerForm
 			try {
 
 				// Try to conect
-				$mailbox = new MigurMailerMailbox($mbprofile);
+				$mailbox = new NewsletterClassMailerMailbox($mbprofile);
 
 				$logData = (array)$mbprofile; 
 				unset($logData['password']);

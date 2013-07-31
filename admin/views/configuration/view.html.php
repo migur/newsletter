@@ -62,7 +62,7 @@ class NewsletterViewConfiguration extends MigurView
 			return false;
 		}
 
-		EnvironmentHelper::showWarnings(array(
+		NewsletterHelperEnvironment::showWarnings(array(
 			'checkJoomla',
 			'checkImap',
 			'checkLogs',
@@ -73,7 +73,7 @@ class NewsletterViewConfiguration extends MigurView
 		//$model = MigurModel::getInstance('extensions', 'NewsletterModel');
 		//$this->modules = $model->getModules();
 		//$this->plugins = $model->getPlugins();
-		$this->assign('modules', MigurModuleHelper::getSupported());
+		$this->assign('modules', NewsletterHelperModule::getSupported());
 		$this->assign('plugins', MigurPluginHelper::getSupported());
 
 		$this->assign('templates', MigurModel::getInstance('Templates', 'NewsletterModel')->getAllInstalledItems());
@@ -93,12 +93,12 @@ class NewsletterViewConfiguration extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_CONFIGURATION_TITLE'), 'article.png');
 
 		$bar = JToolBar::getInstance('toolbar');
-		if (AclHelper::canConfigureComponent()) {
+		if (NewsletterHelperAcl::canConfigureComponent()) {
 			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'configuration.apply', false);
 		}	
 
 		// Load the submenu.
-		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
 
 }

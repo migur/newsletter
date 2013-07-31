@@ -59,7 +59,7 @@ class AclHelperTest extends TestCase
 	public function testGetActions()
 	{
 		JLoader::import('helpers.acl', JPATH_COMPONENT_ADMINISTRATOR);
-		$actions = AclHelper::getActions();
+		$actions = NewsletterHelperAcl::getActions();
 		
 		$this->assertTrue(in_array('core.admin', $actions));
 		$this->assertTrue(in_array('core.manage', $actions));
@@ -81,7 +81,7 @@ class AclHelperTest extends TestCase
 
 		JLoader::import('helpers.acl', JPATH_COMPONENT_ADMINISTRATOR);
 		
-		$array = AclHelper::toArray($mockJuser);
+		$array = NewsletterHelperAcl::toArray($mockJuser);
 		$this->assertTrue($array['core.admin'], true);
 		$this->assertTrue($array['core.manage'], true);
 		$this->assertTrue($array['com_newsletter.newsletter.create'], true);

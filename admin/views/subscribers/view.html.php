@@ -54,7 +54,7 @@ class NewsletterViewSubscribers extends MigurView
 		$listModel = MigurModel::getInstance('lists', 'NewsletterModel');
 		$this->setModel($listModel);
 
-		EnvironmentHelper::showWarnings(array(
+		NewsletterHelperEnvironment::showWarnings(array(
 			'checkUserConflicts'));
 		
 		
@@ -109,7 +109,7 @@ class NewsletterViewSubscribers extends MigurView
 
 		$bar = MigurToolBar::getInstance('subscribers', null, '');
 		
-		if (AclHelper::actionIsAllowed('list.edit')) {
+		if (NewsletterHelperAcl::actionIsAllowed('list.edit')) {
 			$bar->appendButton('Link', 'cancel', 'COM_NEWSLETTER_REMOVE_FROM_LIST', 'list.unbindgroup', false);
 			$bar->appendButton('Link', 'copy', 'COM_NEWSLETTER_ASSIGN_TO_LIST', 'list.assigngroup', false);
 		}
@@ -118,30 +118,29 @@ class NewsletterViewSubscribers extends MigurView
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'subscribers.delete', false);
 		$bar->appendButton('Standard', 'unblock', 'JTOOLBAR_ENABLE', 'subscribers.publish', false);
 		$bar->appendButton('Standard', 'unpublish', 'JTOOLBAR_DISABLE', 'subscribers.unpublish', false);
-
 		if ($this->activationIsAllowed) {
 			$bar->appendButton('Standard', 'publish', 'COM_NEWSLETTER_ACTIVATE', 'lists.activate', false);
-		}	
-		
-		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', SupportHelper::getResourceUrl('subscribers'));
+		}
+
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', NewsletterHelperSupport::getResourceUrl('subscribers'));
 
 		$bar = MigurToolBar::getInstance('lists');
 		
-		if (AclHelper::actionIsAllowed('list.add')) {
+		if (NewsletterHelperAcl::actionIsAllowed('list.add')) {
 			$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&amp;view=list&amp;tmpl=component', 1000, 600, 0, 0);
 		}
 		
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'lists.delete', false);
 		
-		if (AclHelper::actionIsAllowed('list.edit')) {
+		if (NewsletterHelperAcl::actionIsAllowed('list.edit')) {
 			$bar->appendButton('Standard', 'unpublish', 'JTOOLBAR_DISABLE', 'lists.unpublish', false);
 			$bar->appendButton('Standard', 'publish', 'JTOOLBAR_ENABLE', 'lists.publish', false);
 		}	
 
-		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', SupportHelper::getResourceUrl('lists'));
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', NewsletterHelperSupport::getResourceUrl('lists'));
 
 		// Load the submenu.
-		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
 
 }
