@@ -25,7 +25,7 @@ class NewsletterHelperAutoload
 
 		// Register the base path for Joomla platform libraries.
 		jimport('migur.migur');
-		self::registerPrefix('MigurJ', $migurlibPath);
+        self::registerPrefix('Migur', $migurlibPath);
 		self::registerPrefix('NewsletterAutomlailingPlan', $componentPath . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'automailing' . DIRECTORY_SEPARATOR . 'plans');
 		self::registerPrefix('NewsletterAutomlailingThread', $componentPath . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'automailing' . DIRECTORY_SEPARATOR . 'threads');
 		
@@ -33,6 +33,8 @@ class NewsletterHelperAutoload
 		self::registerPrefix('NewsletterModelEntity',  $componentPath . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'entities');
 		self::registerPrefix('NewsletterModel',  $componentPath . DIRECTORY_SEPARATOR . 'models');
 		self::registerPrefix('NewsletterTable',  $componentPath . DIRECTORY_SEPARATOR . 'tables');
+        self::registerPrefix('NewsletterClass',  $componentPath . DIRECTORY_SEPARATOR . 'class');
+
 
 		// Register the autoloader functions.
 		spl_autoload_register(array('NewsletterHelperAutoload', '_autoload'));
@@ -81,19 +83,6 @@ class NewsletterHelperAutoload
 	 */
 	private static function _autoload($class)
 	{
-		// BAD HALPERS NAMING SUPPORT!!
-		if (strrpos($class, 'Helper') == strlen($class) - strlen('Helper')) {
-
-			$file = self::$componentAdminPath . 
-				DIRECTORY_SEPARATOR . 'helpers' . 
-				DIRECTORY_SEPARATOR . strtolower(str_replace('Helper', '', $class)) . '.php';
-
-			if (file_exists($file)) {
-				include_once $file;
-			}	
-		}
-		//
-		
 		foreach (self::$prefixes as $prefix => $lookup) {
 			if (strpos($class, $prefix) === 0) {
 				return self::_load(substr($class, strlen($prefix)), $lookup);

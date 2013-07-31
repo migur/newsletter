@@ -41,7 +41,7 @@ class MigurDocumentHtmlRendererModules extends JDocumentRenderer
 			$post = '</div>';
 		}
 
-		$modules = MigurModuleHelper::getModules($position);
+		$modules = NewsletterHelperModule::getModules($position);
 		
 		// Sort the modules by ordering
 		$total = count($modules);

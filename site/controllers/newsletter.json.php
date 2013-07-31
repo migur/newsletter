@@ -38,7 +38,7 @@ class NewsletterControllerNewsletter extends JControllerForm
         
 		try {
 			// Check the uid
-			$subscriber = SubscriberHelper::getBySubkey($subkey);
+			$subscriber = NewsletterHelperSubscriber::getBySubkey($subkey);
 			if (empty($subscriber->subscriber_id)) {
 				throw new Exception('User is absent');
 			}
@@ -90,7 +90,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 			if ($e->getMessage() != 'no need to track') {
                 
 				// For debug
-                LogHelper::addError('COM_NEWSLETTER_TRACKING_FAILED', LogHelper::CAT_TRACKING,  
+                NewsletterHelperLog::addError('COM_NEWSLETTER_TRACKING_FAILED', NewsletterHelperLog::CAT_TRACKING,
                     array(
                         'Message' => $e->getMessage(),
                         'Data' => JRequest::get())
@@ -99,7 +99,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 			} else {
 
 				// For debug
-                LogHelper::addDebug('Tracking', LogHelper::CAT_TRACKING,  
+                NewsletterHelperLog::addDebug('Tracking', NewsletterHelperLog::CAT_TRACKING,
                     array(
                         'Message' => 'No need to track',
                         'data' => JRequest::get())
@@ -108,7 +108,7 @@ class NewsletterControllerNewsletter extends JControllerForm
             }
 		}
 		
-        LogHelper::addDebug('Tracking', LogHelper::CAT_TRACKING, JRequest::get());
+        NewsletterHelperLog::addDebug('Tracking', NewsletterHelperLog::CAT_TRACKING, JRequest::get());
         
 		// Redirect it!
 		if (!empty($link)) {

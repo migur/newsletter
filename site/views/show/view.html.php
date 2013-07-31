@@ -34,7 +34,7 @@ class NewsletterViewShow extends JView
 
 		if (!empty($alias)) {
 
-			$newslettter = NewsletterHelper::getByAlias($alias);
+			$newslettter = NewsletterHelperNewsletter::getByAlias($alias);
 			
 			$this->assignRef('newsletter', $newslettter);
 			

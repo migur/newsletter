@@ -29,7 +29,7 @@ class MigurDocumentPlainRendererPlaceholder extends JDocumentRenderer
 	 */
 	public function render($name, $attribs = array(), $content = null)
 	{
-		return PlaceholderHelper::render($name, 'plain');
+		return NewsletterHelperPlaceholder::render($name, 'plain');
 	}
 
 }

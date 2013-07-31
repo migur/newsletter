@@ -93,7 +93,7 @@ class NewsletterViewBounceds extends MigurView
 		$bar->appendButton('Standard', 'process', 'JTOOLBAR_PROCESS', 'bounceds.process', false);
 
 		// Load the submenu.
-		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
 
 }

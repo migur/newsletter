@@ -35,7 +35,7 @@ class NewsletterModelNewsletterext extends JModel
 	 */
 	public function getTable($type = 'Newsletterext', $prefix = 'NewsletterTable', $config = array())
 	{
-		return MigurJTable::getInstance($type, $prefix, $config);
+		return MigurTable::getInstance($type, $prefix, $config);
 	}
 
 	/**

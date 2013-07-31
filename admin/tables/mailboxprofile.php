@@ -18,7 +18,7 @@ jimport('migur.library.table');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterTableMailboxprofile extends MigurJTable
+class NewsletterTableMailboxprofile extends MigurTable
 {
 
 	const MAILBOX_DEFAULT = -1;

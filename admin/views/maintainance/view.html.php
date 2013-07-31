@@ -52,7 +52,7 @@ class NewsletterViewMaintainance extends MigurView
 			JText::_('COM_NEWSLETTER_AUTOMAILING_EDIT_TITLE'), 
 		'article.png');
 		
-		JavascriptHelper::addStringVar('isNew', (int)$isNew);
+		NewsletterHelperJavascript::addStringVar('isNew', (int)$isNew);
 		
 		$document = JFactory::getDocument();
 		

@@ -78,7 +78,7 @@ class NewsletterViewSender extends MigurView
 				'listDirn' => $modelLists->getState('list.direction')
 		);
 		
-		JavascriptHelper::addStringVar('defaultMailbox', MailHelper::getDefaultMailbox('idOnly'));
+		NewsletterHelperJavascript::addStringVar('defaultMailbox', NewsletterHelperMail::getDefaultMailbox('idOnly'));
 
 		$modelLists->setState('limit', $limit);
 
@@ -101,6 +101,6 @@ class NewsletterViewSender extends MigurView
 		$bar->appendButton('Link', 'export', 'COM_NEWSLETTER_NEWSLETTER_SEND', '#');
 
 		// Load the submenu.
-		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
 }

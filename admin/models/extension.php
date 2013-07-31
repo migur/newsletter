@@ -100,7 +100,7 @@ class NewsletterModelExtension extends JModelAdmin
 				$id     = $this->getState($this->getName().'.id');
 				$native = $this->getState('item.module.native');
 
-				$modules = MigurModuleHelper::getSupported(array(
+				$modules = NewsletterHelperModule::getSupported(array(
 					'extension_id' => $id,
 					'native'       => $native
 				));

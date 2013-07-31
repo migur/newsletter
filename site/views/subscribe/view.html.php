@@ -38,7 +38,7 @@ class NewsletterViewSubscribe extends JView
 			$subscriber->load('-'.$user->id);
 		}
 		
-		$lists = SubscriberHelper::getLists($subscriber->subscription_key);
+		$lists = NewsletterHelperSubscriber::getLists($subscriber->subscription_key);
 
 		$this->assignRef('user', $user);
 		$this->assign('subscriber', $subscriber->toObject());

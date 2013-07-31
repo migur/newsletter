@@ -45,7 +45,7 @@ class NewsletterViewSmtpprofile extends MigurView
 			$model->load($smtpid);
 		}	
 		
-		JavascriptHelper::addStringVar('migurIsJoomlaProfile', $model->isJoomlaProfile());
+		NewsletterHelperJavascript::addStringVar('migurIsJoomlaProfile', $model->isJoomlaProfile());
 		
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
@@ -70,8 +70,8 @@ class NewsletterViewSmtpprofile extends MigurView
 	protected function addToolbar()
 	{
 		$bar = JToolBar::getInstance('smtp-toolbar', 'smtpprofileForm');
-		$bar->addButtonPath(MIGURPATH_LIBRARY . '/button');
-		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', SupportHelper::getResourceUrl('smtpp', 'general'));
+		$bar->addButtonPath(COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
+		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', NewsletterHelperSupport::getResourceUrl('smtpp', 'general'));
 		$bar->appendButton('Standard', 'publish', 'COM_NEWSLETTER_CHECK', 'smtpprofile.checkconnection', false);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'smtpprofile.save', false);

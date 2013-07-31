@@ -2,7 +2,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-$showFull = AclHelper::canConfigureComponent(); 
+$showFull = NewsletterHelperAcl::canConfigureComponent();
 
 ?>
 
@@ -48,7 +48,7 @@ $showFull = AclHelper::canConfigureComponent();
 		
 		<?php
 		// First check if user has access to the component.
-		if (AclHelper::canConfigureComponent()) {
+		if (NewsletterHelperAcl::canConfigureComponent()) {
 			echo $this->loadTemplate('permissions', 'config');
 		} else { ?>
 			<center>

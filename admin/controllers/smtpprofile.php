@@ -111,7 +111,7 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 		
 		$smtpSettings = (object)JRequest::getVar('jform');
 
-		$sender = new MigurMailerSender(array('exceptions' => true));
+		$sender = new NewsletterClassMailerSender(array('exceptions' => true));
 		
 		$res = $sender->checkConnection($smtpSettings);
 		

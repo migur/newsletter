@@ -45,7 +45,7 @@ class NewsletterControllerList extends JControllerForm
 	{
 		return 
 			/* parent::allowAdd($data, $key) && */
-			AclHelper::actionIsAllowed('list.add');
+			NewsletterHelperAcl::actionIsAllowed('list.add');
 	}
 
 
@@ -59,7 +59,7 @@ class NewsletterControllerList extends JControllerForm
 	{
 		return 
 			/* parent::allowEdit($data, $key) && */
-			AclHelper::actionIsAllowed('list.edit');
+			NewsletterHelperAcl::actionIsAllowed('list.edit');
 	}
 
 	
@@ -220,8 +220,8 @@ class NewsletterControllerList extends JControllerForm
 								
 								$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_FAILED"), 'error');
 
-								LogHelper::addError(
-									'COM_NEWSLETTER_WELCOMING_SEND_FAILED', LogHelper::CAT_SUBSCRIPTION, array(
+								NewsletterHelperLog::addError(
+									'COM_NEWSLETTER_WELCOMING_SEND_FAILED', NewsletterHelperLog::CAT_SUBSCRIPTION, array(
 									'Error' => $e->getMessage(),
 									'Email' => $subscriber->email,
 									'Newsletter' => $newsletter->name));
@@ -306,7 +306,7 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function gethead()
 	{
-		NewsletterHelper::jsonPrepare();
+		NewsletterHelperNewsletter::jsonPrepare();
 
 		$jsonData = JRequest::getString('jsondata', '{}');
 		if (get_magic_quotes_gpc()) {
@@ -323,13 +323,13 @@ class NewsletterControllerList extends JControllerForm
 			if (($handle = fopen($data->file, "r")) !== FALSE) {
 				$data->fields = fgetcsv($handle, 1000, $settings->delimiter, $settings->enclosure);
 			} else {
-				NewsletterHelper::jsonError('Cannot open file', $data);
+				NewsletterHelperNewsletter::jsonError('Cannot open file', $data);
 			}
 		} else {
-			NewsletterHelper::jsonError('No data about file', $data);
+			NewsletterHelperNewsletter::jsonError('No data about file', $data);
 		}
 
-		NewsletterHelper::jsonMessage('', $data);
+		NewsletterHelperNewsletter::jsonMessage('', $data);
 	}
 
 
@@ -341,7 +341,7 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function import()
 	{
-		NewsletterHelper::jsonPrepare();
+		NewsletterHelperNewsletter::jsonPrepare();
 		
 		$app = JFactory::getApplication();
 		
@@ -351,7 +351,7 @@ class NewsletterControllerList extends JControllerForm
 		$offset = JRequest::getVar('offset', '');
 		
 		if ($currentList < 1) {
-            NewsletterHelper::jsonError('No list Id');
+            NewsletterHelperNewsletter::jsonError('No list Id');
 		}
 
 		$jsonData = JRequest::getString('jsondata', '{}');
@@ -362,7 +362,7 @@ class NewsletterControllerList extends JControllerForm
 		$data = NewsletterHelperData::jsonDecode($jsonData);
 		
 		if (!$settings = $this->_getSettings($data)) {
-            NewsletterHelper::jsonError('No settings');
+            NewsletterHelperNewsletter::jsonError('No settings');
 		}
 
 		$mapping = $settings->fields;
@@ -401,7 +401,7 @@ class NewsletterControllerList extends JControllerForm
 		
 		// Try to open file
 		if (($handle = fopen($filename, "r")) === FALSE) {
-			NewsletterHelper::jsonError('Cannot open file');
+			NewsletterHelperNewsletter::jsonError('Cannot open file');
 		}
 
 		//get the header and seek to previous position
@@ -456,7 +456,7 @@ class NewsletterControllerList extends JControllerForm
 			));
 
 		if (!empty($res['errors'])) {
-			NewsletterHelper::jsonError('Import failed!', array(
+			NewsletterHelperNewsletter::jsonError('Import failed!', array(
 				'fetched'   => $total,
 				'total'     => $offset   + $total,
 				'skipped'   => $skipped,
@@ -479,7 +479,7 @@ class NewsletterControllerList extends JControllerForm
 			$app->setUserState($statePath.'.assigned', $assigned + $res['assigned']);
 			$app->setUserState($statePath.'.alreadyInList', $alreadyInList + $res['alreadyInList']);
 
-			NewsletterHelper::jsonMessage('ok', array(
+			NewsletterHelperNewsletter::jsonMessage('ok', array(
 				'fetched'   => $total,
 				'total'     => $offset   + $total,
 				'skipped'   => $skipped,
@@ -521,7 +521,7 @@ class NewsletterControllerList extends JControllerForm
 			$res
 		);
 		
-		NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL'), $res);
+		NewsletterHelperNewsletter::jsonMessage(JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL'), $res);
 	}
 
 	
@@ -532,7 +532,7 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function exclude()
 	{
-		NewsletterHelper::jsonPrepare();
+		NewsletterHelperNewsletter::jsonPrepare();
 		
 		$app = JFactory::getApplication();
 		
@@ -544,7 +544,7 @@ class NewsletterControllerList extends JControllerForm
 		$offset = JRequest::getVar('offset', '');
 		
 		if ($currentList < 1) {
-            NewsletterHelper::jsonError('No list Id');
+            NewsletterHelperNewsletter::jsonError('No list Id');
 		}
 
 		$jsonData = JRequest::getString('jsondata', '{}');
@@ -581,7 +581,7 @@ class NewsletterControllerList extends JControllerForm
 				
 				if (!$res) {
 
-					NewsletterHelper::jsonError('COM_NEWSLETTER_EXCLUSION_FAILED', array(
+					NewsletterHelperNewsletter::jsonError('COM_NEWSLETTER_EXCLUSION_FAILED', array(
 						'total' => $total
 					));
 					return;
@@ -590,7 +590,7 @@ class NewsletterControllerList extends JControllerForm
 
 			$dbo->transactionCommit();
 			
-			NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), array(
+			NewsletterHelperNewsletter::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), array(
 				'total' => $total
 			));
 			return;
@@ -599,7 +599,7 @@ class NewsletterControllerList extends JControllerForm
 		if ($subtask == 'parse') {
             
             if (!$settings = $this->_getSettings($data)) {
-                NewsletterHelper::jsonError('No settings');
+                NewsletterHelperNewsletter::jsonError('No settings');
             }
 
             $mapping = $settings->fields;
@@ -631,7 +631,7 @@ class NewsletterControllerList extends JControllerForm
 
             // Try to open file
             if (($handle = fopen($filename, "r")) === FALSE) {
-                NewsletterHelper::jsonError('Cannot open file');
+                NewsletterHelperNewsletter::jsonError('Cannot open file');
             }
 
             //get the header and seek to previous position
@@ -684,7 +684,7 @@ class NewsletterControllerList extends JControllerForm
 			$dbo->transactionCommit();
 			
             if (!empty($res['errors'])) {
-                NewsletterHelper::jsonError(JText::_('COM_NEWSLETTER_EXCLUSION_FAILED'), array(
+                NewsletterHelperNewsletter::jsonError(JText::_('COM_NEWSLETTER_EXCLUSION_FAILED'), array(
                     'fetched'   => $total,
                     'total'     => $offset   + $total,
                     'skipped'   => $skipped,
@@ -702,7 +702,7 @@ class NewsletterControllerList extends JControllerForm
                 $app->setUserState($statePath.'.errors', $errors + $res['errors']);
                 $app->setUserState($statePath.'.unbound', $unbound + $res['unbound']);
 
-                NewsletterHelper::jsonMessage('ok', array(
+                NewsletterHelperNewsletter::jsonMessage('ok', array(
                     'fetched'   => $total,
                     'total'     => $offset   + $total,
                     'skipped'   => $skipped,
@@ -737,7 +737,7 @@ class NewsletterControllerList extends JControllerForm
                 $res
             );
 
-            NewsletterHelper::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), $res);        
+            NewsletterHelperNewsletter::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), $res);
 		}
 	}
 

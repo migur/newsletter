@@ -57,7 +57,7 @@
 				</td>
 				<td>
 				<?php 
-				if (AclHelper::actionIsAllowed('list.edit')) { ?>
+				if (NewsletterHelperAcl::actionIsAllowed('list.edit')) { ?>
 					<a href="<?php echo JRoute::_("index.php?option=com_newsletter&tmpl=component&layout=edit&task=list.edit&list_id=".(int) $item->list_id, false); ?>"
 					   rel="{handler: 'iframe', size: {x: 990, y: 635}}"
 					   class="modal" >

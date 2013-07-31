@@ -46,7 +46,7 @@
 				</td>
 				<td>
 				<?php 
-				if (AclHelper::actionIsAllowed('newsletter.edit')) { 
+				if (NewsletterHelperAcl::actionIsAllowed('newsletter.edit')) {
 				?>
 					<a href="<?php echo JRoute::_("index.php?option=com_newsletter&task=newsletter.edit&newsletter_id=" . (int) $item->id, false); ?>">
 						<?php echo $this->escape($item->name); ?>

@@ -14,9 +14,9 @@ defined('_JEXEC') or die;
  * Content component helper.
  * 
  * To test:
- * LogHelper::addDebug('Newsletter bebug', 'test', array('name1' => 'value1'));
- * LogHelper::addMessage('Newsletter message', 'test', array('name2' => 'value2'));
- * LogHelper::addError('Newsletter error', 'test', array('name3' => 'value3'));
+ * NewsletterHelperLog::addDebug('Newsletter bebug', 'test', array('name1' => 'value1'));
+ * NewsletterHelperLog::addMessage('Newsletter message', 'test', array('name2' => 'value2'));
+ * NewsletterHelperLog::addError('Newsletter error', 'test', array('name3' => 'value3'));
  * JError::raiseError(501, 'Joomla error');
  * JError::raiseNotice(501, 'notice'); // onto screen
  *
@@ -60,10 +60,3 @@ class NewsletterHelperSupport
 		return JUri::root(). self::$resourceUrl . $resourceUrl;
 	}	
 }
-
-/**
- * Legacy support for class name
- * Should be removed after 12.07
- */
-class SupportHelper extends NewsletterHelperSupport
-{}

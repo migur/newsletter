@@ -13,8 +13,8 @@ defined('_JEXEC') or die;
         echo $this->loadTemplate('overview', '');
 		
 		if (
-			( $this->isNew && AclHelper::actionIsAllowed('list.add')) || 
-			(!$this->isNew && AclHelper::actionIsAllowed('list.edit'))
+			( $this->isNew && NewsletterHelperAcl::actionIsAllowed('list.add')) ||
+			(!$this->isNew && NewsletterHelperAcl::actionIsAllowed('list.edit'))
 		) {
 			echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_IMPORT'), 'tab-import');
 			echo $this->loadTemplate('import', '');

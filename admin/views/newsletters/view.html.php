@@ -106,14 +106,14 @@ class NewsletterViewNewsletters extends MigurView
 		$bar = JToolBar::getInstance('newsletters');
 		$bar->appendButton('Link', 'default', 'COM_NEWSLETTER_SHOW_STATISTICS', 'index.php?option=com_newsletter&amp;view=statistic&amp;tmpl=component');
 		
-		if (AclHelper::actionIsAllowed('newsletter.add')) {
+		if (NewsletterHelperAcl::actionIsAllowed('newsletter.add')) {
 			$bar->appendButton('Standard', 'new', 'JTOOLBAR_NEW', 'newsletter.add', false);
 			$bar->appendButton('Standard', 'copy', 'JTOOLBAR_SAVE_AS_COPY', 'newsletter.save2copy', false);
 		}	
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'newsletters.delete', false);
 
 		// Load the submenu.
-		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
+		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
 
 	/**
@@ -124,20 +124,20 @@ class NewsletterViewNewsletters extends MigurView
 	 */
 	protected function setStatisticsData()
 	{
-		$data = StatisticsHelper::totalSent();
-		JavascriptHelper::addObject('statTotalSent', $data);
+		$data = NewsletterHelperStatistics::totalSent();
+		NewsletterHelperJavascript::addObject('statTotalSent', $data);
 
 
-		$data = StatisticsHelper::openedActionsCount();
-		JavascriptHelper::addObject('statOpenedCount', $data);
+		$data = NewsletterHelperStatistics::openedActionsCount();
+		NewsletterHelperJavascript::addObject('statOpenedCount', $data);
 
 
-		$data = StatisticsHelper::openedNewslettersCount();
+		$data = NewsletterHelperStatistics::openedNewslettersCount();
 		$res = array(
 			'newsletters' => empty($data['newsletters']) ? 0 : $data['newsletters'],
 			'subscribers' => empty($data['subscribers']) ? 0 : $data['subscribers'],
 		);
-		JavascriptHelper::addObject('statActiveSubscribersCount', $res);
+		NewsletterHelperJavascript::addObject('statActiveSubscribersCount', $res);
 
 		$now = date('Y-m-d H:i:s');
 		$sevenDaysBefore = date('Y-m-d', strtotime('-7 Days', time())) . " 00:00:00";
@@ -146,27 +146,27 @@ class NewsletterViewNewsletters extends MigurView
 
 
 		$this->totalSubs = array(
-			StatisticsHelper::totalSubscribersCount($sevenDaysBefore, $now),
-			StatisticsHelper::totalSubscribersCount($thirtyDaysBefore, $now),
-			StatisticsHelper::totalSubscribersCount($ninetyDaysBefore, $now)
+			NewsletterHelperStatistics::totalSubscribersCount($sevenDaysBefore, $now),
+			NewsletterHelperStatistics::totalSubscribersCount($thirtyDaysBefore, $now),
+			NewsletterHelperStatistics::totalSubscribersCount($ninetyDaysBefore, $now)
 		);
 
 		$this->newSubs = array(
-			StatisticsHelper::newSubscribersCount($sevenDaysBefore, $now),
-			StatisticsHelper::newSubscribersCount($thirtyDaysBefore, $now),
-			StatisticsHelper::newSubscribersCount($ninetyDaysBefore, $now)
+			NewsletterHelperStatistics::newSubscribersCount($sevenDaysBefore, $now),
+			NewsletterHelperStatistics::newSubscribersCount($thirtyDaysBefore, $now),
+			NewsletterHelperStatistics::newSubscribersCount($ninetyDaysBefore, $now)
 		);
 
 		$this->lostSubs = array(
-			StatisticsHelper::lostSubscribersCount($sevenDaysBefore, $now),
-			StatisticsHelper::lostSubscribersCount($thirtyDaysBefore, $now),
-			StatisticsHelper::lostSubscribersCount($ninetyDaysBefore, $now)
+			NewsletterHelperStatistics::lostSubscribersCount($sevenDaysBefore, $now),
+			NewsletterHelperStatistics::lostSubscribersCount($thirtyDaysBefore, $now),
+			NewsletterHelperStatistics::lostSubscribersCount($ninetyDaysBefore, $now)
 		);
 
 		$this->activeSubs = array(
-			StatisticsHelper::activeSubscribersCount($sevenDaysBefore, $now),
-			StatisticsHelper::activeSubscribersCount($thirtyDaysBefore, $now),
-			StatisticsHelper::activeSubscribersCount($ninetyDaysBefore, $now)
+			NewsletterHelperStatistics::activeSubscribersCount($sevenDaysBefore, $now),
+			NewsletterHelperStatistics::activeSubscribersCount($thirtyDaysBefore, $now),
+			NewsletterHelperStatistics::activeSubscribersCount($ninetyDaysBefore, $now)
 		);
 	}
 
