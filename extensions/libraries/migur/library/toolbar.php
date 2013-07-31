@@ -49,9 +49,11 @@ class MigurToolBar extends JToolbar
 
 		$this->_formName = ($form) ? $form : $name . 'Form';
 
-        $this->addButtonPath(COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
-		$this->addButtonPath(JPATH_LIBRARIES. DIRECTORY_SEPARATOR .'migur'. DIRECTORY_SEPARATOR .'library'. DIRECTORY_SEPARATOR .'button');
-		
+        if (defined(COM_NEWSLETTER_PATH_ADMIN)) {
+            $this->addButtonPath(COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
+        }
+        $this->addButtonPath(JPATH_LIBRARIES. DIRECTORY_SEPARATOR .'migur'. DIRECTORY_SEPARATOR .'library'. DIRECTORY_SEPARATOR .'button');
+
 		$this->_actionPrefix = $actionPrefix;
 		
 		$this->_useAcl = $useAcl;
@@ -68,17 +70,17 @@ class MigurToolBar extends JToolbar
 	 * @return	JToolBar	The MigurToolBar object.
 	 * @since   1.0
 	 */
-	public static function getInstance($name = 'toolbar', $form = null, $actionPrefix = '', $useAcl = false, $options = array())
-	{
-		if (!isset(self::$instances)) {
-			self::$instances = array();
-		}
-		if (empty(self::$instances[$name])) {
-			self::$instances[$name] = new MigurToolBar($name, $form, $actionPrefix, $useAcl, $options);
-		}
+    public static function getInstance($name = 'toolbar', $form = null, $actionPrefix = '', $useAcl = false, $options = array())
+    {
+        if (!isset(self::$instances)) {
+            self::$instances = array();
+        }
+        if (empty(self::$instances[$name])) {
+            self::$instances[$name] = new MigurToolBar($name, $form, $actionPrefix, $useAcl, $options);
+        }
 
-		return self::$instances[$name];
-	}
+        return self::$instances[$name];
+    }
 
 	/**
 	 * Changes standard behavior.
@@ -129,8 +131,8 @@ class MigurToolBar extends JToolbar
 	{
 		$args = func_get_args();
 
-		$action = !empty($args[1])? $args[1] : '';
-		
+        $action = !empty($args[1])? $args[1] : '';
+
 		if ($this->_useAcl) {
 			if (!NewsletterHelperAcl::actionIsAllowed($this->_actionPrefix.'.'.$action)) {
 				return false;
