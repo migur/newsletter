@@ -1,3 +1,0 @@
-
-Component menu on left side of a page.
-
