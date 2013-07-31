@@ -31,6 +31,7 @@ if (!class_exists('JViewLegacy')) {
 
 class MigurView extends JViewLegacy
 {
+
     /**
      * Load a template file -- first look in the templates folder for an override
      *
