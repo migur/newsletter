@@ -47,7 +47,7 @@ class JFormFieldTimeinterval extends JFormField
 		
 		// Parse value
 		$value = $this->value;
-		$vl = DataHelper::timeIntervalExplode($value);
+		$vl = NewsletterHelperData::timeIntervalExplode($value);
 
 		$valueCnt = 0;
 		$valueType = 'day';

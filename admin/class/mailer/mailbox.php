@@ -19,7 +19,7 @@ include_once(_PATH_BMH . 'class.phpmailer-bmh.php');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurMailerMailbox
+class NewsletterClassMailerMailbox
 {
 
 	/**
@@ -124,7 +124,7 @@ class MigurMailerMailbox
 			$options['novalidate-cert'] = empty($options['validate_cert']);
 			unset($options['validate_cert']);
 			
-			$name = 'MigurMailerProtocol' . ucfirst($options['mailbox_server_type']);
+			$name = 'NewsletterClassMailerProtocol' . ucfirst($options['mailbox_server_type']);
 
 			require_once 'protocol' . DIRECTORY_SEPARATOR . strtolower($options['mailbox_server_type']) . '.php';
 
@@ -258,7 +258,7 @@ class MigurMailerMailbox
 		// Nix 4000 mails = 180sec
 		//$res = $this->protocol->since(0);
 
-		$res = (array) $this->protocol->findBy('body', MailHelper::APPLICATION_HEADER);
+		$res = (array) $this->protocol->findBy('body', NewsletterHelperMail::APPLICATION_HEADER);
 
 		$this->totalBounces = count($res);
 
@@ -266,7 +266,7 @@ class MigurMailerMailbox
 			return true;
 		}
 
-		LogHelper::addDebug('Mailbox.Bounceds.Ids found.', LogHelper::CAT_BOUNCES, $res);
+		NewsletterHelperLog::addDebug('Mailbox.Bounceds.Ids found.', NewsletterHelperLog::CAT_BOUNCES, $res);
 
 		// Handle partial processing option
 		if (!empty($max)) {
@@ -338,10 +338,10 @@ class MigurMailerMailbox
 						$processed = $this->processBounce($x, 'BODY', $c_total);
 					}
 
-					LogHelper::addDebug('Mailbox.Mail processed.Position:' . $x . ',time:' . (string) (time() - $time) . ',id:' . $messageId . ',date:' . $date, LogHelper::CAT_BOUNCES);
+					NewsletterHelperLog::addDebug('Mailbox.Mail processed.Position:' . $x . ',time:' . (string) (time() - $time) . ',id:' . $messageId . ',date:' . $date, NewsletterHelperLog::CAT_BOUNCES);
 				} else {
 
-					LogHelper::addDebug('Mailbox.Mail in cache.Position:' . $x . ',id:' . $messageId, LogHelper::CAT_BOUNCES);
+					NewsletterHelperLog::addDebug('Mailbox.Mail in cache.Position:' . $x . ',id:' . $messageId, NewsletterHelperLog::CAT_BOUNCES);
 				}
 			}
 

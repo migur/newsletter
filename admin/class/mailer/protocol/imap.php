@@ -3,7 +3,7 @@
 /**
  * Wrapper for implementation of POP3 protocol
  */
-class MigurMailerProtocolImap {
+class NewsletterClassMailerProtocolImap {
 
 	/**
 	 * Pointer to real implementation of protocol
@@ -21,13 +21,13 @@ class MigurMailerProtocolImap {
 		if (function_exists('imap_open')) {
 
 			require_once 'imap'. DIRECTORY_SEPARATOR .'lib.php';
-			return $this->implementation = new MigurMailerProtocolImapLib($options);
+			return $this->implementation = new NewsletterClassMailerProtocolImapLib($options);
 			
 		}
 			
 		// Use this as falback
 		require_once 'imap'. DIRECTORY_SEPARATOR .'php.php';
-		return $this->implementation = new MigurMailerProtocolImapPhp($options);
+		return $this->implementation = new NewsletterClassMailerProtocolImapPhp($options);
 	}
 	
 	/**

@@ -138,7 +138,7 @@ class MigurToolbar extends JToolbar
 		$action = !empty($args[1])? $args[1] : '';
 		
 		if ($this->_useAcl) {
-			if (!AclHelper::actionIsAllowed($this->_actionPrefix.'.'.$action)) {
+			if (!NewsletterHelperAcl::actionIsAllowed($this->_actionPrefix.'.'.$action)) {
 				return false;
 			}
 		}

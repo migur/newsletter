@@ -7,7 +7,7 @@ JHtml::_('behavior.multiselect');
 JHtml::_('dropdown.init');
 JHtml::_('formbehavior.chosen');
 
-$showFull = AclHelper::canConfigureComponent(); 
+$showFull = NewsletterHelperAcl::canConfigureComponent();
 
 ?>
 
@@ -55,6 +55,7 @@ $showFull = AclHelper::canConfigureComponent();
 
 <?php if ($showFull) { ?>
 <fieldset id="config-config">
+<<<<<<< HEAD
 	<div class="legend"><?php echo JText::_('COM_NEWSLETTER_GLOBAL_CONFIG'); ?></div>
 	
 	<form id="adminForm" name="adminForm" method="POST" class="form-horizontal form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
@@ -104,6 +105,39 @@ $showFull = AclHelper::canConfigureComponent();
 			</div>	
 		</div>	
 				
+=======
+	<legend><?php echo JText::_('COM_NEWSLETTER_GLOBAL_CONFIG'); ?></legend>
+	<form name="adminForm" method="POST" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
+		<?php
+		echo JHtml::_('tabs.start', 'tabs-config');
+		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_GENERAL'), 'tab-general');
+		echo $this->loadTemplate('general', 'config');
+		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_NEWSLETTERS'), 'tab-newsletters');
+		echo $this->loadTemplate('newsletters', 'config');
+		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_TEMPLATES'), 'tab-templates');
+		echo $this->loadTemplate('templates', 'config');
+		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_SUBSCRIBERS'), 'tab-subscribers');
+		echo $this->loadTemplate('subscribers', 'config');
+		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_ADVANCED'), 'tab-advanced');
+		echo $this->loadTemplate('advanced', 'config');
+		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_IMPORT_EXPORT'), 'tab-export');
+		echo $this->loadTemplate('export', 'config');
+		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PERMISSIONS'), 'tab-permissions');
+		?>
+		
+		<?php
+		// First check if user has access to the component.
+		if (NewsletterHelperAcl::canConfigureComponent()) {
+			echo $this->loadTemplate('permissions', 'config');
+		} else { ?>
+			<center>
+			<?php echo JText::_('COM_NEWSLETTER_YOU_CANT_CHANGE_COMPONENT_PERMISSIONS'); ?>
+			</center>
+		<?php }	
+		echo JHtml::_('tabs.end');
+		?>
+		
+>>>>>>> development
 		<input type="hidden" name="jform[dryrun_mailing]" value="<?php echo $this->form->getValue('dryrun_mailing'); ?>" />
 
 		<input type="hidden" name="task" value="" />

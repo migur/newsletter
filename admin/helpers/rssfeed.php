@@ -37,7 +37,7 @@ defined('_JEXEC') or die;
 		$parser = @JFactory::getFeedParser($params->rssurl, 0);
 		if ($parser) {
 			// @ to hide STRICT php warnings of a SimplePie.
-			return @RssfeedHelper::_parse($parser, $params);
+			return @NewsletterHelperRssfeed::_parse($parser, $params);
 
 		} else {
 			return false;
@@ -111,10 +111,3 @@ defined('_JEXEC') or die;
 		}
 	}
 }
-
-/**
- * Legacy support for class name
- * Should be removed after 12.07
- */
-class RssfeedHelper extends NewsletterHelperRssfeed
-{}

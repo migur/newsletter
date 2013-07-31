@@ -84,7 +84,7 @@ class NewsletterModelImportCommon
 				$isTransaction = true;
 			}
 			
-			NewsletterHelper::setTimeLimit(30);
+			NewsletterHelperNewsletter::setTimeLimit(30);
 			
 			$lists[$item['list_name']] = 0;
 			$subs[$item['email']] = $item;
@@ -105,8 +105,8 @@ class NewsletterModelImportCommon
 					$saveData = array(
 						'name' => stripslashes($item['name']),
 						'email' => stripslashes($item['email']),
-						'html' => (int) DataHelper::getDefault('html', 'subscriber'),
-						'state' => (int) DataHelper::getDefault('state', 'subscriber'),
+						'html' => (int) NewsletterHelperData::getDefault('html', 'subscriber'),
+						'state' => (int) NewsletterHelperData::getDefault('state', 'subscriber'),
 						'created_on' => stripslashes($item['created']),
 					);
 					
@@ -171,8 +171,8 @@ class NewsletterModelImportCommon
 					
 				} catch(Exception $e) {
 					
-					LogHelper::addError(
-						'COM_NEWSLETTER_ASSIGN_FAILED', LogHelper::CAT_SUBSCRIPTION, array(
+					NewsletterHelperLog::addError(
+						'COM_NEWSLETTER_ASSIGN_FAILED', NewsletterHelperLog::CAT_SUBSCRIPTION, array(
 						'Error' => $e->getMessage(),
 						'Email' => $subscriber['email'],
 						'List' => $newsletter->name

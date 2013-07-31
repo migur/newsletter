@@ -55,7 +55,7 @@ try {
 		}
 
 	// Add translations used in JavaScript
-	JavascriptHelper::requireTranslations();
+	NewsletterHelperJavascript::requireTranslations();
 
 	NewsletterHelperPlugin::prepare();
 

@@ -57,8 +57,8 @@ class NewsletterViewNewsletter extends MigurView
 		$isNew = empty($nId);
 		
 		if (
-			( $isNew && !AclHelper::actionIsAllowed('newsletter.add')) ||
-			(!$isNew && !AclHelper::actionIsAllowed('newsletter.edit'))
+			( $isNew && !NewsletterHelperAcl::actionIsAllowed('newsletter.add')) ||
+			(!$isNew && !NewsletterHelperAcl::actionIsAllowed('newsletter.edit'))
 		) {
 			$msg = $isNew? 'JLIB_APPLICATION_ERROR_CREATE_RECORD_NOT_PERMITTED' : 'JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED';
 			JFactory::getApplication()->redirect(
@@ -79,9 +79,9 @@ class NewsletterViewNewsletter extends MigurView
 		
 		$this->assign('isUpdateAllowed', $isUpdateAllowed);
 		
-		JavascriptHelper::addStringVar('isUpdateAllowed', (int) $isUpdateAllowed);
+		NewsletterHelperJavascript::addStringVar('isUpdateAllowed', (int) $isUpdateAllowed);
 		
-		JavascriptHelper::addObject(
+		NewsletterHelperJavascript::addObject(
 				'comParams',
 				JComponentHelper::getParams('com_newsletter')->toArray() //array('autosaver' => array('on' => true))
 		);
@@ -90,7 +90,7 @@ class NewsletterViewNewsletter extends MigurView
 		
 		// Let's add J! profile
 		$smtpp = $smtpModel->loadJoomla();
-		JavascriptHelper::addObject(
+		NewsletterHelperJavascript::addObject(
 				'joomlaDe',
 				JComponentHelper::getParams('com_newsletter')->toArray() //array('autosaver' => array('on' => true))
 		);
@@ -100,7 +100,7 @@ class NewsletterViewNewsletter extends MigurView
 		$this->assign('smtpprofiles', $smtpprofilesManager->getAllItems('withDefault'));
 
 		// get all the Extensions
-		$this->modules = MigurModuleHelper::getSupported(array('withoutInfo'=>true));
+		$this->modules = NewsletterHelperModule::getSupported(array('withoutInfo'=>true));
 		$this->plugins = MigurPluginHelper::getSupported(array('withoutInfo'=>true), 'newsletter.html');
 
 		// get the Extensions used in this newsletter
@@ -176,9 +176,9 @@ class NewsletterViewNewsletter extends MigurView
 			$this->addToolbar();
 		}
 
-		$this->downloads = (array)DownloadHelper::getByNewsletterId($nId);
+		$this->downloads = (array)NewsletterHelperDownload::getByNewsletterId($nId);
 
-		JavascriptHelper::addObject('dataStorage',
+		NewsletterHelperJavascript::addObject('dataStorage',
 
             (object)array(
                 'htmlTemplate' => (object)array(
@@ -188,7 +188,7 @@ class NewsletterViewNewsletter extends MigurView
                 'templates' => (array)$this->templates->items,
                 'modules' => (array)$this->modules,
                 'plugins' => (array)$this->plugins,
-				'newsletter' => NewsletterHelper::get($nId)
+				'newsletter' => NewsletterHelperNewsletter::get($nId)
             )
 			
         );
@@ -233,7 +233,7 @@ class NewsletterViewNewsletter extends MigurView
 		
 			// We show tutorials only for users with valid license
 			if ($status->isValid) {
-				$helpLink = 'http://migur.com/support/documentation/migur-newsletter/newsletters?version=' . NewsletterHelper::getManifest()->version;
+				$helpLink = 'http://migur.com/support/documentation/migur-newsletter/newsletters?version=' . NewsletterHelperNewsletter::getManifest()->version;
 				$bar->appendButton(
 					'Custom', 
 					'<a class="btn btn-small" href="'.$helpLink.'" target="_blank">'.
@@ -249,8 +249,8 @@ class NewsletterViewNewsletter extends MigurView
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
 
 		if ($this->isUpdateAllowed && (
-				( $isNew && AclHelper::actionIsAllowed('newsletter.add' )) ||
-				(!$isNew && AclHelper::actionIsAllowed('newsletter.edit')) 
+				( $isNew && NewsletterHelperAcl::actionIsAllowed('newsletter.add' )) ||
+				(!$isNew && NewsletterHelperAcl::actionIsAllowed('newsletter.edit'))
 			)
 		) {
 			$bar->appendButton('Separator', null, '50');
@@ -269,7 +269,7 @@ class NewsletterViewNewsletter extends MigurView
 	protected function setDocument()
 	{
 		$isNew = (!JRequest::getInt('newsletter_id', false) );
-		JavascriptHelper::addStringVar('isNew', (int)$isNew);
+		NewsletterHelperJavascript::addStringVar('isNew', (int)$isNew);
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_NEWSLETTER_CREATING') : JText::sprintf('COM_NEWSLETTER_NEWSLETTERS_EDIT_TITLE', $this->newsletter->name));
 		

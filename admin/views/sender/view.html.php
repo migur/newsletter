@@ -78,9 +78,9 @@ class NewsletterViewSender extends MigurView
 				'listDirn' => $modelLists->getState('list.direction')
 		);
 		
-		$defaultMailbox = MailHelper::getDefaultMailbox('idOnly');
+		$defaultMailbox = NewsletterHelperMail::getDefaultMailbox('idOnly');
 		
-		JavascriptHelper::addStringVar('defaultMailbox', $defaultMailbox);
+		NewsletterHelperJavascript::addStringVar('defaultMailbox', $defaultMailbox);
 
 		if ($defaultMailbox < 1){
 			JFactory::getApplication()->enqueueMessage(JText::_('DEFAULT_MAILBOX_PROFILE_UNDEFINED'), 'warning');

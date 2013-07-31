@@ -63,7 +63,7 @@ class NewsletterViewAutomailing extends MigurView
 		$model = $this->getModel();
 		$automailing = $model->getItem();
 		$this->assignRef('automailing', $automailing);
-		JavascriptHelper::addObject('automailing', $automailing);
+		NewsletterHelperJavascript::addObject('automailing', $automailing);
 		$this->assign('form', $this->get('form', 'automailing'));
 		
 		
@@ -102,7 +102,7 @@ class NewsletterViewAutomailing extends MigurView
 			$usedLists = $targetsModel->getRelatedLists($aid);
 			
 			// Diff the records
-			$usedListIds = DataHelper::getColumnData($usedLists, 'list_id');
+			$usedListIds = NewsletterHelperData::getColumnData($usedLists, 'list_id');
 			
 			foreach($allLists as $idx => $item) {
 				if (in_array($item->list_id, $usedListIds)) {
@@ -166,7 +166,7 @@ class NewsletterViewAutomailing extends MigurView
 			JText::_('COM_NEWSLETTER_AUTOMAILING_EDIT_TITLE'), 
 		'article.png');
 		
-		JavascriptHelper::addStringVar('isNew', (int)$isNew);
+		NewsletterHelperJavascript::addStringVar('isNew', (int)$isNew);
 		
 		$document = JFactory::getDocument();
 		

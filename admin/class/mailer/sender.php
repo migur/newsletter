@@ -23,7 +23,7 @@ jimport('joomla.error.log');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurMailerSender extends PHPMailer
+class NewsletterClassMailerSender extends PHPMailer
 {
 	protected $_errors = array();
 	
@@ -231,7 +231,7 @@ class MigurMailerSender extends PHPMailer
 					$debugArray[$prop->name] = $this->{$prop->name};
 				}
 				
-				NewsletterHelperLog::addDebug('Dryrun mail sending', LogHelper::CAT_MAILER, $debugArray);
+				NewsletterHelperLog::addDebug('Dryrun mail sending', NewsletterHelperLog::CAT_MAILER, $debugArray);
 			}	
 			
 		} catch(Exception $e) {
@@ -241,7 +241,7 @@ class MigurMailerSender extends PHPMailer
 				$this->setError($msg);
 			}	
 			
-			LogHelper::addDebug('Mailer.Sender error.', LogHelper::CAT_MAILER, $this->getErrors());
+			NewsletterHelperLog::addDebug('Mailer.Sender error.', NewsletterHelperLog::CAT_MAILER, $this->getErrors());
 			
 			return false;
 		}

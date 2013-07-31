@@ -3,10 +3,11 @@
 defined('_JEXEC') or die;
 
 $isAuthorised =
-			( $this->isNew && AclHelper::actionIsAllowed('list.add')) || 
-			(!$this->isNew && AclHelper::actionIsAllowed('list.edit'));
+			( $this->isNew && NewsletterHelperAcl::actionIsAllowed('list.add')) ||
+			(!$this->isNew && NewsletterHelperAcl::actionIsAllowed('list.edit'));
 ?>
 
+<<<<<<< HEAD
 	
 <div id="modal-listevent" class="modal hide fade">
 	<div class="modal-header">
@@ -75,6 +76,36 @@ $isAuthorised =
             </div>
 
         </div>
+
+=======
+<fieldset id="tabs">
+    <legend><?php echo JFactory::getDocument()->getTitle(); ?></legend>
+    <form class="form-validate" method="POST" action="<?php echo JURI::base(); ?>index.php?option=com_newsletter&amp;view=list&amp;tmpl=component&amp;<?php echo $this->session->getName().'='.$this->session->getId(); ?>&amp;<?php echo JUtility::getToken();?>=1" enctype="multipart/form-data" id="listForm" name="listForm">
+    <?php
+        echo JToolBar::getInstance('multitab-toolbar')->render();
+        echo JHtml::_('tabs.start', 'tabs-list', array('startOffset'=> $this->activeTab));
+        echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_OVERVIEW'), 'tab-overview');
+        echo $this->loadTemplate('overview', '');
+		
+		if (
+			( $this->isNew && NewsletterHelperAcl::actionIsAllowed('list.add')) ||
+			(!$this->isNew && NewsletterHelperAcl::actionIsAllowed('list.edit'))
+		) {
+			echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_IMPORT'), 'tab-import');
+			echo $this->loadTemplate('import', '');
+			echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_EXCLUDE'), 'tab-exclude');
+			echo $this->loadTemplate('exclude', '');
+		}
+		
+        echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_SUBSCRIBERS'), 'tab-subscribers');
+        echo $this->loadTemplate('subscribers', '');
+        echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_UNSUBSCRIBED'), 'tab-unsubscribed');
+        echo $this->loadTemplate('unsubscribed', '');
+        echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_ADVANCED'), 'tab-advanced');
+        echo $this->loadTemplate('advanced', '');
+        echo JHtml::_('tabs.end');
+    ?>
+>>>>>>> development
 
         <input type="hidden" name="option" value="com_newsletter" />
         <input type="hidden" name="view" value="list" />

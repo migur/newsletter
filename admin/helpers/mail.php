@@ -54,7 +54,7 @@ class NewsletterHelperMail
 		if (empty($letter->params['encoding'])) {
 			$letter->params['encoding'] = 'utf-8';
 		}
-		PlaceholderHelper::setPlaceholders($letter->params);
+		NewsletterHelperPlaceholder::setPlaceholders($letter->params);
 
 		$profileEntity = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$profileEntity->load((int)$letter->smtp_profile_id);
@@ -235,10 +235,3 @@ class NewsletterHelperMail
 		return $db->loadObject();
 	}
 }
-
-/**
- * Legacy support for class name
- * Should be removed after 12.07
- */
-class MailHelper extends NewsletterHelperMail
-{}

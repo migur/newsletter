@@ -74,7 +74,7 @@ class NewsletterModelFile extends MigurModel
 
 			$filepath = JPath::clean(JPATH_COMPONENT . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . strtolower($file['name']));
 
-			if (!MediaHelper::canUpload($file, $err)) {
+			if (!NewsletterHelperMedia::canUpload($file, $err)) {
 				NewsletterHelperLog::addError(
 					'COM_NEWSLETTER_ERROR_CANNOT_UPLOAD_FILE', 
 					NewsletterHelperLog::CAT_UPLOAD,
