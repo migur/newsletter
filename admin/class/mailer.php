@@ -86,30 +86,6 @@ class NewsletterClassMailer extends JObject
 	}
 
 	/**
-	 * Render each module from the list.
-	 *
-	 * @param <type> $params - the array(object(widgetId, moduleName, native))
-	 * @return <type>
-	 */
-	public function renderModules($params)
-	{
-		NewsletterHelperModule::renderModule($module);
-
-		// If can't determine the type of doc...
-		if (empty($params['type']) || !in_array($params['type'], array('html', 'plain'))) {
-			$this->setError('Type is not defined');
-			return false;
-		}
-
-		$document = NewsletterClassMailerDocument::factory($params['type'], $params);
-		$data = $document->render(false, $params);
-		unset($document);
-
-		return $data;
-	}
-
-	
-	/**
 	 * Renders subject. As a plain-type template. 
 	 * Available the same placeholders as for mail body.
 	 * 

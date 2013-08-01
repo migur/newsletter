@@ -63,12 +63,6 @@ class JFormFieldTimeinterval extends JFormField
 		}
 		
 
-		// To avoid user's confusion, readonly="true" should imply disabled="true".
-		if ((string) $this->element['readonly'] == 'true' || (string) $this->element['disabled'] == 'true') {
-			$attr .= ' disabled="disabled"';
-		}
-
-
 		// Initialize JavaScript field attributes.
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/fields/timeinterval.js');
 

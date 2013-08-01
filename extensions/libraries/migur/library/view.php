@@ -61,7 +61,7 @@ class MigurView extends JViewLegacy
         if ($layout == '') {
             if (empty($tpl)) {
 
-                return JError::raiseError(500, JText::sprintf('JLIB_APPLICATION_ERROR_LAYOUTFILE_NOT_FOUND', $file));
+                return JError::raiseError(500, JText::sprintf('JLIB_APPLICATION_ERROR_LAYOUTFILE_NOT_FOUND', $tpl));
             } else {
 
                 $file = $tpl;

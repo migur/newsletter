@@ -68,7 +68,7 @@ img.current-progress {
 
 .upload-flash .progress {
 	background: url(../images/progress.gif) no-repeat;
-	background-position: +50% 0;
+	background-position: 50% 0;
 	margin-right: 0.5em;
 	vertical-align: middle;
 }

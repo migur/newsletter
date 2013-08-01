@@ -48,7 +48,7 @@ class NewsletterHelperPlaceholder
 		$namespace = strtolower($namespace);
 
 		if (empty($name) || empty($namespace)) {
-			Jerror::throwError('The name or namespace of placeholder is missing');
+			throw new Exception('The name or namespace of placeholder is missing');
 		}
 
 		/*

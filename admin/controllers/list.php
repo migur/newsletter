@@ -80,7 +80,7 @@ class NewsletterControllerList extends JControllerForm
 
 			return true;
 		} else {
-			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($recordId, $key), false));
+			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend(), false));
 		}
 
 		return false;
@@ -665,7 +665,9 @@ class NewsletterControllerList extends JControllerForm
 
 			$dbo = JFactory::getDbo();
 			$dbo->transactionStart();
-			
+
+			$res = array();
+
             foreach ($emails as $row) {
 
                 $user = $subscriber->getItem(array('email' => $row['email']));

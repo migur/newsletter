@@ -133,15 +133,15 @@ class NewsletterTableHistory extends JTable
         
         // Need to set it to NULL if it is empty (need for FKs)
         if (isset($this->newsletter_id) && empty($this->newsletter_id)) {
-            $src->newsletter_id = null;
+			$this->newsletter_id = null;
         }
 
         if (isset($this->subscriber_id) && empty($this->subscriber_id)) {
-            $src->subscriber_id = null;
+			$this->subscriber_id = null;
         }
 
         if (isset($this->list_id) && empty($this->list_id)) {
-            $src->list_id = null;
+			$this->list_id = null;
         }
         
         return parent::store($updateNulls);
