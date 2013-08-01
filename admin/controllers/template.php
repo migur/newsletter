@@ -39,15 +39,6 @@ class NewsletterControllerTemplate extends JControllerForm
 		return true;
 	}
 
-	
-	public function add() {
-		
-		$this->input->set('layout', 'defailt');
-		
-		return parent::add();
-	}
-	
-	
 	/**
 	 * Save the configuration
 	 *
@@ -63,12 +54,10 @@ class NewsletterControllerTemplate extends JControllerForm
 		JRequest::setVar('jform', $jform, 'post');
 
 		if (parent::save()) {
-			return true;
+			return;
 		} else {
 			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($recordId, $key) . '&tmpl=component', false));
 		}
-
-		return false;
 	}
 
 	/**
@@ -90,7 +79,7 @@ class NewsletterControllerTemplate extends JControllerForm
 			'title' => $standard->information['name'] . ' (custom)',
 			'params' => '{}'
 		));
-		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
+		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
 	}
 	
 	

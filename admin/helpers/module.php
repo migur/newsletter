@@ -63,7 +63,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 	 * @param	object	A module object.
 	 * @param	array	An array of attributes for the module (probably from the XML).
 	 *
-	 * @return	strign	The HTML content of the module output.
+	 * @return	string	The HTML content of the module output.
 	 * @since   1.0
 	 */
 	public static function renderModule($module, $attribs = array())

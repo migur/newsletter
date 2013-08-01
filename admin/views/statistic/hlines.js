@@ -259,7 +259,7 @@ Migur.chart.hline = {
 					height: 0},
 
 				bottomOx: {
-					height: 0},
+					height: 0}
 			}	
 		};
 		

@@ -15,8 +15,7 @@ jimport('joomla.application.component.controllerform');
 
 class NewsletterControllerList extends JControllerForm
 {
-	protected $view_list = 'subscribers';
-	
+
 	/**
 	 *
 	 * Class Constructor
@@ -71,57 +70,36 @@ class NewsletterControllerList extends JControllerForm
 	 */
 	public function upload()
 	{
-		$listId = JRequest::getInt('list_id', null);
-		$callback = JRequest::getString('callback', '');
-		
-		if (empty($listId)) {
-			throw new Exception (JText::_('COM_NEWSLETTER_LIST_ID_ABSENT'));
+
+		$listId = JRequest::getInt('list_id', 0);
+		$subtask = JRequest::getString('subtask', 'import');
+
+		if ($listId > 0) {
+
+			$uploader = JModel::getInstance('file', 'NewsletterModel');
+			$data = $uploader->upload(array(
+					'overwrite' => true,
+					'filedataName' => 'Filedata-' . $subtask
+				));
+
+			if (!empty($data['file'])) {
+
+				// get the column names from uploaded file
+				$arr = file($data['file']['filepath']);
+
+				$data['fields'] = explode(',', $arr[0]);
+			}
 		}
 
-		$app = JFactory::getApplication();
-		
-		$uploader = MigurModel::getInstance('file', 'NewsletterModel');
-		$data = $uploader->upload(array(
-			'overwrite' => true,
-			'filedataName' => 'Filedata'
-		));
-
-		$msg = $data['error'];
+		if (empty($data)) {
+			$data = array();
+		}
 
 		$sess = JFactory::getSession();
-		
-		if ($data['status'] == 1 && !empty($data['file'])) {
+		$sess->set('list.' . $listId . '.file.uploaded', $data);
 
-			$data = array(
-				'status'   => $data['status'],
-				'error'    => $data['error'],
-				'file' => array(
-					'name'     => $data['file']['name'],
-					'type'     => $data['file']['type'],
-					'tmp_name' => $data['file']['tmp_name'],
-					'size'     => $data['file']['size'],
-					'error'    => $data['file']['error'],
-					'filepath' => $data['file']['filepath']
-				)	
-			);
-
-			// These data are for further manipulations with file
-			$sess->set('com_newsletter.list.'.$listId.'.file.uploaded', $data);
-		}	
-
-		// These data will be passed into JS importer onUpload
-		$sess->set('com_newsletter.uploader.file', $data);
 		
-		$this->setRedirect(JRoute::_('index.php?'.implode('&', array(
-			'option=com_newsletter',
-			'view=uploader',
-			'tmpl=component',
-			'params[task]=list.upload',
-			'params[callback]='.$callback,
-			'params[list_id]='.$listId,
-			'message='.$msg
-		)), false));
-		
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($listId, 'list_id') . '&subtask=' . $subtask, false));
 		return;
 	}
 
@@ -142,9 +120,9 @@ class NewsletterControllerList extends JControllerForm
 		
 		if (JRequest::getMethod() == "POST") {
 
-			$subscriber  = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
-			$newsletter  = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
-			$listManager = MigurModel::getInstance('List', 'NewsletterModel');
+			$subscriber  = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$newsletter  = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+			$listManager = JModel::getInstance('List', 'NewsletterModel');
 			
 			$subscribers = JRequest::getVar('cid', array(), 'post');
 			$lists = json_decode(JRequest::getVar('list_id', array(), 'post'));
@@ -227,7 +205,7 @@ class NewsletterControllerList extends JControllerForm
 		
 		if (JRequest::getMethod() == "POST") {
 
-			$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
 			$subscribers = JRequest::getVar('cid', null, 'post');
 			$lists = json_decode(JRequest::getVar('list_id', null, 'post'));
@@ -336,14 +314,11 @@ class NewsletterControllerList extends JControllerForm
 		$mapping = $settings->fields;
 
 		$sess = JFactory::getSession();
-		
-		$file = $sess->get('com_newsletter.list.' . $currentList . '.file.uploaded', array());
+		$file = $sess->get('list.' . $currentList . '.file.uploaded', array());
 
 		$filename = $file['file']['filepath'];
 		$statePath = 'com_newsletter.'.md5('list.'.$currentList.'import.file.'.$filename);
-
-		//$app->setUserState($statePath.'.trololo101', 'facepalm');
-
+		
 		// If there is no extarnal offset then use internal from session
 		if (!is_numeric($offset)) {
 			$offset = $app->getUserState($statePath.'.offset', 0);
@@ -410,14 +385,13 @@ class NewsletterControllerList extends JControllerForm
 
 			$total++;
 		}
-
+		
 		// Store seek for further requests and close file
 		$app->setUserState($statePath.'.seek', ftell($handle));
+		fclose($handle);
 
-		
-		
 		// Let's import it all!
-		$list = MigurModel::getInstance('List', 'NewsletterModel');
+		$list = JModel::getInstance('List', 'NewsletterModel');
 		$res = $list->importCollection(
 			$currentList,
 			$collection, 
@@ -426,7 +400,7 @@ class NewsletterControllerList extends JControllerForm
 				'autoconfirm' => true,
 				'sendRegmail' => false
 			));
-		
+
 		if (!empty($res['errors'])) {
 			NewsletterHelperNewsletter::jsonError('Import failed!', array(
 				'fetched'   => $total,
@@ -472,8 +446,8 @@ class NewsletterControllerList extends JControllerForm
 		$app->setUserState($statePath.'.assigned', 0);
 		$app->setUserState($statePath.'.alreadyInList', 0);
 
-		//unlink($file['file']['filepath']);
-		//$sess->clear('com_newsletter.list.' . $currentList . '.file.uploaded');
+		unlink($file['file']['filepath']);
+		$sess->clear('list.' . $currentList . '.file.uploaded');
 
 		$res = array(
 			'fetched'   => $total,
@@ -528,7 +502,7 @@ class NewsletterControllerList extends JControllerForm
 		
 		if ($subtask == 'lists') {
 
-			$list = MigurModel::getInstance('list', 'newsletterModel');
+			$list = JModel::getInstance('list', 'newsletterModel');
 
 			$subscribers = array();
 
@@ -541,7 +515,7 @@ class NewsletterControllerList extends JControllerForm
 				}
 			}
 
-			$mList = MigurModel::getInstance('List', 'NewsletterModel');
+			$mList = JModel::getInstance('List', 'NewsletterModel');
 			$total = count($subscribers);
 			
 			$dbo = JFactory::getDbo();
@@ -577,7 +551,7 @@ class NewsletterControllerList extends JControllerForm
             $mapping = $settings->fields;
 
 			$sess = JFactory::getSession();
-			$file = $sess->get('com_newsletter.list.' . $currentList . '.file.uploaded', array());
+			$file = $sess->get('list.' . $currentList . '.file.uploaded', array());
 
             $filename = $file['file']['filepath'];
             $statePath = 'com_newsletter.'.md5('list.'.$currentList.'exclude.file.'.$filename);
@@ -632,8 +606,8 @@ class NewsletterControllerList extends JControllerForm
             $app->setUserState($statePath.'.seek', ftell($handle));
             fclose($handle);
 
-            $subscriber = MigurModel::getInstance('subscriber', 'newsletterModel');
-            $mList = MigurModel::getInstance('List', 'NewsletterModel');
+            $subscriber = JModel::getInstance('subscriber', 'newsletterModel');
+            $mList = JModel::getInstance('List', 'NewsletterModel');
 
 			$dbo = JFactory::getDbo();
 			$dbo->transactionStart();
