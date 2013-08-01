@@ -148,7 +148,7 @@ class plgSystemMiguruserreg extends JPlugin
 				// Set message and add some logs
 				if($res) {
 					$message =
-						JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name) . ' ' .
+						JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $user['name']) . ' ' .
 						JText::_('COM_NEWSLETTER_YOU_WILL_NEED_CONFIRM_SUBSCRIPTION');
 				}
 			}		

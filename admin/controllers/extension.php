@@ -52,7 +52,7 @@ class NewsletterControllerExtension extends JControllerForm
 
 			return true;
 		} else {
-			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($recordId, $key), false));
+			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend(), false));
 		}
 
 		return false;

@@ -175,7 +175,7 @@ class NewsletterModelImportCommon
 						'COM_NEWSLETTER_ASSIGN_FAILED', NewsletterHelperLog::CAT_SUBSCRIPTION, array(
 						'Error' => $e->getMessage(),
 						'Email' => $subscriber['email'],
-						'List' => $newsletter->name
+						'List' => $lid
 					));
 					
 					$errors++;
@@ -217,7 +217,7 @@ class NewsletterModelImportCommon
 	public function isValid()
 	{
 		// TODO deprecated since 12.1 Use PHP Exception
-		JError::throwError('isValid should be implemented (' . $this->getName() . ')');
+		throw new Exception('isValid should be implemented (' . $this->getName() . ')');
 	}
 
 	public function validateTable($name, $needed)
