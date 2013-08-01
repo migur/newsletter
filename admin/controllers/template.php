@@ -61,12 +61,10 @@ class NewsletterControllerTemplate extends JControllerForm
 					break;
 			}
 
-			return true;
+			return;
 		} else {
-			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($recordId, $key) . '&tmpl=component', false));
+			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend() . '&tmpl=component', false));
 		}
-
-		return false;
 	}
 
 	/**

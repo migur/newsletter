@@ -324,12 +324,4 @@ class NewsletterModelQueues extends JModelList
 			'created' => date('Y-m-d H:i:s'),
 			'state'   => 1)); 
 	}
-	
-	public function isMailExist() 
-	{
-		return 
-			$this->getTable()->load(array(
-				'newsletter_id' => $newsletterId,
-				'subscriber_id' => $item['subscriber_id']));
-	}
 }

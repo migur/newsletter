@@ -240,11 +240,6 @@ class NewsletterClassMailerProtocolImapLib extends BounceMailHandler
    * @return boolean
    */
   function openMailbox() {
-    // before starting the processing, let's check the delete flag and do global deletes if true
-    if ( trim($this->deleteMsgDate) != '' ) {
-      //echo "processing global delete based on date of " . $this->deleteMsgDate . "<br />";
-      $this->globalDelete($nameRaw);
-    }
     // disable move operations if server is Gmail ... Gmail does not support mailbox creation
     if ( stristr($this->mailhost,'gmail') ) {
       $this->moveSoft = false;
