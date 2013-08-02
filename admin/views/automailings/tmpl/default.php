@@ -54,7 +54,7 @@ defined('_JEXEC') or die;
 									</td>
 									<td>
 										<a href="<?php echo JRoute::_('index.php?option=com_newsletter&task=automailing.edit&tmpl=component&automailing_id='.(int) $item->automailing_id); ?>"
-										   rel="{handler: 'iframe', size: {x: 820, y: 500} }"
+										   rel="{handler: 'iframe', size: {x: 820, y: 480} }"
 										   class="modal" >
 											<?php echo $this->escape($item->automailing_name); ?>
 										</a>
@@ -82,7 +82,7 @@ defined('_JEXEC') or die;
         <td style="vertical-align: top;">
             <?php echo JHtml::_('tabs.start', 'prewiew'); ?>
             <?php echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PREVIEW'), 'tab-preview'); ?>
-                <iframe id="preview-container" frameBorder="0"></iframe>
+                <iframe id="preview-container"></iframe>
             <?php echo JHtml::_('tabs.end'); ?>
         </td>
     </tr>
