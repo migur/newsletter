@@ -53,7 +53,7 @@ class NewsletterViewAutomailings extends MigurView
 		}
 
 		$model = $this->getModel('automailings');
-		
+
 		$amList = (object) array(
 				'items' => $model->getItems(),
 				'state' => $model->getState(),
@@ -61,16 +61,16 @@ class NewsletterViewAutomailings extends MigurView
 				'listDirn' => $model->getState('list.direction')
 		);
 		$this->assignRef('automailings', $amList);
-		
+
 		$pagination = $model->getPagination();
 		$this->assignRef('pagination', $pagination);
-		
+
 		$this->setDocument();
-		
+
 		parent::display($tpl);
 	}
 
-	
+
 	/**
 	 * Add the page title and toolbar.
 	 *
@@ -89,7 +89,7 @@ class NewsletterViewAutomailings extends MigurView
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
-	
+
 	/**
 	 * Method to set up the document properties
 	 *
@@ -103,6 +103,6 @@ class NewsletterViewAutomailings extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/automailings/automailings.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/filterpanel.js');
-		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/search.js');		
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/search.js');
 	}
 }

@@ -69,7 +69,7 @@ class NewsletterViewDashboard extends MigurView
 			'checkJoomla',
 			'checkImap',
 			'checkLogs'));
-		
+
 		$this->addToolbar();
 
 		$stat = MigurModel::getInstance('Queues', 'NewsletterModel')->getSummary();
@@ -93,7 +93,7 @@ class NewsletterViewDashboard extends MigurView
 					array('rssurl' => JRoute::_('http://migur.com/blog?format=feed&type=rss'))
 			)
 		);
-		
+
 		$this->info = NewsletterHelperNewsletter::getCommonInfo();
 
 		$this->setStatisticsData();
@@ -116,10 +116,10 @@ class NewsletterViewDashboard extends MigurView
 	protected function addToolbar()
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_DASHBOARD_TITLE'), 'article.png');
-		$bar = JToolBar::getInstance();
+		$bar = MigurToolbar::getInstance();
 		$bar->appendButton('Link', 'alert', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
 		$bar->appendButton('Separator');
-		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', NewsletterHelperSupport::getResourceUrl('mailing', 'general'));
+		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', NewsletterHelperSupport::getResourceUrl('com-newsletter/mailing/general'));
 		JToolBarHelper::custom('', 'progress', '', '', false);
 		$bar->appendButton('MigurQueue', 'queue');
 

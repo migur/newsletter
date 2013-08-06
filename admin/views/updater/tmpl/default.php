@@ -10,13 +10,13 @@ defined('_JEXEC') or die;
         <dt>
             <?php echo $this->ssForm->getLabel('name'); ?>
         </dt>
-        <dd> 
+        <dd>
             <?php echo $this->ssForm->getInput('name'); ?>
         </dd>
-        <dt> 
+        <dt>
             <?php echo $this->ssForm->getLabel('email'); ?>
         </dt>
-        <dd> 
+        <dd>
             <?php echo $this->ssForm->getInput('email'); ?>
         </dd>
         <dt>
@@ -30,18 +30,18 @@ defined('_JEXEC') or die;
 
 
     <div class="buttons-container">
-            <?php echo JToolBar::getInstance('updater-toolbar')->render(); ?>
+            <?php echo MigurToolbar::getInstance('updater-toolbar')->render(); ?>
     </div>
 
 
     <div>
             <?php echo $this->ssForm->getInput('subscriber_id'); ?>
             <?php echo $this->ssForm->getInput('confirmed'); ?>
-		
+
             <input type="hidden" name="subscriber_id" value="<?php echo $this->ssForm->getValue('subscriber_id'); ?>" />
             <input type="hidden" name="task" value="" />
             <?php echo JHtml::_('form.token'); ?>
     </div>
 
 </form>
-</fieldset>	
+</fieldset>

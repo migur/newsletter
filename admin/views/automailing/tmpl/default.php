@@ -4,7 +4,7 @@ defined('_JEXEC') or die;
 ?>
 
 <fieldset class="automailing-new">
-<legend><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING'); ?></legend>	
+<legend><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING'); ?></legend>
 
 	<form name="automailingForm" method="POST" id="form-automailing" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
 
@@ -25,7 +25,7 @@ defined('_JEXEC') or die;
 
 	<div class="clr"></div>
 	<div id="automailing-wrapper">
-		<?php echo JToolBar::getInstance('automailing')->render(); ?>
-	</div>	
+		<?php echo MigurToolbar::getInstance('automailing')->render(); ?>
+	</div>
 
 </fieldset>

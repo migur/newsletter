@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
                 <legend><?php echo JText::_('COM_NEWSLETTER_AUTOMAILINGS'); ?></legend>
 
                 <fieldset class="filter-bar" >
-                    <?php echo JToolBar::getInstance('automailings')->render(); ?>
+                    <?php echo MigurToolbar::getInstance('automailings')->render(); ?>
                     <div id="automailings-filter-panel-control" class="filter-panel-control"></div>
                     <div class="clr"></div>
                     <div id="automailings-filter-panel" class="filter-panel">
