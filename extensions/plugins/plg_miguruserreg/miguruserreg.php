@@ -109,8 +109,7 @@ class plgSystemMiguruserreg extends JPlugin
 		// Get models
 		$subscriberModel = MigurModel::getInstance('Subscriber', 'NewsletterModel');
 		$listModel = MigurModel::getInstance('List', 'NewsletterModel');
-		
-		// Just for creation of a uid-sid relation 
+		// Just for creation of a uid-sid relation
 		$subscriber = $subscriberModel->getItem(array('user_id' => $user['id']));
 		$sid = $subscriber['subscriber_id'];
 		
