@@ -2,7 +2,7 @@
 <legend><?php echo JText::_('Newsletters'); ?></legend>
 <form id="form-newsletterslist" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters');?>" method="post" name="adminForm" >
 	<fieldset id="filter-bar" >
-            <?php echo JToolBar::getInstance('bounceds')->render(); ?>
+            <?php echo MigurToolbar::getInstance('bounceds')->render(); ?>
             <div id="newsletters-filter-panel-control" class="filter-panel-control"></div>
             <div class="clr"></div>
             <div id="newsletters-filter-panel" class="filter-panel">

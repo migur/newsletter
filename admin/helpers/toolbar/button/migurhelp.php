@@ -58,7 +58,7 @@ class JButtonMigurHelp extends JButton
 
 		return $html;
 	}
-	
+
 	/**
 	 * Get the button id
 	 *

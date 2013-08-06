@@ -3,7 +3,7 @@
 <form id="form-subscribers" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=conflicts&form=conflicts');?>" method="post" name="adminForm" >
     <fieldset id="wrapper">
         <legend><?php echo JText::_('COM_NEWSLETTER_CONFLICT_TITLE'); ?></legend>
-		<?php //echo JToolbar::getInstance()->render(); ?>
+		<?php //echo MigurToolbar::getInstance()->render(); ?>
 	<table class="sslist adminlist  table table-striped">
 		<thead>
 			<tr>
