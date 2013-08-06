@@ -2,7 +2,7 @@
 <legend><?php echo JText::_('Queues'); ?></legend>
 <form id="form-queueslist" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=queues');?>" method="post" name="adminForm" >
 	<fieldset id="filter-bar" >
-            <?php echo JToolBar::getInstance('queues')->render(); ?>
+            <?php echo MigurToolbar::getInstance('queues')->render(); ?>
             <div id="queues-filter-panel-control" class="filter-panel-control"></div>
             <div class="clr"></div>
             <div id="queues-filter-panel" class="filter-panel">
@@ -64,19 +64,19 @@
 					<?php echo $this->escape($item->created); ?>
 				</td>
 				<td>
-					<?php 
+					<?php
 						switch($item->state) {
-							case 0: echo '<span style="color:green">'.JText::_('COM_NEWSLETTER_QUEUE_SENT').'</span>'; break; 
+							case 0: echo '<span style="color:green">'.JText::_('COM_NEWSLETTER_QUEUE_SENT').'</span>'; break;
 							case 1: echo '<span style="color:gray">'.JText::_('COM_NEWSLETTER_QUEUE_INPROGRESS').'</span>'; break;
 							case 2: echo '<span style="color:red">'.JText::_('COM_NEWSLETTER_QUEUE_ERROR').'</span>'; break;
-						}		
+						}
 					?>
 				</td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>
 	</table>
-	</div>	
+	</div>
 	<div>
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="boxchecked" value="0" />

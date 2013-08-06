@@ -16,7 +16,7 @@
 			<button type="button" onclick="document.id('lists_filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 		</div>
 
-		<?php echo MigurToolBar::getInstance('lists')->render(); ?>
+		<?php echo MigurToolbar::getInstance('lists')->render(); ?>
 
 			</fieldset>
 			<div class="clr"> </div>

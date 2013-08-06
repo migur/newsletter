@@ -61,7 +61,7 @@ class NewsletterViewQueues extends MigurView
 			'checkJoomla',
 			'checkImap',
 			'checkLogs'));
-		
+
 		// We don't need toolbar in the modal window.
 		if ($this->getLayout() !== 'modal') {
 			$this->addToolbar();
@@ -76,7 +76,7 @@ class NewsletterViewQueues extends MigurView
 		$state = $model->getState();
 		$listOrder = $model->getState('list.ordering');
 		$listDirn = $model->getState('list.direction');
-                
+
 		$saveOrder = $listOrder == 'a.ordering';
 
 		$this->assignRef('items', $items);
@@ -102,7 +102,7 @@ class NewsletterViewQueues extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_QUEUE_TITLE'), 'article.png');
 
-		$bar = JToolBar::getInstance();
+		$bar = MigurToolbar::getInstance();
 		$bar->appendButton('Custom', '', 'preloader', '');
 		$bar->appendButton('Link', 'messaging', 'COM_NEWSLETTER_PROCESS_QUEUE', '#');
 		$bar->appendButton('Link', 'alert', 'COM_NEWSLETTER_PROCESS_BOUNCES', '#');

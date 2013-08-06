@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * @version	   $Id:  $
@@ -9,16 +9,17 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+
 class MigurComNewsletterBootstrap
 {
-	
+
 	/**
 	 * Load all constants needed in component
 	 */
-	static public function initEnvironment() 
+	static public function initEnvironment()
 	{
 		require_once 'constants.php';
-		
+
 		// import joomla controller library
 		jimport('joomla.application.component.controller');
 		jimport('joomla.application.component.view');
@@ -36,22 +37,22 @@ class MigurComNewsletterBootstrap
 		JLoader::import('helpers.module', COM_NEWSLETTER_PATH_ADMIN);
 	}
 
-	
+
 	/**
 	 * Init autoloading of a component
 	 */
-	static public function initAutoloading() 
+	static public function initAutoloading()
 	{
 		// Run autoloader
 		JLoader::import('helpers.autoload', dirname(__FILE__));
 		NewsletterHelperAutoload::setup();
 	}
 
-	
+
 	/**
 	 * Init the cacahe for the component
 	 */
-	static public function initCache() 
+	static public function initCache()
 	{
 		// Setup the cache
 		$cache = JFactory::getCache('com_newsletter');
@@ -59,21 +60,19 @@ class MigurComNewsletterBootstrap
 		$cache->setLifeTime(900); // cache to 5 min
 	}
 
-	
+
 	/**
 	 * Setup J! tools for usage with component's addons
 	 */
-	static public function initJoomlaTools() 
+	static public function initJoomlaTools()
 	{
 		// Add the paths to component's addons for J! tools.
 		JHtml::addIncludePath(
 			COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'html');
 
-		JToolbar::getInstance()->addButtonPath(
-			COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
-
-//		JToolbar::addGlobalButtonPath(
-//			COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
+		MigurToolbar::addGlobalButtonPath(
+			COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button'
+		);
 
 		JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'rules');
 		JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'tables');
@@ -84,22 +83,17 @@ class MigurComNewsletterBootstrap
 	/**
 	 * Setup J! tools for usage with component's addons
 	 */
-	static public function initJoomlaToolsSite() 
+	static public function initJoomlaToolsSite()
 	{
 		// Add the paths to component's addons for J! tools.
 		JHtml::addIncludePath(
-			COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'html');
-
-//		JToolbar::getInstance()->addButtonPath(
-//			COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
-
-//		JToolbar::addGlobalButtonPath(
-//			COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
+			COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'html'
+		);
 
 		JFormHelper::addRulePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'rules');
 		JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'tables');
 		JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models', 'NewsletterModel');
 		JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'entities', 'NewsletterModelEntity');
 	}
-	
+
 }

@@ -68,7 +68,7 @@ class NewsletterViewLogs extends MigurView
 		$listOrder = $model->getState('list.ordering');
 		$listDirn = $model->getState('list.direction');
 		$priorities = $model->getPriorities();
-		
+
 		$this->assignRef('items', $items);
 		$this->assignRef('pagination', $pagination);
 		$this->assignRef('state', $state);
@@ -77,7 +77,7 @@ class NewsletterViewLogs extends MigurView
 		$this->assignRef('saveOrder', $saveOrder);
 		$this->assignRef('categories', $categories);
 		$this->assignRef('priorities', $priorities);
-		
+
 		parent::display($tpl);
 	}
 
@@ -91,7 +91,7 @@ class NewsletterViewLogs extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_LOG_TITLE'), 'article.png');
 
-		$bar = JToolBar::getInstance('logs');
+		$bar = MigurToolbar::getInstance('logs');
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'logs.delete', false);
 
 		// Load the submenu.

@@ -4,7 +4,7 @@ defined('_JEXEC') or die;
 ?>
 
 <fieldset>
-<legend><?php echo JText::_('COM_NEWSLETTER_MAILBOX_PROFILE'); ?></legend>	
+<legend><?php echo JText::_('COM_NEWSLETTER_MAILBOX_PROFILE'); ?></legend>
     <form id="mailboxprofile-form" class="form-validate" name="mailboxprofileForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
         <dl>
         <?php foreach($this->ssForm->getFieldset() as $field) { ?>
@@ -20,7 +20,7 @@ defined('_JEXEC') or die;
         <div class="clr"></div>
 
         <div class="buttons-container">
-                <?php echo JToolBar::getInstance('mailbox-toolbar')->render(); ?>
+                <?php echo MigurToolbar::getInstance('mailbox-toolbar')->render(); ?>
         </div>
 
 

@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 
 /**
  * Content component helper.
- * 
+ *
  * To test:
  * NewsletterHelperLog::addDebug('Newsletter bebug', 'test', array('name1' => 'value1'));
  * NewsletterHelperLog::addMessage('Newsletter message', 'test', array('name2' => 'value2'));
@@ -24,39 +24,72 @@ defined('_JEXEC') or die;
  */
 class NewsletterHelperSupport
 {
-	static public $resourceUrl = 'administrator/index.php?option=com_newsletter&view=support';
-	
-	public static function getResourceUrl($category, $name = null, $anchor = null, $version = null, $options = array())
+
+    static public $resourceUrl = 'administrator/index.php?option=com_newsletter&view=support';
+
+    static public $resourceUrlRemote = COM_NEWSLETTER_SUPPORT_REMOTE_URL;
+
+	public static function getResourceUrl($name, $anchor = null, $version = null, $options = array())
 	{
 		$resourceUrl = '';
-		
-		if (!empty($category)) {
-			$resourceUrl .= '&category='.$category;
-		}	
 
-		if (!empty($name)) {
-			$resourceUrl .= '&name='.$name;
-		}	
+        if (!empty($options['localResource'])) {
 
-		if (!empty($version)) {
-			$resourceUrl .= '&version='.$category;
-		}	
+			list($category, $name) = explode('/', $name, 2);
 
-		// Add some params (dafault or provided)
-		$params = empty($options['params'])? array() : (array) $options['params'];
-		
-		if (empty($params['tmpl'])) {
-			$params['tmpl'] = 'component';
-		}	
-		
-		foreach($params as $name => $val) {
-			$resourceUrl .= '&'.$name.'='.$val;
-		}
-		
-		if (!empty($anchor)) {
-			$resourceUrl .= '#'.$anchor;
-		}	
-		
-		return JUri::root(). self::$resourceUrl . $resourceUrl;
-	}	
+            if (!empty($category)) {
+                $resourceUrl .= '&category='.$category;
+            }
+
+            if (!empty($name)) {
+                $resourceUrl .= '&name='.$name;
+            }
+
+            if (!empty($version)) {
+                $resourceUrl .= '&version='.$category;
+            }
+
+            // Add some params (dafault or provided)
+            $params = empty($options['params'])? array() : (array) $options['params'];
+
+            if (empty($params['tmpl'])) {
+                $params['tmpl'] = 'component';
+            }
+
+            foreach($params as $name => $val) {
+                $resourceUrl .= '&'.$name.'='.$val;
+            }
+
+            if (!empty($anchor)) {
+                $resourceUrl .= '#'.$anchor;
+            }
+
+            return JUri::root(). self::$resourceUrl . $resourceUrl;
+
+        } else {
+
+			$route = array();
+
+			if (!empty($name)) {
+				array_push($route, preg_replace('/[^0-9a-z]+\//', '-', strtolower($name)));
+			}
+
+			if (!empty($version)) {
+				array_push($route, preg_replace('/[^0-9a-z]+/', '-', strtolower($version)));
+			}
+
+			$path = implode('/', $route);
+
+			if (!empty($anchor)) {
+				$path .= '#' . preg_replace('/[^0-9a-z]+/', '-', strtolower($anchor));
+			}
+
+			return self::$resourceUrlRemote . '/' . $path;
+
+        }
+	}
+
+    function buildRemoteHelpPageRoute() {
+
+    }
 }

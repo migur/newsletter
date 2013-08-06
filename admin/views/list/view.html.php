@@ -47,17 +47,17 @@ class NewsletterViewList extends MigurView
 	public function display($tpl = null)
 	{
 		$app = JFactory::getApplication();
-		
+
 		$isNew = (!JRequest::getInt('list_id', false) );
-		
-		$model =            JModel::getInstance('lists', 'NewsletterModel');
-		$listModel =        JModel::getInstance('List', 'NewsletterModel');
-		$subscribersModel = JModel::getInstance('subscribers', 'NewsletterModel');
-		
+
+		$model =            MigurModel::getInstance('lists', 'NewsletterModel');
+		$listModel =        MigurModel::getInstance('List', 'NewsletterModel');
+		$subscribersModel = MigurModel::getInstance('subscribers', 'NewsletterModel');
+
 		$this->setModel($subscribersModel);
-		
+
 		$this->assign('list', $listModel->getItem());
-		
+
 		if (
 			( $isNew && !NewsletterHelperAcl::actionIsAllowed('list.add')) ||
 			(!$isNew && !NewsletterHelperAcl::actionIsAllowed('list.edit'))
@@ -65,18 +65,18 @@ class NewsletterViewList extends MigurView
 			$msg = $isNew? 'JLIB_APPLICATION_ERROR_CREATE_RECORD_NOT_PERMITTED' : 'JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED';
 			JFactory::getApplication()->redirect(
 				JRoute::_('index.php?option=com_newsletter&view=subscribers', false),
-				JText::_($msg), 
+				JText::_($msg),
 				'error');
 			return;
-		}	
-		
-		
+		}
+
+
 		//TODO: Bulk-code. Need to refactor
 
 		$listId = JRequest::getInt('list_id', 0);
-		
+
 		$activeTab = JRequest::getInt('activetab', 0);
-		
+
 		$subtask = 0;
 		switch(JRequest::getString('subtask', '')) {
 			case 'import':
@@ -90,9 +90,9 @@ class NewsletterViewList extends MigurView
 			default:
 				$subtask = 0;
 		}
-		
+
 		$this->assign('activeTab', $activeTab);
-		
+
 		NewsletterHelperJavascript::addStringVar('subtask', $subtask);
 
 
@@ -110,7 +110,7 @@ class NewsletterViewList extends MigurView
 
 		$modelSubs = new NewsletterModelSubscribers();
 		$modelSubs->setState('list.limit', 10);
-		
+
 		if (!empty($listId)) {
 			$this->subs = $modelSubs->getSubscribersByList(array(
 				'list_id' => JRequest::getInt('list_id')
@@ -123,7 +123,7 @@ class NewsletterViewList extends MigurView
 			$items = array();
 			$this->subs = array();
 		}
-		
+
 		$ss = (object) array(
 				'items' => $items,
 				'state' => $modelSubs->getState(),
@@ -163,8 +163,8 @@ class NewsletterViewList extends MigurView
 
 		if ($config->get('enable_flash', 1)) {
 
-			JHTML::stylesheet('media/com_newsletter/css/uploaders.css');
-			JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/list/uploaders.js");
+			NewsletterHelperView::addStyleSheet('media/com_newsletter/css/uploaders.css');
+			NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/uploaders.js');
 
 
 			$fileTypes = $config->get('image_extensions', 'bmp,gif,jpg,png,jpeg');
@@ -188,11 +188,11 @@ class NewsletterViewList extends MigurView
 			$typeString = '{ \'' . JText::_('COM_MEDIA_FILES', 'true') . ' (' . $displayTypes . ')\': \'' . $filterTypes . '\' }';
 		}
 
-		
+
 		if(!empty($listId)) {
 			$this->assign('events', $listModel->getEventsCollection($listId));
-		}	
-		
+		}
+
 		/*
 		 * Display form for FTP credentials?
 		 * Don't set them here, as there are other functions called before this one if there is any file write operation
@@ -209,19 +209,19 @@ class NewsletterViewList extends MigurView
 		$this->setStatisticsData();
 
         // Handle import plugins
-	
+
         $plgManager = NewsletterPluginManager::factory('import');
-		
+
         $res = $plgManager->trigger(array(
             'group' => 'list.import',
             'event' => 'onMigurImportShowIcon'
         ));
-        
+
         $this->assignRef('importPlugins', $res);
-        
+
 		// Set the document
 		$this->setDocument();
-		
+
 		parent::display($tpl);
 
 	}
@@ -236,15 +236,15 @@ class NewsletterViewList extends MigurView
 	{
 		$lid = JRequest::getInt('list_id', false);
 		$isNew = !$lid;
-		
-		$bar = JToolBar::getInstance('multitab-toolbar');
+
+		$bar = MigurToolbar::getInstance('multitab-toolbar');
 		if (
 			( $isNew && NewsletterHelperAcl::actionIsAllowed('list.add')) ||
 			(!$isNew && NewsletterHelperAcl::actionIsAllowed('list.edit'))
 		) {
 			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'list.apply', false);
 			$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'list.save', false);
-		}	
+		}
 		$bar->appendButton('Link', 'cancel', 'JTOOLBAR_CLOSE', 'index.php?option=com_newsletter&view=close&tmpl=component', false);
 
 		$bar = MigurToolBar::getInstance('import-toolbar');
@@ -264,41 +264,41 @@ class NewsletterViewList extends MigurView
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_LIST_CREATING') : JText::_('COM_NEWSLETTER_LIST_EDITING'));
 
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/list.css');
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/uploaders.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/list.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/uploaders.css');
 
-		$document->addScript(JURI::root() . $this->script);
-		
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
-		$document->addScript(JURI::root() . 'media/system/js/tabs.js');
+		NewsletterHelperView::addScript($this->script);
 
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-min.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.raphael-min.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.line-min.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.pie-min.js');
-		
-		$document->addScript(JURI::root() . "media/system/js/progressbar.js");
-		$document->addScript(JURI::root() . "media/system/js/swf.js");
-		$document->addScript(JURI::root() . 'media/system/js/uploader.js');
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/list.js");
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/submitbutton.js");
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/plugins.js");
-		//$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/list/eventwidget.js");
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/models/forms/list.js", true);
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('media/system/js/tabs.js');
 
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/storage.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-min.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.raphael.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.line.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.pie.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/g.bar.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-line.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/raphael-migur-pie.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/message.js');
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/iterativeajax.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-min.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.raphael-min.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.line-min.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.pie-min.js');
+
+		NewsletterHelperView::addScript('media/system/js/progressbar.js');
+		NewsletterHelperView::addScript('media/system/js/swf.js');
+		NewsletterHelperView::addScript('media/system/js/uploader.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/list.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/submitbutton.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/plugins.js');
+		//NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/eventwidget.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/forms/list.js', true);
+
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/storage.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-min.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.raphael.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.line.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.pie.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.bar.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-migur-line.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-migur-pie.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/message.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/iterativeajax.js');
 		// Add JS and create namespace for data
-		$document->addScript(JURI::root() . "media/com_newsletter/js/migur/js/support.js");
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/support.js');
 
 		$document->addScriptDeclaration('var urlRoot = "' . JURI::root(true) . '";');
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');

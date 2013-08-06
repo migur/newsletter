@@ -64,21 +64,26 @@ class NewsletterViewSubscriber extends MigurView
 			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 			$model->load($this->subscriberId);
 			$this->subscriber = $model;
+<<<<<<< Updated upstream
 			
 			$listsModel = JModel::getInstance('lists', 'NewsletterModel');
+=======
+
+			$listsModel = MigurModel::getInstance('lists', 'NewsletterModel');
+>>>>>>> Stashed changes
 			$model = $this->setModel($listsModel);
-			
+
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 			$model->setSubscriberQuery();
 
 			$sentsModel = JModel::getInstance('sents', 'NewsletterModel');
 			$model = $this->setModel($sentsModel);
-			
+
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 
 			$historyModel = JModel::getInstance('history', 'NewsletterModel');
 			$model = $this->setModel($historyModel);
-			
+
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 
 			$this->listItems = $this->get('Items', 'lists');
@@ -115,7 +120,7 @@ class NewsletterViewSubscriber extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('subscriber-toolbar', 'subscriberForm');
+		$bar = MigurToolbar::getInstance('subscriber-toolbar', 'subscriberForm');
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'subscriber.cancel', false);
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'subscriber.save', false);
 	}

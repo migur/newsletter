@@ -53,7 +53,7 @@ class NewsletterViewAutomailings extends MigurView
 		}
 
 		$model = $this->getModel('automailings');
-		
+
 		$amList = (object) array(
 				'items' => $model->getItems(),
 				'state' => $model->getState(),
@@ -61,16 +61,16 @@ class NewsletterViewAutomailings extends MigurView
 				'listDirn' => $model->getState('list.direction')
 		);
 		$this->assignRef('automailings', $amList);
-		
+
 		$pagination = $model->getPagination();
 		$this->assignRef('pagination', $pagination);
-		
+
 		$this->setDocument();
-		
+
 		parent::display($tpl);
 	}
 
-	
+
 	/**
 	 * Add the page title and toolbar.
 	 *
@@ -82,14 +82,14 @@ class NewsletterViewAutomailings extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_AUTOMAILINGS_TITLE'), 'article.png');
 
 		$bar = JToolBar::getInstance('automailings');
-		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailing&tmpl=component', 350, 175, 0, 0);
+		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailing&tmpl=component', 370, 190, 0, 0);
 		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'automailing.edit', false);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'automailings.delete', false);
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
-	
+
 	/**
 	 * Method to set up the document properties
 	 *
@@ -98,12 +98,11 @@ class NewsletterViewAutomailings extends MigurView
 	 */
 	protected function setDocument()
 	{
-		$document = JFactory::getDocument();
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/automailings.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/automailings/automailings.js");
-		JHTML::script('media/com_newsletter/js/migur/js/filterpanel.js');
-		JHTML::script('media/com_newsletter/js/migur/js/search.js');		
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/automailings.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/automailings/automailings.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/filterpanel.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/search.js');
 	}
 }

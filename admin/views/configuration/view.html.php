@@ -40,21 +40,21 @@ class NewsletterViewConfiguration extends MigurView
 	 * Displays the view.
 	 *
 	 * @param  string $tpl the template name
-	 * 
+	 *
 	 * @return void
 	 * @since  1.0
 	 */
 	public function display($tpl = null)
 	{
 		JHTML::_('behavior.modal');
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/configuration.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script('administrator/components/com_newsletter/views/configuration/configuration.js');
-		
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/configuration.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/configuration/configuration.js');
+
 		// Add JS and create namespace for data
 		//$document = JFactory::getDocument();
-		//$document->addScript(JURI::root() . "media/com_newsletter/js/migur/js/support.js");
+		//NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/support.js');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
@@ -67,17 +67,17 @@ class NewsletterViewConfiguration extends MigurView
 			'checkImap',
 			'checkLogs',
 			'checkAcl'));
-		
+
 		$this->assign('general', JComponentHelper::getParams('com_newsletter'));
 
-		//$model = JModel::getInstance('extensions', 'NewsletterModel');
+		//$model = MigurModel::getInstance('extensions', 'NewsletterModel');
 		//$this->modules = $model->getModules();
 		//$this->plugins = $model->getPlugins();
 		$this->assign('modules', NewsletterHelperModule::getSupported());
 		$this->assign('plugins', MigurPluginHelper::getSupported());
 
-		$this->assign('templates', JModel::getInstance('Templates', 'NewsletterModel')->getAllInstalledItems());
-		
+		$this->assign('templates', MigurModel::getInstance('Templates', 'NewsletterModel')->getAllInstalledItems());
+
 		$this->assign('form', $this->get('Form'));
 		$this->addToolbar();
 		parent::display($tpl);
@@ -92,10 +92,10 @@ class NewsletterViewConfiguration extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_CONFIGURATION_TITLE'), 'article.png');
 
-		$bar = JToolBar::getInstance('toolbar');
+		$bar = MigurToolbar::getInstance('toolbar');
 		if (NewsletterHelperAcl::canConfigureComponent()) {
 			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'configuration.apply', false);
-		}	
+		}
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));

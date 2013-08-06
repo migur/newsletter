@@ -34,7 +34,7 @@ class NewsletterViewMailboxprofile extends MigurView
 	public function display($tpl = null)
 	{
 		$this->ssForm = $this->get('Form', 'mailboxprofile');
-		
+
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
 			JError::raiseError(500, implode("\n", $errors));
@@ -56,7 +56,7 @@ class NewsletterViewMailboxprofile extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('mailbox-toolbar', 'mailboxprofileForm');
+		$bar = MigurToolbar::getInstance('mailbox-toolbar', 'mailboxprofileForm');
 		$bar->appendButton('Standard', 'publish', 'COM_NEWSLETTER_CHECK', 'mailboxprofile.checkconnection', false);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'mailboxprofile.save', false);
@@ -73,14 +73,14 @@ class NewsletterViewMailboxprofile extends MigurView
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_MAILBOX_CREATING') : JText::_('COM_NEWSLETTER_MAILBOX_EDITING'));
 
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
-		$document->addStylesheet(JURI::root() . 'media/com_newsletter/css/mailboxprofile.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/mailboxprofile.css');
 
-		$document->addScript(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/models/forms/mailboxprofile.js");
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/mailboxprofile/submitbutton.js");
-		$document->addScript(JURI::root() . "administrator/components/com_newsletter/views/mailboxprofile/mailboxprofile.js");
-		
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/forms/mailboxprofile.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/mailboxprofile/submitbutton.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/mailboxprofile/mailboxprofile.js');
+
 		JText::script('COM_NEWSLETTER_MAILBOX_ERROR_UNACCEPTABLE');
 	}
 

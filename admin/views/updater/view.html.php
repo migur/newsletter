@@ -60,7 +60,7 @@ class NewsletterViewUpdater extends MigurView
 	 */
 	protected function addToolbar()
 	{
-//		$bar = JToolBar::getInstance();
+//		$bar = MigurToolbar::getInstance();
 //		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'subscriber.cancel', false);
 //		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'subscriber.save', false);
 	}
@@ -74,15 +74,15 @@ class NewsletterViewUpdater extends MigurView
 	protected function setDocument()
 	{
 		$document = JFactory::getDocument();
-		
+
 		$document->setTitle(JText::_('COM_NEWSLETTER_NEW_UPDATER'));
-		
-		$document->addStyleSheet(JURI::root() . 'media/com_newsletter/css/admin.css');
-		$document->addStyleSheet(JURI::root() . 'media/com_newsletter/css/updater.css');
-		
-		$document->addScript(JURI::root() . '/media/com_newsletter/js/migur/js/core.js');
-		$document->addScript(JURI::root() . '/media/com_newsletter/js/migur/js/message.js');
-		
+
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/updater.css');
+
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/message.js');
+
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}
 

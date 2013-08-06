@@ -6,8 +6,8 @@ defined('_JEXEC') or die;
 <fieldset id="tabs">
     <legend><?php echo JText::_('COM_NEWSLETTER_TEMPLATE_CONFIG'); ?></legend>
     <form name="templateForm" method="POST" id="form-template" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_newsletter'); ?>">
-		
-        <?php echo JToolBar::getInstance('multitab-toolbar')->render(); ?>
+
+        <?php echo MigurToolbar::getInstance('multitab-toolbar')->render(); ?>
 
 
 		<?php
@@ -35,7 +35,7 @@ defined('_JEXEC') or die;
 		echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_INFO'), 'tab-info');
 		echo $this->loadTemplate('info', '');
 		echo JHtml::_('tabs.end'); ?>
-		
+
         <?php echo $this->tplForm->getInput('t_style_id'); ?>
         <input type="hidden" name="t_style_id" value="<?php echo $this->tplForm->getValue('t_style_id'); ?>" />
         <input type="hidden" name="task" value="" />

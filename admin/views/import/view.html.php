@@ -46,13 +46,13 @@ class NewsletterViewImport extends MigurView
 	public function display($tpl = null)
 	{
 		JHTML::_('behavior.modal');
-		
-		JHTML::stylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
-		JHTML::stylesheet(JURI::root() . 'media/com_newsletter/css/import.css');
-		JHTML::script(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
-		JHTML::script(JURI::root() . 'media/com_newsletter/js/migur/js/message.js');
-		JHTML::script(JURI::root() . 'media/com_newsletter/js/migur/js/iterativeajax.js');
-		JHTML::script(JURI::root() . "administrator/components/com_newsletter/views/import/import.js");
+
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/import.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/message.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/iterativeajax.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/import/import.js');
 
 		$this->assign('components', NewsletterModelImportCommon::getSupported());
 
@@ -69,7 +69,7 @@ class NewsletterViewImport extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('sender');
+		$bar = MigurToolbar::getInstance('sender');
 		$bar->appendButton('Link', 'export', 'COM_NEWSLETTER_NEWSLETTER_SEND', '#');
 
 		// Load the submenu.
