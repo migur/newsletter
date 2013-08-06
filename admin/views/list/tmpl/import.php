@@ -1,23 +1,23 @@
 <div class="import">
-    
-    <?php echo MigurToolBar::getInstance('import-toolbar')->render(); ?>
+
+    <?php echo MigurToolbar::getInstance('import-toolbar')->render(); ?>
 
     <div class="toolbar-list">
         <ul>
-        <?php foreach($this->importPlugins as $plg) { 
+        <?php foreach($this->importPlugins as $plg) {
 			$plg = (object) $plg; ?>
-          <li class="button plugin-icon" rel="<?php echo !empty($plg->name)? $plg->name : ''; ?>" role="pluginButton">  
+          <li class="button plugin-icon" rel="<?php echo !empty($plg->name)? $plg->name : ''; ?>" role="pluginButton">
               <a href="#">
                   <span><img src="<?php echo !empty($plg->icon)? $plg->icon : ''; ?>" /></span>
                   <?php echo !empty($plg->title)? $plg->title : ''; ?>
-              </a>    
+              </a>
           </li>
         <?php } ?>
-        </ul>  
+        </ul>
     </div>
 
 	<div class="clr"></div>
-	
+
 	<div class="import-content">
 
 		<div class="plugin-preloader"></div>
@@ -25,11 +25,11 @@
 
 		<div class="clr"></div>
 		<div id="import-file" class="file-form hide">
-			
+
 			<div class="block-notice">
 				<?php echo JText::_('COM_NEWSLETTER_STANDARD_IMPORT_HELPTEXT'); ?>
 			</div>
-			
+
 			<div id="import-file-upload">
 				<fieldset id="import-uploadform">
 						<legend><?php echo $this->config->get('upload_maxsize')=='0' ? JText::_('COM_MEDIA_UPLOAD_FILES_NOLIMIT') : JText::sprintf('COM_MEDIA_UPLOAD_FILES', $this->config->get('upload_maxsize')); ?></legend>
@@ -69,7 +69,7 @@
 							<option value="0">No</option>
 							<option value="1">Yes</option>
 						</select>
-					</div>	
+					</div>
 			</fieldset>
 
 			<fieldset id="import-settings">
@@ -155,7 +155,7 @@
 					id="import-file-apply"
 					value="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_FILE_APPLY'); ?>"
 				/>
-			</div>	
+			</div>
 		</div>
-	</div>	
+	</div>
 </div>

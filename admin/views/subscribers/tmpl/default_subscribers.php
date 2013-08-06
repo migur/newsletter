@@ -4,7 +4,7 @@
     <fieldset>
         <legend><?php echo JText::_('COM_NEWSLETTER_SUBSCRIBERS'); ?></legend>
 	<fieldset class="filter-bar">
-            <?php echo MigurToolBar::getInstance('subscribers')->render(); ?>
+            <?php echo MigurToolbar::getInstance('subscribers')->render(); ?>
             <div id="ss-filter-panel-control" class="filter-panel-control"></div>
             <div class="clr"></div>
             <div id="ss-filter-panel" class="filter-panel <?php echo !empty($filterList)? 'opened' : ''; ?>">
@@ -34,11 +34,11 @@
 				<div class="fltlft">
 					<div class="label"><?php echo JText::_('COM_NEWSLETTER_JUSERGROUP'); ?></div>
 					<?php echo JHtml::_('access.usergroup', 'filter_jusergroup', $this->subscribers->state->get('filter.jusergroup'), "onchange=\"document.subscribersForm.filter_type.value='2';this.form.submit();\"", true); ?>
-				</div>	
+				</div>
 				<div class="fltlft">
 					<div class="label"><?php echo JText::_('COM_NEWSLETTER_FILTER'); ?></div>
 					<input type="text" name="filter_search" id="ss_filter_search" class="migur-search" value="<?php echo $this->escape($this->subscribers->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
-					
+
 					<div class="fltlft" style="margin-left:10px">
 						<button class="filter-search-button" type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 						<button type="button" onclick="document.id('ss_filter_search').value='';document.subscribersForm.filter_list.value='';document.subscribersForm.filter_published.value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
@@ -81,8 +81,8 @@
 		</tfoot>
 		<tbody>
 		<?php
-		$subscriber = $this->subscriberModel; 
-		foreach ($this->subscribers->items as $i => $item) : 
+		$subscriber = $this->subscriberModel;
+		foreach ($this->subscribers->items as $i => $item) :
 			$subscriber->setFromArray($item);
 		?>
 
@@ -91,8 +91,8 @@
 					<?php echo JHtml::_('multigrid.id', $i, $subscriber->getExtendedId(), false, 'cid', 'subscribersForm'); ?>
 				</td>
 				<td class="subscriber-name">
-					<?php 
-						if (!$subscriber->subscriber_id) { 
+					<?php
+						if (!$subscriber->subscriber_id) {
 							$href = JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&user_id='.$subscriber->user_id, false);
 						} else {
 							$href = JRoute::_('index.php?option=com_newsletter&tmpl=component&layout=edit&task=subscriber.edit&subscriber_id='.$subscriber->subscriber_id, false);
