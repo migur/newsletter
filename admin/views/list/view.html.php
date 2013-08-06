@@ -247,7 +247,7 @@ class NewsletterViewList extends MigurView
 		}
 		$bar->appendButton('Link', 'cancel', 'JTOOLBAR_CLOSE', 'index.php?option=com_newsletter&view=close&tmpl=component', false);
 
-		$bar = MigurToolBar::getInstance('import-toolbar');
+		$bar = MigurToolbar::getInstance('import-toolbar');
 		$bar->appendButton('Link', 'export', 'COM_NEWSLETTER_IMPORT_FROM_FILE', '#');
 	}
 

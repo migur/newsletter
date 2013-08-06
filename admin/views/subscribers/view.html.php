@@ -107,7 +107,7 @@ class NewsletterViewSubscribers extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_SUBSCRIBERS_TITLE'), 'article.png');
 
-		$bar = MigurToolBar::getInstance('subscribers', null, '');
+		$bar = MigurToolbar::getInstance('subscribers', null, '');
 
 		if (NewsletterHelperAcl::actionIsAllowed('list.edit')) {
 			$bar->appendButton('Link', 'cancel', 'COM_NEWSLETTER_REMOVE_FROM_LIST', 'list.unbindgroup', false);
@@ -124,7 +124,7 @@ class NewsletterViewSubscribers extends MigurView
 
 		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', NewsletterHelperSupport::getResourceUrl('subscribers'));
 
-		$bar = MigurToolBar::getInstance('lists');
+		$bar = MigurToolbar::getInstance('lists');
 
 		if (NewsletterHelperAcl::actionIsAllowed('list.add')) {
 			$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&amp;view=list&amp;tmpl=component', 1000, 600, 0, 0);
