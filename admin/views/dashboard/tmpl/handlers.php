@@ -2,22 +2,22 @@
 <div class="container" id="container-left-left">
     <fieldset id="dashboard-newsletters">
         <legend><?php echo JText::_('COM_NEWSLETTER_NEWSLETTERS'); ?></legend>
-        <?php echo MigurToolBar::getInstance('newsletters-toolbar')->render(); ?>
+        <?php echo MigurToolbar::getInstance('newsletters-toolbar')->render(); ?>
     </fieldset>
     <fieldset id="dashboard-config">
         <legend><?php echo JText::_('COM_NEWSLETTER_CONFIG_N_INSTALL'); ?></legend>
-        <?php echo MigurToolBar::getInstance('config-toolbar')->render(); ?>
+        <?php echo MigurToolbar::getInstance('config-toolbar')->render(); ?>
     </fieldset>
 </div>
 
 <div class="container" id="container-left-right">
     <fieldset id="dashboard-subscribers">
         <legend><?php echo JText::_('COM_NEWSLETTER_SUBSCRIBERS'); ?></legend>
-        <?php echo MigurToolBar::getInstance('subscribers-toolbar')->render(); ?>
+        <?php echo MigurToolbar::getInstance('subscribers-toolbar')->render(); ?>
     </fieldset>
     <fieldset id="dashboard-help">
         <legend><?php echo JText::_('COM_NEWSLETTER_HELP_N_ABOUT'); ?></legend>
-        <?php echo MigurToolBar::getInstance('help-toolbar')->render(); ?>
+        <?php echo MigurToolbar::getInstance('help-toolbar')->render(); ?>
     </fieldset>
 </div>
 

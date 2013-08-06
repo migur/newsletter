@@ -25,7 +25,7 @@ if (!defined('MIGUR')) {
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurToolBar extends JToolBar
+class MigurToolbar extends JToolBar
 {
 
 	protected $_formName = '';
@@ -60,7 +60,7 @@ class MigurToolBar extends JToolBar
 	 *
 	 * @param	string		$name  The name of the toolbar.
 	 *
-	 * @return	JToolBar	The MigurToolBar object.
+	 * @return	JToolBar	The MigurToolbar object.
 	 * @since   1.0
 	 */
 	public static function getInstance($name = 'toolbar', $options = array())
@@ -76,7 +76,7 @@ class MigurToolBar extends JToolBar
 			self::$instances[$name] =
 				empty($options['migurInstance'])?
 					new JToolBar($name) :
-					new MigurToolBar($name, $options);
+					new MigurToolbar($name, $options);
 
 			self::$instances[$name]->addButtonPath(self::$_globalButtonPath);
 		}

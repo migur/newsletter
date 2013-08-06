@@ -2,7 +2,7 @@
     <fieldset>
         <legend><?php echo JText::_('COM_NEWSLETTER_LISTS'); ?></legend>
     	<fieldset class="filter-bar">
-            <?php echo MigurToolBar::getInstance('lists')->render(); ?>
+            <?php echo MigurToolbar::getInstance('lists')->render(); ?>
             <div id="lists-filter-panel-control" class="filter-panel-control"></div>
             <div class="clr"></div>
             <div id="lists-filter-panel" class="filter-panel">
@@ -16,7 +16,7 @@
 				<div class="fltlft">
 				<div class="label"><?php echo JText::_('COM_NEWSLETTER_FILTER'); ?></div>
 					<input type="text" name="filter_search" id="lists_filter_search" class="migur-search" value="<?php echo $this->escape($this->lists->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
-					
+
 					<div class="fltlft" style="margin-left:10px">
 						<button class="filter-search-button" type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 						<button type="button" onclick="document.id('lists_filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
@@ -56,20 +56,20 @@
                                     <?php echo JHtml::_('multigrid.id', $i, $item->list_id, false, 'cid', 'listsForm'); ?>
 				</td>
 				<td>
-				<?php 
+				<?php
 				if (NewsletterHelperAcl::actionIsAllowed('list.edit')) { ?>
 					<a href="<?php echo JRoute::_("index.php?option=com_newsletter&tmpl=component&layout=edit&task=list.edit&list_id=".(int) $item->list_id, false); ?>"
 					   rel="{handler: 'iframe', size: {x: 990, y: 635}}"
 					   class="modal" >
 						<?php echo $this->escape($item->name); ?>
 					</a>
-				<?php } else { 
+				<?php } else {
 					echo $this->escape($item->name);
 				}
-				?>	
+				?>
 				</td>
 				<td>
-				<?php 
+				<?php
 					if (intval($item->subscribers) > 0) {
 						echo '<a href="#" onclick="document.subscribersForm.filter_published.value=\'\';document.subscribersForm.filter_jusergroup.value=\'\';document.subscribersForm.filter_type.value=\'\';document.subscribersForm.filter_search.value=\'\';document.subscribersForm.filter_list.value=\'' . $item->list_id . '\';document.subscribersForm.submit();">' . $this->escape(intval($item->subscribers)) . '</a>';
 					} else {
