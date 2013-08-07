@@ -26,7 +26,7 @@ if (!defined('MIGUR')) {
 /**
  * Legacy support
  */
-JToolbar::getInstance()->loadButtonType('help');
+MigurToolbar::getInstance()->loadButtonType('help');
 
 class JButtonMigurhelp extends JButton
 {
