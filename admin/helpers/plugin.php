@@ -23,21 +23,21 @@ abstract class NewsletterHelperPlugin
 	static $_plugins;
 
 	static $_lang;
-	
+
 	static $_prepared = false;
-	
+
 	/**
 	 * Import all needed plugins. Add all needed handlers
-	 * 
+	 *
 	 */
 	public static function prepare()
 	{
 		if (self::$_prepared) {
 			return;
 		}
-		
+
 		$jpathComponentAdministrator = JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_newsletter';
-		
+
 		// Load 'Migur' group of plugins
 		JLoader::import('plugins.plugin', $jpathComponentAdministrator, '');
 
@@ -51,11 +51,11 @@ abstract class NewsletterHelperPlugin
 		JFactory::getApplication()->registerEvent('onMigurAfterUnsubscribe', 'plgMigurAutomail');
 		JFactory::getApplication()->registerEvent('onMigurAfterSubscriberUnbind', 'plgMigurAutomail');
 		JFactory::getApplication()->registerEvent('onMigurAfterSubscriberDelete', 'plgMigurAutomail');
-		
+
 		self::$_prepared = true;
 	}
 
-	
+
 	/**
 	 * Gets the data from module config file
 	 *
@@ -88,8 +88,8 @@ abstract class NewsletterHelperPlugin
 
 	/**
 	 * Gets the list of ALL supported plugins
-	 * 
-	 * @return array - the list of supported modules 
+	 *
+	 * @return array - the list of supported modules
 	 */
 	public static function getSupported($params = array(), $namespace = '')
 	{
@@ -104,13 +104,13 @@ abstract class NewsletterHelperPlugin
 			$item = $extensions[$i];
 			// Add the info about module
 			$xml = self::getInfo($item->extension, $item->native, $item->namespace);
-			
+
 			$extNamespace = !empty($xml->namespace)? (string)$xml->namespace : '';
 
 			if (!self::namespaceCheckOccurence($namespace, $extNamespace)) {
 				continue;
 			}
-			
+
 			if (!isset($params['withoutInfo'])) {
 				$item->xml = $xml;
 			}
@@ -127,15 +127,15 @@ abstract class NewsletterHelperPlugin
 		if (!empty($params['extension_id']) && !empty($params['native'])) {
 			JError::raiseError(E_ERROR, "The module " . $params['extension_id'] . " could not found in the list of supported modules (native = " . $params['native'] . ")");
 		}
-		
+
 		return $items;
 	}
 
-	
+
 	/**
 	 * Gets the list of ALL supported plugins
-	 * 
-	 * @return array - the list of supported modules 
+	 *
+	 * @return array - the list of supported modules
 	 */
 	public static function getItem($pid, $native = false)
 	{
@@ -159,7 +159,7 @@ abstract class NewsletterHelperPlugin
 
 		return $item;
 	}
-	
+
 	/**
 	 * Gets the list of supported local plugins.
 	 * Gets the full info about each one.
@@ -183,11 +183,11 @@ abstract class NewsletterHelperPlugin
 
 		// Filter by module
 		$query->where('a.type = ' . $db->Quote(NewsletterTableNExtension::TYPE_PLUGIN));
-		
+
 		if ($pid > 0) {
 			$query->where('a.extension_id = ' . (int) $pid);
-		} 
-		
+		}
+
 		$query->order('a.title ASC');
 
 		//echo nl2br(str_replace('#__','jos_',$query));
@@ -217,11 +217,11 @@ abstract class NewsletterHelperPlugin
 		// Filter by module
 		$query->where("a.type = 'plugin'");
 		$query->where("a.folder = 'migur'");
-		
+
 		if ($pid > 0) {
 			$query->where('a.extension_id = ' . (int) $pid);
-		} 
-		
+		}
+
 		$query->order('a.name ASC');
 
 		//echo nl2br(str_replace('#__','jos_',$query));
@@ -242,8 +242,8 @@ abstract class NewsletterHelperPlugin
 //		self::getInstance($pluginName, $group);
 //		return self::$_plugins[$group.'.'.$pluginName]->$action($params, $document);
 //	}
-//	
-//	
+//
+//
 //	/**
 //	 * Trigger the action of a plugin.
 //	 *
@@ -261,11 +261,11 @@ abstract class NewsletterHelperPlugin
 //			self::$_plugins[$group.'.'.$pluginName] = new $pluginName;
 //			return self::$_plugins[$group.'.'.$pluginName];
 //		}
-//		
+//
 //		return null;
 //	}
 //
-	
+
 	/**
 	 * Check if $requestedNamespace contain $extNamespace namespace.
 	 * '',                     'newsletter.html' -> true
@@ -273,10 +273,10 @@ abstract class NewsletterHelperPlugin
 	 * 'newsletter.html',      'newsletter.html' -> true
 	 * 'newsletter.html.some', 'newsletter.html' -> false
 	 * 'newsletter.plain',     'newsletter.html' -> false
-	 * 
+	 *
 	 * @param type $requestedNamespace The namespace to check
 	 * @param type $extNamespace The namespace that plugin have
-	 * @return type 
+	 * @return type
 	 */
 	public static function namespaceCheckOccurence($requestedNamespace = '', $extNamespace = '')
 	{
@@ -284,25 +284,25 @@ abstract class NewsletterHelperPlugin
 		if (empty($requestedNamespace)) {
 			return true;
 		}
-		// If extension does not has the namespace and 
+		// If extension does not has the namespace and
 		// the requested is not empty then denie it
 		if (empty($extNamespace) && !empty($requestedNamespace)) {
 			return false;
 		}
-		
+
 		$req = explode('.', $requestedNamespace);
 		$ext = explode('.', $extNamespace);
-		
+
 		for($i=0; $i < count($req); $i++) {
 			if (empty($ext[$i]) || $req[$i] != $ext[$i]) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * Loads all the plugin files for a particular type if no specific plugin is specified
 	 * otherwise only the specific plugin is loaded.
@@ -337,10 +337,10 @@ abstract class NewsletterHelperPlugin
 			// Get the specified plugin(s).
 			for ($i = 0, $t = count($plugins); $i < $t; $i++)
 			{
-				
+
 				if (
-					$plugins[$i]->type == 2 && 
-					self::namespaceCheckOccurence($type, $plugins[$i]->namespace) && 
+					$plugins[$i]->type == 2 &&
+					self::namespaceCheckOccurence($type, $plugins[$i]->namespace) &&
 					($plugin == $plugins[$i]->extension || $plugin == null)
 				) {
 					self::_import($plugins[$i], $autocreate, $dispatcher);
@@ -361,7 +361,7 @@ abstract class NewsletterHelperPlugin
 
 
 	/**
-	 * Add into dispatcher the collection of a plugins. 
+	 * Add into dispatcher the collection of a plugins.
 	 * Collection item contain DB data of a plugin.
 	 *
 	 * @param   string       $plugins     List of objects
@@ -374,7 +374,7 @@ abstract class NewsletterHelperPlugin
 	public static function importPluginCollection($plugins, $dispatcher = null)
 	{
 		/*static*/ $loaded = array();
-		
+
 		if (!is_array($plugins)) {
 			throw new Exception('Collection of plugins is not array');
 		}
@@ -388,13 +388,13 @@ abstract class NewsletterHelperPlugin
 			{
 				self::_import($plugins[$i], true, $dispatcher);
 				$loaded[$pid] = true;
-			}	
+			}
 		}
 
 		return $loaded;
 	}
-	
-	
+
+
 	/**
 	 * Loads the plugin file.
 	 *
@@ -411,10 +411,10 @@ abstract class NewsletterHelperPlugin
 		/*static*/ $paths = array();
 
 		@list($group) = explode('.', $plugin->namespace);
-		
+
 		$plugin->extension = preg_replace('/[^A-Z0-9_\.-]/i', '', $plugin->extension);
 
-		$path = MigurPluginHelper::getFolder($plugin->extension, $group) . DIRECTORY_SEPARATOR . $plugin->extension . '.php';
+		$path = NewsletterHelperPlugin::getFolder($plugin->extension, $group) . DIRECTORY_SEPARATOR . $plugin->extension . '.php';
 
 		if (!isset($paths[$path]))
 		{
@@ -439,7 +439,7 @@ abstract class NewsletterHelperPlugin
 					if (class_exists($className))
 					{
                         self::_loadLang($plugin->extension, $group);
-                                            
+
 						// Load the plugin from the database.
 						if (!isset($plugin->params))
 						{
@@ -461,14 +461,14 @@ abstract class NewsletterHelperPlugin
 			}
 		}
 	}
-        
+
 	protected static function _loadLang($name, $group)
 	{
 		if (!self::$_lang instanceof JLanguage) {
 			self::$_lang = JFactory::getLanguage();
 		}
 
-		$path = 
+		$path =
 			JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR .
 			'extensions' . DIRECTORY_SEPARATOR .
 			'plugins' . DIRECTORY_SEPARATOR .
@@ -484,19 +484,12 @@ abstract class NewsletterHelperPlugin
 	{
 		@list($group) = explode('.', $namespace);
 
-		return JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 
-		'components' . DIRECTORY_SEPARATOR . 
-		'com_newsletter' . DIRECTORY_SEPARATOR . 
-		'extensions' . DIRECTORY_SEPARATOR . 
-		'plugins' . DIRECTORY_SEPARATOR . 
-		$group . DIRECTORY_SEPARATOR . 
+		return JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR .
+		'components' . DIRECTORY_SEPARATOR .
+		'com_newsletter' . DIRECTORY_SEPARATOR .
+		'extensions' . DIRECTORY_SEPARATOR .
+		'plugins' . DIRECTORY_SEPARATOR .
+		$group . DIRECTORY_SEPARATOR .
 		$extension;
-	}	
+	}
 }
-
-/**
- * Legacy support for class name
- * Should be removed after 12.07
- */
-abstract class MigurPluginHelper extends NewsletterHelperPlugin 
-{}
