@@ -108,7 +108,7 @@ class NewsletterViewNewsletters extends MigurView
 		}
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'newsletters.delete', false);
 
-		$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_SHOW_STATISTICS', array(
+		$bar->appendButton('Migurbasic', 'COM_NEWSLETTER_SHOW_STATISTICS', array(
 			'id' => 'ctrl-showstats',
 			'href' => JRoute::_('index.php?option=com_newsletter&view=statistic', false),
 			'icon-class' => 'icon-asterisk'

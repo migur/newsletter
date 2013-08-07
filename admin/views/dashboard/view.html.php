@@ -108,7 +108,7 @@ class NewsletterViewDashboard extends MigurView
 		$bar->appendButton('SendProgress');
 
 		$bar->appendButton('Link', 'list', 'COM_NEWSLETTER_VIEW_QUEUE', 'index.php?option=com_newsletter&view=queues');
-		$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_PROCESS_BOUNCES', array('id' => 'toolbar-bounces', 'icon-class' => 'icon-refresh'));
+		$bar->appendButton('Migurbasic', 'COM_NEWSLETTER_PROCESS_BOUNCES', array('id' => 'toolbar-bounces', 'icon-class' => 'icon-refresh'));
 
 		$bar->appendButton('Link', 'warning', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
 		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', NewsletterHelperSupport::getResourceUrl('mailing', 'general'));

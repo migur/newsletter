@@ -94,5 +94,4 @@ class JButtonMigurhelp extends JButton
 		return $cmd;
 	}
 }
-
 class JToolbarButtonMigurhelp extends JButtonMigurhelp {}
