@@ -3,9 +3,9 @@
 /**
  * The cron controller file.
  *
- * @version	   $Id:  $
+ * @version       $Id:  $
  * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
- * @license	   GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -27,10 +27,10 @@ class NewsletterControllerSubscribe extends MigurController
 	/**
 	 * The constructor of a class
 	 *
-	 * @param	array	$config		An optional associative array of configuration settings.
+	 * @param    array    $config        An optional associative array of configuration settings.
 	 *
-	 * @return	void
-	 * @since	1.0
+	 * @return    void
+	 * @since    1.0
 	 */
 	public function __construct($config = array())
 	{
@@ -53,7 +53,7 @@ class NewsletterControllerSubscribe extends MigurController
 		// Get variables from request
 		$name = JRequest::getString('newsletter-name', null);
 		$email = JRequest::getString('newsletter-email', null);
-		$html = (int) JRequest::getInt('newsletter-html', null);
+		$html = (int)JRequest::getInt('newsletter-html', null);
 		$listsIds = NewsletterHelperData::toArrayOfInts(JRequest::getVar('newsletter-lists', array()));
 		$fbenabled = JRequest::getInt('fbenabled', array());
 		//$sendto = JRequest::getVar('sendto');
@@ -66,10 +66,10 @@ class NewsletterControllerSubscribe extends MigurController
 
 			NewsletterHelperLog::addDebug(
 				$msg, NewsletterHelperLog::CAT_SUBSCRIPTION, array(
-				'name' => $name,
-				'email' => $email,
-				'is html' => $html,
-				'list ids' => $listsIds)
+					'name' => $name,
+					'email' => $email,
+					'is html' => $html,
+					'list ids' => $listsIds)
 			);
 
 			jexit($msg);
@@ -78,7 +78,7 @@ class NewsletterControllerSubscribe extends MigurController
 		$comParams = JComponentHelper::getComponent('com_newsletter')->params;
 
 		$trusted = false;
-		
+
 		// try to get user data from FB
 		$fbAppId = $comParams->get('fbappid');
 		$fbSecret = $comParams->get('fbsecret');
@@ -127,22 +127,23 @@ class NewsletterControllerSubscribe extends MigurController
 		}
 
 		$message = JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name);
-		
-		$listModel = JModel::getInstance('List',  'NewsletterModel');
+
+		$listModel = JModel::getInstance('List', 'NewsletterModel');
 
 		$assignedListsIds = array();
-		
+
 		$sid = $subscriber->getId();
 
 		// Process each list
 		foreach ($listsIds as $lid) {
-			
+
 			$list = $listModel->getItem($lid);
-			
-			if (!$listModel->hasSubscriber($lid, $sid)) {
-				
+			$hasSubscriber = $listModel->hasSubscriber($lid, $sid);
+
+			if (!$hasSubscriber) {
+
 				$listModel->assignSubscriber(
-					$lid, $subscriber->toArray(), 
+					$lid, $subscriber->toArray(),
 					array('confirmed' => ($list->autoconfirm || $trusted))
 				);
 
@@ -157,32 +158,41 @@ class NewsletterControllerSubscribe extends MigurController
 					'text' => addslashes($list->name)
 				));
 				unset($history);
-				
+
 				$assignedListsIds[] = $lid;
-				
+
 			} else {
-				
+
 				if (($list->autoconfirm || $trusted)) {
 					$listModel->confirmSubscriber($lid, $sid);
-				}	
+
+					$message =
+						JText::sprintf('COM_NEWSLETTER_YOU_HAVE_SUBSCRIBED_TO', $name) . ' ' .
+							JText::_('COM_NEWSLETTER_LIST_ALREADY');
+					jexit($message);
+				}
 			}
 
 			// If list is not confirmed then send the newsletter
-			if(!$listModel->isConfirmed($lid, $sid)) {
-			
+			if (!$listModel->isConfirmed($lid, $sid)) {
+
 				// Immediately mail subscription letter
 				$res = $listModel->sendSubscriptionMail(
-					$subscriber, 
+					$subscriber,
 					$list->list_id,
 					array(
 						'ignoreDuplicates' => true
 					));
 
 				// Set message and add some logs
-				if($res) {
-					$message =
-						JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name) . ' ' .
-						JText::_('COM_NEWSLETTER_YOU_WILL_NEED_CONFIRM_SUBSCRIPTION');
+				if ($res) {
+					if ($hasSubscriber) {
+						$message = JText::_('COM_NEWSLETTER_YOU_ADDED_TO_LIST_ALREADY');
+					} else {
+						$message =
+							JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name) . ' ' .
+								JText::_('COM_NEWSLETTER_YOU_WILL_NEED_CONFIRM_SUBSCRIPTION');
+					}
 				}
 			}
 		}
@@ -190,12 +200,12 @@ class NewsletterControllerSubscribe extends MigurController
 		// Triggering the subscribed plugins.
 		// Process automailing via internal plugin plgMigurAutomail
 		JFactory::getApplication()->triggerEvent(
-			'onMigurAfterSubscribe', 
+			'onMigurAfterSubscribe',
 			array(
 				'subscriberId' => $sid,
 				'lists' => $assignedListsIds)
 		);
-		
+
 		jexit($message);
 	}
 
@@ -238,7 +248,7 @@ class NewsletterControllerSubscribe extends MigurController
 			$this->setRedirect('?option=com_newsletter&view=subscribe&layout=confirmed&uid=' . $subKey, $message, 'error');
 			return true;
 		}
-		
+
 		// Insert into db
 		// TODO: Add santiy checks, use model instead
 		$db->setQuery("UPDATE #__newsletter_subscribers set confirmed=1 WHERE confirmed=" . $db->quote($subKey));
@@ -246,11 +256,11 @@ class NewsletterControllerSubscribe extends MigurController
 
 		if (!empty($lid)) {
 			$db->setQuery(
-				"UPDATE #__newsletter_sub_list set confirmed=1 WHERE ".
-				" confirmed=" . $db->quote($subKey) .
-				" AND list_id=" . $db->quote($lid));
+				"UPDATE #__newsletter_sub_list set confirmed=1 WHERE " .
+					" confirmed=" . $db->quote($subKey) .
+					" AND list_id=" . $db->quote($lid));
 			$subscriber = $db->query();
-		}	
+		}
 
 		// Redirect to page
 		$message = JText::_("COM_NEWSLETTER_YOUR_SUBSCRIPTION_CONFIRMED");
@@ -340,7 +350,7 @@ class NewsletterControllerSubscribe extends MigurController
 				'subscriber' => $subscriber,
 				'lists' => $lists
 			));
-			
+
 			// Legacy event
 			$app->triggerEvent(
 				'onMigurNewsletterBeforeUnsubscribe', array(
@@ -353,32 +363,32 @@ class NewsletterControllerSubscribe extends MigurController
 				// Delete subscriptions from list
 				$db->setQuery(
 					"DELETE FROM #__newsletter_sub_list " .
-					"WHERE subscriber_id = " . $db->quote((int) $subscriber->subscriber_id) . " AND list_id = " . $db->quote((int) $list)
+						"WHERE subscriber_id = " . $db->quote((int)$subscriber->subscriber_id) . " AND list_id = " . $db->quote((int)$list)
 				);
 				$db->query();
 
 				// Add to history
-				$newsletterId = !empty($nid)? $db->quote((int) $nid) : "NULL";
-				
+				$newsletterId = !empty($nid) ? $db->quote((int)$nid) : "NULL";
+
 				$db->setQuery(
 					"INSERT IGNORE INTO #__newsletter_sub_history SET " .
-					" newsletter_id = " . $newsletterId . ", " .
-					" subscriber_id=" . $db->quote((int) $subscriber->subscriber_id) . ", " .
-					" list_id=" . $db->quote((int) $list) . ", " .
-					" date=" . $db->quote(date('Y-m-d H:i:s')) . ", " .
-					" action=" . $db->quote(NewsletterTableHistory::ACTION_UNSUBSCRIBED) . ", " .
-					" text=''"
+						" newsletter_id = " . $newsletterId . ", " .
+						" subscriber_id=" . $db->quote((int)$subscriber->subscriber_id) . ", " .
+						" list_id=" . $db->quote((int)$list) . ", " .
+						" date=" . $db->quote(date('Y-m-d H:i:s')) . ", " .
+						" action=" . $db->quote(NewsletterTableHistory::ACTION_UNSUBSCRIBED) . ", " .
+						" text=''"
 				);
 				$res = $db->query();
 			}
 
-			
+
 			// Triggering plugins.
 			// Process automailing via internal plugin plgMigurAutomail
 			JFactory::getApplication()->triggerEvent('onMigurUnsubscribe', array(
-				'subscriberId' => (int) $subscriber->subscriber_id,
+				'subscriberId' => (int)$subscriber->subscriber_id,
 				'lists' => $lists));
-			
+
 			$app->triggerEvent(
 				'onMigurAfterUnsubscribe', array(
 				'subscriberId' => $subscriber->subscriber_id,
