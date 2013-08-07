@@ -57,21 +57,21 @@ class NewsletterViewSubscriber extends MigurView
 			$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 			$model->load($this->subscriberId);
 			$this->subscriber = $model;
-			
+
 			$listsModel = MigurModel::getInstance('lists', 'NewsletterModel');
 			$model = $this->setModel($listsModel);
-			
+
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 			$model->setSubscriberQuery();
 
 			$sentsModel = MigurModel::getInstance('sents', 'NewsletterModel');
 			$model = $this->setModel($sentsModel);
-			
+
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 
 			$historyModel = MigurModel::getInstance('history', 'NewsletterModel');
 			$model = $this->setModel($historyModel);
-			
+
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 
 			$this->listItems = $this->get('Items', 'lists');
@@ -90,7 +90,7 @@ class NewsletterViewSubscriber extends MigurView
 		}
 
 		$this->addToolbar();
-		
+
 		// Set the document
 		$this->setDocument();
 
@@ -106,7 +106,7 @@ class NewsletterViewSubscriber extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance();
+		$bar = MigurToolbar::getInstance();
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'subscriber.cancel', false);
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'subscriber.save', false);
 	}
@@ -128,7 +128,7 @@ class NewsletterViewSubscriber extends MigurView
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/subscriber/subscriber.js');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/subscriber.css');
-		
+
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}
 

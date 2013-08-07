@@ -51,7 +51,7 @@ class NewsletterViewListevent extends MigurView
 		$this->assignRef('item', $item);
 		$this->assign('form', $this->get('Form', 'listevent'));
 
-		
+
 		// Set main ID first
 		$lid = !empty($item->list_id)? $item->list_id : JRequest::getInt('list_id');
 		$leid = !empty($item->le_id)? $item->le_id : JRequest::getInt('le_id');
@@ -59,7 +59,7 @@ class NewsletterViewListevent extends MigurView
 		$this->assignRef('listeventId', $leid);
 
 		$this->addToolbar();
-		
+
 		parent::display($tpl);
 	}
 
@@ -71,7 +71,7 @@ class NewsletterViewListevent extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('listevent');
+		$bar = MigurToolbar::getInstance('listevent');
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'listevent.save', false);
 		$bar->appendButton('Standard', 'save-new', 'JTOOLBAR_SAVE_AND_NEW', 'listevent.save2new', false);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'listevent.cancel', false);

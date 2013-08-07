@@ -53,7 +53,7 @@ class NewsletterViewAutomailings extends MigurView
 		}
 
 		$model = $this->getModel('automailings');
-		
+
 		$amList = (object) array(
 				'items' => $model->getItems(),
 				'state' => $model->getState(),
@@ -61,14 +61,15 @@ class NewsletterViewAutomailings extends MigurView
 				'listDirn' => $model->getState('list.direction')
 		);
 		$this->assignRef('automailings', $amList);
-		
+
 		$pagination = $model->getPagination();
 		$this->assignRef('pagination', $pagination);
-		
+
 		$this->setDocument();
-		
+
 		parent::display($tpl);
 	}
+
 
 	/**
 	 * Add the page title and toolbar.
@@ -80,9 +81,9 @@ class NewsletterViewAutomailings extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_AUTOMAILINGS_TITLE'), 'article.png');
 
-		$bar = JToolBar::getInstance();
+		$bar = MigurToolbar::getInstance();
 		$bar->appendButton('MigurModal', 'JTOOLBAR_NEW', array(
-			'url' => 'index.php?option=com_newsletter&view=automailing&tmpl=component', 
+			'url' => 'index.php?option=com_newsletter&view=automailing&tmpl=component',
 			'modal' => '#modal-automailing',
 			'class' => 'btn btn-small btn-success',
 			'icon-class' => 'icon-new'
@@ -90,12 +91,12 @@ class NewsletterViewAutomailings extends MigurView
 //		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailing&tmpl=component', 400, 300, 0, 0);
 //		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'automailing.edit', false);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'automailings.delete', true);
-		
+
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
-	
+
 	/**
 	 * Method to set up the document properties
 	 *

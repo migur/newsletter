@@ -46,7 +46,7 @@ class NewsletterViewImport extends MigurView
 	public function display($tpl = null)
 	{
 		JHTML::_('behavior.modal');
-		
+
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/import.css');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
@@ -69,7 +69,7 @@ class NewsletterViewImport extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('sender');
+		$bar = MigurToolbar::getInstance('sender');
 		$bar->appendButton('Link', 'export', 'COM_NEWSLETTER_NEWSLETTER_SEND', '#');
 	}
 

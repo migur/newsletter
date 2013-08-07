@@ -16,7 +16,7 @@ defined('JPATH_BASE') or die;
 
 // Check if Migur is active
 if (!defined('MIGUR')) {
-	die(JError::raiseWarning(0, JText::_("MIGUR library wasn't found.")));
+	throw new Exception(JText::_("MIGUR library wasn't found."));
 }
 
 /**
@@ -25,15 +25,16 @@ if (!defined('MIGUR')) {
  * @since   1.0
  * @package Migur.Newsletter
  */
-class MigurToolBar extends JToolbar
+class MigurToolbar extends JToolBar
 {
+
 	protected $_formName = '';
-	
+
 	protected $_actionPrefix = '';
-	
-	protected $_useAcl = false;
-	
+
 	protected $_options = array();
+
+	protected static $_globalButtonPath = array();
 
 	/**
 	 * The constructor of a class
@@ -43,22 +44,14 @@ class MigurToolBar extends JToolbar
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function __construct($name = 'toolbar', $form = null, $actionPrefix = '', $useAcl = false, $options = array())
+	public function __construct($name = 'toolbar', $options = array())
 	{
 		parent::__construct($name);
 
-		$this->_formName = ($form) ? $form : $name . 'Form';
-
-        if (defined(COM_NEWSLETTER_PATH_ADMIN)) {
-            $this->addButtonPath(COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
-        }
-        $this->addButtonPath(JPATH_LIBRARIES. DIRECTORY_SEPARATOR .'migur'. DIRECTORY_SEPARATOR .'library'. DIRECTORY_SEPARATOR .'button');
-
-		$this->_actionPrefix = $actionPrefix;
-		
-		$this->_useAcl = $useAcl;
-		
 		$this->_options = (array) $options;
+
+		$this->_options['formName'] = !empty($options['form']) ? $options['form'] : $name . 'Form';
+		$this->_options['actionPrefix'] = !empty($options['actionPrefix'])? $options['actionPrefix'] : '';
 	}
 
 	/**
@@ -66,21 +59,30 @@ class MigurToolBar extends JToolbar
 	 * doesn't already exist.
 	 *
 	 * @param	string		$name  The name of the toolbar.
-	 * 
-	 * @return	JToolBar	The MigurToolBar object.
+	 *
+	 * @return	JToolBar	The MigurToolbar object.
 	 * @since   1.0
 	 */
-    public static function getInstance($name = 'toolbar', $form = null, $actionPrefix = '', $useAcl = false, $options = array())
-    {
-        if (!isset(self::$instances)) {
-            self::$instances = array();
-        }
-        if (empty(self::$instances[$name])) {
-            self::$instances[$name] = new MigurToolBar($name, $form, $actionPrefix, $useAcl, $options);
-        }
+	public static function getInstance($name = 'toolbar', $options = array())
+	{
+//		static $instances;
 
-        return self::$instances[$name];
-    }
+		if (!isset(self::$instances)) {
+			self::$instances = array();
+		}
+
+		if (empty(self::$instances[$name])) {
+
+			self::$instances[$name] =
+				empty($options['migurInstance'])?
+					new JToolBar($name) :
+					new MigurToolbar($name, $options);
+
+			self::$instances[$name]->addButtonPath(self::$_globalButtonPath);
+		}
+
+		return self::$instances[$name];
+	}
 
 	/**
 	 * Changes standard behavior.
@@ -98,22 +100,8 @@ class MigurToolBar extends JToolbar
 
 		if (!empty($this->_options['preserveJCallback'])) {
 			return $html;
-		}	
-		
-		if (!empty($this->_options['useDefaultCallback'])) {
-			return preg_replace(
-				array(
-					"/Joomla\.submitbutton\(([^)]*)\)/",
-					"/adminForm/"
-				),
-				array(
-					"Joomla.submitbutton($1, document.{$formName}, this)",
-					$formName
-				),
-				$html
-			);
 		}
-		
+
 		return preg_replace(
 			array(
 				"/Joomla\.submitbutton\(([^)]*)\)/",
@@ -126,46 +114,27 @@ class MigurToolBar extends JToolbar
 			$html
 		);
 	}
-	
-	public function appendButton() 
+
+	public static function addGlobalButtonPath($path)
 	{
-		$args = func_get_args();
+		// Just force path to array.
+		settype($path, 'array');
 
-        $action = !empty($args[1])? $args[1] : '';
+		// Loop through the path directories.
+		foreach ($path as $dir)
+		{
+			// No surrounding spaces allowed!
+			$dir = trim($dir);
 
-		if ($this->_useAcl) {
-			if (!NewsletterHelperAcl::actionIsAllowed($this->_actionPrefix.'.'.$action)) {
-				return false;
+			// Add trailing separators as needed.
+			if (substr($dir, -1) != DIRECTORY_SEPARATOR)
+			{
+				// Directory
+				$dir .= DIRECTORY_SEPARATOR;
 			}
+
+			// Add to the top of the search dirs.
+			array_push(self::$_globalButtonPath, $dir);
 		}
-		
-		return call_user_func_array(array('parent', 'appendButton'), $args);
 	}
-	
-	
-	/**
-	 * Add a directory where JToolbar should search for button types in LIFO order.
-	 *
-	 * You may either pass a string or an array of directories.
-	 *
-	 * JToolbar will be searching for an element type in the same order you
-	 * added them. If the parameter type cannot be found in the custom folders,
-	 * it will look in libraries/joomla/html/toolbar/button.
-	 *
-	 * @param   mixed  $path  Directory or directories to search.
-	 *
-	 * @return  void
-	 *
-	 * @since   boolean
-	 * @see     JToolbar
-	 */
-	public static function addGlobalButtonPath($dir)
-	{
-		// No surrounding spaces allowed!
-		$dir = trim($dir);
-		if (substr($dir, -1) != DIRECTORY_SEPARATOR)
-			$dir .= DIRECTORY_SEPARATOR;
-		
-		self::$globalButtonPath[] = $dir;
-	}	
 }
