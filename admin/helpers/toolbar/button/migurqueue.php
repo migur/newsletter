@@ -18,7 +18,7 @@ if (!defined('MIGUR')) {
 /**
  * Renders buttons for queue (used in dashboard)
  */
-class JButtonMigurQueue extends JButton
+class JButtonMigurqueue extends JButton
 {
 	/**
 	 * @var    string	Button type
