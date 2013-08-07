@@ -38,14 +38,14 @@ defined('_JEXEC') or die;
 	<?php echo JHtml::_('layout.controlgroup', '', $this->ssForm->getInput('periodStartTime', 'params')); ?>
 
 	<?php echo JHtml::_('layout.controlgroup', '', $this->ssForm->getInput('sentsPerLastPeriod', 'params')); ?>
-		
+
 	<?php echo JHtml::_('layout.controlgroup', '', $this->ssForm->getInput('smtp_profile_id')); ?>
-	
+
 	<div class="form-actions" style="padding-right:0;">
 		<div class="pull-left" style="margin: 12px 10px 0 0; width: 16px;">
 			<div id="preloader-container"></div>
-		</div>	
-		<div class="pull-left"><?php echo JToolBar::getInstance()->render(); ?></div>
+		</div>
+		<div class="pull-left"><?php echo MigurToolbar::getInstance()->render(); ?></div>
 	</div>
 
 	<input type="hidden" name="smtp_profile_id" value="<?php echo $this->ssForm->getValue('smtp_profile_id'); ?>" />

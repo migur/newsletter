@@ -106,6 +106,6 @@ class NewsletterViewSender extends MigurView
 	protected function addToolbar()
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_SENDMAIL_TITLE'), 'article.png');
-		$bar = JToolBar::getInstance('sender');
+		$bar = MigurToolbar::getInstance('sender');
 	}
 }

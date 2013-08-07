@@ -22,14 +22,14 @@ defined('_JEXEC') or die;
 	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('validate_cert'), $this->ssForm->getInput('validate_cert')); ?>
 
 	<div class="form-actions" style="padding-right:0;">
-		<div class="pull-left"><?php echo JToolBar::getInstance()->render(); ?></div>
+		<div class="pull-left"><?php echo MigurToolbar::getInstance()->render(); ?></div>
 		<div class="pull-left" style="margin: 12px 0 0 10px;">
 			<div id="preloader-container"></div>
-		</div>	
+		</div>
 	</div>
 
 	<input type="hidden" name="mailbox_profile_id" value="<?php echo $this->ssForm->getValue('mailbox_profile_id'); ?>" />
 	<input type="hidden" name="task" value="" />
 	<?php echo JHtml::_('form.token'); ?>
-	
+
 </form>

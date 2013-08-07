@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
                 <?php echo $this->form->getInput('event'); ?>
             </div>
         </div>
-        
+
         <div class="control-group">
             <label class="control-label"><?php echo $this->form->getLabel('jgroup_id'); ?></label>
             <div class="controls">
@@ -34,9 +34,9 @@ defined('_JEXEC') or die;
 		<input type="hidden" name="list_id" value="<?php echo JRequest::getInt('list_id', ''); ?>" />
 		<input type="hidden" name="jform[list_id]" value="<?php echo JRequest::getInt('list_id', ''); ?>" />
 		<?php echo JHtml::_('form.token'); ?>
-		
+
     	<div class="form-actions">
-    		<?php echo JToolBar::getInstance('listevent')->render(); ?>
-        </div>    
+    		<?php echo MigurToolbar::getInstance('listevent')->render(); ?>
+        </div>
 	</form>
 </div>

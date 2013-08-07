@@ -34,7 +34,7 @@ defined('_JEXEC') or die;
 	<?php echo JHtml::_('form.token'); ?>
 
 	<div class="form-actions">
-		<?php echo JToolBar::getInstance()->render(); ?>
+		<?php echo MigurToolbar::getInstance()->render(); ?>
 	</div>
 
 </form>

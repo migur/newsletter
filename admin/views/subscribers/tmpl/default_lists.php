@@ -4,17 +4,17 @@
     	<fieldset class="filter-bar">
 			<div class="row-fluid">
 				<div class="pull-right">
-		            <?php echo MigurToolBar::getInstance('lists')->render(); ?>
+		            <?php echo MigurToolbar::getInstance('lists')->render(); ?>
 				</div>
-				
+
 				<div id="lists-filter-panel-control" class="pull-left filter-panel-control" data-role="ctrl-container">
 				</div>
-				
+
 			</div>
 			<br/>
 
 			<div id="lists-filter-panel" class="row-fluid filter-panel"  data-role="panel-container">
-				
+
 				<div class="filter-panel-inner" data-role="panel-container-inner">
 
 					<div class="pull-left btn-group">
@@ -26,14 +26,14 @@
 					</div>
 					<div class="filter-search btn-group pull-left">
 						<input type="text" name="filter_search" id="lists_filter_search" class="migur-search" value="<?php echo $this->escape($this->lists->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
-					</div>	
+					</div>
 					<div class="btn-group pull-left">
 						<button class="btn tip filter-search-button" type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 						<button class="btn tip" type="button" onclick="document.id('lists_filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
-					</div>	
+					</div>
 
 				</div>
-			</div>	
+			</div>
 	</fieldset>
 
 	<table class="sslist adminlist  table table-striped">
@@ -58,11 +58,11 @@
 				<td colspan="4">
 					<div class="pull-left">
 						<?php echo $this->lists->pagination->getListFooter(); ?>
-					</div>	
+					</div>
 					<div class="pull-right">
 						<label for="limit" class="pull-left buttongroup-label"><?php echo JText::_('COM_NEWSLETTER_LIMIT'); ?></label>
 						<?php echo $this->lists->pagination->getLimitBox(); ?>
-					</div>					
+					</div>
 				</td>
 			</tr>
 		</tfoot>
@@ -79,13 +79,13 @@
 					>
 						<?php echo $this->escape($item->name); ?>
 					</a>
-				<?php } else { 
+				<?php } else {
 					echo $this->escape($item->name);
 				}
-				?>	
+				?>
 				</td>
 				<td>
-				<?php 
+				<?php
 					if (intval($item->subscribers) > 0) {
 						echo '<a href="#" onclick="document.subscribersForm.filter_published.value=\'\';document.subscribersForm.filter_jusergroup.value=\'\';document.subscribersForm.filter_type.value=\'\';document.subscribersForm.filter_search.value=\'\';document.subscribersForm.filter_list.value=\'' . $item->list_id . '\';document.subscribersForm.submit();">' . $this->escape(intval($item->subscribers)) . '</a>';
 					} else {

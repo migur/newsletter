@@ -30,20 +30,20 @@ class NewsletterControllerList extends JControllerForm
 
 		// Apply, Save & New, and Save As copy should be standard on forms.
 		$this->registerTask('savenclose', 'save');
-		
+
 		$this->view_list = 'subscribers';
 	}
 
-	
+
 	/**
 	 * See parent's phpdoc
-	 * 
+	 *
 	 * @return  boolean
 	 * @since   11.1
 	 */
 	protected function allowAdd($data = array(), $key = 'id')
 	{
-		return 
+		return
 			/* parent::allowAdd($data, $key) && */
 			NewsletterHelperAcl::actionIsAllowed('list.add');
 	}
@@ -51,18 +51,18 @@ class NewsletterControllerList extends JControllerForm
 
 	/**
 	 * See parent's phpdoc
-	 * 
+	 *
 	 * @return  boolean
 	 * @since   11.1
 	 */
 	protected function allowEdit($data = array(), $key = 'id')
 	{
-		return 
+		return
 			/* parent::allowEdit($data, $key) && */
 			NewsletterHelperAcl::actionIsAllowed('list.edit');
 	}
 
-	
+
 	/**
 	 * Is used for standard upload of file.
 	 * @since  1.0
@@ -98,7 +98,7 @@ class NewsletterControllerList extends JControllerForm
 		$sess = JFactory::getSession();
 		$sess->set('list.' . $listId . '.file.uploaded', $data);
 
-		
+
 		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($listId, 'list_id') . '&subtask=' . $subtask, false));
 		return;
 	}
@@ -116,54 +116,54 @@ class NewsletterControllerList extends JControllerForm
 			$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=' . $this->view_list . $this->getRedirectToListAppend(), false));
 			return false;
 		}
-		
-		
+
+
 		if (JRequest::getMethod() == "POST") {
 
 			$subscriber  = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 			$newsletter  = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
 			$listManager = JModel::getInstance('List', 'NewsletterModel');
-			
+
 			$subscribers = JRequest::getVar('cid', array(), 'post');
 			$lists = json_decode(JRequest::getVar('list_id', array(), 'post'));
 
 			if (!empty($lists) && !empty($subscribers)) {
-				
+
 				foreach ($subscribers as $subscriberId) {
-					
+
 					// Need to load to add row  for j! user "on the fly"
 					$subscriber->load($subscriberId);
 
 					$assignedLists = array();
-					
+
 					$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_SUCCESS"));
 
 					foreach($lists as $listId) {
-						
+
 						if(!$subscriber->isInList($listId)) {
-							
+
 							try {
 
 								// No need to send the subscription newsleter when assigning with admin
-								
+
 //								if (!$listManager->sendSubscriptionMail(
 //									$subscriber,
-//									$listId, 
+//									$listId,
 //									array(
 //										'addToQueue'       => true,
 //										'ignoreDuplicates' => true))
-//								){	
+//								){
 //									throw new Exception();
 //								}
-//								
+//
 								if(!$subscriber->assignToList($listId, array('confirmed' => true))){
 									throw new Exception();
-								}	
+								}
 
 								$assignedLists[] = $listId;
-								
+
 							} catch (Exception $e) {
-								
+
 								$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_FAILED"), 'error');
 
 								NewsletterHelperLog::addError(
@@ -171,12 +171,12 @@ class NewsletterControllerList extends JControllerForm
 									'Error' => $e->getMessage(),
 									'Email' => $subscriber->email,
 									'Newsletter' => $newsletter->name));
-								
+
 								return false;
-							}	
-						}	
+							}
+						}
 					}
-					
+
 					// Fire event onMigurAfterSubscriberAssign
 					JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberAssign', array(
 						'subscriberId' => $subscriber->getId(),
@@ -201,8 +201,8 @@ class NewsletterControllerList extends JControllerForm
 			$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list.$this->getRedirectToListAppend(), false));
 			return false;
 		}
-		
-		
+
+
 		if (JRequest::getMethod() == "POST") {
 
 			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
@@ -217,7 +217,7 @@ class NewsletterControllerList extends JControllerForm
 					$model->load($subscriberId);
 
 					$unboundLists = array();
-					
+
 					foreach($lists as $listId) {
 
 						if($model->isInList($listId)) {
@@ -229,9 +229,9 @@ class NewsletterControllerList extends JControllerForm
 								$this->setMessage(JText::_("COM_NEWSLETTER_UNBIND_FAILED"), 'error');
 								break(2);
 							}
-						}	
+						}
 					}
-					
+
 					// Fire event onMigurAfterSubscriberUnbind
 					JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberUnbind', array(
 						'subscriberId' => $model->getId(),
@@ -240,11 +240,11 @@ class NewsletterControllerList extends JControllerForm
 				}
 			}
 		}
-		
+
 		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view='.$this->view_list, false));
 	}
-    
-    
+
+
 	/**
 	 * Retrieves only first row(names of columns) of the list
 	 * @since 1.0
@@ -258,9 +258,9 @@ class NewsletterControllerList extends JControllerForm
 		if (get_magic_quotes_gpc()) {
 			$jsonData = stripslashes($jsonData);
 		}
-		
+
 		$data = NewsletterHelperData::jsonDecode($jsonData);
-		
+
 		if (!$settings = $this->_getSettings($data)) {
 			return;
 		}
@@ -279,7 +279,7 @@ class NewsletterControllerList extends JControllerForm
 	}
 
 
-	
+
 	/**
 	 * Fetches and adds the data to DB from the file uploaded before
 	 * @return void
@@ -288,14 +288,14 @@ class NewsletterControllerList extends JControllerForm
 	public function import()
 	{
 		NewsletterHelperNewsletter::jsonPrepare();
-		
+
 		$app = JFactory::getApplication();
-		
+
 		$currentList = JRequest::getInt('list_id', '0');
-	
+
 		$limit = JRequest::getInt('limit', 1000);
 		$offset = JRequest::getVar('offset', '');
-		
+
 		if ($currentList < 1) {
             NewsletterHelperNewsletter::jsonError('No list Id');
 		}
@@ -304,9 +304,9 @@ class NewsletterControllerList extends JControllerForm
 		if (get_magic_quotes_gpc()) {
 			$jsonData = stripslashes($jsonData);
 		}
-		
+
 		$data = NewsletterHelperData::jsonDecode($jsonData);
-		
+
 		if (!$settings = $this->_getSettings($data)) {
             NewsletterHelperNewsletter::jsonError('No settings');
 		}
@@ -318,11 +318,11 @@ class NewsletterControllerList extends JControllerForm
 
 		$filename = $file['file']['filepath'];
 		$statePath = 'com_newsletter.'.md5('list.'.$currentList.'import.file.'.$filename);
-		
+
 		// If there is no extarnal offset then use internal from session
 		if (!is_numeric($offset)) {
 			$offset = $app->getUserState($statePath.'.offset', 0);
-		}	
+		}
 
 		// If this is a start then init session variables
 		if ($offset == 0) {
@@ -334,7 +334,7 @@ class NewsletterControllerList extends JControllerForm
 			$app->setUserState($statePath.'.assigned', 0);
 			$app->setUserState($statePath.'.alreadyInList', 0);
 		}
-		
+
 		// Restore previous state
 		$seek     = $app->getUserState($statePath.'.seek', 0);
 		$skipped  = $app->getUserState($statePath.'.skipped', 0);
@@ -343,8 +343,8 @@ class NewsletterControllerList extends JControllerForm
 		$updated  =	$app->getUserState($statePath.'.updated', 0);
 		$assigned =	$app->getUserState($statePath.'.assigned', 0);
 		$alreadyInList = $app->getUserState($statePath.'.alreadyInList', 0);
-		
-		
+
+
 		// Try to open file
 		if (($handle = fopen($filename, "r")) === FALSE) {
 			NewsletterHelperNewsletter::jsonError('Cannot open file');
@@ -353,13 +353,13 @@ class NewsletterControllerList extends JControllerForm
 		//get the header and seek to previous position
 		if ($settings->skipHeader) {
 			fgetcsv($handle, 0, $settings->delimiter, $settings->enclosure);
-		}	
-		
+		}
+
 		// Seek only if SEEK is not on the start to prevent inserting the HEADER into DB
 		if ($seek > 0) {
 			fseek($handle, $seek);
-		}	
-		
+		}
+
 		$collection = array();
 		$total = 0;
 
@@ -385,7 +385,7 @@ class NewsletterControllerList extends JControllerForm
 
 			$total++;
 		}
-		
+
 		// Store seek for further requests and close file
 		$app->setUserState($statePath.'.seek', ftell($handle));
 		fclose($handle);
@@ -394,7 +394,7 @@ class NewsletterControllerList extends JControllerForm
 		$list = JModel::getInstance('List', 'NewsletterModel');
 		$res = $list->importCollection(
 			$currentList,
-			$collection, 
+			$collection,
 			array(
 				'overwrite' => $settings->overwrite,
 				'autoconfirm' => true,
@@ -415,7 +415,7 @@ class NewsletterControllerList extends JControllerForm
 
 		// Check if this is not the end
 		if ($total > 0) {
-			
+
 			// Store offsets and stats
 			$app->setUserState($statePath.'.offset', $offset + $total);
 			$app->setUserState($statePath.'.skipped', $skipped);
@@ -459,18 +459,18 @@ class NewsletterControllerList extends JControllerForm
 			'updated'   => $updated  + $res['updated'],
 			'assigned'  => $assigned + $res['assigned'],
 			'alreadyInList' => $alreadyInList + $res['alreadyInList']);
-		
-		
+
+
 		NewsletterHelperLog::addDebug(
-			'Import successfull. List ID is '.$currentList, 
-			NewsletterHelperLog::CAT_IMPORT, 
+			'Import successfull. List ID is '.$currentList,
+			NewsletterHelperLog::CAT_IMPORT,
 			$res
 		);
-		
+
 		NewsletterHelperNewsletter::jsonMessage(JText::_('COM_NEWSLETTER_IMPORT_SUCCESSFUL'), $res);
 	}
 
-	
+
 	/**
 	 * Unbind the users from list. The users are in the file uploaded before
 	 * @return void
@@ -479,16 +479,16 @@ class NewsletterControllerList extends JControllerForm
 	public function exclude()
 	{
 		NewsletterHelperNewsletter::jsonPrepare();
-		
+
 		$app = JFactory::getApplication();
-		
+
 		$subtask = JRequest::getString('subtask', '');
 		$lids = (array) JRequest::getVar('list_id', 0);
         $currentList = (int) $lids[0];
-        
+
 		$limit = JRequest::getInt('limit', 1000);
 		$offset = JRequest::getVar('offset', '');
-		
+
 		if ($currentList < 1) {
             NewsletterHelperNewsletter::jsonError('No list Id');
 		}
@@ -497,9 +497,9 @@ class NewsletterControllerList extends JControllerForm
 		if (get_magic_quotes_gpc()) {
 			$jsonData = stripslashes($jsonData);
 		}
-		
+
 		$data = NewsletterHelperData::jsonDecode($jsonData);
-		
+
 		if ($subtask == 'lists') {
 
 			$list = JModel::getInstance('list', 'newsletterModel');
@@ -517,14 +517,14 @@ class NewsletterControllerList extends JControllerForm
 
 			$mList = JModel::getInstance('List', 'NewsletterModel');
 			$total = count($subscribers);
-			
+
 			$dbo = JFactory::getDbo();
 			$dbo->transactionStart();
-			
+
 			foreach ($subscribers as $item) {
-				
+
 				$res = $mList->unbindSubscriber($currentList, $item);
-				
+
 				if (!$res) {
 
 					NewsletterHelperNewsletter::jsonError('COM_NEWSLETTER_EXCLUSION_FAILED', array(
@@ -535,7 +535,7 @@ class NewsletterControllerList extends JControllerForm
 			}
 
 			$dbo->transactionCommit();
-			
+
 			NewsletterHelperNewsletter::jsonMessage(JText::_('COM_NEWSLETTER_EXCLUSION_COMPLETE'), array(
 				'total' => $total
 			));
@@ -543,7 +543,7 @@ class NewsletterControllerList extends JControllerForm
 		}
 
 		if ($subtask == 'parse') {
-            
+
             if (!$settings = $this->_getSettings($data)) {
                 NewsletterHelperNewsletter::jsonError('No settings');
             }
@@ -559,7 +559,7 @@ class NewsletterControllerList extends JControllerForm
             // If there is no extarnal offset then use internal from session
             if (!is_numeric($offset)) {
                 $offset = $app->getUserState($statePath.'.offset', 0);
-            }	
+            }
 
             // If this is a start then init session variables
             if ($offset == 0) {
@@ -583,15 +583,15 @@ class NewsletterControllerList extends JControllerForm
             //get the header and seek to previous position
             if ($settings->skipHeader) {
                 fgetcsv($handle, 0, $settings->delimiter, $settings->enclosure);
-            }	
+            }
 
             // Seek only if SEEK is not on the start to prevent inserting the HEADER into DB
             if ($seek > 0) {
                 fseek($handle, $seek);
-            }	
+            }
 
             $total = 0;
-			
+
             while (
                 ($limit == 0 || $total < $limit) &&
                 ($data = fgetcsv($handle, 0, $settings->delimiter, $settings->enclosure)) !== FALSE
@@ -601,7 +601,7 @@ class NewsletterControllerList extends JControllerForm
                 );
 				$total++;
             }
-            
+
             // Store seek for further requests and close file
             $app->setUserState($statePath.'.seek', ftell($handle));
             fclose($handle);
@@ -611,7 +611,9 @@ class NewsletterControllerList extends JControllerForm
 
 			$dbo = JFactory::getDbo();
 			$dbo->transactionStart();
-			
+
+			$res = array();
+
             foreach ($emails as $row) {
 
                 $user = $subscriber->getItem(array('email' => $row['email']));
@@ -628,7 +630,7 @@ class NewsletterControllerList extends JControllerForm
             }
 
 			$dbo->transactionCommit();
-			
+
             if (!empty($res['errors'])) {
                 NewsletterHelperNewsletter::jsonError(JText::_('COM_NEWSLETTER_EXCLUSION_FAILED'), array(
                     'fetched'   => $total,
@@ -678,8 +680,8 @@ class NewsletterControllerList extends JControllerForm
 
 
             NewsletterHelperLog::addDebug(
-                'Import successfull. List ID is '.$currentList, 
-                NewsletterHelperLog::CAT_EXCLUDE, 
+                'Import successfull. List ID is '.$currentList,
+                NewsletterHelperLog::CAT_EXCLUDE,
                 $res
             );
 
@@ -687,8 +689,8 @@ class NewsletterControllerList extends JControllerForm
 		}
 	}
 
-	
-	
+
+
 	/**
 	 * Retrieves the settings from the request data
 	 * @return object - data
@@ -697,7 +699,7 @@ class NewsletterControllerList extends JControllerForm
 	protected function _getSettings($data)
 	{
 		$data = (object) $data;
-		
+
 		if (empty($data->enclosure) || $data->enclosure == 'no') {
 			$data->enclosure = "\0";
 		}

@@ -217,7 +217,7 @@ class NewsletterViewNewsletter extends MigurView
 			),
 		'article.png');
 
-		$bar = JToolBar::getInstance('toolbar');
+		$bar = MigurToolbar::getInstance('toolbar');
 
 		if ($this->isUpdateAllowed && (
 				( $isNew && AclHelper::actionIsAllowed('newsletter.add' )) ||
