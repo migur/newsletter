@@ -6,9 +6,9 @@
 	<fieldset class="filter-bar">
 		<div class="row-fluid">
 			<div class="pull-right">
-				<?php echo MigurToolBar::getInstance('subscribers')->render(); ?>
-			</div>	
-		
+				<?php echo MigurToolbar::getInstance('subscribers')->render(); ?>
+			</div>
+
 			<div id="ss-filter-panel-control" class="pull-left filter-panel-control" data-role="ctrl-container"></div>
 		</div>
 
@@ -42,18 +42,18 @@
 				<div class="pull-left btn-group">
 					<!--<label><?php echo JText::_('COM_NEWSLETTER_JUSERGROUP'); ?></label>-->
 					<?php echo JHtml::_('access.usergroup', 'filter_jusergroup', $this->subscribers->state->get('filter.jusergroup'), "onchange=\"document.subscribersForm.filter_type.value='2';this.form.submit();\"", true); ?>
-				</div>	
+				</div>
 				<div class="pull-left btn-group">
 					<div class="filter-search btn-group pull-left">
-						<input type="text" name="filter_search" id="ss_filter_search" class="migur-search" value="<?php echo $this->escape($this->subscribers->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />		
-					</div>	
+						<input type="text" name="filter_search" id="ss_filter_search" class="migur-search" value="<?php echo $this->escape($this->subscribers->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
+					</div>
 					<div class="btn-group pull-left">
 						<button class="btn tip filter-search-button" type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 						<button class="btn tip" type="button" onclick="document.id('ss_filter_search').value='';document.subscribersForm.filter_list.value='';document.subscribersForm.filter_published.value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
-					</div>	
+					</div>
 				</div>
 			</div>
-		</div>	
+		</div>
 	</fieldset>
 
 	<table class="sslist adminlist  table table-striped">
@@ -86,18 +86,18 @@
 				<td class="left" colspan="6">
 					<div class="pull-left">
 						<?php echo $this->subscribers->pagination->getListFooter(); ?>
-					</div>	
+					</div>
 					<div class="pull-right">
 						<label for="limit" class="pull-left buttongroup-label"><?php echo JText::_('COM_NEWSLETTER_LIMIT'); ?></label>
 						<?php echo $this->subscribers->pagination->getLimitBox(); ?>
-					</div>					
+					</div>
 				</td>
 			</tr>
 		</tfoot>
 		<tbody>
 		<?php
-		$subscriber = $this->subscriberModel; 
-		foreach ($this->subscribers->items as $i => $item) : 
+		$subscriber = $this->subscriberModel;
+		foreach ($this->subscribers->items as $i => $item) :
 			$subscriber->setFromArray($item);
 		?>
 
@@ -106,20 +106,20 @@
 					<?php echo JHtml::_('multigrid.id', $i, $subscriber->getExtendedId(), false, 'cid', 'subscribersForm'); ?>
 				</td>
 				<td class="subscriber-name">
-					<?php 
-						if (!$subscriber->subscriber_id) { 
+					<?php
+						if (!$subscriber->subscriber_id) {
 							$href = JRoute::_('index.php?option=com_newsletter&layout=edit&task=subscriber.edit&user_id='.$subscriber->user_id, false);
 						} else {
 							$href = JRoute::_('index.php?option=com_newsletter&layout=edit&task=subscriber.edit&subscriber_id='.$subscriber->subscriber_id, false);
 						}
 					?>
-					<a 
+					<a
 						href="<?php echo $href; ?>"
-						class="subscriber-item" 
+						class="subscriber-item"
 					>
 						<?php echo $this->escape($item->name); ?>
 					</a>
-					
+
 					<div class="<?php echo $subscriber->isJoomlaUserType()? 'juser-type-icon' : 'subscriber-type-icon'; ?>"></div>
 				</td>
 				<td class="subscriber-email">
