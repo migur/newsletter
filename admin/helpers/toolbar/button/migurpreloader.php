@@ -17,7 +17,7 @@ if (!defined('MIGUR')) {
 
 /**
  * Usage:
- *		$bar->appendButton('MigurPreloader');
+ *		$bar->appendButton('Migurpreloader');
  *
  * @package     Joomla.Platform
  * @subpackage  HTML
@@ -29,14 +29,14 @@ require_once 'migurbasic.php';
 class JToolbarButtonMigurpreloader extends JToolbarButtonMigurbasic
 {
 	protected $_defaults = array('id' => 'toolbar-preloader');
-	
+
 	/**
 	 * @var    string	Button type
 	 */
 	protected $_name = 'MigurPreloader';
 
-	
-	
+
+
 	protected function _getHtml($params)
 	{
 		$html = "<div id=\"{$params['id']}\" class=\"preloader-container\"></div>\n";
