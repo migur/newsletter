@@ -64,13 +64,8 @@ class NewsletterViewSubscriber extends MigurView
 			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 			$model->load($this->subscriberId);
 			$this->subscriber = $model;
-<<<<<<< Updated upstream
-			
-			$listsModel = JModel::getInstance('lists', 'NewsletterModel');
-=======
 
 			$listsModel = MigurModel::getInstance('lists', 'NewsletterModel');
->>>>>>> Stashed changes
 			$model = $this->setModel($listsModel);
 
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
