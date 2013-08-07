@@ -104,14 +104,14 @@ class NewsletterViewDashboard extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_DASHBOARD_TITLE'), 'article.png');
 		$bar = MigurToolbar::getInstance();
 
-		$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_PROCESS_QUEUE', array('id' => 'toolbar-queue', 'class' => 'btn btn-small btn-success'));
+		$bar->appendButton('Migurbasic', 'COM_NEWSLETTER_PROCESS_QUEUE', array('id' => 'toolbar-queue', 'class' => 'btn btn-small btn-success'));
 		$bar->appendButton('SendProgress');
 
 		$bar->appendButton('Link', 'list', 'COM_NEWSLETTER_VIEW_QUEUE', 'index.php?option=com_newsletter&view=queues');
 		$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_PROCESS_BOUNCES', array('id' => 'toolbar-bounces', 'icon-class' => 'icon-refresh'));
 
 		$bar->appendButton('Link', 'warning', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
-		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', SupportHelper::getResourceUrl('mailing', 'general'));
+		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', NewsletterHelperSupport::getResourceUrl('mailing', 'general'));
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
