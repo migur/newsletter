@@ -11,7 +11,7 @@
     <description>Ant Build File for Joomla</description>
 
     <!-- load variables from config file -->
-    <property name="cfg.configFile" location="build.properties" />
+    <property name="cfg.configFile" location="build.j3.properties" />
     <loadproperties srcfile="${cfg.configFile}" />
 
     <!--config file values
@@ -80,7 +80,7 @@
 
 
     <target name="_up_component" description="attemps to update files on localhost server with files from working directory">
-    	<!-- MAIN COMPONENT -->	
+    	<!-- MAIN COMPONENT -->
         <delete dir="${destdir}/administrator/components/com_${cfg.comName}" />
         <copy todir="${destdir}/administrator/components/com_${cfg.comName}" preservelastmodified="true" overwrite="true">
             <fileset dir="${cfg.adminFilesDir}" />
@@ -146,7 +146,7 @@
         <copy  todir="${destdir}/language/en-GB" preservelastmodified="true" overwrite="true">
             <fileset file="${basedir}/extensions/modules/${ext_name}/en-GB.${ext_name}.sys.ini" />
         </copy>
-	</target>	
+	</target>
 
 
 
@@ -168,7 +168,7 @@
     </target>
 
 
-	
+
     <target name="init" description="creates nessecary directory to build with">
         <mkdir dir="${cfg.buildVersionDir}" />
         <mkdir dir="${cfg.buildVersionDir}/plugins" />
