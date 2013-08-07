@@ -82,7 +82,7 @@ class NewsletterViewAutomailings extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_AUTOMAILINGS_TITLE'), 'article.png');
 
 		$bar = MigurToolbar::getInstance();
-		$bar->appendButton('MigurModal', 'JTOOLBAR_NEW', array(
+		$bar->appendButton('Migurmodal', 'JTOOLBAR_NEW', array(
 			'url' => 'index.php?option=com_newsletter&view=automailing&tmpl=component',
 			'modal' => '#modal-automailing',
 			'class' => 'btn btn-small btn-success',

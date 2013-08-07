@@ -45,7 +45,7 @@ class JToolbarButtonSendProgress extends JToolbarButton
 	 * @return  string
 	 * @since   11.1
 	 */
-	public function fetchButton($type = 'MigurHelp', $ref = '', $com = false, $override = null, $component = null, $target = '_blank', $width='980', $height='600')
+	public function fetchButton($type = 'Migurhelp', $ref = '', $com = false, $override = null, $component = null, $target = '_blank', $width='980', $height='600')
 	{
 
 		$stat = MigurModel::getInstance('Queues', 'NewsletterModel')->getSummary();

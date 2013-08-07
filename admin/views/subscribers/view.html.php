@@ -102,7 +102,7 @@ class NewsletterViewSubscribers extends MigurView
 
 		$bar = MigurToolbar::getInstance('subscribers');
 
-		$bar->appendButton('MigurModal', 'COM_NEWSLETTER_NEW_SUBSCRIBER', array(
+		$bar->appendButton('Migurmodal', 'COM_NEWSLETTER_NEW_SUBSCRIBER', array(
 			'url' => 'index.php?option=com_newsletter&task=subscriber.add&tmpl=component',
 			'modal' => '#modal-subscriber',
 			'class' => 'btn btn-small btn-success',
@@ -118,20 +118,20 @@ class NewsletterViewSubscribers extends MigurView
 		}
 
         if (NewsletterHelperAcl::actionIsAllowed('list.edit')) {
-			$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_REMOVE_FROM_LIST', array(
+			$bar->appendButton('Migurbasic', 'COM_NEWSLETTER_REMOVE_FROM_LIST', array(
 				'id' => 'subscribers-unbind',
 				'data-task' => 'list.unbindgroup',
 				'icon-class' => 'icon-cancel'
 			));
 
-			$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_ASSIGN_TO_LIST', array(
+			$bar->appendButton('Migurbasic', 'COM_NEWSLETTER_ASSIGN_TO_LIST', array(
 				'id' => 'subscribers-assign',
 				'data-task' => 'list.assigngroup',
 				'icon-class' => 'icon-copy'
 			));
 		}
 
-		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', NewsletterHelperSupport::getResourceUrl('subscribers'));
+		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP', NewsletterHelperSupport::getResourceUrl('subscribers'));
 
 		$bar = MigurToolbar::getInstance('lists');
 
@@ -146,7 +146,7 @@ class NewsletterViewSubscribers extends MigurView
 			$bar->appendButton('Standard', 'publish', 'JTOOLBAR_ENABLE', 'lists.publish', false);
 		}
 
-		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', NewsletterHelperSupport::getResourceUrl('lists'));
+		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP', NewsletterHelperSupport::getResourceUrl('lists'));
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
