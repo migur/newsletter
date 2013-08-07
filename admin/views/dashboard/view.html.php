@@ -121,7 +121,7 @@ class NewsletterViewDashboard extends MigurView
 		$bar->appendButton('Separator');
 		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', NewsletterHelperSupport::getResourceUrl('com-newsletter/mailing/general'));
 		JToolBarHelper::custom('', 'progress', '', '', false);
-		$bar->appendButton('MigurQueue', 'queue');
+		$bar->appendButton('Migurqueue', 'queue');
 
 		JToolBarHelper::custom('', 'progress', '', '', false);
 
@@ -139,7 +139,7 @@ class NewsletterViewDashboard extends MigurView
 
 		$bar = MigurToolbar::getInstance('help-toolbar');
 		$bar->appendButton('Popup', 'publish', 'COM_NEWSLETTER_ABOUT', 'http://migur.com/products/newsletter', 800, 600, 0, 0);
-		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter');
+		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter');
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
