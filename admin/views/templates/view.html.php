@@ -64,7 +64,7 @@ class NewsletterViewTemplates extends MigurView
 
 		$pagination = $modelTemps->getPagination();
 
-		
+
 		$temps = (object) array(
 				'items' => $modelTemps->getItems(),
 				'state' => $modelTemps->getState(),
@@ -87,7 +87,7 @@ class NewsletterViewTemplates extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_TEMPLATES_TITLE'), 'article.png');
 
-		$bar = JToolBar::getInstance();
+		$bar = MigurToolbar::getInstance();
 		$bar->appendButton('Standard', 'new', 'JTOOLBAR_NEW', 'template.add', false);
 		//$bar->appendButton('Standard', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);

@@ -66,7 +66,7 @@ class NewsletterViewBounceds extends MigurView
 		$state = $model->getState();
 		$listOrder = $model->getState('list.ordering');
 		$listDirn = $model->getState('list.direction');
-                
+
 		$saveOrder = $listOrder == 'a.ordering';
 
 		$this->assignRef('items', $items);
@@ -89,7 +89,7 @@ class NewsletterViewBounceds extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_BOUNCEDS_TITLE'), 'article.png');
 
-		$bar = JToolBar::getInstance('bounceds');
+		$bar = MigurToolbar::getInstance('bounceds');
 		$bar->appendButton('Standard', 'process', 'JTOOLBAR_PROCESS', 'bounceds.process', false);
 
 		// Load the submenu.

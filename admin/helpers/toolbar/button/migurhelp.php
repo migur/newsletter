@@ -26,9 +26,9 @@ if (!defined('MIGUR')) {
 /**
  * Legacy support
  */
-JToolbar::getInstance()->loadButtonType('help');
+MigurToolbar::getInstance()->loadButtonType('help');
 
-class JToolbarButtonMigurHelp extends JToolbarButton
+class JButtonMigurHelp extends JButton
 {
 	/**
 	 * @var    string	Button type
@@ -58,7 +58,7 @@ class JToolbarButtonMigurHelp extends JToolbarButton
 
 		return $html;
 	}
-	
+
 	/**
 	 * Get the button id
 	 *

@@ -42,7 +42,6 @@ class NewsletterViewTemplate extends MigurView
 		JHTML::_('behavior.modal');
 
 		$tStyleId = JRequest::getInt('t_style_id');
-		
 		$modelTemps = MigurModel::getInstance('Templates', 'NewsletterModel');
 		$temps = (object) array(
 				'items' => $modelTemps->getStandardTemplates(),
@@ -69,10 +68,10 @@ class NewsletterViewTemplate extends MigurView
 		}
 
 		if ($tStyleId > 0) {
-			
+
 			$model = $this->getModel();
 			$template = $model->getTemplateBy($tStyleId);
-			
+
 			$this->assign('columns', $model->getColumnPlaceholders($template->content));
 			$this->assign('tplInfo', (object)$template->information);
 
@@ -81,7 +80,7 @@ class NewsletterViewTemplate extends MigurView
 				$this->tplForm->setValue('template_name', null, $this->escape($this->tplInfo->name));
 			}
 		}
-		
+
 		parent::display($tpl);
 
 		// Set the document
@@ -96,7 +95,7 @@ class NewsletterViewTemplate extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance();
+		$bar = MigurToolbar::getInstance();
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'template.save', false);
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'template.cancel', false);
 	}
@@ -115,7 +114,7 @@ class NewsletterViewTemplate extends MigurView
 		JToolbarHelper::title($title);
 		$document = JFactory::getDocument();
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
-		
+
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/template.css');
 
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');

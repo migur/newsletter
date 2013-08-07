@@ -20,8 +20,8 @@ defined('_JEXEC') or die;
 	<button id="control-button-send" class="btn btn-large btn-success">
 		<?php echo JText::_('COM_NEWSLETTER_NEWSLETTER_SEND'); ?>
 	</button>
-	<?php echo JToolBar::getInstance('sender')->render(); ?>
-</div>	
+	<?php echo MigurToolbar::getInstance('sender')->render(); ?>
+</div>
 
 <div id="send-msg-container"class="pull-right">
 	<div id="send-message" class="pull-left"></div>

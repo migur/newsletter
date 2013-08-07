@@ -47,17 +47,17 @@ class NewsletterViewList extends MigurView
 	public function display($tpl = null)
 	{
 		$app = JFactory::getApplication();
-		
+
 		$isNew = (!JRequest::getInt('list_id', false) );
-		
+
 		$model =            MigurModel::getInstance('lists', 'NewsletterModel');
 		$listModel =        MigurModel::getInstance('List', 'NewsletterModel');
 		$subscribersModel = MigurModel::getInstance('subscribers', 'NewsletterModel');
-		
+
 		$this->setModel($subscribersModel);
-		
+
 		$this->assign('list', $listModel->getItem());
-		
+
 		if (
 			( $isNew && !NewsletterHelperAcl::actionIsAllowed('list.add')) ||
 			(!$isNew && !NewsletterHelperAcl::actionIsAllowed('list.edit'))
@@ -65,18 +65,18 @@ class NewsletterViewList extends MigurView
 			$msg = $isNew? 'JLIB_APPLICATION_ERROR_CREATE_RECORD_NOT_PERMITTED' : 'JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED';
 			JFactory::getApplication()->redirect(
 				JRoute::_('index.php?option=com_newsletter&view=subscribers', false),
-				JText::_($msg), 
+				JText::_($msg),
 				'error');
 			return;
-		}	
-		
-		
+		}
+
+
 		//TODO: Bulk-code. Need to refactor
 
 		$listId = JRequest::getInt('list_id', 0);
-		
+
 		$activeTab = JRequest::getInt('activetab', 0);
-		
+
 		$subtask = 0;
 		switch(JRequest::getString('subtask', '')) {
 			case 'import':
@@ -90,17 +90,10 @@ class NewsletterViewList extends MigurView
 			default:
 				$subtask = 0;
 		}
-		
+
 		$this->assign('activeTab', $activeTab);
-		
+
 		NewsletterHelperJavascript::addStringVar('subtask', $subtask);
-<<<<<<< HEAD
-=======
-
-
-		$script = $this->get('Script');
-		$this->script = $script;
->>>>>>> development
 
 		$this->listForm = $this->get('Form', 'list');
 
@@ -112,7 +105,7 @@ class NewsletterViewList extends MigurView
 
 		$modelSubs = new NewsletterModelSubscribers();
 		$modelSubs->setState('list.limit', 10);
-		
+
 		if (!empty($listId)) {
 			$this->subs = $modelSubs->getSubscribersByList(array(
 				'list_id' => JRequest::getInt('list_id')
@@ -125,7 +118,7 @@ class NewsletterViewList extends MigurView
 			$items = array();
 			$this->subs = array();
 		}
-		
+
 		$ss = (object) array(
 				'items' => $items,
 				'state' => $modelSubs->getState(),
@@ -190,11 +183,11 @@ class NewsletterViewList extends MigurView
 //			$typeString = '{ \'' . JText::_('COM_MEDIA_FILES', 'true') . ' (' . $displayTypes . ')\': \'' . $filterTypes . '\' }';
 //		}
 
-		
+
 //		if(!empty($listId)) {
 //			$this->assign('events', $listModel->getEventsCollection($listId));
-//		}	
-		
+//		}
+
 		/*
 		 * Display form for FTP credentials?
 		 * Don't set them here, as there are other functions called before this one if there is any file write operation
@@ -211,19 +204,19 @@ class NewsletterViewList extends MigurView
 		$this->setStatisticsData();
 
         // Handle import plugins
-	
+
         $plgManager = NewsletterPluginManager::factory('import');
-		
+
         $res = $plgManager->trigger(array(
             'group' => 'list.import',
             'event' => 'onMigurImportShowIcon'
         ));
-        
+
         $this->assignRef('importPlugins', $res);
-        
+
 		// Set the document
 		$this->setDocument();
-		
+
 		parent::display($tpl);
 
 	}
@@ -239,15 +232,15 @@ class NewsletterViewList extends MigurView
 		$lid = JRequest::getInt('list_id', false);
 		$isNew = !$lid;
 		JToolbarHelper::title($isNew? JText::_('COM_NEWSLETTER_TITLE_CREATE_LIST') : JText::sprintf('COM_NEWSLETTER_TITLE_EDIT_LIST', '"'.$this->list->name.'"'));
-		
-		$bar = JToolBar::getInstance();
+
+		$bar = MigurToolbar::getInstance();
 		if (
 			( $isNew && NewsletterHelperAcl::actionIsAllowed('list.add')) ||
 			(!$isNew && NewsletterHelperAcl::actionIsAllowed('list.edit'))
 		) {
 			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'list.apply', false);
 			$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'list.save', false);
-		}	
+		}
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CLOSE', 'list.cancel', false);
 	}
 
@@ -275,7 +268,7 @@ class NewsletterViewList extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.raphael-min.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.line-min.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.pie-min.js');
-		
+
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/importer.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/excluder.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/list/list.js');

@@ -26,7 +26,7 @@ if (!defined('MIGUR')) {
 /**
  * Legacy support
  */
-JToolbar::getInstance()->loadButtonType('help');
+MigurToolbar::getInstance()->loadButtonType('help');
 
 class JToolbarButtonSendProgress extends JToolbarButton
 {
@@ -47,7 +47,7 @@ class JToolbarButtonSendProgress extends JToolbarButton
 	 */
 	public function fetchButton($type = 'MigurHelp', $ref = '', $com = false, $override = null, $component = null, $target = '_blank', $width='980', $height='600')
 	{
-		
+
 		$stat = MigurModel::getInstance('Queues', 'NewsletterModel')->getSummary();
 		$sent = 0;
 		$toSend = 0;
@@ -56,11 +56,11 @@ class JToolbarButtonSendProgress extends JToolbarButton
 			$sent += $row['sent'];
 			$total += $row['total'];
 		}
-		
+
 		$text	= !empty($com)? JText::_($com) : JText::_('JTOOLBAR_HELP');
 		$class	= $this->fetchIconClass('help');
 
-		$html = 
+		$html =
 			'<div style="float:left;font-size:12px;">' .
 				'<div class="progress-info">' .
 	                $sent . ' of ' . $total . ' mails sent in ' . count($stat) . ' newsletters' .
@@ -72,11 +72,11 @@ class JToolbarButtonSendProgress extends JToolbarButton
 			'<div style="width: 260px">' .
 				'<div class="progress-line"></div>' .
 				'<div class="progress-bar"></div>' .
-			'</div>';	
-		
+			'</div>';
+
 		return $html;
 	}
-	
+
 	/**
 	 * Get the button id
 	 *

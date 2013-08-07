@@ -53,7 +53,7 @@ class NewsletterViewLogs extends MigurView
 		$listOrder = $model->getState('list.ordering');
 		$listDirn = $model->getState('list.direction');
 		$priorities = $model->getPriorities();
-		
+
 		$this->assignRef('items', $items);
 		$this->assignRef('pagination', $pagination);
 		$this->assignRef('state', $state);
@@ -63,7 +63,7 @@ class NewsletterViewLogs extends MigurView
 		$this->assignRef('categories', $categories);
 		$this->assignRef('priorities', $priorities);
 
-		
+
 		// We don't need toolbar in the modal window.
 		if ($this->getLayout() !== 'modal') {
 			$this->addToolbar();
@@ -72,7 +72,7 @@ class NewsletterViewLogs extends MigurView
 		}
 
 		$this->setDocument();
-		
+
 		parent::display($tpl);
 	}
 
@@ -86,14 +86,14 @@ class NewsletterViewLogs extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_LOG_TITLE'), 'article.png');
 
-		$bar = JToolBar::getInstance();
+		$bar = MigurToolbar::getInstance();
 		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'logs.delete', false);
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
 	}
-	
-	protected function addSidebar() 
+
+	protected function addSidebar()
 	{
 		JHtmlSidebar::setAction('index.php?option=com_newsletter&view=logs');
 
@@ -110,14 +110,14 @@ class NewsletterViewLogs extends MigurView
 		);
 	}
 
-	protected function setDocument() 
+	protected function setDocument()
 	{
 		$doc = JFactory::getDocument();
-		
+
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/logs.css');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/logs/logs.js');
 	}
-	
+
 }

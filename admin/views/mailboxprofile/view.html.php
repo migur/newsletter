@@ -33,7 +33,7 @@ class NewsletterViewMailboxprofile extends MigurView
 	public function display($tpl = null)
 	{
 		$this->ssForm = $this->get('Form', 'mailboxprofile');
-		
+
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
 			JError::raiseError(500, implode("\n", $errors));
@@ -55,7 +55,7 @@ class NewsletterViewMailboxprofile extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance();
+		$bar = MigurToolbar::getInstance();
 		$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_CHECK', array('id' => 'mailbox-toolbar-publish'));
 		$bar->appendButton('MigurBasic', 'JTOOLBAR_CANCEL', array('id' => 'mailbox-toolbar-cancel'));
 		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'mailboxprofile.save', false);
@@ -80,7 +80,7 @@ class NewsletterViewMailboxprofile extends MigurView
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/forms/mailboxprofile.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/mailboxprofile/submitbutton.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/mailboxprofile/mailboxprofile.js');
-		
+
 		JText::script('COM_NEWSLETTER_MAILBOX_ERROR_UNACCEPTABLE');
 	}
 

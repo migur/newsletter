@@ -76,7 +76,7 @@ class NewsletterViewDashboard extends MigurView
 					array('rssurl' => JRoute::_('http://migur.com/blog?format=feed&type=rss'))
 			)
 		);
-		
+
 		$this->info = NewsletterHelperNewsletter::getCommonInfo();
 
 		$this->setStatisticsData();
@@ -88,7 +88,7 @@ class NewsletterViewDashboard extends MigurView
 		$this->setDocument();
 
 		$this->addToolbar();
-		
+
 		parent::display($tpl);
 
 	}
@@ -102,7 +102,7 @@ class NewsletterViewDashboard extends MigurView
 	protected function addToolbar()
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_DASHBOARD_TITLE'), 'article.png');
-		$bar = JToolBar::getInstance();
+		$bar = MigurToolbar::getInstance();
 
 		$bar->appendButton('MigurBasic', 'COM_NEWSLETTER_PROCESS_QUEUE', array('id' => 'toolbar-queue', 'class' => 'btn btn-small btn-success'));
 		$bar->appendButton('SendProgress');
@@ -129,7 +129,7 @@ class NewsletterViewDashboard extends MigurView
 		//$document->setTitle('COM_NEWSLETTER_DASHBOARD_TITLE');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/dashboard.css');
-		
+
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/modal.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-min.js');
@@ -143,7 +143,7 @@ class NewsletterViewDashboard extends MigurView
 
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/subscriber/submitbutton.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/dashboard/dashboard.js');
-		
+
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}
 
