@@ -75,7 +75,7 @@ class NewsletterViewConfiguration extends MigurView
 		//$this->modules = $model->getModules();
 		//$this->plugins = $model->getPlugins();
 		$this->assign('modules', NewsletterHelperModule::getSupported());
-		$this->assign('plugins', MigurPluginHelper::getSupported());
+		$this->assign('plugins', NewsletterHelperPlugin::getSupported());
 
 		$this->assign('templates', MigurModel::getInstance('Templates', 'NewsletterModel')->getAllInstalledItems());
 
