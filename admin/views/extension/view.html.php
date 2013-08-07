@@ -42,7 +42,7 @@ class NewsletterViewExtension extends MigurView
 	public function display($tpl = null)
 	{
 		require_once COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'fields' . DIRECTORY_SEPARATOR . 'modulelayout.php';
-		
+
 		JHTML::stylesheet('media/com_newsletter/css/admin.css');
 		JHTML::stylesheet('media/com_newsletter/css/extension.css');
 		JHTML::script('media/com_newsletter/js/migur/js/core.js');
@@ -53,7 +53,7 @@ class NewsletterViewExtension extends MigurView
 		$extensionId = JRequest::getInt('extension_id', 0);
 
 		if ($type == 'plugin') {
-			$exts = array(MigurPluginHelper::getItem($extensionId, $native));
+			$exts = array(NewsletterHelperPlugin::getItem($extensionId, $native));
 		} else {
 			$exts = NewsletterHelperModule::getSupported(array(
 				'extension_id' => $extensionId,
@@ -71,13 +71,13 @@ class NewsletterViewExtension extends MigurView
 			JPATH_BASE
 			:
 			COM_NEWSLETTER_PATH_ADMIN_EXTENSIONS .
-			DIRECTORY_SEPARATOR . $type . 's' . 
+			DIRECTORY_SEPARATOR . $type . 's' .
 			DIRECTORY_SEPARATOR . $ext->extension;
-		
-		$lang->load($ext->extension, $basePath) 
+
+		$lang->load($ext->extension, $basePath)
 		|| $lang->load($ext->extension, $basePath, $lang->getDefault());
-		
-		
+
+
 		$this->info = $ext->xml;
 		if (JRequest::getString('layout') == 'edit') {
 			$model = $this->getModel();
@@ -86,7 +86,7 @@ class NewsletterViewExtension extends MigurView
 				'native'    => $ext->native,
 				'type'      => $ext->type,
 				'namespace' => !empty($ext->namespace)? $ext->namespace : '',
-				
+
 			));
 			//var_dump($ext); die;
 		}
