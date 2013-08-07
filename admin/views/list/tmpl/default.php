@@ -7,8 +7,7 @@ $isAuthorised =
 			(!$this->isNew && NewsletterHelperAcl::actionIsAllowed('list.edit'));
 ?>
 
-<<<<<<< HEAD
-	
+
 <div id="modal-listevent" class="modal hide fade">
 	<div class="modal-header">
 		<button data-dismiss="modal" class="close" type="button">×</button>
@@ -46,7 +45,7 @@ $isAuthorised =
             </li>
         </ul>
         <div class="tab-content">
-            
+
             <div class="tab-pane active" id="tab-overview">
                 <?php echo $this->loadTemplate('overview', ''); ?>
             </div>
@@ -65,7 +64,7 @@ $isAuthorised =
 
             <div class="tab-pane" id="tab-subscribers">
                 <?php echo $this->loadTemplate('subscribers', ''); ?>
-            </div>    
+            </div>
 
             <div class="tab-pane" id="tab-unsubscribed">
                 <?php echo $this->loadTemplate('unsubscribed', ''); ?>
@@ -77,35 +76,6 @@ $isAuthorised =
 
         </div>
 
-=======
-<fieldset id="tabs">
-    <legend><?php echo JFactory::getDocument()->getTitle(); ?></legend>
-    <form class="form-validate" method="POST" action="<?php echo JURI::base(); ?>index.php?option=com_newsletter&amp;view=list&amp;tmpl=component&amp;<?php echo $this->session->getName().'='.$this->session->getId(); ?>&amp;<?php echo JUtility::getToken();?>=1" enctype="multipart/form-data" id="listForm" name="listForm">
-    <?php
-        echo MigurToolbar::getInstance('multitab-toolbar')->render();
-        echo JHtml::_('tabs.start', 'tabs-list', array('startOffset'=> $this->activeTab));
-        echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_OVERVIEW'), 'tab-overview');
-        echo $this->loadTemplate('overview', '');
-
-		if (
-			( $this->isNew && NewsletterHelperAcl::actionIsAllowed('list.add')) ||
-			(!$this->isNew && NewsletterHelperAcl::actionIsAllowed('list.edit'))
-		) {
-			echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_IMPORT'), 'tab-import');
-			echo $this->loadTemplate('import', '');
-			echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_EXCLUDE'), 'tab-exclude');
-			echo $this->loadTemplate('exclude', '');
-		}
-
-        echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_SUBSCRIBERS'), 'tab-subscribers');
-        echo $this->loadTemplate('subscribers', '');
-        echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_UNSUBSCRIBED'), 'tab-unsubscribed');
-        echo $this->loadTemplate('unsubscribed', '');
-        echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_ADVANCED'), 'tab-advanced');
-        echo $this->loadTemplate('advanced', '');
-        echo JHtml::_('tabs.end');
-    ?>
->>>>>>> development
 
         <input type="hidden" name="option" value="com_newsletter" />
         <input type="hidden" name="view" value="list" />
@@ -113,7 +83,7 @@ $isAuthorised =
         <input type="hidden" name="task" value="" />
         <input type="hidden" name="subtask" value="" />
         <?php echo JHtml::_('form.token'); ?>
-        
+
     </form>
 </div>
 
