@@ -49,7 +49,7 @@ $listOrder = 'desc';
                     <?php echo $this->escape($item->date); ?>
                 </td>
                 <td>
-                    <?php echo $this->escape($item->text); ?>
+                    <?php echo $this->escape($item->fulltext); ?>
                 </td>
             </tr>
             <?php endforeach; ?>
