@@ -17,7 +17,7 @@ JHtml::_('behavior.framework', true);
  * @subpackage	com_media
  * @since 1.0
  */
-class NewsletterViewMedia extends JView
+class NewsletterViewMedia extends MigurView
 {
 	function display($tpl = null)
 	{

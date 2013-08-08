@@ -55,7 +55,7 @@ class NewsletterViewSubscriber extends MigurView
 
 		$this->ssForm = $this->get('Form', 'subscriber');
 
-		// call getItems from model 'lists' via JView->get()
+		// call getItems from model 'lists' via MigurView->get()
 		$this->subscriberId = $this->ssForm->getValue('subscriber_id');
 
 
