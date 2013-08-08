@@ -19,7 +19,7 @@ JHtml::_('behavior.formvalidation');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterViewClose extends JView
+class NewsletterViewClose extends MigurView
 {
 
 	/**
@@ -36,7 +36,7 @@ class NewsletterViewClose extends JView
 		$msg = $session->get('application.queue');
 		$session->set('migur.queue', $msg);
 		$session->set('application.queue', null);
-		
+
 		// close a modal window
 		JFactory::getDocument()->addScriptDeclaration('window.parent.location.reload();');
 	}
