@@ -102,7 +102,7 @@ class NewsletterModelList extends JModelAdmin
 	 * Creates Migur or Joomla user if necessary
 	 *
 	 * TODO: Better to place it in something like NewsletterManagerList...
-	 * 
+	 *
 	 * @param type $collection List of objects
 	 * @param type $options Lsit of options (errorOnFail, overwrite, autoconfirm)
 	 * @return type Result data array
@@ -121,10 +121,10 @@ class NewsletterModelList extends JModelAdmin
 		$errorOnFail = isset($options['errorOnFail']) ? (bool) $options['errorOnFail'] : false;
 
 		$db = JFactory::getDbo();
-		
+
 		$isTransaction = false;
 		$transactionItemsCount = 0;
-		
+
 		foreach ($collection as $row) {
 
 			// Let's Speeeeeed up this script in at least 50 times!
@@ -132,7 +132,7 @@ class NewsletterModelList extends JModelAdmin
 				$db->transactionStart();
 				$isTransaction = true;
 			}
-			
+
 			foreach ($row as &$value) {
 				$value = trim($value);
 			}
@@ -221,15 +221,15 @@ class NewsletterModelList extends JModelAdmin
 
 						// Finaly all ok!
 						$assigned++;
-						
+
 					} catch (Exception $e) {
 						$errors++;
 					}
-					
+
 				} else {
 					$alreadyInList++;
 				}
-				
+
 			} else {
 				$errors++;
 			}
@@ -381,7 +381,7 @@ class NewsletterModelList extends JModelAdmin
 			$options['confirmed'] = NewsletterHelperData::getDefault('confirmed', 'sublist');
 		}
 
-		// If passed or default is false then 
+		// If passed or default is false then
 		// try to determine from subscriber entity or from DB.
 		if (empty($options['confirmed'])) {
 
