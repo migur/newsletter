@@ -36,7 +36,7 @@ class NewsletterViewClose extends MigurView
 		$msg = $session->get('application.queue');
 		$session->set('migur.queue', $msg);
 		$session->set('application.queue', null);
-		
+
 		// close a modal window
 		JFactory::getDocument()->addScriptDeclaration('window.parent.location.reload();');
 	}

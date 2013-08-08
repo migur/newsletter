@@ -35,10 +35,10 @@ class NewsletterViewShow extends MigurView
 		if (!empty($alias)) {
 
 			$newslettter = NewsletterHelperNewsletter::getByAlias($alias);
-			
+
 			$this->assignRef('newsletter', $newslettter);
-			
+
 			parent::display();
-		}	
+		}
 	}
 }
