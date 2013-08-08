@@ -7,7 +7,6 @@
  @copyright Copyright (C) 2010 SmellsLikeApps. All rights reserved.
  @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
 -->
-
 <project name="sla-newsletter" default="build" basedir=".">
     <description>Ant Build File for Joomla</description>
 
