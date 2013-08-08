@@ -30,9 +30,9 @@ class NewsletterViewTest extends JView
 	 */
 	function display($tpl = null)
 	{
-		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/test/test.js');		
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/test/test.js');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
-		
+
 		parent::display($tpl);
 	}
 }
