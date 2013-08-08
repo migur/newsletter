@@ -105,7 +105,7 @@ class NewsletterControllerSubscribe extends MigurController
 		// So we can create the Migur subscriber if registration is alowed.
 		if (!$subscriber->getId()) {
 
-			// Check if the registration is disabled then 
+			// Check if the registration is disabled then
 			// there is nothing to do.
 			if (NewsletterHelperNewsletter::getParam('general_reg_disable') == '1') {
 				jexit(JText::_('COM_NEWSLETTER_REGISTRATION_IS_DISABLED'));
@@ -241,7 +241,7 @@ class NewsletterControllerSubscribe extends MigurController
 			return;
 		}
 
-		// Check if the registration is disabled then 
+		// Check if the registration is disabled then
 		// there is nothing to do.
 		if (NewsletterHelperNewsletter::getParam('general_reg_disable') == '1') {
 			$message = JText::_('COM_NEWSLETTER_REGISTRATION_IS_DISABLED');

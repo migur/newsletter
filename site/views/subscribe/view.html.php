@@ -28,16 +28,16 @@ class NewsletterViewSubscribe extends JView
 		$nid = JRequest::getString('nid', '');
 
 		$user = JFactory::getUser();
-		
-		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+
+		$subscriber = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
 		if (!empty($uid)) {
 			$subscriber->load(array('subscription_key' => $uid));
-			
-		} elseif(!empty($user->id)) {	
+
+		} elseif(!empty($user->id)) {
 			$subscriber->load('-'.$user->id);
 		}
-		
+
 		$lists = NewsletterHelperSubscriber::getLists($subscriber->subscription_key);
 
 		$this->assignRef('user', $user);
@@ -52,7 +52,6 @@ class NewsletterViewSubscribe extends JView
 	}
 
 	function setDocument(){
-		$document = JFactory::getDocument();
-		$document->addStyleSheet('media/com_newsletter/css/unsubscribe.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/unsubscribe.css');
 	}
 }
