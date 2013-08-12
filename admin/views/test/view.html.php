@@ -19,7 +19,7 @@ JHtml::_('behavior.framework', true);
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterViewTest extends JView
+class NewsletterViewTest extends MigurView
 {
 	/**
 	 * Displays the view. Used to close the popup.
@@ -30,9 +30,9 @@ class NewsletterViewTest extends JView
 	 */
 	function display($tpl = null)
 	{
-		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/test/test.js');		
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/test/test.js');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
-		
+
 		parent::display($tpl);
 	}
 }

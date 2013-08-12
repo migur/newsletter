@@ -2,14 +2,14 @@
 <legend><?php echo JText::_('Newsletters'); ?></legend>
 <form id="form-newsletterslist" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters');?>" method="post" name="adminForm" >
 	<fieldset id="filter-bar" >
-            <?php echo JToolBar::getInstance('newsletters')->render(); ?>
+            <?php echo MigurToolbar::getInstance('newsletters')->render(); ?>
             <div id="newsletters-filter-panel-control" class="filter-panel-control"></div>
             <div class="clr"></div>
             <div id="newsletters-filter-panel" class="filter-panel">
 				<div class="fltlft">
-					<input class="migur-search" type="text" name="newsletters_filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
+					<input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
 					<button type="submit" class="btn migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-					<button type="button" onclick="document.id('newsletters_filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+					<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 				</div>
             </div>
 	</fieldset>
@@ -45,15 +45,15 @@
 					<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 				</td>
 				<td>
-				<?php 
+				<?php
 				if (NewsletterHelperAcl::actionIsAllowed('newsletter.edit')) {
 				?>
 					<a href="<?php echo JRoute::_("index.php?option=com_newsletter&task=newsletter.edit&newsletter_id=" . (int) $item->id, false); ?>">
 						<?php echo $this->escape($item->name); ?>
 					</a>
-				<?php 
-				} else {	
-					echo $this->escape($item->name); 
+				<?php
+				} else {
+					echo $this->escape($item->name);
 				}
 				?>
 				</td>

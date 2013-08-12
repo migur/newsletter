@@ -54,20 +54,20 @@ class NewsletterViewAutomailing extends MigurView
 		$this->setDocument();
 
 		$this->addToolbar();
-		
+
 		// Set main ID first
 		$aid = JRequest::getInt('automailing_id');
 		$this->assignRef('automailingId', $aid);
-		
-		
+
+
 		// Get automailing form
 		$model = $this->getModel();
 		$automailing = $model->getItem();
 		$this->assignRef('automailing', $automailing);
 		NewsletterHelperJavascript::addObject('automailing', $automailing);
 		$this->assign('form', $this->get('form', 'automailing'));
-		
-		
+
+
 		// Get item list (series)
 		$itemsModel = MigurModel::getInstance('AutomailingItems', 'NewsletterModel');
 		$itemsModel->automailingId = $aid;
@@ -78,7 +78,7 @@ class NewsletterViewAutomailing extends MigurView
 				'listDirn' => $itemsModel->getState('list.direction'),
 				'pagination' => $itemsModel->getPagination()
 		);
-		
+
 		$this->assignRef('automailingItems', $amList);
 
 		// Check if this automailing finished
@@ -88,29 +88,29 @@ class NewsletterViewAutomailing extends MigurView
 		} else {
 			$automailing->finished = false;
 		}
-		
+
 		// Get targets list
 		$targetsModel = MigurModel::getInstance('AutomailingTargets', 'NewsletterModel');
 		$targetsModel->automailingId = $aid;
-		
-		if ($tpl != 'details') {	
-			
+
+		if ($tpl != 'details') {
+
 			// Get ids for all available lists
 			$listsModel = MigurModel::getInstance('Lists', 'NewsletterModel');
 			$allLists = $listsModel->getAllActive();
-			
+
 			// Find all used lists
 			$usedLists = $targetsModel->getRelatedLists($aid);
-			
+
 			// Diff the records
 			$usedListIds = NewsletterHelperData::getColumnData($usedLists, 'list_id');
-			
+
 			foreach($allLists as $idx => $item) {
 				if (in_array($item->list_id, $usedListIds)) {
 					unset($allLists[$idx]);
 				}
 			}
-			
+
 			$amTargets = (object) array(
 					'items' => $targetsModel->getRelatedLists($aid, 'usePagination'),
 					'state' => $targetsModel->getState(),
@@ -118,17 +118,17 @@ class NewsletterViewAutomailing extends MigurView
 					'listDirn' => $targetsModel->getState('list.direction'),
 					'pagination' => $targetsModel->getPagination()
 			);
-			
+
 			$this->assignRef('automailingTargets', $amTargets);
 			$this->assignRef('unusedLists', $allLists);
-			
-		}	
 
-		
-		if ($tpl == 'details') {	
+		}
+
+
+		if ($tpl == 'details') {
 			$this->assign('automailingTargets', $targetsModel->getNames($aid));
-		}	
-		
+		}
+
 		parent::display($tpl);
 	}
 
@@ -142,17 +142,17 @@ class NewsletterViewAutomailing extends MigurView
 	{
 		$aid = JRequest::getInt('automailing_id');
 
-		$bar = JToolBar::getInstance('automailing');
-		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'automailing.save', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'automailing.cancel', false);
-		
-		$bar = JToolBar::getInstance('series');
+		$bar = MigurToolbar::getInstance('automailing');
+		$bar->appendButton('Migurstandard', 'save', 'JTOOLBAR_SAVE', 'automailing.save', false);
+		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', 'automailing.cancel', false);
+
+		$bar = MigurToolbar::getInstance('series');
 		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailingitem&layout=edit&tmpl=component&automailing_id='.$aid, 420, 210, 0, 0);
-		
-		$bar = JToolBar::getInstance('lists');
+
+		$bar = MigurToolbar::getInstance('lists');
 		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailing&tmpl=component', 880, 690, 0, 0);
 		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
-		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
+		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
 	}
 
 	/**
@@ -164,17 +164,17 @@ class NewsletterViewAutomailing extends MigurView
 	protected function setDocument()
 	{
 		$isNew = (!JRequest::getInt('automailing_id', false));
-		JToolBarHelper::title($isNew? 
-			JText::_('COM_NEWSLETTER_AUTOMAILING_ADD_TITLE') : 
-			JText::_('COM_NEWSLETTER_AUTOMAILING_EDIT_TITLE'), 
+		JToolBarHelper::title($isNew?
+			JText::_('COM_NEWSLETTER_AUTOMAILING_ADD_TITLE') :
+			JText::_('COM_NEWSLETTER_AUTOMAILING_EDIT_TITLE'),
 		'article.png');
-		
+
 		NewsletterHelperJavascript::addStringVar('isNew', (int)$isNew);
-		
+
 		$document = JFactory::getDocument();
-		
+
 		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_AUTOMAILING_CREATING') : JText::_('COM_NEWSLETTER_AUTOMAILING_EDITING'));
-		
+
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/automailing.css');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/automailing/automailing.js');

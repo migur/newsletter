@@ -207,13 +207,13 @@ class NewsletterControllerNewsletter extends JControllerForm
 	{
 		// Actualy on this step will be performed 
 		// the checking for NEWSLETTER.ADD permission. It's ok
-		if (!$this->allowSave()) {
-			$this->setError(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
-			$this->setMessage($this->getError(), 'error');
-			$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list.$this->getRedirectToListAppend(), false));
+		//if (!$this->allowSave()) {
+		//	$this->setError(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
+		//	$this->setMessage($this->getError(), 'error');
+		//	$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list.$this->getRedirectToListAppend(), false));
 
-			return false;
-		}
+		//	return false;
+		//}
 
 		$nIds = JRequest::getVar('cid', array());
 

@@ -2,7 +2,7 @@
 <legend><?php echo JText::_('logs'); ?></legend>
 <form id="form-logslist" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=logs');?>" method="post" name="adminForm" >
 	<fieldset id="filter-bar" >
-            <?php echo JToolBar::getInstance('logs')->render(); ?>
+            <?php echo MigurToolbar::getInstance('logs')->render(); ?>
             <div id="logs-filter-panel-control" class="filter-panel-control"></div>
             <div class="clr"></div>
             <div id="logs-filter-panel" class="filter-panel">
@@ -66,61 +66,61 @@
 		</tfoot>
 		<tbody>
 		<?php if(count($this->items) > 0) foreach ($this->items as $i => $item) : ?>
-			
+
 			<tr class="item row<?php echo $i % 2; ?>">
-				
+
 				<td class="center">
 					<?php echo JHtml::_('grid.id', $i, $item->log_id); ?>
 				</td>
-				
+
 				<td>
-				<?php 
+				<?php
 					switch($item->priority) {
 						case 1:
 						case 2:
 						case 4:
-						case 8:	
-							echo '<span style="color:red">'.$item->message.'</span>'; break; 
-						
-						case 16: 
-							echo '<span style="color:#888800">'.$item->message.'</span>'; break; 
-						case 32: 
-						case 64: 
+						case 8:
+							echo '<span style="color:red">'.$item->message.'</span>'; break;
+
+						case 16:
+							echo '<span style="color:#888800">'.$item->message.'</span>'; break;
+						case 32:
+						case 64:
 							echo '<span style="color:black">'.$item->message.'</span>'; break;
-						
+
 						case 128:
 						default:
 							echo '<span style="color:gray">'.$item->message.'</span>'; break;
-					}		
+					}
 				?>
 				</td>
-				
+
 				<td>
 					<?php echo $this->escape($item->category); ?>
 				</td>
-				
+
 				<td>
 					<?php echo $this->escape($item->date); ?>
 				</td>
-				
+
 				<td>
-				<?php if(!empty($item->params)) { 
-					
-					$data = json_decode(str_replace('\u0000', '', $item->params)); 
+				<?php if(!empty($item->params)) {
+
+					$data = json_decode(str_replace('\u0000', '', $item->params));
 				?>
-					<label 
-						class="search icon-16-search hasTip" 
-						style="width:16px;height:16px;cursor:pointer" 
+					<label
+						class="search icon-16-search hasTip"
+						style="width:16px;height:16px;cursor:pointer"
 						title="<?php echo $this->escape(JHtml::_('multigrid.renderObject', $data, 0, 'black', array('maxLength' => 100, 'maxLengthMessage' => 'See full log...'))); ?>">
-					</label>	
+					</label>
 				<?php }	?>
 				</td>
-				
+
 			</tr>
 			<?php endforeach; ?>
 		</tbody>
 	</table>
-	</div>	
+	</div>
 	<div>
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="boxchecked" value="0" />

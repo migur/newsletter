@@ -17,14 +17,14 @@ JHtml::_('behavior.framework', true);
  * @subpackage	com_media
  * @since 1.0
  */
-class NewsletterViewMedia extends JView
+class NewsletterViewMedia extends MigurView
 {
 	function display($tpl = null)
 	{
 		NewsletterHelperJavascript::addStringVar('migurFieldId', JRequest::getString('fieldId', 'insertField'));
-		
+
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/media/media.js');
-		
+
 		parent::display($tpl);
 	}
 }

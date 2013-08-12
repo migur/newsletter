@@ -49,7 +49,7 @@ class NewsletterViewTemplates extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/templates/templates.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/filterpanel.js');
-		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/search.js');		
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/search.js');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
@@ -66,7 +66,7 @@ class NewsletterViewTemplates extends MigurView
 
 		$pagination = $modelTemps->getPagination();
 
-		
+
 		$temps = (object) array(
 				'items' => $modelTemps->getItems(),
 				'state' => $modelTemps->getState(),
@@ -89,10 +89,10 @@ class NewsletterViewTemplates extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_TEMPLATES_TITLE'), 'article.png');
 
-		$bar = JToolBar::getInstance('templates');
+		$bar = MigurToolbar::getInstance('templates');
 		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=template&tmpl=component', 850, 690, 0, 0);
 		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
-		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
+		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));

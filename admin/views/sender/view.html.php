@@ -77,7 +77,7 @@ class NewsletterViewSender extends MigurView
 				'listOrder' => $modelLists->getState('list.ordering'),
 				'listDirn' => $modelLists->getState('list.direction')
 		);
-		
+
 		NewsletterHelperJavascript::addStringVar('defaultMailbox', NewsletterHelperMail::getDefaultMailbox('idOnly'));
 
 		$modelLists->setState('limit', $limit);
@@ -97,7 +97,7 @@ class NewsletterViewSender extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('sender');
+		$bar = MigurToolbar::getInstance('sender');
 		$bar->appendButton('Link', 'export', 'COM_NEWSLETTER_NEWSLETTER_SEND', '#');
 
 		// Load the submenu.

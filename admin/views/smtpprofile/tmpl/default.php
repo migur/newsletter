@@ -4,7 +4,7 @@ defined('_JEXEC') or die;
 ?>
 
 <fieldset>
-<legend><?php echo JText::_('COM_NEWSLETTER_SMTP_PROFILE'); ?></legend>	
+<legend><?php echo JText::_('COM_NEWSLETTER_SMTP_PROFILE'); ?></legend>
     <form id="smtpprofile-form" class="form-validate" name="smtpprofileForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
         <dl>
 			<dt><?php echo $this->ssForm->getLabel('smtp_profile_name'); ?></dt>
@@ -39,9 +39,9 @@ defined('_JEXEC') or die;
 
 			<dt><?php echo $this->ssForm->getLabel('mailbox_profile_id'); ?></dt>
 			<dd><?php echo $this->ssForm->getInput('mailbox_profile_id'); ?></dd>
-			
+
 			<div class="clr"></div>
-			
+
 			<fieldset class="period-conf">
 				<legend><?php echo JText::_('COM_NEWSLETTER_MAILING_PERIOD_CONFIGURATION'); ?></legend>
 
@@ -54,15 +54,15 @@ defined('_JEXEC') or die;
 				<?php echo $this->ssForm->getInput('inProcess', 'params'); ?>
 				<?php echo $this->ssForm->getInput('periodStartTime', 'params'); ?>
 				<?php echo $this->ssForm->getInput('sentsPerLastPeriod', 'params'); ?>
-				
-			</fieldset>	
+
+			</fieldset>
         </dl>
 
 			<?php echo $this->ssForm->getInput('smtp_profile_id'); ?>
         <div class="clr"></div>
 
         <div class="buttons-container">
-                <?php echo JToolBar::getInstance('smtp-toolbar')->render(); ?>
+                <?php echo MigurToolbar::getInstance('smtp-toolbar')->render(); ?>
         </div>
 
 

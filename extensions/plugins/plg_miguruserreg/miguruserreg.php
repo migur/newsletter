@@ -109,8 +109,7 @@ class plgSystemMiguruserreg extends JPlugin
 		// Get models
 		$subscriberModel = MigurModel::getInstance('Subscriber', 'NewsletterModel');
 		$listModel = MigurModel::getInstance('List', 'NewsletterModel');
-		
-		// Just for creation of a uid-sid relation 
+		// Just for creation of a uid-sid relation
 		$subscriber = $subscriberModel->getItem(array('user_id' => $user['id']));
 		$sid = $subscriber['subscriber_id'];
 		
@@ -148,7 +147,7 @@ class plgSystemMiguruserreg extends JPlugin
 				// Set message and add some logs
 				if($res) {
 					$message =
-						JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name) . ' ' .
+						JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $user['name']) . ' ' .
 						JText::_('COM_NEWSLETTER_YOU_WILL_NEED_CONFIRM_SUBSCRIPTION');
 				}
 			}		

@@ -45,40 +45,40 @@ class NewsletterViewSubscriber extends MigurView
 	{
 		//TODO: Need to move css/js to SetDocument
 
-		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
-		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/subscriber.css');
-		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
-		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/message.js');
+		JHTML::stylesheet('media/com_newsletter/css/admin.css');
+		JHTML::stylesheet('media/com_newsletter/css/subscriber.css');
+		JHTML::script('media/com_newsletter/js/migur/js/core.js');
+		JHTML::script('media/com_newsletter/js/migur/js/message.js');
 
 		$script = $this->get('Script');
 		$this->script = $script;
 
 		$this->ssForm = $this->get('Form', 'subscriber');
 
-		// call getItems from model 'lists' via JView->get()
+		// call getItems from model 'lists' via MigurView->get()
 		$this->subscriberId = $this->ssForm->getValue('subscriber_id');
 
 
 		if ($this->getLayout() == 'edit') {
 
-			$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
 			$model->load($this->subscriberId);
 			$this->subscriber = $model;
-			
+
 			$listsModel = MigurModel::getInstance('lists', 'NewsletterModel');
 			$model = $this->setModel($listsModel);
-			
+
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 			$model->setSubscriberQuery();
 
-			$sentsModel = MigurModel::getInstance('sents', 'NewsletterModel');
+			$sentsModel = JModel::getInstance('sents', 'NewsletterModel');
 			$model = $this->setModel($sentsModel);
-			
+
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 
-			$historyModel = MigurModel::getInstance('history', 'NewsletterModel');
+			$historyModel = JModel::getInstance('history', 'NewsletterModel');
 			$model = $this->setModel($historyModel);
-			
+
 			$model->filtering = array('subscriber_id' => JRequest::getInt('subscriber_id', null));
 
 			$this->listItems = $this->get('Items', 'lists');
@@ -115,9 +115,9 @@ class NewsletterViewSubscriber extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('subscriber-toolbar', 'subscriberForm');
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'subscriber.cancel', false);
-		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'subscriber.save', false);
+		$bar = MigurToolbar::getInstance('subscriber-toolbar', array('formName' => 'subscriberForm', 'useCustomForm' => true));
+		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', 'subscriber.cancel', false);
+		$bar->appendButton('Migurstandard', 'save', 'JTOOLBAR_SAVE', 'subscriber.save', false);
 	}
 
 	/**
@@ -131,9 +131,9 @@ class NewsletterViewSubscriber extends MigurView
 		$isNew = (!JRequest::get('subscriber_id', false) );
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_NEW_SUBSCRIBER') : JText::_('COM_NEWSLETTER_SUBSCRIBER_EDITING'));
-		NewsletterHelperView::addScript($this->script);
-		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/subscriber/submitbutton.js');
-		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/subscriber/subscriber.js');
+		$document->addScript(JURI::root() . $this->script);
+		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/subscriber/submitbutton.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/subscriber/subscriber.js");
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}
 

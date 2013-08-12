@@ -26,14 +26,14 @@ if (!defined('MIGUR')) {
 /**
  * Legacy support
  */
-JToolbar::getInstance()->loadButtonType('help');
+MigurToolbar::getInstance()->loadButtonType('help');
 
-class JButtonMigurHelp extends JButton
+class JButtonMigurhelp extends JButton
 {
 	/**
 	 * @var    string	Button type
 	 */
-	protected $_name = 'MigurHelp';
+	protected $_name = 'Migurhelp';
 
 	/**
 	 * @param   string   $type		Unused string.
@@ -45,7 +45,7 @@ class JButtonMigurHelp extends JButton
 	 * @return  string
 	 * @since   11.1
 	 */
-	public function fetchButton($type = 'MigurHelp', $ref = '', $com = false, $override = null, $component = null, $target = '_blank', $width='980', $height='600')
+	public function fetchButton($type = 'Migurhelp', $ref = '', $com = false, $override = null, $component = null, $target = '_blank', $width='980', $height='600')
 	{
 		$text	= !empty($com)? JText::_($com) : JText::_('JTOOLBAR_HELP');
 		$class	= $this->fetchIconClass('help');
@@ -58,7 +58,7 @@ class JButtonMigurHelp extends JButton
 
 		return $html;
 	}
-	
+
 	/**
 	 * Get the button id
 	 *
@@ -94,10 +94,4 @@ class JButtonMigurHelp extends JButton
 		return $cmd;
 	}
 }
-
-
-/*
- * Legacy support
- */
-class JToolbarButtonMigurHelp extends JButtonMigurHelp 
-{}
+class JToolbarButtonMigurhelp extends JButtonMigurhelp {}

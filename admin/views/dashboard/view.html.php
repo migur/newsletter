@@ -69,7 +69,7 @@ class NewsletterViewDashboard extends MigurView
 			'checkJoomla',
 			'checkImap',
 			'checkLogs'));
-		
+
 		$this->addToolbar();
 
 		$stat = MigurModel::getInstance('Queues', 'NewsletterModel')->getSummary();
@@ -93,7 +93,7 @@ class NewsletterViewDashboard extends MigurView
 					array('rssurl' => JRoute::_('http://migur.com/blog?format=feed&type=rss'))
 			)
 		);
-		
+
 		$this->info = NewsletterHelperNewsletter::getCommonInfo();
 
 		$this->setStatisticsData();
@@ -116,28 +116,28 @@ class NewsletterViewDashboard extends MigurView
 	protected function addToolbar()
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_DASHBOARD_TITLE'), 'article.png');
-		$bar = JToolBar::getInstance();
+		$bar = MigurToolbar::getInstance();
 		$bar->appendButton('Link', 'alert', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
 		$bar->appendButton('Separator');
-		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', NewsletterHelperSupport::getResourceUrl('mailing', 'general'));
+		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', NewsletterHelperSupport::getResourceUrl('com-newsletter/mailing/general'));
 		JToolBarHelper::custom('', 'progress', '', '', false);
-		$bar->appendButton('MigurQueue', 'queue');
+		$bar->appendButton('Migurqueue', 'queue');
 
-		$bar = MigurToolBar::getInstance('newsletters-toolbar');
+		$bar = MigurToolbar::getInstance('newsletters-toolbar');
 		$bar->appendButton('Link', 'new', 'COM_NEWSLETTER_NEWSLETTER_CREATE', 'index.php?option=com_newsletter&amp;view=newsletter');
 		$bar->appendButton('Popup', 'export', 'COM_NEWSLETTER_NEWSLETTER_SEND', 'index.php?option=com_newsletter&amp;view=sender&amp;tmpl=component', 920, 450, 0, 0);
 
-		$bar = MigurToolBar::getInstance('subscribers-toolbar');
+		$bar = MigurToolbar::getInstance('subscribers-toolbar');
 		$bar->appendButton('Popup', 'new', 'COM_NEWSLETTER_SUBSCRIBER_CREATE', 'index.php?option=com_newsletter&amp;view=subscriber&amp;tmpl=component', 400, 220, 0, 0);
 		$bar->appendButton('Popup', 'new', 'COM_NEWSLETTER_LIST_CREATE', 'index.php?option=com_newsletter&amp;view=list&amp;tmpl=component', 1000, 600, 0, 0);
 
-		$bar = MigurToolBar::getInstance('config-toolbar');
+		$bar = MigurToolbar::getInstance('config-toolbar');
 		$bar->appendButton('Link', 'export', 'COM_NEWSLETTER_EXTENSIONS_INSTALL', 'index.php?option=com_newsletter&amp;view=install');
 		$bar->appendButton('Link', 'options', 'COM_NEWSLETTER_CONFIGURATION', 'index.php?option=com_newsletter&amp;view=configuration');
 
-		$bar = MigurToolBar::getInstance('help-toolbar');
+		$bar = MigurToolbar::getInstance('help-toolbar');
 		$bar->appendButton('Popup', 'publish', 'COM_NEWSLETTER_ABOUT', 'http://migur.com/products/newsletter', 800, 600, 0, 0);
-		$bar->appendButton('MigurHelp', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter');
+		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP', 'http://migur.com/support/documentation/newsletter');
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));

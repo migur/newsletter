@@ -53,7 +53,7 @@ class NewsletterViewNewsletter extends MigurView
 		$nId = JRequest::getInt('newsletter_id');
 
 		$isNew = empty($nId);
-		
+
 		if (
 			( $isNew && !NewsletterHelperAcl::actionIsAllowed('newsletter.add')) ||
 			(!$isNew && !NewsletterHelperAcl::actionIsAllowed('newsletter.edit'))
@@ -61,50 +61,50 @@ class NewsletterViewNewsletter extends MigurView
 			$msg = $isNew? 'JLIB_APPLICATION_ERROR_CREATE_RECORD_NOT_PERMITTED' : 'JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED';
 			JFactory::getApplication()->redirect(
 				JRoute::_('index.php?option=com_newsletter&view=newsletters', false),
-				JText::_($msg), 
+				JText::_($msg),
 				'error');
 			return;
-		}	
-		
+		}
+
 		// Get main form and data for newsletter
 		$newsletterModel = MigurModel::getInstance('Newsletter', 'NewsletterModel');
 		$newsletter = $newsletterModel->getItem($nId);
-		
+
 		$this->assignRef('newsletter', $newsletter);
 		$this->assign('form', $this->get('Form', 'newsletter'));
-		
+
 		$isUpdateAllowed = $newsletterModel->isUpdateAllowed($newsletter);
-		
+
 		$this->assign('isUpdateAllowed', $isUpdateAllowed);
-		
+
 		NewsletterHelperJavascript::addStringVar('isUpdateAllowed', (int) $isUpdateAllowed);
-		
+
 		NewsletterHelperJavascript::addObject(
 				'comParams',
 				JComponentHelper::getParams('com_newsletter')->toArray() //array('autosaver' => array('on' => true))
 		);
-		
-		$smtpModel = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity'); 
-		
+
+		$smtpModel = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+
 		// Let's add J! profile
 		$smtpp = $smtpModel->loadJoomla();
 		NewsletterHelperJavascript::addObject(
 				'joomlaDe',
 				JComponentHelper::getParams('com_newsletter')->toArray() //array('autosaver' => array('on' => true))
 		);
-		
+
 		// get the SmtpProfiles data
 		$smtpprofilesManager = MigurModel::getInstance('smtpprofiles', 'NewsletterModel');
 		$this->assign('smtpprofiles', $smtpprofilesManager->getAllItems('withDefault'));
 
 		// get all the Extensions
 		$this->modules = NewsletterHelperModule::getSupported(array('withoutInfo'=>true));
-		$this->plugins = MigurPluginHelper::getSupported(array('withoutInfo'=>true), 'newsletter.html');
+		$this->plugins = NewsletterHelperPlugin::getSupported(array('withoutInfo'=>true), 'newsletter.html');
 
 		// get the Extensions used in this newsletter
 		$model = MigurModel::getInstance('newsletterext', 'NewsletterModel');
 		$this->usedExts = $model->getExtensionsBy($nId);
-		
+
 		// Get a list of all templates
 		$templateModel = MigurModel::getInstance('templates', 'NewsletterModel');
 		$this->setModel($templateModel);
@@ -188,12 +188,12 @@ class NewsletterViewNewsletter extends MigurView
                 'plugins' => (array)$this->plugins,
 				'newsletter' => NewsletterHelperNewsletter::get($nId)
             )
-			
+
         );
 
 		// Set the document
 		$this->setDocument();
-		
+
 		parent::display($tpl);
 
 	}
@@ -207,35 +207,35 @@ class NewsletterViewNewsletter extends MigurView
 	protected function addToolbar()
 	{
 		$isNew = (!JRequest::getInt('newsletter_id', false) );
-		JToolBarHelper::title($isNew? 
-			JText::_('COM_NEWSLETTER_NEWSLETTERS_ADD_TITLE') : 
-			($this->isUpdateAllowed? 
+		JToolBarHelper::title($isNew?
+			JText::_('COM_NEWSLETTER_NEWSLETTERS_ADD_TITLE') :
+			($this->isUpdateAllowed?
 				JText::sprintf('COM_NEWSLETTER_NEWSLETTERS_EDIT_TITLE', $this->newsletter->name) :
 				JText::sprintf('COM_NEWSLETTER_NEWSLETTERS_REVIEW_TITLE', $this->newsletter->name)
-			), 
+			),
 		'article.png');
 
-		$bar = JToolBar::getInstance('toolbar');
-		
+		$bar = MigurToolbar::getInstance('toolbar');
+
 		try {
 			$status = NewsletterHelperNewsletter::getLicenseStatus();
-		
+
 			// We show tutorials only for users with valid license
 			if ($status->isValid) {
 				$helpLink = 'http://migur.com/support/documentation/migur-newsletter/newsletters?version=' . NewsletterHelperNewsletter::getManifest()->version;
 				$bar->appendButton(
-					'Custom', 
+					'Custom',
 					'<a class="btn btn-small" href="'.$helpLink.'" target="_blank">'.
 					'<span class="icon-32-default"></span>'.JText::_('COM_NEWSLETTER_TUTORIAL').'</a>'
 				);
 				$bar->appendButton('Separator', null, '25');
-			}	
-		
+			}
+
 		} catch(Exception $e) {
 			NewsletterHelperLog::addError($e->getMessage());
 		}
 
-		
+
 
 		if ($this->isUpdateAllowed && (
 				( $isNew && NewsletterHelperAcl::actionIsAllowed('newsletter.add' )) ||
@@ -244,16 +244,16 @@ class NewsletterViewNewsletter extends MigurView
 		) {
 			$bar->appendButton('Link', 'autosaver', '', '#', false);
 			$bar->appendButton('Separator', null, '25');
-			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'newsletter.apply', false);
-			$bar->appendButton('Standard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
+			$bar->appendButton('Migurstandard', 'apply', 'JTOOLBAR_APPLY', 'newsletter.apply', false);
+			$bar->appendButton('Migurstandard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
 
 //			$bar->appendButton('Separator', null, '50');
 //			$bar->appendButton('Custom', '<button class="btn btn-small" id="autosaver-switch"><span id="autosaver-icon"></span><span id="content-state"></span></button>', 'autosaver', '', false);
 //			$bar->appendButton('Separator', null, '25');
 //			$bar->appendButton('Custom', '<span></span>', 'docstate', '', false);
-		}	
-		
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
+		}
+
+		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
 	}
 
 	/**
@@ -268,14 +268,14 @@ class NewsletterViewNewsletter extends MigurView
 		NewsletterHelperJavascript::addStringVar('isNew', (int)$isNew);
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew? JText::_('COM_NEWSLETTER_NEWSLETTER_CREATING') : JText::sprintf('COM_NEWSLETTER_NEWSLETTERS_EDIT_TITLE', $this->newsletter->name));
-		
+
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/newsletter.css');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
 //		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/modal.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/ajax.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/widgets.js');
-		
+
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/moodialog/MooDialog.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/moodialog/MooDialog.Request.js');
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/moodialog/MooDialog.IFrame.js');
@@ -288,7 +288,7 @@ class NewsletterViewNewsletter extends MigurView
 
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/guide.js');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/guide.css');
-		
+
 //		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/html.js');
 //		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/plain.js');
 //		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/newsletter/preview.js');

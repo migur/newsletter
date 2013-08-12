@@ -65,7 +65,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 	 * @param	object	A module object.
 	 * @param	array	An array of attributes for the module (probably from the XML).
 	 *
-	 * @return	strign	The HTML content of the module output.
+	 * @return	string	The HTML content of the module output.
 	 * @since   1.0
 	 */
 	public static function renderModule($module, $attribs = array())
@@ -118,11 +118,21 @@ abstract class NewsletterHelperModule extends JModuleHelper
 				JFactory::$application = null;
 				JFactory::getApplication('site');
 				ob_start();
-				require $path;
+				@require $path;
 				$module->content = ob_get_contents() . $content;
 				ob_end_clean();
 			} catch (Exception $e) {
-
+				// Log about accident
+				NewsletterHelperLog::addError(
+					'COM_NEWSLETTER_MODULE_EXCEPTION',
+					NewsletterHelperLog::CAT_MODULE,
+					array(
+						'message' => $e->getMessage(),
+						'code' => $e->getCode(),
+						'file' => $e->getFile(),
+						'line' => $e->getLine(),
+						'trace' => $e->getTraceAsString()
+				));
 			}
 
 			JFactory::$application = $app;
@@ -192,9 +202,9 @@ abstract class NewsletterHelperModule extends JModuleHelper
 		}
 
 		/*
-		 * TODO: It is duplication of 
+		 * TODO: It is duplication of
 		 * NewsletterTableNewsletterext::getExtensionsBy
-		 * functionality. 
+		 * functionality.
 		 * Need to use model's method to retrieve a list of extensions
 		 */
 		$app = JFactory::getApplication();
@@ -277,7 +287,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 		$result = null;
 		$modules = self::_load();
 		$total = count($modules);
-		
+
 		for ($i = 0; $i < $total; $i++) {
 			// Match the name of the module
 			if ($modules[$i]->name == $name) {
@@ -424,7 +434,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 		$array = self::getNativeSupportedNames();
 
 		$sqlIn = "'" . implode('\',\'', $array) . "'";
-		
+
 		// Fetch it
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -511,7 +521,7 @@ abstract class NewsletterHelperModule extends JModuleHelper
 /**
  * From beezDivision chrome.
  * Wrapper for module
- * 
+ *
  * @since	1.0
  */
 function modChrome_newsletterDefault($module, &$params, &$attribs)
@@ -523,14 +533,14 @@ function modChrome_newsletterDefault($module, &$params, &$attribs)
 		} else {
 			$module->content = JText::_('COM_NEWSLETTER_NO_CONTENT_' . strtoupper($module->module));
 		}
-	}	
-		
+	}
+
 	if (!empty($module->content)) {
 		echo '<div>';
 		if ($module->showtitle) {
 			echo "<h1><span> $module->title </span></h1>";
 		}
-		
+
 		echo $module->content;
 		echo '</div>';
 	}

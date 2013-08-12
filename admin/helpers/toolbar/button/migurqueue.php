@@ -18,7 +18,7 @@ if (!defined('MIGUR')) {
 /**
  * Renders buttons for queue (used in dashboard)
  */
-class JToolbarButtonMigurQueue extends JButton
+class JButtonMigurqueue extends JButton
 {
 	/**
 	 * @var    string	Button type
@@ -38,15 +38,15 @@ class JToolbarButtonMigurQueue extends JButton
 	public function fetchButton($type = 'MigurQueue', $ref = '', $com = false, $override = null, $component = null, $target = '_blank', $width='980', $height='600')
 	{
 
-		$html = 
+		$html =
 			'<a style="clear:both" href="#" class="queue-list">' . JText::_('PROCESS_QUEUE') . '</a></br>' .
 			'<a style="clear:both" href="index.php?option=com_newsletter&view=queues" class="viewqueue-list">' . JText::_('VIEW_QUEUE') . '</a><br/>' .
 			'<a style="clear:both" href="#" class="bounces-list">' . JText::_('PROCESS_BOUNCES') . '</a>';
-		
+
 		return $html;
 	}
-	
-	
+
+
 	/**
 	 * Get the button id
 	 *
@@ -59,7 +59,5 @@ class JToolbarButtonMigurQueue extends JButton
 	{
 		return $this->_parent->getName().'-'."queue";
 	}
-	
-}
 
-class JButtonMigurQueue extends JToolbarButtonMigurQueue {}
+}

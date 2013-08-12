@@ -7,8 +7,8 @@ defined('_JEXEC') or die;
 <legend><?php echo JText::_('COM_NEWSLETTER_NEWSLETTER_SENDING'); ?></legend>
 
 	<div class="fltrt">
-		<?php echo JToolBar::getInstance('sender')->render(); ?>
-	</div>	
+		<?php echo MigurToolbar::getInstance('sender')->render(); ?>
+	</div>
 
 	<div id="send-msg-container"class="fltrt">
 		<div id="send-preloader" class="fltrt"></div>

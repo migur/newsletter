@@ -111,10 +111,10 @@ class NewsletterModelHistory extends MigurModelList
 
 		// Select the required fields from the table.
 		$action = $this->getTable('history', 'newsletterTable')->getMappingFor('action');
-		$query->select("a.history_id, a.subscriber_id, a.list_id, a.newsletter_id, a.date, {$action}, a.text, n.name");
+		$query->select("a.history_id, a.subscriber_id, a.list_id, a.newsletter_id, a.date, {$action}, a.text, n.name, l.name as listName");
 		$query->from('#__newsletter_sub_history AS a');
 		$query->join('LEFT', '#__newsletter_newsletters AS n ON a.newsletter_id = n.newsletter_id');
-		//$query->join('LEFT', '#__newsletter_lists AS l ON a.list_id = l.list_id');
+		$query->join('LEFT', '#__newsletter_lists AS l ON a.list_id = l.list_id');
 
 
 		// Filtering the data
@@ -140,5 +140,39 @@ class NewsletterModelHistory extends MigurModelList
 	public function setBounced($sid, $nid, $bounceType)
 	{
 		return JTable::getInstance('History', 'NewsletterTable')->setBounced($sid, $nid, $bounceType);
-	}	
+	}
+
+	/**
+	 * Method to get an array of data items.
+	 *
+	 *
+	 * @return  mixed  An array of data items on success, false on failure.
+	 *
+	 * @since   11.1
+	 */
+	public function getItems()
+	{
+		$collection = parent::getItems();
+
+		if (empty($collection)) {
+			return $collection;
+		}
+
+		foreach($collection as &$item) {
+
+			switch($item->action) {
+				case 'ACTION_SIGNEDUP':
+				case 'ACTION_UNSUBSCRIBED':
+					$item->fulltext =
+						JText::sprintf('COM_NEWSLETTER_LIST_OF_ACTION', !empty($item->listName)? $item->listName : $item->text);
+					break;
+
+				default:
+					$item->fulltext = $item->text;
+			}
+		}
+
+		return $collection;
+	}
+
 }

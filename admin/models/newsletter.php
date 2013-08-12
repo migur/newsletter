@@ -21,7 +21,7 @@ jimport('joomla.application.component.modeladmin');
 class NewsletterModelNewsletter extends JModelAdmin
 {
 	protected $_data;
-	
+
 	protected $_context;
 
 	/**
@@ -74,12 +74,12 @@ class NewsletterModelNewsletter extends JModelAdmin
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * Gets the list of plugins used in newsletter
 	 *
 	 * @param  integer $nid
-	 * @param  string  $namespace May be used as filter 
+	 * @param  string  $namespace May be used as filter
 	 *
 	 * @return array of objects
 	 * @since  1.0
@@ -88,8 +88,8 @@ class NewsletterModelNewsletter extends JModelAdmin
 	{
 		if (empty($nid)) {
 			return array();
-		}	
-		
+		}
+
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('ne.*, e.extension, e.namespace');
@@ -104,32 +104,32 @@ class NewsletterModelNewsletter extends JModelAdmin
 
 		$res = array();
 		foreach($objs as $obj) {
-			
+
 			// Check if plugin is included into NAMESPACE and anabled for this letter
-			if (MigurPluginHelper::namespaceCheckOccurence($namespace, $obj->namespace)) {
+			if (NewsletterHelperPlugin::namespaceCheckOccurence($namespace, $obj->namespace)) {
 				$obj->params = (object) json_decode($obj->params);
 				if (!empty($obj->params->active)) {
 					$res[] = $obj;
-				}	
-			}	
+				}
+			}
 		}
 		return $res;
 	}
-	
+
 	/**
 	 * Tells us if we can update (save) the newsletter.
 	 * We can save it if it is static or if it has not sent earlier.
-	 * 
+	 *
 	 * @param JObject|int $newsletter
-	 * 
+	 *
 	 * @return	boolean
 	 */
-	public function isUpdateAllowed($newsletter) 
+	public function isUpdateAllowed($newsletter)
 	{
 		if (!is_object($newsletter) && !is_numeric($newsletter)) {
 			throw new Exception('isUpdateAllowed. Invalid newsletter identifacation');
 		}
-		
+
 		if (is_numeric($newsletter)) {
 			$newsletter = $this->getItem((int)$newsletter)->newsletter_id;
 		}
@@ -137,7 +137,7 @@ class NewsletterModelNewsletter extends JModelAdmin
 		if (empty($newsletter)) {
 			throw new Exception('isUpdateAllowed. Newsletter absent');
 		}
-		
+
 		return (empty($newsletter->newsletter_id) || $newsletter->type == 1/*Static newsletter*/ || $newsletter->sent_started == '0000-00-00 00:00:00');
 	}
 }

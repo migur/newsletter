@@ -58,36 +58,36 @@ class NewsletterViewAutomailingItem extends MigurView
 			$this->addToolbar();
 		}
 
-		
+
 		// Set main ID first
 		$iid = JRequest::getInt('series_id');
 		$this->assignRef('seriesId', $iid);
 
-		
+
 		// Get automailing form
 		$model = $this->getModel();
 		$item = $model->getItem();
 		$this->assignRef('item', $item);
 		$this->assign('form', $this->get('Form', 'automailingitem'));
 
-		
+
 		// Set main ID first
-		$aid = !empty($item->automailing_id)? 
+		$aid = !empty($item->automailing_id)?
 			$item->automailing_id : JRequest::getInt('automailing_id');
 		$this->assignRef('automailingId', $aid);
 
-		
+
 		// All items of parent (siblings)
 		$amItemsModel = MigurModel::getInstance('AutomailingItems', 'NewsletterModel');
 		$amItems = $amItemsModel->getAllItems($aid);
 		$this->assignRef('allItems', $amItems);
-		
-		
+
+
 		// Automailig entity
 		$amItemsModel = MigurModel::getInstance('Automailing', 'NewsletterModel');
 		$am = $amItemsModel->getItem($aid);
 		$this->assignRef('automailing', $am);
-		
+
 		parent::display($tpl);
 	}
 
@@ -99,9 +99,9 @@ class NewsletterViewAutomailingItem extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('amitem');
-		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'automailingitem.save', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'automailingitem.cancel', false);
+		$bar = MigurToolbar::getInstance('amitem');
+		$bar->appendButton('Migurstandard', 'save', 'JTOOLBAR_SAVE', 'automailingitem.save', false);
+		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', 'automailingitem.cancel', false);
 	}
 
 	/**

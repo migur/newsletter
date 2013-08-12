@@ -63,7 +63,7 @@ class NewsletterViewConflicts extends MigurView
 		$state = $model->getState();
 		$listOrder = $model->getState('list.ordering');
 		$listDirn = $model->getState('list.direction');
-		
+
 		$this->assignRef('items', $items);
 		$this->assignRef('pagination', $pagination);
 		$this->assignRef('state', $state);
@@ -71,7 +71,7 @@ class NewsletterViewConflicts extends MigurView
 		$this->assignRef('listDirn', $listDirn);
 		$this->assignRef('saveOrder', $saveOrder);
 		$this->assign('subscriberModel', MigurModel::getInstance('Subscriber', 'NewsletterModelEntity'));
-		
+
 		parent::display($tpl);
 	}
 
@@ -85,15 +85,15 @@ class NewsletterViewConflicts extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_CONFLICT_TITLE'), 'article.png');
 
-		$bar = JToolBar::getInstance();
+		$bar = MigurToolbar::getInstance();
 		// delete all/selected;
-		$bar->appendButton('Standard', 'trash', 'COM_NEWSLETTER_DELETE_SUBS', 'conflicts.deletesubs', false);
+		$bar->appendButton('Migurstandard', 'trash', 'COM_NEWSLETTER_DELETE_SUBS', 'conflicts.deletesubs', false);
 		// merge selected. preserve J! user's data
-		$bar->appendButton('Standard', 'trash', 'COM_NEWSLETTER_MERGE_USERS', 'conflicts.mergeusers', false);
+		$bar->appendButton('Migurstandard', 'trash', 'COM_NEWSLETTER_MERGE_USERS', 'conflicts.mergeusers', false);
 		// merge selected. preserve J! subscriber's data
-		$bar->appendButton('Standard', 'trash', 'COM_NEWSLETTER_MERGE_SUBS', 'conflicts.mergesubs', false);
+		$bar->appendButton('Migurstandard', 'trash', 'COM_NEWSLETTER_MERGE_SUBS', 'conflicts.mergesubs', false);
 
-		// TODO merge history (yes/no)		
+		// TODO merge history (yes/no)
 
 
 		// Load the submenu.

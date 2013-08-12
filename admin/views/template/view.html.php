@@ -42,7 +42,6 @@ class NewsletterViewTemplate extends MigurView
 		JHTML::_('behavior.modal');
 
 		$tStyleId = JRequest::getInt('t_style_id');
-		
 		$modelTemps = MigurModel::getInstance('Templates', 'NewsletterModel');
 		$temps = (object) array(
 				'items' => $modelTemps->getStandardTemplates(),
@@ -69,10 +68,10 @@ class NewsletterViewTemplate extends MigurView
 		}
 
 		if ($tStyleId > 0) {
-			
+
 			$model = $this->getModel();
 			$template = $model->getTemplateBy($tStyleId);
-			
+
 			$this->assign('columns', $model->getColumnPlaceholders($template->content));
 			$this->assign('tplInfo', (object)$template->information);
 
@@ -81,7 +80,7 @@ class NewsletterViewTemplate extends MigurView
 				$this->tplForm->setValue('template_name', null, $this->escape($this->tplInfo->name));
 			}
 		}
-		
+
 		parent::display($tpl);
 
 		// Set the document
@@ -96,9 +95,9 @@ class NewsletterViewTemplate extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = JToolBar::getInstance('multitab-toolbar');
-		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'template.save', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
+		$bar = MigurToolbar::getInstance('multitab-toolbar');
+		$bar->appendButton('Migurstandard', 'save', 'JTOOLBAR_SAVE', 'template.save', false);
+		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
 	}
 
 	/**
@@ -113,14 +112,14 @@ class NewsletterViewTemplate extends MigurView
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_NEWSLETTER_TEMPLATE_CREATING') : JText::_('COM_NEWSLETTER_TEMPLATE_EDITING'));
 
-		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
-		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/templates.css');
+		$document->addStylesheet(JURI::root() . '/media/com_newsletter/css/admin.css');
+		$document->addStylesheet(JURI::root() . '/media/com_newsletter/css/templates.css');
 
-		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
-		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/message.js');
-		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/template/template.js');
-		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/template/submitbutton.js');
-		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/forms/template.js');
+		$document->addScript(JURI::root() . '/media/com_newsletter/js/migur/js/core.js');
+		$document->addScript(JURI::root() . '/media/com_newsletter/js/migur/js/message.js');
+		$document->addScript(JURI::root() . '/administrator/components/com_newsletter/views/template/template.js');
+		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/template/submitbutton.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/models/forms/template.js");
 
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}

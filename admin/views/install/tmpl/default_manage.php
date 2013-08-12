@@ -2,7 +2,7 @@
 <form action="<?php echo JRoute::_('index.php?option=com_newsletter&view=install');?>" method="post" name="adminForm" id="adminForm">
 
 <div class="width-30 fltlft" style="margin-top:22px;">
-		<?php echo MigurToolBar::getInstance('extensions')->render(); ?>
+		<?php echo MigurToolbar::getInstance('extensions')->render(); ?>
 </div>
 
 <div class="clr"></div>
