@@ -528,4 +528,22 @@ class NewsletterModelList extends JModelAdmin
 		return $dbo->loadObjectList();
 	}
 
+	/**
+	 * Method to save the form data.
+	 *
+	 * @param   array  $data  The form data.
+	 *
+	 * @return  boolean  True on success, False on error.
+	 *
+	 * @since   13.08
+	 */
+	public function save($data)
+	{
+		if (empty($data['autoconfirm'])) {
+			$data['autoconfirm'] = 0;
+		}
+
+		return parent::save($data);
+	}
+
 }
