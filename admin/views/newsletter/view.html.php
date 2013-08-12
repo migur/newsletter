@@ -244,8 +244,8 @@ class NewsletterViewNewsletter extends MigurView
 		) {
 			$bar->appendButton('Link', 'autosaver', '', '#', false);
 			$bar->appendButton('Separator', null, '25');
-			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'newsletter.apply', false);
-			$bar->appendButton('Standard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
+			$bar->appendButton('Migurstandard', 'apply', 'JTOOLBAR_APPLY', 'newsletter.apply', false);
+			$bar->appendButton('Migurstandard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
 
 //			$bar->appendButton('Separator', null, '50');
 //			$bar->appendButton('Custom', '<button class="btn btn-small" id="autosaver-switch"><span id="autosaver-icon"></span><span id="content-state"></span></button>', 'autosaver', '', false);
@@ -253,7 +253,7 @@ class NewsletterViewNewsletter extends MigurView
 //			$bar->appendButton('Custom', '<span></span>', 'docstate', '', false);
 		}
 
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
+		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
 	}
 
 	/**

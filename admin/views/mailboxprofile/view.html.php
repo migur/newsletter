@@ -56,10 +56,10 @@ class NewsletterViewMailboxprofile extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = MigurToolbar::getInstance('mailbox-toolbar', 'mailboxprofileForm');
-		$bar->appendButton('Standard', 'publish', 'COM_NEWSLETTER_CHECK', 'mailboxprofile.checkconnection', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
-		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'mailboxprofile.save', false);
+		$bar = MigurToolbar::getInstance('mailbox-toolbar', array('formName' => 'mailboxprofileForm', 'useCustomForm' => true));
+		$bar->appendButton('Migurstandard', 'publish', 'COM_NEWSLETTER_CHECK', 'mailboxprofile.checkconnection', false);
+		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
+		$bar->appendButton('Migurstandard', 'save', 'JTOOLBAR_SAVE', 'mailboxprofile.save', false);
 	}
 
 	/**

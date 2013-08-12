@@ -96,8 +96,8 @@ class NewsletterViewTemplate extends MigurView
 	protected function addToolbar()
 	{
 		$bar = MigurToolbar::getInstance('multitab-toolbar');
-		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'template.save', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
+		$bar->appendButton('Migurstandard', 'save', 'JTOOLBAR_SAVE', 'template.save', false);
+		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
 	}
 
 	/**
