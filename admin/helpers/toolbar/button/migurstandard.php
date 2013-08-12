@@ -16,7 +16,7 @@ MigurToolbar::getInstance()->loadButtonType('standard');
  * @package     Migur.com_newsletter
  * @since       13.06
  */
-class JButtonMigurstandard extends JButtonStandard
+class JToolbarButtonMigurstandard extends JToolbarButtonStandard
 {
 	/**
 	 * Button type
@@ -36,7 +36,7 @@ class JButtonMigurstandard extends JButtonStandard
 	 *
 	 * @return  string  HTML string for the button
 	 *
-	 * @since   11.1
+	 * @since   13.08
 	 */
 	public function fetchButton($type = 'Standard', $name = '', $text = '', $task = '', $list = true)
 	{
@@ -44,11 +44,22 @@ class JButtonMigurstandard extends JButtonStandard
 		$class = $this->fetchIconClass($name);
 		$doTask = $this->_getCommand($text, $task, $list);
 
-		$html = "<a href=\"#\" onclick=\"return $doTask;\" class=\"toolbar\">\n";
-		$html .= "<span class=\"$class\">\n";
-		$html .= "</span>\n";
+		if ($name == "apply" || $name == "new")
+		{
+			$btnClass = "btn btn-small btn-success";
+			$iconWhite = "icon-white";
+		}
+		else
+		{
+			$btnClass = "btn btn-small";
+			$iconWhite = "";
+		}
+
+		$html = "<button href=\"#\" onclick=\"return $doTask\" class=\"" . $btnClass . "\">\n";
+		$html .= "<i class=\"$class $iconWhite\">\n";
+		$html .= "</i>\n";
 		$html .= "$i18n_text\n";
-		$html .= "</a>\n";
+		$html .= "</button>\n";
 
 		return $html;
 	}
