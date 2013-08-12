@@ -90,7 +90,7 @@ class NewsletterViewBounceds extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_BOUNCEDS_TITLE'), 'article.png');
 
 		$bar = MigurToolbar::getInstance('bounceds');
-		$bar->appendButton('Standard', 'process', 'JTOOLBAR_PROCESS', 'bounceds.process', false);
+		$bar->appendButton('Migurstandard', 'process', 'JTOOLBAR_PROCESS', 'bounceds.process', false);
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));

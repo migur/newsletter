@@ -69,12 +69,12 @@ class NewsletterViewSmtpprofile extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = MigurToolbar::getInstance('smtp-toolbar', 'smtpprofileForm');
+		$bar = MigurToolbar::getInstance('smtp-toolbar', array('formName' => 'smtpprofileForm', 'useCustomForm' => true));
 		$bar->addButtonPath(COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
 		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP', NewsletterHelperSupport::getResourceUrl('com-newsletter/smtpp/general'));
-		$bar->appendButton('Standard', 'publish', 'COM_NEWSLETTER_CHECK', 'smtpprofile.checkconnection', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
-		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'smtpprofile.save', false);
+		$bar->appendButton('Migurstandard', 'publish', 'COM_NEWSLETTER_CHECK', 'smtpprofile.checkconnection', false);
+		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', '', false);
+		$bar->appendButton('Migurstandard', 'save', 'JTOOLBAR_SAVE', 'smtpprofile.save', false);
 	}
 
 

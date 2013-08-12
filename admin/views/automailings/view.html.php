@@ -84,7 +84,7 @@ class NewsletterViewAutomailings extends MigurView
 		$bar = MigurToolbar::getInstance('automailings');
 		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailing&tmpl=component', 370, 190, 0, 0);
 		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'automailing.edit', false);
-		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'automailings.delete', false);
+		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'automailings.delete', false);
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));

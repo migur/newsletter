@@ -53,12 +53,12 @@ class NewsletterViewInstall extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_EXTENSION_MANAGER'), 'article.png');
 
-		$bar = MigurToolbar::getInstance('extensions', array('preserveJCallback' => true));
+		$bar = MigurToolbar::getInstance('extensions');
 
-		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'install.remove', false);
-		$bar->appendButton('Standard', 'restore', 'COM_NEWSLETTER_RESTORE', 'install.restore', false);
-//		$bar->appendButton('Standard', 'unpublish', 'JTOOLBAR_DISABLE', 'install.unpublish', false);
-//		$bar->appendButton('Standard', 'publish', 'JTOOLBAR_ENABLE', 'install.publish', false);
+		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'install.remove', false);
+		$bar->appendButton('Migurstandard', 'restore', 'COM_NEWSLETTER_RESTORE', 'install.restore', false);
+//		$bar->appendButton('Migurstandard', 'unpublish', 'JTOOLBAR_DISABLE', 'install.unpublish', false);
+//		$bar->appendButton('Migurstandard', 'publish', 'JTOOLBAR_ENABLE', 'install.publish', false);
 		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP', NewsletterHelperSupport::getResourceUrl('com-newsletter/extension/manager'));
 
 		// Load the submenu.

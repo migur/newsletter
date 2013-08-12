@@ -115,9 +115,9 @@ class NewsletterViewSubscriber extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = MigurToolbar::getInstance('subscriber-toolbar', 'subscriberForm');
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'subscriber.cancel', false);
-		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'subscriber.save', false);
+		$bar = MigurToolbar::getInstance('subscriber-toolbar', array('formName' => 'subscriberForm', 'useCustomForm' => true));
+		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', 'subscriber.cancel', false);
+		$bar->appendButton('Migurstandard', 'save', 'JTOOLBAR_SAVE', 'subscriber.save', false);
 	}
 
 	/**

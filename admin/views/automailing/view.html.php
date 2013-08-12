@@ -143,8 +143,8 @@ class NewsletterViewAutomailing extends MigurView
 		$aid = JRequest::getInt('automailing_id');
 
 		$bar = MigurToolbar::getInstance('automailing');
-		$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'automailing.save', false);
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'automailing.cancel', false);
+		$bar->appendButton('Migurstandard', 'save', 'JTOOLBAR_SAVE', 'automailing.save', false);
+		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', 'automailing.cancel', false);
 
 		$bar = MigurToolbar::getInstance('series');
 		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailingitem&layout=edit&tmpl=component&automailing_id='.$aid, 420, 210, 0, 0);
@@ -152,7 +152,7 @@ class NewsletterViewAutomailing extends MigurView
 		$bar = MigurToolbar::getInstance('lists');
 		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailing&tmpl=component', 880, 690, 0, 0);
 		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
-		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
+		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
 	}
 
 	/**

@@ -15,26 +15,24 @@
  */
 Joomla.submitbutton = function(task, form)
 {
-        if (!form) {
-            form = document.subscriberForm
-        }
+    if (!form) {
+        form = document.subscriberForm
+    }
 
-	if (task == '')
-	{
+	if (task == '') {
 		return false;
-	}
-	else
-        {
-                var action = task.split('.');
-                if ( document.formvalidator.isValid(form) ||
-                     action[1] == 'cancel' ||
-                     action[1] == 'close' ) {
-                     
-			Joomla.submitform(task, form);
-			return true;
-		}
-		else
-		{
+
+	} else {
+
+        var action = task.split('.');
+        if ( document.formvalidator.isValid(form) ||
+             action[1] == 'cancel' ||
+             action[1] == 'close' ) {
+
+            Joomla.submitform(task, form);
+            return true;
+
+        } else {
 			//alert(Joomla.JText._('COM_NEWSLETTER_ERROR_UNACCEPTABLE','Some values are unacceptable'));
 			return false;
 		}
