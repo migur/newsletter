@@ -238,8 +238,8 @@ class NewsletterViewList extends MigurView
 			( $isNew && NewsletterHelperAcl::actionIsAllowed('list.add')) ||
 			(!$isNew && NewsletterHelperAcl::actionIsAllowed('list.edit'))
 		) {
-			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'list.apply', false);
-			$bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'list.save', false);
+			$bar->appendButton('Migurstandard', 'apply', 'JTOOLBAR_APPLY', 'list.apply', false);
+			$bar->appendButton('Migurstandard', 'save', 'JTOOLBAR_SAVE', 'list.save', false);
 		}
 		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CLOSE', 'list.cancel', false);
 	}

@@ -74,7 +74,7 @@ class MigurToolbar extends JToolBar
 		if (empty(self::$instances[$name])) {
 
 			self::$instances[$name] =
-				empty($options['migurInstance'])?
+				!empty($options['joomlaInstance'])?
 					new JToolBar($name) :
 					new MigurToolbar($name, $options);
 
@@ -96,23 +96,24 @@ class MigurToolbar extends JToolBar
 	public function renderButton(&$node)
 	{
 		$html = parent::renderButton($node);
-		$formName = $this->_formName;
 
-		if (!empty($this->_options['preserveJCallback'])) {
-			return $html;
+		$formName = $this->_options['formName'];
+
+		if (!empty($this->_options['useCustomForm']) && !empty($formName)) {
+			$html = preg_replace(
+				array(
+					"/Joomla\.submitbutton\(([^)]*)\)/",
+					"/adminForm/"
+				),
+				array(
+					"Joomla.submitform($1, document.{$formName}, this)",
+					$formName
+				),
+				$html
+			);
 		}
 
-		return preg_replace(
-			array(
-				"/Joomla\.submitbutton\(([^)]*)\)/",
-				"/adminForm/"
-			),
-			array(
-				"Joomla.submitform($1, document.{$formName}, this)",
-				$formName
-			),
-			$html
-		);
+		return $html;
 	}
 
 	public static function addGlobalButtonPath($path)

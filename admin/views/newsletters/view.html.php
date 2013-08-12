@@ -103,10 +103,10 @@ class NewsletterViewNewsletters extends MigurView
 
 		$bar = MigurToolbar::getInstance();
 		if (NewsletterHelperAcl::actionIsAllowed('newsletter.add')) {
-			$bar->appendButton('Standard', 'new', 'JTOOLBAR_NEW', 'newsletter.add', false);
-			$bar->appendButton('Standard', 'copy', 'JTOOLBAR_SAVE_AS_COPY', 'newsletter.save2copy', false);
+			$bar->appendButton('Migurstandard', 'new', 'JTOOLBAR_NEW', 'newsletter.add', false);
+			$bar->appendButton('Migurstandard', 'copy', 'JTOOLBAR_SAVE_AS_COPY', 'newsletter.save2copy', false);
 		}
-		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'newsletters.delete', false);
+		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'newsletters.delete', false);
 
 		$bar->appendButton('Migurbasic', 'COM_NEWSLETTER_SHOW_STATISTICS', array(
 			'id' => 'ctrl-showstats',
