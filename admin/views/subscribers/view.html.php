@@ -100,7 +100,7 @@ class NewsletterViewSubscribers extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_SUBSCRIBERS_TITLE'), 'article.png');
 
-		$bar = MigurToolbar::getInstance('subscribers');
+		$bar = MigurToolbar::getInstance('subscribers', array('formName' => 'subscribersForm', 'useCustomForm' => true));
 
 		$bar->appendButton('Migurmodal', 'COM_NEWSLETTER_NEW_SUBSCRIBER', array(
 			'url' => 'index.php?option=com_newsletter&task=subscriber.add&tmpl=component',
