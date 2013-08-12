@@ -87,11 +87,11 @@ class NewsletterViewConflicts extends MigurView
 
 		$bar = MigurToolbar::getInstance();
 		// delete all/selected;
-		$bar->appendButton('Standard', 'trash', 'COM_NEWSLETTER_DELETE_SUBS', 'conflicts.deletesubs', false);
+		$bar->appendButton('Migurstandard', 'trash', 'COM_NEWSLETTER_DELETE_SUBS', 'conflicts.deletesubs', false);
 		// merge selected. preserve J! user's data
-		$bar->appendButton('Standard', 'trash', 'COM_NEWSLETTER_MERGE_USERS', 'conflicts.mergeusers', false);
+		$bar->appendButton('Migurstandard', 'trash', 'COM_NEWSLETTER_MERGE_USERS', 'conflicts.mergeusers', false);
 		// merge selected. preserve J! subscriber's data
-		$bar->appendButton('Standard', 'trash', 'COM_NEWSLETTER_MERGE_SUBS', 'conflicts.mergesubs', false);
+		$bar->appendButton('Migurstandard', 'trash', 'COM_NEWSLETTER_MERGE_SUBS', 'conflicts.mergesubs', false);
 
 		// TODO merge history (yes/no)
 
