@@ -87,7 +87,7 @@ class NewsletterViewLogs extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_LOG_TITLE'), 'article.png');
 
 		$bar = MigurToolbar::getInstance();
-		$bar->appendButton('Standard', 'trash', 'JTOOLBAR_DELETE', 'logs.delete', false);
+		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'logs.delete', false);
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));

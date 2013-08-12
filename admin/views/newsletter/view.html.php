@@ -224,8 +224,8 @@ class NewsletterViewNewsletter extends MigurView
 				(!$isNew && AclHelper::actionIsAllowed('newsletter.edit'))
 			)
 		) {
-			$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'newsletter.apply', false);
-			$bar->appendButton('Standard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
+			$bar->appendButton('Migurstandard', 'apply', 'JTOOLBAR_APPLY', 'newsletter.apply', false);
+			$bar->appendButton('Migurstandard', 'save',  'JTOOLBAR_SAVE', 'newsletter.save', false);
 		}
 
 		try {
@@ -246,7 +246,7 @@ class NewsletterViewNewsletter extends MigurView
 		}
 
 
-		$bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
+		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', 'newsletter.cancel', false);
 
 
 		if ($this->isUpdateAllowed && (
