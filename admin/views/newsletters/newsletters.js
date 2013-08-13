@@ -12,7 +12,7 @@ window.addEvent('domready', function() {
         $('ctrl-showstats').addEvent('click', function(ev){
 
             var listIds = [];
-            $$('#container-newsletters [name=cid[]]').each(function(el){
+            $$('#adminForm [name=cid[]]').each(function(el){
 
                 if( $(el).getProperty('checked') ) {
 
