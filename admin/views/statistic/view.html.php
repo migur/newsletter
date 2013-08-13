@@ -64,18 +64,18 @@ class NewsletterViewStatistic extends MigurView
 		}
 
 		$this->setStatisticsData();
-		
+
 		// Load the submenu.
-		NewsletterHelper::addSubmenu(JRequest::getVar('view'));
-		
+		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
+
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_NEWSLETTERS_STATS'), 'article.png');
-		
+
 		parent::display($tpl);
 	}
 
 	/**
 	 * Get statistics data and set it to JS.
-	 * 
+	 *
 	 * @return void
 	 * @since  1.0
 	 */
@@ -109,14 +109,14 @@ class NewsletterViewStatistic extends MigurView
 
 		$previousDay = date('Y-m-d 00:00:00', strtotime("-1 day", time()));
 		$thisDay = date('Y-m-d 00:00:00');
-		
+
 		$daysIdentifier = ($days == 1)? "-1 day" : "-" . $days . " Days";
 		$fiewDaysBefore = date('Y-m-d 00:00:00', strtotime($daysIdentifier, time()));
 
 		$previousHour =  date('Y-m-d H:00:00', strtotime("-1 hour", time()));
 		$thisHour =  date('Y-m-d H:00:00');
 		$oneDayBefore = date('Y-m-d H:00:00', strtotime("-1 day", time()));
-		
+
 		NewsletterHelperJavascript::addObject('clicksPerDay',
 			NewsletterHelperStatistics::activityPerDay(
 				$fiewDaysBefore,

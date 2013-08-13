@@ -92,7 +92,7 @@ class NewsletterViewSender extends MigurView
 
 		$this->addToolbar();
 
-		NewsletterHelper::addSubmenu();
+		NewsletterHelperNewsletter::addSubmenu();
 
 		parent::display($tpl);
 	}
