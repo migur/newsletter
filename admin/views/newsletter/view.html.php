@@ -220,8 +220,8 @@ class NewsletterViewNewsletter extends MigurView
 		$bar = MigurToolbar::getInstance('toolbar');
 
 		if ($this->isUpdateAllowed && (
-				( $isNew && AclHelper::actionIsAllowed('newsletter.add' )) ||
-				(!$isNew && AclHelper::actionIsAllowed('newsletter.edit'))
+				( $isNew && NewsletterHelperAcl::actionIsAllowed('newsletter.add' )) ||
+				(!$isNew && NewsletterHelperAcl::actionIsAllowed('newsletter.edit'))
 			)
 		) {
 			$bar->appendButton('Migurstandard', 'apply', 'JTOOLBAR_APPLY', 'newsletter.apply', false);
