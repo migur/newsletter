@@ -38,7 +38,7 @@ class JButtonMigurstandard extends JButtonStandard
 	 *
 	 * @since   11.1
 	 */
-	public function fetchButton($type = 'Standard', $name = '', $text = '', $task = '', $list = true)
+	public function fetchButton($type = 'Migurstandard', $name = '', $text = '', $task = '', $list = true)
 	{
 		$i18n_text = JText::_($text);
 		$class = $this->fetchIconClass($name);
