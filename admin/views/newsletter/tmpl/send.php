@@ -5,8 +5,8 @@
 </script>
 
     <ul id="send" class="form-text">
-		
-		<div class="container-top">	
+
+		<div class="container-top">
 			<li>
 					<?php echo $this->form->getLabel('name'); ?>
 					<?php echo $this->form->getInput('name'); ?>
@@ -30,6 +30,9 @@
 		</li>
 		<li>
                 <?php echo $this->form->getLabel('smtp_profile_id'); ?>
+				&nbsp;&nbsp;<?php echo JHtml::_('migurhelp.link', 'newsletter/smtp'); ?>
+
+
                 <?php echo $this->form->getInput('smtp_profile_id'); ?>
                 <input
                     type="button"
@@ -44,22 +47,22 @@
 			<div class="fltlft">
                 <?php echo $this->form->getLabel('newsletter_from_name', 'params'); ?>
                 <?php echo $this->form->getInput('newsletter_from_name', 'params'); ?>
-			</div>	
+			</div>
 			<div class="fltrt">
                 <?php echo $this->form->getLabel('newsletter_to_name', 'params'); ?>
                 <?php echo $this->form->getInput('newsletter_to_name', 'params'); ?>
-			</div>	
+			</div>
 		</li>
 		<li>
 			<div class="fltlft">
                 <?php echo $this->form->getLabel('newsletter_from_email', 'params'); ?>
                 <?php echo $this->form->getInput('newsletter_from_email', 'params'); ?>
-			</div>	
+			</div>
 			<div class="fltrt">
                 <?php echo $this->form->getLabel('newsletter_to_email', 'params'); ?>
                 <?php echo $this->form->getInput('newsletter_to_email', 'params'); ?>
-			</div>	
-		</li>	
+			</div>
+		</li>
 		<li>
 			<label><?php echo JText::_('COM_NEWSLETTER_WEBSITE'); ?></label>
             <div id="link-website-dd">

@@ -23,34 +23,35 @@
                 <tr>
                     <td>
 						<?php next($items); echo current($items)->label; ?>
+						<?php echo JHtml::_('migurhelp.link', 'smtp/default'); ?>
 					</td>
                     <td>
-					<?php 
+					<?php
 						echo current($items)->input;
 						next($items); ?>
-					<div class="clr"></div>						
-					<?php	
+					<div class="clr"></div>
+					<?php
 						echo current($items)->input; ?>
-						<?php next($items); echo current($items)->input; 
+						<?php next($items); echo current($items)->input;
 						next($items);
-						echo current($items)->input; 
+						echo current($items)->input;
 					?></td>
-					
+
                 </tr>
                 <tr>
                     <td><?php next($items); echo current($items)->label; ?></td>
                     <td>
-					<?php 
+					<?php
 						echo current($items)->input;
 						next($items); ?>
-					<div class="clr"></div>						
-					<?php	
+					<div class="clr"></div>
+					<?php
 						echo current($items)->input; ?>
-						<?php next($items); echo current($items)->input; 
+						<?php next($items); echo current($items)->input;
 						next($items);
-						echo current($items)->input; 
+						echo current($items)->input;
 					?></td>
-					
+
                 </tr>
                 <tr>
                     <td><?php next($items); echo current($items)->label; ?></td>
@@ -60,9 +61,11 @@
                     <td colspan="2">
 						<?php next($items); ?>
 						<?php echo current($items)->label; ?>
+						<div class="fltlft"><?php echo JHtml::_('migurhelp.link', 'subscriber', 'subscription'); ?></div>
 						<?php echo current($items)->input; ?>
 						<?php next($items); ?>
 						<?php echo current($items)->label; ?>
+						<div class="fltlft"><?php echo JHtml::_('migurhelp.link', 'subscriber', 'subscription'); ?></div>
 						<?php echo current($items)->input; ?>
 					</td>
                 </tr>

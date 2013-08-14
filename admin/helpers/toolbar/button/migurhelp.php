@@ -51,7 +51,7 @@ class JButtonMigurhelp extends JButton
 		$class	= $this->fetchIconClass('help');
 		$doTask	= $this->_getCommand($ref, $com, $override, $component, $width, $height);
 
-		$html = "<a href=\"#\" onclick=\"$doTask\" rel=\"help\" class=\"toolbar btn\">\n";
+		$html = "<a href=\"#\" onclick=\"$doTask; return false;\" rel=\"help\" class=\"toolbar btn\">\n";
 		$html .= "<span class=\"$class\"><i class=\"icon-question-sign\"></i></span>\n";
 		$html .= "$text\n";
 		$html .= "</a>\n";
