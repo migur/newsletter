@@ -14,7 +14,7 @@
                     <?php echo $this->listForm->getInput('description'); ?>
                 </dd>
                 <dt>
-					<?php echo JHtml::_('migurhelp.link', 'smtpp', 'general', 'smtpp-list'); ?>
+					<?php echo JHtml::_('migurhelp.link', 'list/smtp'); ?>
                     <?php echo $this->listForm->getLabel('smtp_profile_id'); ?>
                 </dt>
                 <dd>
@@ -43,7 +43,7 @@
 <?php endif; ?>
             </dl>
         </div>
-		
+
 <?php if (!$this->isNew): ?>
 
         <div id="overview2" class="form-text">

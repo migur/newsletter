@@ -119,7 +119,7 @@ class NewsletterViewDashboard extends MigurView
 		$bar = MigurToolbar::getInstance();
 		$bar->appendButton('Link', 'alert', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
 		$bar->appendButton('Separator');
-		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', NewsletterHelperSupport::getResourceUrl('com-newsletter/mailing/general'));
+		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', NewsletterHelperSupport::getResourceUrl('mailing'));
 		JToolBarHelper::custom('', 'progress', '', '', false);
 		$bar->appendButton('Migurqueue', 'queue');
 
