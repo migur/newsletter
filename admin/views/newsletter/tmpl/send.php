@@ -6,7 +6,7 @@
 
     <div id="send">
 
-		<div class="container-top">	
+		<div class="container-top">
 
 			<div class="control-group">
 				<div class="control-label">
@@ -14,7 +14,7 @@
 				</div>
 				<div class="controls">
 					<?php echo $this->form->getInput('name'); ?>
-				</div>	
+				</div>
 			</div>
 
 
@@ -24,7 +24,7 @@
 				</div>
 				<div class="controls">
 					<?php echo $this->form->getInput('subject'); ?>
-				</div>	
+				</div>
 			</div>
 
 
@@ -34,11 +34,11 @@
 				</div>
 				<div class="controls">
 					<?php echo $this->form->getInput('alias'); ?>
-				</div>	
+				</div>
 			</div>
-		
+
 		</div>
-		
+
 
 		<div class="control-group">
 			<div class="control-label">
@@ -46,7 +46,7 @@
 			</div>
 			<div class="controls">
 				<?php echo $this->form->getInput('encoding', 'params'); ?>
-			</div>	
+			</div>
 		</div>
 
 
@@ -56,16 +56,16 @@
 			</div>
 			<div class="controls">
                 <?php echo $this->form->getInput('type'); ?>
-			</div>	
+			</div>
 		</div>
-		
+
 
 		<div class="control-group">
 			<div class="control-label">
                 <?php echo $this->form->getLabel('smtp_profile_id'); ?>
-				&nbsp;&nbsp;<?php echo JHtml::_('migurhelp.link', 'smtpp', 'general'); ?>
-			</div>
-			<div class="controls">
+				&nbsp;&nbsp;<?php echo JHtml::_('migurhelp.link', 'newsletter/smtp'); ?>
+
+
                 <?php echo $this->form->getInput('smtp_profile_id'); ?>
                 <input
                     type="button"
@@ -75,16 +75,16 @@
                     id="button-newsletter-clear-profile"
                     value="<?php  echo JText::_('COM_NEWSLETTER_CLEAR_PROFILE'); ?>"
                 />
-			</div>	
+			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<div class="control-label">
                 <?php echo $this->form->getLabel('newsletter_from_name', 'params'); ?>
 			</div>
 			<div class="controls">
                 <?php echo $this->form->getInput('newsletter_from_name', 'params'); ?>
-			</div>	
+			</div>
 		</div>
 
 
@@ -94,17 +94,17 @@
 			</div>
 			<div class="controls">
                 <?php echo $this->form->getInput('newsletter_to_name', 'params'); ?>
-			</div>	
+			</div>
 		</div>
 
-		
+
 		<div class="control-group">
 			<div class="control-label">
                 <?php echo $this->form->getLabel('newsletter_from_email', 'params'); ?>
 			</div>
 			<div class="controls">
                 <?php echo $this->form->getInput('newsletter_from_email', 'params'); ?>
-			</div>	
+			</div>
 		</div>
 
 
@@ -114,7 +114,7 @@
 			</div>
 			<div class="controls">
                 <?php echo $this->form->getInput('newsletter_to_email', 'params'); ?>
-			</div>	
+			</div>
 		</div>
 
 		<div class="control-group">
@@ -129,7 +129,7 @@
 				<div id="link-website-msg" style="color:gray">
 				   ( <?php echo JText::_('COM_NEWSLETTER_LINK_AVAILABLE_AFTER_SAVING'); ?> )
 				</div>
-			</div>	
+			</div>
 		</div>
-		
+
     </div>

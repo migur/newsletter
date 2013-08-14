@@ -12,13 +12,16 @@ defined('_JEXEC') or die;
 
 abstract class JHtmlMigurhelp
 {
-	public static function link($category, $name = null, $anchor = null, $version = null, $options = array())
+	public static function link($route, $options = array())
 	{
-		$text   = JArrayHelper::getValue($options, 'text', '(?)');
-		$target = JArrayHelper::getValue($options, 'target', '_blank');
-		
-		$link   = NewsletterHelperSupport::getResourceUrl($category, $name, $anchor, $version, $options);
-		
-		return "<a class=\"migurhelp-link\" target=\"$target\" href=\"$link\">$text</a>";
+		$text   = JText::_(JArrayHelper::getValue($options, 'text', '(?)'), true);
+		$width =  JArrayHelper::getValue($options, 'width', '980');
+		$height = JArrayHelper::getValue($options, 'height', '600');
+
+		$link   = NewsletterHelperSupport::getResourceUrl($route, $options);
+
+		$task = "popupWindow('$link', '$text', $width, $height, 1)";
+
+		return "<a class=\"migurhelp-link\" href=\"#\" onclick=\"{$task}; return false;\">{$text}</a>";
 	}
 }

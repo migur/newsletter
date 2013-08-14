@@ -1,5 +1,5 @@
 <div id="exclude-toolbar">
-	
+
 	<button id="exclude-toolbar-lists" class="btn btn-large">
 		<?php echo JText::_('COM_NEWSLETTER_EXCLUDE_FROM_LISTS'); ?>
 	</button>
@@ -57,21 +57,21 @@
     </div>
 
 	<div id="excludelists-control-panel">
-		<input id="exclude-tab-button" class="btn btn-danger" type="button" value="<?php echo JText::_('COM_NEWSLETTER_EXCLUDE'); ?>">
-		<div class="preloader-container"></div>
-	</div>	
+		<input id="exclude-tab-button" type="button" value="<?php echo JText::_('COM_NEWSLETTER_EXCLUDE'); ?>">
+		<div class="preloader-container">&nbsp;</div>
+	</div>
 
 </div>
 
 <div id="exclude-file" class="file-form hide">
 
-	<iframe 
-		id="exclude-uploader" 
+	<iframe
+		id="exclude-uploader"
 		src="<?php echo JRoute::_("index.php?option=com_newsletter&tmpl=component&view=uploader&params[task]=list.upload&params[callback]=MigurExcludeUploadCallback&params[list_id]=". $this->listForm->getValue('list_id'), false); ?>"
-		frameBorder="0"		
+		frameBorder="0"
 	>
 	</iframe>
-	
+
     <fieldset id="exclude-found-fields" class="drop">
         <div class="legend">
 			<span><?php echo JText::_('COM_NEWSLETTER_EXCLUDE_FOUNDED_FIELDS'); ?></span>
@@ -94,7 +94,7 @@
 		<div class="drop" rel="email"></div>
     </fieldset>
 
-	
+
 	<fieldset id="exclude-settings">
 		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_EXCLUDE_SETTINGS'); ?></div>
 
@@ -110,11 +110,11 @@
 					<option value="space">space</option>
 				</select>
 
-				<input 
+				<input
 					type="text"
-					id="exclude-delimiter-custom" 
-					name="exclude_delimiter_custom" 
-					value="" 
+					id="exclude-delimiter-custom"
+					name="exclude_delimiter_custom"
+					value=""
 					class="inputbox hide input-small"
 				/>
 
@@ -128,7 +128,7 @@
 					class="btn btn-info"
 				/>
 			</div>
-		</div>	
+		</div>
 
 		<div class="control-group">
 			<label class="control-label">
@@ -143,11 +143,11 @@
 					<option value="#">#</option>
 				</select>
 
-				<input 
-					type="text" 
-					id="exclude-enclosure-custom" 
-					name="exclude_enclosure_custom" 
-					value="" 
+				<input
+					type="text"
+					id="exclude-enclosure-custom"
+					name="exclude_enclosure_custom"
+					value=""
 					class="inputbox hide input-small"
 				/>
 
@@ -169,10 +169,10 @@
 					<input type="checkbox" id="exclude-skip-header" name="exclude_skip_header" />
 					<span>
 						<?php echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
-						<?php echo JHtml::_('migurhelp.link', 'list', 'exclude'); ?>
+						<?php echo JHtml::_('migurhelp.link', 'list/exclude'); ?>
 					</span>
 				</label>
-			</div>	
+			</div>
 		</div>
 
 	</fieldset>
@@ -195,6 +195,6 @@
 			<div id="exclude-preloader" class="pull-left"></div>
 		</div>
 
-	</div>	
-	
+	</div>
+
 </div>

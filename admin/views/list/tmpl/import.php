@@ -1,7 +1,7 @@
 <div class="import">
-    
+
 	<div id="import-toolbar">
-		
+
 		<button class="btn btn-large" data-role="import-native">
 			<span><?php echo JText::_('COM_NEWSLETTER_IMPORT_FROM_FILE'); ?></span>
 		</button>
@@ -9,15 +9,15 @@
 		<?php foreach($this->importPlugins as $plg) { ?>
 
 			<?php $plg = (object) $plg; ?>
-			<button class="btn btn-large" data-role="import-plugin" rel="<?php echo !empty($plg->name)? $plg->name : ''; ?>" role="pluginButton">  
+			<button class="btn btn-large" data-role="import-plugin" rel="<?php echo !empty($plg->name)? $plg->name : ''; ?>" role="pluginButton">
 				<img src="<?php echo !empty($plg->icon)? $plg->icon : ''; ?>" />
 				<span><?php echo !empty($plg->title)? $plg->title : ''; ?></span>
-			  </a>    
+			  </a>
 		  </button>
 		<?php } ?>
-		
+
 	</div>
-	
+
 	<div class="import-content">
 
 		<div class="plugin-preloader"></div>
@@ -25,14 +25,14 @@
 
 		<div class="clr"></div>
 		<div id="import-file" class="file-form hide">
-			
+
 			<div class="alert alert-info">
 				<?php echo JText::_('COM_NEWSLETTER_STANDARD_IMPORT_HELPTEXT'); ?>
-				<?php echo JHtml::_('migurhelp.link', 'list', 'import'); ?>
+				<?php echo JHtml::_('migurhelp.link', 'list/import'); ?>
 			</div>
-			
-			<iframe 
-				id="import-uploader" 
+
+			<iframe
+				id="import-uploader"
 				src="<?php echo JRoute::_("index.php?option=com_newsletter&tmpl=component&view=uploader&params[task]=list.upload&params[callback]=MigurImportUploadCallback&params[list_id]=". $this->listForm->getValue('list_id'), false); ?>"
 				frameBorder="0"
 			>
@@ -66,12 +66,12 @@
 						<option value="0">No</option>
 						<option value="1">Yes</option>
 					</select>
-				</div>	
+				</div>
 			</fieldset>
 
 			<fieldset id="import-settings">
 				<div class="legend"><?php echo JText::_('COM_NEWSLETTER_IMPORT_SETTINGS'); ?></div>
-				
+
 				<div class="control-group">
 					<label class="control-label">
 						<?php  echo JText::_('COM_NEWSLETTER_IMPORT_SELECT_DELIMITER'); ?>
@@ -83,15 +83,15 @@
 							<option value="tab">tab</option>
 							<option value="space">space</option>
 						</select>
-						
-						<input 
+
+						<input
 							type="text"
-							id="import-delimiter-custom" 
-							name="import_delimiter_custom" 
-							value="" 
+							id="import-delimiter-custom"
+							name="import_delimiter_custom"
+							value=""
 							class="inputbox hide input-small"
 						/>
-						
+
 						<input
 							type="button"
 							name="import_del_toggle_button"
@@ -102,7 +102,7 @@
 							class="btn btn-info"
 						/>
 					</div>
-				</div>	
+				</div>
 
 				<div class="control-group">
 					<label class="control-label">
@@ -116,15 +116,15 @@
 							<option value="`">`</option>
 							<option value="#">#</option>
 						</select>
-						
-						<input 
-							type="text" 
-							id="import-enclosure-custom" 
-							name="import_enclosure_custom" 
-							value="" 
+
+						<input
+							type="text"
+							id="import-enclosure-custom"
+							name="import_enclosure_custom"
+							value=""
 							class="inputbox hide input-small"
 						/>
-						
+
 						<input
 							type="button"
 							name="import_enc_toggle_button"
@@ -136,16 +136,16 @@
 						/>
 					</div>
 				</div>
-				
+
 				<div class="control-group">
 					<div class="controls">
 						<label class="checkbox">
 							<input type="checkbox" id="import-overwrite" name="import_overwrite" />
 							<span><?php  echo JText::_('COM_NEWSLETTER_IMPORT_OVERWRITE'); ?></span>
 						</label>
-					</div>	
+					</div>
 				</div>
-				
+
 				<div class="control-group">
 					<div class="controls">
 						<label class="checkbox">
@@ -155,9 +155,9 @@
 								<?php echo JHtml::_('migurhelp.link', 'list', 'import'); ?>
 							</span>
 						</label>
-					</div>	
+					</div>
 				</div>
-					
+
 			</fieldset>
 
 
@@ -171,15 +171,15 @@
 					id="import-file-apply"
 					value="<?php  echo JText::_('COM_NEWSLETTER_IMPORT_FILE_APPLY'); ?>"
 				/>
-								
+
 				<div id="import-status-container" class="pull-right">
 					<div id="import-message" class="pull-left"></div>
 					<div id="import-message" class="pull-left">&nbsp;&nbsp;&nbsp;</div>
 					<div id="import-preloader" class="pull-left"></div>
 				</div>
 
-			</div>	
-			
+			</div>
+
 		</div>
-	</div>	
+	</div>
 </div>
