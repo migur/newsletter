@@ -57,7 +57,7 @@
     </div>
 
 	<div id="excludelists-control-panel">
-		<input id="exclude-tab-button" type="button" value="<?php echo JText::_('COM_NEWSLETTER_EXCLUDE'); ?>">
+		<input id="exclude-tab-button" type="button" class="btn btn-danger" value="<?php echo JText::_('COM_NEWSLETTER_EXCLUDE'); ?>">
 		<div class="preloader-container">&nbsp;</div>
 	</div>
 

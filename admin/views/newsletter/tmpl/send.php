@@ -64,8 +64,8 @@
 			<div class="control-label">
                 <?php echo $this->form->getLabel('smtp_profile_id'); ?>
 				&nbsp;&nbsp;<?php echo JHtml::_('migurhelp.link', 'newsletter/smtp'); ?>
-
-
+			</div>
+			<div class="controls">
                 <?php echo $this->form->getInput('smtp_profile_id'); ?>
                 <input
                     type="button"

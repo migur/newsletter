@@ -38,7 +38,7 @@ class JToolbarButtonMigurstandard extends JToolbarButtonStandard
 	 *
 	 * @since   13.08
 	 */
-	public function fetchButton($type = 'Standard', $name = '', $text = '', $task = '', $list = true)
+	public function fetchButton($type = 'Migurstandard', $name = '', $text = '', $task = '', $list = true)
 	{
 		$i18n_text = JText::_($text);
 		$class = $this->fetchIconClass($name);
