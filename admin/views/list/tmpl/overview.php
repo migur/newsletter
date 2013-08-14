@@ -1,12 +1,12 @@
     <div id="tab-container-ovirview">
         <div id="overview1" class="form-text">
-            
+
 			<?php echo JHtml::_('layout.controlgroup', $this->listForm->getLabel('name'), $this->listForm->getInput('name')); ?>
 
 			<?php echo JHtml::_('layout.controlgroup', $this->listForm->getLabel('description'), $this->listForm->getInput('description')); ?>
-			
-			<?php echo JHtml::_('layout.controlgroup', 
-				$this->listForm->getLabel('smtp_profile_id') . JHtml::_('migurhelp.link', 'smtpp', 'general', 'smtpp-list'), 
+
+			<?php echo JHtml::_('layout.controlgroup',
+				$this->listForm->getLabel('smtp_profile_id') . JHtml::_('migurhelp.link', 'list/smtp'),
 				$this->listForm->getInput('smtp_profile_id')
 			); ?>
 
@@ -30,7 +30,7 @@
             </div>
             <?php endif; ?>
         </div>
-		
+
 <?php if (!$this->isNew): ?>
 
         <div id="overview2" class="form-text">

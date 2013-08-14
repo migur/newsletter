@@ -5,7 +5,7 @@ defined('_JEXEC') or die;
 
 <h2><?php echo JText::_('COM_NEWSLETTER_SUBSCRIBER_EDITING'); ?></h2>
 <div id="subscriber-form-edit" class="width-100 pull-left">
-	
+
 	<fieldset id="subscriber-edit-main">
 	   <div class="legend"><?php echo JText::_('COM_NEWSLETTER_INFORMATION'); ?></div>
 	   <?php echo $this->loadTemplate('subscriber'); ?>
@@ -21,7 +21,7 @@ defined('_JEXEC') or die;
 	<fieldset id="subscriber-edit-history">
 	   <div class="legend">
 			<?php echo JText::_('COM_NEWSLETTER_HISTORY'); ?>
-			<?php echo JHtml::_('migurhelp.link', 'subscriber', 'history'); ?>
+			<?php echo JHtml::_('migurhelp.link', 'subscriber/history'); ?>
 	   </div>
 	   <?php echo $this->loadTemplate('history'); ?>
 	</fieldset>
