@@ -20,7 +20,7 @@ abstract class JHtmlMigurhelp
 
 		$link   = NewsletterHelperSupport::getResourceUrl($route, $options);
 
-		$task = "popupWindow('$link', '$text', $width, $height, 1)";
+		$task = "Joomla.popupWindow('$link', '$text', $width, $height, 1)";
 
 		return "<a class=\"migurhelp-link\" href=\"#\" onclick=\"{$task}; return false;\">{$text}</a>";
 	}
