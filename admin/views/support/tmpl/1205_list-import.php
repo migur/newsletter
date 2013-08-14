@@ -31,7 +31,7 @@ or it just header with column names. Use <b>"Skip the header"</b> setting to do 
 <br/>
 <p>If you want to sent the registration mail to these subscribers you need to check
  the <b>Send registration mail</b> option in <b>Settings</b> on Import panel before starting of importing.
-See <a href="<?php echo NewsletterHelperSupport::getResourceUrl('com-newsletter/subscriber/subscription', 'regmail'); ?>">Subscription</a> for additional info.
+See <a href="<?php echo NewsletterHelperSupport::getResourceUrl('subscriber/subscription/regmail'); ?>">Subscription</a> for additional info.
 
 <h3>Examples of CSVs for import:</h3>
 <ul>

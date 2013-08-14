@@ -69,7 +69,10 @@
         </table>
     </div>
 
-    <input id="exclude-tab-button" type="button" value="<?php echo JText::_('COM_NEWSLETTER_EXCLUDE'); ?>">
+	<div id="excludelists-control-panel">
+		<input id="exclude-tab-button" type="button" value="<?php echo JText::_('COM_NEWSLETTER_EXCLUDE'); ?>">
+		<div class="preloader-container">&nbsp;</div>
+	</div>
 
 </div>
 
@@ -150,11 +153,11 @@
             />
 
             <div class="clr"></div>
-			
+
 			<div style="margin-top:10px; overflow:hidden">
 				<input type="checkbox" id="exclude-skip-header" name="exclude_skip_header" value="yes">
 				<div style="margin:3px; float: left;"><?php  echo JText::_('COM_NEWSLETTER_SKIP_HEADER'); ?>
-					<?php echo JHtml::_('migurhelp.link', 'list', 'exclude'); ?>
+					<?php echo JHtml::_('migurhelp.link', 'list/exclude'); ?>
 				</div>
 			</div>
         </div>
@@ -170,13 +173,23 @@
     />
 
 
-    <input
-        type="button"
-        name="newsletter_upload"
-        onclick=""
-        id="exclude-file-apply"
-        value="<?php  echo JText::_('COM_NEWSLETTER_EXCLUDE_FILE_APPLY'); ?>"
-    />
+    <div class="fltrt submit-control">
+
+        <div class="fltlft">
+            <div id="exclude-preloader" class="fltrt"></div>
+            <div id="exclude-message" class="fltlft"></div>
+        </div>
+
+        <input
+            type="button"
+            name="newsletter_upload"
+            onclick=""
+            id="exclude-file-apply"
+            value="<?php  echo JText::_('COM_NEWSLETTER_EXCLUDE_FILE_APPLY'); ?>"
+        />
+    </div>
+
+
 
 
 </div>
