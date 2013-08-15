@@ -131,6 +131,7 @@ class NewsletterModelSubscribers extends MigurModelList
 	 */
 	public function setDefaultQuery()
 	{
+
 		$lid = (int) $this->getState('filter.list');
 
 		// Create a new query object.
@@ -141,19 +142,19 @@ class NewsletterModelSubscribers extends MigurModelList
 		$query->select(
 			'a.subscriber_id, a.name, a.email, a.state, a.registerDate, a.user_id, ' . ( empty($lid)? '0 AS confirmed ' : 'sl.confirmed AS confirmed ' )
 		);
-		
+
 		$query->from(
-			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id 
+			'(SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id
 			FROM #__newsletter_subscribers AS s
 			LEFT JOIN #__users AS u ON (s.user_id = u.id)
 			WHERE s.user_id = 0 OR u.id IS NOT NULL OR s.email != ""
-			
+
 			UNION
 
-			SELECT   s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id 
+			SELECT   s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, COALESCE(u.registerDate, s.created_on) AS registerDate, u.id AS user_id
 			FROM #__newsletter_subscribers AS s
 			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS a');
-		
+
 		// Filtering the data
 		if (!empty($this->filtering)) {
 			foreach ($this->filtering as $field => $val)
@@ -169,19 +170,19 @@ class NewsletterModelSubscribers extends MigurModelList
 
 		// Filter by list state
 		$type = $this->getState('filter.type');
-		
+
 		if ($type == 1) {
 			$query->where('a.user_id IS NULL');
 		}
-		
+
 		if ($type == 2) {
 			$query->where('a.user_id > 0');
 		}
-		
-		
+
+
 		// Filter by published state
 		$published = $this->getState('filter.published');
-		if (in_array($published, array('0', '1'))) {
+		if (in_array($published, array('0', '1', '-2'))) {
 			$query->where('a.state = ' . (int) $published);
 		}
 
@@ -206,7 +207,7 @@ class NewsletterModelSubscribers extends MigurModelList
 			$query->join('', "#__user_usergroup_map AS ug ON ug.user_id = a.user_id");
 			$query->where('ug.group_id IN (' . implode(',', $jusergroup) . ')');
 		}
-		
+
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
@@ -219,9 +220,8 @@ class NewsletterModelSubscribers extends MigurModelList
 		if ($orderCol == 'confirmed') {
 			$orderCol = 'sl.confirmed';
 		}
-		
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
+		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 		//echo nl2br(str_replace('#__','php53_',$query)); die;
 		$this->query = $query;
 	}
@@ -234,6 +234,7 @@ class NewsletterModelSubscribers extends MigurModelList
 	 */
 	public function getSubscribersByList($params)
 	{
+
 		// Create a new query object.
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
@@ -254,14 +255,13 @@ class NewsletterModelSubscribers extends MigurModelList
 			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, u.id AS user_id, s.confirmed
 			FROM #__newsletter_subscribers AS s
 			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS a');
-		
+
 		$query->join('', "#__newsletter_sub_list AS sl ON a.subscriber_id=sl.subscriber_id");
 
 		if (!empty($params['list_id'])) {
-			
+
 			$query->where('sl.list_id=' . intval($params['list_id']));
 		}
-		
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering', 'a.name');
 		$orderDirn = $this->state->get('list.direction', 'asc');

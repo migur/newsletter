@@ -68,10 +68,11 @@ class NewsletterModelLists extends MigurModelList
 
 		$form = JRequest::getVar('form');
 		$name = $this->getName();
+
 		if ($form != $name) {
 			$search = $app->getUserState($this->context . '.filter.search');
 			$published = $app->getUserState($this->context . '.filter.published');
-			$published = ($published) ? $published : '';
+
 		} else {
 			$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 			//TODO: Remove implicit match
@@ -80,10 +81,9 @@ class NewsletterModelLists extends MigurModelList
 			}
 			$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
 		}
-
 		$this->setState('filter.published', $published);
 		$this->setState('filter.search', $search);
-
+//		$this->setState('filter.ololo', 'trololo');
 		// List state information.
 		parent::populateState('a.name', 'asc');
 	}
