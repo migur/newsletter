@@ -108,8 +108,16 @@ class NewsletterViewSubscribers extends MigurView
 			'class' => 'btn btn-small btn-success',
 			'icon-class' => 'icon-new'
 		));
+		$state	= $this->get('State');
 
-		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'subscribers.delete', false);
+		if ((int) $state->get('filter.published') == -2)
+		{
+			$bar->appendButton('Migurstandard', 'delete', 'JTOOLBAR_EMPTY_TRASH', 'subscribers.delete', true);
+		} else
+		{
+			$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_TRASH', 'subscribers.trash', false);
+		}
+
 		$bar->appendButton('Migurstandard', 'unblock', 'JTOOLBAR_ENABLE', 'subscribers.publish', false);
 		$bar->appendButton('Migurstandard', 'unpublish', 'JTOOLBAR_DISABLE', 'subscribers.unpublish', false);
 

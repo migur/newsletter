@@ -106,6 +106,9 @@ abstract class JHtmlMultigrid
 		if (!array_key_exists('all', $config) || $config['all']) {
 			$options[] = JHtml::_('select.option', '*', 'JALL');
 		}
+		if (!array_key_exists('trashed', $config) || $config['trashed']) {
+			$options[] = JHtml::_('select.option', '-2', 'Trashed');
+		}
 		return $options;
 	}
 
