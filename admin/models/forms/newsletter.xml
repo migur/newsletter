@@ -4,7 +4,7 @@
 		<field name="name"
 			type="text"
 			label="COM_NEWSLETTER_NAME"
-			description="COM_NEWSLETTER_NAME"
+			description="COM_NEWSLETTER_NEWSLETTER_NAME_DESC"
 			class="inputbox validate-name autosaverable"
 			size="100"
 			default=""
@@ -13,18 +13,18 @@
 		<field name="alias"
 			type="text"
 			label="COM_NEWSLETTER_ALIAS"
-			description="COM_NEWSLETTER_ALIAS"
+			description="COM_NEWSLETTER_NEWSLETTER_ALIAS_DESC"
 			class="inputbox validate-alias autosaverable"
 			size="100"
 			default=""
 			unique="true"
 			validate="alias"
 		 />
-		 
+
 		<field name="subject"
 			type="text"
 			label="COM_NEWSLETTER_SUBJECT"
-			description="COM_NEWSLETTER_SUBJECT"
+			description="COM_NEWSLETTER_NEWSLETTER_SUBJECT_DESC"
 			class="inputbox validate-subject autosaverable"
 			size="100"
 			default=""
@@ -34,7 +34,7 @@
 		<field name="type"
 			type="radio"
 			label="COM_NEWSLETTER_TYPE"
-			description="COM_NEWSLETTER_TYPE"
+			description="COM_NEWSLETTER_NEWSLETTER_TYPE_DESC"
 			class="inputbox validate-type autosaverable"
 			default="0"
 			required="true"
@@ -49,7 +49,7 @@
             default="0"
 			scope=""
             label="COM_NEWSLETTER_SMTP_PROFILE"
-            description="COM_NEWSLETTER_SMTP_PROFILE"
+            description="COM_NEWSLETTER_NEWSLETTER_SMTP_PROFILE_DESC"
             class="selectbox validate-smtp_profile_id autosaverable"
             required="false"
         >
@@ -60,7 +60,7 @@
             <field name="newsletter_from_name"
                     type="text"
                     label="COM_NEWSLETTER_FROM_NAME"
-                    description="COM_NEWSLETTER_FROM_NAME"
+                    description="COM_NEWSLETTER_NEWSLETTER_FROM_NAME_DESC"
                     class="inputbox smtp-dependency validate-newsletter_from_name autosaverable"
                     size="30"
                     default=""
@@ -70,7 +70,7 @@
             <field name="newsletter_from_email"
                     type="text"
                     label="COM_NEWSLETTER_FROM_EMAIL"
-                    description="COM_NEWSLETTER_FROM_EMAIL"
+                    description="COM_NEWSLETTER_NEWSLETTER_FROM_EMAIL_DESC"
                     class="inputbox smtp-dependency validate-newsletter_from_email autosaverable"
                     size="30"
                     default=""
@@ -80,7 +80,7 @@
             <field name="newsletter_to_name"
                     type="text"
                     label="COM_NEWSLETTER_TO_NAME"
-                    description="COM_NEWSLETTER_TO_NAME"
+                    description="COM_NEWSLETTER_NEWSLETTER_TO_NAME_DESC"
                     class="inputbox smtp-dependency validate-newsletter_to_name autosaverable"
                     size="30"
                     default=""
@@ -90,24 +90,24 @@
             <field name="newsletter_to_email"
                     type="text"
                     label="COM_NEWSLETTER_TO_EMAIL"
-                    description="COM_NEWSLETTER_TO_EMAIL"
+                    description="COM_NEWSLETTER_NEWSLETTER_TO_EMAIL_DESC"
                     class="inputbox smtp-dependency validate-newsletter_to_email autosaverable"
                     size="30"
                     default=""
                     required="true"
                     validate=""
              />
-			 
+
 			<field name="encoding"
 				type="encodings"
 				label="COM_NEWSLETTER_ENCODING"
-				description="COM_NEWSLETTER_ENCODING"
+				description="COM_NEWSLETTER_NEWSLETTER_ENCODING_DESC"
 				class="inputbox validate-encoding autosaverable"
 				default="utf-8"
 				required="true"
 				validate=""
 			 />
-			 
+
              <field name="attachments" type="hidden" />
 
         </fields>
@@ -115,7 +115,7 @@
 		<field name="plain"
 			type="textarea"
 			label="COM_NEWSLETTER_PLAIN"
-			description="COM_NEWSLETTER_PLAIN"
+			description="COM_NEWSLETTER_NEWSLETTER_PLAIN_DESC"
 			class="inputbox validate-plain autosaverable"
 			cols="50"
 			rows="20"
@@ -127,7 +127,7 @@
 		<field name="newsletter_attachment"
 			type="file"
 			label="COM_NEWSLETTER_ATTACHMENT"
-			description="COM_NEWSLETTER_ATTACHMENT"
+			description="COM_NEWSLETTER_NEWSLETTER_ATTACHMENT_DESC"
 			class="inputbox validate-newsletter_attachment autosaverable"
 			size="60"
 			default=""
@@ -136,7 +136,7 @@
 		 <field name="newsletter_preview_email"
 				type="text"
 				label="COM_NEWSLETTER_PREVIEW_EMAIL"
-				description="COM_NEWSLETTER_PREVIEW_EMAIL"
+				description="COM_NEWSLETTER_NEWSLETTER_PREVIEW_EMAIL_DESC"
 				class="inputbox validate-newsletter_preview_email"
 				size="70"
 				default=""
@@ -144,11 +144,12 @@
 				validate=""
 		 />
 
-		 <field 
-			 name="t_style_id" 
-			 type="list" 
-			 label="COM_NEWSLETTER_HTML_TEMPLATE" 
-			 required="true" 
+		 <field
+			 name="t_style_id"
+			 type="list"
+			 label="COM_NEWSLETTER_HTML_TEMPLATE"
+             description="COM_NEWSLETTER_NEWSLETTER_HTML_TEMPLATE_DESC"
+             required="true"
 		 />
 
 		 <field name="newsletter_id" type="hidden" />
