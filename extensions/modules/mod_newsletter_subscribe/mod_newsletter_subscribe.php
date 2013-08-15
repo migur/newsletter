@@ -33,7 +33,7 @@ modNewsletterSubscribeHelper::addHeadData();
 $fbMe = '';
 $fbappid = $params->get('fbappid', false);
 $fbsecret = $params->get('fbsecret', false);
-//'255005257848916', 'e3b0efe6fc9bd842f50f339ea42e575a'
+
 if (!empty($fbappid) && !empty($fbsecret)) {
 	$fbMe = modNewsletterSubscribeHelper::getFbMe($fbappid, $fbsecret);
 }

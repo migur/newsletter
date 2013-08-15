@@ -84,7 +84,7 @@ class NewsletterControllerSubscribe extends MigurController
 		$fbSecret = $comParams->get('fbsecret');
 		if (!empty($fbAppId) && !empty($fbSecret) && !empty($fbenabled)) {
 			$me = NewsletterHelperSubscriber::getFbMe($fbAppId, $fbSecret);
-			if (!empty($me->email) && $me->email == $email) {
+			if (!empty($me['email']) && $me['email'] == $email) {
 				$trusted = true;
 			}
 		}
