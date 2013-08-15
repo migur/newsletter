@@ -141,7 +141,7 @@ class NewsletterViewAutomailing extends MigurView
 	{
 		$aid = JRequest::getInt('automailing_id');
 
-		$bar = MigurToolbar::getInstance('automailing');
+		$bar = MigurToolbar::getInstance();
 		$bar->appendButton('Migurstandard', 'save', 'JTOOLBAR_SAVE', 'automailing.save', false);
 		$bar->appendButton('Migurstandard', 'cancel', 'JTOOLBAR_CANCEL', 'automailing.cancel', false);
 
