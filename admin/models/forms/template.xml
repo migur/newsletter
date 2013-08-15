@@ -75,7 +75,7 @@
 			label="COM_NEWSLETTER_LINK_IMAGE_FOLDER"
 			size="20"
             required="false"
-			description="COM_NEWSLETTER_LINK_IMAGE_FOLDER" />
+			description="COM_NEWSLETTER_TEMPLATE_IMAGE_TOP_DESC" />
 
         <field
             type="text"
@@ -118,7 +118,7 @@
 			label="COM_NEWSLETTER_LINK_IMAGE_FOLDER"
 			size="20"
             required="false"
-			description="COM_NEWSLETTER_LINK_IMAGE_FOLDER"
+			description="COM_NEWSLETTER_TEMPLATE_IMAGE_BOTTOM_DESC"
 		/>
         <field
             type="text"
