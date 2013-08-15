@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: config.xml 19439 2010-11-10 15:42:23Z chdemko $ -->
 <config>
-	
+
 	<fieldset name="general"
 		label="COM_NEWSLETTER_CONFIG_GENERAL"
-		description="COM_NEWSLETTER_CONFIG_GENERAL">
+		description="COM_NEWSLETTER_CONFIG_GENERAL_DESC"
+    >
 
         <field
             name="general_send_disable"
             type="radio"
             default="0"
             label="COM_NEWSLETTER_SEND_DISABLE"
-            description="COM_NEWSLETTER_SEND_DISABLE">
+            description="COM_NEWSLETTER_CONFIG_SEND_DISABLE_DESC"
+        >
             <option
                 value="1">JYES</option>
             <option
@@ -23,7 +25,8 @@
             type="radio"
             default="0"
             label="COM_NEWSLETTER_REG_ENABLED"
-            description="COM_NEWSLETTER_REG_ENABLED">
+            description="COM_NEWSLETTER_CONFIG_REG_ENABLED_DESC"
+        >
             <option
                 value="0">JYES</option>
             <option
@@ -36,34 +39,38 @@
 			scope="withoutDef"
             default=""
             label="COM_NEWSLETTER_SMTP_DEFAULT"
-            description="COM_NEWSLETTER_SMTP_DEFAULT">
+            description="COM_NEWSLETTER_CONFIG_SMTP_DEFAULT_DESC"
+        >
         </field>
         <field
             name="newsletter_smtp_edit"
             type="button"
 			class="button"
             label=" "
-            description="COM_NEWSLETTER_EDIT"
 			required="false"
-			value="COM_NEWSLETTER_EDIT">
+			value="COM_NEWSLETTER_EDIT"
+            description="COM_NEWSLETTER_CONFIG_EDIT_DESC"
+        >
         </field>
         <field
             name="newsletter_smtp_create"
             type="button"
 			class="button"
             label=" "
-            description="COM_NEWSLETTER_CREATE_SMTP_PROFILE"
 			required="false"
-			value="COM_NEWSLETTER_CREATE_SMTP_PROFILE">
+			value="COM_NEWSLETTER_CREATE_SMTP_PROFILE"
+            description="COM_NEWSLETTER_CONFIG_CREATE_SMTP_PROFILE_DESC"
+        >
         </field>
         <field
             name="newsletter_smtp_delete"
             type="button"
 			class="button"
             label=" "
-            description="COM_NEWSLETTER_DELETE_SMTP_PROFILE"
 			required="false"
-			value="COM_NEWSLETTER_DELETE_SMTP_PROFILE">
+			value="COM_NEWSLETTER_DELETE_SMTP_PROFILE"
+            description="COM_NEWSLETTER_CONFIG_DELETE_SMTP_PROFILE_DESC"
+        >
         </field>
 
         <field
@@ -72,42 +79,47 @@
             default=""
 			scope="withoutDef"
             label="COM_NEWSLETTER_MAILBOX_DEFAULT"
-            description="COM_NEWSLETTER_MAILBOX_DEFAULT">
+            description="COM_NEWSLETTER_CONFIG_MAILBOX_DEFAULT_DESC"
+        >
         </field>
         <field
             name="newsletter_mailbox_edit"
             type="button"
 			class="button"
             label=" "
-            description="COM_NEWSLETTER_EDIT"
 			required="false"
-			value="COM_NEWSLETTER_EDIT">
+			value="COM_NEWSLETTER_EDIT"
+            description="COM_NEWSLETTER_CONFIG_EDIT_DESC"
+        >
         </field>
         <field
             name="newsletter_mailbox_create"
             type="button"
 			class="button"
             label=" "
-            description="COM_NEWSLETTER_CREATE_MAILBOX_PROFILE"
 			required="false"
-			value="COM_NEWSLETTER_CREATE_MAILBOX_PROFILE">
+			value="COM_NEWSLETTER_CREATE_MAILBOX_PROFILE"
+            description="COM_NEWSLETTER_CONFIG_CREATE_MAILBOX_PROFILE_DESC"
+        >
         </field>
         <field
             name="newsletter_mailbox_delete"
             type="button"
 			class="button"
             label=" "
-            description="COM_NEWSLETTER_DELETE_MAILBOX_PROFILE"
 			required="false"
-			value="COM_NEWSLETTER_DELETE_MAILBOX_PROFILE">
+			value="COM_NEWSLETTER_DELETE_MAILBOX_PROFILE"
+            description="COM_NEWSLETTER_CONFIG_DELETE_MAILBOX_PROFILE_DESC"
+        >
         </field>
-		
+
 		<field
             name="autosaver_enabled"
             type="radio"
             default="0"
             label="COM_NEWSLETTER_AUTOSAVER_IS_ON"
-            description="COM_NEWSLETTER_AUTOSAVER_IS_ON">
+            description="COM_NEWSLETTER_CONFIG_AUTOSAVER_IS_ON_DESC"
+        >
             <option
                 value="1">JYES</option>
             <option
@@ -125,13 +137,14 @@
             <option
                 value="0">JNO</option>
         </field>-->
-		
+
 		<field
             name="confirm_mail_subject"
             type="text"
             default=""
             label="COM_NEWSLETTER_SUBJECT_OF_CONFIRMATION_LETTER"
-            description="COM_NEWSLETTER_SUBJECT_OF_CONFIRMATION_LETTER">
+            description="COM_NEWSLETTER_CONFIG_SUBJECT_OF_CONFIRMATION_LETTER_DESC"
+        >
         </field>
 
 		<field
@@ -139,9 +152,10 @@
             type="textarea"
             default=""
             label="COM_NEWSLETTER_BODY_OF_CONFIRMATION_LETTER"
-            description="COM_NEWSLETTER_BODY_OF_CONFIRMATION_LETTER">
+            description="COM_NEWSLETTER_CONFIG_BODY_OF_CONFIRMATION_LETTER_DESC"
+        >
         </field>
-	
+
 	</fieldset>
 
     <fieldset name="newsletters"
@@ -153,7 +167,8 @@
             type="radio"
             default="1"
             label="COM_NEWSLETTER_SAVE_NEWSLETTERS"
-            description="COM_NEWSLETTER_SAVE_NEWSLETTERS">
+            description="COM_NEWSLETTER_CONFIG_SAVE_NEWSLETTERS_DESC"
+        >
             <option
                 value="1">JYES</option>
             <option
@@ -163,11 +178,12 @@
         <field
             name="newsletter_clear_db"
             type="button"
-                        class="button"
+            class="button"
             label="COM_NEWSLETTER_CLEAR_DB"
-            description="COM_NEWSLETTER_CLEAR_DB"
-                        required="false"
-                        value="COM_NEWSLETTER_CLEAR">
+            required="false"
+            value="COM_NEWSLETTER_CLEAR"
+            description="COM_NEWSLETTER_CONFIG_CLEAR_DB_DESC"
+        >
         </field>
 
         <field
@@ -176,7 +192,8 @@
             default="10"
 			size="10"
             label="COM_NEWSLETTER_CONFIG_CRON_BOUNCE_INTERVAL"
-            description="COM_NEWSLETTER_CONFIG_CRON_BOUNCE_INTERVAL">
+            description="COM_NEWSLETTER_CONFIG_CRON_BOUNCE_INTERVAL_DESC"
+        >
         </field>
 
         <field
@@ -186,7 +203,8 @@
             default="0"
             size="30"
             label="COM_NEWSLETTER_CONFIG_CRON_BOUNCED_LAST"
-            description="COM_NEWSLETTER_CONFIG_CRON_BOUNCED_LAST">
+            description="COM_NEWSLETTER_CONFIG_CRON_BOUNCED_LAST_DESC"
+        >
         </field>
 
 		<field
@@ -195,20 +213,8 @@
                         readonly="true"
             default="0"
             label="COM_NEWSLETTER_CONFIG_CRON_EXECUTED"
-            description="COM_NEWSLETTER_CONFIG_CRON_EXECUTED">
-            <option
-                value="1">JYES</option>
-            <option
-                value="0">JNO</option>
-        </field>
-
-        <field
-            name="mailer_cron_bounced_is_executed"
-            type="mapper"
-                        readonly="true"
-            default="0"
-            label="COM_NEWSLETTER_CONFIG_CRON_BOUNCED_EXECUTED"
-            description="COM_NEWSLETTER_CONFIG_CRON_EXECUTED">
+            description="COM_NEWSLETTER_CONFIG_CRON_EXECUTED_DESC"
+        >
             <option
                 value="1">JYES</option>
             <option
@@ -221,21 +227,25 @@
             scope="static"
             default="1"
             label="COM_NEWSLETTER_CONFIG_SUBSCRIPTION_NEWSLETTER"
-            description="COM_NEWSLETTER_CONFIG_SUBSCRIPTION_NEWSLETTER">
+            description="COM_NEWSLETTER_CONFIG_SUBSCRIPTION_NEWSLETTER_DESC"
+        >
         </field>
 	</fieldset>
 
 
     <fieldset name="advanced"
         label="COM_NEWSLETTER_CONFIG_ADVANCED"
-        description="COM_NEWSLETTER_CONFIG_ADVANCED">
+        description="COM_NEWSLETTER_CONFIG_ADVANCED"
+        >
 
         <field
             name="license_key"
             type="text"
             default="0"
             size="50"
-            label="COM_NEWSLETTER_LICENSE_KEY">
+            label="COM_NEWSLETTER_LICENSE_KEY"
+            description="COM_NEWSLETTER_CONFIG_LICENSE_KEY_DESC"
+        >
         </field>
 
         <field
@@ -243,7 +253,8 @@
             type="hidden"
             default=""
             size="50"
-            label="COM_NEWSLETTER_CONFIG_DOMAIN">
+            label="COM_NEWSLETTER_CONFIG_DOMAIN"
+        >
         </field>
 
         <field
@@ -251,7 +262,8 @@
             type="hidden"
             default="com_newsletter"
             size="50"
-            label="COM_NEWSLETTER_CONFIG_PRODUCT">
+            label="COM_NEWSLETTER_CONFIG_PRODUCT"
+        >
         </field>
 
 		<field
@@ -259,7 +271,9 @@
             type="text"
             default=""
             size="50"
-            label="COM_NEWSLETTER_FACEBOOK_APID">
+            label="COM_NEWSLETTER_FACEBOOK_APID"
+            description="COM_NEWSLETTER_CONFIG_FACEBOOK_APID_DESC"
+        >
         </field>
 
 		<field
@@ -267,14 +281,18 @@
             type="text"
             default=""
             size="50"
-            label="COM_NEWSLETTER_FACEBOOK_SECRET">
+            label="COM_NEWSLETTER_FACEBOOK_SECRET"
+            description="COM_NEWSLETTER_CONFIG_FACEBOOK_SECRET_DESC"
+        >
         </field>
 
 		<field
             name="debug"
             type="radio"
             default="0"
-            label="COM_NEWSLETTER_DEBUG_COMPONENT">
+            label="COM_NEWSLETTER_DEBUG_COMPONENT"
+            description="COM_NEWSLETTER_CONFIG_DEBUG_COMPONENT_DESC"
+        >
             <option value="1">JYES</option>
             <option value="0">JNO</option>
         </field>
@@ -290,7 +308,7 @@
             type="radio"
             default="0"
             label="COM_NEWSLETTER_USE_RAW_URLS"
-			description="COM_NEWSLETTER_USE_RAW_URLS_DESC"
+			description="COM_NEWSLETTER_CONFIG_USE_RAW_URLS_DESC"
 		>
             <option value="1">JYES</option>
             <option value="0">JNO</option>
@@ -298,18 +316,18 @@
 
     </fieldset>
 
-	<fieldset 
-		name="permissions" 
-		label="JCONFIG_PERMISSIONS_LABEL" 
+	<fieldset
+		name="permissions"
+		label="JCONFIG_PERMISSIONS_LABEL"
 		description="JCONFIG_PERMISSIONS_DESC"
 	>
-		<field 
-			name="rules" 
-			type="rules" 
-			label="JCONFIG_PERMISSIONS_LABEL" 
-			filter="rules" 
-			component="com_newsletter" 
+		<field
+			name="rules"
+			type="rules"
+			label="JCONFIG_PERMISSIONS_LABEL"
+			filter="rules"
+			component="com_newsletter"
 			section="component" />
-	</fieldset>	
-	
+	</fieldset>
+
 </config>

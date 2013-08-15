@@ -12,6 +12,7 @@ jimport('joomla.form.helper');
 jimport('migur.library.toolbar');
 jimport('joomla.html.pagination');
 JHtml::_('behavior.framework', true);
+JHtml::_('behavior.tooltip');
 
 // import Joomla view library
 
