@@ -4,7 +4,7 @@
 		<field name="name"
 			type="text"
 			label="COM_NEWSLETTER_NAME"
-			description=""
+			description="COM_NEWSLETTER_SUBSCRIBER_NAME_DESC"
 			class="inputbox validate-name"
 			size="30"
 			default=""
@@ -13,8 +13,8 @@
 
 		<field name="email"
 			type="email"
-			label="JGLOBAL_EMAIL"
-			description=""
+			label="COM_NEWSLETTER_EMAIL"
+			description="COM_NEWSLETTER_SUBSCRIBER_EMAIL_DESC"
 			class="inputbox validate-email"
 			size="30"
 			default=""
@@ -27,7 +27,7 @@
 			type="radio"
 			default="1"
 			label="COM_NEWSLETTER_HTML"
-			description=""
+			description="COM_NEWSLETTER_SUBSCRIBER_HTML_DESC"
 			class="inputbox btn-group"
 			size="30"
 			required="true"
@@ -40,9 +40,9 @@
 
 		<field name="subscriber_id" type="hidden" />
 
-		<field 
-			name="confirmed" 
-			type="hidden" 
+		<field
+			name="confirmed"
+			type="hidden"
 			default="1"
 		/>
 	</fieldset>

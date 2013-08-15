@@ -13,7 +13,7 @@
             type="juserevents"
             default=""
             label="COM_NEWSLETTER_LIST_USEREVENT"
-            description="COM_NEWSLETTER_LIST_USEREVENT"
+            description="COM_NEWSLETTER_LISTEVENT_LIST_USEREVENT_DESC"
             class="inputbox validate-event"
             required="true"
 		/>
@@ -22,7 +22,7 @@
             type="usergroup"
             default=""
             label="COM_NEWSLETTER_USERGROUP"
-            description="COM_NEWSLETTER_USERGROUP"
+            description="COM_NEWSLETTER_LISTEVENT_USERGROUP_DESC"
             class="inputbox validate-jusergroup"
             required="false"
 		/>
@@ -31,7 +31,7 @@
             type="listactions"
             default=""
             label="COM_NEWSLETTER_LIST_ACTION"
-            description="COM_NEWSLETTER_LIST_ACTION"
+            description="COM_NEWSLETTER_LISTEVENT_LIST_ACTION_DESC"
             class="inputbox validate-action"
             required="true"
 		/>
