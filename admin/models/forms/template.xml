@@ -72,10 +72,10 @@
             class="inputbox validate-image_top"
 			type="media"
 			hide_none="1"
-			label="COM_NEWSLETTER_IMAGE_TOP"
+			label="COM_NEWSLETTER_LINK_IMAGE_FOLDER"
 			size="20"
             required="false"
-			description="COM_NEWSLETTER_TEMPLATE_IMAGE_TOP_DESC" />
+			description="COM_NEWSLETTER_LINK_IMAGE_FOLDER" />
 
         <field
             type="text"
@@ -115,10 +115,10 @@
             class="inputbox validate-image_bottom"
 			type="media"
 			hide_none="1"
-			label="COM_NEWSLETTER_IMAGE_BOTTOM"
+			label="COM_NEWSLETTER_LINK_IMAGE_FOLDER"
 			size="20"
             required="false"
-			description="COM_NEWSLETTER_TEMPLATE_IMAGE_BOTTOM_DESC"
+			description="COM_NEWSLETTER_LINK_IMAGE_FOLDER"
 		/>
         <field
             type="text"
