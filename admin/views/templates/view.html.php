@@ -88,8 +88,11 @@ class NewsletterViewTemplates extends MigurView
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_TEMPLATES_TITLE'), 'article.png');
 
 		$bar = MigurToolbar::getInstance();
-		$bar->appendButton('Migurstandard', 'new', 'JTOOLBAR_NEW', 'template.add', false);
-		//$bar->appendButton('Migurstandard', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
+		$bar->appendButton('Migurbasic', 'JTOOLBAR_NEW', array(
+			'onclick'    => "location.href='index.php?option=com_newsletter&view=template'",
+			'class'      => 'btn btn-small btn-success',
+			'icon-class' => 'icon-new'
+		));
 		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
 
 		// Load the submenu.

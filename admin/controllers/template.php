@@ -56,7 +56,7 @@ class NewsletterControllerTemplate extends JControllerForm
 		if (parent::save()) {
 			return;
 		} else {
-			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($recordId, $key) . '&tmpl=component', false));
+			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($recordId, $key), false));
 		}
 	}
 
@@ -79,12 +79,13 @@ class NewsletterControllerTemplate extends JControllerForm
 			'title' => $standard->information['name'] . ' (custom)',
 			'params' => '{}'
 		));
-		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
+
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&task=template.edit&t_style_id='.$table->t_style_id, false));
 	}
-	
-	
+
+
 	/**
-	 * 
+	 *
 	 */
 	public function getparsed()
 	{
@@ -113,7 +114,7 @@ class NewsletterControllerTemplate extends JControllerForm
 				'data' => $data,
 			)
 		);
-		
+
 		NewsletterHelperNewsletter::jsonResponse((bool) $data, $error, $data);
 	}
 }
