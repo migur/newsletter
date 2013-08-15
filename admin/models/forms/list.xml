@@ -5,7 +5,7 @@
             name="name"
             default=""
             label="COM_NEWSLETTER_NAME"
-            description="COM_NEWSLETTER_NAME"
+            description="COM_NEWSLETTER_LIST_NAME_DESC"
             class="inputbox validate-name"
             size="10"
             required="true"
@@ -15,7 +15,7 @@
             name="description"
             default=""
             label="COM_NEWSLETTER_DESCRIPTION"
-            description="COM_NEWSLETTER_DESCRIPTION"
+            description="COM_NEWSLETTER_LIST_DESCRIPTION_DESC"
             class="inputbox validate-description"
             rows="7"
             cols="30"
@@ -27,41 +27,43 @@
             name="smtp_profile_id"
             default="-1"
             label="COM_NEWSLETTER_PROFILE"
-            description="COM_NEWSLETTER_PROFILE"
+            description="COM_NEWSLETTER_LIST_PROFILE_DESC"
             class="selectbox validate-smtp_profile"
             required="true"
         />
-        <field 
+        <field
 			type="checkbox"
 			name="autoconfirm"
 			label="COM_NEWSLETTER_AUTOCONFIRM_USERS"
-			description="COM_NEWSLETTER_AUTOCONFIRM_USERS"
+			description="COM_NEWSLETTER_LIST_AUTOCONFIRM_USERS_DESC"
 			class="inputbox validate-autoconfirm"
 			default=""
-			value="1"			
+			value="1"
          />
-        <field 
+        <field
             type="newsletters"
             scope="static"
             name="send_at_reg"
             default=""
             label="COM_NEWSLETTER_SEND_AT_REG"
+            description="COM_NEWSLETTER_LIST_SEND_AT_REG_DESC"
             class="inputbox validate-send_at_reg"
             required="false"
         />
-        <field 
+        <field
             type="newsletters"
             name="send_at_unsubscribe"
             scope="static"
             default=""
             label="COM_NEWSLETTER_SEND_AT_UNSUBSCRIBE"
+            description="COM_NEWSLETTER_LIST_SEND_AT_UNSUBSCRIBE_DESC"
             class="inputbox validate-send_at_unsubscribe"
             required="false"
         />
         <field name="import_excluded"
                 type="file"
                 label="COM_NEWSLETTER_ATTACHMENT"
-                description="COM_NEWSLETTER_ATTACHMENT"
+                description="COM_NEWSLETTER_LIST_ATTACHMENT_DESC"
                 class="inputbox validate-import_excluded"
                 size="80"
                 default=""

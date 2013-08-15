@@ -3,7 +3,7 @@
 	<fieldset>
             <field name="title" type="text"
                 description="COM_MODULES_FIELD_TITLE_DESC"
-                label="JGLOBAL_TITLE"
+                label="COM_MODULES_FIELD_TITLE"
                 maxlength="100"
                 required="true"
                 size="35"
