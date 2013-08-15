@@ -5,8 +5,8 @@
             name="newsletter_id"
 			scope=""
             default=""
-            label="COM_NEWSLETTER_NAME"
-            description="COM_NEWSLETTER_NAME"
+            label="COM_NEWSLETTER_AUTOMAILINGITEM_NEWSLETTER"
+            description="COM_NEWSLETTER_AUTOMAILINGITEM_NEWSLETTER_DESC"
             class="inputbox validate-newsletter"
             required="true"
 			validate="nonzero"
@@ -17,7 +17,7 @@
 			size="4"
             default=""
             label="COM_NEWSLETTER_TIME_INTERVAL"
-            description="COM_NEWSLETTER_TIME_INTERVAL"
+            description="COM_NEWSLETTER_AUTOMAILINGITEM_TIME_INTERVAL_DESC"
             class="inputbox validate-timeoffset"
             required="false"
 		/>
@@ -27,7 +27,7 @@
 			size="10"
             default=""
             label="COM_NEWSLETTER_START_DATE"
-            description="COM_NEWSLETTER_START_DATE"
+            description="COM_NEWSLETTER_AUTOMAILINGITEM_START_DATE_DESC"
             class="inputbox validate-timestart"
             required="false"
 		/>

@@ -6,13 +6,15 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 // No direct access to this file
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('behavior.formvalidation');
 defined('_JEXEC') or die('Restricted access');
+
+JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 jimport('joomla.form.helper');
 jimport('migur.library.toolbar');
 jimport('joomla.html.pagination');
+JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.framework', true);
+JHtml::_('behavior.tooltip');
 
 // import Joomla view library
 

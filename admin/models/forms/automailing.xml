@@ -5,18 +5,18 @@
             name="automailing_name"
             default=""
             label="COM_NEWSLETTER_NAME"
-            description="COM_NEWSLETTER_NAME"
+            description="COM_NEWSLETTER_AUTOMAILING_NAME_DESC"
             class="inputbox validate-automailing-name"
             size="40"
             required="true"
 		/>
-		
+
         <field
             type="automailingEvents"
             name="automailing_event"
             default=""
             label="COM_NEWSLETTER_TYPE"
-            description="COM_NEWSLETTER_TYPE"
+            description="COM_NEWSLETTER_AUTOMAILING_TYPE_DESC"
             class="inputbox validate-automailing-name"
             required="true"
 		/>
@@ -26,16 +26,16 @@
 			name="scope"
 			default="all"
 			label="COM_NEWSLETTER_SELECT_SCOPE"
-			description="COM_NEWSLETTER_SELECT_SCOPE"
+			description="COM_NEWSLETTER_AUTOMAILING_SELECT_SCOPE_DESC"
 			class="inputbox validate-scope"
 		>
 			<option value="all">COM_NEWSLETTER_FOR_ALL_SUBSCRIBERS</option>
 			<option value="targets">COM_NEWSLETTER_FOR_SUBSCRIBERS_FROM_LISTS</option>
-		</field>	
-		
+		</field>
+
         <field name="automailing_type" type="hidden" />
-		
+
         <field name="automailing_id" type="hidden" />
-		
+
         <field name="params" type="hidden" />
 </form>
