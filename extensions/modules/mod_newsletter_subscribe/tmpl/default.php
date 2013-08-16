@@ -16,11 +16,23 @@ defined('_JEXEC') or die; ?>
 	<div id="fb-root"></div>
 	<script src="http://connect.facebook.net/en_US/all.js"></script>
 	<script>
-	 FB.init({
-		appId:'<?php echo $params->get('fbappid'); ?>', cookie:true,
-		status:true, xfbml:true
-	 });
+		FB.init({
+			appId:'<?php echo $fbappid; ?>',
+			cookie:true,
+			status:true,
+			xfbml:true
+		});
 
+		FB.Event.subscribe('auth.authResponseChange', function(response) {
+			if (response.status === 'connected') {
+				FB.api('/me', function(response) {
+					if (response.name && response.email) {
+						$$('[name="newsletter-name"]').set('value', response.name);
+						$$('[name="newsletter-email"]').set('value', response.email);
+					}
+				});
+			}
+		});
 	</script>
 <?php } ?>
 
@@ -31,9 +43,9 @@ defined('_JEXEC') or die; ?>
         <?php echo $params->get('textprepend', ''); ?>
     </div>
     <?php } ?>
-    
+
 	<form class="mod-newsletter" action="?option=com_newsletter" method="POST" name="subscribe-form">
-        
+
         <?php if ($params->get('textabovename', '') != '') { ?>
         <div class="mod-newsletter-subscribe-container newsletter-text-name">
             <?php echo $params->get('textabovename', ''); ?>
@@ -43,13 +55,13 @@ defined('_JEXEC') or die; ?>
         <div class="mod-newsletter-subscribe-container">
 			<input class="required validate-newsletter-name inputbox newsletter-name" name="newsletter-name" type="text" size="20" value="<?php echo $userName; ?>" />
 		</div>
-        
+
         <?php if ($params->get('textaboveemail', '') != '') { ?>
         <div class="mod-newsletter-subscribe-container newsletter-text-email-above">
             <?php echo $params->get('textaboveemail', ''); ?>
         </div>
         <?php } ?>
-        
+
 		<div class="mod-newsletter-subscribe-container">
 			<input class="required validate-newsletter-email inputbox newsletter-email" name="newsletter-email" type="text" size="20" value="<?php echo $userEmail; ?>" />
 		</div>
@@ -65,7 +77,7 @@ defined('_JEXEC') or die; ?>
 			<fb:login-button perms="email"></fb:login-button>
 		</div>
 		<?php } ?>
-			
+
         <?php if ($params->get('showmailtype', 1) == 1) { ?>
 		<div class="mod-newsletter-subscribe-container newsletter-html-container">
 			<h4><?php echo JText::_('MOD_NEWSLETTER_RECIEVE'); ?></h4>
@@ -74,7 +86,7 @@ defined('_JEXEC') or die; ?>
         <?php } else { ?>
             <input type="hidden" name="newsletter-html" value="<?php echo $params->get('defaultmailtype', 1); ?>" />
         <?php } ?>
-        
+
 		<div class="mod-newsletter-subscribe-container">
 			<?php if (count($list) > 1) { ?>
 			<h4 for="newsletter-lists"><?php echo JText::_('MOD_NEWSLETTER_SELECT_LIST_TO_SUBSCRIBE'); ?></h4>
@@ -89,7 +101,7 @@ defined('_JEXEC') or die; ?>
 				<input name="newsletter-lists[]" type="hidden" value="<?php echo $list[0]->value; ?>" />
 			<?php } ?>
 		</div>
-		
+
 		<?php if ($params->get('showtermslink', false)) { ?>
 		<div class="mod-newsletter-subscribe-container">
 			<div id="newsletter-terms" class="required checkboxes">
@@ -101,11 +113,11 @@ defined('_JEXEC') or die; ?>
 					>
 						<?php echo JText::_('MOD_NEWSLETTER_TERMS_AND_CONDITIONS'); ?>
 					</a>
-				</label>	
+				</label>
 			</div>
 		</div>
 		<?php } ?>
-		
+
 		<div id="newsletter-submit-container" class="mod-newsletter-subscribe-container">
 			<input
 				type="button"
@@ -120,7 +132,7 @@ defined('_JEXEC') or die; ?>
             <?php echo $params->get('textappend', ''); ?>
         </div>
         <?php } ?>
-            
+
 		<input type="hidden" name="fbenabled" value="<?php echo $params->get('fbenabled'); ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</form>
@@ -135,5 +147,5 @@ defined('_JEXEC') or die; ?>
 <?php } else { ?>
 
 	<span><?php echo JText::_('MOD_NEWSLETTER_SUBSCRIBE_NO_LISTS_TO_SUBSCRIBE'); ?></span>
-	
+
 <?php } ?>
