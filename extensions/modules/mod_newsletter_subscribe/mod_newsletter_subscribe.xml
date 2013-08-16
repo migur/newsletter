@@ -23,12 +23,12 @@
 		<language tag="en-GB">en-GB.mod_newsletter_subscribe.ini</language>
 		<language tag="en-GB">en-GB.mod_newsletter_subscribe.sys.ini</language>
 	</languages>
-    
+
 	<help key="JHELP_EXTENSIONS_MODULE_MANAGER_NEWSLETTER" />
-	
+
 	<config>
 		<fields name="params">
-			<fieldset 
+			<fieldset
                 name="basic"
                 addfieldpath="/administrator/components/com_newsletter/models/fields">
 
@@ -38,14 +38,14 @@
 					default=""
 					label="MOD_NEWSLETTER_TEXTPREPEND"
 					description="MOD_NEWSLETTER_TEXTPREPEND_DESC" />
-                
+
 				<field
 					name="textabovename"
 					type="textarea"
 					default=""
 					label="MOD_NEWSLETTER_TEXTABOVENAME"
 					description="MOD_NEWSLETTER_TEXTABOVENAME_DESC" />
-                    
+
 				<field
 					name="textaboveemail"
 					type="textarea"
@@ -79,7 +79,7 @@
 					<option value="0">MOD_NEWSLETTER_TEXT</option>
 					<option value="1">MOD_NEWSLETTER_HTML</option>
 				</field>
-                    
+
 				<field
 					name="listselector"
 					type="radio"
@@ -133,13 +133,6 @@
 					description="MOD_NEWSLETTER_TEXTAPPEND_DESC" />
 
                 <field
-                    name="fbsecret"
-                    type="text"
-                    default=""
-                    size="50"
-                    label="MOD_NEWSLETTER_FACEBOOK_SECRET" />
-
-                <field
                     name="fbenabled"
                     type="radio"
                     default="0"
@@ -150,21 +143,6 @@
                     <option
                         value="0">JNO</option>
                 </field>
-                
-                <field
-                    name="fbappid"
-                    type="text"
-                    default=""
-                    size="50"
-                    label="MOD_NEWSLETTER_FACEBOOK_APID" />
-                    
-                <field
-                    name="fbsecret"
-                    type="text"
-                    default=""
-                    size="50"
-                    label="MOD_NEWSLETTER_FACEBOOK_SECRET" />
-                    
 			</fieldset>
 
 			<fieldset name="advanced">
