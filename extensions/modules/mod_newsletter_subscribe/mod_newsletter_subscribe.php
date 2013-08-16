@@ -30,14 +30,10 @@ JHtml::_('behavior.framework');
 JHtml::_('behavior.formvalidation');
 modNewsletterSubscribeHelper::addHeadData();
 
-$fbMe = '';
-$fbappid = $params->get('fbappid', false);
-$fbsecret = $params->get('fbsecret', false);
+$comParams = JComponentHelper::getParams('com_newsletter');
+$fbappid = $comParams->get('fbappid');
+$fbsecret = $comParams->get('fbsecret');
 
-if (!empty($fbappid) && !empty($fbsecret)) {
-	$fbMe = modNewsletterSubscribeHelper::getFbMe($fbappid, $fbsecret);
-}
-
-$showFb = $fbappid && $fbsecret && $params->get('fbenabled', false) && empty($fbMe->email);
+$showFb = $fbappid && $fbsecret && $params->get('fbenabled');
 
 require JModuleHelper::getLayoutPath('mod_newsletter_subscribe', $params->get('layout', 'default'));

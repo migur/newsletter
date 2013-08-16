@@ -14,14 +14,14 @@ defined('_JEXEC') or die; ?>
 	<div id="fb-root"></div>
 	<script src="http://connect.facebook.net/en_US/all.js"></script>
 	<script>
-		 FB.init({
-			appId:'<?php echo $params->get('fbappid'); ?>',
+		FB.init({
+			appId:'<?php echo $fbappid; ?>',
 			cookie:true,
 			status:true,
 			xfbml:true
-		 });
+		});
 
-		 FB.Event.subscribe('auth.authResponseChange', function(response) {
+		FB.Event.subscribe('auth.authResponseChange', function(response) {
 			if (response.status === 'connected') {
 				FB.api('/me', function(response) {
 					if (response.name && response.email) {
@@ -30,8 +30,7 @@ defined('_JEXEC') or die; ?>
 					}
 				});
 			}
-		 });
-
+		});
 	</script>
 <?php } ?>
 
