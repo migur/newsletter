@@ -14,7 +14,7 @@ $listOrder = 'asc';
                     </option>
         <?php } } ?>
     </select>
-    <button class="sslist-submit" type="submit"  onclick="return Joomla.submitform('subscriber.assign', $('listForm'));">
+    <button class="sslist-submit" type="submit"  onclick="Joomla.submitform('subscriber.assign', $('listForm')); return false;">
         <?php echo JText::_('COM_NEWSLETTER_ASSIGN_TO_LIST'); ?>
     </button>
 
