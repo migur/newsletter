@@ -19,7 +19,7 @@
 
 					<div class="pull-left btn-group">
 					<!--<label><?php echo JText::_('COM_NEWSLETTER_STATE'); ?></label>-->
-						<select name="filter_published" class="input-medium" onchange="this.form.submit()">
+						<select name="filter_published" class="input-medium" onchange="this.form.submit(); return false;">
 								<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
 								<?php echo JHtml::_('select.options', JHtml::_('multigrid.enabledOptions'), 'value', 'text', $this->lists->state->get('filter.published'), true);?>
 						</select>

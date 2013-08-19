@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 <form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=automailings&form=automailings');?>" method="post" name="adminForm" >
 
 	<?php echo JHtml::_('layout.wrapper'); ?>
-	
+
 	<div id="automailing-list">
 		<fieldset>
 			<div class="legend"><?php echo JText::_('COM_NEWSLETTER_AUTOMAILINGS'); ?></div>
@@ -25,7 +25,7 @@ defined('_JEXEC') or die;
 				</div>
 				<div class="btn-group pull-left">
 					<button type="submit" class="btn tip migur-search-submit" data-original-title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-					<button rel="tooltip" onclick="document.id('automailing_filter_search').value='';this.form.submit();" type="button" class="btn tip" data-original-title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+					<button rel="tooltip" onclick="document.id('automailing_filter_search').value='';this.form.submit(); return false;" type="button" class="btn tip" data-original-title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
 				</div>
 			</div>
 
@@ -78,7 +78,7 @@ defined('_JEXEC') or die;
 							<?php echo JHtml::_('form.token'); ?>
 					</div>
 		</fieldset>
-	</div>	
+	</div>
 
 	<div id="automailing-details">
 
@@ -91,11 +91,11 @@ defined('_JEXEC') or die;
 		<div class="tab-content">
 			<div id="details" class="tab-pane active">
 				<iframe id="preview-container" frameBorder="0"></iframe>
-			</div>	
+			</div>
 		</div>
 
 	</div>
-	
+
 	<?php echo JHtml::_('layout.wrapperEnd'); ?>
-	
+
 </form>
