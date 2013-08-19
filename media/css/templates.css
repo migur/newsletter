@@ -32,7 +32,11 @@ background-color: #ffffff;
 }
 
 #tabs-template {
-    width: 500px;
+	margin-top:42px;
+}
+
+#tabs {
+	margin-bottom: 0;
 }
 
 #tabs .current {
@@ -105,14 +109,14 @@ background-color: #ffffff;
     width: 500px;
     clear: both;
     margin-left: 65px;
+	overflow: hidden;
 }
 
 #images-top3 label,
 #images-top6 label {
     clear: none;
     float: left;
-    width: 70px;
-    min-width: 70px;
+	margin-left: 20px;
 }
 
 #colors {

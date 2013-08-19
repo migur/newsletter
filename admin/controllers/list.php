@@ -76,7 +76,7 @@ class NewsletterControllerList extends JControllerForm
 
 		if ($listId > 0) {
 
-			$uploader = JModel::getInstance('file', 'NewsletterModel');
+			$uploader = MigurModel::getInstance('file', 'NewsletterModel');
 			$data = $uploader->upload(array(
 					'overwrite' => true,
 					'filedataName' => 'Filedata-' . $subtask
@@ -120,9 +120,9 @@ class NewsletterControllerList extends JControllerForm
 
 		if (JRequest::getMethod() == "POST") {
 
-			$subscriber  = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
-			$newsletter  = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
-			$listManager = JModel::getInstance('List', 'NewsletterModel');
+			$subscriber  = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$newsletter  = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
+			$listManager = MigurModel::getInstance('List', 'NewsletterModel');
 
 			$subscribers = JRequest::getVar('cid', array(), 'post');
 			$lists = json_decode(JRequest::getVar('list_id', array(), 'post'));
@@ -205,7 +205,7 @@ class NewsletterControllerList extends JControllerForm
 
 		if (JRequest::getMethod() == "POST") {
 
-			$model = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 
 			$subscribers = JRequest::getVar('cid', null, 'post');
 			$lists = json_decode(JRequest::getVar('list_id', null, 'post'));
@@ -391,7 +391,7 @@ class NewsletterControllerList extends JControllerForm
 		fclose($handle);
 
 		// Let's import it all!
-		$list = JModel::getInstance('List', 'NewsletterModel');
+		$list = MigurModel::getInstance('List', 'NewsletterModel');
 		$res = $list->importCollection(
 			$currentList,
 			$collection,
@@ -502,7 +502,7 @@ class NewsletterControllerList extends JControllerForm
 
 		if ($subtask == 'lists') {
 
-			$list = JModel::getInstance('list', 'newsletterModel');
+			$list = MigurModel::getInstance('list', 'newsletterModel');
 
 			$subscribers = array();
 
@@ -515,7 +515,7 @@ class NewsletterControllerList extends JControllerForm
 				}
 			}
 
-			$mList = JModel::getInstance('List', 'NewsletterModel');
+			$mList = MigurModel::getInstance('List', 'NewsletterModel');
 			$total = count($subscribers);
 
 			$dbo = JFactory::getDbo();
@@ -606,8 +606,8 @@ class NewsletterControllerList extends JControllerForm
             $app->setUserState($statePath.'.seek', ftell($handle));
             fclose($handle);
 
-            $subscriber = JModel::getInstance('subscriber', 'newsletterModel');
-            $mList = JModel::getInstance('List', 'NewsletterModel');
+            $subscriber = MigurModel::getInstance('subscriber', 'newsletterModel');
+            $mList = MigurModel::getInstance('List', 'NewsletterModel');
 
 			$dbo = JFactory::getDbo();
 			$dbo->transactionStart();

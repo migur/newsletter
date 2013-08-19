@@ -603,8 +603,8 @@ Migur.validator = {
      */
     tabIndicator: function(container, tabElement, markerClass, needle){
 
-        var tabs  = $$(container + ' > dl.tabs > dt.tabs');
-        var panes = $$(container + ' > div.current > dd.tabs');
+        var tabs  = $$(container + ' dl.tabs > dt.tabs');
+        var panes = $$(container + ' div.current > dd.tabs');
 
 		if (!tabs || !panes) return;
 
@@ -624,8 +624,8 @@ Migur.validator = {
 
     sliderIndicator: function(container, tabElement, markerClass, needle){
 
-        var tabs  = $$(container + ' > .panel');
-        var panes = $$(container + ' > .panel > div');
+        var tabs  = $$(container + ' .panel');
+        var panes = $$(container + ' .panel > div');
 
 		if (!tabs || !panes) return;
 
