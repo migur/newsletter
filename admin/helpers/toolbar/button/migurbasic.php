@@ -68,7 +68,7 @@ class JToolbarButtonMigurbasic extends JToolbarButton
 		$strIconProps = '';
 
 		if (empty($params['onclick'])) {
-			$params['onclick'] = "return false;";
+			$params['onclick'] = "event && (event.returnValue = false); return false;";
 		}
 
 		foreach ($params as $name => $val) {

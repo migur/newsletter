@@ -48,14 +48,14 @@ class JToolbarButtonMigurmodal extends JToolbarButtonMigurbasic
 
 		if (!empty($params['modal']) && !empty($params['url'])) {
 			$url = JRoute::_($params['url'], false);
-			$params['onclick'] = "Migur.modal.show('{$params['modal']}', {'href': '{$url}'}); return false;";
+			$params['onclick'] = "event && (event.returnValue = false); Migur.modal.show('{$params['modal']}', {'href': '{$url}'}); return false;";
 			unset($params['modal']);
 			unset($params['url']);
 		}
-		
+
 		return $this->_getHtml($params);
 	}
-	
+
 	/**
 	 * Get the button id
 	 *
