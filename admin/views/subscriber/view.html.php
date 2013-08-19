@@ -126,6 +126,7 @@ class NewsletterViewSubscriber extends MigurView
 		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/message.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/subscriber/submitbutton.js');
 		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/subscriber/subscriber.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/models/forms/subscriber.js');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
 		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/subscriber.css');
 

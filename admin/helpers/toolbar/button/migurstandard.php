@@ -55,7 +55,7 @@ class JToolbarButtonMigurstandard extends JToolbarButtonStandard
 			$iconWhite = "";
 		}
 
-		$html = "<button onclick=\"$doTask; return false;\" class=\"" . $btnClass . "\">\n";
+		$html = "<button onclick=\"event && (event.returnValue = false); $doTask; return false;\" class=\"" . $btnClass . "\">\n";
 		$html .= "<i class=\"$class $iconWhite\">\n";
 		$html .= "</i>\n";
 		$html .= "$i18n_text\n";
