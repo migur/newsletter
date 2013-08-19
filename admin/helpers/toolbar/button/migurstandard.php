@@ -44,7 +44,7 @@ class JButtonMigurstandard extends JButtonStandard
 		$class = $this->fetchIconClass($name);
 		$doTask = $this->_getCommand($text, $task, $list);
 
-		$html = "<a href=\"#\" onclick=\"return $doTask;\" class=\"toolbar\">\n";
+		$html = "<a href=\"#\" onclick=\"$doTask; return false;\" class=\"toolbar\">\n";
 		$html .= "<span class=\"$class\">\n";
 		$html .= "</span>\n";
 		$html .= "$i18n_text\n";

@@ -18,16 +18,16 @@ defined('_JEXEC') or die;
 		<div class="fltrt">
 			<button type="button" id="insert-button"><?php echo JText::_('COM_NEWSLETTER_MEDIA_INSERT') ?></button>
 			<button type="button" onclick="window.parent.SqueezeBox.close();"><?php echo JText::_('JCANCEL') ?></button>
-		</div>	
+		</div>
 	</fieldset>
 
-	<iframe 
-		id="imageframe" 
-		name="imageframe" 
+	<iframe
+		id="imageframe"
+		name="imageframe"
 		src="index.php?option=com_media&amp;view=media&amp;tmpl=component&amp;folder=&amp;asset=&amp;author="
 		width="680px"
 		height="630px"
-		frameBorder="0"		
+		frameBorder="0"
 	/>
-	
-</form>	
+
+</form>

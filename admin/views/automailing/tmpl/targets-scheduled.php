@@ -1,7 +1,7 @@
-<form 
-	method="POST" 
-	name="automailingtargetsForm" 
-	id="automailingtargetsForm" 
+<form
+	method="POST"
+	name="automailingtargetsForm"
+	id="automailingtargetsForm"
 	action="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&view=automailing&layout='.$this->getLayout().'&automailing_id='.$this->automailingId, false); ?>"
 >
 	<div class="fltrt">
@@ -14,11 +14,11 @@
 					</option>
 			<?php } ?>
 		</select>
-		<button type="submit"  onclick="return Joomla.submitform('automailing.assignList', $('automailingtargetsForm'));">
+		<button type="submit"  onclick="Joomla.submitform('automailing.assignList', $('automailingtargetsForm')); return false;">
 			<?php echo JText::_('COM_NEWSLETTER_ASSIGN'); ?>
 		</button>
-	</div>	
-		
+	</div>
+
     <div id="sslist-container">
     <table class="sslist adminlist  table table-striped" width="100%">
         <thead>

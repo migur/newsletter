@@ -19,7 +19,7 @@
 
 					<div class="fltlft" style="margin-left:10px">
 						<button class="filter-search-button" type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-						<button type="button" onclick="document.id('lists_filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+						<button type="button" onclick="document.id('lists_filter_search').value='';this.form.submit(); return false;"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 					</div>
 				</div>
             </div>
