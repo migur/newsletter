@@ -25,7 +25,7 @@
 			</select>
         </div>
     	<div class="pull-left btn-group">
-			<button class="btn" type="submit"  onclick="return Joomla.submitform('automailing.assignList', $('automailingtargetsForm')); return false;">
+			<button class="btn" type="submit"  onclick="Joomla.submitform('automailing.assignList', $('automailingtargetsForm')); return false;">
 				<?php echo JText::_('COM_NEWSLETTER_ASSIGN'); ?>
 			</button>
 		</div>

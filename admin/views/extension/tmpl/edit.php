@@ -9,10 +9,10 @@ defined('_JEXEC') or die;
 	<ul id="tabs-extensions" class="nav nav-tabs">
 		<li class="active">
 			<a data-toggle="tab" href="#ext-settings"><?php echo JText::_('COM_NEWSLETTER_EXTENSION_SETTINGS'); ?></a>
-		</li>	
+		</li>
 		<li>
 			<a data-toggle="tab" href="#ext-info"><?php echo JText::_('COM_NEWSLETTER_EXTENSION_INFORMATION'); ?></a>
-		</li>	
+		</li>
 	</ul>
 
 	<div class="tab-content">
@@ -28,28 +28,28 @@ defined('_JEXEC') or die;
 						</div>
 						<div class="controls">
 							<?php echo $this->form->getInput('title'); ?>
-						</div>	
+						</div>
 					</div>
-					
+
 					<div class="control-group adminformlist">
 						<div class="control-label">
 							<?php echo $this->form->getLabel('showtitle'); ?>
 						</div>
 						<div class="controls">
 							<?php echo $this->form->getInput('showtitle'); ?>
-						</div>	
+						</div>
 					</div>
-					
-					
+
+
 					<div class="accordion pane-sliders" id="module-sliders">
 
 					<?php
 					$fieldSets = $this->form->getFieldsets('params');
 
-					foreach ($fieldSets as $name => $fieldSet) : 
-						$label = !empty($fieldSet->label) ? $fieldSet->label : 'COM_MODULES_'.$name.'_FIELDSET_LABEL';	
+					foreach ($fieldSets as $name => $fieldSet) :
+						$label = !empty($fieldSet->label) ? $fieldSet->label : 'COM_MODULES_'.$name.'_FIELDSET_LABEL';
 						$id = $name . '-options'; ?>
-						
+
 						<div class="accordion-group panel">
 							<div class="accordion-heading">
 								<a class="accordion-toggle" data-toggle="collapse" data-parent="#module-sliders" href="#<?php echo $id; ?>">
@@ -59,7 +59,7 @@ defined('_JEXEC') or die;
 
 							<div id="<?php echo $id; ?>" class="accordion-body collapse in" >
 								<div class="accordion-inner">
-									<?php 
+									<?php
 									$hidden_fields = '';
 									$fieldset = $this->form->getFieldset($name);
 									foreach ($fieldset as $field) :
@@ -72,14 +72,14 @@ defined('_JEXEC') or die;
 												</div>
 												<div class="controls">
 													<?php echo $field->input; ?>
-												</div>	
+												</div>
 											</div>
 										<?php } ?>
 									<?php endforeach; ?>
 									<?php echo $hidden_fields; ?>
-								</div>	
+								</div>
 							</div>
-						</div>	
+						</div>
 					<?php endforeach; ?>
 					</div>
 				</div>
@@ -87,10 +87,10 @@ defined('_JEXEC') or die;
 					class="btn btn-success extension-save"
 					type="button"
 					value="<?php echo JText::_('JTOOLBAR_APPLY'); ?>"
-					onclick="return Joomla.submitbutton('apply');"
+					onclick="Joomla.submitbutton('apply'); return false;"
 				>
 
-		</div>	
+		</div>
 
 		<div id="ext-info" class="tab-pane">
 
@@ -109,10 +109,9 @@ defined('_JEXEC') or die;
 				</tbody>
 			</table>
 
-		</div>	
+		</div>
 
-	</div>	
+	</div>
 
 </div>
 </form>
-	

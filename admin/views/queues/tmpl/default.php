@@ -41,7 +41,13 @@
 		<tfoot>
 			<tr>
 				<td colspan="6">
-					<?php echo $this->pagination->getListFooter(); ?>
+					<div class="pull-left">
+						<?php echo $this->pagination->getListFooter(); ?>
+					</div>
+					<div class="pull-right">
+						<label for="limit" class="pull-left buttongroup-label"><?php echo JText::_('COM_NEWSLETTER_LIMIT'); ?></label>
+						<?php echo $this->pagination->getLimitBox(); ?>
+					</div>
 				</td>
 			</tr>
 		</tfoot>
@@ -84,5 +90,8 @@
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $this->listDirn; ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
+
+<?php echo JHtml::_('layout.wrapperEnd'); ?>
+
 </form>
 </fieldset>

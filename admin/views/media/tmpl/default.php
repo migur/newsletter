@@ -31,3 +31,10 @@ defined('_JEXEC') or die;
 	/>
 
 </form>
+
+<stylesheet>
+	#imageframe {
+		border: 0;
+		overflow: hidden;
+	}
+</stylesheet>
