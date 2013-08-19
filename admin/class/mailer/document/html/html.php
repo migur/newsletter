@@ -177,7 +177,7 @@ class NewsletterClassMailerDocumentHTML extends NewsletterClassMailerDocument
 		// Try to find the newsletter by id.
 		// Supported both standard and custom
 
-		$model = JModel::getInstance("Template", "NewsletterModel");
+		$model = MigurModel::getInstance("Template", "NewsletterModel");
 		$template = $model->getTemplateBy($id, 'preserve positions!');
 
 		if (!$template) {

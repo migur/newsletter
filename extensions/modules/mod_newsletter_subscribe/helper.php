@@ -10,7 +10,7 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.model');
 
-JModel::addIncludePath(JPATH_SITE . '/components/com_content/models', 'ContentModel');
+MigurModel::addIncludePath(JPATH_SITE . '/components/com_content/models', 'ContentModel');
 
 abstract class modNewsletterSubscribeHelper
 {

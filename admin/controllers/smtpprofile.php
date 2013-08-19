@@ -45,7 +45,7 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 	public function save()
 	{
 		$form = JRequest::getVar('jform');
-		$model = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$model = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$model->load($form['smtp_profile_id']);
 		
 		if ($model->isJoomlaProfile()) {

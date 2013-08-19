@@ -74,7 +74,7 @@ class NewsletterModelConfiguration extends JModelForm
 
 	public function loadFormData()
 	{
-		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$newsletter = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
 		$newsletter->loadFallBackNewsletter();
 		$result = $this->getComponent()->params->toArray();
 		$result['confirm_mail_subject'] = $newsletter->subject;

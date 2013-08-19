@@ -7,12 +7,12 @@ $showFull = NewsletterHelperAcl::canConfigureComponent();
 ?>
 
 <fieldset id="config-extensions" <?php if (!$showFull) { ?> style="width:98%" <?php } ?>>
+	<legend><?php echo JText::_('COM_NEWSLETTER_INSTALLED_EXTESIONS'); ?></legend>
 	
 	<div style="float:right;margin:5px 15px 0 0">
 		<a href="<?php echo JRoute::_('index.php?option=com_newsletter&view=install', false); ?>"><?php echo JText::_('COM_NEWSLETTER_MANAGE_EXTENSIONS'); ?></a>
 	</div>
 	
-	<legend><?php echo JText::_('COM_NEWSLETTER_INSTALLED_EXTESIONS'); ?></legend>
 	<?php
 	echo JHtml::_('tabs.start', 'tabs-extensions');
 	echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_MODULES'), 'tab-modules');

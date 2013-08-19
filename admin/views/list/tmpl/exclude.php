@@ -93,8 +93,9 @@
         </fieldset>
     </div>
 
-    <fieldset id="exclude-founded-fields" class="drop">
+    <fieldset id="exclude-founded-fields">
         <legend><?php echo JText::_('COM_NEWSLETTER_IMPORT_FOUNDED_FIELDS'); ?></legend>
+		<div class="drop"></div>
     </fieldset>
 
     <fieldset id="exclude-fields">
@@ -112,10 +113,10 @@
             <?php  echo JText::_('COM_NEWSLETTER_IMPORT_SELECT_DELIMITER'); ?>
             <div id="exclude-del-cont">
                 <select name="exclude_delimiter" id ="exclude-delimiter">
-                    <option value=",">,<option>
-                    <option value=";">;<option>
-                    <option value="tab">tab<option>
-                    <option value="space">space<option>
+                    <option value=",">,</option>
+                    <option value=";">;</option>
+                    <option value="tab">tab</option>
+                    <option value="space">space</option>
                 </select>
                 <input id="exclude-delimiter-custom" name="exclude_delimiter_custom" value="" class="hide">
             </div>
@@ -134,11 +135,11 @@
             <?php  echo JText::_('COM_NEWSLETTER_IMPORT_SELECT_ENCLOSURE'); ?>
             <div>
                 <select id="exclude-enclosure" name="exclude_enclosure">
-                    <option value="no">no<option>
-                    <option value="'">'<option>
-                    <option value='"'>"<option>
-                    <option value="`">`<option>
-                    <option value="#">#<option>
+                    <option value="no">no</option>
+                    <option value="'">'</option>
+                    <option value='"'>"</option>
+                    <option value="`">`</option>
+                    <option value="#">#</option>
                 </select>
                 <input id="exclude-enclosure-custom" name="exclude_enclosure_custom" value="" class="hide">
             </div>

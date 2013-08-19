@@ -46,16 +46,16 @@ class NewsletterViewSender extends MigurView
 	public function display($tpl = null)
 	{
 		JHTML::_('behavior.modal');
-		JHTML::stylesheet(JURI::root() . 'media/com_newsletter/css/admin.css');
-		JHTML::stylesheet(JURI::root() . 'media/com_newsletter/css/sender.css');
-		JHTML::script(JURI::root() . 'media/com_newsletter/js/migur/js/core.js');
-		JHTML::script(JURI::root() . 'media/com_newsletter/js/migur/js/iterativeajax.js');
-		JHTML::script(JURI::root() . 'administrator/components/com_newsletter/views/sender/sender.js');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/sender.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/iterativeajax.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/sender/sender.js');
 
-		$listsModel = JModel::getInstance('lists', 'NewsletterModel');
+		$listsModel = MigurModel::getInstance('lists', 'NewsletterModel');
 		$this->setModel($listsModel);
 
-		$newslettersModel = JModel::getInstance('newsletters', 'NewsletterModel');
+		$newslettersModel = MigurModel::getInstance('newsletters', 'NewsletterModel');
 		$this->setModel($newslettersModel);
 
 		// Check for errors.

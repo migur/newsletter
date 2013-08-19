@@ -1,6 +1,6 @@
 /**
  * @version	   $Id:  $
- * @copyright  Copyright (C) 2011 Migur Ltd. All rights reserved.
+ * @copyright  Copyright (C) 201 Migur Ltd. All rights reserved.
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -158,8 +158,6 @@
 }
 
 #exclude-tab-button {
-    float: right;
-    margin: 15px 5px;
     width: 100px;
 }
 
@@ -197,10 +195,21 @@
     margin: 5px 5px 10px 10px;
     padding: 0px;
     border: 1px solid #cccccc;
-    width: 26%;
+    width: 27%;
     height: 150px;
     float: left;
     position: relative;
+}
+
+
+#import-founded-fields .drop {
+	max-height: 130px;
+	overflow: auto;
+}
+
+#exclude-founded-fields .drop {
+	max-height: 130px;
+	overflow: auto;
 }
 
 
@@ -209,7 +218,7 @@
     margin: 5px 0px 10px 5px;
     padding: 0px;
     border: 1px solid #cccccc;
-    width: 43%;
+    width: 42%;
     height: 150px;
     float: left;
 }
@@ -228,7 +237,7 @@
 .drag {
     top: 0px;
     left: 0px;
-    width: 210px;
+    width: 205px;
     height: 15px;
     cursor: move;
     margin: 5px;
@@ -246,12 +255,12 @@
 #exclude-fields .drop {
     border: 1px solid #cccccc;
     height: 27px;
-    width: 233px;
+    width: 228px;
 }
 
 #import-file-apply,
 #exclude-file-apply {
-    width: 100px;
+    /*width: 100px;*/
     margin-right: 10px;
     float: right;
 }
@@ -261,7 +270,9 @@
 #import-enclosure,
 #import-enclosure-custom,
 #import-escape,
-#import-escape-custom {
+#import-escape-custom,
+#exclude-delimiter,
+#exclude-enclosure {
     width : 60px;
     margin: 5px 20px;
     float : left;
@@ -269,9 +280,11 @@
 
 #import-del-toggle-button,
 #import-enc-toggle-button,
-#import-esc-toggle-button {
+#import-esc-toggle-button,
+#exclude-del-toggle-button,
+#exclude-enc-toggle-button {
     width : 80px;
-    margin: 5px 10px;
+    margin: 5px 0px;
     float : left;
 }
 
@@ -322,7 +335,7 @@
 
 .tabs .import {
 	max-height:505px;
-	overflow: auto;
+	/*overflow: auto;*/
 }
 
 .tabs .import .toolbar-list {
@@ -331,6 +344,14 @@
 
 .tabs .import .toolbar-list li {
     margin: 10px;
+}
+
+#tabs {
+	margin-bottom: 0;
+}
+
+#tabs-list {
+	margin-top: 42px;
 }
 
 .plugin-pane {
@@ -351,6 +372,7 @@
 
 #import-message {
 	line-height: 24px;
+	margin-right: 10px;
 }
 
 #import-preloader {
@@ -379,3 +401,11 @@ div.form-text dl dt {
 	overflow: auto;
 }
 
+#excludelists-control-panel {
+    margin: 15px 5px;
+}
+
+#excludelists-control-panel > * {
+	float: right;
+	margin-top: 5px;
+}

@@ -20,7 +20,7 @@
         <?php echo JHtml::_('tabs.start', 'tab-preview-tabs'); ?>
             
         <?php echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_HTML'), 'tab-preview-html'); ?>
-            <iframe src="" id="tab-preview-html-container"></iframe>
+            <iframe src="" id="tab-preview-html-container" frameBorder="0"></iframe>
 
         <?php echo JHtml::_('tabs.panel', JText::_('COM_NEWSLETTER_PLAIN'), 'tab-preview-plain'); ?>
             <textarea id="tab-preview-plain-container" readonly></textarea>

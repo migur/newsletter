@@ -46,17 +46,17 @@ class NewsletterViewDashboard extends MigurView
 	{
 
 
-		JHTML::stylesheet('media/com_newsletter/css/admin.css');
-		JHTML::stylesheet('media/com_newsletter/css/dashboard.css');
-		JHTML::script('media/com_newsletter/js/migur/js/core.js');
-		JHTML::script('media/com_newsletter/js/migur/js/raphael-min.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.raphael-min.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.line-min.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.raphael.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.line.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.pie.js');
-		JHTML::script('media/com_newsletter/js/migur/js/g.bar.js');
-		JHTML::script('media/com_newsletter/js/migur/js/raphael-migur-line.js');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/admin.css');
+		NewsletterHelperView::addStyleSheet('media/com_newsletter/css/dashboard.css');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/core.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-min.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.raphael-min.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.line-min.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.raphael.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.line.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.pie.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/g.bar.js');
+		NewsletterHelperView::addScript('media/com_newsletter/js/migur/js/raphael-migur-line.js');
 
 
 		// Check for errors.
@@ -72,7 +72,7 @@ class NewsletterViewDashboard extends MigurView
 
 		$this->addToolbar();
 
-		$stat = JModel::getInstance('Queues', 'NewsletterModel')->getSummary();
+		$stat = MigurModel::getInstance('Queues', 'NewsletterModel')->getSummary();
 		$sent = 0;
 		$toSend = 0;
 		$total = 0;
@@ -123,8 +123,6 @@ class NewsletterViewDashboard extends MigurView
 		JToolBarHelper::custom('', 'progress', '', '', false);
 		$bar->appendButton('Migurqueue', 'queue');
 
-		JToolBarHelper::custom('', 'progress', '', '', false);
-
 		$bar = MigurToolbar::getInstance('newsletters-toolbar');
 		$bar->appendButton('Link', 'new', 'COM_NEWSLETTER_NEWSLETTER_CREATE', 'index.php?option=com_newsletter&amp;view=newsletter');
 		$bar->appendButton('Popup', 'export', 'COM_NEWSLETTER_NEWSLETTER_SEND', 'index.php?option=com_newsletter&amp;view=sender&amp;tmpl=component', 920, 450, 0, 0);
@@ -134,7 +132,7 @@ class NewsletterViewDashboard extends MigurView
 		$bar->appendButton('Popup', 'new', 'COM_NEWSLETTER_LIST_CREATE', 'index.php?option=com_newsletter&amp;view=list&amp;tmpl=component', 1000, 600, 0, 0);
 
 		$bar = MigurToolbar::getInstance('config-toolbar');
-		$bar->appendButton('Popup', 'export', 'COM_NEWSLETTER_EXTENSIONS_INSTALL', 'index.php?option=com_newsletter&amp;view=extension&amp;layout=install&amp;tmpl=component', 350, 150, 0, 0);
+		$bar->appendButton('Link', 'export', 'COM_NEWSLETTER_EXTENSIONS_INSTALL', 'index.php?option=com_newsletter&amp;view=install');
 		$bar->appendButton('Link', 'options', 'COM_NEWSLETTER_CONFIGURATION', 'index.php?option=com_newsletter&amp;view=configuration');
 
 		$bar = MigurToolbar::getInstance('help-toolbar');
@@ -155,8 +153,8 @@ class NewsletterViewDashboard extends MigurView
 	{
 		$document = JFactory::getDocument();
 		//$document->setTitle('COM_NEWSLETTER_DASHBOARD_TITLE');
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/subscriber/submitbutton.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_newsletter/views/dashboard/dashboard.js");
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/subscriber/submitbutton.js');
+		NewsletterHelperView::addScript('administrator/components/com_newsletter/views/dashboard/dashboard.js');
 		JText::script('COM_NEWSLETTER_SUBSCRIBER_ERROR_UNACCEPTABLE');
 	}
 

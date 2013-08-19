@@ -54,7 +54,7 @@ defined('_JEXEC') or die;
                                         </td>
                                         <td>
 											<a href="<?php echo JRoute::_('index.php?option=com_newsletter&task=template.edit&tmpl=component&t_style_id='.(int) $item->t_style_id); ?>"
-											   rel="{handler: 'iframe', size: {x: 820, y: 430} }"
+											   rel="{handler: 'iframe', size: {x: 820, y: 440} }"
 											   class="modal" >
 												<?php echo $this->escape($item->title); ?>
 											</a>

@@ -233,7 +233,7 @@ class NewsletterControllerMaintainance extends JControllerForm
 	{
 		$res = array();
 
-		$manager = JModel::getInstance('Smtpprofiles', 'NewsletterModel');
+		$manager = MigurModel::getInstance('Smtpprofiles', 'NewsletterModel');
 		$smtpps = $manager->getAllItems();
 
 		if (!empty($manager)) {
@@ -274,7 +274,7 @@ class NewsletterControllerMaintainance extends JControllerForm
 	{
 		$res = array();
 
-		$manager = JModel::getInstance('Mailboxprofiles', 'NewsletterModel');
+		$manager = MigurModel::getInstance('Mailboxprofiles', 'NewsletterModel');
 		$mailboxes = $manager->getAllItems();
 
 		if (!empty($mailboxes)) {

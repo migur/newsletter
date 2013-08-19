@@ -68,7 +68,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$email        = urldecode(JRequest::getVar('email', null));
 		$alias        = JRequest::getString('alias', null);
 
-		$model = JModel::getInstance('Newsletter', 'NewsletterModel');
+		$model = MigurModel::getInstance('Newsletter', 'NewsletterModel');
 		
 		if (!empty($alias)) {
 			$newsletter = NewsletterHelperNewsletter::getByAlias($alias);
@@ -198,7 +198,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		
 		// Process list of emails....
-		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$subscriber = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		foreach ($emails as $email) {
 			
 			// Trying to find subscriber or J!user

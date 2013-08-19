@@ -21,7 +21,7 @@
 	<div class="import-content">
 
 		<div class="plugin-preloader"></div>
-		<iframe class="plugin-pane" src="" scrolling="auto"></iframe>
+		<iframe class="plugin-pane" src="" scrolling="auto" frameBorder="0"></iframe>
 
 		<div class="clr"></div>
 		<div id="import-file" class="file-form hide">
@@ -50,8 +50,9 @@
 			</div>
 
 
-			<fieldset id="import-founded-fields" class="drop">
+			<fieldset id="import-founded-fields" >
 				<legend><?php echo JText::_('COM_NEWSLETTER_IMPORT_FOUNDED_FIELDS'); ?></legend>
+				<div class="drop"></div>
 			</fieldset>
 
 			<fieldset id="import-fields">
@@ -78,10 +79,10 @@
 					<?php  echo JText::_('COM_NEWSLETTER_IMPORT_SELECT_DELIMITER'); ?>
 					<div id="import-del-cont">
 						<select name="import_delimiter" id ="import-delimiter">
-							<option value=",">,<option>
-							<option value=";">;<option>
-							<option value="tab">tab<option>
-							<option value="space">space<option>
+							<option value=",">,</option>
+							<option value=";">;</option>
+							<option value="tab">tab</option>
+							<option value="space">space</option>
 						</select>
 						<input id="import-delimiter-custom" name="import_delimiter_custom" value="" class="hide">
 					</div>
@@ -100,11 +101,11 @@
 					<?php  echo JText::_('COM_NEWSLETTER_IMPORT_SELECT_ENCLOSURE'); ?>
 					<div>
 						<select id="import-enclosure" name="import_enclosure">
-							<option value="no">no<option>
-							<option value="'">'<option>
-							<option value='"'>"<option>
-							<option value="`">`<option>
-							<option value="#">#<option>
+							<option value="no">no</option>
+							<option value="'">'</option>
+							<option value='"'>"</option>
+							<option value="`">`</option>
+							<option value="#">#</option>
 						</select>
 						<input id="import-enclosure-custom" name="import_enclosure_custom" value="" class="hide">
 					</div>
@@ -145,8 +146,8 @@
 
 			<div class="fltrt submit-control">
 				<div class="fltlft">
-					<span id="import-message"></span>&nbsp;&nbsp;&nbsp;
 					<div id="import-preloader" class="fltrt"></div>
+					<div id="import-message" class="fltlft"></div>
 				</div>
 
 				<input

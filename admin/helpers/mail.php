@@ -56,7 +56,7 @@ class NewsletterHelperMail
 		}
 		NewsletterHelperPlaceholder::setPlaceholders($letter->params);
 
-		$profileEntity = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$profileEntity = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$profileEntity->load((int)$letter->smtp_profile_id);
 		
 		$letter->smtp_profile = $profileEntity->toObject();

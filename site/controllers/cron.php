@@ -159,16 +159,16 @@ class NewsletterControllerCron extends JControllerForm
 		$doSave   = (bool) $config->get('newsletter_save_to_db');
 
 		// 1. Get all SMTP profiles.
-		$smtpManager = JModel::getInstance('Smtpprofiles', 'NewsletterModel');
+		$smtpManager = MigurModel::getInstance('Smtpprofiles', 'NewsletterModel');
 		$smtpProfiles = $smtpManager->getAllItems();
 		$response = array();
 		// 2. Get process it in cycle
 		if (!empty($smtpProfiles)) {
 
-			$queueManager = JModel::getInstance('Queues', 'NewsletterModel');
-			$queueItem    = JModel::getInstance('Queue',      'NewsletterModelEntity');
-			$subscriber   = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
-			$newsletter   = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+			$queueManager = MigurModel::getInstance('Queues', 'NewsletterModel');
+			$queueItem    = MigurModel::getInstance('Queue',      'NewsletterModelEntity');
+			$subscriber   = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
+			$newsletter   = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
 
 			$mailer = new NewsletterClassMailer();
 
@@ -178,7 +178,7 @@ class NewsletterControllerCron extends JControllerForm
 			
 			foreach($smtpProfiles as $smtpp) {
 
-				$smtpProfile = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+				$smtpProfile = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 				$smtpProfile->load($smtpp->smtp_profile_id);
 
 				
@@ -473,7 +473,7 @@ class NewsletterControllerCron extends JControllerForm
 		
 		NewsletterHelperNewsletter::setParam('mailer_cron_bounced_is_executed', 1);
 
-		$bounceds = JModel::getInstance('Bounceds', 'NewsletterModel');
+		$bounceds = MigurModel::getInstance('Bounceds', 'NewsletterModel');
 
 		$mbprofiles = $bounceds->getMailboxesForBounsecheck();
 
@@ -541,13 +541,13 @@ class NewsletterControllerCron extends JControllerForm
 
 							if (!empty($mail->subscriber_id) && !empty($mail->newsletter_id) && !empty($mail->bounce_type)) 
 							{
-								$queue = JModel::getInstance('Queues', 'NewsletterModel');
+								$queue = MigurModel::getInstance('Queues', 'NewsletterModel');
 								if ($queue->setBounced($mail->subscriber_id, $mail->newsletter_id))
 								{
-									$sent = JModel::getInstance('Sent', 'NewsletterModel');
+									$sent = MigurModel::getInstance('Sent', 'NewsletterModel');
 									$sent->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
 
-									$history = JModel::getInstance('History', 'NewsletterModel');
+									$history = MigurModel::getInstance('History', 'NewsletterModel');
 									$history->setBounced($mail->subscriber_id, $mail->newsletter_id, $mail->bounce_type);
 
 									if ($mail->msgnum > 0) {

@@ -123,21 +123,6 @@ fieldset th {
 	width: 400px;
 }
 
-#tabs {
-    padding: 20px;
-    margin: 2px;
-}
-
-#multitab-toolbar {
-    height: 30px;
-}
-
-#multitab-toolbar a {
-    margin-top:-20px;
-    border: none;
-    height: 30px;
-}
-
 div.form-text {
     text-align: right;
 }

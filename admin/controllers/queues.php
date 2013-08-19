@@ -43,7 +43,7 @@ class NewsletterControllerQueues extends JControllerAdmin
 		
 		if (!empty($cids)) {
 
-			$model = JModel::getInstance('queue', 'NewsletterModelEntity');
+			$model = MigurModel::getInstance('queue', 'NewsletterModelEntity');
 			
 			foreach($cids as $idx => $cid) {
 				

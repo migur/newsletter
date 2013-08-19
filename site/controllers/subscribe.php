@@ -98,7 +98,7 @@ class NewsletterControllerSubscribe extends MigurController
 
 		// Trying to find subscriber or J!user with provided email.
 		// TODO Need to replace this 'NewsletterModelEntity' to 'NewsletterModel'
-		$subscriber = JModel::getInstance('Subscriber', 'NewsletterModelEntity');
+		$subscriber = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		$subscriber->load(array('email' => $email));
 
 		// If not found then this email does not belongs anyone in system.
@@ -128,7 +128,7 @@ class NewsletterControllerSubscribe extends MigurController
 
 		$message = JText::sprintf('COM_NEWSLETTER_THANK_YOU_FOR_SUBSCRIBING', $name);
 
-		$listModel = JModel::getInstance('List', 'NewsletterModel');
+		$listModel = MigurModel::getInstance('List',  'NewsletterModel');
 
 		$assignedListsIds = array();
 

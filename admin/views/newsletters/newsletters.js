@@ -38,7 +38,7 @@ window.addEvent('domready', function() {
             var url = href + '&newsletters=' + listIds.toString();
             SqueezeBox.open(url, {
                     handler: 'iframe',
-                    size: {x: 900, y: 600}
+                    size: {x: 900, y: 610}
             });
         });
 

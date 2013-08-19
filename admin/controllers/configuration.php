@@ -94,7 +94,7 @@ class NewsletterControllerConfiguration extends MigurController
 			'option' => $option
 		);
 		
-		$newsletter = JModel::getInstance('Newsletter', 'NewsletterModelEntity');
+		$newsletter = MigurModel::getInstance('Newsletter', 'NewsletterModelEntity');
 		$newsletter->loadFallBackNewsletter();
 		$newsletter->subject = $data['params']['confirm_mail_subject'];
 		$newsletter->plain = $data['params']['confirm_mail_body'];
@@ -304,7 +304,7 @@ class NewsletterControllerConfiguration extends MigurController
         
         
         // Let's init the reating to read/create row in DB for J! SMTP profile.
-        $smtp = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+        $smtp = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
         $smtp->load(NewsletterModelEntitySmtpprofile::JOOMLA_SMTP_ID);
         
         

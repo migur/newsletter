@@ -167,7 +167,7 @@ class NewsletterModelQueues extends JModelList
 		$id = $options['smtpProfileId'];
 		$limit = $options['limit'];
 		
-		$smtpModel = JModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
+		$smtpModel = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$smtpModel->load($id);
 
 		// This SMTP profile ($id) may be used by NEWSLETTER or LIST
