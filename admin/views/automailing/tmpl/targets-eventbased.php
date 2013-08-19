@@ -1,17 +1,17 @@
-<form 
-	method="POST" 
-	name="automailingtargetsForm" 
-	id="automailingtargetsForm" 
+<form
+	method="POST"
+	name="automailingtargetsForm"
+	id="automailingtargetsForm"
 	action="<?php echo JRoute::_('index.php?option=com_newsletter&tmpl=component&view=automailing&layout='.$this->getLayout().'&automailing_id='.$this->automailingId, false); ?>"
 >
-	
+
 	<fieldset class="adminform" style="margin:0 5px 10px;" id="jform_adminform">
 		<legend><?php echo $this->form->getField('scope')->title; ?></legend>
 
 		<?php echo $this->form->getInput('scope'); ?>
-		
-	</fieldset>	
-		
+
+	</fieldset>
+
 	<div id="scope-container">
 		<div class="fltrt">
 			<select name="list_to_subscribe" class="inputbox">
@@ -23,10 +23,10 @@
 						</option>
 				<?php } ?>
 			</select>
-			<button type="submit"  onclick="return Joomla.submitform('automailing.assignList', $('automailingtargetsForm'));">
+			<button type="submit"  onclick="Joomla.submitform('automailing.assignList', $('automailingtargetsForm')); return false;">
 				<?php echo JText::_('COM_NEWSLETTER_ASSIGN'); ?>
 			</button>
-		</div>	
+		</div>
 
 		<div id="sslist-container">
 		<table class="sslist adminlist  table table-striped" width="100%">
@@ -77,7 +77,7 @@
 			</tbody>
 		</table>
 	    </div>
-	</div>	
+	</div>
     <input type="hidden" name="filter_order" value="<?php echo $this->automailingTargets->listOrder; ?>" />
     <input type="hidden" name="filter_order_Dir" value="<?php echo $this->automailingTargets->listDirn; ?>" />
     <input type="hidden" name="automailing_id" value="<?php echo $this->automailingId; ?>" />
