@@ -10,31 +10,31 @@
 <form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=logs');?>" method="post" name="adminForm" >
 
 	<?php echo JHtml::_('layout.wrapper'); ?>
-	
+
 	<div class="nofloat">
 		<div class="pull-left">
 			<div class="btn-group pull-left">
 				<input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
-			</div>	
+			</div>
 			<div class="btn-group pull-left">
 				<button type="submit" class="btn migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-				<button type="button" class="btn" onclick="document.id('filter_search').value='';document.id('filter_priority').value='';document.id('filter_category').value='';document.id('filter_dateFrom').value='';document.id('filter_dateTo').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
-			</div>	
-		</div>	
+				<button type="button" class="btn" onclick="document.id('filter_search').value='';document.id('filter_priority').value='';document.id('filter_category').value='';document.id('filter_dateFrom').value='';document.id('filter_dateTo').value='';this.form.submit(); return false;"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+			</div>
+		</div>
 		<div class="pull-left">
 			<div class="btn-group pull-left">
 				<label class="pull-left"><?php echo JText::_('COM_NEWSLETTER_DATE_FROM'); ?></label>
 				<div class="pull-left">
 					<?php echo JHtml::_('calendar', $this->state->get('filter.dateFrom'), 'filter_dateFrom', 'filter_dateFrom', '%Y-%m-%d', array('onchange' => 'this.form.submit()')); ?>
-				</div>	
+				</div>
 			</div>
 			<div class="btn-group pull-left">
 				<label class="pull-left"><?php echo JText::_('COM_NEWSLETTER_DATE_TO'); ?></label>
 				<div class="pull-left">
 					<?php echo JHtml::_('calendar', $this->state->get('filter.dateTo'), 'filter_dateTo', 'filter_dateTo', '%Y-%m-%d', array('onchange' => 'this.form.submit()')); ?>
-				</div>	
-			</div>	
-		</div>	
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<div class="logslist-container">
@@ -63,11 +63,11 @@
 				<td colspan="5">
 					<div class="pull-left">
 						<?php echo $this->pagination->getListFooter(); ?>
-					</div>	
+					</div>
 					<div class="pull-right">
 						<label for="limit" class="pull-left buttongroup-label"><?php echo JText::_('COM_NEWSLETTER_LIMIT'); ?></label>
 						<?php echo $this->pagination->getLimitBox(); ?>
-					</div>					
+					</div>
 				</td>
 			</tr>
 		</tfoot>
@@ -81,24 +81,24 @@
 				</td>
 
 				<td>
-				<?php 
+				<?php
 					switch($item->priority) {
 						case 1:
 						case 2:
 						case 4:
-						case 8:	
-							echo '<span style="color:red">'.$item->message.'</span>'; break; 
+						case 8:
+							echo '<span style="color:red">'.$item->message.'</span>'; break;
 
-						case 16: 
-							echo '<span style="color:#888800">'.$item->message.'</span>'; break; 
-						case 32: 
-						case 64: 
+						case 16:
+							echo '<span style="color:#888800">'.$item->message.'</span>'; break;
+						case 32:
+						case 64:
 							echo '<span style="color:black">'.$item->message.'</span>'; break;
 
 						case 128:
 						default:
 							echo '<span style="color:gray">'.$item->message.'</span>'; break;
-					}		
+					}
 				?>
 				</td>
 
@@ -111,15 +111,15 @@
 				</td>
 
 				<td>
-				<?php if(!empty($item->params)) { 
+				<?php if(!empty($item->params)) {
 
-					$data = json_decode(str_replace('\u0000', '', $item->params)); 
+					$data = json_decode(str_replace('\u0000', '', $item->params));
 				?>
-					<label 
-						class="icon-list hasTip control-details" 
-						style="width:16px;height:16px;cursor:pointer" 
+					<label
+						class="icon-list hasTip control-details"
+						style="width:16px;height:16px;cursor:pointer"
 						title="<?php echo $this->escape(JHtml::_('multigrid.renderObject', $data, 0, 'black', array('maxLength' => 100, 'maxLengthMessage' => 'See full log...'))); ?>">
-					</label>	
+					</label>
 				<?php }	?>
 				</td>
 
@@ -127,7 +127,7 @@
 			<?php endforeach; ?>
 		</tbody>
 	</table>
-	</div>	
+	</div>
 	<div>
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="boxchecked" value="0" />
@@ -135,7 +135,7 @@
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $this->listDirn; ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
-	
+
 	<?php echo JHtml::_('layout.wrapperEnd'); ?>
-	
+
 </form>
