@@ -44,9 +44,9 @@ class NewsletterHelperSubscriber
 
 		$model = MigurModel::getInstance('Subscriber', 'NewsletterModel');
 		$subscriber = (object) $model->getItem($params);
-		
+
 		$user = JUser::getInstance();
-		
+
 		if (!empty($subscriber->user_id)) {
 			// Get a database object
 			$user->load($subscriber->user_id);
@@ -184,21 +184,31 @@ class NewsletterHelperSubscriber
 
 	public static function getFbMe($app_id, $app_secret)
 	{
-		$args = array();
-		parse_str(trim($_COOKIE['fbs_' . $app_id], '\\"'), $args);
-		ksort($args);
-		$payload = '';
-		foreach ($args as $key => $value) {
-			if ($key != 'sig') {
-				$payload .= $key . '=' . $value;
+		$profile = null;
+
+		require COM_NEWSLETTER_PATH_ADMIN . '/class/facebook/facebook.php';
+
+		// Create our Application instance (replace this with your appId and secret).
+		$facebook = new Facebook(array(
+			'appId'  => $app_id,
+			'secret' => $app_secret
+		));
+
+		// Get User ID
+		$user = $facebook->getUser();
+		// We may or may not have this data based on whether the user is logged in.
+		//
+		// If we have a $user id here, it means we know the user is logged into
+		// Facebook, but we don't know if the access token is valid. An access
+		// token is invalid if the user logged out of Facebook.
+		if ($user) {
+			try {
+				// Proceed knowing you have a logged in user who's authenticated.
+				$profile = $facebook->api('/me');
+			} catch (FacebookApiException $e) {
 			}
 		}
-		if (md5($payload . $app_secret) != $args['sig']) {
-			return null;
-		}
 
-		return (object)json_decode(
-			@file_get_contents('https://graph.facebook.com/me?access_token='.$args['access_token'])
-		);
+		return $profile;
 	}
 }

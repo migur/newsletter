@@ -1,4 +1,4 @@
-<?php
+	<?php
 /**
  * @package     Joomla.Platform
  * @subpackage  HTML
@@ -18,8 +18,8 @@ if (!defined('MIGUR')) {
 /**
  * Usage:
  *		$bar->appendButton(
- *			'Migurbasic', 
- *			'COM_NEWSLETTER_SHOW_STATISTICS', 
+ *			'Migurbasic',
+ *			'COM_NEWSLETTER_SHOW_STATISTICS',
  *			array('id' => 'ctrl-showstats', 'url' => JRoute::_('index.php?option=com_newsletter&view=statistic'))
  *		);
  *
@@ -58,10 +58,10 @@ class JToolbarButtonMigurbasic extends JToolbarButton
 	{
 		$this->_text = !empty($args[1])? $args[1] : '';
 		$params = !empty($args[2])? $args[2] : array();
-		
+
 		return array_merge($this->_defaults, $params);
 	}
-	
+
 	protected function _getHtml($params)
 	{
 		$strBtnProps = '';
@@ -79,10 +79,10 @@ class JToolbarButtonMigurbasic extends JToolbarButton
 		$html .= "</span>\n";
 		$html .= JText::_($this->_text) . "\n";
 		$html .= "</button>\n";
-		
+
 		return $html;
 	}
-	
+
 	/**
 	 * Get the button id
 	 *
