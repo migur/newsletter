@@ -65,8 +65,6 @@ $listOrder = 'asc';
         </tbody>
     </table>
     </div>
-    <input type="hidden" name="filter_order" value="<?php echo $this->subscribers->listOrder; ?>" />
-    <input type="hidden" name="filter_order_Dir" value="<?php echo $this->subscribers->listDirn; ?>" />
     <input type="hidden" name="subscriber_id" value="<?php echo $this->subscriberId; ?>" />
     <input type="hidden" name="list_to_unbind" value="<?php echo $this->subscriberId; ?>" id="list_to_unbind"/>
     <input type="hidden" name="task" value="" />
