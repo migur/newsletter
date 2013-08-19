@@ -37,7 +37,6 @@ class NewsletterControllerSubscribers extends JControllerAdmin
 	 * Check each element and delete deleteable ones
 	 */
 	public function delete() {
-		
 		$cids = JRequest::getVar('cid', array());
 		
 		$unset = 0;
