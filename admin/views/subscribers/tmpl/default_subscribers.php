@@ -49,7 +49,7 @@
 					</div>
 					<div class="btn-group pull-left">
 						<button class="btn tip filter-search-button" type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-						<button class="btn tip" type="button" onclick="document.id('ss_filter_search').value='';document.subscribersForm.filter_list.value='';document.subscribersForm.filter_published.value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+						<button class="btn tip" type="button" onclick="document.id('ss_filter_search').value='';document.subscribersForm.filter_list.value='';document.subscribersForm.filter_published.value='';this.form.submit(); return false;"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 					</div>
 				</div>
 			</div>
@@ -131,6 +131,7 @@
 				<td class="center">
 					<?php echo JHtml::_('multigrid.enabled', $subscriber->state, $i, 'tick.png', 'publish_x.png', 'subscribers.', 'subscribersForm'); ?>
 				</td>
+
 				<?php if ($this->activationIsAllowed): ?>
 				<td class="center">
 					<?php echo JHtml::_('multigrid.confirmed', $subscriber->confirmed, $i, 'tick.png', 'publish_x.png', 'lists.', 'subscribersForm'); ?>

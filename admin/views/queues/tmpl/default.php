@@ -1,16 +1,16 @@
 <fieldset>
 <div class="legend"><?php echo JText::_('Queues'); ?></div>
 <form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=queues');?>" method="post" name="adminForm" >
-	
+
 <?php echo JHtml::_('layout.wrapper'); ?>
-	
+
 	<div class="nofloat">
 		<div class="btn-group pull-left">
 			<input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
-		</div>	
+		</div>
 		<div class="btn-group pull-left">
 			<button type="submit" class="btn migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-			<button type="button" class="btn btn-danger" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+			<button type="button" class="btn btn-danger" onclick="document.id('filter_search').value='';this.form.submit(); return false;"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 		</div>
 	</div>
 
@@ -19,7 +19,7 @@
 		<thead>
 			<tr>
 				<th width="1%">
-					<input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
+					<input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
 				</th>
 				<th width="15%" class="left">
 					<?php echo JHtml::_('grid.sort', 'JGLOBAL_EMAIL', 's.name', $this->listDirn, $this->listOrder, NULL, 'desc'); ?>
@@ -41,13 +41,7 @@
 		<tfoot>
 			<tr>
 				<td colspan="6">
-					<div class="pull-left">
-						<?php echo $this->pagination->getListFooter(); ?>
-					</div>	
-					<div class="pull-right">
-						<label for="limit" class="pull-left buttongroup-label"><?php echo JText::_('COM_NEWSLETTER_LIMIT'); ?></label>
-						<?php echo $this->pagination->getLimitBox(); ?>
-					</div>					
+					<?php echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
 		</tfoot>
@@ -70,19 +64,19 @@
 					<?php echo $this->escape($item->created); ?>
 				</td>
 				<td>
-					<?php 
+					<?php
 						switch($item->state) {
-							case 0: echo '<span style="color:green">'.JText::_('COM_NEWSLETTER_QUEUE_SENT').'</span>'; break; 
+							case 0: echo '<span style="color:green">'.JText::_('COM_NEWSLETTER_QUEUE_SENT').'</span>'; break;
 							case 1: echo '<span style="color:gray">'.JText::_('COM_NEWSLETTER_QUEUE_INPROGRESS').'</span>'; break;
 							case 2: echo '<span style="color:red">'.JText::_('COM_NEWSLETTER_QUEUE_ERROR').'</span>'; break;
-						}		
+						}
 					?>
 				</td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>
 	</table>
-	</div>	
+	</div>
 	<div>
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="boxchecked" value="0" />
@@ -90,8 +84,5 @@
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $this->listDirn; ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
-	
-<?php echo JHtml::_('layout.wrapperEnd'); ?>
-	
 </form>
 </fieldset>
