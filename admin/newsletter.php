@@ -22,9 +22,9 @@ MigurComNewsletterBootstrap::initAutoloading();
 try {
 
 	// Setub toolbar, forms and so on...
-	MigurComNewsletterBootstrap::initJoomlaTools();	
-
 	MigurComNewsletterBootstrap::initEnvironment();
+
+	MigurComNewsletterBootstrap::initJoomlaTools();
 
 	// First check if user has access to the component.
 	if (

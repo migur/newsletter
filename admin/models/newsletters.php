@@ -99,6 +99,12 @@ class NewsletterModelNewsletters extends MigurModelList
 		if ($language = $this->getState('filter.language')) {
 			$query->where('n.language = ' . $db->quote($language));
 		}
+		// Published state.
+		$published = $this->getState('filter.published');
+		if (in_array($published, array('0', '1', '-2'))) {
+			$query->where('n.state = ' . $db->quote($published));
+		}
+
 
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering');
