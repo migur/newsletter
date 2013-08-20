@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterTableQueue extends JTable
+class NewsletterTableQueue extends MigurTable
 {
 
 	const STATE_SENT = 0;
