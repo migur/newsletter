@@ -87,7 +87,6 @@ class NewsletterTableNewsletter extends MigurTable
 			$table->{$table->_tbl_key} = $pk;
 			$table->state = $state;
 
-
 			// Store the row
 			if (!$table->store()) {
 				$this->setError($table->getError());

@@ -83,7 +83,6 @@ class NewsletterModelLists extends MigurModelList
 		}
 		$this->setState('filter.published', $published);
 		$this->setState('filter.search', $search);
-//		$this->setState('filter.ololo', 'trololo');
 		// List state information.
 		parent::populateState('a.name', 'asc');
 	}

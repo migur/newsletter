@@ -114,7 +114,7 @@ class NewsletterViewSubscribers extends MigurView
 
 		$listsState = $listsModel->getState();
 
-		if ((int) $state->get('filter.published') == -2)
+		if ((int) $listsState->get('filter.published') == -2)
 		{
 			$bar->appendButton('Migurstandard', 'delete', 'JTOOLBAR_EMPTY_TRASH', 'subscribers.delete', true);
 		} else

@@ -75,7 +75,7 @@ class NewsletterModelNewsletters extends JModelList
 		$query->from('`#__newsletter_newsletters` AS n');
 		// 2 is system internal newsletters. No need to show it.
 		$query->where('(category = 0 OR category IS NULL)');
-		
+
 		// Filtering the data
 		if (!empty($this->filtering)) {
 			foreach ($this->filtering as $field => $val)
@@ -99,6 +99,12 @@ class NewsletterModelNewsletters extends JModelList
 		if ($language = $this->getState('filter.language')) {
 			$query->where('n.language = ' . $db->quote($language));
 		}
+		// Published state.
+		$published = $this->getState('filter.published');
+		if (in_array($published, array('0', '1', '-2'))) {
+			$query->where('n.state = ' . $db->quote($published));
+		}
+
 
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering');
@@ -117,7 +123,7 @@ class NewsletterModelNewsletters extends JModelList
 	 * ordering requirements.
 	 *
 	 * @param	string		$id	A prefix for the store id.
-	 * 
+	 *
 	 * @return	string		A store id.
 	 * @since	1.0
 	 */
@@ -134,7 +140,7 @@ class NewsletterModelNewsletters extends JModelList
 	 * @param	type	The table type to instantiate
 	 * @param	string	A prefix for the table class name. Optional.
 	 * @param	array	Configuration array for model. Optional.
-	 * 
+	 *
 	 * @return	JTable	A database object
 	 * @since	1.0
 	 */
@@ -149,7 +155,7 @@ class NewsletterModelNewsletters extends JModelList
 	 *
 	 * @param string $ordering - name of column
 	 * @param string $direction - direction
-	 * 
+	 *
 	 * @return void
 	 * @since  1.0
 	 */
@@ -167,13 +173,15 @@ class NewsletterModelNewsletters extends JModelList
 
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_newsletter');
-		$this->setState('params', $params);
+		$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
 
+		$this->setState('params', $params);
+		$this->setState('filter.published', $published);
 		// List state information.
 		parent::populateState('name', 'asc');
 	}
 
-	
+
 	/**
 	 * Build an SQL query to load the list data.
 	 *
@@ -196,7 +204,7 @@ class NewsletterModelNewsletters extends JModelList
 		return $res;
 	}
 
-	
+
 	/**
 	 * Build an SQL query to load the list data.
 	 *
@@ -217,20 +225,20 @@ class NewsletterModelNewsletters extends JModelList
 		$query->order('n.smtp_profile_id');
 		$db->setQuery($query);
 		$spids = $db->loadAssocList(null, 'smtp_profile_id');
-		
+
 		$res = array();
 		$ids = array();
 		foreach($spids as $spid){
-			
+
 			$model = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 			$model->load($spid);
-			
+
 			if (!in_array($model->getId(), $ids)) {
 				$res[] = $model;
 				$ids[] = $model->getId();
 			}
 		}
-		
+
 		return $res;
 	}
 }
