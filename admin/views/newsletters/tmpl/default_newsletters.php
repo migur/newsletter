@@ -25,7 +25,7 @@
                     <div class="pull-left btn-group">
                         <select name="filter_published" class="input-medium" onchange="this.form.submit()">
                             <option value="">- <?php echo JText::_('COM_NEWSLETTER_SELECT_STATE');?> -</option>
-                            								<?php echo JHtml::_('select.options', JHtml::_('multigrid.enabledOptions'), 'value', 'text', $this->get('state')->get('filter.published'), true);?>
+							<?php echo JHtml::_('select.options', JHtml::_('multigrid.enabledOptions', array('trashedOnly' => true)), 'value', 'text', $this->get('state')->get('filter.published'), true);?>
                         </select>
                     </div>
                 </div>
