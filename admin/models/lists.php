@@ -125,8 +125,13 @@ class NewsletterModelLists extends MigurModelList
 
 		// Filter by published state
 		$published = $this->getState('filter.published');
-		if (is_numeric($published)) {
+
+		// Filter by published state
+		$published = $this->getState('filter.published');
+		if (in_array($published, array('0', '1', '-2'))) {
 			$query->where('a.state = ' . (int) $published);
+		} elseif($published != '*') {
+			$query->where('a.state >= 0');
 		}
 
 		// Filter by search in title.

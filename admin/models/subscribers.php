@@ -154,11 +154,12 @@ class NewsletterModelSubscribers extends MigurModelList
 			$query->where('a.user_id > 0');
 		}
 
-
 		// Filter by published state
 		$published = $this->getState('filter.published');
 		if (in_array($published, array('0', '1'))) {
 			$query->where('a.state = ' . (int) $published);
+		} elseif($published != '*') {
+			$query->where('a.state >= 0');
 		}
 
 		// Filter by search in title.
