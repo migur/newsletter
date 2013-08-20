@@ -99,12 +99,14 @@ class NewsletterModelNewsletters extends JModelList
 		if ($language = $this->getState('filter.language')) {
 			$query->where('n.language = ' . $db->quote($language));
 		}
-		// Published state.
+
+		// Filter by published state
 		$published = $this->getState('filter.published');
 		if (in_array($published, array('0', '1', '-2'))) {
-			$query->where('n.state = ' . $db->quote($published));
+			$query->where('a.state = ' . (int) $published);
+		} elseif($published != '*') {
+			$query->where('a.state >= 0');
 		}
-
 
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering');

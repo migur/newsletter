@@ -179,11 +179,12 @@ class NewsletterModelSubscribers extends MigurModelList
 			$query->where('a.user_id > 0');
 		}
 
-
 		// Filter by published state
 		$published = $this->getState('filter.published');
 		if (in_array($published, array('0', '1', '-2'))) {
 			$query->where('a.state = ' . (int) $published);
+		} elseif($published != '*') {
+			$query->where('a.state >= 0');
 		}
 
 		// Filter by search in title.
@@ -275,9 +276,9 @@ class NewsletterModelSubscribers extends MigurModelList
 		$db->setQuery($query);
 		return $db->loadObjectList();
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Build an SQL query to load the list data.
 	 *
@@ -311,7 +312,7 @@ class NewsletterModelSubscribers extends MigurModelList
 			SELECT s.subscriber_id, COALESCE(u.name, s.name) AS name, COALESCE(u.email, s.email) AS email, COALESCE(s.state, 1) AS state, u.id AS user_id, s.confirmed
 			FROM #__newsletter_subscribers AS s
 			RIGHT JOIN #__users AS u ON (s.user_id = u.id)) AS a');
-		
+
 		$query->join('', "#__newsletter_sub_history AS h ON a.subscriber_id=h.subscriber_id AND h.list_id='" . intval($params['list_id']) . "'");
 		$query->where("action='" . intval(NewsletterTableHistory::ACTION_UNSUBSCRIBED) . "'");
 
@@ -322,7 +323,7 @@ class NewsletterModelSubscribers extends MigurModelList
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		$db->setQuery($query);
-		
+
 		return $db->loadObjectList();
 	}
 }

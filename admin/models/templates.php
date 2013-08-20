@@ -141,8 +141,15 @@ class NewsletterModelTemplates extends JModelList
 			}
 		}
 
-		// Add the list ordering clause.
+		// Filter by published state
+		$published = $this->getState('filter.published');
+		if (in_array($published, array('0', '1', '-2'))) {
+			$query->where('a.state = ' . (int) $published);
+		} elseif($published != '*') {
+			$query->where('a.state >= 0');
+		}
 
+		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
 
@@ -155,7 +162,7 @@ class NewsletterModelTemplates extends JModelList
 		return $query;
 	}
 
-	
+
 	/**
 	 * Get standard templates.
 	 *
@@ -170,11 +177,11 @@ class NewsletterModelTemplates extends JModelList
 		$query->select('*');
 		$query->from('#__newsletter_extensions');
 		$query->where('type=3');
-		
+
 		$db->setQuery($query);
 		return $db->loadObjectList();
 	}
-	
+
 	/**
 	 * Get all (standard and custom) templates
 	 *
@@ -236,10 +243,10 @@ class NewsletterModelTemplates extends JModelList
 		$query->select('*');
 		$query->from('#__newsletter_extensions');
 		$query->where('type=3');
-		
+
 		$db->setQuery($query);
 		$installed = $db->loadAssocList();
-		
+
 		foreach ($installed as $item) {
 
 			$standards[] = (object) array(
@@ -249,7 +256,7 @@ class NewsletterModelTemplates extends JModelList
 					'params' => '{}'
 			);
 		}
-		
+
 		return $standards;
 	}
 }
