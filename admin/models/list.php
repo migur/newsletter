@@ -244,7 +244,7 @@ class NewsletterModelList extends JModelAdmin
 				$isTransaction = false;
 			}
 		}
-		
+
 		// Commit it all!
 		if ($isTransaction) {
 			$db->transactionCommit();
@@ -546,4 +546,31 @@ class NewsletterModelList extends JModelAdmin
 		return parent::save($data);
 	}
 
+	/**
+	 * Method to test whether a record can be deleted.
+	 *
+	 * @param   object  $record  A record object.
+	 *
+	 * @return  boolean  True if allowed to delete the record. Defaults to the permission for the component.
+	 *
+	 * @since   13.08
+	 */
+	protected function canDelete($record)
+	{
+		return NewsletterHelperAcl::actionIsAllowed('list.edit');
+	}
+
+	/**
+	 * Method to test whether a record can be deleted.
+	 *
+	 * @param   object  $record  A record object.
+	 *
+	 * @return  boolean  True if allowed to change the state of the record. Defaults to the permission for the component.
+	 *
+	 * @since   13.08
+	 */
+	protected function canEditState($record)
+	{
+		return NewsletterHelperAcl::actionIsAllowed('list.edit');
+	}
 }

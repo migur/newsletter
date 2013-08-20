@@ -114,7 +114,7 @@ class NewsletterViewSubscribers extends MigurView
 
 		$listsState = $listsModel->getState();
 
-		if ((int) $listsState->get('filter.published') == -2)
+		if ((int) $state->get('filter.published') == -2)
 		{
 			$bar->appendButton('Migurstandard', 'delete', 'JTOOLBAR_EMPTY_TRASH', 'subscribers.delete', true);
 		} else
@@ -122,7 +122,7 @@ class NewsletterViewSubscribers extends MigurView
 			$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_TRASH', 'subscribers.trash', false);
 		}
 
-		$bar->appendButton('Migurstandard', 'unblock', 'JTOOLBAR_ENABLE', 'subscribers.publish', false);
+		$bar->appendButton('Migurstandard', 'publish', 'JTOOLBAR_ENABLE', 'subscribers.publish', false);
 		$bar->appendButton('Migurstandard', 'unpublish', 'JTOOLBAR_DISABLE', 'subscribers.unpublish', false);
 
 		if ($this->activationIsAllowed) {
@@ -150,7 +150,6 @@ class NewsletterViewSubscribers extends MigurView
 		if (NewsletterHelperAcl::actionIsAllowed('list.add')) {
 			$bar->appendButton('Migurstandard', 'new', 'COM_NEWSLETTER_NEW_LIST_CREATE', 'list.add', false);
 		}
-//		var_dump($state);die();
 
 		if ((int) $listsState->get('filter.published') == -2)
 		{
