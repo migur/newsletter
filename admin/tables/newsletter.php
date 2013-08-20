@@ -36,7 +36,7 @@ class NewsletterTableNewsletter extends MigurTable
 		);
 	}
 
-	
+
 	/**
 	 * Method to set the publishing state for a row or list of rows in the database
 	 * table.  The method respects checked out rows by other users and will attempt
@@ -86,6 +86,7 @@ class NewsletterTableNewsletter extends MigurTable
 			// Change the state
 			$table->{$table->_tbl_key} = $pk;
 			$table->state = $state;
+
 
 			// Store the row
 			if (!$table->store()) {
