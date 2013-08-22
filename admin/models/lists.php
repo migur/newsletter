@@ -48,18 +48,6 @@ class NewsletterModelLists extends MigurModelList
 		parent::__construct($config);
 	}
 
-	/**
-	 * Method to auto-populate the model state.
-	 * Note. Calling getState in this method will result in recursion.
-	 *
-	 * @return	void
-	 * @since	1.0
-	 */
-	protected function populateState($ordering = null, $direction = null)
-	{
-		// Initialise variables.
-		$app = JFactory::getApplication();
-		$session = JFactory::getSession();
 
 		// Adjust the context to support modal layouts.
 		if ($layout = JRequest::getVar('layout')) {
@@ -83,7 +71,6 @@ class NewsletterModelLists extends MigurModelList
 		}
 		$this->setState('filter.published', $published);
 		$this->setState('filter.search', $search);
-//		$this->setState('filter.ololo', 'trololo');
 		// List state information.
 		parent::populateState('a.name', 'asc');
 	}
@@ -108,6 +95,7 @@ class NewsletterModelLists extends MigurModelList
 
 		return parent::getStoreId($id);
 	}
+
 
 	/**
 	 * Build an SQL query to load the list data.
@@ -233,12 +221,12 @@ class NewsletterModelLists extends MigurModelList
 		//echo nl2br(str_replace('#__','jos_',$query));
 		$this->query = $query;
 	}
-	
-	
+
+
 	/**
-	 * Gets a list of all active lists 
+	 * Gets a list of all active lists
 	 * without pagination and other limitations
-	 * 
+	 *
 	 * @return array of objects
 	 */
 	public function getAllActive($idonly = false)
@@ -249,13 +237,13 @@ class NewsletterModelLists extends MigurModelList
 		$query->select('*')
 			  ->from('#__newsletter_lists')
 			  ->where('state=1');
-		
+
 		$db->setQuery($query);
-		
+
 		if (!empty($idonly)) {
 			return $db->loadObjectList(null, 'list_id');
 		}
-		
+
 		return $db->loadObjectList();
 	}
 }
