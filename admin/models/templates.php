@@ -45,48 +45,6 @@ class NewsletterModelTemplates extends MigurModelList
 	}
 
 	/**
-	 * Method to auto-populate the model state.
-	 * Note. Calling getState in this method will result in recursion.
-	 *
-	 * @param string $ordering - name of column
-	 * @param string $direction - direction
-	 *
-	 * @return void
-	 * @since  1.0
-	 */
-	protected function populateState($ordering = null, $direction = null)
-	{
-		// Initialise variables.
-		$app = JFactory::getApplication();
-		$session = JFactory::getSession();
-
-		// Adjust the context to support modal layouts.
-		if ($layout = JRequest::getVar('layout')) {
-			$this->context .= '.' . $layout;
-		}
-
-		$form = JRequest::getVar('form');
-		$name = $this->getName();
-		if ($form != $name) {
-			$search = $app->getUserState($this->context . '.filter.search');
-			$published = $app->getUserState($this->context . '.filter.published');
-			$published = ($published) ? $published : '';
-		} else {
-			$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-			if ($search == "Search...") {
-				$search = "";
-			}
-			$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
-		}
-
-		$this->setState('filter.published', $published);
-		$this->setState('filter.search', $search);
-
-		// List state information.
-		parent::populateState('a.title', 'asc');
-	}
-
-	/**
 	 * Method to get a store id based on model configuration state.
 	 *
 	 * This is necessary because the model is used by the component and
@@ -142,7 +100,6 @@ class NewsletterModelTemplates extends MigurModelList
 		}
 
 		// Add the list ordering clause.
-
 		$orderCol = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
 
@@ -151,11 +108,11 @@ class NewsletterModelTemplates extends MigurModelList
 		}
 		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
-		//echo nl2br(str_replace('#__','jos_',$query));
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		return $query;
 	}
 
-	
+
 	/**
 	 * Get standard templates.
 	 *
@@ -170,11 +127,11 @@ class NewsletterModelTemplates extends MigurModelList
 		$query->select('*');
 		$query->from('#__newsletter_extensions');
 		$query->where('type=3');
-		
+
 		$db->setQuery($query);
 		return $db->loadObjectList();
 	}
-	
+
 	/**
 	 * Get all (standard and custom) templates
 	 *
@@ -236,10 +193,10 @@ class NewsletterModelTemplates extends MigurModelList
 		$query->select('*');
 		$query->from('#__newsletter_extensions');
 		$query->where('type=3');
-		
+
 		$db->setQuery($query);
 		$installed = $db->loadAssocList();
-		
+
 		foreach ($installed as $item) {
 
 			$standards[] = (object) array(
@@ -249,7 +206,7 @@ class NewsletterModelTemplates extends MigurModelList
 					'params' => '{}'
 			);
 		}
-		
+
 		return $standards;
 	}
 }
