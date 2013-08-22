@@ -31,6 +31,7 @@ class MigurModelList extends JModelList
 	 *  The name of function to retrive the list of items.
 	 *  Allow to use not only "getListQuery()".
 	 */
+	const STATE_TRASHED = -2;
 
 	protected $_queryType = null;
 
@@ -49,59 +50,74 @@ class MigurModelList extends JModelList
 	 * @return  void
 	 * @since	1.0
 	 */
-	protected function populateState($ordering = null, $direction = null)
+	protected function populateState($ordering = null, $direction = null, $options = array())
 	{
-		/**
-		 * If 'form' variable is mismatched with model name
-		 * then set data from user state
-		 * because this post data is addressed to another model
-		 */
+		$app = JFactory::getApplication();
+		$form = $app->input->post->get('form');
+
+		// If the context is set, assume that stateful lists are used.
 		if ($this->context) {
-			// If the context is set, assume that stateful lists are used.
-			$app = JFactory::getApplication();
-			$form = JRequest::getVar('form');
+
+			if (empty($options['fields'])) $options['fields'] = array();
+			$additionalFields = array();
+
+			/**
+			 * If 'form' variable is mismatched with model name
+			 * then set data from user state
+			 * because this post data is addressed to another model
+			 */
 			$name = $this->getName();
-			if ($form != $name) {
+			if (empty($form) || $form == $name) {
+
+				parent::populateState($ordering = null, $direction = null);
+
+				// Override global limit with models own one.
+				$limit = $app->getUserState('global.list.limit', $app->getCfg('list_limit'));
+				$limit = $this->getUserStateFromRequest($this->context . '.limit', 'limit', $limit);
+				$this->setState('list.limit', $limit);
+
+
+				$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
+				$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published');
+
+				foreach($options['fields'] as $key => $value) {
+					$additionalFields[$key] = $this->getUserStateFromRequest($this->context . '.' . $key, $value[0], $value[1]);
+				}
+
+			} else {
+
+				// Defaults
+				$limit = $app->getUserState('global.list.limit', $app->getCfg('list_limit'));
+
 				// Get data from user state
 				// global for all lists(models)
-				$limit = $app->getUserState($this->context . '.limit');
-				if (!$limit) {
-					$limit = $app->getUserState('global.list.limit');
-					$limit = ($limit) ? $limit : $app->getCfg('list_limit');
-				}
-				$lstart = $app->getUserState($this->context . '.limitstart');
-
-				// Check if the ordering field is in the white list, otherwise use the incoming value.
+				$limit = $app->getUserState($this->context . '.limit', $limit);
+				$start = $app->getUserState($this->context . '.limitstart', 0);
 				$order = $app->getUserState($this->context . '.ordercol');
-				// Check if the ordering direction is valid, otherwise use the incoming value.
-				$dir = $app->getUserState($this->context . '.orderdirn');
-			} else {
-				// global for all lists(models)
-				$limit = $app->getUserStateFromRequest($this->context . '.limit', 'limit', $app->getCfg('list_limit'));
-				$lstart = $app->getUserStateFromRequest($this->context . '.limitstart', 'limitstart', 0);
-				// Check if the ordering field is in the white list, otherwise use the incoming value.
-				$order = $app->getUserStateFromRequest($this->context . '.ordercol', 'filter_order', $ordering);
-				// Check if the ordering direction is valid, otherwise use the incoming value.
-				$dir = $app->getUserStateFromRequest($this->context . '.orderdirn', 'filter_order_Dir', $direction);
+				$dir   = $app->getUserState($this->context . '.orderdirn', 'ASC');
+
+				$search    = $app->getUserState($this->context . '.filter.search', null);
+				$published = $app->getUserState($this->context . '.filter.published', null);
+
+				//// Update user state and model state
+				$this->setState('list.start', $limit > 0? (floor($start / $limit) * $limit) : 0);
+				$this->setState('list.ordering', $order);
+				$this->setState('list.direction', $dir);
+				$this->setState('list.limit', $limit);
+
+				foreach($options['fields'] as $key => $value) {
+					$additionalFields[$key] = $app->getUserState($this->context . '.' . $key, $value[1]);
+				}
 			}
 
-			//// Update user state and model state
-			$limitstart = ($limit != 0 ? (floor($lstart / $limit) * $limit) : 0);
-			$this->setState('list.start', $limitstart);
+			// Add functionality to populate SEARCH and PUBLISH state
+			$this->setState('filter.search', $search);
+			$this->setState('filter.published', $published);
 
-			if (!in_array($order, $this->filter_fields)) {
-				$order = $ordering;
-				$app->setUserState($this->context . '.ordercol', $order);
+			foreach($additionalFields as $key => $value) {
+				$this->setState($key, $value);
 			}
-			$this->setState('list.ordering', $order);
 
-			if (!in_array(strtoupper($dir), array('ASC', 'DESC', ''))) {
-				$value = $direction;
-				$app->setUserState($this->context . '.orderdirn', $value);
-			}
-			$this->setState('list.direction', $dir);
-
-			$this->setState('list.limit', $limit);
 		} else {
 			$this->setState('list.start', 0);
 			$this->state->set('list.limit', 0);
@@ -168,7 +184,7 @@ class MigurModelList extends JModelList
 	 *    $model->getItems();
 	 *
 	 * If not then the default query will be executed.
-	 * 
+	 *
 	 * @param   string $search - the search string from client form data
 	 * @param   char   $separator - the separator
 	 *
