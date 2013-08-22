@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
 		<div class="fltlft"><span style="line-height:32px;"><?php echo JText::_('COM_NEWSLETTER_MEDIA_INSERT_DESC') ?></span></div>
 		<div class="fltrt">
 			<button type="button" id="insert-button"><?php echo JText::_('COM_NEWSLETTER_MEDIA_INSERT') ?></button>
-			<button type="button" onclick="window.parent.SqueezeBox.close();"><?php echo JText::_('JCANCEL') ?></button>
+			<button type="button" onclick="window.parent.SqueezeBox.close(); return false;"><?php echo JText::_('JCANCEL') ?></button>
 		</div>
 	</fieldset>
 
