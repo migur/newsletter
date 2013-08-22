@@ -17,7 +17,7 @@ jimport('joomla.application.component.modellist');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelNewsletters extends JModelList
+class NewsletterModelNewsletters extends MigurModelList
 {
 
 	/**
@@ -36,7 +36,7 @@ class NewsletterModelNewsletters extends JModelList
 				'name', 'n.name',
 				'se', 'n.name',
 				'alias', 'n.alias',
-                                'sent_to',
+				'sent_to', 'n.sent_to',
 				'ordering', 'n.ordering',
 				'language', 'n.language',
 				'checked_out', 'n.checked_out',
@@ -150,39 +150,6 @@ class NewsletterModelNewsletters extends JModelList
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
-
-	/**
-	 * Method to auto-populate the model state.
-	 * Note. Calling getState in this method will result in recursion.
-	 *
-	 * @param string $ordering - name of column
-	 * @param string $direction - direction
-	 *
-	 * @return void
-	 * @since  1.0
-	 */
-	protected function populateState($ordering = null, $direction = null)
-	{
-		// Initialise variables.
-		$app = JFactory::getApplication('administrator');
-
-		// Load the filter state.
-		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-		if ($search == "Search...") {
-			$search = "";
-		}
-		$this->setState('filter.search', $search);
-
-		// Load the parameters.
-		$params = JComponentHelper::getParams('com_newsletter');
-		$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
-
-		$this->setState('params', $params);
-		$this->setState('filter.published', $published);
-		// List state information.
-		parent::populateState('name', 'asc');
-	}
-
 
 	/**
 	 * Build an SQL query to load the list data.

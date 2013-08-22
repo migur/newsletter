@@ -43,7 +43,7 @@
 					<?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_NEWSLETTER_NAME', 'n.name', $this->listDirn, $this->listOrder); ?>
                 </th>
                 <th width="20%" class="left">
-					<?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_SENT_TO', 'sent_to', $this->listDirn, $this->listOrder, NULL, 'desc'); ?>
+					<?php echo JText::_('COM_NEWSLETTER_SENT_TO'); ?>
                 </th>
                 <th width="20%" class="left">
 					<?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_START_DATE', 'n.sent_started', $this->listDirn, $this->listOrder, NULL, 'desc'); ?>

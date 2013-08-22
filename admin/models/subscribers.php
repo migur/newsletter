@@ -61,45 +61,21 @@ class NewsletterModelSubscribers extends MigurModelList
 	 * @return void
 	 * @since  1.0
 	 */
-	protected function populateState($ordering = null, $direction = null)
+	protected function populateState($ordering = null, $direction = null, $options = array())
 	{
-		// Initialise variables.
-		$app = JFactory::getApplication();
-		$session = JFactory::getSession();
+		$fields = array(
+			'filter.list' => array('filter_list', ''),
+			'filter.type' => array('filter_type', ''),
+			'filter.jusergroup' => array('filter_jusergroup', '')
+		);
 
 		// Adjust the context to support modal layouts.
 		if ($layout = JRequest::getVar('layout')) {
 			$this->context .= '.' . $layout;
 		}
 
-		$form = JRequest::getVar('form');
-		$name = $this->getName();
-		if ($form != $name) {
-			$list = $app->getUserState($this->context . '.filter.list');
-			$type = $app->getUserState($this->context . '.filter.type');
-			$published = $app->getUserState($this->context . '.filter.published');
-			$published = ($published) ? $published : '';
-			$search = $app->getUserState($this->context . '.filter.search');
-			$jusergroup = $app->getUserState($this->context . '.filter.jusergroup');
-		} else {
-			$list = $this->getUserStateFromRequest($this->context . '.filter.list', 'filter_list', '');
-			$type = $this->getUserStateFromRequest($this->context . '.filter.type', 'filter_type', '');
-			$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
-			$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-			if ($search == "Search...") {
-				$search = "";
-			}
-			$jusergroup = $this->getUserStateFromRequest($this->context . '.filter.jusergroup', 'filter_jusergroup');
-		}
-
-		$this->setState('filter.type', $type);
-		$this->setState('filter.list', $list);
-		$this->setState('filter.published', $published);
-		$this->setState('filter.search', $search);
-		$this->setState('filter.jusergroup', $jusergroup);
-
 		// List state information.
-		parent::populateState('a.name', 'asc');
+		parent::populateState('a.name', 'asc', array('fields' => $fields));
 	}
 
 	/**
@@ -210,19 +186,20 @@ class NewsletterModelSubscribers extends MigurModelList
 		}
 
 		// Add the list ordering clause.
-		$orderCol = $this->state->get('list.ordering');
-		$orderDirn = $this->state->get('list.direction');
+		$orderCol = $this->state->get('list.ordering', 'name');
+		$orderDirn = $this->state->get('list.direction', 'ASC');
 
 		if ($orderCol == 'a.ordering' || $orderCol == 'a.name') {
 			$orderCol = 'name';
 		}
 
-		//var_dump($orderCol); die;
 		if ($orderCol == 'confirmed') {
 			$orderCol = 'sl.confirmed';
 		}
 
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 		//echo nl2br(str_replace('#__','php53_',$query)); die;
 		$this->query = $query;
 	}

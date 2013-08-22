@@ -18,7 +18,7 @@ jimport('joomla.utilities.simplexml');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelTemplates extends JModelList
+class NewsletterModelTemplates extends MigurModelList
 {
 
 	/**
@@ -42,48 +42,6 @@ class NewsletterModelTemplates extends JModelList
 		}
 
 		parent::__construct($config);
-	}
-
-	/**
-	 * Method to auto-populate the model state.
-	 * Note. Calling getState in this method will result in recursion.
-	 *
-	 * @param string $ordering - name of column
-	 * @param string $direction - direction
-	 *
-	 * @return void
-	 * @since  1.0
-	 */
-	protected function populateState($ordering = null, $direction = null)
-	{
-		// Initialise variables.
-		$app = JFactory::getApplication();
-		$session = JFactory::getSession();
-
-		// Adjust the context to support modal layouts.
-		if ($layout = JRequest::getVar('layout')) {
-			$this->context .= '.' . $layout;
-		}
-
-		$form = JRequest::getVar('form');
-		$name = $this->getName();
-		if ($form != $name) {
-			$search = $app->getUserState($this->context . '.filter.search');
-			$published = $app->getUserState($this->context . '.filter.published');
-			$published = ($published) ? $published : '';
-		} else {
-			$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-			if ($search == "Search...") {
-				$search = "";
-			}
-			$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
-		}
-
-		$this->setState('filter.published', $published);
-		$this->setState('filter.search', $search);
-
-		// List state information.
-		parent::populateState('a.title', 'asc');
 	}
 
 	/**
@@ -150,15 +108,11 @@ class NewsletterModelTemplates extends JModelList
 		}
 
 		// Add the list ordering clause.
-		$orderCol = $this->state->get('list.ordering');
-		$orderDirn = $this->state->get('list.direction');
-
-		if ($orderCol == 'a.ordering' || $orderCol == 'a.name') {
-			$orderCol = 'title ' . $orderDirn;
-		}
+		$orderCol = $this->state->get('list.ordering', 'title');
+		$orderDirn = $this->state->get('list.direction', 'ASC');
 		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
-		//echo nl2br(str_replace('#__','jos_',$query));
+		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		return $query;
 	}
 
