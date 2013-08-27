@@ -71,7 +71,6 @@ class NewsletterModelLists extends MigurModelList
 	}
 
 
-
 	/**
 	 * Build an SQL query to load the list data.
 	 *

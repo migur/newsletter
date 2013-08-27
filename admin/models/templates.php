@@ -18,7 +18,7 @@ jimport('joomla.utilities.simplexml');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelTemplates extends JModelList
+class NewsletterModelTemplates extends MigurModelList
 {
 
 	/**
