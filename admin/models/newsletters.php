@@ -100,6 +100,14 @@ class NewsletterModelNewsletters extends MigurModelList
 			$query->where('n.language = ' . $db->quote($language));
 		}
 
+		// Filter by published state
+		$published = $this->getState('filter.published');
+		if (in_array($published, array('0', '1', '-2'))) {
+			$query->where('n.state = ' . (int) $published);
+		} elseif($published != '*') {
+			$query->where('n.state >= 0');
+		}
+
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
@@ -142,39 +150,6 @@ class NewsletterModelNewsletters extends MigurModelList
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
-
-	/**
-	 * Method to auto-populate the model state.
-	 * Note. Calling getState in this method will result in recursion.
-	 *
-	 * @param string $ordering - name of column
-	 * @param string $direction - direction
-	 *
-	 * @return void
-	 * @since  1.0
-	 */
-	protected function populateState($ordering = null, $direction = null)
-	{
-		// Initialise variables.
-		$app = JFactory::getApplication('administrator');
-
-		// Load the filter state.
-		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-		if ($search == "Search...") {
-			$search = "";
-		}
-		$this->setState('filter.search', $search);
-
-		// Load the parameters.
-		$params = JComponentHelper::getParams('com_newsletter');
-		$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
-
-		$this->setState('params', $params);
-		$this->setState('filter.published', $published);
-		// List state information.
-		parent::populateState('name', 'asc');
-	}
-
 
 	/**
 	 * Build an SQL query to load the list data.
