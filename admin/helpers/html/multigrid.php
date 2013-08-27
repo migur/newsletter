@@ -15,7 +15,7 @@ abstract class JHtmlMultigrid
 
 	/**
 	 * The multigrid version of a grid.id
-	 * 
+	 *
 	 * @param int The row index
 	 * @param int The record id
 	 * @param boolean
@@ -97,11 +97,14 @@ abstract class JHtmlMultigrid
 
 		// Build the active state filter options.
 		$options = array();
-		if (!array_key_exists('published', $config) || $config['published']) {
-			$options[] = JHtml::_('select.option', '1', 'COM_NEWSLETTER_ENABLED');
-		}
-		if (!array_key_exists('unpublished', $config) || $config['unpublished']) {
-			$options[] = JHtml::_('select.option', '0', 'COM_NEWSLETTER_DISABLED');
+
+		if (empty($config['trashedOnly'])) {
+			if (!array_key_exists('published', $config) || $config['published']) {
+				$options[] = JHtml::_('select.option', '1', 'COM_NEWSLETTER_ENABLED');
+			}
+			if (!array_key_exists('unpublished', $config) || $config['unpublished']) {
+				$options[] = JHtml::_('select.option', '0', 'COM_NEWSLETTER_DISABLED');
+			}
 		}
 		if (!array_key_exists('all', $config) || $config['all']) {
 			$options[] = JHtml::_('select.option', '*', 'JALL');
@@ -148,7 +151,7 @@ abstract class JHtmlMultigrid
 		return $options;
 	}
 
-	
+
 	/**
 	 * Builds a list of options based on lists array
 	 * @param array $lists
@@ -162,7 +165,7 @@ abstract class JHtmlMultigrid
 			array('value' => '1', 'text' => JText::_('COM_NEWSLETTER_MIGURTYPE_SUBSCRIBER')),
 			array('value' => '2', 'text' => JText::_('COM_NEWSLETTER_JUSERTYPE_SUBSCRIBER'))
 		);
-		
+
 		$options = array();
 		// Build the options array
 		foreach ($data as $item) {
@@ -170,8 +173,8 @@ abstract class JHtmlMultigrid
 		}
 		return $options;
 	}
-	
-	
+
+
 	/**
 	 * Builds a list of options based on lists array
 	 * @param array $lists
@@ -199,7 +202,7 @@ abstract class JHtmlMultigrid
 	 * Builds a list of options based on lists array
 	 *
 	 * @param <type> $value
-	 * @param <type> $i 
+	 * @param <type> $i
 	 * @param <type> $img1
 	 * @param <type> $img0
 	 * @param <type> $prefix
@@ -233,7 +236,7 @@ abstract class JHtmlMultigrid
 	 * Builds a list of options based on lists array
 	 *
 	 * @param <type> $value
-	 * @param <type> $i 
+	 * @param <type> $i
 	 * @param <type> $img1
 	 * @param <type> $img0
 	 * @param <type> $prefix
@@ -255,19 +258,19 @@ abstract class JHtmlMultigrid
 		}
 
 		if ($value == 1) {
-			$html = 
+			$html =
 				'<span>' .
-					JHTML::_('image', 'admin/' . $img, $alt, array('border' => 0), true) . 
+					JHTML::_('image', 'admin/' . $img, $alt, array('border' => 0), true) .
 				'</span>';
-		} else {	
+		} else {
 			$html = '<a href="javascript:void(0);" onclick="return Migur.lists.listItemTask(' . $args . ')" title="' . $action . '">' .
 				JHTML::_('image', 'admin/' . $img, $alt, array('border' => 0), true) . '</a>';
 		}
-		
+
 		return $html;
 	}
-	
-	static function renderObject($data, $level = 0, $style = '', $options = array()) 
+
+	static function renderObject($data, $level = 0, $style = '', $options = array())
 	{
 		$spaces = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 		$res = '';
@@ -281,9 +284,9 @@ abstract class JHtmlMultigrid
 			if (is_object($data)) { $data = '(empty object)'; }
 			if (is_null($data)) { $data = '(null)'; }
 		}
-		
+
 		if (is_array($data) || is_object($data)) {
-			
+
 			foreach($data as $key => $value) {
 
 				if (!is_numeric($key)) {
@@ -302,17 +305,17 @@ abstract class JHtmlMultigrid
 
 				$res .= self::renderObject($value, $level+1, $style, $options);
 			}
-				
+
 		} else {
-			
+
 			if (!empty($options['maxLength']) && strlen($data) > $options['maxLength']) {
 				$data = !empty($options['maxLengthMessage'])? $options['maxLengthMessage'] : '...';
 			}
-			
+
 			$res .= "<span $style>" . substr($spaces, 0, $level*12) . $data . "</span><br/>";
 		}
-		
+
 		return $res;
 	}
-	
+
 }

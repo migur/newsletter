@@ -140,4 +140,32 @@ class NewsletterModelNewsletter extends JModelAdmin
 
 		return (empty($newsletter->newsletter_id) || $newsletter->type == 1/*Static newsletter*/ || $newsletter->sent_started == '0000-00-00 00:00:00');
 	}
+
+	/**
+	 * Method to test whether a record can be deleted.
+	 *
+	 * @param   object  $record  A record object.
+	 *
+	 * @return  boolean  True if allowed to delete the record. Defaults to the permission for the component.
+	 *
+	 * @since   13.08
+	 */
+	protected function canDelete($record)
+	{
+		return NewsletterHelperAcl::actionIsAllowed('newsletter.edit');
+	}
+
+	/**
+	 * Method to test whether a record can be deleted.
+	 *
+	 * @param   object  $record  A record object.
+	 *
+	 * @return  boolean  True if allowed to change the state of the record. Defaults to the permission for the component.
+	 *
+	 * @since   13.08
+	 */
+	protected function canEditState($record)
+	{
+		return NewsletterHelperAcl::actionIsAllowed('newsletter.edit');
+	}
 }

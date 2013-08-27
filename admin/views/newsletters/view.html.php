@@ -110,7 +110,17 @@ class NewsletterViewNewsletters extends MigurView
 			$bar->appendButton('Migurstandard', 'new', 'JTOOLBAR_NEW', 'newsletter.add', false);
 			$bar->appendButton('Migurstandard', 'copy', 'JTOOLBAR_SAVE_AS_COPY', 'newsletter.save2copy', false);
 		}
-		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'newsletters.delete', false);
+
+
+		$state	= $this->get('State');
+
+		if ((int) $state->get('filter.published') == MigurModelList::STATE_TRASHED)
+		{
+			$bar->appendButton('Migurstandard', 'delete', 'JTOOLBAR_EMPTY_TRASH', 'newsletters.delete', true);
+		} else
+		{
+			$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_TRASH', 'newsletters.trash', false);
+		}
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
