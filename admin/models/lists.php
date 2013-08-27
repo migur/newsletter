@@ -49,32 +49,6 @@ class NewsletterModelLists extends MigurModelList
 	}
 
 
-		// Adjust the context to support modal layouts.
-		if ($layout = JRequest::getVar('layout')) {
-			$this->context .= '.' . $layout;
-		}
-
-		$form = JRequest::getVar('form');
-		$name = $this->getName();
-
-		if ($form != $name) {
-			$search = $app->getUserState($this->context . '.filter.search');
-			$published = $app->getUserState($this->context . '.filter.published');
-
-		} else {
-			$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-			//TODO: Remove implicit match
-			if ($search == "Search...") {
-				$search = "";
-			}
-			$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
-		}
-		$this->setState('filter.published', $published);
-		$this->setState('filter.search', $search);
-		// List state information.
-		parent::populateState('a.name', 'asc');
-	}
-
 	/**
 	 * Method to get a store id based on model configuration state.
 	 *
@@ -95,6 +69,7 @@ class NewsletterModelLists extends MigurModelList
 
 		return parent::getStoreId($id);
 	}
+
 
 
 	/**
@@ -125,8 +100,13 @@ class NewsletterModelLists extends MigurModelList
 
 		// Filter by published state
 		$published = $this->getState('filter.published');
-		if (is_numeric($published)) {
+
+		// Filter by published state
+		$published = $this->getState('filter.published');
+		if (in_array($published, array('0', '1', '-2'))) {
 			$query->where('a.state = ' . (int) $published);
+		} elseif($published != '*') {
+			$query->where('a.state >= 0');
 		}
 
 		// Filter by search in title.

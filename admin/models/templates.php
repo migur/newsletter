@@ -99,13 +99,17 @@ class NewsletterModelTemplates extends JModelList
 			}
 		}
 
-		// Add the list ordering clause.
-		$orderCol = $this->state->get('list.ordering');
-		$orderDirn = $this->state->get('list.direction');
-
-		if ($orderCol == 'a.ordering' || $orderCol == 'a.name') {
-			$orderCol = 'title ' . $orderDirn;
+		// Filter by published state
+		$published = $this->getState('filter.published');
+		if (in_array($published, array('0', '1', '-2'))) {
+			$query->where('a.state = ' . (int) $published);
+		} elseif($published != '*') {
+			$query->where('a.state >= 0');
 		}
+
+		// Add the list ordering clause.
+		$orderCol = $this->state->get('list.ordering', 'title');
+		$orderDirn = $this->state->get('list.direction', 'ASC');
 		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
