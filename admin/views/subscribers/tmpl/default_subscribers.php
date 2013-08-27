@@ -1,4 +1,3 @@
-
 <?php $filterList = $this->subscribers->state->get('filter.list'); ?>
 
 <form id="form-subscribers" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=subscribers&form=subscribers');?>" method="post" name="subscribersForm" >
