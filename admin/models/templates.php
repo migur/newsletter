@@ -18,7 +18,7 @@ jimport('joomla.utilities.simplexml');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelTemplates extends JModelList
+class NewsletterModelTemplates extends MigurModelList
 {
 
 	/**
@@ -109,8 +109,11 @@ class NewsletterModelTemplates extends JModelList
 
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering', 'title');
-		$orderDirn = $this->state->get('list.direction', 'ASC');
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		$orderDirn = $this->state->get('list.direction', 'asc');
+
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		return $query;

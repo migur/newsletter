@@ -158,13 +158,16 @@ class NewsletterModelSmtpprofiles extends MigurModelList
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering', 'smtp_profile_name');
 		$orderDirn = $this->state->get('list.direction', 'asc');
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$this->query = $query;
 	}
 
-	
+
 	/**
 	 * Get all SMTP profiles
 	 */
@@ -194,7 +197,7 @@ class NewsletterModelSmtpprofiles extends MigurModelList
 				}
 			}
 		}
-		
+
 		return $list;
 	}
 }

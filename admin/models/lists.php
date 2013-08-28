@@ -71,7 +71,6 @@ class NewsletterModelLists extends MigurModelList
 	}
 
 
-
 	/**
 	 * Build an SQL query to load the list data.
 	 *
@@ -133,7 +132,9 @@ class NewsletterModelLists extends MigurModelList
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering', 'a.name');
 		$orderDirn = $this->state->get('list.direction', 'asc');
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		$this->query = $query;
@@ -190,13 +191,16 @@ class NewsletterModelLists extends MigurModelList
 
 		// Add the list ordering clause.
 
-		$orderCol = $this->state->get('list.ordering');
-		$orderDirn = $this->state->get('list.direction');
+		$orderCol = $this->state->get('list.ordering', 'a.name');
+		$orderDirn = $this->state->get('list.direction', 'asc');
 
 		if ($orderCol == 'a.ordering' || $orderCol == 'a.name') {
 			$orderCol = 'name ' . $orderDirn . ', a.ordering';
 		}
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		$this->query = $query;

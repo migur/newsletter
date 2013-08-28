@@ -244,7 +244,7 @@ class NewsletterModelList extends JModelAdmin
 				$isTransaction = false;
 			}
 		}
-		
+
 		// Commit it all!
 		if ($isTransaction) {
 			$db->transactionCommit();
