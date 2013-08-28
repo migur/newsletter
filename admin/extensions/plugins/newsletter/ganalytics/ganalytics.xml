@@ -7,24 +7,24 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>info@migur.com</authorEmail>
 	<authorUrl>http://migur.com/</authorUrl>
-	<version>13.05</version>
+	<version>13.08</version>
 	<description></description>
 	<componentVersion>12.06</componentVersion>
 	<namespace>newsletter.html</namespace>
-	
+
 	<files>
 		<filename
 			plugin="ganalytics">ganalytics.php</filename>
 		<filename>index.html</filename>
 	</files>
-	
+
 	<help key="JHELP_EXTENSIONS_PLUGIN_MANAGER_ADMIN_ARTICLE" />
-	
+
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
 
-                <field 
+                <field
                     name="goal"
                     type="text"
                     label="COM_NEWSLETTER_GOAL"
@@ -33,7 +33,7 @@
                     size="50"
 					default=""
                 />
-                
+
 			</fieldset>
 		</fields>
 	</config>

@@ -7,21 +7,21 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>henrik@migur.com</authorEmail>
 	<authorUrl>www.migur.com</authorUrl>
-	<version>13.05</version>
+	<version>13.08</version>
 	<description>Plugin to synchronise users during registration</description>
 
 	<files>
 		<filename plugin="miguruserreg">miguruserreg.php</filename>
 		<filename>index.html</filename>
 	</files>
-	
+
 	<languages>
 		<language tag="en-GB">en-GB.plg_system_miguruserreg.ini</language>
 	</languages>
 
 	<config>
 		<fields name="params">
-			<fieldset 
+			<fieldset
                 name="basic"
                 addfieldpath="/administrator/components/com_newsletter/models/fields">
 

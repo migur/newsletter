@@ -9,7 +9,7 @@
         <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
         <authorEmail>info@migur.com</authorEmail>
         <authorUrl>http://migur.com/</authorUrl>
-        <version>13.05</version>
+        <version>13.08</version>
         <description>This is the standard threecolumn newsletter template.</description>
     </information>
     <template>
@@ -39,8 +39,8 @@ h1 a:active, h2 a:active,  h3 a:active, h4 a:active, h5 a:active, h6 a:active {
 h1 a:visited, h2 a:visited,  h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
     color: purple !important; }
 
-table td { 
-	border-collapse:collapse; 
+table td {
+	border-collapse:collapse;
 	vertical-align: top;
 }
 

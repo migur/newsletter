@@ -2,7 +2,7 @@
 <extension type="package" version="1.6.0">
 	<name>Migur Newsletter</name>
 	<packagename>newsletter</packagename>
-	<version>13.05</version>
+	<version>13.08</version>
 	<url>http://migur.com</url>
 	<packager>Migur</packager>
 	<packagerurl>http://migur.com</packagerurl>
@@ -12,9 +12,9 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<scriptfile>pkg_newsletter_script.php</scriptfile>
 	<files folder="packages">
-	<!-- 
+	<!--
 		Don't change the direction! The component should be in line before LIBRARY.
-		Component has pages that requires the library in both install and uninstall flows . 
+		Component has pages that requires the library in both install and uninstall flows .
 		So library should be installed BEFORE the component and removed AFTER the component.
 		pkg_newslette_script will reverse the order of these extensions on installation/updating the package.
 		Component should be installed AFTER plugins to be able to manage (enable) these plugins.

@@ -7,14 +7,14 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>henrik@migur.com</authorEmail>
 	<authorUrl>www.migur.com</authorUrl>
-	<version>13.05</version>
+	<version>13.08</version>
 	<description>Plugin to synchronise users</description>
 
 	<files>
 		<filename plugin="migurlistsync">migurlistsync.php</filename>
 		<filename>index.html</filename>
 	</files>
-	
+
 	<languages>
 		<language tag="en-GB">en-GB.plg_system_migurlistsync.ini</language>
 	</languages>
