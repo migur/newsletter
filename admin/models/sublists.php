@@ -76,7 +76,10 @@ class NewsletterModelSublists extends MigurModelList
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering', 'subscriber_name');
 		$orderDirn = $this->state->get('list.direction', 'asc');
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		// echo nl2br(str_replace('#__','jos_',$query));
 		$this->query = $query;

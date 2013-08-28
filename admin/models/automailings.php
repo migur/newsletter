@@ -106,11 +106,13 @@ class NewsletterModelAutomailings extends MigurModelList
 			$query->where('(a.automailing_name LIKE ' . $search . ')');
 		}
 
-		// Add the list ordering clause. 
+		// Add the list ordering clause.
 		// Need to be setted in populateState
-		$orderCol = $this->state->get('list.ordering');
-		$orderDirn = $this->state->get('list.direction');
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		$orderCol = $this->state->get('list.ordering', 'a.automailing_name');
+		$orderDirn = $this->state->get('list.direction', 'asc');
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		return $query;
