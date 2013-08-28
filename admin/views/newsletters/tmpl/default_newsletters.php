@@ -33,16 +33,23 @@
             </div>
         </fieldset>
 
-	            <div class="filter-search btn-group pull-left">
+			<input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>"/>
+		</div>
+		<div class="btn-group pull-left">
+			<button type="submit" class="btn tip migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
+			<button type="button"  class="btn tip" onclick="document.id('filter_search').value='';this.form.submit(); return false;"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+		</div>
+	</div>
+	<div class="pull-left btn-group">
 
-	                    <input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>"/>
-                    </div>
-                    <div class="btn-group pull-left">
-		                <button type="submit" class="btn tip migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-		                <button type="button"  class="btn tip" onclick="document.id('filter_search').value='';this.form.submit(); return false;"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
-                    </div>
-                </div>
-                <div class="pull-left btn-group">
+	<div class="filter-panel-inner" data-role="panel-container-inner">
+		<div class="pull-left btn-group">
+			<select name="filter_published" class="input-medium" onchange="this.form.submit()">
+				<option value="">- <?php echo JText::_('COM_NEWSLETTER_SELECT_STATE');?> -</option>
+				<?php echo JHtml::_('select.options', JHtml::_('multigrid.enabledOptions', array('trashedOnly' => true)), 'value', 'text', $this->get('state')->get('filter.published'), true);?>
+			</select>
+		</div>
+	</div>
 
 	            <div class="filter-panel-inner" data-role="panel-container-inner">
                     <div class="pull-left btn-group">
@@ -98,30 +105,38 @@
 						echo $this->escape($item->name);
 					}
 					?>
-                </td>
-                <td>
+					<a href="<?php echo JRoute::_("index.php?option=com_newsletter&task=newsletter.edit&newsletter_id=" . (int)$item->id, false); ?>">
+						<?php echo $this->escape($item->name); ?>
+					</a>
 					<?php
-					if ($item->type == 0) {
-						echo $item->sent_to;
-					} else {
-						echo '<span style="color:green;">' . JText::_('COM_NEWSLETTER_STATIC') . '</span>';
-					}
-					?>
-                </td>
-                <td>
-					<?php echo $item->sent_started;?>
-                </td>
-            </tr>
-				<?php endforeach; ?>
-            </tbody>
-        </table>
+				} else {
+					echo $this->escape($item->name);
+				}
+				?>
+			</td>
+			<td>
+				<?php
+				if ($item->type == 0) {
+					echo $item->sent_to;
+				} else {
+					echo '<span style="color:green;">' . JText::_('COM_NEWSLETTER_STATIC') . '</span>';
+				}
+				?>
+			</td>
+			<td>
+				<?php echo $item->sent_started;?>
+			</td>
+		</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
 
-        <div>
-            <input type="hidden" name="task" value=""/>
-            <input type="hidden" name="boxchecked" value="0"/>
-            <input type="hidden" name="filter_order" value="<?php echo $this->listOrder; ?>"/>
-            <input type="hidden" name="filter_order_Dir" value="<?php echo $this->listDirn; ?>"/>
-			<?php echo JHtml::_('form.token'); ?>
-        </div>
+	<div>
+		<input type="hidden" name="task" value=""/>
+		<input type="hidden" name="boxchecked" value="0"/>
+		<input type="hidden" name="filter_order" value="<?php echo $this->listOrder; ?>"/>
+		<input type="hidden" name="filter_order_Dir" value="<?php echo $this->listDirn; ?>"/>
+		<?php echo JHtml::_('form.token'); ?>
+	</div>
     </form>
 </fieldset>

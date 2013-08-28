@@ -54,7 +54,7 @@ class NewsletterModelNewsletterext extends MigurModel
 
 			if (!empty($data) ) {
 				foreach ($data as $item) {
-					
+
 					if (isset($item->type)) {
 
 						// Skip the empty plugins (not configured)
@@ -66,7 +66,7 @@ class NewsletterModelNewsletterext extends MigurModel
 						$item->newsletter_id = $id;
 						$table->bind($item);
 						$table->store();
-					}	
+					}
 				}
 			}
 			return true;

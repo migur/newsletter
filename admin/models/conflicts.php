@@ -137,7 +137,7 @@ class NewsletterModelConflicts extends MigurModelList
 		$query->from('#__newsletter_subscribers AS s');
 		$query->join('', '#__users AS u ON s.email = u.email AND s.user_id != u.id');
 
-		
+
 		// Filtering the data
 		if (!empty($this->filtering)) {
 			foreach ($this->filtering as $field => $val)
@@ -147,16 +147,16 @@ class NewsletterModelConflicts extends MigurModelList
 
 		// Filter by list state
 		$type = $this->getState('filter.type');
-		
+
 		if ($type == 1) {
 			$query->where('a.user_id IS NULL');
 		}
-		
+
 		if ($type == 2) {
 			$query->where('a.user_id > 0');
 		}
-		
-		
+
+
 		// Filter by published state
 		$published = $this->getState('filter.published');
 		if (in_array($published, array('0', '1'))) {
@@ -179,17 +179,20 @@ class NewsletterModelConflicts extends MigurModelList
 
 		// Add the list ordering clause.
 
-		$orderCol = $this->state->get('list.ordering');
-		$orderDirn = $this->state->get('list.direction');
+		$orderCol = $this->state->get('list.ordering', 'a.name');
+		$orderDirn = $this->state->get('list.direction', 'asc');
 
 		if ($orderCol == 'a.ordering' || $orderCol == 'a.name') {
 			$orderCol = 'subName';
 		}
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$this->query = $query;
 	}
 
-	
+
 }

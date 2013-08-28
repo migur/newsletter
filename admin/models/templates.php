@@ -109,8 +109,11 @@ class NewsletterModelTemplates extends MigurModelList
 
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering', 'title');
-		$orderDirn = $this->state->get('list.direction', 'ASC');
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		$orderDirn = $this->state->get('list.direction', 'asc');
+
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		return $query;
