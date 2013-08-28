@@ -38,7 +38,7 @@ class NewsletterModelInstall extends MigurModelList
 	public $installer = null;
 
 	protected $_context = 'com_newsletter.install';
-	
+
 	/**
 	 * The constructor of a class
 	 *
@@ -60,9 +60,9 @@ class NewsletterModelInstall extends MigurModelList
 
 		parent::__construct($config);
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Install an extension from either folder, url or upload.
 	 *
@@ -74,7 +74,7 @@ class NewsletterModelInstall extends MigurModelList
 		$this->setState('action', 'install');
 
 		$app = JFactory::getApplication();
-		
+
 		// Remember the 'Install from Directory' path.
 		$app->getUserStateFromRequest($this->_context.'.install_directory', 'install_directory');
 		$package = $this->_getPackageFromUpload();
@@ -85,7 +85,7 @@ class NewsletterModelInstall extends MigurModelList
 			return false;
 		}
 
-		
+
 		$installer = $this->getInstaller();
 
 		// Install the package
@@ -121,8 +121,8 @@ class NewsletterModelInstall extends MigurModelList
 		return $result;
 	}
 
-		
-	
+
+
 	/**
 	 * Remove (uninstall) an extension
 	 *
@@ -159,7 +159,7 @@ class NewsletterModelInstall extends MigurModelList
 				$id = trim($id);
 				$row->load($id);
 				if ($row->type) {
-					
+
 					$type = $this->getStringType($row->type);
 					$result = $installer->uninstall($type, $id);
 
@@ -202,21 +202,21 @@ class NewsletterModelInstall extends MigurModelList
 			JError::raiseWarning(403, JText::_('JERROR_CORE_DELETE_NOT_PERMITTED'));
 		}
 	}
-	
-	
+
+
 	public function getInstaller()
 	{
-		
+
 		if (!$this->installer) {
 			JLoader::import('class.extension.installer', JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_newsletter');
 			$this->installer = new NewslettterClassExtensionInstaller();
 			$this->installer->loadAllAdapters();
 		}
-		
+
 		return $this->installer;
 	}
 
-	public function getStringType($typeId) 
+	public function getStringType($typeId)
 	{
 		switch($typeId) {
 			case 1: return 'newsletter_module';
@@ -224,7 +224,7 @@ class NewsletterModelInstall extends MigurModelList
 			case 3: return 'newsletter_template';
 		}
 	}
-	
+
 	/**
 	 * Method to auto-populate the model state.
 	 *
@@ -263,7 +263,7 @@ class NewsletterModelInstall extends MigurModelList
 		// SQL-query for gettting the users-subscibers list.
 		$query->select('a.*');
 		$query->from('#__newsletter_extensions AS a');
-		
+
 		// Filtering the data
 		if (!empty($this->filtering)) {
 			foreach ($this->filtering as $field => $val)
@@ -273,18 +273,20 @@ class NewsletterModelInstall extends MigurModelList
 
 		// Filter by list state
 		$type = $this->getState('filter.type');
-		
+
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering', 'a.title');
-		$orderDirn = $this->state->get('list.direction', 'ASC');
+		$orderDirn = $this->state->get('list.direction', 'asc');
 
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$this->query = $query;
 	}
-	
-	
+
+
 	/**
 	 * Works out an installation package from a HTTP upload
 	 *
@@ -337,18 +339,18 @@ class NewsletterModelInstall extends MigurModelList
 	public function restore()
 	{
 		$installer = $this->getInstaller();
-		
+
 		$extensions = (array) $installer->discover();
-		
+
 		// Load all registered extensions first
 		$db = JFactory::getDbo();
 		$db->setQuery('SELECT * FROM #__newsletter_extensions');
 		$dbExts = $db->loadObjectList();
-		
+
 		$processed = array();
-		
+
 		foreach ($extensions as $item) {
-			
+
 			// Trying to load record...
 			$table = JTable::getInstance('NExtension', 'NewsletterTable');
 			$table->load(array(
@@ -356,21 +358,21 @@ class NewsletterModelInstall extends MigurModelList
 					'type' => $item->type,
 					'namespace' => $item->namespace
 			));
-			
+
 			// ...and then refresh anyway!
 			$table->save((array) $item);
-			
+
 			// At least mark this extension as processed.
 			$processed[] = (int) $table->extension_id;
-			
+
 			unset($table);
 		}
 
 		// Now let's remove all unprocessed (absent) extensions...
 		foreach($dbExts as $item) {
-			
+
 			if (!in_array($item->extension_id, $processed)) {
-				
+
 				// This trash need to remove
 				$table = JTable::getInstance('NExtension', 'NewsletterTable');
 				$table->delete($item->extension_id);

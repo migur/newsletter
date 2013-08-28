@@ -246,7 +246,10 @@ class NewsletterModelSubscribers extends MigurModelList
 		if ($orderCol == 'a.ordering' || $orderCol == 'a.name') {
 			$orderCol = 'name ' . $orderDirn . ', a.subscriber_id';
 		}
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$db->setQuery($query);
@@ -295,7 +298,10 @@ class NewsletterModelSubscribers extends MigurModelList
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.unsubscribed.ordering');
 		$orderDirn = $this->state->get('list.unsubscribed.direction');
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		$db->setQuery($query);

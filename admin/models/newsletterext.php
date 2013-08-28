@@ -18,7 +18,7 @@ jimport('joomla.application.component.modeladmin');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelNewsletterext extends JModel
+class NewsletterModelNewsletterext extends MigurModel
 {
 
 	protected $_context;
@@ -54,7 +54,7 @@ class NewsletterModelNewsletterext extends JModel
 
 			if (!empty($data) ) {
 				foreach ($data as $item) {
-					
+
 					if (isset($item->type)) {
 
 						// Skip the empty plugins (not configured)
@@ -66,7 +66,7 @@ class NewsletterModelNewsletterext extends JModel
 						$item->newsletter_id = $id;
 						$table->bind($item);
 						$table->store();
-					}	
+					}
 				}
 			}
 			return true;

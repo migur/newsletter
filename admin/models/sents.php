@@ -92,9 +92,12 @@ class NewsletterModelSents extends JModelList
 		}
 
 		// Add the list ordering clause.
-		$orderCol = $this->state->get('list.ordering');
-		$orderDirn = $this->state->get('list.direction');
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		$orderCol = $this->state->get('list.ordering', 's.sent_date');
+		$orderDirn = $this->state->get('list.direction', 'desc');
+
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		//echo nl2br(str_replace('#__','jos_',$query));
 		return $query;

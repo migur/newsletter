@@ -23,7 +23,7 @@ JLoader::import('helpers.media', JPATH_COMPONENT_ADMINISTRATOR, '');
  * @since   1.0
  * @package Migur.Newsletter
  */
-class NewsletterModelFile extends JModel
+class NewsletterModelFile extends MigurModel
 {
 
 	/**
@@ -69,7 +69,7 @@ class NewsletterModelFile extends JModel
 
 			if (!NewsletterHelperMedia::canUpload($file, $err)) {
 				NewsletterHelperLog::addError(
-					'COM_NEWSLETTER_ERROR_CANNOT_UPLOAD_FILE', 
+					'COM_NEWSLETTER_ERROR_CANNOT_UPLOAD_FILE',
 					NewsletterHelperLog::CAT_UPLOAD,
 					array('file' => $filepath, 'error' => $err)
 				);
@@ -89,11 +89,11 @@ class NewsletterModelFile extends JModel
 			if (in_array(false, $result, true)) {
 				// There are some errors in the plugins
 				NewsletterHelperLog::addError(
-					'COM_NEWSLETTER_ERROR_BEFORE_SAVE', 
+					'COM_NEWSLETTER_ERROR_BEFORE_SAVE',
 					NewsletterHelperLog::CAT_UPLOAD,
 					array('file' => $filepath, 'errors' => implode(', ', $object_file->getErrors()))
 				);
-				
+
 				$response = array(
 					'status' => '0',
 					'error' => JText::plural('COM_NEWSLETTER_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors))
@@ -104,11 +104,11 @@ class NewsletterModelFile extends JModel
 			if (JFile::exists($filepath) && empty($params['overwrite'])) {
 				// File exists
 				NewsletterHelperLog::addError(
-					'COM_NEWSLETTER_ERROR_FILE_EXISTS', 
+					'COM_NEWSLETTER_ERROR_FILE_EXISTS',
 					NewsletterHelperLog::CAT_UPLOAD,
 					array('file' => $filepath,  'user_id' => $user->id)
 				);
-				
+
 				$response = array(
 					'status' => '0',
 					'error' => JText::_('COM_NEWSLETTER_ERROR_FILE_EXISTS')
@@ -117,7 +117,7 @@ class NewsletterModelFile extends JModel
 			} elseif (!$user->authorise('core.create', 'com_media')) {
 				// File does not exist and user is not authorised to create
 				NewsletterHelperLog::addError(
-					'COM_NEWSLETTER_ERROR_CREATE_NOT_PERMITTED', 
+					'COM_NEWSLETTER_ERROR_CREATE_NOT_PERMITTED',
 					NewsletterHelperLog::CAT_UPLOAD,
 					array('file' => $filepath,  'user_id' => $user->id)
 				);
@@ -133,7 +133,7 @@ class NewsletterModelFile extends JModel
 			if (!JFile::upload($file['tmp_name'], $file['filepath'])) {
 				// Error in upload
 				NewsletterHelperLog::addError(
-					'COM_NEWSLETTER_ERROR_UNABLE_TO_UPLOAD_FILE', 
+					'COM_NEWSLETTER_ERROR_UNABLE_TO_UPLOAD_FILE',
 					NewsletterHelperLog::CAT_UPLOAD,
 					array('file' => $filepath)
 				);
@@ -144,7 +144,7 @@ class NewsletterModelFile extends JModel
 				return $response;
 			} else {
 				NewsletterHelperLog::addDebug(
-					'COM_NEWSLETTER_UPLOAD_COMPLETE', 
+					'COM_NEWSLETTER_UPLOAD_COMPLETE',
 					NewsletterHelperLog::CAT_UPLOAD,
 					array('file' => $filepath)
 				);

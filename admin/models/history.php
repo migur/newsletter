@@ -128,10 +128,12 @@ class NewsletterModelHistory extends MigurModelList
 		$orderDirn = $this->state->get('list.direction', 'desc');
 
 		if ($orderCol == 'a.ordering' || $orderCol == 'a.date') {
-
 			$orderCol = 'date ' . $orderDirn;
 		}
-		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+
+		if (!empty($orderCol)) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		return $query;
