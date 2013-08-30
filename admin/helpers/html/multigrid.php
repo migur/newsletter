@@ -93,19 +93,48 @@ abstract class JHtmlMultigrid
 	 */
 	public static function enabledOptions($config = array())
 	{
-		//TODO: Need to create the way to work with multiform page via only one point - submitbutton.js
-
 		// Build the active state filter options.
 		$options = array();
 
-		if (empty($config['trashedOnly'])) {
-			if (!array_key_exists('published', $config) || $config['published']) {
-				$options[] = JHtml::_('select.option', '1', 'COM_NEWSLETTER_ENABLED');
-			}
-			if (!array_key_exists('unpublished', $config) || $config['unpublished']) {
-				$options[] = JHtml::_('select.option', '0', 'COM_NEWSLETTER_DISABLED');
-			}
+		if (!array_key_exists('published', $config) || $config['published']) {
+			$options[] = JHtml::_('select.option', '1', 'COM_NEWSLETTER_ENABLED');
 		}
+
+		if (!array_key_exists('unpublished', $config) || $config['unpublished']) {
+			$options[] = JHtml::_('select.option', '0', 'COM_NEWSLETTER_DISABLED');
+		}
+
+		if (!array_key_exists('trashed', $config) || $config['trashed']) {
+			$options[] = JHtml::_('select.option', '-2', 'COM_NEWSLETTER_TRASHED');
+		}
+
+		if (!array_key_exists('all', $config) || $config['all']) {
+			$options[] = JHtml::_('select.option', '*', 'JALL');
+		}
+		return $options;
+	}
+
+	/**
+	 * Render the options for "status" field
+	 *
+	 * @param array config
+	 *
+	 * @return string
+	 * @since 1.0
+	 */
+	public static function trashedOptions($config = array())
+	{
+		// Build the active state filter options.
+		$options = array();
+
+		if (!array_key_exists('published', $config) || $config['published']) {
+			$options[] = JHtml::_('select.option', '1', 'COM_NEWSLETTER_ACTIVE');
+		}
+
+		if (!array_key_exists('trashed', $config) || $config['trashed']) {
+			$options[] = JHtml::_('select.option', '-2', 'COM_NEWSLETTER_TRASHED');
+		}
+
 		if (!array_key_exists('all', $config) || $config['all']) {
 			$options[] = JHtml::_('select.option', '*', 'JALL');
 		}
@@ -217,10 +246,10 @@ abstract class JHtmlMultigrid
 			$value = $value->published;
 		}
 
-		$img = $value ? $img1 : $img0;
-		$task = $value ? 'unpublish' : 'publish';
-		$alt = $value ? JText::_('COM_NEWSLETTER_ENABLED') : JText::_('COM_NEWSLETTER_DISABLED');
-		$action = $value ? JText::_('COM_NEWSLETTER_DISABLE_ITEM') : JText::_('COM_NEWSLETTER_ENABLE_ITEM');
+		$img = $value==1 ? $img1 : $img0;
+		$task = $value==1 ? 'unpublish' : 'publish';
+		$alt = $value==1 ? JText::_('COM_NEWSLETTER_ENABLED') : JText::_('COM_NEWSLETTER_DISABLED');
+		$action = $value==1 ? JText::_('COM_NEWSLETTER_DISABLE_ITEM') : JText::_('COM_NEWSLETTER_ENABLE_ITEM');
 
 		$args = "'cb{$i}','$prefix$task'";
 		if (!empty($form)) {

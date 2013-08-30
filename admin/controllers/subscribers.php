@@ -31,25 +31,25 @@ class NewsletterControllerSubscribers extends JControllerAdmin
 		$model = parent::getModel($name, $prefix, $config);
 		return $model;
 	}
-	
-	
+
+
 	/**
 	 * Check each element and delete deleteable ones
 	 */
 	public function delete() {
-		
+
 		$cids = JRequest::getVar('cid', array());
-		
+
 		$unset = 0;
-		
+
 		if (!empty($cids)) {
 
 			$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
-			
+
 			foreach($cids as $idx => $cid) {
-				
+
 				$model->load($cid);
-				
+
 				if ($model->isJoomlaUserType()) {
 					unset($cids[$idx]);
 					$unset++;
@@ -59,20 +59,20 @@ class NewsletterControllerSubscribers extends JControllerAdmin
 			if ($unset > 0) {
 				JFactory::getApplication()->enqueueMessage(sprintf(JText::_('COM_NEWSLETTER_SUBSCRIBERS_ITEMS_CANNOT_DELETED'), $unset), 'message');
 			}
-			
+
 			if (empty($cids)) {
 				$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list, false));
 				return;
 			}
-			
+
 			JRequest::setVar('cid', $cids);
 		}
-		
-		
+
+
 		return parent::delete();
 	}
-	
-	
+
+
 	/**
 	 * Method to publish a list of items
 	 *
@@ -87,21 +87,29 @@ class NewsletterControllerSubscribers extends JControllerAdmin
 
 		// Get items to publish from the request.
 		$cids = JRequest::getVar('cid', array(), '', 'array');
-		
+
+		$task = JRequest::getVar('task');
+
 		// If needed create rows in SUBSCRIBERS for J! user
 		$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		$newCids = array();
+		$msg = null;
 		foreach($cids as $cid) {
 			$model->load($cid);
-			$newCids[] = $model->getId();
-		}	
-		
+
+			if ($task == 'trash' && $model->isJoomlaUserType()) {
+				$msg = "COM_NEWSLETTER_SUBSCRIBERS_CANNOT_TRASH_JUSER";
+			} else {
+				$newCids[] = $model->getId();
+			}
+		}
+
+		if (!empty($msg)) {
+			JFactory::getApplication()->enqueueMessage(JText::_($msg), 'error');
+		}
+
 		// Then update CIDs by new subscriber_id
-		if(!empty($newCids)) {
-			JRequest::setVar('cid', $newCids);
-			return parent::publish();
-		}	
-		
-		return false;
+		JRequest::setVar('cid', $newCids);
+		return parent::publish();
 	}
 }
