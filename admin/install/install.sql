@@ -3,7 +3,7 @@
 # Prev version 1.0.3b2;
 
 # J! stores last used updating schema in _schemas table;
-# The better way to name update patches is YY.MMaX.sql; 
+# The better way to name update patches is YY.MMaX.sql;
 # Note that YY.MM.sql is the latest update for YY.MM version;
 # You cant add any updates for YY.MM[aX|bY] version if you already used;
 # YY.MM.sql update;
@@ -52,6 +52,7 @@ CREATE TABLE `#__newsletter_template_styles`
 `template` VARCHAR(50) DEFAULT '' NOT NULL,
 `title` VARCHAR(255) DEFAULT '' NOT NULL,
 `params` TEXT NOT NULL,
+`state` INT(11) DEFAULT 1 NOT NULL,
 
 PRIMARY KEY (`t_style_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
@@ -123,6 +124,7 @@ CREATE TABLE `#__newsletter_newsletters`
 `sent_started` DATETIME NOT NULL,
 `type` INT(11) NOT NULL,
 `category` INT(11),
+`state` INT(11) DEFAULT 1 NOT NULL,
 
 PRIMARY KEY (`newsletter_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
@@ -249,7 +251,7 @@ PRIMARY KEY (`downloads_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `#__newsletter_mailbox_profiles` 
+CREATE TABLE `#__newsletter_mailbox_profiles`
 (
 `mailbox_profile_id` INT(11) NOT NULL AUTO_INCREMENT,
 `mailbox_profile_name` VARCHAR(255) DEFAULT NULL,
@@ -274,6 +276,7 @@ CREATE TABLE `#__newsletter_automailings` (
   `automailing_state` INT(11) DEFAULT NULL,
   `scope` ENUM('all','targets') DEFAULT NULL,
   `params` TEXT,
+  `state` INT(11) DEFAULT 1  NOT NULL,
 
   PRIMARY KEY (`automailing_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
@@ -414,9 +417,9 @@ insert  into `#__newsletter_extensions`(`extension_id`,`title`,`extension`,`para
 # Example data for tables -----------------------------------------------------;
 
 # Data for the table `#__newsletter_template_styles`;
-INSERT  INTO `#__newsletter_template_styles`(`t_style_id`,`template`,`title`,`params`) VALUES (5,'doublecolumn1.xml','Standard doublecolumn template (custom)','{\"width_column1\":\"50%\",\"height_column1\":\"50%\",\"width_column2\":\"50%\",\"height_column2\":\"50%\",\"image_top\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/top_image.png\",\"image_top_alt\":\"The top image\",\"image_top_width\":\"600px\",\"image_top_height\":\"100px\",\"image_bottom\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/bottom_image.png\",\"image_bottom_alt\":\"The bottom image\",\"image_bottom_width\":\"600px\",\"image_bottom_height\":\"100px\",\"table_background\":\"#FFFFFF\",\"text_color\":\"#888888\",\"t_style_id\":\"5\"}');
-INSERT  INTO `#__newsletter_template_styles`(`t_style_id`,`template`,`title`,`params`) VALUES (6,'singlecolumn1.xml','Standard singlecolumn template (custom)','{\"width_column1\":\"50%\",\"height_column1\":\"50%\",\"width_column2\":\"50%\",\"height_column2\":\"50%\",\"image_top\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/top_image.png\",\"image_top_alt\":\"The top image\",\"image_top_width\":\"600px\",\"image_top_height\":\"100px\",\"image_bottom\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/bottom_image.png\",\"image_bottom_alt\":\"The bottom image\",\"image_bottom_width\":\"600px\",\"image_bottom_height\":\"100px\",\"table_background\":\"#FFFFFF\",\"text_color\":\"#888888\",\"t_style_id\":\"6\"}');
-INSERT  INTO `#__newsletter_template_styles`(`t_style_id`,`template`,`title`,`params`) VALUES (8,'threecolumn1.xml','Standard threecolumn template (custom)','{\"width_column1\":\"50%\",\"height_column1\":\"50%\",\"width_column2\":\"50%\",\"height_column2\":\"50%\",\"image_top\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/top_image.png\",\"image_top_alt\":\"The top image\",\"image_top_width\":\"600px\",\"image_top_height\":\"100px\",\"image_bottom\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/bottom_image.png\",\"image_bottom_alt\":\"The bottom image\",\"image_bottom_width\":\"600px\",\"image_bottom_height\":\"100px\",\"table_background\":\"#FFFFFF\",\"text_color\":\"#888888\",\"t_style_id\":\"8\"}');
+INSERT  INTO `#__newsletter_template_styles`(`t_style_id`,`template`,`title`,`params`) VALUES (5,'doublecolumn1.xml','Standard doublecolumn template (custom)','{\"width_column1\":\"50%\",\"height_column1\":\"50%\",\"width_column2\":\"50%\",\"height_column2\":\"50%\",\"image_top\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/top_image.png\",\"image_top_alt\":\"The top image\",\"image_top_width\":\"600px\",\"image_top_height\":\"100px\",\"image_bottom\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/bottom_image.png\",\"image_bottom_alt\":\"The bottom image\",\"image_bottom_width\":\"600px\",\"image_bottom_height\":\"100px\",\"table_background\":\"#FFFFFF\",\"text_color\":\"#888888\",\"t_style_id\":\"5\"}',1);
+INSERT  INTO `#__newsletter_template_styles`(`t_style_id`,`template`,`title`,`params`) VALUES (6,'singlecolumn1.xml','Standard singlecolumn template (custom)','{\"width_column1\":\"50%\",\"height_column1\":\"50%\",\"width_column2\":\"50%\",\"height_column2\":\"50%\",\"image_top\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/top_image.png\",\"image_top_alt\":\"The top image\",\"image_top_width\":\"600px\",\"image_top_height\":\"100px\",\"image_bottom\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/bottom_image.png\",\"image_bottom_alt\":\"The bottom image\",\"image_bottom_width\":\"600px\",\"image_bottom_height\":\"100px\",\"table_background\":\"#FFFFFF\",\"text_color\":\"#888888\",\"t_style_id\":\"6\"}',1);
+INSERT  INTO `#__newsletter_template_styles`(`t_style_id`,`template`,`title`,`params`) VALUES (8,'threecolumn1.xml','Standard threecolumn template (custom)','{\"width_column1\":\"50%\",\"height_column1\":\"50%\",\"width_column2\":\"50%\",\"height_column2\":\"50%\",\"image_top\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/top_image.png\",\"image_top_alt\":\"The top image\",\"image_top_width\":\"600px\",\"image_top_height\":\"100px\",\"image_bottom\":\"administrator\\/components\\/com_newsletter\\/extensions\\/img\\/bottom_image.png\",\"image_bottom_alt\":\"The bottom image\",\"image_bottom_width\":\"600px\",\"image_bottom_height\":\"100px\",\"table_background\":\"#FFFFFF\",\"text_color\":\"#888888\",\"t_style_id\":\"8\"}',1);
 
 # Data for the table `#__newsletter_subscribers`;
 insert  into `#__newsletter_subscribers`(`subscriber_id`,`name`,`email`,`state`,`html`,`user_id`,`created_on`,`created_by`,`modified_on`,`modified_by`,`locked_on`,`locked_by`,`confirmed`,`subscription_key`) values (1,'John Doe','john-doe123123123@gmail.com',1,1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00',0,'1','1234560000000011234567890');
@@ -430,7 +433,7 @@ insert  into `#__newsletter_sub_list`(`sublist_id`,`subscriber_id`,`list_id`,`co
 insert  into `#__newsletter_sub_list`(`sublist_id`,`subscriber_id`,`list_id`,`confirmed`) values (2,1,2,1);
 
 # Data for the table `#__newsletter_newsletters`;
-insert  into `#__newsletter_newsletters`(`newsletter_id`,`name`,`subject`,`alias`,`smtp_profile_id`,`t_style_id`,`plain`,`params`,`ordering`,`language`,`checked_out`,`checked_out_time`,`created`,`sent_started`,`type`) VALUES (1,'Birthday of Baby Doe!','Baby Doe','birthdayofbabydoe',0,6,'Meet the Baby Doe!\nCongratulations for [username]! \n\nTo unsubscribe: [unsubscription link]','{\"newsletter_from_name\":\"John Doe\",\"newsletter_from_email\":\"johndoe@example.com\",\"newsletter_to_name\":\"John Doe\",\"newsletter_to_email\":\"johndoe@example.com\"}',0,'',0,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0);
+insert  into `#__newsletter_newsletters`(`newsletter_id`,`name`,`subject`,`alias`,`smtp_profile_id`,`t_style_id`,`plain`,`params`,`ordering`,`language`,`checked_out`,`checked_out_time`,`created`,`sent_started`,`type`) VALUES (1,'Birthday of Baby Doe!','Baby Doe','birthdayofbabydoe',0,6,'Meet the Baby Doe!\nCongratulations for [username]! \n\nTo unsubscribe: [unsubscription link]','{\"newsletter_from_name\":\"John Doe\",\"newsletter_from_email\":\"johndoe@example.com\",\"newsletter_to_name\":\"John Doe\",\"newsletter_to_email\":\"johndoe@example.com\"}',0,'',0,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,1);
 # Data for the table `#__newsletter_newsletters_ext`;
 insert  into `#__newsletter_newsletters_ext`(`newsletters_ext_id`,`newsletter_id`,`extension_id`,`position`,`params`,`ordering`,`native`,`title`,`showtitle`) values (1,1,4,'header_module_position','{"text":"<p>Hi! Wellocme to migur newsletter. You need to complete registration. Please follow this link<\/p>\n<p>[confirmation link]<\/p>"}',1,0,'Welcome to Migur Newsletter',1);
 insert  into `#__newsletter_newsletters_ext`(`newsletters_ext_id`,`newsletter_id`,`extension_id`,`position`,`params`,`ordering`,`native`,`title`,`showtitle`) values (6,96,4,'header_module_position','{\"text\":\"<p>Meet the Baby Doe!<\\/p>\\n<p>Congratulations for [username]!<\\/p>\"}',1,0,'Text Module',1);

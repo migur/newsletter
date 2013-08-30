@@ -13,12 +13,12 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-window.addEvent('domready', 
+window.addEvent('domready',
 
 	function() {
-	
+
 		var glasses = $$('.automailingslist .search')
-		
+
 		// Add AJAX preview functionality to glasses
 		glasses.addEvent('click', function(){
 

@@ -93,7 +93,9 @@
 				} else {
 					echo $this->escape($item->name);
 				}
-				?>
+				if($item->state == -2) { ?>
+					&nbsp;&nbsp;&nbsp;<span class="icon-16-trash icon-block-16"></span>
+				<?php }	?>
 				</td>
 				<td>
 					<?php
