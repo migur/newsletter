@@ -88,7 +88,7 @@ class NewsletterViewAutomailings extends MigurView
 		$state	= $this->get('State');
 
 		if ($state->get('filter.published') == MigurModelList::STATE_TRASHED) {
-			$bar->appendButton('Migurstandard', 'publish', 'JTOOLBAR_PUBLISH', 'automailings.publish', true);
+			$bar->appendButton('Migurstandard', 'publish', 'COM_NEWSLETTER_UNTRASH', 'automailings.publish', true);
 			$bar->appendButton('Migurstandard', 'delete', 'JTOOLBAR_EMPTY_TRASH', 'automailings.delete');
 		} else {
 			$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_TRASH', 'automailings.trash');
