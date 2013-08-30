@@ -7,22 +7,25 @@ defined('_JEXEC') or die;
     <tr>
         <td width="45%" style="vertical-align: top;">
 
-            <form id="form-templates" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=templates&form=templates');?>" method="post" name="templatesForm" >
+            <form id="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=templates&form=templates');?>" method="post" name="adminForm" >
                 <fieldset>
                 <legend><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></legend>
 
-                <fieldset class="filter-bar" >
-                    <?php echo MigurToolbar::getInstance('templates')->render(); ?>
-                    <div id="templates-filter-panel-control" class="filter-panel-control"></div>
-                    <div class="clr"></div>
-                    <div id="templates-filter-panel" class="filter-panel">
-						<div class="fltlft">
-							<input type="text" name="filter_search" id="template_filter_search" class="migur-search" value="<?php echo $this->escape($this->templates->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
-							<button type="submit" class="migur-search-submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-							<button type="button" onclick="document.id('template_filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); return false; ?></button>
-						</div>
-                    </div>
-                </fieldset>
+                <div class="table-panel">
+					<div class="fltrt">
+	                    <?php echo MigurToolbar::getInstance('templates')->render(); ?>
+					</div>
+					<div style="margin-top:10px; float: left;">
+						<div><?php echo JText::_('COM_NEWSLETTER_SEARCH_AND_FILTERS'); ?></div>
+						<select name="filter_published" class="input-medium" onchange="this.form.submit()">
+							<option value="">- <?php echo JText::_('COM_NEWSLETTER_SELECT_STATE');?> -</option>
+							<?php echo JHtml::_('select.options', JHtml::_('multigrid.trashedOptions'), 'value', 'text', $this->get('state')->get('filter.published'), true);?>
+						</select>
+						<input type="text" name="filter_search" id="template_filter_search" class="migur-search" value="<?php echo $this->escape($this->templates->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
+						<button type="submit" class="migur-search-submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
+						<button type="button" onclick="document.id('template_filter_search').value='';this.form.submit(); return false;"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+					</div>
+                </div>
                 <table class="templateslist adminlist  table table-striped" width="100%">
                         <thead>
                                 <tr>
@@ -30,7 +33,7 @@ defined('_JEXEC') or die;
                                                 <input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
                                         </th>
                                         <th class="left">
-                                                <?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_TEMPLATE', 'a.title', $this->templates->listDirn, $this->templates->listOrder, null, null, 'templatesForm'); ?>
+                                                <?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_TEMPLATE', 'a.title', $this->templates->listDirn, $this->templates->listOrder, null, null, 'adminForm'); ?>
                                         </th>
                                 </tr>
                         </thead>
@@ -43,13 +46,13 @@ defined('_JEXEC') or die;
                         </tfoot>
                         <tbody>
                         <?php
-                                foreach ($this->templates->items as $i => $item) {
+							foreach ($this->templates->items as $i => $item) {
                             ?>
                                 <tr class="row<?php echo $i % 2; ?>">
                                         <td class="center">
                                             <?php
                                                 $idx = $item->t_style_id;
-                                                echo JHtml::_('multigrid.id', $i, $idx, false, 'cid', 'templatesForm');
+                                                echo JHtml::_('multigrid.id', $i, $idx, false, 'cid', 'adminForm');
                                             ?>
                                         </td>
                                         <td>
@@ -58,7 +61,9 @@ defined('_JEXEC') or die;
 											   class="modal" >
 												<?php echo $this->escape($item->title); ?>
 											</a>
-
+											<?php if($item->state == -2) { ?>
+												&nbsp;&nbsp;&nbsp;<span class="icon-16-trash icon-block-16"></span>
+											<?php }	?>
                                             <a href="#" class="search icon-16-search"></a>
                                         </td>
                                 </tr>

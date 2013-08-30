@@ -7,32 +7,18 @@
             <div class="clr"></div>
             <div id="newsletters-filter-panel" class="filter-panel">
 				<div class="fltlft">
+					<select name="filter_published" class="input-medium" onchange="this.form.submit()">
+						<option value="">- <?php echo JText::_('COM_NEWSLETTER_SELECT_STATE');?> -</option>
+						<?php echo JHtml::_('select.options', JHtml::_('multigrid.trashedOptions'), 'value', 'text', $this->get('state')->get('filter.published'), true);?>
+					</select>
+				</div>
+				<div class="fltlft">
 					<input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
 					<button type="submit" class="btn migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 					<button type="button" onclick="document.id('filter_search').value='';this.form.submit(); return false;"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 				</div>
             </div>
 	</fieldset>
-	<div>
-		<div class="filter-search btn-group pull-left">
-
-			<input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>"/>
-		</div>
-		<div class="btn-group pull-left">
-			<button type="submit" class="btn tip migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-			<button type="button"  class="btn tip" onclick="document.id('filter_search').value='';this.form.submit(); return false;"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
-		</div>
-	</div>
-	<div class="pull-left btn-group">
-
-	<div class="filter-panel-inner" data-role="panel-container-inner">
-		<div class="pull-left btn-group">
-			<select name="filter_published" class="input-medium" onchange="this.form.submit()">
-				<option value="">- <?php echo JText::_('COM_NEWSLETTER_SELECT_STATE');?> -</option>
-				<?php echo JHtml::_('select.options', JHtml::_('multigrid.enabledOptions', array('trashedOnly' => true)), 'value', 'text', $this->get('state')->get('filter.published'), true);?>
-			</select>
-		</div>
-	</div>
 
 	<table class="sslist adminlist  table table-striped" width="100%">
 	<thead>
@@ -75,7 +61,9 @@
 				} else {
 					echo $this->escape($item->name);
 				}
-				?>
+				if($item->state == -2) { ?>
+					&nbsp;&nbsp;&nbsp;<span class="icon-16-trash icon-block-16"></span>
+				<?php }	?>
 			</td>
 			<td>
 				<?php

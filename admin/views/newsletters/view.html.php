@@ -114,11 +114,10 @@ class NewsletterViewNewsletters extends MigurView
 
 		$state	= $this->get('State');
 
-		if ((int) $state->get('filter.published') == MigurModelList::STATE_TRASHED)
-		{
+		if ($state->get('filter.published') == MigurModelList::STATE_TRASHED) {
+			$bar->appendButton('Migurstandard', 'publish', 'JTOOLBAR_PUBLISH', 'newsletters.publish', false);
 			$bar->appendButton('Migurstandard', 'delete', 'JTOOLBAR_EMPTY_TRASH', 'newsletters.delete', true);
-		} else
-		{
+		} else {
 			$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_TRASH', 'newsletters.trash', false);
 		}
 

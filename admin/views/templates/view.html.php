@@ -89,10 +89,18 @@ class NewsletterViewTemplates extends MigurView
 	{
 		JToolBarHelper::title(JText::_('COM_NEWSLETTER_TEMPLATES_TITLE'), 'article.png');
 
-		$bar = MigurToolbar::getInstance();
-		$bar->appendButton('Migurstandard', 'new', 'JTOOLBAR_NEW', 'template.add', false);
+		$bar = MigurToolbar::getInstance('templates');
+		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=template&tmpl=component', 880, 680, 0, 0);
 		//$bar->appendButton('Migurstandard', 'edit', 'JTOOLBAR_EDIT', 'template.edit', false);
-		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'templates.delete', false);
+
+		$state	= $this->get('State');
+
+		if($state->get('filter.published') == MigurModelList::STATE_TRASHED) {
+			$bar->appendButton('Migurstandard', 'publish', 'JTOOLBAR_PUBLISH', 'templates.publish', false);
+			$bar->appendButton('Migurstandard', 'delete', 'JTOOLBAR_EMPTY_TRASH', 'templates.delete', true);
+		} else {
+			$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_TRASH', 'templates.trash', false);
+		}
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));

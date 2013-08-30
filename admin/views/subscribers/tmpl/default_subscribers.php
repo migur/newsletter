@@ -104,6 +104,9 @@
 						<?php echo $this->escape($item->name); ?>
 					</a>
 					<div class="<?php echo $subscriber->isJoomlaUserType()? 'juser-type-icon' : 'subscriber-type-icon'; ?>"></div>
+					<?php if($item->state == -2) { ?>
+						&nbsp;&nbsp;&nbsp;<span class="icon-16-trash icon-block-16"></span>
+					<?php }	?>
 				</td>
 				<td class="subscriber-email">
 					<?php echo $this->escape($subscriber->email); ?>
