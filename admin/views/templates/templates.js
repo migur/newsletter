@@ -52,21 +52,6 @@ window.addEvent('domready', function() {
                 }
             });
         }
-    });
-}
-
-
-		/* Expand the functionality of the edit button */
-		edit.addEvent('click', function(ev){
-
-			ev.stop();
-
-			checkboxes.each(function(el){
-				if(el.getProperty('checked')) {
-					el.getParent('tr').getElements('.modal').fireEvent('click');
-				}
-			});
-		});
 
 		var render = function(data){
 			$('preview-container').set('html', data.content || '');

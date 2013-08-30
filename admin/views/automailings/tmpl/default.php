@@ -20,12 +20,18 @@ defined('_JEXEC') or die;
 			<div class="legend"><?php echo JText::_('COM_NEWSLETTER_AUTOMAILINGS'); ?></div>
 
 			<div>
+				<div class="pull-left btn-group">
+					<select name="filter_published" class="input-medium" onchange="this.form.submit()">
+						<option value="">- <?php echo JText::_('COM_NEWSLETTER_SELECT_STATE');?> -</option>
+						<?php echo JHtml::_('select.options', JHtml::_('multigrid.trashedOptions'), 'value', 'text', $this->get('state')->get('filter.published'), true);?>
+					</select>
+				</div>
 				<div class="filter-search btn-group pull-left">
 					<input type="text" name="filter_search" id="automailing_filter_search" class="migur-search" value="<?php echo $this->escape($this->automailings->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" placeholder="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>"/>
 				</div>
 				<div class="btn-group pull-left">
 					<button type="submit" class="btn tip migur-search-submit" data-original-title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-					<button rel="tooltip" onclick="document.id('automailing_filter_search').value='';this.form.submit(); return false;" type="button" class="btn tip" data-original-title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+					<button rel="tooltip" onclick="document.id('automailing_filter_search').value='';this.form.submit(); return false;" type="button" class="btn tip btn-danger" data-original-title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
 				</div>
 			</div>
 
@@ -62,7 +68,9 @@ defined('_JEXEC') or die;
 									<a href="<?php echo JRoute::_('index.php?option=com_newsletter&task=automailing.edit&automailing_id='.(int) $item->automailing_id); ?>">
 										<?php echo $this->escape($item->automailing_name); ?>
 									</a>
-
+									<?php if($item->state == -2) { ?>
+									&nbsp;&nbsp;&nbsp;<span class="icon-trash icon-block-16"></span>
+									<?php }	?>
 									<a href="#" class="search icon-search"></a>
 								</td>
 							</tr>

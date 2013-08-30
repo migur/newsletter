@@ -20,8 +20,8 @@ defined('_JEXEC') or die;
 			<input type="text" name="filter_search" id="template_filter_search" class="migur-search" value="<?php echo $this->escape($this->templates->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
 		</div>
 		<div class="pull-left btn-group">
-			<button type="submit" class="btn migur-search-submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-			<button type="button" class="btn btn-danger" onclick="document.id('template_filter_search').value='';this.form.submit(); return false;"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+			<button type="submit" class="btn tip migur-search-submit" data-original-title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
+			<button rel="tooltip" onclick="document.id('template_filter_search').value='';this.form.submit(); return false;" type="button" class="btn tip btn-danger" data-original-title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
 		</div>
 
 		<table class="templateslist adminlist  table table-striped" width="100%">
@@ -64,7 +64,7 @@ defined('_JEXEC') or die;
 										<?php echo $this->escape($item->title); ?>
 									</a>
 									<?php if($item->state == -2) { ?>
-										&nbsp;&nbsp;&nbsp;<span class="icon-16-trash icon-block-16"></span>
+										&nbsp;&nbsp;&nbsp;<span class="icon-trash icon-block-16"></span>
 									<?php }	?>
 
 									<a href="#" class="search icon-search"></a>

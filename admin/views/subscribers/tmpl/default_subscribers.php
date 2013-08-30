@@ -49,8 +49,8 @@
 						<input type="text" name="filter_search" id="ss_filter_search" class="migur-search" value="<?php echo $this->escape($this->subscribers->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
 					</div>
 					<div class="btn-group pull-left">
-						<button class="btn tip filter-search-button" type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-						<button class="btn tip" type="button" onclick="document.id('ss_filter_search').value='';document.subscribersForm.filter_list.value='';document.subscribersForm.filter_published.value='';this.form.submit(); return false;"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+						<button type="submit" class="btn tip migur-search-submit" data-original-title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
+						<button rel="tooltip" onclick="document.id('ss_filter_search').value='';document.subscribersForm.filter_list.value='';document.subscribersForm.filter_published.value='';this.form.submit(); return false;" type="button" class="btn tip btn-danger" data-original-title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
 					</div>
 				</div>
 			</div>
@@ -123,7 +123,7 @@
 
 					<div class="<?php echo $subscriber->isJoomlaUserType()? 'juser-type-icon' : 'subscriber-type-icon'; ?>"></div>
 					<?php if($item->state == -2) { ?>
-						&nbsp;&nbsp;&nbsp;<span class="icon-16-trash icon-block-16"></span>
+						&nbsp;&nbsp;&nbsp;<span class="icon-trash icon-block-16"></span>
 					<?php }	?>
 				</td>
 				<td class="subscriber-email">
