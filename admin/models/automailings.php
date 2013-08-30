@@ -106,6 +106,14 @@ class NewsletterModelAutomailings extends MigurModelList
 			$query->where('(a.automailing_name LIKE ' . $search . ')');
 		}
 
+		// Filter by published state
+		$published = $this->getState('filter.published');
+		if (in_array($published, array('0', '1', '-2'))) {
+			$query->where('a.state = ' . (int) $published);
+		} elseif($published != '*') {
+			$query->where('a.state >= 0');
+		}
+
 		// Add the list ordering clause.
 		// Need to be setted in populateState
 		$orderCol = $this->state->get('list.ordering', 'a.automailing_name');

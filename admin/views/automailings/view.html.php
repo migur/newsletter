@@ -90,7 +90,15 @@ class NewsletterViewAutomailings extends MigurView
 		));
 //		$bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_newsletter&view=automailing&tmpl=component', 400, 300, 0, 0);
 //		$bar->appendButton('Link', 'edit', 'JTOOLBAR_EDIT', 'automailing.edit', false);
-		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'automailings.delete', true);
+
+		$state	= $this->get('State');
+
+		if ($state->get('filter.published') == MigurModelList::STATE_TRASHED) {
+			$bar->appendButton('Migurstandard', 'publish', 'COM_NEWSLETTER_UNTRASH', 'automailings.publish', true);
+			$bar->appendButton('Migurstandard', 'delete', 'JTOOLBAR_EMPTY_TRASH', 'automailings.delete');
+		} else {
+			$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_TRASH', 'automailings.trash');
+		}
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));

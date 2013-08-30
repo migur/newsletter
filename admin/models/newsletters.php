@@ -69,7 +69,7 @@ class NewsletterModelNewsletters extends MigurModelList
 				'n.checked_out AS checked_out,' .
 				'n.checked_out_time AS checked_out_time,' .
 				'n.ordering AS ordering,' .
-				'n.language, n.sent_started, "---" AS sent_to'
+				'n.language, n.sent_started, "---" AS sent_to, n.state'
 			)
 		);
 		$query->from('`#__newsletter_newsletters` AS n');

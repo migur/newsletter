@@ -7,18 +7,18 @@
  */
 
 window.addEvent('domready', function() {
-	
+
 		var edit  = $$('#templates-edit > button');
 		var trash = $$('#templates-trash > button');
 		var glasses = $$('.templateslist .search')
 		var checkboxes = $$('.templateslist [type=checkbox]');
-		
+
 		var buttons = [edit, trash];
 
 		// Manipulates with access to a buttons depending on checkboxes
 		var updateBtnState = function() {
-			
-			checkboxes.some(function(el){ return el.get('checked') })? 
+
+			checkboxes.some(function(el){ return el.get('checked') })?
 
 				buttons.each(function(el){
 					 el.removeClass('disabled');
@@ -28,7 +28,7 @@ window.addEvent('domready', function() {
 					 el.addClass('disabled');
 				});
 		}
-		
+
 		checkboxes.addEvent('click', updateBtnState);
 		buttons.each(function(el) { el.removeProperty('onclick'); });
 		updateBtnState();
@@ -36,15 +36,24 @@ window.addEvent('domready', function() {
 		/* Expand the functionality of the delete button */
 		trash.addEvent('click', function() {
 			if (
-				$(this).hasClass('disabled') == false && 
-				confirm('One or more newsletters may use this template(s). Do you want to delete?') 
+				$(this).hasClass('disabled') == false &&
+				confirm('One or more newsletters may use this template(s). Do you want to delete?')
 			) {
 				Joomla.submitform('templates.delete', $$('[name=templatesForm]')[0]);
 			};
-			
+
 			return false;
 		});
 
+        if ($$('[name=cid[]]').length > 0) {
+            $$('[name=cid[]]').each(function(el){
+                if(el.getProperty('checked')) {
+                    el.getParent('tr').getElements('.modal').fireEvent('click');
+                }
+            });
+        }
+    });
+}
 
 
 		/* Expand the functionality of the edit button */
@@ -80,9 +89,9 @@ window.addEvent('domready', function() {
 						type: 'html' },
 
 					onComplete: function(res){
-						
+
 						$('container-preloader').removeClass('preloader');
-						
+
 						render(res.data)
 						$('preview-container').set('html', res.data.content);
 						$('tpl-title').set('text', res.data.information.name);
@@ -99,5 +108,5 @@ window.addEvent('domready', function() {
 
 
 			glasses[0].fireEvent('click');
-		}	
+		}
 });

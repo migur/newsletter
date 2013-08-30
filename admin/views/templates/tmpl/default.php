@@ -11,6 +11,12 @@ defined('_JEXEC') or die;
 		<div class="legend"><?php echo JText::_('COM_NEWSLETTER_TEMPLATES'); ?></div>
 
 		<div class="pull-left btn-group">
+			<select name="filter_published" class="input-medium" onchange="this.form.submit()">
+				<option value="">- <?php echo JText::_('COM_NEWSLETTER_SELECT_STATE');?> -</option>
+				<?php echo JHtml::_('select.options', JHtml::_('multigrid.trashedOptions'), 'value', 'text', $this->get('state')->get('filter.published'), true);?>
+			</select>
+		</div>
+		<div class="pull-left btn-group">
 			<input type="text" name="filter_search" id="template_filter_search" class="migur-search" value="<?php echo $this->escape($this->templates->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>" />
 		</div>
 		<div class="pull-left btn-group">
@@ -54,9 +60,12 @@ defined('_JEXEC') or die;
 									?>
 								</td>
 								<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_newsletter&task=template.edit&t_style_id='.(int) $item->t_style_id); ?>">
-									<?php echo $this->escape($item->title); ?>
-								</a>
+									<a href="<?php echo JRoute::_('index.php?option=com_newsletter&task=template.edit&t_style_id='.(int) $item->t_style_id); ?>">
+										<?php echo $this->escape($item->title); ?>
+									</a>
+									<?php if($item->state == -2) { ?>
+										&nbsp;&nbsp;&nbsp;<span class="icon-16-trash icon-block-16"></span>
+									<?php }	?>
 
 									<a href="#" class="search icon-search"></a>
 								</td>

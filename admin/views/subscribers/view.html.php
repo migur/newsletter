@@ -114,13 +114,9 @@ class NewsletterViewSubscribers extends MigurView
 
 		$listsState = $listsModel->getState();
 
-		if ((int) $state->get('filter.published') == MigurModelList::STATE_TRASHED)
-		{
-			$bar->appendButton('Migurstandard', 'delete', 'JTOOLBAR_EMPTY_TRASH', 'subscribers.delete', true);
-		} else
-		{
+		$state->get('filter.published') == MigurModelList::STATE_TRASHED ?
+			$bar->appendButton('Migurstandard', 'delete', 'JTOOLBAR_EMPTY_TRASH', 'subscribers.delete', true):
 			$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_TRASH', 'subscribers.trash', false);
-		}
 
 		$bar->appendButton('Migurstandard', 'publish', 'JTOOLBAR_ENABLE', 'subscribers.publish', false);
 		$bar->appendButton('Migurstandard', 'unpublish', 'JTOOLBAR_DISABLE', 'subscribers.unpublish', false);
@@ -151,14 +147,9 @@ class NewsletterViewSubscribers extends MigurView
 			$bar->appendButton('Migurstandard', 'new', 'COM_NEWSLETTER_NEW_LIST_CREATE', 'list.add', false);
 		}
 
-		if ((int) $listsState->get('filter.published') == -2)
-		{
-			$bar->appendButton('Migurstandard', 'delete', 'JTOOLBAR_EMPTY_TRASH', 'lists.delete', false);
-		} else
-		{
+		$listsState->get('filter.published') == MigurModelList::STATE_TRASHED ?
+			$bar->appendButton('Migurstandard', 'delete', 'JTOOLBAR_EMPTY_TRASH', 'lists.delete', false):
 			$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_TRASH', 'lists.trash', false);
-		}
-//		$bar->appendButton('Migurstandard', 'trash', 'JTOOLBAR_DELETE', 'lists.delete', false);
 
 		if (NewsletterHelperAcl::actionIsAllowed('list.edit')) {
 			$bar->appendButton('Migurstandard', 'unpublish', 'JTOOLBAR_DISABLE', 'lists.unpublish', false);
