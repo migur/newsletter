@@ -33,7 +33,7 @@ class NewsletterClassMailerDocument extends JDocument
 	public $parsedTags;
 	public $_caching;
 	public $useRawUrls;
-	
+
 	// Hotfix. Need to remove when we remove tracking from here.
 	public $dispatcher;
 
@@ -68,7 +68,7 @@ class NewsletterClassMailerDocument extends JDocument
 		parent::$_buffer = array();
 
 		$this->tracking   = isset($params['tracking'])? (bool)$params['tracking'] : true;
-		
+
 		$this->directory = !empty($params['directory']) ?
 			$params['directory'] : JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'templates';
 
@@ -78,14 +78,14 @@ class NewsletterClassMailerDocument extends JDocument
 		$this->showNames = !empty($params['showNames']);
 
 		$this->useRawUrls = !empty($params['useRawUrls']);
-		
+
 		// if we already get the template then work with it.
 		if (!empty($params['template'])) {
 			$this->_template = $params['template'];
 			return true;
 		}
 
-		
+
 		// if request contains the letter ID...
 		if (!empty($params['newsletter_id'])) {
 			$this->_letter = $this->loadLetter($params['newsletter_id']);
@@ -98,7 +98,7 @@ class NewsletterClassMailerDocument extends JDocument
 			$this->_template = $this->_loadTemplate($params['t_style_id']);
 			return true;
 		}
-		
+
 		$this->setError('The PLAIN is not allowed because the NEWSLETTER is not loaded');
 		return false;
 	}
@@ -169,7 +169,7 @@ class NewsletterClassMailerDocument extends JDocument
 	public static function factory($type = 'html', $attributes = array())
 	{
 		$signature = serialize(array($type, $attributes));
-		
+
 		// Determine the path and class
 		$class = 'NewsletterClassMailerDocument' . $type;
 		if (!class_exists($class)) {
@@ -184,7 +184,7 @@ class NewsletterClassMailerDocument extends JDocument
 
 		return  new $class($attributes);
 	}
-	
+
 	/**
 	 * Get the template
 	 *
@@ -212,8 +212,8 @@ class NewsletterClassMailerDocument extends JDocument
 	{
 		if (empty($this->_template)) {
 			throw new Exception('ParseTemplate: template entity is empty');
-		}	
-		
+		}
+
 		$replaces = array();
 		foreach ($this->parsedTags as $name => $val) {
 			$matches = array();
@@ -247,7 +247,7 @@ class NewsletterClassMailerDocument extends JDocument
 		}
 
 		$this->_parsed = $replaces;
-		
+
 		return true;
 	}
 
@@ -263,10 +263,10 @@ class NewsletterClassMailerDocument extends JDocument
 	public function render($caching = false, $params = array())
 	{
 		try {
-			
+
 			// Load newseltter language
 			JFactory::getLanguage()->load('com_newsletter_modules', JPATH_ADMINISTRATOR);
-			
+
 			// Set the mode of rendering of URLs
 			if(!empty($this->useRawUrls) || !empty($params['useRawUrls'])) {
 				// Set mode for the global router to RAW
@@ -274,9 +274,9 @@ class NewsletterClassMailerDocument extends JDocument
 				if (!empty($router)) {
 					$sefMode = $router->getMode();
 					$router->setMode(JROUTER_MODE_RAW);
-				}	
+				}
 			}
-			
+
 			// first pass of rendering.
 			$this->parse();
 			$this->_template->content = $this->_renderTemplate();
@@ -295,7 +295,7 @@ class NewsletterClassMailerDocument extends JDocument
 
 			if (!empty($params['newsletter_id'])) {
 				$this->dispatcher->trigger('onMigurAfterNewsletterRender', array(
-					&$this->_template->content, 
+					&$this->_template->content,
 					array('newsletter_id' => $params['newsletter_id'])
 				));
 			}
@@ -309,18 +309,18 @@ class NewsletterClassMailerDocument extends JDocument
 					$params['newsletter_id']
 				);
 			}
-			
+
 			// Restore the mode of rendering of URLs
 			if(!empty($router) && isset($sefMode)) {
 				$router->setMode($sefMode);
 			}
-			
+
 			return $this->_template->content;
-			
+
 		} catch(Exception $e) {
-			
+
 			return false;
-		}	
+		}
 	}
 
 	/**
@@ -504,15 +504,15 @@ class NewsletterClassMailerDocument extends JDocument
 		$content = NewsletterHelperContent::pathsToAbsolute($content);
 		return true;
 	}
-	
+
 	public function getNewsletterId() {
 		return isset($this->_letter->newsletter_id)? $this->_letter->newsletter_id : null;
 	}
-	
+
 	public function getContent() {
 		return $this->_template->content;
 	}
-	
+
 	public function setContent($content) {
 		$this->_template->content = (string)$content;
 	}
