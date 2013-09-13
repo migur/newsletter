@@ -35,6 +35,10 @@ class MigurModelList extends JModelList
 
 	protected $_queryType = null;
 
+	public $tableClassName = null;
+
+	public $tableClassPrefix = null;
+
 	/**
 	 * Method to auto-populate the model state.
 	 *
@@ -196,5 +200,58 @@ class MigurModelList extends JModelList
 		return explode($separator, $search, 1);
 	}
 
+	/**
+	 * Fetches items regardles of model's state.
+	 * You can set your own filters for fetching.
+	 *
+	 * @param $options array
+	 * @return array | null
+	 */
+	public function fetchItems($options)
+	{
+		// Create a new query object.
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select('a.*');
+
+		$query->from($db->quoteName($this->getTable()->getTableName()) . ' AS a');
+
+		if ($options['filters']) {
+			foreach($options['filters'] as $name => $value) {
+				$query->where($db->quoteName($name) . '=' . $db->quote($value));
+			}
+		}
+
+		if (!empty($options['ordering'])) {
+			$query->order($db->quoteName($options['ordering'][0]) . (!empty($options['ordering'][1])? ' '.$options['ordering'][1] : ''));
+		}
+
+		// echo $query; die;
+		$db->setQuery($query);
+		return $db->loadObjectList();
+	}
+
+	/**
+	 * Method to get a table object, load it if necessary.
+	 *
+	 * @param   string  $name     The table name. Optional.
+	 * @param   string  $prefix   The class prefix. Optional.
+	 * @param   array   $options  Configuration array for model. Optional.
+	 *
+	 * @return  JTable  A JTable object
+	 *
+	 * @since   12.2
+	 * @throws  Exception
+	 */
+	public function getTable($name = '', $prefix = '', $options = array())
+	{
+		$name = !empty($name)? $name : $this->tableClassName;
+		$prefix = !empty($prefix)? $prefix :
+			(!empty($this->tableClassPrefix)? $this->tableClassPrefix : 'Table');
+
+		return parent::getTable($name, $prefix, $options);
+	}
 }
 
