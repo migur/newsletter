@@ -122,20 +122,20 @@ class NewsletterModelTemplate extends JModelAdmin
 		if (strval(intval($id)) == strval($id)) {
 			$isCustom = true;
 			$item = $this->getItem($id);
-			
+
 			if (empty($item)) {
 				return false;
 			}
-			
+
 			$filename = $item->template;
-			
+
 		} else {
 			$item = new JObject($this->getTable()->getProperties(1));
-			
+
 			if (empty($item)) {
 				return false;
 			}
-			
+
 			$filename = $id;
 		}
 
@@ -146,7 +146,7 @@ class NewsletterModelTemplate extends JModelAdmin
 		}
 
 		try {
-			
+
 			$xml = simplexml_load_file($fullfile, 'SimpleXMLElement' ,LIBXML_NOCDATA);
 			$str = trim((string)$xml->template);
 			if (!$preserve) {
@@ -200,12 +200,12 @@ class NewsletterModelTemplate extends JModelAdmin
 	/**
 	 * Get all column placeholders from templice.
 	 * Something like table_width1 or table_height2.
-	 * 
+	 *
 	 * @param string $tid Filename of template
-	 * 
+	 *
 	 * @return array Array of names of placeholdedrs
 	 */
-	public function getColumnPlaceholders($content) 
+	public function getColumnPlaceholders($content)
 	{
 		$placeholders = NewsletterHelperPlaceholder::fetchFromString($content);
 
@@ -216,7 +216,7 @@ class NewsletterModelTemplate extends JModelAdmin
 				$res[] = $ph;
 			}
 		}
-		
+
 		return $res;
 	}
 }

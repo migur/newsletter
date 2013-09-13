@@ -111,7 +111,7 @@ class NewsletterViewNewsletter extends MigurView
 		$templateModel = MigurModel::getInstance('templates', 'NewsletterModel');
 		$this->setModel($templateModel);
 		$model = $this->getModel('templates');
-		$templs = $model->getItems();
+		$templs = $model->fetchActiveItems(array('ordering' => array('title', 'asc')));
 		$path = JPATH_COMPONENT . '/extensions/templates/';
 		$filenames = JFolder::files($path, '^.*\.xml$');
 		if ($filenames === false) {

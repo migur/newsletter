@@ -16,11 +16,11 @@ JLoader::import('helpers.placeholder', COM_NEWSLETTER_PATH_ADMIN);
 class NewsletterHelperMail
 {
 	const APPLICATION_HEADER = 'X-Application: Migur Newsletter';
-	
+
 	const EMAIL_NAME_HEADER = 'X-Email-Name';
-	
+
 	const NEWSLETTER_ID_HEADER = 'X-Newsletter-Id';
-	
+
 	const SUBSCRIBER_ID_HEADER = 'X-Subscriber-Id';
 	/*
 	 * The allowed types of a letter
@@ -29,11 +29,11 @@ class NewsletterHelperMail
 
 	public static $bounceds = array();
 
-	
+
 	/**
 	 * Load letter from DB, load SMTP settings
 	 * TODO: Move this to NewsletterModel or NewsletterModelEntity
-	 * 	
+	 *
 	 * @param <string> $name - id of a letter
 	 *
 	 * @return object - letter
@@ -44,11 +44,13 @@ class NewsletterHelperMail
 		$letter = JTable::getInstance('Newsletter', 'NewsletterTable');
 		$letter->load((int) $id);
 
-		// If letter absent then fail.
-		if (!$letter) {
-			return false;
+		// If letter is absent or trashed then fail.
+		if (!$letter || (!empty($letter->state) && $letter->state == COM_NEWSLETTER_ENTITY_STATE_TRASHED)) {
+			$ex = new Exception('COM_NEWSLETTER_EXCEPTION_NEWSLETTER_ABSENT_OR_TRASHED');
+			$ex->id = $id;
+			throw $ex;
 		}
-		
+
 		$letter = (object) $letter->getProperties();
 		$letter->params = (array) json_decode($letter->params);
 		if (empty($letter->params['encoding'])) {
@@ -58,7 +60,7 @@ class NewsletterHelperMail
 
 		$profileEntity = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$profileEntity->load((int)$letter->smtp_profile_id);
-		
+
 		$letter->smtp_profile = $profileEntity->toObject();
 
 
@@ -78,14 +80,14 @@ class NewsletterHelperMail
 				$letter->smtp_profile->reply_to_name = $letter->params['newsletter_to_name'];
 			}
 		}
-	
+
 		return $letter;
 	}
 
 	/**
-	 * Deprecated and not used 
+	 * Deprecated and not used
 	 * Should be removed after 12.07
-	 * 
+	 *
 	 * Get all subscribers binded to list with $id.
 	 *
 	 * @param string $name - id of a letter
@@ -157,11 +159,11 @@ class NewsletterHelperMail
 		$res->password = $data['smtppass'];
 		$res->mailbox_profile_id = NewsletterTableMailboxprofile::MAILBOX_DEFAULT;
 		$res->params = new stdClass();
-		
+
 		return $res;
 	}
 
-	
+
 	/**
 	 *
 	 * Get SMTP default profile or J! profile if the default is not configured.
@@ -175,7 +177,7 @@ class NewsletterHelperMail
 	{
 		$options = JComponentHelper::getComponent('com_newsletter');
 		$options = $options->params->toArray();
-		
+
 		$id = empty($options['general_smtp_default'])? 0 : (int)$options['general_smtp_default'];
 
 		// If we need only smtpID
@@ -188,7 +190,7 @@ class NewsletterHelperMail
 		if (empty($id)) {
 			return self::getJoomlaProfile();
 		}
-		
+
 		// Get profile. Create a new query object.
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -200,7 +202,7 @@ class NewsletterHelperMail
 		$db->setQuery($query);
 		return $db->loadObject();
 	}
-	
+
 	/**
 	 *
 	 * Get default Mailbox profile or empty if the default is not configured.
@@ -212,10 +214,10 @@ class NewsletterHelperMail
 	 */
 	public static function getDefaultMailbox($onlyId = false)
 	{
-		
+
 		$options = JComponentHelper::getComponent('com_newsletter');
 		$options = $options->params->toArray();
-		
+
 		$id = empty($options['general_mailbox_default'])? 0 : (int)$options['general_mailbox_default'];
 
 		// If we need only smtpID

@@ -99,11 +99,11 @@ class NewsletterClassMailerDocumentHTML extends NewsletterClassMailerDocument
 			// Override some placeholders
 			NewsletterHelperPlaceholder::setPlaceholder('table_background', null, '#FFFFFF');
 			NewsletterHelperPlaceholder::setPlaceholder('text_color', null, '#000000');
-			
+
 			// Don't parse any IMG
 		}
-		
-		
+
+
 		if ($this->renderMode == 'schematic') {
 
 			// replace all POSITIONs to DIVs with schematic mode
@@ -180,10 +180,12 @@ class NewsletterClassMailerDocumentHTML extends NewsletterClassMailerDocument
 		$model = MigurModel::getInstance("Template", "NewsletterModel");
 		$template = $model->getTemplateBy($id, 'preserve positions!');
 
-		if (!$template) {
-			$this->setError($model->getError());
-			return false;
+		if (!$template || !empty($template->state) && $template->state == COM_NEWSLETTER_ENTITY_STATE_TRASHED) {
+			$ex = new Exception('COM_NEWSLETTER_EXCEPTION_TEMPLATE_ABSENT_OR_TRASHED');
+			$ex->id = $id;
+			throw $ex;
 		}
+
 		$template->params = $this->_mapParams($template->params);
 		NewsletterHelperPlaceholder::setPlaceholders($template->params);
 
@@ -225,11 +227,11 @@ class NewsletterClassMailerDocumentHTML extends NewsletterClassMailerDocument
 
 	/**
 	 * Method implements the com_newsletter tracking functionality.
-	 * 
-	 * @param type $content - the content 
+	 *
+	 * @param type $content - the content
 	 * @param type $uid     - subscription key
 	 * @param type $newsletterId - newsletter id
-	 * @return type 
+	 * @return type
 	 */
 	function track(&$content, $uid, $newsletterId)
 	{
@@ -251,7 +253,7 @@ class NewsletterClassMailerDocumentHTML extends NewsletterClassMailerDocument
 	function _trackLinks(&$content, $uid, $newsletterId)
 	{
 		$allowedSchemes = array('http', 'https');
-		
+
 		// Find all ahrefs
 		$pat =
 			'(?:(?:href\s*\=\s*\"\s*)([^\"]+)\")|'. // Double quoted case
@@ -262,38 +264,38 @@ class NewsletterClassMailerDocumentHTML extends NewsletterClassMailerDocument
 		// Make it multiline caseinsensetive
 		$matches = array();
 		preg_match_all("/$pat/im", $content, $matches);
-		
+
 		// Create unique pattern-url pairs for substitution
 		$urls = array();
 		$patterns = $matches[0];
 		for($i=0; $i < count($patterns); $i++) {
-			
+
 			// Make it unique!
 			if (array_key_exists($patterns[$i], $urls)) {
 				continue;
-			}	
+			}
 
 			// Try to get url
 			$url = null;
-			
+
 			do {
 				if (!empty($matches[1][$i])) { $url = $matches[1][$i]; break; }
 				if (!empty($matches[2][$i])) { $url = $matches[2][$i]; break; }
 				if (!empty($matches[3][$i])) { $url = $matches[3][$i]; break; }
 				break;
-			} while(false);	
+			} while(false);
 
 			// If there is no extracted url then just do not modify it
 			if (!$url) continue;
-				
+
 			// Check if scheme of url is allowed to be tracked
 			$allowed = false;
 			foreach($allowedSchemes as $scheme) {
 				if (strpos($url, $scheme) === 0) {
 					$allowed = true;
 					break;
-				}	
-			}	
+				}
+			}
 
 			// If url is not allowed then just skip it
 			if (!$allowed) {
@@ -307,12 +309,12 @@ class NewsletterClassMailerDocumentHTML extends NewsletterClassMailerDocument
 				).
 					'&link=' . urlencode(base64_encode($url)),
 				$patterns[$i]
-			);	
+			);
 		}
 
 		// Finaly replace patterns with allowed processed modifications
 		$content = str_replace(array_keys($urls), array_values($urls), $content);
-			
+
 		return true;
 	}
 
