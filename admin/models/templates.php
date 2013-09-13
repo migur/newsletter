@@ -20,6 +20,8 @@ jimport('joomla.utilities.simplexml');
  */
 class NewsletterModelTemplates extends MigurModelList
 {
+	public $tableClassName = 'Template';
+	public $tableClassPrefix = 'NewsletterTable';
 
 	/**
 	 * The constructor of a class
@@ -31,7 +33,6 @@ class NewsletterModelTemplates extends MigurModelList
 	 */
 	public function __construct($config = array())
 	{
-
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = array(
 				't_style_id', 'a.t_style_id',
@@ -216,4 +217,18 @@ class NewsletterModelTemplates extends MigurModelList
 
 		return $standards;
 	}
+
+
+	/**
+	 * Shorthand for fetching non-deleted templates only and order it.
+	 * @param $options
+	 * @return array | null
+	 */
+	public function fetchActiveItems($options) {
+
+		$options['filters']['state'] = '1';
+
+		return $this->fetchItems($options);
+	}
+
 }
