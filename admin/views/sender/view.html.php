@@ -66,21 +66,14 @@ class NewsletterViewSender extends MigurView
 
 		$modelLists = $this->getModel('lists');
 
-		JRequest::setVar('limit', 1);
-		$limit = $modelLists->setState('limit', 1);
-		$modelLists->filtering = array('state' => '1');
-
 		$lists = (object) array(
-				'items' => $modelLists->getItems(),
+				'items' => $modelLists->fetchItems(array('filters' => array('state' => '1'))),
 				'pagination' => new JPagination(10, 0, 5), // used to get the pagination layout for JS pagination
-				'state' => $modelLists->getState(),
-				'listOrder' => $modelLists->getState('list.ordering'),
-				'listDirn' => $modelLists->getState('list.direction')
+				'listOrder' => 'name',
+				'listDirn' => 'asc'
 		);
 
 		NewsletterHelperJavascript::addStringVar('defaultMailbox', NewsletterHelperMail::getDefaultMailbox('idOnly'));
-
-		$modelLists->setState('limit', $limit);
 
 		$this->assignRef('lists', $lists);
 
