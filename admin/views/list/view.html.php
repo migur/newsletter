@@ -141,7 +141,7 @@ class NewsletterViewList extends MigurView
 		));
 
 		$this->lists = (object) array(
-				'items' => $model->getItems(),
+				'items' => $model->getAllActive(),
 				'state' => $model->getState(),
 				'listOrder' => $model->getState('list.ordering'),
 				'listDirn' => $model->getState('list.direction')
