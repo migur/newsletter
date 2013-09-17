@@ -36,13 +36,13 @@ try {
 
 	// Setup the cache
 	MigurComNewsletterBootstrap::initCache();
-	
+
 	// Add translations used in JavaScript
 	NewsletterHelperJavascript::requireTranslations();
 
 	// Load 'Migur' group of plugins
-	NewsletterHelperPlugin::prepare();	
-	
+	NewsletterHelperPlugin::prepare();
+
 	$app = JFactory::getApplication();
 	$app->triggerEvent('onMigurStart');
 
@@ -61,11 +61,11 @@ try {
 	// Get an instance of the controller
 	// Here we get full task and preserve it from exploding
     JRequest::setVar('completetask', JRequest::getCmd('task'));
-    
+
 	$controller = JController::getInstance('Newsletter');
-	
+
 	// Perform the Request task
-	// Here we get only tail of a task 
+	// Here we get only tail of a task
 	$taskMethod = JFactory::getApplication()->input->get('task');
 	$controller->execute($taskMethod);
 
@@ -90,13 +90,16 @@ try {
 			$app->enqueueMessage(JText::_('COM_NEWSLETTER_LICENSE_INVALID'), 'error');
 		}
 	}
-	
+
+	// Do all things at the end of component lifetime.
+	MigurComNewsletterBootstrap::shutDown();
+
 } catch (Exception $e) {
-	
+
 	NewsletterHelperLog::addDebug(
 		'COM_NEWSLETTER_UNCAUGHT_EXCEPTION',
 		'common',
 		$e);
-	
+
 	throw $e;
 }
