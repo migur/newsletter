@@ -23,7 +23,7 @@ JLoader::import('helpers.data', JPATH_COMPONENT_ADMINISTRATOR, '');
 class NewsletterModelAutomailingItems extends MigurModelList
 {
 	public $automailingId = null;
-	
+
 	/**
 	 * Method to auto-populate the model state.
 	 * Note. Calling getState in this method will result in recursion.
@@ -34,7 +34,7 @@ class NewsletterModelAutomailingItems extends MigurModelList
 	 * @return void
 	 * @since  1.0
 	 */
-	protected function populateState($ordering = null, $direction = null)
+	protected function populateState($ordering = null, $direction = null, $options = array())
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication();
@@ -108,7 +108,7 @@ class NewsletterModelAutomailingItems extends MigurModelList
 		if (!empty($this->automailingId)) {
 			$query->where('ai.automailing_id='.(int)$this->automailingId);
 		}
-		
+
 		// Filter by search in title.
 //		$search = $this->getState('filter.search');
 //		if (!empty($search)) {
@@ -116,7 +116,7 @@ class NewsletterModelAutomailingItems extends MigurModelList
 //			$query->where('(a.timeoffset LIKE ' . $search . ')');
 //		}
 
-		// Add the list ordering clause. 
+		// Add the list ordering clause.
 		// Need to be setted in populateState
 //		$orderCol = $this->state->get('list.ordering');
 //		$orderDirn = $this->state->get('list.direction');
@@ -125,24 +125,24 @@ class NewsletterModelAutomailingItems extends MigurModelList
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		return $query;
 	}
-	
-	
+
+
 	/**
-	 * 
-	 * 
-	 * 
-	 * @return type 
+	 *
+	 *
+	 *
+	 * @return type
 	 */
-	public function getNormalizedItems($aid = null) 
+	public function getNormalizedItems($aid = null)
 	{
 		if (!empty($aid)) {
 			$this->automailingId = $aid;
-		}	
-		
+		}
+
 		$items = $this->getItems();
-		
+
 		foreach($items as $idx => &$item) {
-			
+
 			// If this is a first element then check the automailing type to determine
 			// verbal interpretation of it
 			if ($idx == 0) {
@@ -150,24 +150,24 @@ class NewsletterModelAutomailingItems extends MigurModelList
 					$item->time_verbal = JText::_('COM_NEWSLETTER_EVENT_SUBSCRIPTION');
 				} else {
 					$item->time_verbal = date('Y-m-d', strtotime($item->time_start));
-				}	
+				}
 			} else {
-				$item->time_verbal = 
-					(($item->time_offset > 0)? JText::_('COM_NEWSLETTER_AFTER').' ' : '') . 
+				$item->time_verbal =
+					(($item->time_offset > 0)? JText::_('COM_NEWSLETTER_AFTER').' ' : '') .
 					NewsletterHelperData::timeIntervaltoVerbal($item->time_offset);
 			}
 		}
-		
+
 		return $items;
 	}
 
-	
-	public function getAllItems($aid) 
+
+	public function getAllItems($aid)
 	{
 		if (!empty($aid)) {
 			$this->automailingId = $aid;
-		}	
-		
+		}
+
 		// Create a new query object.
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
@@ -182,7 +182,7 @@ class NewsletterModelAutomailingItems extends MigurModelList
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		$db->setQuery($query);
-		
+
 		return $db->loadObjectList();
 	}
 }

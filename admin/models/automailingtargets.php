@@ -23,7 +23,7 @@ JLoader::import('helpers.data', JPATH_COMPONENT_ADMINISTRATOR, '');
 class NewsletterModelAutomailingTargets extends MigurModelList
 {
 	public $automailingId = null;
-	
+
 	/**
 	 * Method to auto-populate the model state.
 	 * Note. Calling getState in this method will result in recursion.
@@ -34,7 +34,7 @@ class NewsletterModelAutomailingTargets extends MigurModelList
 	 * @return void
 	 * @since  1.0
 	 */
-	protected function populateState($ordering = null, $direction = null)
+	protected function populateState($ordering = null, $direction = null, $options = array())
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication();
@@ -106,42 +106,42 @@ class NewsletterModelAutomailingTargets extends MigurModelList
 		if (!empty($this->automailingId)) {
 			$query->where('automailing_id='.(int)$this->automailingId);
 		}
-		
+
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
 		return $query;
 	}
-	
-	
+
+
 	/**
-	 * 
-	 * 
-	 * 
-	 * @return type 
+	 *
+	 *
+	 *
+	 * @return type
 	 */
-	public function getNames($aid) 
+	public function getNames($aid)
 	{
 		$this->automailingId = $aid;
 
 		$items = $this->getItems();
-		
+
 		$ids = array(
-			'list' => array(), 
+			'list' => array(),
 			'subscriber' => array()
 		);
-		
+
 		$names = array(
-			'list' => array(), 
+			'list' => array(),
 			'subscriber' => array()
 		);
-		
+
 		foreach($items as &$item) {
 			$ids[$item->target_type][] = $item->target_id;
-		}	
-		
+		}
+
 		foreach($ids as $idx => &$idList) {
-			
+
 			if ($idx == 'list' && !empty($idList)) {
-				
+
 				$dbo = JFactory::getDbo();
 				$query = $dbo->getQuery(true);
 				$query->select('name')
@@ -150,10 +150,10 @@ class NewsletterModelAutomailingTargets extends MigurModelList
 				$dbo->setQUery($query);
 				$nms = $dbo->loadAssocList(null, 'name');
 				$names['list'] = array_merge($names['list'], $nms);
-			}	
+			}
 
 			if ($idx == 'subscriber' && !empty($idList)) {
-				
+
 				$dbo = JFactory::getDbo();
 				$query = $dbo->getQuery(true);
 				$query->select('name')
@@ -161,20 +161,20 @@ class NewsletterModelAutomailingTargets extends MigurModelList
 					  ->where('subscriber_id in ('.implode(',',$idList).')');
 				$dbo->setQUery($query);
 				$names['subscriber'] = array_merge($names['subscriber'], $dbo->loadAssocList(null, 'name'));
-			}	
+			}
 		}
-		
+
 		return $names;
 	}
-	
+
 
 	/**
-	 * 
-	 * 
-	 * 
-	 * @return type 
+	 *
+	 *
+	 *
+	 * @return type
 	 */
-	public function getRelatedLists($aid, $usePagination = false) 
+	public function getRelatedLists($aid, $usePagination = false)
 	{
 		$dbo = JFactory::getDbo();
 		$query = $dbo->getQuery(true);
@@ -188,16 +188,16 @@ class NewsletterModelAutomailingTargets extends MigurModelList
 			$dbo->setQuery($query, $this->getStart(), $this->getState('list.limit'));
 		} else {
 			$dbo->setQuery($query);
-		}	
+		}
 
 		return $dbo->loadObjectList();
 	}
 
-	
+
 	/**
-	 * Gets a list of all active lists 
+	 * Gets a list of all active lists
 	 * without pagination and other limitations
-	 * 
+	 *
 	 * @return array of objects
 	 */
 	public function findByAid($aid, $idonly = false)
@@ -208,15 +208,15 @@ class NewsletterModelAutomailingTargets extends MigurModelList
 		$query->select('*')
 			  ->from('#__newsletter_automailing_targets')
 		      ->where('automailing_id='.(int)$aid);
-		
+
 		$db->setQuery($query);
-		
+
 		if (!empty($idonly)) {
 			return $db->loadObjectList(null, 'am_target_id');
 		}
-		
+
 		return $db->loadObjectList();
 	}
-	
-	
+
+
 }

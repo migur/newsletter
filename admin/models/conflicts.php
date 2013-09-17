@@ -60,7 +60,7 @@ class NewsletterModelConflicts extends MigurModelList
 	 * @return void
 	 * @since  1.0
 	 */
-	protected function populateState($ordering = null, $direction = null)
+	protected function populateState($ordering = null, $direction = null, $options = array())
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication();

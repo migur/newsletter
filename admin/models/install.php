@@ -232,7 +232,7 @@ class NewsletterModelInstall extends MigurModelList
 	 *
 	 * @since	1.6
 	 */
-	protected function populateState($ordering = null, $direction = null)
+	protected function populateState($ordering = null, $direction = null, $options = array())
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication('administrator');

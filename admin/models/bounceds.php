@@ -35,7 +35,7 @@ class NewsletterModelBounceds extends MigurModelList
 	 * @return void
 	 * @since  1.0
 	 */
-	protected function populateState($ordering = null, $direction = null)
+	protected function populateState($ordering = null, $direction = null, $options = array())
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication();
@@ -70,7 +70,7 @@ class NewsletterModelBounceds extends MigurModelList
 		parent::populateState('a.name', 'asc');
 	}
 
-	
+
 	/**
 	 * Method to cache the last query constructed.
 	 *
@@ -84,7 +84,7 @@ class NewsletterModelBounceds extends MigurModelList
 	{
 		return null;
 	}
-	
+
 	/**
 	 * Method to cache the last query constructed.
 	 *
@@ -99,8 +99,8 @@ class NewsletterModelBounceds extends MigurModelList
 		$list = NewsletterHelperMail::getBouncedList($limitstart=0, $limit=0);
 		return $list;
 	}
-	
-	
+
+
 	/**
 	 * Method to get a store id based on model configuration state.
 	 *
@@ -122,7 +122,7 @@ class NewsletterModelBounceds extends MigurModelList
 		return parent::getStoreId($id);
 	}
 
-	
+
 
 	/**
 	 * Returns a record count for the query
@@ -137,31 +137,31 @@ class NewsletterModelBounceds extends MigurModelList
 		$result = $this->_getList($query, $limitstart=0, $limit=0);
 		return count($result);
 	}
-	
+
 	public function getMailboxesForBounsecheck()
 	{
 		$db = JFactory::getDbo();
-		
+
 		// Get default SMTP and Mailbox profile ids
 		$smtpId = NewsletterHelperMail::getDefaultSmtp('idOnly');
 		$mailboxId = NewsletterHelperMail::getDefaultMailbox('idOnly');
-		
-		
+
+
 		// Get mailbox ids with start mailing date
 		$db->setQuery(
-			' SELECT DISTINCT mp.mailbox_profile_id, min(q.created) AS startdate '. 
+			' SELECT DISTINCT mp.mailbox_profile_id, min(q.created) AS startdate '.
 			' FROM #__newsletter_mailbox_profiles AS mp '.
-			
+
 			' RIGHT JOIN #__newsletter_smtp_profiles AS sp '.
 				'ON (sp.mailbox_profile_id = mp.mailbox_profile_id) '.
 				'OR (sp.mailbox_profile_id = '.NewsletterTableMailboxprofile::MAILBOX_DEFAULT.' AND mp.mailbox_profile_id='.$mailboxId.') '.
-			
+
 			' JOIN #__newsletter_newsletters AS n  '.
 				'ON (n.smtp_profile_id = sp.smtp_profile_id) '.
 				'OR (n.smtp_profile_id = '.NewsletterModelEntitySmtpprofile::DEFAULT_SMTP_ID.' AND sp.smtp_profile_id='.$smtpId.') '.
-			
+
 			' JOIN #__newsletter_queue AS q ON q.newsletter_id = n.newsletter_id '.
-			
+
 			// get mailboxes for sent newsletters without errors
 			' WHERE q.state = ' . NewsletterTableQueue::STATE_SENT.
 			' GROUP BY mp.mailbox_profile_id'
@@ -169,11 +169,11 @@ class NewsletterModelBounceds extends MigurModelList
 
 		// Get mailboxes and their start dates
 		$db->setQuery(
-			' SELECT DISTINCT mp.*, t.startdate'. 
+			' SELECT DISTINCT mp.*, t.startdate'.
 			' FROM #__newsletter_mailbox_profiles AS mp '.
 			' JOIN ('.(string)$db->getQuery().') as t ON mp.mailbox_profile_id=t.mailbox_profile_id');
 		$result = $db->loadAssocList();
-		
+
 		foreach($result as &$mb) {
 			if (!empty($mb['data'])) {
 				$mb['data'] = (array)json_decode($mb['data']);
@@ -183,10 +183,10 @@ class NewsletterModelBounceds extends MigurModelList
 					'ids'=>array()
 				);
 			}
-			
+
 			$mb['password'] = base64_decode($mb['password']);
 		}
-		
+
 		return $result;
 	}
 }
