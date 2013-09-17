@@ -15,7 +15,7 @@
                                 <input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
                         </th>
                         <th width="30%" class="left">
-                                <?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_NEWSLETTER_NAME', 'a.name', $this->lists->listDirn, $this->lists->listOrder); ?>
+                                <?php echo JHtml::_('grid.sort', 'COM_NEWSLETTER_LIST_NAME', 'a.name', $this->lists->listDirn, $this->lists->listOrder); ?>
                         </th>
                     </tr>
                 </thead>
