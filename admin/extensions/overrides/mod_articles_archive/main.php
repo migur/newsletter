@@ -1,5 +1,5 @@
 <table>
-	<?php die;foreach ($list as $item) : ?>
+	<?php foreach ($list as $item) : ?>
 	<tr>
 		<td>
 			<a href="<?php echo $item->link; ?>">
