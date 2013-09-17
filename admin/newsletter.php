@@ -62,7 +62,7 @@ try {
 	// Here we get full task and preserve it from exploding
     JRequest::setVar('completetask', JRequest::getCmd('task'));
 
-	$controller = JController::getInstance('Newsletter');
+	$controller = MigurController::getInstance('Newsletter');
 
 	// Perform the Request task
 	// Here we get only tail of a task
