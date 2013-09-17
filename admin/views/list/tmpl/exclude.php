@@ -43,8 +43,8 @@
                     </td>
                     <td>
                         <?php
-                               if (intval($item->subscribers) > 0) {
-                                   echo $this->escape(intval($item->subscribers));
+                               if (intval($item->sub_cnt) > 0) {
+                                   echo $this->escape(intval($item->sub_cnt));
                                } else {
                                    echo '<span style="color:#cccccc">0</span>';
                                }
