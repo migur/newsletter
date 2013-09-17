@@ -207,7 +207,7 @@ class MigurModelList extends JModelList
 	 * @param $options array
 	 * @return array | null
 	 */
-	public function fetchItems($options)
+	public function fetchItems($options = array())
 	{
 		// Create a new query object.
 		$db = $this->getDbo();
@@ -218,7 +218,7 @@ class MigurModelList extends JModelList
 
 		$query->from($db->quoteName($this->getTable()->getTableName()) . ' AS a');
 
-		if ($options['filters']) {
+		if (!empty($options['filters'])) {
 			foreach($options['filters'] as $name => $value) {
 				$query->where($db->quoteName($name) . '=' . $db->quote($value));
 			}

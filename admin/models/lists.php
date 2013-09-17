@@ -20,6 +20,9 @@ JLoader::import('models.entities.list', JPATH_COMPONENT_ADMINISTRATOR, '');
  */
 class NewsletterModelLists extends MigurModelList
 {
+	public $tableClassName = 'List';
+	public $tableClassPrefix = 'NewsletterTable';
+
 
 	/**
 	 * The constructor of a class
@@ -219,9 +222,14 @@ class NewsletterModelLists extends MigurModelList
 		$query = $db->getQuery(true);
 
 		$query->select('*')
-			  ->from('#__newsletter_lists')
+			  ->from('#__newsletter_lists AS a')
 			  ->where('state=1');
 
+		if (empty($idonly)) {
+			$query->join('left', '(select list_id, count(*) as sub_cnt FROM #__newsletter_sub_list GROUP BY list_id) AS t ON a.list_id=t.list_id');
+		}
+
+		//echo $query; die;
 		$db->setQuery($query);
 
 		if (!empty($idonly)) {
