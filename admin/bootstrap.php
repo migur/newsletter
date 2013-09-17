@@ -12,6 +12,9 @@ defined('_JEXEC') or die('Restricted access');
 
 class MigurComNewsletterBootstrap
 {
+	static public $displayErrors;
+
+	static public $errorReporting;
 
 	/**
 	 * Load all constants needed in component
@@ -35,6 +38,21 @@ class MigurComNewsletterBootstrap
 		JLoader::import('helpers.log', COM_NEWSLETTER_PATH_ADMIN);
 		JLoader::import('helpers.support', COM_NEWSLETTER_PATH_ADMIN);
 		JLoader::import('helpers.module', COM_NEWSLETTER_PATH_ADMIN);
+
+		// Set needed php error levels
+		$params = JComponentHelper::getParams('com_newsletter');
+
+		// Save current settings for restoring it on shutdown
+		self::$displayErrors  = ini_get('display_errors');
+		self::$errorReporting = ini_get('error_reporting');
+
+		if ((defined('COM_NEWSLETTER_ENV') && COM_NEWSLETTER_ENV == 'development') || getenv('COM_NEWSLETTER_ENV') == 'development' || $params->get('debug') == '1') {
+			ini_set('display_errors', 'on');
+			ini_set('error_reporting', E_ALL);
+		} else {
+			ini_set('display_errors', 'off');
+			ini_set('error_reporting', E_NONE);
+		}
 	}
 
 
@@ -94,6 +112,16 @@ class MigurComNewsletterBootstrap
 		JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'tables');
 		MigurModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models', 'NewsletterModel');
 		MigurModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'entities', 'NewsletterModelEntity');
+	}
+
+	/**
+	 * Actions that need to be executed on finishing component's lifetime
+	 */
+	static public function shutDown()
+	{
+		// Restore error reporting settings
+		ini_set('display_errors', self::$displayErrors);
+		ini_set('error_reporting', self::$errorReporting);
 	}
 
 }
