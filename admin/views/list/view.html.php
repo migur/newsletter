@@ -147,7 +147,7 @@ class NewsletterViewList extends MigurView
 			JError::raiseError(500, implode("\n", $errors));
 			return false;
 		}
-var_dump('ololo');die();
+
 		// We don't need toolbar in the modal window.
 		$this->addToolbar();
 
