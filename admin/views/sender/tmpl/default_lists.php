@@ -4,7 +4,7 @@
 	<div class="inline-info">
 		<span class="label label-info">#2</span>
 		<span class="text-info"><?php echo JText::_('COM_NEWSLETTER_SENDMAIL_STEP2'); ?></span>
-	</div>	
+	</div>
 
     <form id="lists-form" name="listsForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=sender&tmpl=component'); ?>" method="post">
         <div id="sender-container">
@@ -19,13 +19,6 @@
                         </th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <td colspan="2">
-                            <?php echo $this->lists->pagination->getListFooter(); ?>
-                        </td>
-                    </tr>
-                </tfoot>
                 <tbody>
                 <?php foreach ($this->lists->items as $i => $item) : ?>
                     <tr class="row<?php echo $i % 2; ?>">

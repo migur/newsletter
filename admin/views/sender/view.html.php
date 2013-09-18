@@ -66,6 +66,7 @@ class NewsletterViewSender extends MigurView
 
 		$modelLists = $this->getModel('lists');
 
+
 		$lists = (object) array(
 				'items' => $modelLists->fetchItems(array('filters' => array('state' => '1'))),
 				'pagination' => new JPagination(10, 0, 5), // used to get the pagination layout for JS pagination
