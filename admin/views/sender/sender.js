@@ -8,7 +8,7 @@
 
 window.addEvent('domready', function() {
 try {
-	
+
 	var controlSendButton = $('control-button-send');
 	var controlNewsletterList = $$('select')[0];
 
@@ -67,7 +67,7 @@ try {
 					this.showAlert(
 
 						Joomla.JText._(
-							'THE_NEWSLETTER_HAS_BEEN_QUEUED_SUCCESFULLY', 
+							'THE_NEWSLETTER_HAS_BEEN_QUEUED_SUCCESFULLY',
 							'The newsletter(s) has been queued succesfully'
 						) + "\n" +
 						Joomla.JText._('TOTAL','Total') + ": " + data.total + "\n" +
@@ -76,18 +76,18 @@ try {
 
 					//document.location.reload();
 				}
-				
+
             }).start();
-			
+
 			controlSendButton.addClass('disabled');
         }
     });
 
-    new Migur.lists.paginator($$('.sslist')[0]);
-    Migur.lists.sortable.setup($$('.sslist')[0]);
+    //new Migur.lists.paginator($$('.sslist')[0]);
+    //Migur.lists.sortable.setup($$('.sslist')[0]);
 
 
-    
+
 } catch(e){
     if (console && console.log) console.log(e);
 }
