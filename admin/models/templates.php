@@ -140,50 +140,6 @@ class NewsletterModelTemplates extends MigurModelList
 		return $db->loadObjectList();
 	}
 
-	/**
-	 * Get all (standard and custom) templates
-	 *
-	 * @return	array list of the templates
-	 * @since	1.0
-	 */
-	public function getAllTemplates()
-	{
-
-		$customs = $this->getItems();
-		$standards = $this->getStandardTemplates();
-
-		$orderDirn = $this->state->get('list.direction');
-		$search = $this->getState('filter.search');
-		$type = $this->getState('filter.published');
-
-		switch ($type) {
-			case '1':
-				$merged = $standards;
-				break;
-			case '2':
-				$merged = $customs;
-				break;
-			default:
-				$merged = array_merge($standards, $customs);
-		}
-
-		$len = count($merged);
-		for ($i = 0; $i < $len; $i++) {
-
-			if (empty($search) || strpos($merged[$i]->title, $search) !== false) {
-				for ($j = $i; $j < $len; $j++) {
-					if ($orderDirn == 'asc' && $merged[$i]->title > $merged[$j]->title ||
-						$orderDirn == 'desc' && $merged[$i]->title < $merged[$j]->title) {
-
-						$buff = $merged[$i];
-						$merged[$i] = $merged[$j];
-						$merged[$j] = $buff;
-					}
-				}
-			}
-		}
-		return $merged;
-	}
 
 	/**
 	 * Get standard templates.
