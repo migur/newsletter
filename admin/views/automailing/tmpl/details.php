@@ -6,8 +6,8 @@
 			</td>
 			<td>
 				<span id="am-name"><b><?php echo $this->escape($this->automailing->automailing_name); ?></b></span>
-			</td>	
-		</tr>	
+			</td>
+		</tr>
 		<tr>
 			<td>
 				<span id="am-email-label"><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_TYPE') . ":"; ?>&nbsp;&nbsp;</span>
@@ -15,7 +15,7 @@
 			<td>
 				<span id="am-email"><b><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_TYPE_'.strtoupper($this->automailing->automailing_event)); ?></b></span>
 			</td>
-		</tr>	
+		</tr>
 		<tr>
 			<td>
 				<span id="am-targets-label"><?php echo JText::_('COM_NEWSLETTER_AUTOMAILING_TARGETS') . ":"; ?>&nbsp;&nbsp;</span>
@@ -29,14 +29,14 @@
 							<?php } ?>
 						<?php } else { ?>
 							<span><?php echo JText::_('COM_NEWSLETTER_FOR_ANY_SUBSCRIBER'); ?></span>
-						<?php } ?>	
-				</div>					
+						<?php } ?>
+				</div>
 			</td>
-		</tr>	
-	</table>	
-		
+		</tr>
+	</table>
+
 	<form id="form-automailing" action="<?php echo JRoute::_('index.php?option=com_newsletter&view=automailing&layuot=details');?>" method="post" name="automailingForm" >
-		
+
 		<table class="automailingitems adminlist  table table-striped" width="100%">
 			<thead>
 				<tr>
@@ -73,15 +73,15 @@
 						<?php echo $this->escape($item->newsletter_name); ?>
 					</td>
 					<td>
-						<?php 
+						<?php
 							if ($this->automailing->automailing_type == 'eventbased') {
 								echo '---';
 							} else {
 								switch($item->status) {
 									case 0: echo '<span style="color:gray">'.JText::_('COM_NEWSLETTER_QUEUE_INPROGRESS').'</span>'; break;
-									default: echo '<span style="color:green">'.JText::_('COM_NEWSLETTER_PROCESSED').'</span>'; break; 
-								}		
-							}	
+									default: echo '<span style="color:green">'.JText::_('COM_NEWSLETTER_PROCESSED').'</span>'; break;
+								}
+							}
 						?>
 					</td>
 					<td>
