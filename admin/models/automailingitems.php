@@ -24,6 +24,9 @@ class NewsletterModelAutomailingItems extends MigurModelList
 {
 	public $automailingId = null;
 
+	public $tableClassName = 'Automailingitem';
+	public $tableClassPrefix = 'NewsletterTable';
+
 	/**
 	 * Method to auto-populate the model state.
 	 * Note. Calling getState in this method will result in recursion.
@@ -139,8 +142,7 @@ class NewsletterModelAutomailingItems extends MigurModelList
 			$this->automailingId = $aid;
 		}
 
-		$items = $this->getItems();
-
+		$items = $this->getAllItems($aid);
 		foreach($items as $idx => &$item) {
 
 			// If this is a first element then check the automailing type to determine
@@ -162,7 +164,7 @@ class NewsletterModelAutomailingItems extends MigurModelList
 	}
 
 
-	public function getAllItems($aid)
+	public function getAllItems($aid = null)
 	{
 		if (!empty($aid)) {
 			$this->automailingId = $aid;
@@ -177,7 +179,9 @@ class NewsletterModelAutomailingItems extends MigurModelList
 		$query->from('#__newsletter_automailing_items AS ai');
 		$query->join('', '#__newsletter_newsletters AS n ON n.newsletter_id = ai.newsletter_id');
 		$query->join('', '#__newsletter_automailings AS a ON a.automailing_id = ai.automailing_id');
-		$query->where('ai.automailing_id='.(int)$aid);
+		if (!empty($aid)) {
+			$query->where('ai.automailing_id='.(int)$aid);
+		}
 		$query->order('time_offset ASC');
 
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
