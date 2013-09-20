@@ -51,6 +51,7 @@ class NewsletterControllerTemplate extends JControllerForm
 		$data = $jform;
 		unset($data['title']);
 		$jform['params'] = $data;
+		JFactory::getApplication()->input->post->set('jform', $jform);
 		JRequest::setVar('jform', $jform, 'post');
 
 		if (parent::save()) {
