@@ -1,12 +1,12 @@
 
 <form action="<?php echo JRoute::_('index.php?option=com_newsletter&view=install');?>" method="post" name="adminForm" id="adminForm">
-	
+
 	<?php if (count($this->items)) : ?>
 	<table class="adminlist table table-striped">
 		<thead>
 			<tr>
 				<th width="10">
-					<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.Joomla.checkAll(this)" />
+					<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
 				</th>
 				<th>
 					<?php echo JHtml::_('multigrid.sort', 'COM_NEWSLETTER_EXTENSION_TITLE', 'a.title', $this->listDirn, $this->listOrder, null, null, 'adminForm'); ?>

@@ -19,7 +19,7 @@
 		<thead>
 			<tr>
 				<th width="1%">
-					<input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
+					<input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
 				</th>
 				<th width="15%" class="left">
 					<?php echo JHtml::_('grid.sort', 'JGLOBAL_EMAIL', 's.name', $this->listDirn, $this->listOrder, NULL, 'desc'); ?>
