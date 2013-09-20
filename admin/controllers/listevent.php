@@ -18,17 +18,18 @@ class NewsletterControllerListevent extends JControllerForm
 	public function __construct($config = array())
 	{
 		parent::__construct($config);
-		
+
 		// Preserve list_id as the eventlist is a ALWAYS child of a some LIST.
 		$lid = JRequest::getInt('list_id', null);
 		if (!empty($lid)) {
 			$jform = JRequest::getVar('jform');
 			$jform['list_id'] = $lid;
+			JFactory::getApplication()->input->set('jform', $jform);
 			JRequest::setVar('jform', $jform);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Save the configuration
 	 *
@@ -88,7 +89,7 @@ class NewsletterControllerListevent extends JControllerForm
 		}
 
 		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
-		
+
 		$url = JRequest::getString('returnUrl');
 
 		$url = !empty($url) ?
@@ -100,19 +101,19 @@ class NewsletterControllerListevent extends JControllerForm
 
 	/**
 	 * In addition adds parent id (list_id)
-	 * 
+	 *
 	 * @param type $recordId
-	 * @param type $urlVar 
+	 * @param type $urlVar
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'le_id')
 	{
 		$part = parent::getRedirectToItemAppend($recordId, $urlVar);
 		$lid = JRequest::getInt('list_id', null);
-		
+
 		if (!empty($lid)) {
 			$part .= '&list_id='. (int) $lid;
 		}
-		
+
 		return $part;
 	}
 
