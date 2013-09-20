@@ -5,7 +5,7 @@ defined('_JEXEC') or die;
 
 <fieldset>
 <legend><?php echo JText::_('COM_NEWSLETTER_SMTP_PROFILE'); ?></legend>
-    <form id="smtpprofile-form" class="form-validate" name="smtpprofileForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
+    <form id="adminForm" class="form-validate" name="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
         <dl>
 			<dt><?php echo $this->ssForm->getLabel('smtp_profile_name'); ?></dt>
 			<dd><?php echo $this->ssForm->getInput('smtp_profile_name'); ?></dd>
@@ -62,7 +62,7 @@ defined('_JEXEC') or die;
         <div class="clr"></div>
 
         <div class="buttons-container">
-                <?php echo MigurToolbar::getInstance('smtp-toolbar')->render(); ?>
+                <?php echo MigurToolbar::getInstance('smtp-profile')->render(); ?>
         </div>
 
 

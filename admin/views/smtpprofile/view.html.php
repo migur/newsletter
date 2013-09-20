@@ -70,7 +70,7 @@ class NewsletterViewSmtpprofile extends MigurView
 	 */
 	protected function addToolbar()
 	{
-		$bar = MigurToolbar::getInstance('smtp-toolbar', array('formName' => 'smtpprofileForm', 'useCustomForm' => true));
+		$bar = MigurToolbar::getInstance('smtp-profile');
 		$bar->addButtonPath(COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'toolbar' . DIRECTORY_SEPARATOR . 'button');
 		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP', NewsletterHelperSupport::getResourceUrl('smtp'));
 		$bar->appendButton('Migurstandard', 'publish', 'COM_NEWSLETTER_CHECK', 'smtpprofile.checkconnection', false);

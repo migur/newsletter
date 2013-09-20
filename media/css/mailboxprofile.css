@@ -4,7 +4,7 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-#mailboxprofile-form dd {
+form dd {
     width: 200px;
     float: right;
     margin: 0;
@@ -12,7 +12,7 @@
 }
 
 
-#mailboxprofile-form dt {
+form dt {
     width: 150px;
     float: left;
     margin: 0;
@@ -20,16 +20,16 @@
 }
 
 
-#mailboxprofile-form input {
-    width: 200px;
+form input {
+    width: 200px !important;
 }
 
 
-#mailboxprofile-form {
+form {
     width: 350px;
 }
 
-#mailboxprofile-form [type="checkbox"] {
+form [type="checkbox"] {
 	width: auto;
 }
 

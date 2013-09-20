@@ -6,9 +6,9 @@
  * @license	   GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-window.addEvent('domready', function() { try {
+window.addEvent('domready', function() {
 
-    $$('#smtp-toolbar-cancel a')[0]
+    $$('#smtp-profile-cancel a')
         .removeProperty('onclick')
         .addEvent('click', function(){
             if (window && window.parent && window.parent.SqueezeBox) {
@@ -19,20 +19,20 @@ window.addEvent('domready', function() { try {
 
 
 	// Check button. Do a check.
-    $$('#smtp-toolbar-publish a')[0]
+    $$('#smtp-profile-publish a')
         .removeProperty('onclick')
         .addEvent('click', function(){
 
-			var inputs  = $('smtpprofile-form').toQueryString();
+			var inputs  = $('adminForm').toQueryString();
 			var obj = new Hash(inputs.parseQueryString());
 			obj['task'] = 'smtpprofile.checkconnection';
 
 			// Resotore preloader
-			if ($$('#smtp-toolbar .preloader').length > 0) {
-				$$('#smtp-toolbar .preloader')[0].destroy();
-			}	
-			$$('#smtp-toolbar ul')[0].grab(new Element('li', {
-				'class': 'preloader' 
+			if ($$('#smtp-profile .preloader').length > 0) {
+				$$('#smtp-profile .preloader')[0].destroy();
+			}
+			$$('#smtp-profile ul')[0].grab(new Element('li', {
+				'class': 'preloader'
 			}), 'top');
 
 			new Request({
@@ -42,10 +42,10 @@ window.addEvent('domready', function() { try {
 				onComplete: function(res){
 
 					// Hide preloader
-					if ($$('#smtp-toolbar .preloader').length > 0) {
-						$$('#smtp-toolbar .preloader')[0].destroy();
-					}	
-					
+					if ($$('#smtp-profile .preloader').length > 0) {
+						$$('#smtp-profile .preloader')[0].destroy();
+					}
+
 					var response = new Migur.jsonResponseParser();
 
 					response.setResponse(res);
@@ -54,8 +54,8 @@ window.addEvent('domready', function() { try {
 						alert(response.getMessagesAsList(Joomla.JText._('CONNECTION_FAILED','Connection failed!')));
 					} else {
 						alert(response.getMessagesAsList(Joomla.JText._('CONNECTION_OK', 'Connection ok!')));
-					}	
-					
+					}
+
 					return;
 				}
 			}).send();
@@ -69,8 +69,4 @@ window.addEvent('domready', function() { try {
 			el.setStyle('color', '#ccc');
 		});
 	}
-
-
-} catch(e){
-    if (console && console.log) console.log(e);
-} });
+});

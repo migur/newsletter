@@ -5,7 +5,7 @@ defined('_JEXEC') or die;
 
 <fieldset>
 <legend><?php echo JText::_('COM_NEWSLETTER_MAILBOX_PROFILE'); ?></legend>
-    <form id="mailboxprofile-form" class="form-validate" name="mailboxprofileForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
+    <form id="adminForm" class="form-validate" name="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
         <dl>
         <?php foreach($this->ssForm->getFieldset() as $field) { ?>
             <?php if (!$field->hidden) : ?>

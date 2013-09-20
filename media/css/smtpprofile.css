@@ -7,8 +7,8 @@
  dl {
 	 overflow: hidden;
  }
- 
-#smtpprofile-form dd {
+
+form dd {
     width: 200px;
     float: right;
     margin: 0;
@@ -16,7 +16,7 @@
 }
 
 
-#smtpprofile-form dt {
+form dt {
     width: 150px;
     float: left;
     margin: 0;
@@ -24,12 +24,12 @@
 }
 
 
-#smtpprofile-form input {
-    width: 195px;
+form input {
+    width: 195px !important;
 }
 
 
-#smtpprofile-form {
+form {
     /*width: 360px;*/
 }
 

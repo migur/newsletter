@@ -21,16 +21,16 @@ window.addEvent('domready', function() { try {
         .removeProperty('onclick')
         .addEvent('click', function(){
 
-			var inputs  = $('mailboxprofile-form').toQueryString();
+			var inputs  = $('adminForm').toQueryString();
 			var obj = new Hash(inputs.parseQueryString());
 			obj['task'] = 'mailboxprofile.checkconnection';
 
 			// Resotore preloader
 			if ($$('#mailbox-toolbar .preloader').length > 0) {
 				$$('#mailbox-toolbar .preloader')[0].destroy();
-			}	
+			}
 			$$('#mailbox-toolbar ul')[0].grab(new Element('li', {
-				'class': 'preloader' 
+				'class': 'preloader'
 			}), 'top');
 
 			new Request({
@@ -42,8 +42,8 @@ window.addEvent('domready', function() { try {
 					// Hide preloader
 					if ($$('#mailbox-toolbar .preloader').length > 0) {
 						$$('#mailbox-toolbar .preloader')[0].destroy();
-					}	
-					
+					}
+
 					var response = new Migur.jsonResponseParser();
 
 					response.setResponse(res);
@@ -52,14 +52,14 @@ window.addEvent('domready', function() { try {
 						alert(response.getMessagesAsList(Joomla.JText._('CONNECTION_FAILED','Connection failed!')));
 					} else {
 						alert(response.getMessagesAsList(Joomla.JText._('CONNECTION_OK', 'Connection ok!')));
-					}	
-					
+					}
+
 					return;
 				}
 			}).send();
 				return false;
     });
-	
+
 
 
 } catch(e){
