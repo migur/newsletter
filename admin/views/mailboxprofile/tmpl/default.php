@@ -3,7 +3,7 @@
 defined('_JEXEC') or die;
 ?>
 
-<form id="mailboxprofile-form" class="form-validate form-horizontal" name="mailboxprofileForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
+<form id="adminForm" class="form-validate form-horizontal" name="adminForm" action="<?php echo JRoute::_('index.php?option=com_newsletter&layout=') . $this->getLayout(); ?>" method="post">
 
 	<?php echo JHtml::_('layout.controlgroup', $this->ssForm->getLabel('mailbox_profile_name'), $this->ssForm->getInput('mailbox_profile_name')); ?>
 

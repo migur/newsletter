@@ -50,7 +50,7 @@ class MigurToolbar extends JToolBar
 
 		$this->_options = (array) $options;
 
-		$this->_options['formName'] = !empty($options['form']) ? $options['form'] : $name . 'Form';
+		$this->_options['formName'] = !empty($options['formName']) ? $options['formName'] : $name . 'Form';
 		$this->_options['actionPrefix'] = !empty($options['actionPrefix'])? $options['actionPrefix'] : '';
 	}
 

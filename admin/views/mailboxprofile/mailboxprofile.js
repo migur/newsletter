@@ -8,7 +8,7 @@
 
 window.addEvent('domready', function(){
 
-	// Fix for IE8. Because IE triggers native submit when 
+	// Fix for IE8. Because IE triggers native submit when
 	// clicking on <button> that is placed INSIDE of a form.
 	// So we need to prevent that default unwanted action.
 	$$('form button').each(function(el){
@@ -28,7 +28,7 @@ window.addEvent('domready', function(){
 
 			ev.stop();
 
-			var inputs  = $('mailboxprofile-form').toQueryString();
+			var inputs  = $('adminForm').toQueryString();
 			var obj = new Hash(inputs.parseQueryString());
 			obj['task'] = 'mailboxprofile.checkconnection';
 
@@ -48,15 +48,15 @@ window.addEvent('domready', function(){
 						alert(response.getMessagesAsList(Joomla.JText._('CONNECTION_FAILED','Connection failed!')));
 					} else {
 						alert(response.getMessagesAsList(Joomla.JText._('CONNECTION_OK', 'Connection ok!')));
-					}	
-					
+					}
+
 					return;
 				}
 			}).send();
-			
+
 			$('preloader-container').addClass('preloader');
-			
+
 			return false;
     });
-	
+
 });
