@@ -23,7 +23,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 * Class Constructor
 	 *
 	 * @param	array	$config		An optional associative array of configuration settings.
-	 * 
+	 *
 	 * @return	void
 	 * @since	1.0
 	 */
@@ -34,11 +34,11 @@ class NewsletterControllerNewsletter extends JControllerForm
 		// Apply, Save & New, and Save As copy should be standard on forms.
 	}
 
-	
+
 
 	/**
 	 * See parent's phpdoc
-	 * 
+	 *
 	 * @return  boolean
 	 * @since   11.1
 	 */
@@ -54,19 +54,19 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 	/**
 	 * See parent's phpdoc
-	 * 
+	 *
 	 * @return  boolean
 	 * @since   11.1
 	 */
 	protected function allowEdit($data = array(), $key = 'id')
 	{
-		return 
+		return
 			/* parent::allowEdit($data, $key) && */
 			NewsletterHelperAcl::actionIsAllowed('newsletter.edit');
 	}
 
-	
-	
+
+
 	/**
 	 * Creates the letter for a preview
 	 *
@@ -79,26 +79,26 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$mailer = new NewsletterClassMailer();
 		echo $mailer->render($data);
 	}
-	
-	
-	
+
+
+
 	/**
-	 * Bulk save method for saving of newsletter 
+	 * Bulk save method for saving of newsletter
 	 * or copying of several ones.
-	 * 
-	 * @return type 
+	 *
+	 * @return type
 	 */
 	public function save($key = null, $urlVar = null)
 	{
-		
+
 		$task = JRequest::getString('task');
-		
+
 		if (!empty($task) && strpos($task, 'save2copy') !== false) {
-			
+
 			return $this->_copyNewsletter();
-			
+
 		} else {
-			
+
 			$nsid = JRequest::getVar('newsletter_id', '0');
 			$type = JRequest::getVar('task');
 			$context = JRequest::getString('context', 'html');
@@ -109,13 +109,13 @@ class NewsletterControllerNewsletter extends JControllerForm
 			// If the type is not changeable then replace type as now (for success validation).
 			if (!empty($nsid)) {
 
-				// Get newsletter's extended info 
+				// Get newsletter's extended info
 				$nl = NewsletterHelperNewsletter::get($nsid);
 
 				if (empty($data['alias'])) {
 					$data['alias'] = NewsletterHelperNewsletter::createAlias($data['name'], $nsid);
 				}
-				
+
 				if (!$nl['type_changeable']) {
 					$data['type'] = $nl['type'];
 				}
@@ -123,7 +123,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 				// Check if we can change the newsletter
 				if (!$nl['saveable']) {
 
-					$error = JText::_('COM_NEWSLETTER_CANNOT_SAVE_NEWSLETTER');	
+					$error = JText::_('COM_NEWSLETTER_CANNOT_SAVE_NEWSLETTER');
 
 					if ($context == 'json') {
 
@@ -136,7 +136,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 						JFactory::getApplication()->enqueueMessage($error, 'error');
 						$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletter&layout=edit&newsletter_id='.$nsid, false));
 						return;
-					}	
+					}
 				}
 
 			} else {
@@ -147,8 +147,9 @@ class NewsletterControllerNewsletter extends JControllerForm
 			}
 
 			// Fix all overrades has been made above
+			$this->input->post->set('jform', $data);
 			JRequest::setVar('jform', $data, 'post');
-			
+
 			if (parent::save()) {
 
 				$nsid = $this->newsletterId;
@@ -170,7 +171,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 			}
 
 			if ($context == 'json') {
-				
+
 				$this->setRedirect(null);
 				if (empty($error)) {
 					$msgs = JFactory::getApplication()->getMessageQueue();
@@ -179,12 +180,12 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 				echo json_encode(array(
 					'state' => (!empty($error)) ? $error : 'ok',
-					'newsletter_id' => $nsid, 
+					'newsletter_id' => $nsid,
 					'alias' => $data['alias']
 				));
 
 				jexit();
-			}	
+			}
 		}
 	}
 
@@ -194,7 +195,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	 *
 	 * @param <type> $model - the model object
 	 * @param <type> $data  - saved data.
-	 * 
+	 *
 	 * @return void
 	 * @since 1.0
 	 */
@@ -202,10 +203,10 @@ class NewsletterControllerNewsletter extends JControllerForm
 	{
 		$this->newsletterId = $model->getState($model->getName() . '.id');
 	}
-	
+
 	protected function _copyNewsletter()
 	{
-		// Actualy on this step will be performed 
+		// Actualy on this step will be performed
 		// the checking for NEWSLETTER.ADD permission. It's ok
 		//if (!$this->allowSave()) {
 		//	$this->setError(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
@@ -274,7 +275,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 							return false;
 						}
 					}
-				}	
+				}
 
 				// Copy downloads...
 				$exts = $downTable->getRowsBy($nId);
@@ -299,7 +300,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 							return false;
 						}
 					}
-				}	
+				}
 
 				// Clean the cache.
 				$cache = JFactory::getCache($this->option);
@@ -314,6 +315,6 @@ class NewsletterControllerNewsletter extends JControllerForm
 			$message = JText::_('COM_NEWSLETTER_SELECT_AT_LEAST_ONE_ITEM');
 			$this->setRedirect(JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters', false), $message, 'error');
 			return true;
-		}		
+		}
 	}
 }

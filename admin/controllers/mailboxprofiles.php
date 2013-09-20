@@ -25,6 +25,7 @@ class NewsletterControllerMailboxprofiles extends JControllerAdmin
 	{
                 $jform = JRequest::getVar('jform');
                 if ($jform['general_mailbox_default'] > 0) {
+					JFactory::getApplication()->input->set('cid', $jform['general_mailbox_default']);
                     JRequest::setVar('cid', $jform['general_mailbox_default']);
                     parent::delete();
                 } else {
@@ -34,7 +35,7 @@ class NewsletterControllerMailboxprofiles extends JControllerAdmin
                 $rurl = JRequest::getString('returnurl');
                 if (!empty($rurl)) {
                     $this->setRedirect(base64_decode($rurl));
-                }    
+                }
 	}
 
 	/**

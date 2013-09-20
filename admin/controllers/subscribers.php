@@ -65,6 +65,7 @@ class NewsletterControllerSubscribers extends JControllerAdmin
 				return;
 			}
 
+			JFactory::getApplication()->input->set('cid', $cids);
 			JRequest::setVar('cid', $cids);
 		}
 
@@ -109,6 +110,7 @@ class NewsletterControllerSubscribers extends JControllerAdmin
 		}
 
 		// Then update CIDs by new subscriber_id
+		JFactory::getApplication()->input->set('cid', $newCids);
 		JRequest::setVar('cid', $newCids);
 		return parent::publish();
 	}

@@ -22,6 +22,7 @@ class NewsletterController extends MigurController
 	function display($cachable = false, $urlparams = false)
 	{
 		// set default view if not set
+		JFactory::getApplication()->input->set('view', JRequest::getCmd('view', 'dashboard'));
 		JRequest::setVar('view', JRequest::getCmd('view', 'dashboard'));
 
 		$view = JRequest::getCmd('view');
@@ -57,7 +58,7 @@ class NewsletterController extends MigurController
 					$idName = 't_style_id';
 					$viewRedir = 'templates';
 					break;
-				
+
 				case 'automailing':
 					$idName = 'automailing_id';
 					$viewRedir = 'automailings';

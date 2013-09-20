@@ -29,26 +29,26 @@ class NewsletterControllerQueues extends JControllerAdmin
 	{
 		return parent::getModel($name, $prefix, $config);
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Check each element and delete deleteable ones
 	 */
 	public function delete() {
-		
+
 		$cids = JRequest::getVar('cid', array());
-		
+
 		$unset = 0;
-		
+
 		if (!empty($cids)) {
 
 			$model = MigurModel::getInstance('queue', 'NewsletterModelEntity');
-			
+
 			foreach($cids as $idx => $cid) {
-				
+
 				$model->load($cid);
-				
+
 				if ($model->isSent()) {
 					unset($cids[$idx]);
 					$unset++;
@@ -58,16 +58,17 @@ class NewsletterControllerQueues extends JControllerAdmin
 			if ($unset > 0) {
 				JFactory::getApplication()->enqueueMessage(sprintf(JText::_('COM_NEWSLETTER_QUEUES_ITEMS_CANNOT_DELETED'), $unset), 'message');
 			}
-			
+
 			if (empty($cids)) {
 				$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list, false));
 				return;
 			}
-			
+
+			JFactory::getApplication()->input->set('cid', $cids);
 			JRequest::setVar('cid', $cids);
 		}
-		
-		
+
+
 		parent::delete();
 	}
 }
