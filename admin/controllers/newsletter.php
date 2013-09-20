@@ -148,7 +148,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 			}
 
 			// Fix all overrades has been made above
-			$this->input->post->set('jform', $data);
+			JFactory::getApplication()->input->post->set('jform', $data);
 			JRequest::setVar('jform', $data, 'post');
 
 			if (parent::save()) {
