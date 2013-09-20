@@ -34,7 +34,7 @@ class NewsletterControllerSubscriber extends JControllerForm
 
 	/**
 	 * Assign the subscriber to the list
-	 * 
+	 *
 	 * @return void
 	 * @since 1.0
 	 */
@@ -43,50 +43,50 @@ class NewsletterControllerSubscriber extends JControllerForm
 		if (JRequest::getMethod() == "POST") {
 
 			try {
-				
+
 				$sid = JRequest::getInt('subscriber_id', null, 'post');
 				$lid = JRequest::getInt('list_to_subscribe', null, 'post');
-				
+
 				$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
-				
+
 				if (!$model->load($sid)) {
 					throw new Exception();
 				}
-				
+
 				if (!$model->IsInList($lid)) {
-					
+
 					if (!$model->assignToList($lid)) {
 						throw new Exception();
 					}
-					
+
 					// Add letter to queue.
 					// Cant send immediatelty because we are in ADMIN side
-					// and some j! native modules cause fail when 
+					// and some j! native modules cause fail when
 					// JOOMLA_BASE = '/administrator/' (mod_latest_articles)
 //					$listModel = MigurModel::getInstance('List', 'NewsletterModel');
 //					$res = $listModel->sendSubscriptionMail(
-//						$model, 
+//						$model,
 //						$lid,
 //						array(
 //							'addToQueue'	   => true,
 //							'ignoreDuplicates' => true)
 //					);
-//					
+//
 //					if (!$res) {
 //						throw new Exception();
 //					}
-					
+
 					// Fire event onMigurAfterSubscriberAssign
 					JFactory::getApplication()->triggerEvent('onMigurAfterSubscriberAssign', array(
 						'subscriberId' => $model->getId(),
 						'lists' => array($lid)
 					));
-					
+
 				}
 				$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_SUCCESS"));
-				
+
 			} catch (Exception $e) {
-				
+
 				$this->setMessage(JText::_("COM_NEWSLETTER_ASSIGN_FAILED"), 'error');
 			}
 		}
@@ -105,24 +105,24 @@ class NewsletterControllerSubscriber extends JControllerForm
 		if (JRequest::getMethod() == "POST") {
 
 			try {
-				
+
 				$sid = JRequest::getInt('subscriber_id', null, 'post');
 				$lid = JRequest::getInt('list_to_unbind', null, 'post');
-				
+
 				$model = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
-				
+
 				if (!$model->load($sid)) {
 					throw new Exception();
 				}
-				
+
 				if (!$model->unbindFromList($lid)) {
 					throw new Exception();
-				} 
+				}
 
 				$this->setMessage(JText::_("COM_NEWSLETTER_UNBIND_SUCCESS"));
-				
+
 			} catch (Exception $e) {
-				
+
 				$this->setMessage(JText::_("COM_NEWSLETTER_UNBIND_FAILED"), 'error');
 			}
 		}
@@ -193,33 +193,34 @@ class NewsletterControllerSubscriber extends JControllerForm
 
 		return $append;
 	}
-	
-	
+
+
 	/**
 	 * Load data to autocreate subscriber row for J! user
 	 */
 	public function edit($key = null, $urlVar = null)
 	{
 		$sid = JRequest::getInt('subscriber_id', null);
-		
+
 		if (empty($sid)) {
 
 			$uid = JRequest::getInt('user_id', null);
 
 			if (empty($uid)) {
 				return false;
-			}	
-			
+			}
+
 			$model = $this->getModel();
 			$sub = $model->getItem(array('user_id' => $uid));
 
 			if (empty($sub)) {
 				return false;
 			}
-			
+
+			JFactory::getApplication()->input->set('subscriber_id', $sub['subscriber_id']);
 			JRequest::setVar('subscriber_id', $sub['subscriber_id']);
-		}	
-		
+		}
+
 		return parent::edit($key, $urlVar);
 	}
 }

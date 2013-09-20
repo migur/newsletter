@@ -30,6 +30,7 @@ class NewsletterControllerExtension extends JControllerForm
 	}
 
 	/**
+	 * Looks like obsolete code.
 	 * Save the configuration
 	 * @return	boolean
 	 * @since	1.0
@@ -40,6 +41,7 @@ class NewsletterControllerExtension extends JControllerForm
 		$data = $jform;
 		unset($data['title']);
 		$jform['params'] = $data;
+		JFactory::getApplication()->input->post->set('jform', $jform);
 		JRequest::setVar('jform', $jform, 'post');
 
 		if (parent::save()) {

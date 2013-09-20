@@ -60,6 +60,7 @@ try {
 
 	// Get an instance of the controller
 	// Here we get full task and preserve it from exploding
+	JFactory::getApplication()->input->set('completetask', JRequest::getCmd('task'));
     JRequest::setVar('completetask', JRequest::getCmd('task'));
 
 	$controller = MigurController::getInstance('Newsletter');
