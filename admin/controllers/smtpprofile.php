@@ -23,7 +23,7 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 	 * Class Constructor
 	 *
 	 * @param	array	$config		An optional associative array of configuration settings.
-	 * 
+	 *
 	 * @return	void
 	 * @since	1.0
 	 */
@@ -47,10 +47,11 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 		$form = JRequest::getVar('jform');
 		$model = MigurModel::getInstance('Smtpprofile', 'NewsletterModelEntity');
 		$model->load($form['smtp_profile_id']);
-		
+
 		if ($model->isJoomlaProfile()) {
 			$buffer = array_merge($model->toArray(), $form);
 			$buffer['params'] = array_merge((array)$model->params, $form['params']);
+			JFactory::getApplication()->input->post->set('jform', $buffer);
 			JRequest::setVar('jform', $buffer, 'post');
 		}
 
@@ -59,7 +60,7 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
 	}
 
-	
+
 	/**
 	 * Redirection after standard saving
 	 *
@@ -108,15 +109,15 @@ class NewsletterControllerSmtpprofile extends JControllerForm
 	public function checkConnection()
 	{
 		NewsletterHelperNewsletter::jsonPrepare();
-		
+
 		$smtpSettings = (object)JRequest::getVar('jform');
 
 		$sender = new NewsletterClassMailerSender(array('exceptions' => true));
-		
+
 		$res = $sender->checkConnection($smtpSettings);
-		
+
 		NewsletterHelperNewsletter::jsonResponse($res, $sender->getErrors());
 	}
-	
+
 }
 

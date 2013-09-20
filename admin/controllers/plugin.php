@@ -23,8 +23,8 @@ class NewsletterControllerPlugin extends JControllerForm
 		$pGroup = JRequest::getString('triggergroup', null);
 		$pEvent = JRequest::getString('triggerevent', null);
 
-        if (!empty($pGroup) && !empty($pEvent)) {       
-        
+        if (!empty($pGroup) && !empty($pEvent)) {
+
             JLoader::import('plugins.manager', JPATH_COMPONENT_ADMINISTRATOR, '');
 
             $manager = NewsletterDispatcher::factory($pGroup);
@@ -42,7 +42,7 @@ class NewsletterControllerPlugin extends JControllerForm
 
         jexit();
 	}
-	
+
     public function triggerListimport()
     {
         $pGroup = 'list';
@@ -55,7 +55,7 @@ class NewsletterControllerPlugin extends JControllerForm
 
         // Trigger event for plugin
         $context = $this->option.'.edit.'.$this->context;
-        $listId = JRequest::getInt('list_id'); 
+        $listId = JRequest::getInt('list_id');
         $res = $manager->trigger(
             array(
                 'name'  => $pName,
@@ -68,19 +68,22 @@ class NewsletterControllerPlugin extends JControllerForm
 
         // In this case we trigger only one plugin then his data is in first element
         $res = $res[0];
-        
-        
+
+
         // Get VIEW.....
         // Set layout for event
         $pEvent = strtolower(str_replace('onMigurImport', '', $manager->pluginEvent));
-        
+
+		JFactory::getApplication()->input->set('view', 'plugin');
 		JRequest::setVar('view', 'plugin');
+
+		JFactory::getApplication()->input->set('layout', $pEvent);
 		JRequest::setVar('layout', $pEvent);
-		
+
 		$view = $this->getView(
-            'plugin', 'html', '', 
+            'plugin', 'html', '',
             array(
-                'base_path' => $this->basePath, 
+                'base_path' => $this->basePath,
                 'layout' => 'listimport-'.strtolower($pEvent)
         ));
 
@@ -91,14 +94,14 @@ class NewsletterControllerPlugin extends JControllerForm
         $plugin->name = (string) $pName;
         $plugin->group = (string) $pGroup;
         $plugin->title = $plg->getTitle();
-        
+
         // Complement data
         $plugin->description = empty($res->description)? $plg->getDescription() : $res['description'];
-        
+
         // Set all view need...
         $view->assignRef('plugin', $plugin);
         $view->assign('listId', $listId);
-        
+
         return $this->display();
     }
 }

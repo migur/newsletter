@@ -35,6 +35,7 @@ class NewsletterController extends MigurController
 	function display($cachable = false, $urlparams = false)
 	{
 		// set default view if not set
+		JFactory::getApplication()->input->set('view', JRequest::getCmd('view', 'subscribers'));
 		JRequest::setVar('view', JRequest::getCmd('view', 'subscribers'));
 
 		// call parent behavior

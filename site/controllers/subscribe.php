@@ -296,8 +296,12 @@ class NewsletterControllerSubscribe extends MigurController
 			jexit(JText::_('COM_NEWSLETTER_UNSUBSCRIPTION_FAILED_PARAMETERS_NOT_FOUND'));
 		}
 
+		JFactory::getApplication()->input->set('view', 'subscribe');
 		JRequest::setVar('view', 'subscribe');
+
+		JFactory::getApplication()->input->set('layout', 'unsubscribe');
 		JRequest::setVar('layout', 'unsubscribe');
+
 		$this->display();
 
 		return true;

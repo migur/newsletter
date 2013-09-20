@@ -50,6 +50,7 @@ class NewsletterControllerNewsletters extends JControllerAdmin
 					unset($cids[$idx]);
 				}
 			}
+			JFactory::getApplication()->input->set('cid', $cids);
 			JRequest::setVar('cid', $cids);
 		}
 
@@ -78,11 +79,13 @@ class NewsletterControllerNewsletters extends JControllerAdmin
 
 		if (count($cid)) {
 
+			JFactory::getApplication()->input->post->set('cid', $cid);
 			JRequest::setVar('cid', $cid, 'post');
 
-			$token = JRequest::getVar(JSession::getFormToken());
-			JRequest::setVar(JSession::getFormToken(), $token, 'post');
-			JFactory::getApplication()->input->post->set(JSession::getFormToken(), $token);
+			$tokenId = JSession::getFormToken();
+			$token = JRequest::getVar($tokenId);
+			JFactory::getApplication()->input->post->set($tokenId, $token);
+			JRequest::setVar($tokenId, $token, 'post');
 
 			parent::delete();
 		}
