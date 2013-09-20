@@ -51,6 +51,7 @@ class NewsletterControllerTemplate extends JControllerForm
 		$data = $jform;
 		unset($data['title']);
 		$jform['params'] = $data;
+		JFactory::getApplication()->input->post->set('jform', $jform);
 		JRequest::setVar('jform', $jform, 'post');
 
 		if (parent::save()) {
@@ -88,10 +89,10 @@ class NewsletterControllerTemplate extends JControllerForm
 		));
 		$this->setRedirect('index.php?option=com_newsletter&view=close&tmpl=component');
 	}
-	
-	
+
+
 	/**
-	 * 
+	 *
 	 */
 	public function getparsed()
 	{
@@ -120,7 +121,7 @@ class NewsletterControllerTemplate extends JControllerForm
 				'data' => $data,
 			)
 		);
-		
+
 		NewsletterHelperNewsletter::jsonResponse((bool) $data, $error, $data);
 	}
 }
