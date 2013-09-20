@@ -16,7 +16,7 @@
 Joomla.submitbutton = function(task, form)
 {
         if (!form) {
-            form = document.mailboxprofileForm
+            form = document.adminForm
         }
 
 	if (task == '')
@@ -29,7 +29,7 @@ Joomla.submitbutton = function(task, form)
                 if ( document.formvalidator.isValid(form) ||
                      action[1] == 'cancel' ||
                      action[1] == 'close' ) {
-                     
+
 			Joomla.submitform(task, form);
 			return true;
 		}

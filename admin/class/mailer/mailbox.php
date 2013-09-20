@@ -10,7 +10,7 @@
 // No direct access
 defined('JPATH_BASE') or die;
 
-define('_PATH_BMH', JPATH_LIBRARIES . DIRECTORY_SEPARATOR . 'migur' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'mailer' . DIRECTORY_SEPARATOR . 'phpmailer' . DIRECTORY_SEPARATOR);
+define('_PATH_BMH', COM_NEWSLETTER_PATH_ADMIN . DIRECTORY_SEPARATOR . 'class' . DIRECTORY_SEPARATOR . 'mailer' . DIRECTORY_SEPARATOR . 'phpmailer' . DIRECTORY_SEPARATOR);
 include_once(_PATH_BMH . 'class.phpmailer-bmh.php');
 
 /**
@@ -63,8 +63,8 @@ class NewsletterClassMailerMailbox
 
 	/**
 	 * Turn on/off cache using
-	 * 
-	 * @param boolean $flag 
+	 *
+	 * @param boolean $flag
 	 */
 	public function useCache($flag = true)
 	{
@@ -90,7 +90,7 @@ class NewsletterClassMailerMailbox
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	protected function setProtocol($options)
 	{
@@ -117,13 +117,13 @@ class NewsletterClassMailerMailbox
 					break;
 
 				default : $options['is_ssl'] = 'notls';
-					break;
+				break;
 			}
 
 			// Invert external value
 			$options['novalidate-cert'] = empty($options['validate_cert']);
 			unset($options['validate_cert']);
-			
+
 			$name = 'NewsletterClassMailerProtocol' . ucfirst($options['mailbox_server_type']);
 
 			require_once 'protocol' . DIRECTORY_SEPARATOR . strtolower($options['mailbox_server_type']) . '.php';
@@ -136,9 +136,9 @@ class NewsletterClassMailerMailbox
 
 	/**
 	 * Connect to POP3/IMAP Mailbox profile using standard IMAP library
-	 * 
+	 *
 	 * @param array $mailbox Sarver parameters and user's credentials
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function connect()
 	{
@@ -162,9 +162,9 @@ class NewsletterClassMailerMailbox
 
 	/**
 	 * Deletes the letter from inbox
-	 * 
-	 * @param integet/string $uid The UID of letter in mailbox 
-	 * 
+	 *
+	 * @param integet/string $uid The UID of letter in mailbox
+	 *
 	 * @return boolean
 	 */
 	public function deleteMail($uid)
@@ -185,7 +185,7 @@ class NewsletterClassMailerMailbox
 
 	/**
 	 * Closes the mailbox
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function close()
@@ -199,7 +199,7 @@ class NewsletterClassMailerMailbox
 
 	/**
 	 * Scan all mails and detect bounced ones.
-	 * 
+	 *
 	 * @return array of bounced letters
 	 */
 	public function getBouncedList($limit)
@@ -246,7 +246,7 @@ class NewsletterClassMailerMailbox
 //			$x = $this->_getStartPosition();
 //		} else {
 //			$x = $offset;
-//		}	
+//		}
 
 		$c_total = $this->protocol->getMessagesCount();
 		$this->total = $c_total;
@@ -476,7 +476,7 @@ class NewsletterClassMailerMailbox
 			$remove = 'moved (hard)';
 		}
 //			elseif ($this->moveSoft && $result['remove'] == 1) {
-//			$remove = 'moved (soft)';	} 
+//			$remove = 'moved (soft)';	}
 		elseif ($this->disableDelete) {
 			$remove = 0;
 		} else {
@@ -530,7 +530,7 @@ class NewsletterClassMailerMailbox
 
 //	if ($subject == 'Undelivered Mail Returned to Sender') {
 //		var_dump($bounce_type, $subject, $body);
-//	}	
+//	}
 		// Check if this is a bounced mail
 		if (empty($bounce_type)) {
 			return false;
@@ -570,43 +570,43 @@ class NewsletterClassMailerMailbox
 		}
 
 		$this->bounceds[] = (object) array(
-				'msgnum' => $msgUid,
-				'bounce_type' => $bounce_type,
-				'subscriber_id' => $sid,
-				'newsletter_id' => $nid,
-				'list_id' => $lid,
-				'email' => $email,
-				'subject' => $subject,
-				'xheader' => $xheader,
-				'remove' => $remove,
-				'rule_no' => $rule_no,
-				'rule_cat' => $rule_cat,
-				'totalFetched' => $totalFetched
+			'msgnum' => $msgUid,
+			'bounce_type' => $bounce_type,
+			'subscriber_id' => $sid,
+			'newsletter_id' => $nid,
+			'list_id' => $lid,
+			'email' => $email,
+			'subject' => $subject,
+			'xheader' => $xheader,
+			'remove' => $remove,
+			'rule_no' => $rule_no,
+			'rule_cat' => $rule_cat,
+			'totalFetched' => $totalFetched
 		);
 		return true;
 	}
 
 	/**
 	 * Checks if the UID is present in the chache array
-	 * 
+	 *
 	 * @param string $uid The message UID.
-	 * 
+	 *
 	 * @return boolean
-	 * 
+	 *
 	 * @since 1.0.3
 	 */
 	public function checkCache($uid)
 	{
 		return
 			(in_array($uid, $this->mailboxProfile['data']['ids']) &&
-			$this->useCache == true);
+				$this->useCache == true);
 	}
 
 	/**
 	 * Returns all entries from cache
-	 * 
+	 *
 	 * @return array
-	 * 
+	 *
 	 * @since 1.0.3
 	 */
 	public function getCache()
@@ -620,7 +620,7 @@ class NewsletterClassMailerMailbox
 
 	/**
 	 * Clears UIDs cache
-	 * 
+	 *
 	 * @since 1.0.3
 	 */
 	public function clearCache()
@@ -635,7 +635,7 @@ class NewsletterClassMailerMailbox
 	 * Add NEW message id to array cache
 	 *
 	 * @param string $uid UID of a letter
-	 * 
+	 *
 	 * @since 1.0.3
 	 */
 	public function addToCache($uid)
@@ -650,7 +650,7 @@ class NewsletterClassMailerMailbox
 	 * Remove from cache by UID
 	 *
 	 * @param string $uid UID of a letter
-	 * 
+	 *
 	 * @since 1.0.3
 	 */
 	public function removeFromCache($uid)
@@ -666,7 +666,7 @@ class NewsletterClassMailerMailbox
 	 * Set timestamp of a date
 	 *
 	 * @param string|int $date timestamp
-	 * 
+	 *
 	 * @since 1.0.3
 	 */
 	public function setLastDate($date)
@@ -679,7 +679,7 @@ class NewsletterClassMailerMailbox
 	 * Get timestamp of a date
 	 *
 	 * @return int timestamp
-	 * 
+	 *
 	 * @since 1.0.3
 	 */
 	public function getLastDate()
@@ -689,9 +689,9 @@ class NewsletterClassMailerMailbox
 
 	/**
 	 * Set error message
-	 * 
+	 *
 	 * @param type $error
-	 * 
+	 *
 	 * @since 1.0.3
 	 */
 	public function setError($error)
@@ -701,9 +701,9 @@ class NewsletterClassMailerMailbox
 
 	/**
 	 * Get error message
-	 * 
+	 *
 	 * @return string Error message
-	 * 
+	 *
 	 * @since 1.0.3
 	 */
 	public function getLastError()
