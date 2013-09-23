@@ -3,33 +3,31 @@
     <form id="adminForm"
           action="<?php echo JRoute::_('index.php?option=com_newsletter&view=newsletters&form=newsletters');?>"
           method="post" name="adminForm">
-        <fieldset id="filter-bar">
-			<?php echo MigurToolbar::getInstance('newsletters')->render(); ?>
-            <div id="newsletters-filter-panel-control" class="filter-panel-control"></div>
-            <div class="clr"></div>
-            <div id="newsletters-filter-panel" class="filter-panel">
-				<div class="pull-left btn-group">
-					<div class="filter-panel-inner" data-role="panel-container-inner">
-						<div class="pull-left btn-group">
-							<select name="filter_published" class="input-medium" onchange="this.form.submit()">
-								<option value="">- <?php echo JText::_('COM_NEWSLETTER_SELECT_STATE');?> -</option>
-								<?php echo JHtml::_('select.options', JHtml::_('multigrid.enabledOptions', array('trashedOnly' => true)), 'value', 'text', $this->get('state')->get('filter.published'), true);?>
-							</select>
-						</div>
+		<?php echo MigurToolbar::getInstance('newsletters')->render(); ?>
+		<div id="newsletters-filter-panel-control" class="filter-panel-control"></div>
+		<div class="clr"></div>
+		<div id="newsletters-filter-panel" class="filter-panel">
+			<div class="pull-left btn-group">
+				<div class="filter-panel-inner" data-role="panel-container-inner">
+					<div class="pull-left btn-group">
+						<select name="filter_published" class="input-medium" onchange="this.form.submit()">
+							<option value="">- <?php echo JText::_('COM_NEWSLETTER_SELECT_STATE');?> -</option>
+							<?php echo JHtml::_('select.options', JHtml::_('multigrid.enabledOptions', array('trashedOnly' => true)), 'value', 'text', $this->get('state')->get('filter.published'), true);?>
+						</select>
 					</div>
 				</div>
+			</div>
 
-                <div class="pull-left btn-group">
-	            	<div class="filter-search btn-group pull-left">
-	                    <input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>"/>
-                    </div>
-                    <div class="btn-group pull-left">
-						<button type="submit" class="btn tip migur-search-submit" data-original-title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-						<button rel="tooltip" onclick="document.id('filter_search').value='';this.form.submit(); return false;" type="button" class="btn tip btn-danger" data-original-title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
-                    </div>
-                </div>
-            </div>
-        </fieldset>
+			<div class="pull-left btn-group">
+				<div class="filter-search btn-group pull-left">
+					<input class="migur-search" type="text" name="filter_search" id="filter_search" class="filter-search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_NEWSLETTER_FILTER_SEARCH_DESC'); ?>"/>
+				</div>
+				<div class="btn-group pull-left">
+					<button type="submit" class="btn tip migur-search-submit" data-original-title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
+					<button rel="tooltip" onclick="document.id('filter_search').value='';this.form.submit(); return false;" type="button" class="btn tip btn-danger" data-original-title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+				</div>
+			</div>
+		</div>
 
         <table class="sslist adminlist  table table-striped" width="100%">
             <thead>
