@@ -111,7 +111,8 @@ class NewsletterViewDashboard extends MigurView
 		$bar->appendButton('Migurbasic', 'COM_NEWSLETTER_PROCESS_BOUNCES', array('id' => 'toolbar-bounces', 'icon-class' => 'icon-refresh'));
 
 		$bar->appendButton('Link', 'warning', 'COM_NEWSLETTER_NOTIFICATIONS', 'index.php?option=com_newsletter&amp;view=logs');
-		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', NewsletterHelperSupport::getResourceUrl('mailing', 'general'));
+		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_QUEUE', NewsletterHelperSupport::getResourceUrl('mailing'));
+		$bar->appendButton('Migurhelp', 'help', 'COM_NEWSLETTER_HELP_ABOUT_BOUNCES', NewsletterHelperSupport::getResourceUrl('bounces'));
 
 		// Load the submenu.
 		NewsletterHelperNewsletter::addSubmenu(JRequest::getVar('view'));
