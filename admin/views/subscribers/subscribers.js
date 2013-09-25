@@ -9,7 +9,7 @@
 window.addEvent('domready', function() { try {
 
     $('subscribers-unbind').addEvent('click', function(ev){
-        
+
         ev.stop();
 
         if ( $$('#form-subscribers [name=boxchecked]')[0].get('value') < 1 ) {
@@ -26,7 +26,7 @@ window.addEvent('domready', function() { try {
                 listIds.push($(el).get('value'));
             }
         });
-		
+
         if (listIds.length == 0) {
 			alert(Joomla.JText._(
 				'IN_THE_TABLE_WITH_LISTS_ON_THE_RIGHT_SELECT_FROM',
@@ -42,7 +42,7 @@ window.addEvent('domready', function() { try {
 
 
 	$('subscribers-assign').addEvent('click', function(ev){
-        
+
         ev.stop();
 
         if ( $$('#form-subscribers [name=boxchecked]')[0].get('value') < 1 ) {
@@ -52,7 +52,7 @@ window.addEvent('domready', function() { try {
 				));
             return;
         }
-		
+
         var listIds = [];
         $$('#form-lists [name=cid[]]').each(function(el){
             if( $(el).getProperty('checked') ) {
@@ -67,16 +67,15 @@ window.addEvent('domready', function() { try {
 				));
             return;
         }
-		
+
         $$('#form-subscribers [name=list_id]')[0].set('value', JSON.encode(listIds));
 
         Joomla.submitform($(this).getProperty('data-task'), document.subscribersForm);
-	});	
+	});
 
 
     $('form-subscribers').getElements('[name=cid[]], [name=checkall-toggle]').addEvent('click', function(){
 
-		console.log($$('#form-subscribers [name=boxchecked]')[0].get('value'));
         if ($$('#form-subscribers [name=boxchecked]')[0].get('value') == 0) {
             $('subscribers-assign').addClass('disabled');
             $('subscribers-unbind').addClass('disabled');
