@@ -72,7 +72,7 @@ Migur.widget = new Class({
             });
             return true;
         }
-        
+
         return false;
     },
 
@@ -88,11 +88,36 @@ Migur.widget = new Class({
 
     load: function(url, data, subpath, completeCallback){
 
+
+        var urlData = [data].clone()[0];
+        // Workaround for mootools AJAX method.
+        // Seems it cannot send empty arrays
+
+        (typeof urlData == 'object') &&
+        Object.each(urlData, function(val, name){
+
+            if (typeof val == 'object') {
+
+                Object.each(val, function(subval, subname){
+
+                    if (typeof subval == 'object' && subval.length == 0) {
+                        urlData[name][subname] = ['null'];
+                    }
+                });
+
+            } else {
+
+                if (typeof subval == 'object' && val.length == 0) {
+                    urlData[name][subname] = ['null'];
+                }
+            }
+        });
+
         var widget = this;
 
         var transport = new Request({
             url: url,
-            data: data,
+            data: urlData,
 
             onComplete: function(res){
                 widget.setBody(res, subpath);
@@ -136,16 +161,16 @@ Migur.widget = new Class({
 
 /**
  * Create widget for DOM element
- * 
+ *
  * @param el  - the DOM element of widget
  * @param obj - the config of widget
  * @param obj - optionaly the class of a widget
- * 
+ *
  * @return boolean
  * @since  1.0
  */
 Migur.createWidget = function(el, obj, wdgt) {
-	
+
     if (!$(el)) {
         console.log('Migur.createWidget("' + el + '", obj). El is not a DOM element');
         return false;
@@ -161,14 +186,14 @@ Migur.createWidget = function(el, obj, wdgt) {
 	    widget = new Migur.widget(el, obj);
 	} else {
 		widget = new wdgt(el, obj);
-	}		
+	}
     $(el).store(
         'widget',
         widget
         );
 
     Migur.widgetStorage.set(widget);
-    
+
     return widget;
 }
 
@@ -186,10 +211,10 @@ Migur.getWidget = function(el) {
     } else {
         console.log('Migur.getWidget("' + el + '"). El is not a DOM element');
     }
-        
+
     return false;
 }
-    
+
 
 
 Migur.widgetStorage = {
@@ -207,7 +232,7 @@ Migur.widgetStorage = {
         if (typeof(widget.widgetId) == 'undefined') {
             widget.widgetId = this._storage.length + 1;
         }
-        
+
         if (typeof (this._storage[widget.widgetId]) != 'undefined') {
             console.log('Conflict in the widget storage. Widget id ' + widget.widgetId);
             return null;

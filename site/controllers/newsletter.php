@@ -56,7 +56,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		 */
 
 		//TODO: Get the admin session...
-		
+
 		/*
 		 *  Let's render the newsletter.
 		 *  If subscriber's email is provided then add info about this user
@@ -69,14 +69,14 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$alias        = JRequest::getString('alias', null);
 
 		$model = MigurModel::getInstance('Newsletter', 'NewsletterModel');
-		
+
 		if (!empty($alias)) {
 			$newsletter = NewsletterHelperNewsletter::getByAlias($alias);
 		}
-		
+
 		if (!empty($newsletterId)) {
 			$newsletter = (array) $model->getItem($newsletterId);
-		}	
+		}
 
 		if (empty($newsletter)) {
 			echo json_encode(array(
@@ -85,7 +85,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 			));
 			return;
 		}
-		
+
 		$newsletterId = $newsletter['newsletter_id'];
 
 		if (empty($type)) {
@@ -98,14 +98,14 @@ class NewsletterControllerNewsletter extends JControllerForm
 
 		// Load newseltter language
 		JFactory::getLanguage()->load('com_newsletter_modules', JPATH_ADMINISTRATOR);
-		
+
 		$mailer = new NewsletterClassMailer();
-		
+
 		// emulate user environment
 		NewsletterHelperSubscriber::saveRealUser();
 		NewsletterHelperSubscriber::emulateUser(array('email' => $email));
 
-		
+
 		// render the content of letter for each user
 		$html = $mailer->render(array(
 			'type' => $type,
@@ -135,7 +135,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	public function rendermodule()
 	{
 		ob_start();
-		
+
 		$native     = JRequest::getString('native');
 		$id         = JRequest::getString('extension_id');
 		$params     = JRequest::getVar('params', array(), 'post', 'array');
@@ -150,21 +150,26 @@ class NewsletterControllerNewsletter extends JControllerForm
 		$module = $modules[0];
 
 		// Override needed data
+		foreach ($params as &$item) {
+			if (is_array($item) && count($item) == 1 && $item[0] == 'null') {
+				$item = array();
+			}
+		}
 		$module->params     = json_encode((object)$params);
 		$module->title      = $title;
 		$module->showtitle  = $showTitle;
 
 		// Load newseltter language
 		JFactory::getLanguage()->load('com_newsletter_modules', JPATH_ADMINISTRATOR);
-		
+
 		$content = NewsletterHelperContent::pathsToAbsolute(
 			NewsletterHelperModule::renderModule($modules[0])
-		);	
-		
+		);
+
 		ob_end_clean();
-		
+
 		header("Content-Type: text/html; charset=UTF-8");
-		
+
 		echo $content; die;
 	}
 	/**
@@ -176,7 +181,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 	public function sendPreview()
 	{
 		NewsletterHelperNewsletter::jsonPrepare();
-		
+
 		$emails = JRequest::getVar('emails', array());
 		$newsletterId = JRequest::getVar('newsletter_id');
 		$type = JRequest::getVar('type');
@@ -188,7 +193,7 @@ class NewsletterControllerNewsletter extends JControllerForm
 		if (empty($emails)) {
 			NewsletterHelperNewsletter::jsonError(JText::_('COM_NEWSLETTER_ADD_EMAILS'));
 		}
-		
+
 		$data = array(
 			'newsletter_id' => $newsletterId,
 			'type' => $type,
@@ -196,17 +201,17 @@ class NewsletterControllerNewsletter extends JControllerForm
 			'useRawUrls' => NewsletterHelperNewsletter::getParam('rawurls') == '1'
 		);
 
-		
+
 		// Process list of emails....
 		$subscriber = MigurModel::getInstance('Subscriber', 'NewsletterModelEntity');
 		foreach ($emails as $email) {
-			
+
 			// Trying to find subscriber or J!user
 			if ($subscriber->load(array('email' => $email[1]))) {
-				
+
 				// If subscriber is allowed to send to then add him to list.
 				$data['subscribers'][] = $subscriber->toObject();
-				
+
 			} else {
 
 				// If this is unknown email then add it to list.
@@ -219,28 +224,28 @@ class NewsletterControllerNewsletter extends JControllerForm
 		if(empty($data['subscribers'])) {
 			NewsletterHelperNewsletter::jsonError(JText::_('COM_NEWSLETTER_NO_EMAILS_TO_SEND'));
 		}
-		
+
 		// Send mails.....
 		$mailer = new NewsletterClassMailer();
 		if(!$mailer->sendToList($data)) {
 
 			$errors = $mailer->getErrors();
-			
+
 			NewsletterHelperLog::addDebug('Sending of preview was failed.',
 				NewsletterHelperLog::CAT_MAILER,
 				array(
 					'Errors' => $errors,
 					'Emails' => $emails));
-			
+
 			NewsletterHelperNewsletter::jsonError($errors, $emails);
 		}
-		
+
 		// Some debugging
 		NewsletterHelperLog::addDebug('Preview was sent successfully.',
 			NewsletterHelperLog::CAT_MAILER,
 			array('Emails' => $emails));
-		
-		
+
+
 		NewsletterHelperNewsletter::jsonMessage(JText::_('COM_NEWSLETTER_PREVIEW_SENT_SUCCESSFULLY'), $emails);
 	}
 }
