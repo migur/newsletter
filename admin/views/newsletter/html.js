@@ -40,7 +40,7 @@ Migur.define('htmlPane', function(){
 				var coords = draggable.getCoordinates($$('body')[0]);
 				var draggableParent = draggable.getParent('div');
 				$(draggable).store('source', draggableParent);
-			
+
 				// Workaround for unwanted saving of a newsletter when we just drag out a module.
 				// Just "lock" the html widget so it will return the same data as it has before dragging
 				if (draggableParent) {
@@ -130,7 +130,7 @@ Migur.define('htmlPane', function(){
 
 				if (Migur.app.autosaver) {
 					Migur.app.autosaver.update();
-				}	
+				}
 			}
 		});
 		return avatar;
@@ -252,29 +252,60 @@ Migur.define('htmlPane', function(){
 				}
 			});
 
-			phonyForm.enctype = "application/x-www-form-urlencoded"
-			$(document.body).grab(phonyForm, 'bottom');
+            phonyForm.enctype = "application/x-www-form-urlencoded"
+            $(document.body).grab(phonyForm, 'bottom');
 
-			Object.each(Migur.moodialogs[href].data, function(val, name){
+            Object.each(Migur.moodialogs[href].data, function(val, name){
 
-				if (typeof val == 'object') {
-					Object.each(val, function(subval, subname){
-						phonyForm.appendChild(new Element('input', {
-							'type':"hidden",
-							'name': 'jform['+name+']['+subname+']',
-							'value': subval
-						}));
-					});
-				} else {
-					phonyForm.appendChild(new Element('input', {
-						'type':"hidden",
-						'name': 'jform['+name+']',
-						'value': val
-					}));
-				}	
-			});
+                if (typeof val == 'object') {
 
-			phonyForm.submit();
+                    Object.each(val, function(subval, subname){
+
+                        if (typeof subval == "undefined") subval = null;
+
+                        // assumed this is just array
+                        if (typeof subval != 'string') {
+
+                            if (subval && subval.length > 0) {
+
+                                Array.each(subval, function(subsubval){
+                                    phonyForm.appendChild(new Element('input', {
+                                        'type':"hidden",
+                                        'name': 'jform['+name+']['+subname+'][]',
+                                        'value': subsubval
+                                    }));
+                                });
+
+                            } else {
+                                phonyForm.appendChild(new Element('input', {
+                                    'type':"hidden",
+                                    'name': 'jform['+name+']['+subname+'][]',
+                                    'value': subval
+                                }));
+                            }
+
+                        } else {
+
+                            phonyForm.appendChild(new Element('input', {
+                                'type':"hidden",
+                                'name': 'jform['+name+']['+subname+']',
+                                'value': subval
+                            }));
+                        }
+                    });
+
+                } else {
+
+                    phonyForm.appendChild(new Element('input', {
+                        'type':"hidden",
+                        'name': 'jform['+name+']',
+                        'value': val
+                    }));
+
+                }
+            });
+
+            phonyForm.submit();
 		})
 		.setStyle('display', 'block');
 	}
@@ -317,7 +348,7 @@ Migur.define('htmlPane', function(){
 
 				if (!curId || confirm(
 					Joomla.JText._('DO_YOU_REALLY_WANT_TO_CHANGE_THE_TEMPLATE_STYLE_QM',"Do you really want to change the template style?")+"\n"+
-					Joomla.JText._('ALL_CHANGES_IN_THE_CURRENT_HTML_NEWSLETTER_WILL_BE_LOST',"All changes in the current HTML Newsletter will be lost."))) 
+					Joomla.JText._('ALL_CHANGES_IN_THE_CURRENT_HTML_NEWSLETTER_WILL_BE_LOST',"All changes in the current HTML Newsletter will be lost.")))
 				{
 
 					// Case if htmlWidget is rendered firstly
@@ -534,12 +565,12 @@ Migur.define('htmlPane', function(){
 
 					$this.data.template = res.data.content;
 					this.initialised = false;
-					
+
 					$this._render();
 
 					if (Migur.app.autosaver) {
-						Migur.app.autosaver.update();	
-					}	
+						Migur.app.autosaver.update();
+					}
 				}
 			}).send();
 
@@ -579,8 +610,8 @@ Migur.define('htmlPane', function(){
 						'#' + domEl.getProperty('id') +
 						' [name=' + el.position + ']'
 						)[0];
-					if (position) { 
-						modules.push(el); 
+					if (position) {
+						modules.push(el);
 					}
 				});
 
@@ -631,7 +662,7 @@ Migur.define('htmlPane', function(){
 					}
 				});
 			}
-			
+
 			locThis.initialised = true;
 		},
 
@@ -641,13 +672,13 @@ Migur.define('htmlPane', function(){
 		* return this data in JSON format
 		**/
 		parse: function() {
-			
+
 			// Workaround for unwanted saving of a newsletter when we just drag out a module.
 			// Just "lock" the html widget so it will return the same data as it has before dragging
 			if (widgetHtmlArea.locked == true) {
 				return widgetHtmlArea.dataCache;
 			}
-			
+
 			// all of dropable areas
 			var dt = [this.data].clone()[0];
 			if (!dt) dt = {};
