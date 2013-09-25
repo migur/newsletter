@@ -44,7 +44,7 @@ Joomla.submitbutton = function(task)
 				}
 			}
 		}
-	
+
 		if (isValid)
 		{
             var inputs = $$('form')[0].toQueryString();
@@ -55,20 +55,34 @@ Joomla.submitbutton = function(task)
             Object.each(obj, function(val, name){
 
                 // if it is the params field
-                var regex=/^jform\[params\]\[([^\[\]]+)\]/;
+                var regex=/^jform\[params\]\[([^\[\]]+)\](\[\])?/;
                 var res = regex.exec(name);
+                var def = null;
 
-                if (res) {
+                if (res && res[1]) {
+                    var isArray = (res[2] && res[2] == '[]')? true : false;
+                    if (val.length == 0) {
+                        val = isArray? [] : '';
+                    } else {
+                        val = (isArray && typeof val == 'string')? [val] : val;
+                    }
                     dialog.data.params[res[1]] = val;
                     return;
                 }
 
                 // if this is non-params field
-                regex=/^jform\[([^\[\]]+)\]/;
+                regex=/^jform\[([^\[\]]+)\](\[\])?/;
                 res = regex.exec(name);
-                if (res) {
+                if (res && res[1]) {
+                    var isArray = (res[2] && res[2] == '[]');
+                    if (val.length == 0) {
+                        val = isArray? [] : '';
+                    } else {
+                        val = isArray? (typeof val == 'string') [val] : val;
+                    }
                     dialog.data[res[1]] = val;
                 }
+
             });
 
             dialog.task = task;

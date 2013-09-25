@@ -38,7 +38,7 @@ Migur.dnd.makeAvatar = function(el, droppables, htmlWidget){
 
     var avatar = el.clone();
     avatar.cloneEvents(el);
-        
+
     /* Set draggable behaviour to avatar */
     avatar.makeDraggable({
 
@@ -47,16 +47,16 @@ Migur.dnd.makeAvatar = function(el, droppables, htmlWidget){
         onBeforeStart: function(draggable, droppable){
 
             var coords = draggable.getCoordinates($$('body')[0]);
-			
+
 			var draggableParent = draggable.getParent('div');
             $(draggable).store('source', draggableParent);
-			
+
 			// Workaround for unwanted saving of a newsletter when we just drag out a module.
 			// Just "lock" the html widget so it will return the same data as it has before dragging
 			if (draggableParent) {
 				htmlWidget.locked = true;
 			}
-			
+
 			$$('body').grab(draggable);
             draggable.setStyles({
                 left: coords.left + 'px',
@@ -82,9 +82,9 @@ Migur.dnd.makeAvatar = function(el, droppables, htmlWidget){
         onDrop: function(draggable, droppable){
 
 			htmlWidget.locked = false;
-                
+
             if (!draggable) return false;
-			
+
             var source = $(draggable).retrieve('source');
             if (!droppable) {
                 // no droopable area
@@ -92,7 +92,7 @@ Migur.dnd.makeAvatar = function(el, droppables, htmlWidget){
                 if (!source) {
                     return draggable.destroy();
                 }
-                    
+
                 source.grab(draggable);
                 draggable.setStyles({
                     left: 0,
@@ -140,7 +140,7 @@ Migur.dnd.makeAvatar = function(el, droppables, htmlWidget){
 			if (window.isUpdateAllowed == 1) {
 				Migur.getWidget('autosaver-switch').update(
 					(autosaver.isChanged(autosaver.getter()))? 'unsaved' : 'saved');
-			}		
+			}
         }
     });
     return avatar;
@@ -148,13 +148,13 @@ Migur.dnd.makeAvatar = function(el, droppables, htmlWidget){
 
 // BAAAD!!! Ned to insert into module widget
 avatarSetSettings = function(avatar) {
-    
+
     avatar.getElements('a.settings')[0]
     .addEvent('mousedown', function(event){
         event.stop();
     })
     .addEvent('click', function(event){
-            
+
         var widgetEl = $(this).getParent('.widget');
         widget = Migur.getWidget(widgetEl);
         var conf = widget.get().notConfigured;
@@ -200,7 +200,7 @@ avatarSetSettings = function(avatar) {
         Migur.moodialogs[href].targetObj = avatar;
         Migur.moodialogs[href].data =
             Migur.getWidget( $(this).getParent('.widget') ).get();
-                
+
         Migur.moodialogs[href].open();
 
         var box = document.getSize();
@@ -240,7 +240,7 @@ avatarSetSettings = function(avatar) {
         $$('div.title').addEvent('mouseup', function(){
             Migur.moodialogs[href].mover.detach();
         });
-		
+
 
         var ifr = $(Migur.moodialogs[0].content).getElements('iframe')[0];
         var target='moodialogiframe';
@@ -251,7 +251,7 @@ avatarSetSettings = function(avatar) {
 		if ($('moodialog_form_helper')) {
 			$('moodialog_form_helper').destroy();
 		}
-		
+
         var phonyForm = new Element('form', {
 			'id': 'moodialog_form_helper',
 			'method': 'post',
@@ -261,29 +261,60 @@ avatarSetSettings = function(avatar) {
 				'display': 'none'
 			}
 		});
-		
+
         phonyForm.enctype = "application/x-www-form-urlencoded"
         $(document.body).grab(phonyForm, 'bottom');
-		
+
 		Object.each(Migur.moodialogs[href].data, function(val, name){
-			
-			if (typeof val == 'object') {
+
+            if (typeof val == 'object') {
+
 				Object.each(val, function(subval, subname){
-					phonyForm.appendChild(new Element('input', {
-						'type':"hidden",
-						'name': 'jform['+name+']['+subname+']',
-						'value': subval
-					}));
+
+                    if (typeof subval == "undefined") subval = null;
+
+                    // assumed this is just array
+                    if (typeof subval != 'string') {
+
+                        if (subval && subval.length > 0) {
+
+                            Array.each(subval, function(subsubval){
+                                phonyForm.appendChild(new Element('input', {
+                                    'type':"hidden",
+                                    'name': 'jform['+name+']['+subname+'][]',
+                                    'value': subsubval
+                                }));
+                            });
+
+                        } else {
+                            phonyForm.appendChild(new Element('input', {
+                                'type':"hidden",
+                                'name': 'jform['+name+']['+subname+'][]',
+                                'value': subval
+                            }));
+                        }
+
+                    } else {
+
+                        phonyForm.appendChild(new Element('input', {
+                            'type':"hidden",
+                            'name': 'jform['+name+']['+subname+']',
+                            'value': subval
+                        }));
+                    }
 				});
+
 			} else {
+
 				phonyForm.appendChild(new Element('input', {
 					'type':"hidden",
 					'name': 'jform['+name+']',
 					'value': val
 				}));
-			}	
+
+			}
 		});
-		
+
         phonyForm.submit();
     })
     .removeClass('icon-16-gear-disabled')
@@ -351,7 +382,7 @@ window.addEvent('domready', function() {
 
                     if (!curId || confirm(
                         Joomla.JText._('DO_YOU_REALLY_WANT_TO_CHANGE_THE_TEMPLATE_STYLE_QM',"Do you really want to change the template style?")+"\n"+
-                        Joomla.JText._('ALL_CHANGES_IN_THE_CURRENT_HTML_NEWSLETTER_WILL_BE_LOST',"All changes in the current HTML Newsletter will be lost."))) 
+                        Joomla.JText._('ALL_CHANGES_IN_THE_CURRENT_HTML_NEWSLETTER_WILL_BE_LOST',"All changes in the current HTML Newsletter will be lost.")))
 					{
 
                         // Case if htmlWidget is rendered firstly
@@ -360,7 +391,7 @@ window.addEvent('domready', function() {
                         }
 
                         htmlWidget.render(tpl);
-						
+
 						if (htmlWidget.initialised) {
 							Migur.getWidget('autosaver-switch').update('unsaved');
 						}
@@ -406,7 +437,7 @@ window.addEvent('domready', function() {
                         if (widget.mode == 'common') {
 
                             /* If event happened onto setting icon */
-                        
+
                             // IE Fix
                             var trgt = (typeof(event.event.target) == 'undefined')?
                             event.target : event.event.target;
@@ -429,7 +460,7 @@ window.addEvent('domready', function() {
                                 );
 
                             w.set({'notConfigured': true});
-                            
+
                             avatarSetSettings(avatar);
                             avatar.inject($$('body')[0]);
 
@@ -473,7 +504,7 @@ window.addEvent('domready', function() {
         $$('.plugin').each(function(el) {
 
             Migur.createWidget(el, {
-            
+
                 setup: function(){
                     var id = $(this.domEl).getProperty('id');
                     var data = Migur.iterator.getItem(
@@ -490,7 +521,7 @@ window.addEvent('domready', function() {
                             id
                         );
                     }
-                    
+
                     this.set(data);
                     // Update the turn on/off switcher
                     $(this.domEl).getElements('input')[0].setProperty(
@@ -513,11 +544,11 @@ window.addEvent('domready', function() {
                             var data = widget.get();
                             data.params.active = $(trgt).getProperty('checked');
                             widget.set(data);
-							
+
 							if (window.autosaver) {
 								Migur.getWidget('autosaver-switch').update(
 									(autosaver.isChanged(autosaver.getter()))? 'unsaved' : 'saved');
-							}		
+							}
                         }
                     }
                 }
@@ -549,7 +580,7 @@ window.addEvent('domready', function() {
 
             /* Update the dom of element and save the id of used tempate style */
             render: function(data) {
-            
+
                 if (!data || !data.t_style_id) {
                     return false;
                 }
@@ -567,17 +598,17 @@ window.addEvent('domready', function() {
 						tagsRenderMode: 'htmlconstructor'
                     },
                     onSuccess: function(res){
-						
+
 						$($this.domEl).removeClass('preloader');
-						
+
                         $this.data.template = res.data.content;
 						this.initialised = false;
                         $this._render();
                     }
                 }).send();
-				
+
 				this.domEl.addClass('preloader');
-				
+
                 return true;
             },
 
@@ -593,7 +624,7 @@ window.addEvent('domready', function() {
                         html: this.data.template
                         });
                     $$('form [name=jform[t_style_id]]').set('value', this.data.t_style_id);
-					
+
 					var locThis = this;
 
 //					this.droppables = $(this.domEl).getElements('.modules');
@@ -604,7 +635,7 @@ window.addEvent('domready', function() {
 						locThis.initialised = true;
 						return;
 					}
-						
+
                     // Render the modules HTML
 
 					// Count how many modules should be rendered
@@ -616,8 +647,8 @@ window.addEvent('domready', function() {
 							'#' + domEl.getProperty('id') +
 							' [name=' + el.position + ']'
 							)[0];
-						if (position) { 
-							modules.push(el); 
+						if (position) {
+							modules.push(el);
 						}
 					});
 
@@ -671,20 +702,20 @@ window.addEvent('domready', function() {
 					});
 				}
             },
-			
+
             /**
          * Specific behavior. Parses dom of htmlTpl element, get all the extensions
          * its positions and id of used template style and
          * return this data in JSON format
          **/
             parse: function() {
-				
+
 				// Workaround for unwanted saving of a newsletter when we just drag out a module.
 				// Just "lock" the html widget so it will return the same data as it has before dragging
 				if (widgetHtmlArea.locked == true) {
 					return widgetHtmlArea.dataCache;
 				}
-				
+
                 // all of dropable areas
                 var dt = [this.data].clone()[0];
                 if (!dt) dt = {};
@@ -708,13 +739,13 @@ window.addEvent('domready', function() {
                         });
                     }
 				);
-					
+
 				widgetHtmlArea.dataCache = res;
                 return res;
             }
-			
+
 			// Good practice but it needs total refactoring of all this code.
-			
+
 //			_initDroppables: function() {
 //				Array.each(this.droppables, function(item){
 //					item.addEvent('dropped', function(droppedItem){
@@ -747,7 +778,7 @@ window.addEvent('domready', function() {
                 } );
             }
         });
-    
+
         $$('#tabs-newsletter > dt')[0].fireEvent('click');
 
         /* Type of letter */
@@ -779,20 +810,20 @@ window.addEvent('domready', function() {
 					vals = sets[i];
 				}
 			}
-				
+
             if( id != 0 && vals.is_joomla != 1) {
-            
+
                 $('jform_params_newsletter_from_name').set('value', vals.from_name);
                 $('jform_params_newsletter_from_email').set('value', vals.from_email);
                 $('jform_params_newsletter_to_name').set('value', vals.reply_to_name);
                 $('jform_params_newsletter_to_email').set('value', vals.reply_to_email);
-				
+
                 inputs.addEvent('keydown', function(){
                     return false;
                 });
-				
+
                 inputs.setProperty('readonly', true);
-				
+
             } else {
                 inputs.removeProperty('readonly');
                 inputs.removeEvents('keydown');
@@ -800,7 +831,7 @@ window.addEvent('domready', function() {
 					var val = el.retrieve('value');
 					if (val) {
 	                    el.set('value', val);
-					}	
+					}
                 });
             }
         });
@@ -877,7 +908,7 @@ window.addEvent('domready', function() {
 							// Update value
 							$$('[name=newsletter_id]').set('value', res.newsletter_id);
 
-							// Update alias and newsletter link 
+							// Update alias and newsletter link
 							Migur.getWidget('jform_alias').update(res.alias);
 
 							Migur.getWidget('autosaver-switch').render();
@@ -889,7 +920,7 @@ window.addEvent('domready', function() {
 						if (autosaver.messageCannotsave === undefined || switcher.data == 'off') {
 							alert(res.state);
 							autosaver.messageCannotsave = true;
-						}	
+						}
 					}
 				},
 
@@ -1010,7 +1041,7 @@ window.addEvent('domready', function() {
 				Migur.getWidget('autosaver-switch').update(
 					(autosaver.isChanged(autosaver.getter()))? 'unsaved' : 'saved');
 			});
-		}	
+		}
 
 		/* Newsletter link widget */
 		 Migur.createWidget('jform_alias', {
@@ -1052,7 +1083,7 @@ window.addEvent('domready', function() {
 					link.setProperty('href', val);
 				}
 			}
-		 });	
+		 });
 
 
 
@@ -1084,7 +1115,7 @@ window.addEvent('domready', function() {
         new Request({
             url: '?option=com_newsletter&task=newsletter.autocomplete&format=json',
             onSuccess: function(res){
-				
+
                 autocomp.tokens = JSON.decode(res);
             }
         }).send();
@@ -1101,7 +1132,7 @@ window.addEvent('domready', function() {
 
         var nsId = $$('[name=newsletter_id]')[0].get('value');
         $('tab-preview-html-container').setProperty(
-            'src', 
+            'src',
             migurSiteRoot + 'index.php?option=com_newsletter&task=newsletter.render&type=html&email='+escape(email)+'&newsletter_id='+nsId);
 
         new Request({
@@ -1112,9 +1143,9 @@ window.addEvent('domready', function() {
                 type: 'plain'
             },
             onComplete: function(res){
-				
+
 				$('tab-preview-plain-container').removeClass('preloader');
-				
+
                 if (res) {
                     $('tab-preview-plain-container')
                     .set('value', res);
@@ -1123,9 +1154,9 @@ window.addEvent('domready', function() {
                 }
             }
         }).send();
-		
+
 		$('tab-preview-plain-container').addClass('preloader');
-		
+
     });
 
     $$('.tab-preview').addEvent('click', function(){
@@ -1143,7 +1174,7 @@ window.addEvent('domready', function() {
     $('button-newsletter-send-preview').addEvent('click', function(){
 
 		var emails = autocomp.getBoxes();
-		
+
 		if (emails.length < 1) {
 			var val = $('jform_newsletter_preview_email').getProperty('value');
 			if (document.formvalidator.handlers.email.exec(val) == false) {
@@ -1162,12 +1193,12 @@ window.addEvent('domready', function() {
                 type: type
             },
             onComplete: function(res){
-				
+
 				$('send-preview-preloader').removeClass('preloader');
-                
+
 				try{res = JSON.decode(res);}
 				catch (e) {res = null;}
-				
+
                 var text;
                 if (res && res.state == true) {
                     text = res.messages.join("\n");
@@ -1178,7 +1209,7 @@ window.addEvent('domready', function() {
                 alert(text);
             }
         }).send();
-		
+
 		$('send-preview-preloader').addClass('preloader');
     });
 
@@ -1190,7 +1221,7 @@ window.addEvent('domready', function() {
     // so you have to do it in two steps.
 
     if (isNew == 1) {
-    
+
         migurGuide = Migur.createWidget(
             new Element('div'),
             {
@@ -1274,12 +1305,12 @@ window.addEvent('domready', function() {
 
 
 // Check if newsletter is unabled to save
-if (isUpdateAllowed == 0) { 
+if (isUpdateAllowed == 0) {
 	setTimeout(function(){
 		alert(Joomla.JText._('COM_NEWSLETTER_CANNOT_SAVE_NEWSLETTER', "You cannot change this newsletter. Probably it is used in mailing process."))
 	},
 	1000);
-		
+
 }
 
 
