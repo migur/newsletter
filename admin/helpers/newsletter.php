@@ -21,11 +21,11 @@ class NewsletterHelperNewsletter
 	public static $extension = 'com_newsletter';
 
 	public static $_manifest = null;
-	
+
 	public static $_displayErrors = null;
 
 	protected static $_componentVersion = null;
-	
+
 	/**
 	 * Configure the Linkbar.
 	 *
@@ -37,7 +37,7 @@ class NewsletterHelperNewsletter
 	public static function addSubmenu($vName = null)
 	{
 		if ($vName == null) $vName = JRequest::getString('view');
-		
+
 		JHtmlSidebar::addEntry(
 				JText::_('COM_NEWSLETTER_SUBMENU_DASHBOARD'),
 				'index.php?option=com_newsletter&view=dashboard',
@@ -88,11 +88,11 @@ class NewsletterHelperNewsletter
 		$product = $obj->monsterName;
 
 		$domain = $_SERVER['SERVER_NAME'];
-		
+
 		$monster_url = $params->get('monster_url');
 
 		$url = $monster_url . '/service/check/license/license_key/' . urlencode($lkey) . '/product/' . urlencode($product) . '/domain/' . urlencode($domain);
-		
+
 		if (empty($url) || strpos($url, 'http://') === false) {
 			$url = 'http://' . $url;
 		}
@@ -103,14 +103,14 @@ class NewsletterHelperNewsletter
             $res = $cache->call(array('NewsletterHelperNewsletter', '_getCommonInfo'), $url, $domain, $lkey);
         } else {
             $res = NewsletterHelperNewsletter::_getCommonInfo($url, $domain, $lkey);
-        }   
-		
+        }
+
 		$res->current_version = (string) $obj->version;
 		$res->copyright = (string) $obj->copyright;
 		return $res;
 	}
 
-	
+
 	/**
 	 *
 	 * @param type $eid - extension id
@@ -119,50 +119,50 @@ class NewsletterHelperNewsletter
 	public static function findUpdate($eid)
 	{
 		$dbo = JFactory::getDbo();
-		
-		$query = 
+
+		$query =
 			'SELECT DISTINCT us.* FROM #__update_sites AS us' .
 			' JOIN #__update_sites_extensions AS ue ON us.update_site_id = ue.update_site_id'.
 			' WHERE extension_id = '.(int)$eid;
-		
+
 		$dbo->setQuery($query);
 		$results = $dbo->loadAssoc();
-		
+
 		if (empty($results)) {
 			return false;
 		}
-		
+
 		$updater = JUpdater::getInstance();
 		$adapter = $updater->getAdapter('extension');
 		$updates = $adapter->findUpdate($results);
-		
+
 		// Process updates
 		if (!empty($updates['updates'][0])) {
 			$latest = $updates['updates'][0];
-			
+
 			if ($latest instanceof JTable) {
 				$latest = $latest->getProperties();
 			}
 		}
-		
+
 		return $latest;
 	}
 
 	/**
  	 * Gets latest info about component from server.
 	 * Used in cjaching
-	 * 
+	 *
 	 * @param string $url
 	 * @param string $domain
 	 * @param string $lkey
-	 * 
+	 *
 	 * @return stdClass
 	 * @since	1.0
 	 */
 	public static function _getCommonInfo($url, $domain, $lkey)
 	{
 		$monster = @simplexml_load_file($url);
-		
+
 		if (!$monster) {
 			$monster = new stdClass();
 			$monster->is_valid = null;
@@ -170,7 +170,7 @@ class NewsletterHelperNewsletter
 		}
 
 		$res = new stdClass();
-		
+
 		$res->is_valid = null;
 		if ((string) $monster->is_valid == '1') {
 			$res->is_valid = "JYES";
@@ -198,9 +198,9 @@ class NewsletterHelperNewsletter
 
 		$obj = self::getManifest();
 		$product = $obj->monsterName;
-		
+
 		$domain = $_SERVER['SERVER_NAME'];
-		
+
 		$url = MIGUR_LICENSE_SERVICE_URL . '/license_key/' . urlencode($lkey) . '/product/' . urlencode($product) . '/domain/' . urlencode($domain);
 
 		if (!$noCache) {
@@ -208,12 +208,12 @@ class NewsletterHelperNewsletter
 			$monster = $cache->call(array('NewsletterHelperNewsletter', '_getLicenseStatus'), $url);
         } else {
 			$monster = self::_getLicenseStatus($url);
-        }   
+        }
 
 		if (empty($monster)) {
 			throw new Exception('Can not get license status');
 		}
-		
+
 		return (object) array(
 			'isValid'       => !empty($monster->is_valid) && ($monster->is_valid == 1),
 			'domainName'    => !empty($monster->domain_name)? $monster->domain_name : null,
@@ -221,23 +221,23 @@ class NewsletterHelperNewsletter
 			'error'         => !empty($monster->error)? $monster->error : null,
 			'code'          => !empty($monster->code)? $monster->code : null
 		);
-	}	
-	
-	public static function _getLicenseStatus($url) 
+	}
+
+	public static function _getLicenseStatus($url)
 	{
 		$xml = @simplexml_load_file($url);
 		$res = new stdClass;
-		
+
 		if ($xml) {
 			foreach($xml as $key => $val) {
 				$res->$key = (string) $val;
 			}
-		}	
-		
+		}
+
 		return $res;
 	}
-	
-	
+
+
 	static public function getManifest()
 	{
 		if (!self::$_manifest) {
@@ -253,7 +253,7 @@ class NewsletterHelperNewsletter
 		return self::$_manifest;
 	}
 
-	static public function getVersion() 
+	static public function getVersion()
 	{
 		if (self::$_componentVersion === null) {
 			$manifest = self::getManifest();
@@ -266,11 +266,11 @@ class NewsletterHelperNewsletter
 			}
 
 			self::$_componentVersion = $manifest->version;
-		}	
-		
+		}
+
 		return self::$_componentVersion;
 	}
-	
+
 	/**
 	 * Get the extended info for a newsletter identified by id.
 	 *
@@ -328,7 +328,7 @@ class NewsletterHelperNewsletter
 		if (empty($res)) {
 			return $alias;
 		}
-		
+
 		// Get array with similar aliases
 		$aliases = array();
 		foreach($res as $item) {
@@ -344,7 +344,7 @@ class NewsletterHelperNewsletter
 		}
 	}
 
-	
+
 	/**
 	 * Create alias for newsletter.
 	 *
@@ -359,11 +359,11 @@ class NewsletterHelperNewsletter
 			// Create alias by modyfiing newsletter's name
 			$alias = strtolower(preg_replace('/[^a-zA-Z0-9\-]+/', '-', $name));
 		}
-		
+
 		return self::getFreeAlias($alias, $ownNid);
 	}
 
-	
+
 	/**
 	 * Get first unused alias.
 	 *
@@ -383,7 +383,7 @@ class NewsletterHelperNewsletter
 		//echo nl2br(str_replace('#__','jos_',$query)); die;
  		return $db->loadAssoc();
 	}
-	
+
 	/**
 	 * Deprecated and not used anymore
 	 * will be removed after 12.07
@@ -394,32 +394,32 @@ class NewsletterHelperNewsletter
 	{
 		JLoader::import('tables.mailboxprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
 		JLoader::import('tables.smtpprofile', JPATH_COMPONENT_ADMINISTRATOR, '');
-		
+
 		$db = JFactory::getDbo();
-		
+
 		// Get default SMTP and Mailbox profile ids
 		$smtpId = NewsletterHelperMail::getDefaultSmtp('idOnly');
 		$mailboxId = NewsletterHelperMail::getDefaultMailbox('idOnly');
-		
+
 		$newsletter = JTable::getInstance('Newsletter', 'NewsletterTable');
 		$newsletter->load($nid);
-		
+
 		// The default profile is the SMTP profile
 		if ($newsletter->smtp_profile_id == 0) {
-			
+
 			$smtp = (array)NewsletterHelperMail::getJoomlaProfile();
 			$mailbox = (array)NewsletterHelperMail::getDefaultMailbox();
-			
+
 			$smtp['mailbox_profile_id'] = !empty($mailbox['mailbox_profile_id'])?
 				$mailbox['mailbox_profile_id'] : 0;
-			
+
 			$res = array(
 				'mailbox' => $mailbox,
 				'smtp'    => $smtp
 			);
-			
+
 		} else {
-		
+
 			$db->setQuery(
 				'SELECT DISTINCT '.
 					'mp.mailbox_profile_id AS mp_mailbox_profile_id, '.
@@ -494,109 +494,109 @@ class NewsletterHelperNewsletter
 		return $res;
 	}
 
-	
-	
+
+
 	/**
 	 * Log a messagge into file.
-	 * 
+	 *
 	 * @param string Message
 	 * @param string File name, usae current date otherwise
 	 * @param boolean Use to force the logging
-	 */ 
-	static public function logMessage($msg, $filename = null, $force = false) 
+	 */
+	static public function logMessage($msg, $filename = null, $force = false)
 	{
 		$arr = explode('/', $filename);
 		return NewsletterHelperLog::addDebug($msg, $arr[0]);
 	}
 
-	
+
 	/**
 	 * Just SILENTLY start buffering.
 	 * No matter if it will fail.
 	 */
-	static public function jsonPrepare() 
+	static public function jsonPrepare()
 	{
 		@ob_start();
 	}
-	
-	
+
+
 	/**
 	 * Echoes the JSON responce to client.
 	 * Collect all output data from buffers and attaches it
 	 * to the response as a parameter "serverResponse".
-	 * 
+	 *
 	 * @param boolean $status The status of a responce
 	 * @param string $message Text of returned messages
 	 * @param type $data
-	 * @param type $exit 
+	 * @param type $exit
 	 */
-	static public function jsonResponse($status, $messages = array(), $data = null, $exit = true) 
+	static public function jsonResponse($status, $messages = array(), $data = null, $exit = true)
 	{
 		if (!is_array($messages) && !is_object($messages)) {
 			$messages = array($messages);
 		}
-		
+
 		$serverResponse = ''; $i=0;
 		do {
 			$serverResponse .= ob_get_contents();
 			$i++; // Make sure that it's not neverended cycle
 		} while(@ob_end_clean() && $i < 10);
-		
+
 		@header('Content-Type:application/json; charset=utf-8');
-		
+
 		echo json_encode(array(
 			'state' => (bool)$status,
 			'messages' => (array)$messages,
 			'data' => $data,
 			'serverResponse' => htmlentities($serverResponse)
 		));
-		
+
 		jexit();
 	}
 
-	
+
 	/**
 	 * Echoes the JSON error massages to client.
 	 * Collect all output data from buffers and attaches it
 	 * to the response as a parameter "serverResponse".
-	 * 
+	 *
 	 * @param string|array $message Text of returned messages
 	 * @param mixed $data
-	 * @param bool $exit 
+	 * @param bool $exit
 	 */
 	static public function jsonError($messages = array(), $data = array(), $exit = true) {
 		self::jsonResponse(false, $messages, $data, $exit);
-	}	
-	
+	}
+
 	/**
 	 * Echoes the JSON success messages to client.
 	 * Collect all output data from buffers and attaches it
 	 * to the response as a parameter "serverResponse".
-	 * 
+	 *
 	 * @param string|array $message Text of returned messages
 	 * @param mixed $data
-	 * @param bool $exit 
+	 * @param bool $exit
 	 */
 	static public function jsonMessage($messages = array(), $data = array(), $exit = true) {
 		self::jsonResponse(true, $messages, $data, $exit);
-	}	
-	
-	
-	
+	}
+
+
+
 	/**
-	 * Get parameter directly from the parameters of component 
+	 * Get parameter directly from the parameters of component
 	 * from extensions table
-	 * 
+	 *
 	 * @param type $name
-	 * @return type 
+	 * @return type
 	 */
-	static public function getParam($name) 
+	static public function getParam($name)
 	{
 		$table = JTable::getInstance('extension');
 		if ( empty($table) || !$table->load(array('element' => 'com_newsletter'))) {
 			return false;
 		}
-				
+
 		$params = (object)json_decode($table->params);
 		return isset($params->{$name})? $params->{$name} : null;
 	}
@@ -605,18 +605,18 @@ class NewsletterHelperNewsletter
 
 	/**
 	 * Sets the param of component directly into extensions table
-	 * 
+	 *
 	 * @param type $name
 	 * @param type $value
-	 * @return type 
+	 * @return type
 	 */
-	static public function setParam($name, $value) 
+	static public function setParam($name, $value)
 	{
 		$table = JTable::getInstance('extension');
 		if ( empty($table) || !$table->load(array('element' => 'com_newsletter'))) {
 			return false;
 		}
-		
+
 		$params = (object)json_decode($table->params);
 		$params->{$name} = $value;
 		$table->params = json_encode($params);
@@ -627,9 +627,9 @@ class NewsletterHelperNewsletter
 
 	/**
 	 * Set the new time limit
-	 * 
+	 *
 	 * @param numeric $time Time in seconds
-	 * 
+	 *
 	 * @return boolean
 	 */
 	static public function setTimeLimit($time)
@@ -647,10 +647,10 @@ class NewsletterHelperNewsletter
 	{
 		$usedMemory = memory_get_usage(true);
 		$maxMemory  = ini_get('memory_limit');
-		
+
 		return (($usedMemory / $maxMemory) * 100) < 99;
 	}
-	
+
 
 	/**
 	 * Supress all errors and warnings. Stores previous state.
@@ -658,11 +658,11 @@ class NewsletterHelperNewsletter
 	static public function supressPhpErrors() {
 		if (self::$_displayErrors === null) {
 			self::$_displayErrors = ini_get('display_errors');
-		}	
+		}
 		@ini_set('display_errors', 0);
 	}
 
-	
+
 	/**
 	 * Restore the value of display_errors.
 	 */
@@ -670,7 +670,20 @@ class NewsletterHelperNewsletter
 		if (self::$_displayErrors !== null) {
 			@ini_set('display_errors', self::$_displayErrors);
 			self::$_displayErrors = null;
-		}	
+		}
 	}
-	
+
+
+	/**
+	 * Retrieves task from request in cross-platform way
+	 *
+	 * @param null $default
+	 * @return mixed|string
+	 */
+	static public function getTask($default = null)
+	{
+		$ver = new JVersion();
+		return  substr($ver->getShortVersion(), 0, 1) == '2'?
+			JRequest::getCmd('task', $default) : JFactory::getApplication()->input->get('task');
+	}
 }
