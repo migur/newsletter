@@ -69,7 +69,7 @@ class JToolbarButtonSendProgress extends JToolbarButton
 			'</div>' .
 			'<div style="float:right">' .
 			'</div>' .
-			'<div style="width: 260px">' .
+			'<div style="width:260px;position:relative;">' .
 				'<div class="progress-line"></div>' .
 				'<div class="progress-bar"></div>' .
 			'</div>';
