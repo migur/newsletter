@@ -27,8 +27,8 @@ MigurComNewsletterBootstrap::initAutoloading();
 try {
 
 	// Setub toolbar, forms and so on...
-	MigurComNewsletterBootstrap::initJoomlaToolsSite();	
-	
+	MigurComNewsletterBootstrap::initJoomlaToolsSite();
+
 	// Constants, required J! files, so on...
 	MigurComNewsletterBootstrap::initEnvironment();
 
@@ -48,10 +48,10 @@ try {
 				if(!JFactory::getUser()->id && !JRequest::getString('uid', NULL)) {
 
 					JFactory::getApplication()->redirect(
-						JRoute::_('index.php?option=com_users&view=login&returnurl=' . base64_encode(JRoute::_('index.php?option=com_newsletter&view=subscribe&layout=unsubscribe', false))), 
-						JText::_('COM_NEWSLETTER_LOGIN_FIRST'), 
+						JRoute::_('index.php?option=com_users&view=login&returnurl=' . base64_encode(JRoute::_('index.php?option=com_newsletter&view=subscribe&layout=unsubscribe', false)) ),
+						JText::_('COM_NEWSLETTER_LOGIN_FIRST '),
 						'message');
-				}	
+					}
 		}
 
 	// Add translations used in JavaScript
@@ -63,7 +63,7 @@ try {
 	$app->triggerEvent('onMigurStart');
 
 	// Perform the Request task
-	$controller->execute(JRequest::getCmd('task'));
+	$controller->execute(NewsletterHelperNewsletter::getTask());
 
 	$app->triggerEvent('onMigurShoutdown');
 
@@ -71,13 +71,12 @@ try {
 	$controller->redirect();
 
 } catch (Exception $e) {
-	
+
 	NewsletterHelperLog::addDebug(
 		'COM_NEWSLETTER_UNCAUGHT_EXCEPTION',
 		'common',
 		$e);
-	
+
 	throw $e;
 }
 
-	

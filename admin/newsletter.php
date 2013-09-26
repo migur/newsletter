@@ -67,8 +67,7 @@ try {
 
 	// Perform the Request task
 	// Here we get only tail of a task
-	$taskMethod = JFactory::getApplication()->input->get('task');
-	$controller->execute($taskMethod);
+	$controller->execute(NewsletterHelperNewsletter::getTask());
 
 	// Trigger events after exacution
 	$app->triggerEvent('onMigurShoutdown');
