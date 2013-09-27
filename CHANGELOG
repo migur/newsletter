@@ -10,3 +10,16 @@ Added synchronisation of Migur lists with Joomla groups.
 
 12.06.02 FREE/PREMIUM
 Fixed some bugs.
+
+13.08
+Fixed UI bugs.
+Added trash functionality for items.
+Fixed bugs with mailing.
+Refactored confirmation process.
+Added remote help support
+Fixed history data
+Fixed validation in IE
+Fixed interaction with K2
+Fixed newsletter modules appearance.
+Fixed newsletter modules settings.
+See full list here http://projects.migur.com/redmine/projects/newsletter/issues
